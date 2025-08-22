@@ -1,8 +1,18 @@
 use std::fs;
-use parser::parse_bs_file;
-mod parser;
+mod type_generator;
+mod definitions;
+mod output;
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let text = fs::read_to_string("raw/index.bs")?;
-    parse_bs_file(&text);
+    let local_cddl = fs::read_to_string("raw/local.cddl")?;
+    let remote_cddl = fs::read_to_string("raw/remote.cddl")?;
+    
+    let cddl_strings = vec![local_cddl.as_str(), remote_cddl.as_str()];
+    let modules = type_generator::detect_modules(cddl_strings)?;
+    
+    output::generate_output(&modules)?;
+    
+    println!("Generated {} modules to ./output", modules.len());
+    
     Ok(())
 }

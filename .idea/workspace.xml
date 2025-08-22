@@ -8,18 +8,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/session/commands.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/session/commands.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/session/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/session/types.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-core/src/listeners.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/listeners.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-generator/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-generator/src/parser.rs" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="RsBuildProfile:test" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="RsBuildProfile:dev" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -36,11 +35,12 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Cargo.Rustenium Generator.executor&quot;: &quot;Debug&quot;,
     &quot;Cargo.Test Rustenium.executor&quot;: &quot;Debug&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.rust.reset.selective.auto.import&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;e1026484&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
@@ -50,7 +50,25 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Cargo.Rustenium Generator">
+    <configuration name="Rustenium Generator" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
+      <option name="buildProfileId" value="dev" />
+      <option name="command" value="run" />
+      <option name="workingDirectory" value="file://$PROJECT_DIR$/rustenium-generator" />
+      <envs />
+      <option name="emulateTerminal" value="true" />
+      <option name="channel" value="DEFAULT" />
+      <option name="requiredFeatures" value="true" />
+      <option name="allFeatures" value="false" />
+      <option name="withSudo" value="false" />
+      <option name="buildTarget" value="REMOTE" />
+      <option name="backtrace" value="SHORT" />
+      <option name="isRedirectInput" value="false" />
+      <option name="redirectInputPath" value="" />
+      <method v="2">
+        <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Test Rustenium" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
       <option name="buildProfileId" value="test" />
       <option name="command" value="test --workspace --test browser" />
@@ -69,6 +87,10 @@
         <option name="CARGO.BUILD_TASK_PROVIDER" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Cargo.Test Rustenium" />
+      <item itemvalue="Cargo.Rustenium Generator" />
+    </list>
   </component>
   <component name="RustProjectSettings">
     <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
@@ -102,9 +124,9 @@
           <option name="timeStamp" value="16" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/rustenium-core/src/listeners.rs</url>
-          <line>27</line>
-          <option name="timeStamp" value="23" />
+          <url>file://$PROJECT_DIR$/rustenium-generator/src/type_generator.rs</url>
+          <line>57</line>
+          <option name="timeStamp" value="27" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
