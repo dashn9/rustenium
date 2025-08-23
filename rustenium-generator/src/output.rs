@@ -1,6 +1,7 @@
 use std::fs;
 use std::path::Path;
 use crate::type_generator::Module;
+use crate::command_parser::{parse_command_definition, ParsedCommandDefinition, ParsedCommandDefinitionCommand};
 
 pub fn generate_output(modules: &[Module]) -> Result<(), Box<dyn std::error::Error>> {
     // Create output directory
@@ -27,7 +28,18 @@ fn generate_module_files(module: &Module, output_dir: &str) -> Result<(), Box<dy
     
     // Create command file if definition exists
     if let Some(ref cmd_def) = module.command_definition {
-        let mut command_content = cmd_def.content.clone();
+        let mut command_content = String::new();
+        
+        // Parse command definition and generate enum
+        match parse_command_definition(cmd_def) {
+            Ok(parsed_cmd) => {
+                command_content.push_str(&generate_command_enum(&parsed_cmd));
+            }
+            Err(_) => {
+                // Fallback to original content if parsing fails
+                command_content.push_str(&cmd_def.content);
+            }
+        }
         
         // Add result definition to commands if it exists
         if let Some(ref result_def) = module.result_definition {
@@ -53,4 +65,30 @@ fn generate_module_files(module: &Module, output_dir: &str) -> Result<(), Box<dy
     fs::write(format!("{}/mod.rs", module_dir), mod_content)?;
     
     Ok(())
+}
+
+fn generate_command_enum(parsed_cmd: &ParsedCommandDefinition) -> String {
+    let mut output = String::new();
+    
+    // Add attributes
+    for attribute in &parsed_cmd.attributes {
+        output.push_str(&format!("{}\n", attribute));
+    }
+    
+    // Add enum declaration
+    output.push_str(&format!("pub enum {} {{\n", parsed_cmd.value));
+    
+    // Add enum variants
+    for command in &parsed_cmd.commands {
+        // Add variant attributes if any
+        for attribute in &command.attributes {
+            output.push_str(&format!("    {}\n", attribute));
+        }
+        
+        // Add variant - use command name as both variant and type like Close(Close)
+        output.push_str(&format!("    {}({}),\n", command.name, command.name));
+    }
+    
+    output.push_str("}\n");
+    output
 }

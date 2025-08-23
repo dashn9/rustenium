@@ -1,8 +1,7 @@
 use regex::Regex;
-use serde::{Deserialize, Serialize};
 use crate::definitions::CommandDefinition;
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct ParsedCommandDefinitionCommand {
     pub name: String,
     pub module: String,
@@ -10,10 +9,10 @@ pub struct ParsedCommandDefinitionCommand {
     pub attributes: Vec<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(untagged)]
+#[derive(Debug, Clone)]
 pub struct ParsedCommandDefinition {
     pub name: String,
+    pub value: String,
     pub commands: Vec<ParsedCommandDefinitionCommand>,
     pub attributes: Vec<String>,
 }
@@ -49,6 +48,7 @@ pub fn parse_command_definition(cmd_def: &CommandDefinition) -> Result<ParsedCom
     
     Ok(ParsedCommandDefinition {
         name: cmd_def.name.clone(),
+        value: cmd_def.name.clone(),
         commands,
         attributes: definition_attributes,
     })

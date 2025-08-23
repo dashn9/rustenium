@@ -2,6 +2,7 @@ use std::fs;
 mod type_generator;
 mod definitions;
 mod output;
+mod command_parser;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let local_cddl = fs::read_to_string("raw/local.cddl")?;

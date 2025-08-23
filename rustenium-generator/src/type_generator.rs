@@ -60,7 +60,7 @@ pub fn detect_modules(cddl_strings: Vec<&str>) -> Result<Vec<Module>, Box<dyn st
             let line = line.trim();
             
             if let Some(captures) = command_pattern.captures(line) {
-                let name = captures[1].to_lowercase();
+                let name = captures[1].to_string();
                 let content = extract_definition_content(cddl_content, line)?;
                 modules.entry(name.clone()).or_insert(Module {
                     name: name.clone(),
