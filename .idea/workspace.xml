@@ -7,12 +7,7 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-generator/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/main.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-generator/src/parser.rs" beforeDir="false" />
-    </list>
+    <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,7 +30,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
-    &quot;Cargo.Rustenium Generator.executor&quot;: &quot;Debug&quot;,
+    &quot;Cargo.Rustenium Generator.executor&quot;: &quot;Run&quot;,
     &quot;Cargo.Test Rustenium.executor&quot;: &quot;Debug&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
@@ -88,8 +83,8 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Cargo.Test Rustenium" />
       <item itemvalue="Cargo.Rustenium Generator" />
+      <item itemvalue="Cargo.Test Rustenium" />
     </list>
   </component>
   <component name="RustProjectSettings">
@@ -117,11 +112,6 @@
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/rustenium-bidi-commands/src/lib.rs</url>
           <option name="timeStamp" value="13" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/rustenium-core/src/session.rs</url>
-          <line>44</line>
-          <option name="timeStamp" value="16" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/rustenium-generator/src/type_generator.rs</url>
