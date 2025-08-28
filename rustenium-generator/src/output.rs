@@ -1,7 +1,6 @@
 use std::fs;
 use std::path::Path;
-use crate::type_generator::Module;
-use crate::command_parser::{parse_command_definition, ParsedCommandDefinition, ParsedCommandDefinitionCommand};
+use crate::module::Module;
 
 pub fn generate_output(modules: &[Module]) -> Result<(), Box<dyn std::error::Error>> {
     // Create output directory
@@ -30,16 +29,8 @@ fn generate_module_files(module: &Module, output_dir: &str) -> Result<(), Box<dy
     if let Some(ref cmd_def) = module.command_definition {
         let mut command_content = String::new();
         
-        // Parse command definition and generate enum
-        match parse_command_definition(cmd_def) {
-            Ok(parsed_cmd) => {
-                command_content.push_str(&generate_command_enum(&parsed_cmd));
-            }
-            Err(_) => {
-                // Fallback to original content if parsing fails
-                command_content.push_str(&cmd_def.content);
-            }
-        }
+        // Generate enum from pre-parsed command definition
+        command_content.push_str(&generate_command_enum(cmd_def));
         
         // Add result definition to commands if it exists
         if let Some(ref result_def) = module.result_definition {
@@ -67,19 +58,19 @@ fn generate_module_files(module: &Module, output_dir: &str) -> Result<(), Box<dy
     Ok(())
 }
 
-fn generate_command_enum(parsed_cmd: &ParsedCommandDefinition) -> String {
+fn generate_command_enum(cmd_def: &crate::command_parser::CommandDefinition) -> String {
     let mut output = String::new();
     
     // Add attributes
-    for attribute in &parsed_cmd.attributes {
+    for attribute in &cmd_def.attributes {
         output.push_str(&format!("{}\n", attribute));
     }
     
     // Add enum declaration
-    output.push_str(&format!("pub enum {} {{\n", parsed_cmd.value));
+    output.push_str(&format!("pub enum {} {{\n", cmd_def.name));
     
     // Add enum variants
-    for command in &parsed_cmd.commands {
+    for command in &cmd_def.commands {
         // Add variant attributes if any
         for attribute in &command.attributes {
             output.push_str(&format!("    {}\n", attribute));

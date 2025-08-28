@@ -1,15 +1,17 @@
 use std::fs;
-mod type_generator;
-mod definitions;
+mod module;
+mod extractor;
 mod output;
 mod command_parser;
+mod event_parser;
+mod result_parser;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let local_cddl = fs::read_to_string("raw/local.cddl")?;
     let remote_cddl = fs::read_to_string("raw/remote.cddl")?;
     
     let cddl_strings = vec![local_cddl.as_str(), remote_cddl.as_str()];
-    let modules = type_generator::detect_modules(cddl_strings)?;
+    let modules = module::detect_modules(cddl_strings)?;
     
     output::generate_output(&modules)?;
     

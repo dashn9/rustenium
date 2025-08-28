@@ -1,11 +1,10 @@
 use regex::Regex;
 use std::collections::HashMap;
-use crate::definitions::{CommandDefinition, EventDefinition, ResultDefinition, extract_definition_content};
+use crate::extractor::extract_definition_content;
+use crate::command_parser::{CommandDefinition, parse_command_definition, Command};
+use crate::event_parser::EventDefinition;
+use crate::result_parser::ResultDefinition;
 
-#[derive(Debug)]
-pub struct Command {
-    pub raw: String,
-}
 
 #[derive(Debug)]
 pub struct Event {
@@ -34,19 +33,6 @@ pub struct Module {
     pub results: Vec<BidiResult>,
 }
 
-pub fn generate_types(cddl_strings: Vec<&str>) -> Result<String, Box<dyn std::error::Error>> {
-    let modules = detect_modules(cddl_strings)?;
-    
-    let mut output = String::new();
-    output.push_str("// Detected modules:\n");
-    
-    for module in modules {
-        output.push_str(&format!("// Module: {} (command_def: {}, event_def: {}, result_def: {})\n", 
-            module.name, module.command_definition.is_some(), module.event_definition.is_some(), module.result_definition.is_some()));
-    }
-    
-    Ok(output)
-}
 
 pub fn detect_modules(cddl_strings: Vec<&str>) -> Result<Vec<Module>, Box<dyn std::error::Error>> {
     let mut modules: HashMap<String, Module> = HashMap::new();
@@ -62,6 +48,7 @@ pub fn detect_modules(cddl_strings: Vec<&str>) -> Result<Vec<Module>, Box<dyn st
             if let Some(captures) = command_pattern.captures(line) {
                 let name = captures[1].to_string();
                 let content = extract_definition_content(cddl_content, line)?;
+                let command_def = parse_command_definition(format!("{}Command", name), content)?;
                 modules.entry(name.clone()).or_insert(Module {
                     name: name.clone(),
                     command_definition: None,
@@ -71,10 +58,7 @@ pub fn detect_modules(cddl_strings: Vec<&str>) -> Result<Vec<Module>, Box<dyn st
                     events: Vec::new(),
                     types: Vec::new(),
                     results: Vec::new(),
-                }).command_definition = Some(CommandDefinition {
-                    name: format!("{}Command", name),
-                    content,
-                });
+                }).command_definition = Some(command_def);
             }
             
             if let Some(captures) = event_pattern.captures(line) {
