@@ -1,11 +1,6 @@
 use std::collections::HashMap;
 use regex::Regex;
 
-#[derive(Debug)]
-pub struct CommandDefinition {
-    pub name: String,
-    pub content: String,
-}
 
 #[derive(Debug)]
 pub struct EventDefinition {

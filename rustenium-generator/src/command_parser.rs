@@ -10,6 +10,10 @@ pub struct CommandDefinition {
     pub content: String,
     /// Parsed individual commands found within this definition
     pub commands: Vec<Command>,
+    /// Generated command methods
+    pub command_methods: Vec<CommandMethods>,
+    /// Generated command parameters
+    pub command_params: Vec<CommandParams>,
     /// Rust attributes to be applied to the generated enum (e.g., #[derive(Debug, Serialize)])
     pub attributes: Vec<String>,
 }
@@ -43,7 +47,7 @@ pub fn parse_command_definition(name: String, content: String) -> Result<Command
                 name,
                 module_name,
                 method: String::new(), // Empty string for now
-                params: CommandParams {},
+                params: String::new(), // Empty string for now
                 attributes,
             });
         }
@@ -59,6 +63,8 @@ pub fn parse_command_definition(name: String, content: String) -> Result<Command
         name: name.clone(),
         content,
         commands,
+        command_methods: Vec::new(),
+        command_params: Vec::new(),
         attributes: definition_attributes,
     })
 }
@@ -92,6 +98,17 @@ pub struct CommandParams {
     // Empty for now - will contain parsed parameter definitions
 }
 
+/// Represents a WebDriver BiDi command method with its serialization attributes
+#[derive(Debug, Clone)]
+pub struct CommandMethods {
+    /// The Rust method name (e.g., "EmulationSetGeolocationOverride")
+    pub name: String,
+    /// Attributes for the method variants (e.g., serde rename)
+    pub method_attributes: Vec<String>,
+    /// Attributes for the enum itself (e.g., derive attributes)
+    pub enum_attributes: Vec<String>,
+}
+
 /// Represents a single WebDriver BiDi command parsed from CDDL
 /// Commands follow the pattern module.method (e.g., "browser.close", "network.enable")
 #[derive(Debug, Clone)]
@@ -100,10 +117,10 @@ pub struct Command {
     pub name: String,
     /// The name of the module this command belongs to (e.g., "browser", "network", "session")
     pub module_name: String,
-    /// The actual WebDriver BiDi method name - currently empty, will be populated later
+    /// The actual WebDriver BiDi method name as a string
     pub method: String,
-    /// The parsed parameters for this command
-    pub params: CommandParams,
+    /// The parameters as a string - will be populated by search_and_update_command
+    pub params: String,
     /// Rust attributes to be applied to this command variant
     pub attributes: Vec<String>,
 }
@@ -125,20 +142,70 @@ pub struct Command {
 /// Currently only searches for the command pattern. Need to implement:
 /// - Parsing the actual method name from the CDDL definition
 /// - Extracting and parsing parameter definitions
-pub fn search_and_update_command(cddl_content: &str, command: &mut Command) -> Result<(), Box<dyn std::error::Error>> {
-    // Search for individual command using module.command pattern
-    let pattern = format!(r"{}\s*\.\s*{}\s*//", command.module_name.to_lowercase(), command.name.to_lowercase());
+pub fn search_and_update_command(cddl_content: &str, command: &mut Command, command_def: &mut CommandDefinition) -> Result<(), Box<dyn std::error::Error>> {
+    // Search for command definition using pattern: module_name.name = (
+    let method_name = format!("{}.{}", command.module_name.to_lowercase(), command.name);
+    let pattern = format!(r"^{}\s*=\s*\(", regex::escape(&method_name));
     let regex = Regex::new(&pattern)?;
     
-    for line in cddl_content.lines() {
+    let lines: Vec<&str> = cddl_content.lines().collect();
+    
+    for (line_num, line) in lines.iter().enumerate() {
         if regex.is_match(line.trim()) {
-            // TODO: Parse the method and params from the CDDL definition
-            // For now, just mark that we found it
+            // Found the command definition, set the method
+            command.method = method_name.clone();
+            
+            // Create CommandMethods if it doesn't exist yet
+            let rust_method_name = format!("{}{}",
+                command.module_name.replace("_", "").to_string().chars().next().unwrap().to_uppercase().to_string() + &command.module_name[1..],
+                command.name
+            );
+            
+            let method_exists = command_def.command_methods.iter().any(|m| m.name == rust_method_name);
+            if !method_exists {
+                let method_attributes = vec![
+                    format!(r#"#[serde(rename = "{}")]"#, method_name)
+                ];
+                let enum_attributes = vec![
+                    "#[derive(Debug, Serialize, Deserialize)]".to_string()
+                ];
+                
+                command_def.command_methods.push(CommandMethods {
+                    name: rust_method_name,
+                    method_attributes,
+                    enum_attributes,
+                });
+            }
+            
+            // Go line by line from current line until we find the closing )
+            let mut paren_count = 0;
+            let mut found_start = false;
+            
+            for i in line_num..lines.len() {
+                let current_line = lines[i];
+                
+                for ch in current_line.chars() {
+                    match ch {
+                        '(' => {
+                            paren_count += 1;
+                            found_start = true;
+                        }
+                        ')' => {
+                            paren_count -= 1;
+                            if paren_count == 0 && found_start {
+                                // Found the end of the definition
+                                // TODO: Parse the params from the extracted lines
+                                return Ok(());
+                            }
+                        }
+                        _ => {}
+                    }
+                }
+            }
+            
             break;
         }
     }
-    
-    // TODO: Need to parse the method and the params from the CDDL definition
     
     Ok(())
 }
