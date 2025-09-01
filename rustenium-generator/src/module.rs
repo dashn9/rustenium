@@ -41,14 +41,14 @@ pub fn detect_modules(cddl_strings: Vec<&str>) -> Result<Vec<Module>, Box<dyn st
     let event_pattern = Regex::new(r"([A-Z]\w*)Event\s*=\s*\(")?;
     let result_pattern = Regex::new(r"([A-Z]\w*)Result\s*=\s*\(")?;
     
-    for cddl_content in cddl_strings {
+    for cddl_content in cddl_strings.clone() {
         for line in cddl_content.lines() {
             let line = line.trim();
             
             if let Some(captures) = command_pattern.captures(line) {
                 let name = captures[1].to_string();
                 let content = extract_definition_content(cddl_content, line)?;
-                let command_def = parse_command_definition(format!("{}Command", name), content)?;
+                let command_def = parse_command_definition(format!("{}Command", name), content, cddl_strings.clone())?;
                 modules.entry(name.clone()).or_insert(Module {
                     name: name.clone(),
                     command_definition: None,

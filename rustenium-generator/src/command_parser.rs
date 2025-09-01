@@ -1,4 +1,5 @@
 use regex::Regex;
+use crate::parser;
 
 /// Represents a complete command definition parsed from CDDL (Concise Data Definition Language)
 /// This contains both the raw CDDL content and the parsed command structures
@@ -27,12 +28,26 @@ pub struct CommandDefinition {
 /// # Arguments
 /// * `name` - The name of the command definition (e.g., "BrowserCommand")
 /// * `content` - The raw CDDL content containing command definitions
+/// * `cddl_strings` - All CDDL content for searching command details
 /// 
 /// # Returns
 /// A CommandDefinition struct containing the parsed commands and metadata
-pub fn parse_command_definition(name: String, content: String) -> Result<CommandDefinition, Box<dyn std::error::Error>> {
+pub fn parse_command_definition(name: String, content: String, cddl_strings: Vec<&str>) -> Result<CommandDefinition, Box<dyn std::error::Error>> {
     let command_enum_pattern = Regex::new(r"(\w+)\.(\w+)\s*//")?;
     let mut commands = Vec::new();
+
+    // Create a mutable command definition to build up
+    let mut command_def = CommandDefinition {
+        name: name.clone(),
+        content: content.clone(),
+        commands: Vec::new(),
+        command_methods: Vec::new(),
+        command_params: Vec::new(),
+        attributes: vec![
+            "#[derive(Debug, Serialize, Deserialize)]".to_string(),
+            "#[serde(untagged)]".to_string(),
+        ],
+    };
 
     // Extract command names from the enum definition
     for line in content.lines() {
@@ -43,30 +58,24 @@ pub fn parse_command_definition(name: String, content: String) -> Result<Command
             let name = captures[2].to_string(); // Extract command name (after the dot)
             let attributes = extract_attributes(line)?;
 
-            commands.push(Command {
+            let mut command = Command {
                 name,
                 module_name,
-                method: String::new(), // Empty string for now
-                params: String::new(), // Empty string for now
+                method: String::new(), // Will be populated by search_and_update_command
+                params: String::new(), // Will be populated by search_and_update_command
                 attributes,
-            });
+            };
+
+            // Search and update the command in all CDDL content
+            search_and_update_command(cddl_strings.clone(), &mut command, &mut command_def)?;
+
+            commands.push(command);
         }
     }
 
-    // Extract attributes for the overall definition
-    let definition_attributes = vec![
-        "#[derive(Debug, Serialize, Deserialize)]".to_string(),
-        "#[serde(untagged)]".to_string(),
-    ];
-
-    Ok(CommandDefinition {
-        name: name.clone(),
-        content,
-        commands,
-        command_methods: Vec::new(),
-        command_params: Vec::new(),
-        attributes: definition_attributes,
-    })
+    // Update the command definition with the processed commands
+    command_def.commands = commands;
+    Ok(command_def)
 }
 
 /// Extracts Rust attributes from a CDDL command line
@@ -132,8 +141,9 @@ pub struct Command {
 /// update the command with the parsed method and parameter information.
 /// 
 /// # Arguments
-/// * `cddl_content` - The raw CDDL content to search through
+/// * `cddl_strings` - The array of CDDL content strings to search through
 /// * `command` - Mutable reference to the Command struct to update
+/// * `command_def` - Mutable reference to the CommandDefinition to update
 /// 
 /// # Returns
 /// Ok(()) if successful, or an error if parsing fails
@@ -142,13 +152,15 @@ pub struct Command {
 /// Currently only searches for the command pattern. Need to implement:
 /// - Parsing the actual method name from the CDDL definition
 /// - Extracting and parsing parameter definitions
-pub fn search_and_update_command(cddl_content: &str, command: &mut Command, command_def: &mut CommandDefinition) -> Result<(), Box<dyn std::error::Error>> {
+pub fn search_and_update_command(cddl_strings: Vec<&str>, command: &mut Command, command_def: &mut CommandDefinition) -> Result<(), Box<dyn std::error::Error>> {
     // Search for command definition using pattern: module_name.name = (
     let method_name = format!("{}.{}", command.module_name.to_lowercase(), command.name);
     let pattern = format!(r"^{}\s*=\s*\(", regex::escape(&method_name));
     let regex = Regex::new(&pattern)?;
     
-    let lines: Vec<&str> = cddl_content.lines().collect();
+    // Search through all CDDL content strings
+    for cddl_content in cddl_strings {
+        let lines: Vec<&str> = cddl_content.lines().collect();
     
     for (line_num, line) in lines.iter().enumerate() {
         if regex.is_match(line.trim()) {
@@ -177,9 +189,10 @@ pub fn search_and_update_command(cddl_content: &str, command: &mut Command, comm
                 });
             }
             
-            // Go line by line from current line until we find the closing )
+            // Collect lines between the parentheses
             let mut paren_count = 0;
             let mut found_start = false;
+            let mut param_lines = Vec::new();
             
             for i in line_num..lines.len() {
                 let current_line = lines[i];
@@ -193,18 +206,28 @@ pub fn search_and_update_command(cddl_content: &str, command: &mut Command, comm
                         ')' => {
                             paren_count -= 1;
                             if paren_count == 0 && found_start {
-                                // Found the end of the definition
-                                // TODO: Parse the params from the extracted lines
+                                // Found the end, join the collected lines
+                                let param_content = param_lines.join("\n").trim().to_string();
+                                command.params = param_content.clone();
+                                
+                                // Parse the parameter content
+                                parser::parse_command_parameters(&param_lines, command_def)?;
                                 return Ok(());
                             }
                         }
                         _ => {}
                     }
                 }
+                
+                // Add the line if we're inside the parentheses
+                if found_start && paren_count > 0 {
+                    param_lines.push(current_line.trim());
+                }
             }
             
-            break;
+            return Ok(()); // Found and processed the command, return early
         }
+    }
     }
     
     Ok(())
