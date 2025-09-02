@@ -159,7 +159,7 @@ pub fn search_and_update_command(cddl_strings: Vec<&str>, command: &mut Command,
     let regex = Regex::new(&pattern)?;
     
     // Search through all CDDL content strings
-    for cddl_content in cddl_strings {
+    for cddl_content in cddl_strings.clone() {
         let lines: Vec<&str> = cddl_content.lines().collect();
     
     for (line_num, line) in lines.iter().enumerate() {
@@ -181,6 +181,8 @@ pub fn search_and_update_command(cddl_strings: Vec<&str>, command: &mut Command,
                 let enum_attributes = vec![
                     "#[derive(Debug, Serialize, Deserialize)]".to_string()
                 ];
+
+                // TODO: Use The Method within the body of the cddl as it is the more idiomatic way
                 
                 command_def.command_methods.push(CommandMethods {
                     name: rust_method_name,
@@ -189,29 +191,27 @@ pub fn search_and_update_command(cddl_strings: Vec<&str>, command: &mut Command,
                 });
             }
             
-            // Collect lines between the parentheses
+            // Collect lines between the parentheses (skip the first line with opening paren)
             let mut paren_count = 0;
-            let mut found_start = false;
             let mut param_lines = Vec::new();
             
-            for i in line_num..lines.len() {
+            for i in (line_num + 1)..lines.len() {
                 let current_line = lines[i];
                 
                 for ch in current_line.chars() {
                     match ch {
                         '(' => {
                             paren_count += 1;
-                            found_start = true;
                         }
                         ')' => {
                             paren_count -= 1;
-                            if paren_count == 0 && found_start {
-                                // Found the end, join the collected lines
+                            if paren_count < 0 {
+                                // Found the closing paren, join the collected lines
                                 let param_content = param_lines.join("\n").trim().to_string();
                                 command.params = param_content.clone();
                                 
                                 // Parse the parameter content
-                                parser::parse_command_parameters(&param_lines, command_def)?;
+                                parser::parse_command_parameters(&param_lines, cddl_strings.clone(), command_def)?;
                                 return Ok(());
                             }
                         }
@@ -219,10 +219,8 @@ pub fn search_and_update_command(cddl_strings: Vec<&str>, command: &mut Command,
                     }
                 }
                 
-                // Add the line if we're inside the parentheses
-                if found_start && paren_count > 0 {
-                    param_lines.push(current_line.trim());
-                }
+                // Add the line (we start from line_num + 1, so first line is skipped)
+                param_lines.push(current_line.trim());
             }
             
             return Ok(()); // Found and processed the command, return early
