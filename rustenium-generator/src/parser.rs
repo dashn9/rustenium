@@ -170,20 +170,14 @@ fn parse_cddl_property_line(line: &str) -> Result<Option<Property>, Box<dyn std:
     Ok(None)
 }
 
-/// Converts a CDDL type to a Rust type
+/// Converts basic CDDL primitive types to Rust types
 /// 
 /// # Arguments
 /// * `cddl_type` - The CDDL type string
 /// 
 /// # Returns
 /// A tuple of (rust_type, is_primitive)
-fn convert_cddl_type_to_rust(cddl_type: &str) -> (String, bool) {
-    // First, check if it's an array
-    if let Some(array_type) = detect_and_convert_array(cddl_type) {
-        return array_type;
-    }
-    
-    // Then check primitive types
+fn convert_basic_cddl_type(cddl_type: &str) -> (String, bool) {
     match cddl_type {
         "text" => ("String".to_string(), true),
         "bool" => ("bool".to_string(), true),
@@ -197,26 +191,111 @@ fn convert_cddl_type_to_rust(cddl_type: &str) -> (String, bool) {
     }
 }
 
-/// Detects and converts CDDL array types to Rust Vec types
+/// Splits a string by commas while respecting nested brackets
 /// 
 /// # Arguments
-/// * `cddl_type` - The CDDL type string to check
+/// * `input` - The string to split
 /// 
 /// # Returns
-/// Optional tuple of (rust_type, is_primitive) if it's an array
-fn detect_and_convert_array(cddl_type: &str) -> Option<(String, bool)> {
-    // Pattern for arrays: [+type] or [*type] 
-    let array_pattern = Regex::new(r"^\s*\[\s*[\+\*]\s*(.+?)\s*\]\s*$").ok()?;
+/// Vector of strings split by top-level commas only
+fn split_respecting_brackets(input: &str) -> Vec<String> {
+    let mut result = Vec::new();
+    let mut current = String::new();
+    let mut bracket_depth = 0;
     
-    if let Some(captures) = array_pattern.captures(cddl_type) {
-        let inner_type = captures[1].trim();
-        
-        // Recursively convert the inner type (handles nested arrays)
-        let (rust_inner_type, _) = convert_cddl_type_to_rust(inner_type);
-        
-        // Arrays are not primitive, even if they contain primitives
-        return Some((format!("Vec<{}>", rust_inner_type), false));
+    for ch in input.chars() {
+        match ch {
+            '[' => {
+                bracket_depth += 1;
+                current.push(ch);
+            }
+            ']' => {
+                bracket_depth -= 1;
+                current.push(ch);
+            }
+            ',' if bracket_depth == 0 => {
+                result.push(current.trim().to_string());
+                current.clear();
+            }
+            _ => {
+                current.push(ch);
+            }
+        }
     }
     
-    None
+    if !current.is_empty() {
+        result.push(current.trim().to_string());
+    }
+    
+    result
 }
+
+/// Extracts content from within brackets, handling nested structures
+/// 
+/// # Arguments
+/// * `input` - The bracketed string (e.g., "[content]")
+/// 
+/// # Returns
+/// The content inside the outermost brackets
+fn extract_bracket_content(input: &str) -> Option<String> {
+    let trimmed = input.trim();
+    if !trimmed.starts_with('[') || !trimmed.ends_with(']') {
+        return None;
+    }
+    
+    // Remove outer brackets
+    let content = &trimmed[1..trimmed.len()-1];
+    Some(content.trim().to_string())
+}
+
+/// Converts a CDDL type to a Rust type, handling arrays, tuples, and basic types
+/// 
+/// # Arguments
+/// * `cddl_type` - The CDDL type string
+/// 
+/// # Returns
+/// A tuple of (rust_type, is_primitive)
+fn convert_cddl_type_to_rust(cddl_type: &str) -> (String, bool) {
+    let trimmed = cddl_type.trim();
+    
+    // Check if it's a bracketed type [...]
+    if let Some(inner_content) = extract_bracket_content(trimmed) {
+        // Check for arrays: [+type] or [*type]
+        if let Ok(array_pattern) = Regex::new(r"^\s*[\+\*]\s*(.+)$") {
+            if let Some(captures) = array_pattern.captures(&inner_content) {
+                let inner_type = captures[1].trim();
+                
+                // Recursively convert the inner type
+                let (rust_inner_type, _) = convert_cddl_type_to_rust(inner_type);
+                
+                // Arrays are not primitive
+                return (format!("Vec<{}>", rust_inner_type), false);
+            }
+        }
+        
+        // Check for tuples by splitting on top-level commas
+        let parts = split_respecting_brackets(&inner_content);
+        if parts.len() > 1 {
+            // It's a tuple - convert each part
+            let tuple_types: Vec<String> = parts
+                .into_iter()
+                .map(|part| {
+                    let (rust_type, _) = convert_cddl_type_to_rust(&part);
+                    rust_type
+                })
+                .collect();
+            
+            // Tuples are not primitive
+            return (format!("({})", tuple_types.join(", ")), false);
+        } else if parts.len() == 1 {
+            // Single item in brackets - could be a single-element array or just grouped
+            // For now, treat as the inner type
+            let (rust_type, is_primitive) = convert_cddl_type_to_rust(&parts[0]);
+            return (rust_type, is_primitive);
+        }
+    }
+    
+    // Fall back to basic type conversion
+    convert_basic_cddl_type(trimmed)
+}
+
