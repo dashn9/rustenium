@@ -13,6 +13,8 @@ pub struct Event {
 
 #[derive(Debug)]
 pub struct BidiType {
+    pub name: String,
+    pub properties: Vec<crate::parser::Property>,
     pub raw: String,
 }
 
