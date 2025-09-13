@@ -9,7 +9,9 @@
   <component name="ChangeListManager">
     <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-generator/src/command_parser.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/command_parser.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-generator/src/module.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/module.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-generator/src/output.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/output.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-generator/src/parser.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/parser.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -32,23 +34,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Cargo.Rustenium Generator.executor&quot;: &quot;Debug&quot;,
-    &quot;Cargo.Test Rustenium.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.rust.reset.selective.auto.import&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;org.rust.cargo.project.model.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
-    &quot;org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon&quot;: &quot;&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Cargo.Rustenium Generator.executor": "Debug",
+    "Cargo.Test Rustenium.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.rust.reset.selective.auto.import": "true",
+    "git-widget-placeholder": "main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
+    "org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon": "",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Cargo.Rustenium Generator">
     <configuration name="Rustenium Generator" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
       <option name="buildProfileId" value="dev" />
@@ -111,7 +113,7 @@
       <workItem from="1756933356172" duration="7453000" />
       <workItem from="1757267287465" duration="1215000" />
       <workItem from="1757268854717" duration="3103000" />
-      <workItem from="1757532099700" duration="7543000" />
+      <workItem from="1757532099700" duration="26239000" />
     </task>
     <servers />
   </component>
@@ -131,9 +133,24 @@
           <option name="timeStamp" value="31" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/rustenium-generator/src/output.rs</url>
+          <line>7</line>
+          <option name="timeStamp" value="37" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/rustenium-generator/src/parser.rs</url>
-          <line>44</line>
-          <option name="timeStamp" value="33" />
+          <line>37</line>
+          <option name="timeStamp" value="42" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/rustenium-generator/src/parser.rs</url>
+          <line>55</line>
+          <option name="timeStamp" value="46" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/rustenium-generator/src/parser.rs</url>
+          <line>69</line>
+          <option name="timeStamp" value="47" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

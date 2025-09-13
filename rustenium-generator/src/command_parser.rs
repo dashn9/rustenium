@@ -1,4 +1,5 @@
 use regex::Regex;
+use crate::module::Module;
 use crate::parser;
 
 /// Represents a complete command definition parsed from CDDL (Concise Data Definition Language)
@@ -32,7 +33,7 @@ pub struct CommandDefinition {
 /// 
 /// # Returns
 /// A CommandDefinition struct containing the parsed commands and metadata
-pub fn parse_command_definition(name: String, content: String, cddl_strings: Vec<&str>) -> Result<CommandDefinition, Box<dyn std::error::Error>> {
+pub fn parse_command_definition(name: String, content: String, cddl_strings: Vec<&str>, module: &mut Module) -> Result<CommandDefinition, Box<dyn std::error::Error>> {
     let command_enum_pattern = Regex::new(r"(\w+)\.(\w+)\s*//")?;
     let mut commands = Vec::new();
 
@@ -67,7 +68,7 @@ pub fn parse_command_definition(name: String, content: String, cddl_strings: Vec
             };
 
             // Search and update the command in all CDDL content
-            search_and_update_command(cddl_strings.clone(), &mut command, &mut command_def)?;
+            search_and_update_command(cddl_strings.clone(), &mut command, &mut command_def, module)?;
 
             commands.push(command);
         }
@@ -152,7 +153,7 @@ pub struct Command {
 /// Currently only searches for the command pattern. Need to implement:
 /// - Parsing the actual method name from the CDDL definition
 /// - Extracting and parsing parameter definitions
-pub fn search_and_update_command(cddl_strings: Vec<&str>, command: &mut Command, command_def: &mut CommandDefinition) -> Result<(), Box<dyn std::error::Error>> {
+pub fn search_and_update_command(cddl_strings: Vec<&str>, command: &mut Command, command_def: &mut CommandDefinition, module: &mut Module) -> Result<(), Box<dyn std::error::Error>> {
     // Search for command definition using pattern: module_name.name = (
     let method_name = format!("{}.{}", command.module_name.to_lowercase(), command.name);
     let pattern = format!(r"^{}\s*=\s*\(", regex::escape(&method_name));
@@ -211,7 +212,7 @@ pub fn search_and_update_command(cddl_strings: Vec<&str>, command: &mut Command,
                                 command.params = param_content.clone();
                                 
                                 // Parse the parameter content
-                                parser::parse_command_parameters(&param_lines, cddl_strings.clone(), command_def)?;
+                                parser::parse_command_parameters(&param_lines, cddl_strings.clone(), module, command_def)?;
                                 return Ok(());
                             }
                         }

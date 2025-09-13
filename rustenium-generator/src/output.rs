@@ -27,17 +27,7 @@ fn generate_module_files(module: &Module, output_dir: &str) -> Result<(), Box<dy
     
     // Create command file if definition exists
     if let Some(ref cmd_def) = module.command_definition {
-        let mut command_content = String::new();
-        
-        // Generate enum from pre-parsed command definition
-        command_content.push_str(&generate_command_enum(cmd_def));
-        
-        // Add result definition to commands if it exists
-        if let Some(ref result_def) = module.result_definition {
-            command_content.push_str("\n\n");
-            command_content.push_str(&result_def.content);
-        }
-        
+        let command_content = generate_commands_file(cmd_def, module);
         fs::write(format!("{}/commands.rs", module_dir), command_content)?;
         mod_content.push_str("pub mod commands;\n");
     }
@@ -48,14 +38,125 @@ fn generate_module_files(module: &Module, output_dir: &str) -> Result<(), Box<dy
         mod_content.push_str("pub mod events;\n");
     }
     
-    // Create types file (always present)
-    fs::write(format!("{}/types.rs", module_dir), "// Module types\n")?;
+    // Create types file with generated types
+    let types_content = generate_types_file(module);
+    fs::write(format!("{}/types.rs", module_dir), types_content)?;
     mod_content.push_str("pub mod types;\n");
     
     // Write mod.rs
     fs::write(format!("{}/mod.rs", module_dir), mod_content)?;
     
     Ok(())
+}
+
+fn generate_commands_file(cmd_def: &crate::command_parser::CommandDefinition, module: &Module) -> String {
+    let mut output = String::new();
+    
+    // Add header comment
+    output.push_str("// Generated commands for module\n\n");
+    
+    // Generate the main command enum first
+    output.push_str(&generate_command_enum(cmd_def));
+    output.push_str("\n\n");
+    
+    // Generate individual command structs
+    for command in &cmd_def.commands {
+        output.push_str(&generate_command_struct(command));
+        output.push_str("\n\n");
+    }
+    
+    output
+}
+
+fn generate_command_struct(command: &crate::command_parser::Command) -> String {
+    let mut output = String::new();
+    
+    // Add derive attributes
+    output.push_str("#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]\n");
+    output.push_str(&format!("pub struct {} {{\n", command.name));
+    
+    // Add method field
+    output.push_str(&format!("    pub method: &'static str,\n"));
+    
+    // Add params field if command has parameters
+    if !command.params.is_empty() {
+        output.push_str(&format!("    pub params: {},\n", extract_params_type(&command.params)));
+    }
+    
+    output.push_str("}");
+    
+    // Add implementation
+    output.push_str(&format!("\n\nimpl {} {{\n", command.name));
+    output.push_str("    pub fn new(");
+    
+    if !command.params.is_empty() {
+        output.push_str(&format!("params: {}", extract_params_type(&command.params)));
+    }
+    
+    output.push_str(") -> Self {\n");
+    output.push_str("        Self {\n");
+    output.push_str(&format!("            method: \"{}\",\n", command.method));
+    
+    if !command.params.is_empty() {
+        output.push_str("            params,\n");
+    }
+    
+    output.push_str("        }\n");
+    output.push_str("    }\n");
+    output.push_str("}");
+    
+    output
+}
+
+fn extract_params_type(params: &str) -> String {
+    // For now, return a simple type - this could be enhanced to parse the actual type
+    if params.contains("EmptyParams") {
+        "()".to_string()
+    } else {
+        "serde_json::Value".to_string() // Generic fallback
+    }
+}
+
+fn generate_types_file(module: &Module) -> String {
+    let mut output = String::new();
+    
+    // Add header comment
+    output.push_str("// Generated types for module\n\n");
+    
+    // Generate each type
+    for bidi_type in &module.types {
+        output.push_str(&generate_rust_struct(&bidi_type.name, &bidi_type.properties));
+        output.push_str("\n\n");
+    }
+    
+    // If no types, add placeholder comment
+    if module.types.is_empty() {
+        output.push_str("// No types generated for this module\n");
+    }
+    
+    output
+}
+
+fn generate_rust_struct(name: &str, properties: &[crate::parser::Property]) -> String {
+    let mut output = String::new();
+    
+    // Add derive attributes
+    output.push_str("#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]\n");
+    output.push_str(&format!("pub struct {} {{\n", name));
+    
+    // Add properties
+    for property in properties {
+        let field_type = if property.is_optional {
+            format!("Option<{}>", property.value)
+        } else {
+            property.value.clone()
+        };
+        
+        output.push_str(&format!("    pub {}: {},\n", property.name, field_type));
+    }
+    
+    output.push_str("}");
+    output
 }
 
 fn generate_command_enum(cmd_def: &crate::command_parser::CommandDefinition) -> String {

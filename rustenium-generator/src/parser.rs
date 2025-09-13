@@ -2,13 +2,13 @@ use regex::Regex;
 use crate::command_parser::{CommandParams, CommandDefinition};
 use crate::module::Module;
 
-#[derive!(Debug, Clone)]
+#[derive(Debug, Clone)]
 pub struct Property {
     is_enum: bool,
     is_primitive: bool,
-    is_optional: bool,
-    name: String,
-    value: String,
+    pub(crate) is_optional: bool,
+    pub(crate) name: String,
+    pub(crate) value: String,
     attributes: Vec<String>,
 }
 /// Parses parameter definitions from CDDL content
@@ -150,7 +150,13 @@ pub fn process_cddl_to_struct(cddl_content: &str, cddl_strings: Vec<&str>, modul
 fn parse_cddl_property_line(line: &str, cddl_strings: &[&str], current_module: &mut Module) -> Result<Option<Property>, Box<dyn std::error::Error>> {
     // Pattern for: [?] propertyName: type[,]
     let property_pattern = Regex::new(r"^\s*(\??\s*)(\w+):\s*(.+?)(?:,\s*)?$")?;
-    
+
+    // TODO: Move enum to the type or property holder, for context
+    // browser.SetClientWindowStateParameters = {
+    //     clientWindow: browser.ClientWindow,
+    //     (browser.ClientWindowNamedState // browser.ClientWindowRectState)
+    // }
+    // the second property should be an untagged serde
     if let Some(captures) = property_pattern.captures(line) {
         let optional_marker = captures[1].trim();
         let property_name = captures[2].trim().to_string();
@@ -263,10 +269,116 @@ fn generate_type_if_same_module(type_name: &str, content: &str, def_type: &str, 
 /// * `type_name` - The custom type name to parse
 /// * `cddl_strings` - All CDDL content for lookup
 /// * `current_module` - Current module being processed
+/// * `struct_name` - Optional struct name for context
+/// * `property_name` - Optional property name for context
 /// 
 /// # Returns
 /// The Rust type name to use for this custom type
-fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mut Module) -> String {
+fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mut Module, struct_name: Option<&str>, property_name: Option<&str>) -> String {
+    // Handle single literal strings (quoted values)
+    if type_name.starts_with('"') && type_name.ends_with('"') {
+        let literal_value = &type_name[1..type_name.len()-1]; // Remove quotes
+        let enum_name = format!("{}Enum", literal_value.replace(" ", "").replace("-", ""));
+        
+        let properties = vec![Property {
+            is_enum: true,
+            is_primitive: false,
+            is_optional: false,
+            name: enum_name.clone(),
+            value: enum_name.clone(),
+            attributes: vec![format!(r#"#[serde(rename = "{}")]"#, literal_value)],
+        }];
+        
+        current_module.types.push(crate::module::BidiType {
+            name: enum_name.clone(),
+            properties,
+            raw: type_name.to_string(),
+        });
+        
+        return enum_name;
+    }
+    
+    // Handle union types with / or // separator
+    if type_name.contains(" // ") || type_name.contains(" / ") {
+        // Break into parts - handle both // and / separators
+        let mut parts: Vec<String> = if type_name.contains(" // ") {
+            type_name.split(" // ").map(|s| s.trim().to_string()).collect()
+        } else {
+            type_name.split(" / ").map(|s| s.trim().to_string()).collect()
+        };
+        
+        // Check if null is present
+        let has_null = parts.iter().any(|part| part == "null");
+        
+        // Remove all nulls
+        parts.retain(|part| part != "null");
+        
+        // Process remaining types through convert_basic_cddl_type
+        let processed_types: Vec<(String, Vec<String>)> = parts
+            .into_iter()
+            .map(|part| {
+                // Check if part is a literal string
+                if part.starts_with('"') && part.ends_with('"') {
+                    let literal_value = &part[1..part.len()-1]; // Remove quotes
+                    let variant_name = literal_value.replace(" ", "").replace("-", "");
+                    let attributes = vec![format!(r#"#[serde(rename = "{}")]"#, literal_value)];
+                    (variant_name, attributes)
+                } else {
+                    let (rust_type, _) = convert_basic_cddl_type(&part, cddl_strings, current_module);
+                    (rust_type, Vec::new()) // No attributes for non-literals
+                }
+            })
+            .collect();
+        
+        // Determine final type
+        return match processed_types.len() {
+            0 => "()".to_string(), // Only null was present
+            1 => {
+                let (base_type, _) = &processed_types[0];
+                if has_null {
+                    format!("Option<{}>", base_type)
+                } else {
+                    base_type.clone()
+                }
+            }
+            _ => {
+                // Multiple non-null types - create enum using struct and property names
+                let enum_name = match (struct_name, property_name) {
+                    (Some(s), Some(p)) => format!("{}{}", s, p),
+                    (Some(s), None) => format!("{}Union", s),
+                    (None, Some(p)) => format!("{}Union", p),
+                    (None, None) => format!("Union{}", current_module.types.len()),
+                };
+                
+                // Create enum variants from processed types
+                let properties: Vec<Property> = processed_types
+                    .iter()
+                    .map(|(rust_type, attributes)| Property {
+                        is_enum: true,
+                        is_primitive: false,
+                        is_optional: false,
+                        name: format!("{}{}", enum_name, rust_type),
+                        value: format!("{}{}", enum_name, rust_type),
+                        attributes: attributes.clone(),
+                    })
+                    .collect();
+                
+                // Create and add BidiType to module
+                current_module.types.push(crate::module::BidiType {
+                    name: enum_name.clone(),
+                    properties,
+                    raw: type_name.to_string(),
+                });
+                
+                if has_null {
+                    format!("Option<{}>", enum_name)
+                } else {
+                    enum_name
+                }
+            }
+        };
+    }
+    
     // Check if this type belongs to the current module
     if is_same_module_type(type_name, current_module) {
         // TODO: Generate type if needed
@@ -329,7 +441,7 @@ fn convert_basic_cddl_type(cddl_type: &str, cddl_strings: &[&str], current_modul
             // Check if it's a custom type that exists in CDDL
             if is_custom_type(cddl_type, cddl_strings, current_module) {
                 // Parse the custom type (this function will handle generation if same module)
-                let parsed_type = parse_custom_type(cddl_type, cddl_strings, current_module);
+                let parsed_type = parse_custom_type(cddl_type, cddl_strings, current_module, None, None);
                 (parsed_type, false)
             } else {
                 // Unknown type - keep as-is but mark as non-primitive
