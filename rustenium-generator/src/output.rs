@@ -71,50 +71,32 @@ fn generate_commands_file(cmd_def: &crate::command_parser::CommandDefinition, mo
 fn generate_command_struct(command: &crate::command_parser::Command) -> String {
     let mut output = String::new();
     
-    // Add derive attributes
-    output.push_str("#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]\n");
+    // Add command attributes
+    for attribute in &command.attributes {
+        output.push_str(&format!("{}\n", attribute));
+    }
+    
     output.push_str(&format!("pub struct {} {{\n", command.name));
     
-    // Add method field
-    output.push_str(&format!("    pub method: &'static str,\n"));
-    
-    // Add params field if command has parameters
-    if !command.params.is_empty() {
-        output.push_str(&format!("    pub params: {},\n", extract_params_type(&command.params)));
+    // Add properties with their attributes
+    for property in &command.properties {
+        // Add property attributes
+        for attr in &property.attributes {
+            output.push_str(&format!("    {}\n", attr));
+        }
+        
+        // Add field
+        let field_type = if property.is_optional {
+            format!("Option<{}>", property.value)
+        } else {
+            property.value.clone()
+        };
+        
+        output.push_str(&format!("    pub {}: {},\n", property.name, field_type));
     }
     
     output.push_str("}");
-    
-    // Add implementation
-    output.push_str(&format!("\n\nimpl {} {{\n", command.name));
-    output.push_str("    pub fn new(");
-    
-    if !command.params.is_empty() {
-        output.push_str(&format!("params: {}", extract_params_type(&command.params)));
-    }
-    
-    output.push_str(") -> Self {\n");
-    output.push_str("        Self {\n");
-    output.push_str(&format!("            method: \"{}\",\n", command.method));
-    
-    if !command.params.is_empty() {
-        output.push_str("            params,\n");
-    }
-    
-    output.push_str("        }\n");
-    output.push_str("    }\n");
-    output.push_str("}");
-    
     output
-}
-
-fn extract_params_type(params: &str) -> String {
-    // For now, return a simple type - this could be enhanced to parse the actual type
-    if params.contains("EmptyParams") {
-        "()".to_string()
-    } else {
-        "serde_json::Value".to_string() // Generic fallback
-    }
 }
 
 fn generate_types_file(module: &Module) -> String {

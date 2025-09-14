@@ -59,12 +59,32 @@ pub fn parse_command_definition(name: String, content: String, cddl_strings: Vec
             let name = captures[2].to_string(); // Extract command name (after the dot)
             let attributes = extract_attributes(line)?;
 
+            let method_name = format!("{}.{}", module_name.to_lowercase(), name);
+            
             let mut command = Command {
                 name,
                 module_name,
-                method: String::new(), // Will be populated by search_and_update_command
-                params: String::new(), // Will be populated by search_and_update_command
-                attributes,
+                attributes: vec![
+                    "#[derive(Debug, Serialize, Deserialize)]".to_string(),
+                ],
+                properties: vec![
+                    crate::parser::Property {
+                        is_enum: false,
+                        is_primitive: true,
+                        is_optional: false,
+                        name: "method".to_string(),
+                        value: method_name,
+                        attributes: vec![r#"#[serde(rename = "method")]"#.to_string()],
+                    },
+                    crate::parser::Property {
+                        is_enum: false,
+                        is_primitive: false,
+                        is_optional: false,
+                        name: "params".to_string(),
+                        value: "".to_string(), // Will be set to param_content later
+                        attributes: vec![r#"#[serde(rename = "params")]"#.to_string()],
+                    },
+                ],
             };
 
             // Search and update the command in all CDDL content
@@ -127,12 +147,11 @@ pub struct Command {
     pub name: String,
     /// The name of the module this command belongs to (e.g., "browser", "network", "session")
     pub module_name: String,
-    /// The actual WebDriver BiDi method name as a string
-    pub method: String,
-    /// The parameters as a string - will be populated by search_and_update_command
-    pub params: String,
     /// Rust attributes to be applied to this command variant
     pub attributes: Vec<String>,
+    /// Properties for the command struct 
+    /// Expected to contain: method property (with rename attribute) and params property (with rename attribute)
+    pub properties: Vec<crate::parser::Property>,
 }
 
 /// Searches for a specific command in CDDL content and updates the command with parsed data
@@ -166,7 +185,6 @@ pub fn search_and_update_command(cddl_strings: Vec<&str>, command: &mut Command,
     for (line_num, line) in lines.iter().enumerate() {
         if regex.is_match(line.trim()) {
             // Found the command definition, set the method
-            command.method = method_name.clone();
             
             // Create CommandMethods if it doesn't exist yet
             let rust_method_name = format!("{}{}",
@@ -209,10 +227,13 @@ pub fn search_and_update_command(cddl_strings: Vec<&str>, command: &mut Command,
                             if paren_count < 0 {
                                 // Found the closing paren, join the collected lines
                                 let param_content = param_lines.join("\n").trim().to_string();
-                                command.params = param_content.clone();
                                 
                                 // Parse the parameter content
-                                parser::parse_command_parameters(&param_lines, cddl_strings.clone(), module, command_def)?;
+                                let command_value = parser::parse_command_parameters(&param_lines, cddl_strings.clone(), module, command_def)?;
+                                if let Some(params_prop) = command.properties.iter_mut().find(|p| p.name == "params") {
+                                    params_prop.value = command_value;
+                                }
+
                                 return Ok(());
                             }
                         }

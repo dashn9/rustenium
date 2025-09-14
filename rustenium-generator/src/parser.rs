@@ -4,12 +4,12 @@ use crate::module::Module;
 
 #[derive(Debug, Clone)]
 pub struct Property {
-    is_enum: bool,
-    is_primitive: bool,
+    pub is_enum: bool,
+    pub is_primitive: bool,
     pub(crate) is_optional: bool,
     pub(crate) name: String,
     pub(crate) value: String,
-    attributes: Vec<String>,
+    pub attributes: Vec<String>,
 }
 /// Parses parameter definitions from CDDL content
 /// This module handles the complex parsing of WebDriver BiDi command parameters
@@ -72,7 +72,9 @@ pub fn parse_command_parameters(command_lines: &[&str], cddl_strings: Vec<&str>,
                                         // Found the end, process the extracted content
                                         let content = param_content_lines.join("\n").trim().to_string();
                                         let processed_struct = process_cddl_to_struct(&content, cddl_strings.clone(), module)?;
-                                        return Ok(content);
+                                        // return Ok(content);
+
+                                        return Ok(format!("{}", param_type));
                                     }
                                 }
                                 _ => {}
@@ -85,12 +87,12 @@ pub fn parse_command_parameters(command_lines: &[&str], cddl_strings: Vec<&str>,
                         }
                     }
                     
-                    return Ok(format!("Found but couldn't extract: {}", param_type));
+                    return Ok(format!("{}", param_type));
                 }
             }
         }
         
-        return Ok(format!("params: {}", param_type));
+        return Ok(format!("{}", param_type));
     }
     
     Ok(String::new())
@@ -381,7 +383,8 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
     
     // Check if this type belongs to the current module
     if is_same_module_type(type_name, current_module) {
-        // TODO: Generate type if needed
+        // Generate type if needed
+        generate_type_if_same_module(type_name, "", "struct", cddl_strings, current_module);
         
         // Return only the type name (without module prefix)
         if let Some(dot_pos) = type_name.find('.') {
