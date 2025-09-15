@@ -174,7 +174,7 @@ pub struct Command {
 /// - Extracting and parsing parameter definitions
 pub fn search_and_update_command(cddl_strings: Vec<&str>, command: &mut Command, command_def: &mut CommandDefinition, module: &mut Module) -> Result<(), Box<dyn std::error::Error>> {
     // Search for command definition using pattern: module_name.name = (
-    let method_name = format!("{}.{}", command.module_name.to_lowercase(), command.name);
+    let method_name = format!("{}.{}", command.module_name, command.name);
     let pattern = format!(r"^{}\s*=\s*\(", regex::escape(&method_name));
     let regex = Regex::new(&pattern)?;
     

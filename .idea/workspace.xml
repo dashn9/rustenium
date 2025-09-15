@@ -10,8 +10,6 @@
     <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-generator/src/command_parser.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/command_parser.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-generator/src/output.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/output.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-generator/src/parser.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/parser.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -113,7 +111,7 @@
       <workItem from="1757267287465" duration="1215000" />
       <workItem from="1757268854717" duration="3103000" />
       <workItem from="1757532099700" duration="36631000" />
-      <workItem from="1757859851643" duration="3028000" />
+      <workItem from="1757859851643" duration="10015000" />
     </task>
     <servers />
   </component>
@@ -129,18 +127,23 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/rustenium-generator/src/parser.rs</url>
-          <line>92</line>
+          <line>94</line>
           <option name="timeStamp" value="49" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/rustenium-generator/src/parser.rs</url>
-          <line>95</line>
+          <line>97</line>
           <option name="timeStamp" value="50" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/rustenium-generator/src/parser.rs</url>
-          <line>30</line>
-          <option name="timeStamp" value="52" />
+          <url>file://$PROJECT_DIR$/rustenium-generator/src/command_parser.rs</url>
+          <line>90</line>
+          <option name="timeStamp" value="57" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/rustenium-generator/src/command_parser.rs</url>
+          <line>189</line>
+          <option name="timeStamp" value="58" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
