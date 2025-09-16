@@ -59,8 +59,10 @@ pub fn parse_command_definition(name: String, content: String, cddl_strings: Vec
             let name = captures[2].to_string(); // Extract command name (after the dot)
             let attributes = extract_attributes(line)?;
 
-            let method_name = format!("{}.{}", module_name.to_lowercase(), name);
-            
+            let rust_method_name = format!("{}{}",
+                                           module_name.replace("_", "").to_string().chars().next().unwrap().to_uppercase().to_string() + &module_name[1..],
+                                           name
+            );
             let mut command = Command {
                 name,
                 module_name,
@@ -73,7 +75,7 @@ pub fn parse_command_definition(name: String, content: String, cddl_strings: Vec
                         is_primitive: true,
                         is_optional: false,
                         name: "method".to_string(),
-                        value: method_name,
+                        value: format!("{}Method", rust_method_name),
                         attributes: vec![r#"#[serde(rename = "method")]"#.to_string()],
                     },
                     crate::parser::Property {
@@ -204,7 +206,7 @@ pub fn search_and_update_command(cddl_strings: Vec<&str>, command: &mut Command,
                 // TODO: Use The Method within the body of the cddl as it is the more idiomatic way
                 
                 command_def.command_methods.push(CommandMethods {
-                    name: rust_method_name,
+                    name: format!("{}Method", rust_method_name),
                     method_attributes,
                     enum_attributes,
                 });
