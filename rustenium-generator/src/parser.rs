@@ -71,10 +71,31 @@ pub fn parse_command_parameters(command_lines: &[&str], cddl_strings: Vec<&str>,
                                     if brace_count == 0 && found_start {
                                         // Found the end, process the extracted content
                                         let content = param_content_lines.join("\n").trim().to_string();
-                                        let processed_struct = process_cddl_to_struct(&content, cddl_strings.clone(), module)?;
-                                        // return Ok(content);
+                                        let processed_properties = process_cddl_to_struct(&content, cddl_strings.clone(), module)?;
 
-                                        return Ok(format!("{}", param_type));
+                                        // Create the parameter struct name from the param_type
+                                        let param_struct_name = if let Some(dot_pos) = param_type.find('.') {
+                                            // Remove module prefix and use just the type name
+                                            param_type[dot_pos + 1..].to_string()
+                                        } else {
+                                            param_type.clone()
+                                        };
+
+                                        // Create CommandParams and add to command_def
+                                        let command_param = crate::command_parser::CommandParams {
+                                            name: param_struct_name.clone(),
+                                            properties: processed_properties,
+                                            attributes: vec![
+                                                "#[derive(Debug, Clone, Serialize, Deserialize)]".to_string(),
+                                            ],
+                                        };
+
+                                        // Check if this param already exists to avoid duplicates
+                                        if !command_def.command_params.iter().any(|p| p.name == param_struct_name) {
+                                            command_def.command_params.push(command_param);
+                                        }
+
+                                        return Ok(param_struct_name);
                                     }
                                 }
                                 _ => {}

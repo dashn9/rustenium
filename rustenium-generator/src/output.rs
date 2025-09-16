@@ -97,6 +97,38 @@ fn generate_command_method(method: &crate::command_parser::CommandMethods) -> St
     output
 }
 
+fn generate_command_param(param: &crate::command_parser::CommandParams) -> String {
+    let mut output = String::new();
+
+    // Add parameter struct attributes
+    for attribute in &param.attributes {
+        output.push_str(&format!("{}\n", attribute));
+    }
+
+    // Generate parameter struct
+    output.push_str(&format!("pub struct {} {{\n", param.name));
+
+    // Add properties
+    for property in &param.properties {
+        // Add property attributes
+        for attr in &property.attributes {
+            output.push_str(&format!("    {}\n", attr));
+        }
+
+        // Add field
+        let field_type = if property.is_optional {
+            format!("Option<{}>", property.value)
+        } else {
+            property.value.clone()
+        };
+
+        output.push_str(&format!("    pub {}: {},\n", property.name, field_type));
+    }
+
+    output.push_str("}");
+    output
+}
+
 fn generate_commands_file(cmd_def: &crate::command_parser::CommandDefinition, module: &Module) -> String {
     let mut output = String::new();
 
@@ -110,6 +142,12 @@ fn generate_commands_file(cmd_def: &crate::command_parser::CommandDefinition, mo
     // Generate command methods after the enum definition
     for method in &cmd_def.command_methods {
         output.push_str(&generate_command_method(method));
+        output.push_str("\n\n");
+    }
+
+    // Generate command params after methods
+    for param in &cmd_def.command_params {
+        output.push_str(&generate_command_param(param));
         output.push_str("\n\n");
     }
 
@@ -162,6 +200,9 @@ fn generate_types_file(module: &Module) -> String {
     // Add header comment
     output.push_str("// Generated types for module\n\n");
 
+    // Add imports for serde
+    output.push_str("use serde::{Serialize, Deserialize};\n\n");
+
     // Generate each type
     for bidi_type in &module.types {
         output.push_str(&generate_rust_struct(&bidi_type.name, &bidi_type.properties, &module.name));
@@ -179,12 +220,37 @@ fn generate_types_file(module: &Module) -> String {
 fn generate_rust_struct(name: &str, properties: &[crate::parser::Property], module_name: &str) -> String {
     let mut output = String::new();
 
+    // Check if this should be an enum instead of a struct
+    let has_enum_properties = properties.iter().any(|p| p.is_enum);
+
+    if has_enum_properties && properties.len() > 1 {
+        // Generate enum with variants
+        generate_rust_enum(name, properties, module_name)
+    } else if properties.is_empty() {
+        // Generate unit struct for empty types
+        output.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
+        output.push_str(&format!("pub struct {};\n", name));
+        output
+    } else {
+        // Generate regular struct
+        generate_rust_regular_struct(name, properties, module_name)
+    }
+}
+
+fn generate_rust_regular_struct(name: &str, properties: &[crate::parser::Property], module_name: &str) -> String {
+    let mut output = String::new();
+
     // Add derive attributes
-    output.push_str("#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]\n");
+    output.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
     output.push_str(&format!("pub struct {} {{\n", name));
 
     // Add properties
     for property in properties {
+        // Add property attributes
+        for attr in &property.attributes {
+            output.push_str(&format!("    {}\n", attr));
+        }
+
         // Clean up property type - remove module prefix if it's the same module
         let cleaned_type = clean_module_prefix(&property.value, module_name);
 
@@ -195,6 +261,49 @@ fn generate_rust_struct(name: &str, properties: &[crate::parser::Property], modu
         };
 
         output.push_str(&format!("    pub {}: {},\n", property.name, field_type));
+    }
+
+    output.push_str("}");
+    output
+}
+
+fn generate_rust_enum(name: &str, properties: &[crate::parser::Property], module_name: &str) -> String {
+    let mut output = String::new();
+
+    // Add derive attributes
+    output.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
+
+    // Check if we need untagged serde for union types
+    let is_union = properties.iter().any(|p| p.attributes.iter().any(|a| a.contains("serde(rename")));
+    if is_union {
+        output.push_str("#[serde(untagged)]\n");
+    }
+
+    output.push_str(&format!("pub enum {} {{\n", name));
+
+    // Add enum variants
+    for property in properties {
+        // Add variant attributes
+        for attr in &property.attributes {
+            output.push_str(&format!("    {}\n", attr));
+        }
+
+        // Clean up property type - remove module prefix if it's the same module
+        let cleaned_type = clean_module_prefix(&property.value, module_name);
+
+        if property.is_enum {
+            // Enum variant
+            if cleaned_type == property.name {
+                // Unit variant
+                output.push_str(&format!("    {},\n", property.name));
+            } else {
+                // Tuple variant
+                output.push_str(&format!("    {}({}),\n", property.name, cleaned_type));
+            }
+        } else {
+            // Regular variant with data
+            output.push_str(&format!("    {}({}),\n", property.name, cleaned_type));
+        }
     }
 
     output.push_str("}");

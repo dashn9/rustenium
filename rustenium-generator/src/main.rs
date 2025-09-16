@@ -10,13 +10,13 @@ mod parser;
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let local_cddl = fs::read_to_string("raw/local.cddl")?;
     let remote_cddl = fs::read_to_string("raw/remote.cddl")?;
-    
+
     let cddl_strings = vec![local_cddl.as_str(), remote_cddl.as_str()];
     let modules = module::detect_modules(cddl_strings)?;
-    
+
     output::generate_output(&modules)?;
-    
+
     println!("Generated {} modules to ./output", modules.len());
-    
+
     Ok(())
 }

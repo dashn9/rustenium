@@ -124,10 +124,14 @@ fn extract_attributes(line: &str) -> Result<Vec<String>, Box<dyn std::error::Err
 }
 
 /// Parameters for a WebDriver BiDi command
-/// Currently empty but will be populated with actual parameter types from CDDL parsing
 #[derive(Debug, Clone)]
 pub struct CommandParams {
-    // Empty for now - will contain parsed parameter definitions
+    /// The parameter struct name (e.g., "BrowserCloseParameters")
+    pub name: String,
+    /// Properties of the parameter struct
+    pub properties: Vec<crate::parser::Property>,
+    /// Rust attributes to be applied to this parameter struct
+    pub attributes: Vec<String>,
 }
 
 /// Represents a WebDriver BiDi command method with its serialization attributes
