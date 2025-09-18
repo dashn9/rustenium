@@ -50,7 +50,8 @@ pub fn detect_modules(cddl_strings: Vec<&str>) -> Result<Vec<Module>, Box<dyn st
             if let Some(captures) = command_pattern.captures(line) {
                 let name = captures[1].to_string();
                 let content = extract_definition_content(cddl_content, line)?;
-                let mut module = Module {
+
+                let module = modules.entry(name.clone()).or_insert_with(|| Module {
                     name: name.clone(),
                     command_definition: None,
                     event_definition: None,
@@ -59,15 +60,17 @@ pub fn detect_modules(cddl_strings: Vec<&str>) -> Result<Vec<Module>, Box<dyn st
                     events: Vec::new(),
                     types: Vec::new(),
                     results: Vec::new(),
-                };
-                let command_def = parse_command_definition(format!("{}Command", name), content, cddl_strings.clone(), &mut module)?;
-                modules.entry(name.clone()).or_insert(module).command_definition = Some(command_def);
+                });
+
+                let command_def = parse_command_definition(format!("{}Command", name), content, cddl_strings.clone(), module)?;
+                module.command_definition = Some(command_def);
             }
             
             if let Some(captures) = event_pattern.captures(line) {
-                let name = captures[1].to_lowercase();
+                let name = captures[1].to_string();
                 let content = extract_definition_content(cddl_content, line)?;
-                modules.entry(name.clone()).or_insert(Module {
+
+                let module = modules.entry(name.clone()).or_insert_with(|| Module {
                     name: name.clone(),
                     command_definition: None,
                     event_definition: None,
@@ -76,16 +79,19 @@ pub fn detect_modules(cddl_strings: Vec<&str>) -> Result<Vec<Module>, Box<dyn st
                     events: Vec::new(),
                     types: Vec::new(),
                     results: Vec::new(),
-                }).event_definition = Some(EventDefinition {
+                });
+
+                module.event_definition = Some(EventDefinition {
                     name: format!("{}Event", name),
                     content,
                 });
             }
             
             if let Some(captures) = result_pattern.captures(line) {
-                let name = captures[1].to_lowercase();
+                let name = captures[1].to_string();
                 let content = extract_definition_content(cddl_content, line)?;
-                modules.entry(name.clone()).or_insert(Module {
+
+                let module = modules.entry(name.clone()).or_insert_with(|| Module {
                     name: name.clone(),
                     command_definition: None,
                     event_definition: None,
@@ -94,7 +100,9 @@ pub fn detect_modules(cddl_strings: Vec<&str>) -> Result<Vec<Module>, Box<dyn st
                     events: Vec::new(),
                     types: Vec::new(),
                     results: Vec::new(),
-                }).result_definition = Some(ResultDefinition {
+                });
+
+                module.result_definition = Some(ResultDefinition {
                     name: format!("{}Result", name),
                     content,
                 });

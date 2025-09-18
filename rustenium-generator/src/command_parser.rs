@@ -91,7 +91,6 @@ pub fn parse_command_definition(name: String, content: String, cddl_strings: Vec
 
             // Search and update the command in all CDDL content
             search_and_update_command(cddl_strings.clone(), &mut command, &mut command_def, module)?;
-
             commands.push(command);
         }
     }
