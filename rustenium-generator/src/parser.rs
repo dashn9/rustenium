@@ -232,6 +232,68 @@ fn find_type_definition(type_name: &str, cddl_strings: &[&str], current_module: 
     None
 }
 
+/// Finds and extracts the content between braces for a type definition
+///
+/// # Arguments
+/// * `type_name` - The type name to search for (e.g., "session.CapabilityRequest", "ErrorCode")
+/// * `cddl_strings` - All CDDL content to search through
+/// * `current_module` - The current module being processed for context
+///
+/// # Returns
+/// Option containing the extracted content between braces if found
+fn find_and_extract_type_content(type_name: &str, cddl_strings: &[&str], current_module: &Module) -> Option<String> {
+    // Try direct match first (e.g., "session.CapabilityRequest = {")
+    let direct_pattern = format!(r"^{}\s*=\s*\{{", regex::escape(type_name));
+    if let Ok(regex) = Regex::new(&direct_pattern) {
+        for cddl_content in cddl_strings {
+            let lines: Vec<&str> = cddl_content.lines().collect();
+
+            for (line_num, line) in lines.iter().enumerate() {
+                if regex.is_match(line.trim()) {
+                    // Found the type definition, extract content between braces
+                    let mut brace_count = 0;
+                    let mut found_start = false;
+                    let mut content_lines = Vec::new();
+
+                    for i in line_num..lines.len() {
+                        let current_line = lines[i];
+
+                        for ch in current_line.chars() {
+                            match ch {
+                                '{' => {
+                                    brace_count += 1;
+                                    found_start = true;
+                                }
+                                '}' => {
+                                    brace_count -= 1;
+                                    if brace_count == 0 && found_start {
+                                        // Found the end, return the extracted content
+                                        return Some(content_lines.join("\n").trim().to_string());
+                                    }
+                                }
+                                _ => {}
+                            }
+                        }
+
+                        // Add the line if we're inside the braces (skip the first line)
+                        if found_start && brace_count > 0 && i > line_num {
+                            content_lines.push(current_line.trim());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // If no module prefix, try with current module prefix
+    if !type_name.contains('.') {
+        let prefixed_type = format!("{}.{}", current_module.name.to_lowercase(), type_name);
+        return find_and_extract_type_content(&prefixed_type, cddl_strings, current_module);
+    }
+
+    None
+}
+
 /// Checks if a custom type belongs to the current module
 /// 
 /// # Arguments
@@ -404,8 +466,11 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
     
     // Check if this type belongs to the current module
     if is_same_module_type(type_name, current_module) {
-        // Generate type if needed
-        generate_type_if_same_module(type_name, "", "struct", cddl_strings, current_module);
+        // First find the actual type definition content
+        if let Some(type_content) = find_and_extract_type_content(type_name, cddl_strings, current_module) {
+            // Generate type if needed
+            generate_type_if_same_module(type_name, &type_content, "struct", cddl_strings, current_module);
+        }
         
         // Return only the type name (without module prefix)
         if let Some(dot_pos) = type_name.find('.') {
