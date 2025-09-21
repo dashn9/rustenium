@@ -77,6 +77,7 @@ pub fn parse_command_definition(name: String, content: String, cddl_strings: Vec
                         name: "method".to_string(),
                         value: format!("{}Method", rust_method_name),
                         attributes: vec![r#"#[serde(rename = "method")]"#.to_string()],
+                        validation_info: None,
                     },
                     crate::parser::Property {
                         is_enum: false,
@@ -85,6 +86,7 @@ pub fn parse_command_definition(name: String, content: String, cddl_strings: Vec
                         name: "params".to_string(),
                         value: "".to_string(), // Will be set to param_content later
                         attributes: vec![r#"#[serde(rename = "params")]"#.to_string()],
+                        validation_info: None,
                     },
                 ],
             };

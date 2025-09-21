@@ -2,6 +2,27 @@ use std::fs;
 use std::path::Path;
 use crate::module::Module;
 
+/// Converts PascalCase to snake_case
+///
+/// # Arguments
+/// * `input` - The PascalCase string to convert
+///
+/// # Returns
+/// The snake_case version of the string
+fn to_snake_case(input: &str) -> String {
+    let mut result = String::new();
+    let mut chars = input.chars().peekable();
+
+    while let Some(ch) = chars.next() {
+        if ch.is_uppercase() && !result.is_empty() {
+            result.push('_');
+        }
+        result.push(ch.to_lowercase().to_string().chars().next().unwrap());
+    }
+
+    result
+}
+
 /// Cleans up module prefixes from type names if they belong to the same module
 ///
 /// # Arguments
@@ -97,8 +118,41 @@ fn generate_command_method(method: &crate::command_parser::CommandMethods) -> St
     output
 }
 
-fn generate_command_param(param: &crate::command_parser::CommandParams) -> String {
+fn generate_command_param(param: &crate::command_parser::CommandParams, module: &Module) -> String {
     let mut output = String::new();
+    let mut default_functions = String::new();
+
+    // Generate default functions first (they need to come before the struct)
+    for property in &param.properties {
+        if let Some(validation_info) = &property.validation_info {
+            if let Some(default_value) = &validation_info.default_value {
+                let function_name = format!("{}_default_{}", to_snake_case(&param.name), property.name);
+                let cleaned_type = clean_module_prefix(&property.value, &module.name);
+
+                let return_type = if property.is_optional {
+                    format!("Option<{}>", cleaned_type)
+                } else {
+                    cleaned_type.clone()
+                };
+
+                let return_value = if property.is_optional {
+                    format!("Some({})", default_value)
+                } else {
+                    default_value.clone()
+                };
+
+                default_functions.push_str(&format!(
+                    "fn {}() -> {} {{\n    {}\n}}\n\n",
+                    function_name, return_type, return_value
+                ));
+            }
+        }
+    }
+
+    // Add default functions to output
+    if !default_functions.is_empty() {
+        output.push_str(&default_functions);
+    }
 
     // Add parameter struct attributes
     for attribute in &param.attributes {
@@ -115,11 +169,54 @@ fn generate_command_param(param: &crate::command_parser::CommandParams) -> Strin
             output.push_str(&format!("    {}\n", attr));
         }
 
+        // Add validation-based attributes
+        if let Some(validation_info) = &property.validation_info {
+            // Add validation constraints
+            if !validation_info.constraints.is_empty() {
+                let mut constraints = Vec::new();
+                for constraint in &validation_info.constraints {
+                    match constraint.constraint_type.as_str() {
+                        "ge" => constraints.push(format!("min = {}", constraint.value)),
+                        "le" => constraints.push(format!("max = {}", constraint.value)),
+                        "gt" => {
+                            // For greater than, we need to add a small epsilon
+                            if let Ok(val) = constraint.value.parse::<f64>() {
+                                constraints.push(format!("min = {}", val + f64::EPSILON));
+                            } else {
+                                constraints.push(format!("min = {}", constraint.value));
+                            }
+                        },
+                        "lt" => {
+                            // For less than, we need to subtract a small epsilon
+                            if let Ok(val) = constraint.value.parse::<f64>() {
+                                constraints.push(format!("max = {}", val - f64::EPSILON));
+                            } else {
+                                constraints.push(format!("max = {}", constraint.value));
+                            }
+                        },
+                        _ => {} // Unknown constraint type
+                    }
+                }
+                if !constraints.is_empty() {
+                    output.push_str(&format!("    #[validate(range({}))]\n", constraints.join(", ")));
+                }
+            }
+
+            // Add default value attribute
+            if let Some(_default_value) = &validation_info.default_value {
+                let function_name = format!("{}_default_{}", to_snake_case(&param.name), property.name);
+                output.push_str(&format!("    #[serde(default = \"{}\")]\n", function_name));
+            }
+        }
+
+        // Clean up property type - remove module prefix if it's the same module
+        let cleaned_type = clean_module_prefix(&property.value, &module.name);
+
         // Add field
         let field_type = if property.is_optional {
-            format!("Option<{}>", property.value)
+            format!("Option<{}>", cleaned_type)
         } else {
-            property.value.clone()
+            cleaned_type
         };
 
         output.push_str(&format!("    pub {}: {},\n", property.name, field_type));
@@ -147,7 +244,7 @@ fn generate_commands_file(cmd_def: &crate::command_parser::CommandDefinition, mo
 
     // Generate command params after methods
     for param in &cmd_def.command_params {
-        output.push_str(&generate_command_param(param));
+        output.push_str(&generate_command_param(param, module));
         output.push_str("\n\n");
     }
 
@@ -239,6 +336,39 @@ fn generate_rust_struct(name: &str, properties: &[crate::parser::Property], modu
 
 fn generate_rust_regular_struct(name: &str, properties: &[crate::parser::Property], module_name: &str) -> String {
     let mut output = String::new();
+    let mut default_functions = String::new();
+
+    // Generate default functions first (they need to come before the struct)
+    for property in properties {
+        if let Some(validation_info) = &property.validation_info {
+            if let Some(default_value) = &validation_info.default_value {
+                let function_name = format!("{}_default_{}", to_snake_case(name), property.name);
+                let cleaned_type = clean_module_prefix(&property.value, module_name);
+
+                let return_type = if property.is_optional {
+                    format!("Option<{}>", cleaned_type)
+                } else {
+                    cleaned_type.clone()
+                };
+
+                let return_value = if property.is_optional {
+                    format!("Some({})", default_value)
+                } else {
+                    default_value.clone()
+                };
+
+                default_functions.push_str(&format!(
+                    "fn {}() -> {} {{\n    {}\n}}\n\n",
+                    function_name, return_type, return_value
+                ));
+            }
+        }
+    }
+
+    // Add default functions to output
+    if !default_functions.is_empty() {
+        output.push_str(&default_functions);
+    }
 
     // Add derive attributes
     output.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
@@ -249,6 +379,46 @@ fn generate_rust_regular_struct(name: &str, properties: &[crate::parser::Propert
         // Add property attributes
         for attr in &property.attributes {
             output.push_str(&format!("    {}\n", attr));
+        }
+
+        // Add validation-based attributes
+        if let Some(validation_info) = &property.validation_info {
+            // Add validation constraints
+            if !validation_info.constraints.is_empty() {
+                let mut constraints = Vec::new();
+                for constraint in &validation_info.constraints {
+                    match constraint.constraint_type.as_str() {
+                        "ge" => constraints.push(format!("min = {}", constraint.value)),
+                        "le" => constraints.push(format!("max = {}", constraint.value)),
+                        "gt" => {
+                            // For greater than, we need to add a small epsilon
+                            if let Ok(val) = constraint.value.parse::<f64>() {
+                                constraints.push(format!("min = {}", val + f64::EPSILON));
+                            } else {
+                                constraints.push(format!("min = {}", constraint.value));
+                            }
+                        },
+                        "lt" => {
+                            // For less than, we need to subtract a small epsilon
+                            if let Ok(val) = constraint.value.parse::<f64>() {
+                                constraints.push(format!("max = {}", val - f64::EPSILON));
+                            } else {
+                                constraints.push(format!("max = {}", constraint.value));
+                            }
+                        },
+                        _ => {} // Unknown constraint type
+                    }
+                }
+                if !constraints.is_empty() {
+                    output.push_str(&format!("    #[validate(range({}))]\n", constraints.join(", ")));
+                }
+            }
+
+            // Add default value attribute
+            if let Some(_default_value) = &validation_info.default_value {
+                let function_name = format!("{}_default_{}", to_snake_case(name), property.name);
+                output.push_str(&format!("    #[serde(default = \"{}\")]\n", function_name));
+            }
         }
 
         // Clean up property type - remove module prefix if it's the same module

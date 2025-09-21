@@ -10,6 +10,7 @@ pub struct Property {
     pub(crate) name: String,
     pub(crate) value: String,
     pub attributes: Vec<String>,
+    pub validation_info: Option<ValidationInfo>,
 }
 /// Parses parameter definitions from CDDL content
 /// This module handles the complex parsing of WebDriver BiDi command parameters
@@ -185,9 +186,13 @@ fn parse_cddl_property_line(line: &str, cddl_strings: &[&str], current_module: &
         let property_name = captures[2].trim().to_string();
         let property_type = captures[3].trim().trim_end_matches(',').to_string();
         
-        let is_optional = optional_marker.contains('?');
-        let (rust_type, is_primitive) = convert_cddl_type_to_rust(&property_type, cddl_strings, current_module);
-        
+        let is_optional_marker = optional_marker.contains('?');
+        let (rust_type, is_primitive, validation_info) = convert_cddl_type_to_rust(&property_type, cddl_strings, current_module);
+
+        // If the property has a default value, it shouldn't be optional
+        let is_optional = is_optional_marker &&
+            validation_info.as_ref().map_or(true, |v| v.default_value.is_none());
+
         return Ok(Some(Property {
             is_enum: false, // TODO: Detect enums later
             is_primitive,
@@ -195,6 +200,7 @@ fn parse_cddl_property_line(line: &str, cddl_strings: &[&str], current_module: &
             name: property_name,
             value: rust_type,
             attributes: Vec::new(), // TODO: Add attributes if needed
+            validation_info,
         }));
     }
     
@@ -360,6 +366,13 @@ fn generate_type_if_same_module(type_name: &str, content: &str, def_type: &str, 
 /// # Returns
 /// The Rust type name to use for this custom type
 fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mut Module, struct_name: Option<&str>, property_name: Option<&str>) -> String {
+    // Check for validation patterns like "(float .ge 0.0) .default 1.0"
+    if let Some((base_type, _validation_info)) = parse_validation_pattern(type_name) {
+        // For now, just return the base type - validation info will be handled in convert_cddl_type_to_rust
+        let (rust_type, _) = convert_basic_cddl_type(&base_type, cddl_strings, current_module);
+        return rust_type;
+    }
+
     // Handle single literal strings (quoted values)
     if type_name.starts_with('"') && type_name.ends_with('"') {
         let literal_value = &type_name[1..type_name.len()-1]; // Remove quotes
@@ -372,6 +385,7 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
             name: enum_name.clone(),
             value: enum_name.clone(),
             attributes: vec![format!(r#"#[serde(rename = "{}")]"#, literal_value)],
+            validation_info: None,
         }];
         
         current_module.types.push(crate::module::BidiType {
@@ -445,6 +459,7 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
                         name: format!("{}{}", enum_name, rust_type),
                         value: format!("{}{}", enum_name, rust_type),
                         attributes: attributes.clone(),
+                        validation_info: None,
                     })
                     .collect();
                 
@@ -580,10 +595,10 @@ fn split_respecting_brackets(input: &str) -> Vec<String> {
 }
 
 /// Extracts content from within brackets, handling nested structures
-/// 
+///
 /// # Arguments
 /// * `input` - The bracketed string (e.g., "[content]")
-/// 
+///
 /// # Returns
 /// The content inside the outermost brackets
 fn extract_bracket_content(input: &str) -> Option<String> {
@@ -591,39 +606,125 @@ fn extract_bracket_content(input: &str) -> Option<String> {
     if !trimmed.starts_with('[') || !trimmed.ends_with(']') {
         return None;
     }
-    
+
     // Remove outer brackets
     let content = &trimmed[1..trimmed.len()-1];
     Some(content.trim().to_string())
 }
 
-/// Converts a CDDL type to a Rust type, handling arrays, tuples, and basic types
-/// 
+/// Parses type expressions with modifiers like "bool .default false" or "(float .ge 0.0) .default 1.0"
+///
+/// # Arguments
+/// * `type_name` - The full type expression to parse
+///
+/// # Returns
+/// Option containing (base_type, ValidationInfo) if modifiers are found
+fn parse_validation_pattern(type_name: &str) -> Option<(String, ValidationInfo)> {
+    let input = type_name.trim();
+    let mut validation_info = ValidationInfo::new();
+    let mut has_modifiers = false;
+
+    // Look for .default and extract it
+    if let Some(default_pos) = input.find(".default ") {
+        let after_default = &input[default_pos + 9..]; // Skip ".default "
+        let default_value = after_default.split_whitespace().next().unwrap_or("").to_string();
+        if !default_value.is_empty() {
+            validation_info.default_value = Some(default_value);
+            has_modifiers = true;
+        }
+    }
+
+    // Look for constraints (.ge, .le, .gt, .lt)
+    for constraint_type in &[".ge ", ".le ", ".gt ", ".lt "] {
+        if let Some(constraint_pos) = input.find(constraint_type) {
+            let after_constraint = &input[constraint_pos + constraint_type.len()..];
+            let constraint_value = after_constraint.split_whitespace().next().unwrap_or("").trim_end_matches(')').to_string();
+            if !constraint_value.is_empty() {
+                validation_info.constraints.push(ConstraintInfo {
+                    constraint_type: constraint_type.trim().trim_start_matches('.').to_string(),
+                    value: constraint_value,
+                });
+                has_modifiers = true;
+            }
+        }
+    }
+
+    if !has_modifiers {
+        return None;
+    }
+
+    // Extract base type - just the first word, clean it up
+    let base_type = input.split_whitespace()
+        .next()
+        .unwrap_or("")
+        .trim_start_matches('(')
+        .to_string();
+
+    if base_type.is_empty() {
+        None
+    } else {
+        Some((base_type, validation_info))
+    }
+}
+
+
+/// Information about validation constraints and defaults
+#[derive(Debug, Clone)]
+pub struct ValidationInfo {
+    pub constraints: Vec<ConstraintInfo>,
+    pub default_value: Option<String>,
+}
+
+impl ValidationInfo {
+    fn new() -> Self {
+        Self {
+            constraints: Vec::new(),
+            default_value: None,
+        }
+    }
+}
+
+/// Information about a single constraint
+#[derive(Debug, Clone)]
+pub struct ConstraintInfo {
+    pub constraint_type: String, // "ge", "le", "gt", "lt"
+    pub value: String,
+}
+
+
+/// Converts a CDDL type to a Rust type, handling arrays, tuples, validation patterns, and basic types
+///
 /// # Arguments
 /// * `cddl_type` - The CDDL type string
 /// * `cddl_strings` - All CDDL content for type lookups
 /// * `current_module` - Current module being processed
-/// 
+///
 /// # Returns
-/// A tuple of (rust_type, is_primitive)
-fn convert_cddl_type_to_rust(cddl_type: &str, cddl_strings: &[&str], current_module: &mut Module) -> (String, bool) {
+/// A tuple of (rust_type, is_primitive, validation_info)
+fn convert_cddl_type_to_rust(cddl_type: &str, cddl_strings: &[&str], current_module: &mut Module) -> (String, bool, Option<ValidationInfo>) {
     let trimmed = cddl_type.trim();
-    
+
+    // First check for validation patterns like "(float .ge 0.0) .default 1.0"
+    if let Some((base_type, validation_info)) = parse_validation_pattern(trimmed) {
+        let (rust_type, is_primitive, _) = convert_cddl_type_to_rust(&base_type, cddl_strings, current_module);
+        return (rust_type, is_primitive, Some(validation_info));
+    }
+
     // Check if it's a bracketed type [...]
     if let Some(inner_content) = extract_bracket_content(trimmed) {
         // Check for arrays: [+type] or [*type]
         if let Ok(array_pattern) = Regex::new(r"^\s*[\+\*]\s*(.+)$") {
             if let Some(captures) = array_pattern.captures(&inner_content) {
                 let inner_type = captures[1].trim();
-                
+
                 // Recursively convert the inner type
-                let (rust_inner_type, _) = convert_cddl_type_to_rust(inner_type, cddl_strings, current_module);
-                
+                let (rust_inner_type, _, _) = convert_cddl_type_to_rust(inner_type, cddl_strings, current_module);
+
                 // Arrays are not primitive
-                return (format!("Vec<{}>", rust_inner_type), false);
+                return (format!("Vec<{}>", rust_inner_type), false, None);
             }
         }
-        
+
         // Check for tuples by splitting on top-level commas
         let parts = split_respecting_brackets(&inner_content);
         if parts.len() > 1 {
@@ -631,23 +732,24 @@ fn convert_cddl_type_to_rust(cddl_type: &str, cddl_strings: &[&str], current_mod
             let tuple_types: Vec<String> = parts
                 .into_iter()
                 .map(|part| {
-                    let (rust_type, _) = convert_cddl_type_to_rust(&part, cddl_strings, current_module);
+                    let (rust_type, _, _) = convert_cddl_type_to_rust(&part, cddl_strings, current_module);
                     rust_type
                 })
                 .collect();
-            
+
             // Tuples are not primitive
-            return (format!("({})", tuple_types.join(", ")), false);
+            return (format!("({})", tuple_types.join(", ")), false, None);
         } else if parts.len() == 1 {
             // Single item in brackets - could be a single-element array or just grouped
             // For now, treat as the inner type
-            let (rust_type, is_primitive) = convert_cddl_type_to_rust(&parts[0], cddl_strings, current_module);
-            return (rust_type, is_primitive);
+            let (rust_type, is_primitive, validation_info) = convert_cddl_type_to_rust(&parts[0], cddl_strings, current_module);
+            return (rust_type, is_primitive, validation_info);
         }
     }
-    
+
     // Fall back to basic type conversion
-    convert_basic_cddl_type(trimmed, cddl_strings, current_module)
+    let (rust_type, is_primitive) = convert_basic_cddl_type(trimmed, cddl_strings, current_module);
+    (rust_type, is_primitive, None)
 }
 
     
