@@ -219,7 +219,13 @@ fn generate_command_param(param: &crate::command_parser::CommandParams, module: 
             cleaned_type
         };
 
-        output.push_str(&format!("    pub {}: {},\n", property.name, field_type));
+        // Snakify property name and handle "type" keyword
+        let mut field_name = to_snake_case(&property.name);
+        if field_name == "type" {
+            field_name = "r#type".to_string();
+        }
+
+        output.push_str(&format!("    pub {}: {},\n", field_name, field_type));
     }
 
     output.push_str("}");
@@ -284,7 +290,13 @@ fn generate_command_struct(command: &crate::command_parser::Command) -> String {
             cleaned_type
         };
 
-        output.push_str(&format!("    pub {}: {},\n", property.name, field_type));
+        // Snakify property name and handle "type" keyword
+        let mut field_name = to_snake_case(&property.name);
+        if field_name == "type" {
+            field_name = "r#type".to_string();
+        }
+
+        output.push_str(&format!("    pub {}: {},\n", field_name, field_type));
     }
 
     output.push_str("}");
@@ -430,7 +442,13 @@ fn generate_rust_regular_struct(name: &str, properties: &[crate::parser::Propert
             cleaned_type
         };
 
-        output.push_str(&format!("    pub {}: {},\n", property.name, field_type));
+        // Snakify property name and handle "type" keyword
+        let mut field_name = to_snake_case(&property.name);
+        if field_name == "type" {
+            field_name = "r#type".to_string();
+        }
+
+        output.push_str(&format!("    pub {}: {},\n", field_name, field_type));
     }
 
     output.push_str("}");

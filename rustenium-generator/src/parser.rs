@@ -193,13 +193,15 @@ fn parse_cddl_property_line(line: &str, cddl_strings: &[&str], current_module: &
         let is_optional = is_optional_marker &&
             validation_info.as_ref().map_or(true, |v| v.default_value.is_none());
 
+        let mut attributes = vec![format!(r#"#[serde(rename = "{}")]"#, property_name)];
+
         return Ok(Some(Property {
             is_enum: false, // TODO: Detect enums later
             is_primitive,
             is_optional,
             name: property_name,
             value: rust_type,
-            attributes: Vec::new(), // TODO: Add attributes if needed
+            attributes,
             validation_info,
         }));
     }
