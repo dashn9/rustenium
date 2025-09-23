@@ -72,7 +72,7 @@ pub fn parse_command_parameters(command_lines: &[&str], cddl_strings: Vec<&str>,
                                     if brace_count == 0 && found_start {
                                         // Found the end, process the extracted content
                                         let content = param_content_lines.join("\n").trim().to_string();
-                                        let processed_properties = process_cddl_to_struct(&content, cddl_strings.clone(), module)?;
+                                        let (processed_properties, _) = process_cddl_to_struct(&content, cddl_strings.clone(), module, None)?;
 
                                         // Create the parameter struct name from the param_type
                                         let param_struct_name = if let Some(dot_pos) = param_type.find('.') {
@@ -135,43 +135,58 @@ pub fn extract_parameter_types(cddl_content: &str) -> Result<Vec<String>, Box<dy
 }
 
 /// Processes CDDL content and converts it to a Rust parameter struct
-/// 
+///
 /// # Arguments
 /// * `cddl_content` - The CDDL content lines to process
 /// * `cddl_strings` - All CDDL content for type lookups
 /// * `module` - The Module struct containing module information
-/// 
+/// * `type_name` - Optional type name for context in union generation
+///
 /// # Returns
-/// Array of Property structs parsed from the CDDL content
-pub fn process_cddl_to_struct(cddl_content: &str, cddl_strings: Vec<&str>, module: &mut Module) -> Result<Vec<Property>, Box<dyn std::error::Error>> {
+/// A tuple of (properties, meta_comment) where meta_comment indicates if a type was generated
+pub fn process_cddl_to_struct(cddl_content: &str, cddl_strings: Vec<&str>, module: &mut Module, type_name: Option<&str>) -> Result<(Vec<Property>, Option<String>), Box<dyn std::error::Error>> {
     let mut properties = Vec::new();
-    
+
+    // Check if content has no ":" and type_name exists - indicates it's not a struct with properties
+    if !cddl_content.contains(':') && type_name.is_some() {
+        // Concatenate content and pass to parse_cddl_property_line as a fake property
+        let fake_line = format!("{}: {}", type_name.unwrap(), cddl_content);
+        let (property, meta_comment) = parse_cddl_property_line(&fake_line, &cddl_strings, module)?;
+        if let Some(property) = property {
+            // If parse_cddl_property_line returns a property, it means no custom type was generated
+            // If it returns None, it means a custom type was generated and we should return empty
+            properties.push(property);
+        }
+        return Ok((properties, meta_comment));
+    }
+
     // Parse each line in the CDDL body
     for line in cddl_content.lines() {
         let line = line.trim();
         if line.is_empty() || line.starts_with("//") {
             continue; // Skip empty lines and comments
         }
-        
+
         // Parse line like: "? userContext: browser.UserContext,"
-        if let Some(property) = parse_cddl_property_line(line, &cddl_strings, module)? {
+        let (property, meta_comment) = parse_cddl_property_line(line, &cddl_strings, module)?;
+        if let Some(property) = property {
             properties.push(property);
         }
     }
-    
-    Ok(properties)
+
+    Ok((properties, None))
 }
 
 /// Parses a single CDDL property line and returns a Property struct
-/// 
+///
 /// # Arguments
 /// * `line` - A single line of CDDL content (e.g., "? userContext: browser.UserContext,")
 /// * `cddl_strings` - All CDDL content for type lookups
 /// * `current_module` - Current module being processed
-/// 
+///
 /// # Returns
-/// Optional Property if the line contains a valid property definition
-fn parse_cddl_property_line(line: &str, cddl_strings: &[&str], current_module: &mut Module) -> Result<Option<Property>, Box<dyn std::error::Error>> {
+/// A tuple of (Optional Property, generated_type_marker) where generated_type_marker is "generated_type" if a type was created
+fn parse_cddl_property_line(line: &str, cddl_strings: &[&str], current_module: &mut Module) -> Result<(Option<Property>, Option<String>), Box<dyn std::error::Error>> {
     // Pattern for: [?] propertyName: type[,]
     let property_pattern = Regex::new(r"^\s*(\??\s*)(\w+):\s*(.+?)(?:,\s*)?$")?;
 
@@ -187,7 +202,7 @@ fn parse_cddl_property_line(line: &str, cddl_strings: &[&str], current_module: &
         let property_type = captures[3].trim().trim_end_matches(',').to_string();
         
         let is_optional_marker = optional_marker.contains('?');
-        let (rust_type, is_primitive, validation_info) = convert_cddl_type_to_rust(&property_type, cddl_strings, current_module);
+        let (rust_type, is_primitive, validation_info, meta_comment) = convert_cddl_type_to_rust(&property_type, cddl_strings, current_module);
 
         // If the property has a default value, it shouldn't be optional
         let is_optional = is_optional_marker &&
@@ -195,7 +210,7 @@ fn parse_cddl_property_line(line: &str, cddl_strings: &[&str], current_module: &
 
         let mut attributes = vec![format!(r#"#[serde(rename = "{}")]"#, property_name)];
 
-        return Ok(Some(Property {
+        return Ok((Some(Property {
             is_enum: false, // TODO: Detect enums later
             is_primitive,
             is_optional,
@@ -203,41 +218,10 @@ fn parse_cddl_property_line(line: &str, cddl_strings: &[&str], current_module: &
             value: rust_type,
             attributes,
             validation_info,
-        }));
+        }), meta_comment));
     }
-    
-    Ok(None)
-}
 
-/// Searches for a type definition across all CDDL content
-/// 
-/// # Arguments
-/// * `type_name` - The type name to search for (e.g., "session.CapabilityRequest", "ErrorCode")
-/// * `cddl_strings` - All CDDL content to search through
-/// * `current_module` - The current module being processed for context
-/// 
-/// # Returns
-/// Option containing the found type definition content if found
-fn find_type_definition(type_name: &str, cddl_strings: &[&str], current_module: &Module) -> Option<String> {
-    // Try direct match first (e.g., "session.CapabilityRequest = {")
-    let direct_pattern = format!(r"^{}\s*=\s*[\{{\(]", regex::escape(type_name));
-    if let Ok(regex) = Regex::new(&direct_pattern) {
-        for cddl_content in cddl_strings {
-            for line in cddl_content.lines() {
-                if regex.is_match(line.trim()) {
-                    return Some(format!("Found type definition: {}", type_name));
-                }
-            }
-        }
-    }
-    
-    // If no module prefix, try with current module prefix
-    if !type_name.contains('.') {
-        let prefixed_type = format!("{}.{}", current_module.name.to_lowercase(), type_name);
-        return find_type_definition(&prefixed_type, cddl_strings, current_module);
-    }
-    
-    None
+    Ok((None, None))
 }
 
 /// Finds and extracts the content between braces for a type definition
@@ -293,6 +277,35 @@ fn find_and_extract_type_content(type_name: &str, cddl_strings: &[&str], current
         }
     }
 
+    // Try object assignment pattern with inline content (e.g., "emulation.ScreenOrientation = { natural: ..., type: ... }")
+    let object_inline_pattern = format!(r"^{}\s*=\s*\{{(.+)\}}", regex::escape(type_name));
+    if let Ok(regex) = Regex::new(&object_inline_pattern) {
+        for cddl_content in cddl_strings {
+            for line in cddl_content.lines() {
+                if let Some(captures) = regex.captures(line.trim()) {
+                    // Extract the content between braces from inline definition
+                    return Some(captures[1].trim().to_string());
+                }
+            }
+        }
+    }
+
+    // Try string literal pattern (e.g., 'emulation.ForcedColorsModeTheme = "light" / "dark"')
+    let literal_pattern = format!(r#"^{}\s*=\s*(.+)$"#, regex::escape(type_name));
+    if let Ok(regex) = Regex::new(&literal_pattern) {
+        for cddl_content in cddl_strings {
+            for line in cddl_content.lines() {
+                if let Some(captures) = regex.captures(line.trim()) {
+                    let content = captures[1].trim();
+                    // Only return if it looks like a string literal pattern
+                    if content.starts_with('"') || content.contains(" / ") {
+                        return Some(content.to_string());
+                    }
+                }
+            }
+        }
+    }
+
     // If no module prefix, try with current module prefix
     if !type_name.contains('.') {
         let prefixed_type = format!("{}.{}", current_module.name.to_lowercase(), type_name);
@@ -320,19 +333,24 @@ fn is_same_module_type(type_name: &str, current_module: &Module) -> bool {
 }
 
 /// Generates Rust code for a custom type if it belongs to the same module
-/// 
+///
 /// # Arguments
 /// * `type_name` - The full type name (e.g., "session.CapabilityRequest")
 /// * `content` - The CDDL definition content
 /// * `def_type` - The definition type ("struct", "enum", "tuple", "alias")
 /// * `cddl_strings` - All CDDL content for nested type resolution
 /// * `current_module` - Mutable reference to current module being processed
-fn generate_type_if_same_module(type_name: &str, content: &str, def_type: &str, cddl_strings: &[&str], current_module: &mut Module) {
+///
+/// # Returns
+/// The clean type name if generated, None if not in same module or already exists
+fn generate_type_if_same_module(type_name: &str, content: &str, def_type: &str, cddl_strings: &[&str], current_module: &mut Module) -> Option<String> {
     // Check if same module
     if !is_same_module_type(type_name, current_module) {
-        return;
+        return None;
     }
-    
+    if type_name.contains("ForcedColorsMode") {
+        println!("Type Name: {}", type_name);
+    }
     // Extract clean type name without module prefix
     let clean_name = if let Some(dot_pos) = type_name.find('.') {
         &type_name[dot_pos + 1..]
@@ -342,37 +360,47 @@ fn generate_type_if_same_module(type_name: &str, content: &str, def_type: &str, 
     
     // Check if type already exists in module
     if current_module.types.iter().any(|t| t.name == clean_name) {
-        return; // Type already exists, don't generate again
+        return Some(clean_name.to_string()); // Type already exists, return the name
     }
     
     // Use existing process_cddl_to_struct for recursive parsing
-    if let Ok(properties) = process_cddl_to_struct(content, cddl_strings.to_vec(), current_module) {
+    if let Ok((properties, meta_comment)) = process_cddl_to_struct(content, cddl_strings.to_vec(), current_module, Some(clean_name)) {
+        // Check if properties length is 1 and meta_comment indicates type was generated
+        if properties.len() == 1 && meta_comment == Some("generated_property".to_string()) {
+            // Type was already generated by parse_custom_type, return the property type
+            return Some(properties[0].value.clone());
+        }
+
         // Create BidiType with the properties and store in module
         current_module.types.push(crate::module::BidiType {
             name: clean_name.to_string(),
             properties,
             raw: content.to_string(),
         });
+
+        return Some(clean_name.to_string());
     }
+
+    None
 }
 
 /// Parses a custom CDDL type and handles generation if it's in the same module
-/// 
+///
 /// # Arguments
 /// * `type_name` - The custom type name to parse
 /// * `cddl_strings` - All CDDL content for lookup
 /// * `current_module` - Current module being processed
 /// * `struct_name` - Optional struct name for context
 /// * `property_name` - Optional property name for context
-/// 
+///
 /// # Returns
-/// The Rust type name to use for this custom type
-fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mut Module, struct_name: Option<&str>, property_name: Option<&str>) -> String {
+/// A tuple of (rust_type_name, generated_type_name) where generated_type_name is Some if a new type was created
+fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mut Module, struct_name: Option<&str>, property_name: Option<&str>) -> (String, Option<String>) {
     // Check for validation patterns like "(float .ge 0.0) .default 1.0"
     if let Some((base_type, _validation_info)) = parse_validation_pattern(type_name) {
         // For now, just return the base type - validation info will be handled in convert_cddl_type_to_rust
-        let (rust_type, _) = convert_basic_cddl_type(&base_type, cddl_strings, current_module);
-        return rust_type;
+        let (rust_type, _, _) = convert_basic_cddl_type(&base_type, cddl_strings, current_module);
+        return (rust_type, None);
     }
 
     // Handle single literal strings (quoted values)
@@ -395,8 +423,8 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
             properties,
             raw: type_name.to_string(),
         });
-        
-        return enum_name;
+
+        return (enum_name.clone(), Some(String::from("generated_property")));
     }
     
     // Handle union types with / or // separator
@@ -425,7 +453,7 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
                     let attributes = vec![format!(r#"#[serde(rename = "{}")]"#, literal_value)];
                     (variant_name, attributes)
                 } else {
-                    let (rust_type, _) = convert_basic_cddl_type(&part, cddl_strings, current_module);
+                    let (rust_type, _, _) = convert_basic_cddl_type(&part, cddl_strings, current_module);
                     (rust_type, Vec::new()) // No attributes for non-literals
                 }
             })
@@ -433,14 +461,15 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
         
         // Determine final type
         return match processed_types.len() {
-            0 => "()".to_string(), // Only null was present
+            0 => ("()".to_string(), None), // Only null was present
             1 => {
                 let (base_type, _) = &processed_types[0];
-                if has_null {
+                let result_type = if has_null {
                     format!("Option<{}>", base_type)
                 } else {
                     base_type.clone()
-                }
+                };
+                (result_type, None)
             }
             _ => {
                 // Multiple non-null types - create enum using struct and property names
@@ -450,7 +479,7 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
                     (None, Some(p)) => format!("{}Union", p),
                     (None, None) => format!("Union{}", current_module.types.len()),
                 };
-                
+
                 // Create enum variants from processed types
                 let properties: Vec<Property> = processed_types
                     .iter()
@@ -464,19 +493,20 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
                         validation_info: None,
                     })
                     .collect();
-                
+
                 // Create and add BidiType to module
                 current_module.types.push(crate::module::BidiType {
                     name: enum_name.clone(),
                     properties,
                     raw: type_name.to_string(),
                 });
-                
-                if has_null {
+
+                let result_type = if has_null {
                     format!("Option<{}>", enum_name)
                 } else {
-                    enum_name
-                }
+                    enum_name.clone()
+                };
+                (result_type, Some(String::from("generated_property")))
             }
         };
     }
@@ -485,74 +515,55 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
     if is_same_module_type(type_name, current_module) {
         // First find the actual type definition content
         if let Some(type_content) = find_and_extract_type_content(type_name, cddl_strings, current_module) {
+
             // Generate type if needed
-            generate_type_if_same_module(type_name, &type_content, "struct", cddl_strings, current_module);
+            if let Some(generated_name) = generate_type_if_same_module(type_name, &type_content, "struct", cddl_strings, current_module) {
+                return (generated_name, None);
+            }
         }
         
         // Return only the type name (without module prefix)
-        if let Some(dot_pos) = type_name.find('.') {
+        let result_type = if let Some(dot_pos) = type_name.find('.') {
             type_name[dot_pos + 1..].to_string()
         } else {
             type_name.to_string()
-        }
+        };
+        (result_type, None)
     } else {
         // Return module::type format for external modules
-        if let Some(dot_pos) = type_name.find('.') {
+        let result_type = if let Some(dot_pos) = type_name.find('.') {
             let module_name = &type_name[..dot_pos];
             let type_name_clean = &type_name[dot_pos + 1..];
             format!("{}::{}", module_name, type_name_clean)
         } else {
             type_name.to_string()
-        }
+        };
+        (result_type, None)
     }
 }
 
-/// Checks if a type is a custom type that should be looked up in CDDL
-/// 
-/// # Arguments
-/// * `type_name` - The type name to check
-/// * `cddl_strings` - All CDDL content for lookup
-/// * `current_module` - Current module being processed
-/// 
-/// # Returns
-/// True if this is a custom type that exists in CDDL definitions
-fn is_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &Module) -> bool {
-    // Check if it contains a module prefix (e.g., "session.CapabilityRequest")
-    if type_name.contains('.') {
-        return find_type_definition(type_name, cddl_strings, current_module).is_some();
-    }
-    
-    // Check if it exists as a global type or with current module prefix
-    find_type_definition(type_name, cddl_strings, current_module).is_some()
-}
 
 /// Converts basic CDDL primitive types to Rust types
-/// 
+///
 /// # Arguments
 /// * `cddl_type` - The CDDL type string
 /// * `cddl_strings` - All CDDL content for type lookups
 /// * `current_module` - Current module being processed
-/// 
+///
 /// # Returns
-/// A tuple of (rust_type, is_primitive)
-fn convert_basic_cddl_type(cddl_type: &str, cddl_strings: &[&str], current_module: &mut Module) -> (String, bool) {
+/// A tuple of (rust_type, is_primitive, meta_comment)
+fn convert_basic_cddl_type(cddl_type: &str, cddl_strings: &[&str], current_module: &mut Module) -> (String, bool, Option<String>) {
     match cddl_type {
-        "text" => ("String".to_string(), true),
-        "bool" => ("bool".to_string(), true),
-        "js-uint" => ("u64".to_string(), true),
-        "js-int" => ("i64".to_string(), true),
-        "float" => ("f64".to_string(), true),
-        "null" => ("Option<()>".to_string(), false), // null is typically represented as Option
+        "text" => ("String".to_string(), true, None),
+        "bool" => ("bool".to_string(), true, None),
+        "js-uint" => ("u64".to_string(), true, None),
+        "js-int" => ("i64".to_string(), true, None),
+        "float" => ("f64".to_string(), true, None),
+        "null" => ("Option<()>".to_string(), false, None), // null is typically represented as Option
         _ => {
-            // Check if it's a custom type that exists in CDDL
-            if is_custom_type(cddl_type, cddl_strings, current_module) {
                 // Parse the custom type (this function will handle generation if same module)
-                let parsed_type = parse_custom_type(cddl_type, cddl_strings, current_module, None, None);
-                (parsed_type, false)
-            } else {
-                // Unknown type - keep as-is but mark as non-primitive
-                (cddl_type.to_string(), false)
-            }
+                let (parsed_type, meta_comment) = parse_custom_type(cddl_type, cddl_strings, current_module, None, None);
+                (parsed_type, false, meta_comment)
         }
     }
 }
@@ -702,14 +713,14 @@ pub struct ConstraintInfo {
 /// * `current_module` - Current module being processed
 ///
 /// # Returns
-/// A tuple of (rust_type, is_primitive, validation_info)
-fn convert_cddl_type_to_rust(cddl_type: &str, cddl_strings: &[&str], current_module: &mut Module) -> (String, bool, Option<ValidationInfo>) {
+/// A tuple of (rust_type, is_primitive, validation_info, meta_comment_on_type)
+fn convert_cddl_type_to_rust(cddl_type: &str, cddl_strings: &[&str], current_module: &mut Module) -> (String, bool, Option<ValidationInfo>, Option<String>) {
     let trimmed = cddl_type.trim();
 
     // First check for validation patterns like "(float .ge 0.0) .default 1.0"
     if let Some((base_type, validation_info)) = parse_validation_pattern(trimmed) {
-        let (rust_type, is_primitive, _) = convert_cddl_type_to_rust(&base_type, cddl_strings, current_module);
-        return (rust_type, is_primitive, Some(validation_info));
+        let (rust_type, is_primitive, _, meta_comment) = convert_cddl_type_to_rust(&base_type, cddl_strings, current_module);
+        return (rust_type, is_primitive, Some(validation_info), meta_comment);
     }
 
     // Check if it's a bracketed type [...]
@@ -720,10 +731,10 @@ fn convert_cddl_type_to_rust(cddl_type: &str, cddl_strings: &[&str], current_mod
                 let inner_type = captures[1].trim();
 
                 // Recursively convert the inner type
-                let (rust_inner_type, _, _) = convert_cddl_type_to_rust(inner_type, cddl_strings, current_module);
+                let (rust_inner_type, _, _, meta_comment) = convert_cddl_type_to_rust(inner_type, cddl_strings, current_module);
 
                 // Arrays are not primitive
-                return (format!("Vec<{}>", rust_inner_type), false, None);
+                return (format!("Vec<{}>", rust_inner_type), false, None, meta_comment);
             }
         }
 
@@ -734,24 +745,23 @@ fn convert_cddl_type_to_rust(cddl_type: &str, cddl_strings: &[&str], current_mod
             let tuple_types: Vec<String> = parts
                 .into_iter()
                 .map(|part| {
-                    let (rust_type, _, _) = convert_cddl_type_to_rust(&part, cddl_strings, current_module);
+                    let (rust_type, _, _, _) = convert_cddl_type_to_rust(&part, cddl_strings, current_module);
                     rust_type
                 })
                 .collect();
 
             // Tuples are not primitive
-            return (format!("({})", tuple_types.join(", ")), false, None);
+            return (format!("({})", tuple_types.join(", ")), false, None, None);
         } else if parts.len() == 1 {
             // Single item in brackets - could be a single-element array or just grouped
             // For now, treat as the inner type
-            let (rust_type, is_primitive, validation_info) = convert_cddl_type_to_rust(&parts[0], cddl_strings, current_module);
-            return (rust_type, is_primitive, validation_info);
+            let (rust_type, is_primitive, validation_info, meta_comment) = convert_cddl_type_to_rust(&parts[0], cddl_strings, current_module);
+            return (rust_type, is_primitive, validation_info, meta_comment);
         }
     }
 
     // Fall back to basic type conversion
-    let (rust_type, is_primitive) = convert_basic_cddl_type(trimmed, cddl_strings, current_module);
-    (rust_type, is_primitive, None)
+    let (rust_type, is_primitive, meta_comment) = convert_basic_cddl_type(trimmed, cddl_strings, current_module);
+    (rust_type, is_primitive, None, meta_comment)
 }
 
-    

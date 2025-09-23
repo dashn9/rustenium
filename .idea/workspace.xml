@@ -4,12 +4,24 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="CargoProjects">
-    <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
+    <cargoProject FILE="$PROJECT_DIR$/Cargo.toml">
+      <package file="$PROJECT_DIR$/rustenium">
+        <feature name="default" enabled="true" />
+      </package>
+      <package file="$PROJECT_DIR$/rustenium-bidi-commands">
+        <feature name="default" enabled="true" />
+      </package>
+      <package file="$PROJECT_DIR$/rustenium-core">
+        <feature name="default" enabled="true" />
+      </package>
+      <package file="$PROJECT_DIR$/rustenium-generator">
+        <feature name="default" enabled="true" />
+      </package>
+    </cargoProject>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-generator/src/output.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/output.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-generator/src/parser.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/parser.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -37,15 +49,21 @@
     "Cargo.Rustenium Generator.executor": "Debug",
     "Cargo.Test Rustenium.executor": "Debug",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.rust.reset.selective.auto.import": "true",
     "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "D:/Documents/m-workspace/rustenium",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
     "org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon": "",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -116,7 +134,8 @@
       <workItem from="1758134556413" duration="2573000" />
       <workItem from="1758152887083" duration="4628000" />
       <workItem from="1758234747330" duration="5442000" />
-      <workItem from="1758292674099" duration="25143000" />
+      <workItem from="1758292674099" duration="25493000" />
+      <workItem from="1758564709280" duration="20924000" />
     </task>
     <servers />
   </component>
@@ -136,12 +155,20 @@
           <option name="timeStamp" value="73" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <condition expression="line.contains(&quot;ForcedColorsMode&quot;) == true" language="Rust" />
           <url>file://$PROJECT_DIR$/rustenium-generator/src/parser.rs</url>
-          <line>175</line>
-          <option name="timeStamp" value="82" />
+          <line>348</line>
+          <option name="timeStamp" value="99" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/rustenium-generator/src/parser.rs</url>
+          <line>347</line>
+          <option name="timeStamp" value="100" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>
