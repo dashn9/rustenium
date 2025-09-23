@@ -402,30 +402,6 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
         let (rust_type, _, _) = convert_basic_cddl_type(&base_type, cddl_strings, current_module);
         return (rust_type, None);
     }
-
-    // Handle single literal strings (quoted values)
-    if type_name.starts_with('"') && type_name.ends_with('"') {
-        let literal_value = &type_name[1..type_name.len()-1]; // Remove quotes
-        let enum_name = format!("{}Enum", literal_value.replace(" ", "").replace("-", ""));
-        
-        let properties = vec![Property {
-            is_enum: true,
-            is_primitive: false,
-            is_optional: false,
-            name: enum_name.clone(),
-            value: enum_name.clone(),
-            attributes: vec![format!(r#"#[serde(rename = "{}")]"#, literal_value)],
-            validation_info: None,
-        }];
-        
-        current_module.types.push(crate::module::BidiType {
-            name: enum_name.clone(),
-            properties,
-            raw: type_name.to_string(),
-        });
-
-        return (enum_name.clone(), Some(String::from("generated_property")));
-    }
     
     // Handle union types with / or // separator
     if type_name.contains(" // ") || type_name.contains(" / ") {
@@ -509,6 +485,30 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
                 (result_type, Some(String::from("generated_property")))
             }
         };
+    }
+    
+    // Handle single literal strings (quoted values)
+    if type_name.starts_with('"') && type_name.ends_with('"') {
+        let literal_value = &type_name[1..type_name.len()-1]; // Remove quotes
+        let enum_name = format!("{}Enum", literal_value.replace(" ", "").replace("-", ""));
+
+        let properties = vec![Property {
+            is_enum: true,
+            is_primitive: false,
+            is_optional: false,
+            name: enum_name.clone(),
+            value: enum_name.clone(),
+            attributes: vec![format!(r#"#[serde(rename = "{}")]"#, literal_value)],
+            validation_info: None,
+        }];
+
+        current_module.types.push(crate::module::BidiType {
+            name: enum_name.clone(),
+            properties,
+            raw: type_name.to_string(),
+        });
+
+        return (enum_name.clone(), Some(String::from("generated_property")));
     }
     
     // Check if this type belongs to the current module
