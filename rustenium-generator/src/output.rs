@@ -481,11 +481,11 @@ fn generate_rust_enum(name: &str, properties: &[crate::parser::Property], module
 
         if property.is_enum {
             // Enum variant
-            if cleaned_type == property.name {
-                // Unit variant
+            if cleaned_type == "UNIT_VARIANT" {
+                // Unit variant (no value)
                 output.push_str(&format!("    {},\n", property.name));
             } else {
-                // Tuple variant
+                // Tuple variant (with value)
                 output.push_str(&format!("    {}({}),\n", property.name, cleaned_type));
             }
         } else {

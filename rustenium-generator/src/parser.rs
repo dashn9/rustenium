@@ -202,7 +202,7 @@ fn parse_cddl_property_line(line: &str, cddl_strings: &[&str], current_module: &
         let property_type = captures[3].trim().trim_end_matches(',').to_string();
         
         let is_optional_marker = optional_marker.contains('?');
-        let (rust_type, is_primitive, validation_info, meta_comment) = convert_cddl_type_to_rust(&property_type, cddl_strings, current_module);
+        let (rust_type, is_primitive, validation_info, meta_comment) = convert_cddl_type_to_rust(&property_type, cddl_strings, current_module, Some(property_name.as_str()));
 
         // If the property has a default value, it shouldn't be optional
         let is_optional = is_optional_marker &&
@@ -348,9 +348,6 @@ fn generate_type_if_same_module(type_name: &str, content: &str, def_type: &str, 
     if !is_same_module_type(type_name, current_module) {
         return None;
     }
-    if type_name.contains("ForcedColorsMode") {
-        println!("Type Name: {}", type_name);
-    }
     // Extract clean type name without module prefix
     let clean_name = if let Some(dot_pos) = type_name.find('.') {
         &type_name[dot_pos + 1..]
@@ -399,17 +396,24 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
     // Check for validation patterns like "(float .ge 0.0) .default 1.0"
     if let Some((base_type, _validation_info)) = parse_validation_pattern(type_name) {
         // For now, just return the base type - validation info will be handled in convert_cddl_type_to_rust
-        let (rust_type, _, _) = convert_basic_cddl_type(&base_type, cddl_strings, current_module);
+        let (rust_type, _, _) = convert_basic_cddl_type(&base_type, cddl_strings, current_module, property_name);
         return (rust_type, None);
     }
     
     // Handle union types with / or // separator
     if type_name.contains(" // ") || type_name.contains(" / ") {
-        // Break into parts - handle both // and / separators
-        let mut parts: Vec<String> = if type_name.contains(" // ") {
-            type_name.split(" // ").map(|s| s.trim().to_string()).collect()
+        // Remove surrounding parentheses if present
+        let cleaned_type_name = if type_name.starts_with('(') && type_name.ends_with(')') {
+            &type_name[1..type_name.len()-1]
         } else {
-            type_name.split(" / ").map(|s| s.trim().to_string()).collect()
+            type_name
+        };
+
+        // Break into parts - handle both // and / separators
+        let mut parts: Vec<String> = if cleaned_type_name.contains(" // ") {
+            cleaned_type_name.split(" // ").map(|s| s.trim().to_string()).collect()
+        } else {
+            cleaned_type_name.split(" / ").map(|s| s.trim().to_string()).collect()
         };
         
         // Check if null is present
@@ -417,20 +421,26 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
         
         // Remove all nulls
         parts.retain(|part| part != "null");
-        
+
+        if let Some(property_name) = property_name {
+            if property_name.contains("page") {
+                println!("Type Name: {}", property_name);
+            }
+        }
         // Process remaining types through convert_basic_cddl_type
-        let processed_types: Vec<(String, Vec<String>)> = parts
+        let processed_types: Vec<(String, Option<String>, Vec<String>)> = parts
             .into_iter()
             .map(|part| {
                 // Check if part is a literal string
                 if part.starts_with('"') && part.ends_with('"') {
                     let literal_value = &part[1..part.len()-1]; // Remove quotes
-                    let variant_name = literal_value.replace(" ", "").replace("-", "");
+                    let variant_name = to_pascal_case(literal_value);
                     let attributes = vec![format!(r#"#[serde(rename = "{}")]"#, literal_value)];
-                    (variant_name, attributes)
+                    (variant_name, None, attributes)
                 } else {
-                    let (rust_type, _, _) = convert_basic_cddl_type(&part, cddl_strings, current_module);
-                    (rust_type, Vec::new()) // No attributes for non-literals
+                    let (rust_type, _, _) = convert_basic_cddl_type(&part, cddl_strings, current_module, property_name);
+                    let variant_name = to_pascal_case(&rust_type);
+                    (variant_name, Some(rust_type), Vec::new()) // No attributes for non-literals
                 }
             })
             .collect();
@@ -439,7 +449,7 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
         return match processed_types.len() {
             0 => ("()".to_string(), None), // Only null was present
             1 => {
-                let (base_type, _) = &processed_types[0];
+                let (base_type, _, _) = &processed_types[0];
                 let result_type = if has_null {
                     format!("Option<{}>", base_type)
                 } else {
@@ -448,23 +458,31 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
                 (result_type, None)
             }
             _ => {
+
+
                 // Multiple non-null types - create enum using struct and property names
-                let enum_name = match (struct_name, property_name) {
+                let enum_name_temp = match (struct_name, property_name) {
                     (Some(s), Some(p)) => format!("{}{}", s, p),
                     (Some(s), None) => format!("{}Union", s),
                     (None, Some(p)) => format!("{}Union", p),
                     (None, None) => format!("Union{}", current_module.types.len()),
                 };
 
+                let enum_name = to_pascal_case(enum_name_temp.as_str());
+
                 // Create enum variants from processed types
                 let properties: Vec<Property> = processed_types
                     .iter()
-                    .map(|(rust_type, attributes)| Property {
+                    .map(|(variant_name, variant_value, attributes)| Property {
                         is_enum: true,
                         is_primitive: false,
                         is_optional: false,
-                        name: format!("{}{}", enum_name, rust_type),
-                        value: format!("{}{}", enum_name, rust_type),
+                        name: variant_name.clone(),
+                        value: if let Some(value) = variant_value {
+                            value.clone()
+                        } else {
+                            "UNIT_VARIANT".to_string() // Special marker for unit variants
+                        },
                         attributes: attributes.clone(),
                         validation_info: None,
                     })
@@ -490,7 +508,7 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
     // Handle single literal strings (quoted values)
     if type_name.starts_with('"') && type_name.ends_with('"') {
         let literal_value = &type_name[1..type_name.len()-1]; // Remove quotes
-        let enum_name = format!("{}Enum", literal_value.replace(" ", "").replace("-", ""));
+        let enum_name = format!("{}Enum", to_pascal_case(literal_value));
 
         let properties = vec![Property {
             is_enum: true,
@@ -549,10 +567,11 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
 /// * `cddl_type` - The CDDL type string
 /// * `cddl_strings` - All CDDL content for type lookups
 /// * `current_module` - Current module being processed
+/// * `property_name` - Optional property name for context in union generation
 ///
 /// # Returns
 /// A tuple of (rust_type, is_primitive, meta_comment)
-fn convert_basic_cddl_type(cddl_type: &str, cddl_strings: &[&str], current_module: &mut Module) -> (String, bool, Option<String>) {
+fn convert_basic_cddl_type(cddl_type: &str, cddl_strings: &[&str], current_module: &mut Module, property_name: Option<&str>) -> (String, bool, Option<String>) {
     match cddl_type {
         "text" => ("String".to_string(), true, None),
         "bool" => ("bool".to_string(), true, None),
@@ -562,7 +581,7 @@ fn convert_basic_cddl_type(cddl_type: &str, cddl_strings: &[&str], current_modul
         "null" => ("Option<()>".to_string(), false, None), // null is typically represented as Option
         _ => {
                 // Parse the custom type (this function will handle generation if same module)
-                let (parsed_type, meta_comment) = parse_custom_type(cddl_type, cddl_strings, current_module, None, None);
+                let (parsed_type, meta_comment) = parse_custom_type(cddl_type, cddl_strings, current_module, None, property_name);
                 (parsed_type, false, meta_comment)
         }
     }
@@ -711,15 +730,17 @@ pub struct ConstraintInfo {
 /// * `cddl_type` - The CDDL type string
 /// * `cddl_strings` - All CDDL content for type lookups
 /// * `current_module` - Current module being processed
+/// * `property_name` - Optional property name for context in union generation
 ///
 /// # Returns
 /// A tuple of (rust_type, is_primitive, validation_info, meta_comment_on_type)
-fn convert_cddl_type_to_rust(cddl_type: &str, cddl_strings: &[&str], current_module: &mut Module) -> (String, bool, Option<ValidationInfo>, Option<String>) {
+fn convert_cddl_type_to_rust(cddl_type: &str, cddl_strings: &[&str], current_module: &mut Module, property_name: Option<&str>) -> (String, bool, Option<ValidationInfo>, Option<String>) {
     let trimmed = cddl_type.trim();
+
 
     // First check for validation patterns like "(float .ge 0.0) .default 1.0"
     if let Some((base_type, validation_info)) = parse_validation_pattern(trimmed) {
-        let (rust_type, is_primitive, _, meta_comment) = convert_cddl_type_to_rust(&base_type, cddl_strings, current_module);
+        let (rust_type, is_primitive, _, meta_comment) = convert_cddl_type_to_rust(&base_type, cddl_strings, current_module, property_name);
         return (rust_type, is_primitive, Some(validation_info), meta_comment);
     }
 
@@ -731,7 +752,7 @@ fn convert_cddl_type_to_rust(cddl_type: &str, cddl_strings: &[&str], current_mod
                 let inner_type = captures[1].trim();
 
                 // Recursively convert the inner type
-                let (rust_inner_type, _, _, meta_comment) = convert_cddl_type_to_rust(inner_type, cddl_strings, current_module);
+                let (rust_inner_type, _, _, meta_comment) = convert_cddl_type_to_rust(inner_type, cddl_strings, current_module, property_name);
 
                 // Arrays are not primitive
                 return (format!("Vec<{}>", rust_inner_type), false, None, meta_comment);
@@ -745,7 +766,7 @@ fn convert_cddl_type_to_rust(cddl_type: &str, cddl_strings: &[&str], current_mod
             let tuple_types: Vec<String> = parts
                 .into_iter()
                 .map(|part| {
-                    let (rust_type, _, _, _) = convert_cddl_type_to_rust(&part, cddl_strings, current_module);
+                    let (rust_type, _, _, _) = convert_cddl_type_to_rust(&part, cddl_strings, current_module, property_name);
                     rust_type
                 })
                 .collect();
@@ -755,13 +776,38 @@ fn convert_cddl_type_to_rust(cddl_type: &str, cddl_strings: &[&str], current_mod
         } else if parts.len() == 1 {
             // Single item in brackets - could be a single-element array or just grouped
             // For now, treat as the inner type
-            let (rust_type, is_primitive, validation_info, meta_comment) = convert_cddl_type_to_rust(&parts[0], cddl_strings, current_module);
+            let (rust_type, is_primitive, validation_info, meta_comment) = convert_cddl_type_to_rust(&parts[0], cddl_strings, current_module, property_name);
             return (rust_type, is_primitive, validation_info, meta_comment);
         }
     }
 
     // Fall back to basic type conversion
-    let (rust_type, is_primitive, meta_comment) = convert_basic_cddl_type(trimmed, cddl_strings, current_module);
+    let (rust_type, is_primitive, meta_comment) = convert_basic_cddl_type(trimmed, cddl_strings, current_module, property_name);
     (rust_type, is_primitive, None, meta_comment)
+}
+
+/// Converts a string to PascalCase
+///
+/// # Arguments
+/// * `input` - The input string to convert
+///
+/// # Returns
+/// The PascalCase version of the input string
+fn to_pascal_case(input: &str) -> String {
+    let mut result = String::new();
+    let mut capitalize_next = true; // Start with capitalizing the first character
+
+    for ch in input.chars() {
+        if ch == ' ' || ch == '-' || ch == '_' {
+            capitalize_next = true;
+        } else if capitalize_next {
+            result.push(ch.to_uppercase().next().unwrap_or(ch));
+            capitalize_next = false;
+        } else {
+            result.push(ch);
+        }
+    }
+
+    result
 }
 
