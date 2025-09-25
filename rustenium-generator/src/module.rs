@@ -1,9 +1,8 @@
 use regex::Regex;
 use std::collections::HashMap;
 use crate::extractor::extract_definition_content;
-use crate::command_parser::{CommandDefinition, parse_command_definition, Command};
+use crate::command_parser::{CommandDefinition, parse_command_definition, Command, parse_result_definition, ResultDefinition};
 use crate::event_parser::EventDefinition;
-use crate::result_parser::ResultDefinition;
 
 
 #[derive(Debug)]
@@ -102,10 +101,8 @@ pub fn detect_modules(cddl_strings: Vec<&str>) -> Result<Vec<Module>, Box<dyn st
                     results: Vec::new(),
                 });
 
-                module.result_definition = Some(ResultDefinition {
-                    name: format!("{}Result", name),
-                    content,
-                });
+                let result_def = parse_result_definition(format!("{}Result", name), content, cddl_strings.clone(), module)?;
+                module.result_definition = Some(result_def);
             }
         }
     }

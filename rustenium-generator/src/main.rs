@@ -4,7 +4,6 @@ mod extractor;
 mod output;
 mod command_parser;
 mod event_parser;
-mod result_parser;
 mod parser;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {

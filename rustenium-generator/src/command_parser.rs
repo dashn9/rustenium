@@ -20,6 +20,36 @@ pub struct CommandDefinition {
     pub attributes: Vec<String>,
 }
 
+/// Represents a complete result definition parsed from CDDL (Concise Data Definition Language)
+/// This contains both the raw CDDL content and the parsed result structures
+#[derive(Debug)]
+pub struct ResultDefinition {
+    /// The name of the result definition (e.g., "BrowserResult", "NetworkResult")
+    pub name: String,
+    /// The raw CDDL content for this result definition
+    pub content: String,
+    /// Parsed individual result types found within this definition
+    pub results: Vec<BidiResult>,
+    /// Rust attributes to be applied to the generated enum (e.g., #[derive(Debug, Serialize)])
+    pub attributes: Vec<String>,
+}
+
+/// Represents a single WebDriver BiDi result type parsed from CDDL
+/// Results follow the pattern module.ResultType (e.g., "browser.CreateUserContextResult")
+#[derive(Debug, Clone)]
+pub struct BidiResult {
+    /// The result type name as found in CDDL (e.g., "CreateUserContextResult", "GetTreeResult")
+    pub name: String,
+    /// The module name this result belongs to (e.g., "browser", "session")
+    pub module_name: String,
+    /// Properties for the result struct
+    pub properties: Vec<crate::parser::Property>,
+    /// Rust attributes to be applied to this result variant
+    pub attributes: Vec<String>,
+    /// The raw CDDL content for this result
+    pub content: String,
+}
+
 
 /// Parses a CDDL command definition and extracts individual commands
 /// 
@@ -34,7 +64,7 @@ pub struct CommandDefinition {
 /// # Returns
 /// A CommandDefinition struct containing the parsed commands and metadata
 pub fn parse_command_definition(name: String, content: String, cddl_strings: Vec<&str>, module: &mut Module) -> Result<CommandDefinition, Box<dyn std::error::Error>> {
-    let command_enum_pattern = Regex::new(r"(\w+)\.(\w+)\s*//")?;
+    let command_enum_pattern = Regex::new(r"(\w+)\.(\w+)\s*")?;
     let mut commands = Vec::new();
 
     // Create a mutable command definition to build up
@@ -247,7 +277,7 @@ pub fn search_and_update_command(cddl_strings: Vec<&str>, command: &mut Command,
                         _ => {}
                     }
                 }
-                
+
                 // Add the line (we start from line_num + 1, so first line is skipped)
                 param_lines.push(current_line.trim());
             }
@@ -257,5 +287,133 @@ pub fn search_and_update_command(cddl_strings: Vec<&str>, command: &mut Command,
     }
     }
     
+    Ok(())
+}
+
+/// Parses a CDDL result definition and extracts individual result types
+///
+/// This function takes the raw CDDL content for a result definition (e.g., BrowserResult)
+/// and parses it to extract individual result types that follow the pattern "module.ResultType /"
+///
+/// # Arguments
+/// * `name` - The name of the result definition (e.g., "BrowserResult")
+/// * `content` - The raw CDDL content containing result definitions
+/// * `cddl_strings` - All CDDL content for searching result details
+/// * `module` - The module to populate with parsed results
+///
+/// # Returns
+/// A ResultDefinition struct containing the parsed results and metadata
+pub fn parse_result_definition(name: String, content: String, cddl_strings: Vec<&str>, module: &mut Module) -> Result<ResultDefinition, Box<dyn std::error::Error>> {
+    let result_enum_pattern = Regex::new(r"(\w+)\.(\w+)\s*")?;
+    let mut results = Vec::new();
+
+    // Create a mutable result definition to build up
+    let mut result_def = ResultDefinition {
+        name: name.clone(),
+        content: content.clone(),
+        results: Vec::new(),
+        attributes: vec![
+            "#[derive(Debug, Serialize, Deserialize)]".to_string(),
+            "#[serde(untagged)]".to_string(),
+        ],
+    };
+
+    // Extract result names from the enum definition
+    for line in content.lines() {
+        let line = line.trim();
+
+        if let Some(captures) = result_enum_pattern.captures(line) {
+            let module_name = captures[1].to_string(); // Extract module name (before the dot)
+            let name = captures[2].to_string(); // Extract result name (after the dot)
+
+            let mut bidi_result = BidiResult {
+                name,
+                module_name,
+                properties: Vec::new(),
+                attributes: vec![
+                    "#[derive(Debug, Serialize, Deserialize)]".to_string(),
+                ],
+                content: String::new(),
+            };
+
+            // Search and update the result in all CDDL content
+            search_and_update_result(cddl_strings.clone(), &mut bidi_result, &mut result_def, module)?;
+            results.push(bidi_result);
+        }
+    }
+
+    // Update the result definition with the processed results
+    result_def.results = results;
+    Ok(result_def)
+}
+
+/// Searches for a specific result in CDDL content and updates the result with parsed data
+///
+/// This function takes a BidiResult struct and searches for its corresponding definition
+/// in the CDDL content using the pattern "ResultName = {". When found, it will
+/// update the result with the parsed structure information.
+///
+/// # Arguments
+/// * `cddl_strings` - The array of CDDL content strings to search through
+/// * `bidi_result` - Mutable reference to the BidiResult struct to update
+/// * `result_def` - Mutable reference to the ResultDefinition to update
+/// * `module` - The module context for parsing
+///
+/// # Returns
+/// Ok(()) if successful, or an error if parsing fails
+pub fn search_and_update_result(cddl_strings: Vec<&str>, bidi_result: &mut BidiResult, result_def: &mut ResultDefinition, module: &mut Module) -> Result<(), Box<dyn std::error::Error>> {
+    // Search for result definition using pattern: result_name = {
+    let result_name = format!("{}.{}", bidi_result.module_name, bidi_result.name);
+    let pattern = format!(r"^{}\s*=\s*\{{", regex::escape(&result_name));
+    let regex = Regex::new(&pattern)?;
+
+    // Search through all CDDL content strings
+    for cddl_content in cddl_strings.clone() {
+        let lines: Vec<&str> = cddl_content.lines().collect();
+
+        for (line_num, line) in lines.iter().enumerate() {
+            if regex.is_match(line.trim()) {
+                // Found the result definition
+
+                // Collect lines between the braces (skip the first line with opening brace)
+                let mut brace_count = 0;
+                let mut result_lines = Vec::new();
+
+                for i in line_num..lines.len() {
+                    let current_line = lines[i];
+
+                    for ch in current_line.chars() {
+                        match ch {
+                            '{' => {
+                                brace_count += 1;
+                            }
+                            '}' => {
+                                brace_count -= 1;
+                                if brace_count == 0 {
+                                    // Found the closing brace, join the collected lines
+                                    let result_content = result_lines.join("\n").trim().to_string();
+                                    bidi_result.content = result_content.clone();
+
+                                    // Parse the result content to extract properties
+                                    let (result_properties, _) = parser::process_cddl_to_struct(&result_content, cddl_strings.clone(), module, Some(&bidi_result.name))?;
+                                    bidi_result.properties = result_properties;
+
+                                    return Ok(());
+                                }
+                            }
+                            _ => {}
+                        }
+                    }
+
+                    if i > line_num { // Skip the first line with opening brace
+                        result_lines.push(current_line.trim());
+                    }
+                }
+
+                return Ok(()); // Found and processed the result, return early
+            }
+        }
+    }
+
     Ok(())
 }

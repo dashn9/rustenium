@@ -260,6 +260,19 @@ fn generate_commands_file(cmd_def: &crate::command_parser::CommandDefinition, mo
         output.push_str("\n\n");
     }
 
+    // Generate result enum and structs if result definition exists
+    if let Some(ref result_def) = module.result_definition {
+        output.push_str("// Generated results\n\n");
+        output.push_str(&generate_result_enum(result_def));
+        output.push_str("\n\n");
+
+        // Generate individual result structs
+        for result in &result_def.results {
+            output.push_str(&generate_result_struct(result, module));
+            output.push_str("\n\n");
+        }
+    }
+
     output
 }
 
@@ -516,5 +529,66 @@ fn generate_command_enum(cmd_def: &crate::command_parser::CommandDefinition) -> 
     }
     
     output.push_str("}\n");
+    output
+}
+
+fn generate_result_enum(result_def: &crate::command_parser::ResultDefinition) -> String {
+    let mut output = String::new();
+
+    // Add attributes
+    for attribute in &result_def.attributes {
+        output.push_str(&format!("{}\n", attribute));
+    }
+
+    // Add enum declaration
+    output.push_str(&format!("pub enum {} {{\n", result_def.name));
+
+    // Add enum variants
+    for result in &result_def.results {
+        // Add variant - use result name as both variant and type like CreateUserContextResult(CreateUserContextResult)
+        output.push_str(&format!("    {}({}),\n", result.name, result.name));
+    }
+
+    output.push_str("}\n");
+    output
+}
+
+fn generate_result_struct(result: &crate::command_parser::BidiResult, module: &Module) -> String {
+    let mut output = String::new();
+
+    // Add result attributes
+    for attribute in &result.attributes {
+        output.push_str(&format!("{}\n", attribute));
+    }
+
+    output.push_str(&format!("pub struct {} {{\n", result.name));
+
+    // Add properties with their attributes
+    for property in &result.properties {
+        // Add property attributes
+        for attr in &property.attributes {
+            output.push_str(&format!("    {}\n", attr));
+        }
+
+        // Clean up property type - remove module prefix if it's the same module
+        let cleaned_type = clean_module_prefix(&property.value, &result.module_name);
+
+        // Add field
+        let field_type = if property.is_optional {
+            format!("Option<{}>", cleaned_type)
+        } else {
+            cleaned_type
+        };
+
+        // Snakify property name and handle "type" keyword
+        let mut field_name = to_snake_case(&property.name);
+        if field_name == "type" {
+            field_name = "r#type".to_string();
+        }
+
+        output.push_str(&format!("    pub {}: {},\n", field_name, field_type));
+    }
+
+    output.push_str("}");
     output
 }

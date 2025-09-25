@@ -8,12 +8,6 @@ pub struct EventDefinition {
     pub content: String,
 }
 
-#[derive(Debug)]
-pub struct ResultDefinition {
-    pub name: String,
-    pub content: String,
-}
-
 pub fn extract_definition_content(content: &str, target_line: &str) -> Result<String, Box<dyn std::error::Error>> {
     let lines: Vec<&str> = content.lines().collect();
     let mut definition = String::new();
