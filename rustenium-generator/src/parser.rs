@@ -147,6 +147,11 @@ pub fn extract_parameter_types(cddl_content: &str) -> Result<Vec<String>, Box<dy
 pub fn process_cddl_to_struct(cddl_content: &str, cddl_strings: Vec<&str>, module: &mut Module, type_name: Option<&str>) -> Result<(Vec<Property>, Option<String>), Box<dyn std::error::Error>> {
     let mut properties = Vec::new();
 
+    // Check if content is empty or only whitespace - return empty properties for empty structs
+    if cddl_content.trim().is_empty() {
+        return Ok((properties, None));
+    }
+
     // Check if content has no ":" and type_name exists - indicates it's not a struct with properties
     if !cddl_content.contains(':') && type_name.is_some() {
         // Concatenate content and pass to parse_cddl_property_line as a fake property

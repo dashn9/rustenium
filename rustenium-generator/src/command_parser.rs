@@ -48,6 +48,8 @@ pub struct BidiResult {
     pub attributes: Vec<String>,
     /// The raw CDDL content for this result
     pub content: String,
+    /// Whether this is a type alias (true) or struct definition (false)
+    pub is_alias: bool,
 }
 
 
@@ -334,6 +336,7 @@ pub fn parse_result_definition(name: String, content: String, cddl_strings: Vec<
                     "#[derive(Debug, Serialize, Deserialize)]".to_string(),
                 ],
                 content: String::new(),
+                is_alias: false,
             };
 
             // Search and update the result in all CDDL content
@@ -362,17 +365,22 @@ pub fn parse_result_definition(name: String, content: String, cddl_strings: Vec<
 /// # Returns
 /// Ok(()) if successful, or an error if parsing fails
 pub fn search_and_update_result(cddl_strings: Vec<&str>, bidi_result: &mut BidiResult, result_def: &mut ResultDefinition, module: &mut Module) -> Result<(), Box<dyn std::error::Error>> {
-    // Search for result definition using pattern: result_name = {
+    // Search for result definition using pattern: result_name = { or result_name = TypeAlias
     let result_name = format!("{}.{}", bidi_result.module_name, bidi_result.name);
-    let pattern = format!(r"^{}\s*=\s*\{{", regex::escape(&result_name));
-    let regex = Regex::new(&pattern)?;
+    let struct_pattern = format!(r"^{}\s*=\s*\{{", regex::escape(&result_name));
+    let alias_pattern = format!(r"^{}\s*=\s*(.+)", regex::escape(&result_name));
+    let struct_regex = Regex::new(&struct_pattern)?;
+    let alias_regex = Regex::new(&alias_pattern)?;
 
     // Search through all CDDL content strings
     for cddl_content in cddl_strings.clone() {
         let lines: Vec<&str> = cddl_content.lines().collect();
 
         for (line_num, line) in lines.iter().enumerate() {
-            if regex.is_match(line.trim()) {
+            let line_trimmed = line.trim();
+
+            // Check for struct definition pattern: result_name = {
+            if struct_regex.is_match(line_trimmed) {
                 // Found the result definition
 
                 // Collect lines between the braces (skip the first line with opening brace)
@@ -411,6 +419,18 @@ pub fn search_and_update_result(cddl_strings: Vec<&str>, bidi_result: &mut BidiR
                 }
 
                 return Ok(()); // Found and processed the result, return early
+            }
+
+            // Check for type alias pattern: result_name = TypeAlias
+            else if let Some(captures) = alias_regex.captures(line_trimmed) {
+                let alias_type = captures[1].to_string();
+                bidi_result.content = alias_type.clone();
+                bidi_result.is_alias = true;
+
+                // Still run it through process_cddl_to_struct to handle the alias type
+                let (result_properties, _) = parser::process_cddl_to_struct(&alias_type, cddl_strings.clone(), module, Some(&bidi_result.name))?;
+                bidi_result.properties = result_properties;
+                return Ok(());
             }
         }
     }

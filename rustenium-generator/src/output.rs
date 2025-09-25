@@ -556,6 +556,15 @@ fn generate_result_enum(result_def: &crate::command_parser::ResultDefinition) ->
 fn generate_result_struct(result: &crate::command_parser::BidiResult, module: &Module) -> String {
     let mut output = String::new();
 
+    // Handle type aliases differently from structs
+    if result.is_alias {
+        // Generate type alias: pub type ResultName = AliasedType;
+        let cleaned_type = clean_module_prefix(&result.content, &result.module_name);
+        output.push_str(&format!("pub type {} = {};\n", result.name, cleaned_type));
+        return output;
+    }
+
+    // Generate regular struct
     // Add result attributes
     for attribute in &result.attributes {
         output.push_str(&format!("{}\n", attribute));
