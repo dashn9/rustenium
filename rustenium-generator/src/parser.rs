@@ -165,21 +165,108 @@ pub fn process_cddl_to_struct(cddl_content: &str, cddl_strings: Vec<&str>, modul
         return Ok((properties, meta_comment));
     }
 
-    // Parse each line in the CDDL body
-    for line in cddl_content.lines() {
+    // Preprocess content to handle nested inline structs
+    let (processed_content, updated_cddl_strings) = preprocess_nested_structs(cddl_content, type_name, cddl_strings, module)?;
+    let updated_cddl_refs: Vec<&str> = updated_cddl_strings.iter().map(|s| s.as_str()).collect();
+
+    // Parse each line in the processed CDDL body
+    for line in processed_content.lines() {
         let line = line.trim();
         if line.is_empty() || line.starts_with("//") {
             continue; // Skip empty lines and comments
         }
 
         // Parse line like: "? userContext: browser.UserContext,"
-        let (property, meta_comment) = parse_cddl_property_line(line, &cddl_strings, module)?;
+        let (property, meta_comment) = parse_cddl_property_line(line, &updated_cddl_refs, module)?;
         if let Some(property) = property {
             properties.push(property);
         }
     }
 
     Ok((properties, None))
+}
+
+/// Preprocesses CDDL content to extract nested inline structs and create separate type definitions
+///
+/// # Arguments
+/// * `cddl_content` - The CDDL content to preprocess
+/// * `parent_type_name` - The name of the parent type (e.g., "NewResult")
+/// * `cddl_strings` - All CDDL content for type lookups
+/// * `module` - The current module for generating types
+///
+/// # Returns
+/// A tuple of (processed_content, updated_cddl_strings) where nested structs are replaced with type references
+fn preprocess_nested_structs(cddl_content: &str, parent_type_name: Option<&str>, mut cddl_strings: Vec<&str>, module: &mut Module) -> Result<(String, Vec<String>), Box<dyn std::error::Error>> {
+    let mut processed_lines = Vec::new();
+    let mut owned_cddl_strings: Vec<String> = cddl_strings.iter().map(|s| s.to_string()).collect();
+    let lines: Vec<&str> = cddl_content.lines().collect();
+    let mut i = 0;
+
+    while i < lines.len() {
+        let line = lines[i].trim();
+
+        // Check if line contains inline struct: "property: {"
+        if line.contains(": {") && !line.trim_end().ends_with('}') {
+            // Extract property name and handle nested struct
+            if let Some(colon_pos) = line.find(": {") {
+                let property_part = &line[..colon_pos].trim();
+                let property_name = property_part.trim_start_matches('?').trim();
+
+                // Create new type name: module.ParentTypePropertyName (e.g., session.NewResultCapabilities)
+                let module_name = &module.name.to_lowercase();
+                let parent_name = parent_type_name.unwrap_or("Unknown");
+                let new_type_name = format!("{}.{}{}", module_name, parent_name, capitalize_first(property_name));
+
+                // Collect nested content
+                let mut nested_lines = Vec::new();
+                let mut brace_count = 1; // We already saw the opening brace
+                i += 1; // Move past the current line
+
+                while i < lines.len() && brace_count > 0 {
+                    let nested_line = lines[i];
+                    for ch in nested_line.chars() {
+                        match ch {
+                            '{' => brace_count += 1,
+                            '}' => brace_count -= 1,
+                            _ => {}
+                        }
+                    }
+
+                    if brace_count > 0 {
+                        nested_lines.push(nested_line.trim());
+                    }
+                    i += 1;
+                }
+
+                // Create the new type definition
+                let nested_content = nested_lines.join("\n");
+                let new_type_def = format!("{} = {{\n{}\n}}", new_type_name, nested_content);
+                owned_cddl_strings.push(new_type_def);
+
+                // Replace the inline struct with type reference
+                let replacement_line = format!("{}: {},", property_part, new_type_name);
+                processed_lines.push(replacement_line);
+
+                continue;
+            }
+        }
+
+        processed_lines.push(line.to_string());
+        i += 1;
+    }
+
+    // Convert owned strings back to string refs for return
+    let updated_cddl_strings: Vec<String> = owned_cddl_strings;
+    Ok((processed_lines.join("\n"), updated_cddl_strings))
+}
+
+/// Capitalizes the first letter of a string
+fn capitalize_first(s: &str) -> String {
+    let mut chars = s.chars();
+    match chars.next() {
+        None => String::new(),
+        Some(first) => first.to_uppercase().chain(chars).collect(),
+    }
 }
 
 /// Parses a single CDDL property line and returns a Property struct
