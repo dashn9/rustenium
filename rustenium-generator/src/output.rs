@@ -79,7 +79,8 @@ fn generate_module_files(module: &Module, output_dir: &str) -> Result<(), Box<dy
     
     // Create event file if definition exists
     if let Some(ref event_def) = module.event_definition {
-        fs::write(format!("{}/events.rs", module_dir), &event_def.content)?;
+        let events_content = generate_events_file(event_def, module);
+        fs::write(format!("{}/events.rs", module_dir), events_content)?;
         mod_content.push_str("pub mod events;\n");
     }
     
@@ -276,6 +277,40 @@ fn generate_commands_file(cmd_def: &crate::command_parser::CommandDefinition, mo
     output
 }
 
+fn generate_events_file(event_def: &crate::event_parser::EventDefinition, module: &Module) -> String {
+    let mut output = String::new();
+
+    // Add header comment
+    output.push_str("// Generated events for module\n\n");
+
+    // Add imports for serde
+    output.push_str("use serde::{Serialize, Deserialize};\n\n");
+
+    // Generate the main event enum first
+    output.push_str(&generate_event_enum(event_def));
+    output.push_str("\n\n");
+
+    // Generate event methods after the enum definition
+    for method in &event_def.event_methods {
+        output.push_str(&generate_event_method(method));
+        output.push_str("\n\n");
+    }
+
+    // Generate event params after methods
+    for param in &event_def.event_params {
+        output.push_str(&generate_event_param(param, module));
+        output.push_str("\n\n");
+    }
+
+    // Generate individual event structs
+    for event in &event_def.events {
+        output.push_str(&generate_event_struct_new(event));
+        output.push_str("\n\n");
+    }
+
+    output
+}
+
 fn generate_command_struct(command: &crate::command_parser::Command) -> String {
     let mut output = String::new();
 
@@ -327,7 +362,12 @@ fn generate_types_file(module: &Module) -> String {
 
     // Generate each type
     for bidi_type in &module.types {
-        output.push_str(&generate_rust_struct(&bidi_type.name, &bidi_type.properties, &module.name));
+        if bidi_type.is_enum {
+            // Force enum generation if BidiType is marked as enum
+            output.push_str(&generate_rust_enum(&bidi_type.name, &bidi_type.properties, &module.name));
+        } else {
+            output.push_str(&generate_rust_struct(&bidi_type.name, &bidi_type.properties, &module.name));
+        }
         output.push_str("\n\n");
     }
 
@@ -344,10 +384,26 @@ fn generate_rust_struct(name: &str, properties: &[crate::parser::Property], modu
 
     // Check if this should be an enum instead of a struct
     let has_enum_properties = properties.iter().any(|p| p.is_enum);
+    let all_enum_properties = properties.iter().all(|p| p.is_enum);
 
-    if has_enum_properties && properties.len() > 1 {
-        // Generate enum with variants
-        generate_rust_enum(name, properties, module_name)
+    // Clone properties and add serde flatten to enum properties when appropriate
+    let mut modified_properties: Vec<crate::parser::Property> = properties.to_vec();
+
+    for property in &mut modified_properties {
+        if property.is_enum {
+            if properties.len() == 1 && all_enum_properties {
+                // Single enum property case
+                property.attributes.push("#[serde(flatten)]".to_string());
+            } else if !all_enum_properties {
+                // Mixed properties case - flatten enum properties
+                property.attributes.push("#[serde(flatten)]".to_string());
+            }
+        }
+    }
+
+    if has_enum_properties && properties.len() > 1 && all_enum_properties {
+        // Generate enum with variants only if ALL properties are enums
+        generate_rust_enum(name, &modified_properties, module_name)
     } else if properties.is_empty() {
         // Generate unit struct for empty types
         output.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
@@ -355,7 +411,7 @@ fn generate_rust_struct(name: &str, properties: &[crate::parser::Property], modu
         output
     } else {
         // Generate regular struct
-        generate_rust_regular_struct(name, properties, module_name)
+        generate_rust_regular_struct(name, &modified_properties, module_name)
     }
 }
 
@@ -553,6 +609,27 @@ fn generate_result_enum(result_def: &crate::command_parser::ResultDefinition) ->
     output
 }
 
+fn generate_event_enum(event_def: &crate::event_parser::EventDefinition) -> String {
+    let mut output = String::new();
+
+    // Add attributes
+    for attribute in &event_def.attributes {
+        output.push_str(&format!("{}\n", attribute));
+    }
+
+    // Add enum declaration
+    output.push_str(&format!("pub enum {} {{\n", event_def.name));
+
+    // Add enum variants
+    for event in &event_def.events {
+        // Add variant - use event name as both variant and type like ContextCreated(ContextCreated)
+        output.push_str(&format!("    {}({}),\n", event.name, event.name));
+    }
+
+    output.push_str("}\n");
+    output
+}
+
 fn generate_result_struct(result: &crate::command_parser::BidiResult, module: &Module) -> String {
     let mut output = String::new();
 
@@ -581,6 +658,184 @@ fn generate_result_struct(result: &crate::command_parser::BidiResult, module: &M
 
         // Clean up property type - remove module prefix if it's the same module
         let cleaned_type = clean_module_prefix(&property.value, &result.module_name);
+
+        // Add field
+        let field_type = if property.is_optional {
+            format!("Option<{}>", cleaned_type)
+        } else {
+            cleaned_type
+        };
+
+        // Snakify property name and handle "type" keyword
+        let mut field_name = to_snake_case(&property.name);
+        if field_name == "type" {
+            field_name = "r#type".to_string();
+        }
+
+        output.push_str(&format!("    pub {}: {},\n", field_name, field_type));
+    }
+
+    output.push_str("}");
+    output
+}
+
+fn generate_event_method(method: &crate::event_parser::EventMethods) -> String {
+    let mut output = String::new();
+
+    // Add enum attributes
+    for attribute in &method.enum_attributes {
+        output.push_str(&format!("{}\n", attribute));
+    }
+
+    // Generate method enum
+    output.push_str(&format!("pub enum {} {{\n", method.name));
+
+    // Add method attributes
+    for attribute in &method.method_attributes {
+        output.push_str(&format!("    {}\n", attribute));
+    }
+
+    // Add the method variant in format method(method)
+    let method_variant = method.name.replace("Method", "");
+    output.push_str(&format!("    {}({}),\n", method_variant, method_variant));
+
+    output.push_str("}");
+    output
+}
+
+fn generate_event_param(param: &crate::event_parser::EventParams, module: &Module) -> String {
+    let mut output = String::new();
+    let mut default_functions = String::new();
+
+    // Generate default functions first (they need to come before the struct)
+    for property in &param.properties {
+        if let Some(validation_info) = &property.validation_info {
+            if let Some(default_value) = &validation_info.default_value {
+                let function_name = format!("{}_default_{}", to_snake_case(&param.name), property.name);
+                let cleaned_type = clean_module_prefix(&property.value, &module.name);
+
+                let return_type = if property.is_optional {
+                    format!("Option<{}>", cleaned_type)
+                } else {
+                    cleaned_type.clone()
+                };
+
+                let return_value = if property.is_optional {
+                    format!("Some({})", default_value)
+                } else {
+                    default_value.clone()
+                };
+
+                default_functions.push_str(&format!(
+                    "fn {}() -> {} {{\n    {}\n}}\n\n",
+                    function_name, return_type, return_value
+                ));
+            }
+        }
+    }
+
+    // Add default functions to output
+    if !default_functions.is_empty() {
+        output.push_str(&default_functions);
+    }
+
+    // Add parameter struct attributes
+    for attribute in &param.attributes {
+        output.push_str(&format!("{}\n", attribute));
+    }
+
+    // Generate parameter struct
+    output.push_str(&format!("pub struct {} {{\n", param.name));
+
+    // Add properties
+    for property in &param.properties {
+        // Add property attributes
+        for attr in &property.attributes {
+            output.push_str(&format!("    {}\n", attr));
+        }
+
+        // Add validation-based attributes
+        if let Some(validation_info) = &property.validation_info {
+            // Add validation constraints
+            if !validation_info.constraints.is_empty() {
+                let mut constraints = Vec::new();
+                for constraint in &validation_info.constraints {
+                    match constraint.constraint_type.as_str() {
+                        "ge" => constraints.push(format!("min = {}", constraint.value)),
+                        "le" => constraints.push(format!("max = {}", constraint.value)),
+                        "gt" => {
+                            // For greater than, we need to add a small epsilon
+                            if let Ok(val) = constraint.value.parse::<f64>() {
+                                constraints.push(format!("min = {}", val + f64::EPSILON));
+                            } else {
+                                constraints.push(format!("min = {}", constraint.value));
+                            }
+                        },
+                        "lt" => {
+                            // For less than, we need to subtract a small epsilon
+                            if let Ok(val) = constraint.value.parse::<f64>() {
+                                constraints.push(format!("max = {}", val - f64::EPSILON));
+                            } else {
+                                constraints.push(format!("max = {}", constraint.value));
+                            }
+                        },
+                        _ => {} // Unknown constraint type
+                    }
+                }
+                if !constraints.is_empty() {
+                    output.push_str(&format!("    #[validate(range({}))]\n", constraints.join(", ")));
+                }
+            }
+
+            // Add default value attribute
+            if let Some(_default_value) = &validation_info.default_value {
+                let function_name = format!("{}_default_{}", to_snake_case(&param.name), property.name);
+                output.push_str(&format!("    #[serde(default = \"{}\")]\n", function_name));
+            }
+        }
+
+        // Clean up property type - remove module prefix if it's the same module
+        let cleaned_type = clean_module_prefix(&property.value, &module.name);
+
+        // Add field
+        let field_type = if property.is_optional {
+            format!("Option<{}>", cleaned_type)
+        } else {
+            cleaned_type
+        };
+
+        // Snakify property name and handle "type" keyword
+        let mut field_name = to_snake_case(&property.name);
+        if field_name == "type" {
+            field_name = "r#type".to_string();
+        }
+
+        output.push_str(&format!("    pub {}: {},\n", field_name, field_type));
+    }
+
+    output.push_str("}");
+    output
+}
+
+fn generate_event_struct_new(event: &crate::event_parser::Event) -> String {
+    let mut output = String::new();
+
+    // Add event attributes
+    for attribute in &event.attributes {
+        output.push_str(&format!("{}\n", attribute));
+    }
+
+    output.push_str(&format!("pub struct {} {{\n", event.name));
+
+    // Add properties with their attributes
+    for property in &event.properties {
+        // Add property attributes
+        for attr in &property.attributes {
+            output.push_str(&format!("    {}\n", attr));
+        }
+
+        // Clean up property type - remove module prefix if it's the same module
+        let cleaned_type = clean_module_prefix(&property.value, &event.module_name);
 
         // Add field
         let field_type = if property.is_optional {

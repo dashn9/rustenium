@@ -1,5 +1,6 @@
 use regex::Regex;
 use crate::command_parser::{CommandParams, CommandDefinition};
+use crate::event_parser::{EventParams, EventDefinition};
 use crate::module::Module;
 
 #[derive(Debug, Clone)]
@@ -296,19 +297,36 @@ fn parse_cddl_property_line(line: &str, cddl_strings: &[&str], current_module: &
         let is_optional_marker = optional_marker.contains('?');
         let (rust_type, is_primitive, validation_info, meta_comment) = convert_cddl_type_to_rust(&property_type, cddl_strings, current_module, Some(property_name.as_str()));
 
-        // If the property has a default value, it shouldn't be optional
+        // If the property has a default value, it shouldn't be  optional
         let is_optional = is_optional_marker &&
             validation_info.as_ref().map_or(true, |v| v.default_value.is_none());
 
         let mut attributes = vec![format!(r#"#[serde(rename = "{}")]"#, property_name)];
 
         return Ok((Some(Property {
-            is_enum: false, // TODO: Detect enums later
+            is_enum: false,
             is_primitive,
             is_optional,
             name: property_name,
             value: rust_type,
             attributes,
+            validation_info,
+        }), meta_comment));
+    }
+
+    // Check for enum pattern: just a simple word
+    let enum_pattern = Regex::new(r"^\s*(.+)\s*$")?;
+    if let Some(captures) = enum_pattern.captures(line) {
+        let enum_type = captures[1].trim().to_string();
+        let (rust_type, is_primitive, validation_info, meta_comment) = convert_cddl_type_to_rust(&enum_type, cddl_strings, current_module, None);
+
+        return Ok((Some(Property {
+            is_enum: true,
+            is_primitive,
+            is_optional: false,
+            name: rust_type.clone(),
+            value: rust_type,
+            attributes: Vec::new(),
             validation_info,
         }), meta_comment));
     }
@@ -361,6 +379,49 @@ fn find_and_extract_type_content(type_name: &str, cddl_strings: &[&str], current
 
                         // Add the line if we're inside the braces (skip the first line)
                         if found_start && brace_count > 0 && i > line_num {
+                            content_lines.push(current_line.trim());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Try parentheses pattern (e.g., "browsingContext.BaseNavigationInfo = (")
+    let paren_pattern = format!(r"^{}\s*=\s*\(", regex::escape(type_name));
+    if let Ok(regex) = Regex::new(&paren_pattern) {
+        for cddl_content in cddl_strings {
+            let lines: Vec<&str> = cddl_content.lines().collect();
+
+            for (line_num, line) in lines.iter().enumerate() {
+                if regex.is_match(line.trim()) {
+                    // Found the type definition, extract content between parentheses
+                    let mut paren_count = 0;
+                    let mut found_start = false;
+                    let mut content_lines = Vec::new();
+
+                    for i in line_num..lines.len() {
+                        let current_line = lines[i];
+
+                        for ch in current_line.chars() {
+                            match ch {
+                                '(' => {
+                                    paren_count += 1;
+                                    found_start = true;
+                                }
+                                ')' => {
+                                    paren_count -= 1;
+                                    if paren_count == 0 && found_start {
+                                        // Found the end, return the extracted content
+                                        return Some(content_lines.join("\n").trim().to_string());
+                                    }
+                                }
+                                _ => {}
+                            }
+                        }
+
+                        // Add the line if we're inside the parentheses (skip the first line)
+                        if found_start && paren_count > 0 && i > line_num {
                             content_lines.push(current_line.trim());
                         }
                     }
@@ -465,6 +526,7 @@ fn generate_type_if_same_module(type_name: &str, content: &str, def_type: &str, 
             name: clean_name.to_string(),
             properties,
             raw: content.to_string(),
+            is_enum: false,
         });
 
         return Some(clean_name.to_string());
@@ -514,11 +576,6 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
         // Remove all nulls
         parts.retain(|part| part != "null");
 
-        if let Some(property_name) = property_name {
-            if property_name.contains("page") {
-                println!("Type Name: {}", property_name);
-            }
-        }
         // Process remaining types through convert_basic_cddl_type
         let processed_types: Vec<(String, Option<String>, Vec<String>)> = parts
             .into_iter()
@@ -528,6 +585,7 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
                     let literal_value = &part[1..part.len()-1]; // Remove quotes
                     let variant_name = to_pascal_case(literal_value);
                     let attributes = vec![format!(r#"#[serde(rename = "{}")]"#, literal_value)];
+
                     (variant_name, None, attributes)
                 } else {
                     let (rust_type, _, _) = convert_basic_cddl_type(&part, cddl_strings, current_module, property_name);
@@ -585,6 +643,7 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
                     name: enum_name.clone(),
                     properties,
                     raw: type_name.to_string(),
+                    is_enum: true,
                 });
 
                 let result_type = if has_null {
@@ -606,8 +665,8 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
             is_enum: true,
             is_primitive: false,
             is_optional: false,
-            name: enum_name.clone(),
-            value: enum_name.clone(),
+            name: to_pascal_case(literal_value),
+            value: "UNIT_VARIANT".to_string(),
             attributes: vec![format!(r#"#[serde(rename = "{}")]"#, literal_value)],
             validation_info: None,
         }];
@@ -616,6 +675,7 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
             name: enum_name.clone(),
             properties,
             raw: type_name.to_string(),
+            is_enum: true,
         });
 
         return (enum_name.clone(), Some(String::from("generated_property")));

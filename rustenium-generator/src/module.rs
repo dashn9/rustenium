@@ -2,7 +2,7 @@ use regex::Regex;
 use std::collections::HashMap;
 use crate::extractor::extract_definition_content;
 use crate::command_parser::{CommandDefinition, parse_command_definition, Command, parse_result_definition, ResultDefinition};
-use crate::event_parser::EventDefinition;
+use crate::event_parser::{EventDefinition, parse_event_definition};
 
 
 #[derive(Debug)]
@@ -15,6 +15,7 @@ pub struct BidiType {
     pub name: String,
     pub properties: Vec<crate::parser::Property>,
     pub raw: String,
+    pub is_enum: bool,
 }
 
 #[derive(Debug)]
@@ -80,10 +81,8 @@ pub fn detect_modules(cddl_strings: Vec<&str>) -> Result<Vec<Module>, Box<dyn st
                     results: Vec::new(),
                 });
 
-                module.event_definition = Some(EventDefinition {
-                    name: format!("{}Event", name),
-                    content,
-                });
+                let event_def = parse_event_definition(format!("{}Event", name), content, cddl_strings.clone(), module)?;
+                module.event_definition = Some(event_def);
             }
             
             if let Some(captures) = result_pattern.captures(line) {
