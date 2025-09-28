@@ -123,8 +123,24 @@ fn generate_command_param(param: &crate::command_parser::CommandParams, module: 
     let mut output = String::new();
     let mut default_functions = String::new();
 
+    // Clone properties and add serde flatten to enum properties when appropriate
+    let mut modified_properties: Vec<crate::parser::Property> = param.properties.to_vec();
+    let all_enum_properties = param.properties.iter().all(|p| p.is_enum);
+
+    for property in &mut modified_properties {
+        if property.is_enum {
+            if param.properties.len() == 1 && all_enum_properties {
+                // Single enum property case
+                property.attributes.push("#[serde(flatten)]".to_string());
+            } else if !all_enum_properties {
+                // Mixed properties case - flatten enum properties
+                property.attributes.push("#[serde(flatten)]".to_string());
+            }
+        }
+    }
+
     // Generate default functions first (they need to come before the struct)
-    for property in &param.properties {
+    for property in &modified_properties {
         if let Some(validation_info) = &property.validation_info {
             if let Some(default_value) = &validation_info.default_value {
                 let function_name = format!("{}_default_{}", to_snake_case(&param.name), property.name);
@@ -164,7 +180,7 @@ fn generate_command_param(param: &crate::command_parser::CommandParams, module: 
     output.push_str(&format!("pub struct {} {{\n", param.name));
 
     // Add properties
-    for property in &param.properties {
+    for property in &modified_properties {
         // Add property attributes
         for attr in &property.attributes {
             output.push_str(&format!("    {}\n", attr));
@@ -641,6 +657,22 @@ fn generate_result_struct(result: &crate::command_parser::BidiResult, module: &M
         return output;
     }
 
+    // Clone properties and add serde flatten to enum properties when appropriate
+    let mut modified_properties: Vec<crate::parser::Property> = result.properties.to_vec();
+    let all_enum_properties = result.properties.iter().all(|p| p.is_enum);
+
+    for property in &mut modified_properties {
+        if property.is_enum {
+            if result.properties.len() == 1 && all_enum_properties {
+                // Single enum property case
+                property.attributes.push("#[serde(flatten)]".to_string());
+            } else if !all_enum_properties {
+                // Mixed properties case - flatten enum properties
+                property.attributes.push("#[serde(flatten)]".to_string());
+            }
+        }
+    }
+
     // Generate regular struct
     // Add result attributes
     for attribute in &result.attributes {
@@ -650,7 +682,7 @@ fn generate_result_struct(result: &crate::command_parser::BidiResult, module: &M
     output.push_str(&format!("pub struct {} {{\n", result.name));
 
     // Add properties with their attributes
-    for property in &result.properties {
+    for property in &modified_properties {
         // Add property attributes
         for attr in &property.attributes {
             output.push_str(&format!("    {}\n", attr));
@@ -707,8 +739,27 @@ fn generate_event_param(param: &crate::event_parser::EventParams, module: &Modul
     let mut output = String::new();
     let mut default_functions = String::new();
 
+    // Clone properties and add serde flatten to enum properties when appropriate
+    let mut modified_properties: Vec<crate::parser::Property> = param.properties.to_vec();
+    let all_enum_properties = param.properties.iter().all(|p| p.is_enum);
+
+    for property in &mut modified_properties {
+        if property.is_enum {
+            if param.properties.len() == 1 && all_enum_properties {
+                // Single enum property case
+                property.attributes.push("#[serde(flatten)]".to_string());
+            } else if !all_enum_properties {
+                // Mixed properties case - flatten enum properties
+                property.attributes.push("#[serde(flatten)]".to_string());
+            }
+        }
+    }
+
     // Generate default functions first (they need to come before the struct)
-    for property in &param.properties {
+    for property in &modified_properties {
+        if property.name.contains("union") {
+            println!("{}", property.name)
+        }
         if let Some(validation_info) = &property.validation_info {
             if let Some(default_value) = &validation_info.default_value {
                 let function_name = format!("{}_default_{}", to_snake_case(&param.name), property.name);
@@ -748,7 +799,7 @@ fn generate_event_param(param: &crate::event_parser::EventParams, module: &Modul
     output.push_str(&format!("pub struct {} {{\n", param.name));
 
     // Add properties
-    for property in &param.properties {
+    for property in &modified_properties {
         // Add property attributes
         for attr in &property.attributes {
             output.push_str(&format!("    {}\n", attr));

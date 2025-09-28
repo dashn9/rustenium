@@ -153,10 +153,13 @@ pub fn process_cddl_to_struct(cddl_content: &str, cddl_strings: Vec<&str>, modul
         return Ok((properties, None));
     }
 
+    // Preprocess multiline union types - collapse them to single line
+    let preprocessed_content = preprocess_multiline_unions(cddl_content);
+
     // Check if content has no ":" and type_name exists - indicates it's not a struct with properties
-    if !cddl_content.contains(':') && type_name.is_some() {
+    if !preprocessed_content.contains(':') && type_name.is_some() {
         // Concatenate content and pass to parse_cddl_property_line as a fake property
-        let fake_line = format!("{}: {}", type_name.unwrap(), cddl_content);
+        let fake_line = format!("{}: {}", type_name.unwrap(), preprocessed_content);
         let (property, meta_comment) = parse_cddl_property_line(&fake_line, &cddl_strings, module)?;
         if let Some(property) = property {
             // If parse_cddl_property_line returns a property, it means no custom type was generated
@@ -167,7 +170,7 @@ pub fn process_cddl_to_struct(cddl_content: &str, cddl_strings: Vec<&str>, modul
     }
 
     // Preprocess content to handle nested inline structs
-    let (processed_content, updated_cddl_strings) = preprocess_nested_structs(cddl_content, type_name, cddl_strings, module)?;
+    let (processed_content, updated_cddl_strings) = preprocess_nested_structs(&preprocessed_content, type_name, cddl_strings, module)?;
     let updated_cddl_refs: Vec<&str> = updated_cddl_strings.iter().map(|s| s.as_str()).collect();
 
     // Parse each line in the processed CDDL body
@@ -185,6 +188,66 @@ pub fn process_cddl_to_struct(cddl_content: &str, cddl_strings: Vec<&str>, modul
     }
 
     Ok((properties, None))
+}
+
+/// Preprocesses multiline union types to collapse them into single lines
+///
+/// # Arguments
+/// * `cddl_content` - The CDDL content to preprocess
+///
+/// # Returns
+/// The content with multiline unions collapsed to single lines
+fn preprocess_multiline_unions(cddl_content: &str) -> String {
+    let lines: Vec<&str> = cddl_content.lines().collect();
+    let mut processed_lines = Vec::new();
+    let mut i = 0;
+
+    while i < lines.len() {
+        let line = lines[i].trim();
+
+        // Check if line starts with '(' - beginning of a potential multiline union
+        if line == "(" {
+            let mut union_parts = Vec::new();
+            let mut paren_count = 1;
+            i += 1; // Move past the opening parenthesis
+
+            // Collect all lines until we find the closing parenthesis
+            while i < lines.len() && paren_count > 0 {
+                let current_line = lines[i].trim();
+
+                // Count parentheses
+                for ch in current_line.chars() {
+                    match ch {
+                        '(' => paren_count += 1,
+                        ')' => paren_count -= 1,
+                        _ => {}
+                    }
+                }
+
+                if paren_count > 0 {
+                    // Remove trailing "//" or "//" and clean up the line
+                    let cleaned = current_line.trim_end_matches("//").trim_end_matches("/").trim();
+                    if !cleaned.is_empty() {
+                        union_parts.push(cleaned.to_string());
+                    }
+                }
+
+                i += 1;
+            }
+
+            // Join all parts with " // " and wrap in parentheses
+            if !union_parts.is_empty() {
+                let collapsed_union = format!("({})", union_parts.join(" // "));
+                processed_lines.push(collapsed_union);
+            }
+        } else {
+            // Regular line - just add it
+            processed_lines.push(line.to_string());
+            i += 1;
+        }
+    }
+
+    processed_lines.join("\n")
 }
 
 /// Preprocesses CDDL content to extract nested inline structs and create separate type definitions
@@ -615,7 +678,14 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
                     (Some(s), Some(p)) => format!("{}{}", s, p),
                     (Some(s), None) => format!("{}Union", s),
                     (None, Some(p)) => format!("{}Union", p),
-                    (None, None) => format!("Union{}", current_module.types.len()),
+                    (None, None) => {
+                        // Combine all type names when no struct or property name is present
+                        let type_names: Vec<String> = processed_types
+                            .iter()
+                            .map(|(variant_name, _, _)| variant_name.clone())
+                            .collect();
+                        format!("{}Union", type_names.join(""))
+                    },
                 };
 
                 let enum_name = to_pascal_case(enum_name_temp.as_str());
