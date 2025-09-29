@@ -1,26 +1,17 @@
 use regex::Regex;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use crate::extractor::extract_definition_content;
-use crate::command_parser::{CommandDefinition, parse_command_definition, Command, parse_result_definition, ResultDefinition};
-use crate::event_parser::{EventDefinition, parse_event_definition};
+use crate::command_parser::{CommandDefinition, parse_command_definition, Command, parse_result_definition, ResultDefinition, BidiResult};
+use crate::event_parser::{EventDefinition, parse_event_definition, Event};
 
 
-#[derive(Debug)]
-pub struct Event {
-    pub raw: String,
-}
 
 #[derive(Debug)]
 pub struct BidiType {
     pub name: String,
     pub properties: Vec<crate::parser::Property>,
-    pub raw: String,
     pub is_enum: bool,
-}
-
-#[derive(Debug)]
-pub struct BidiResult {
-    pub raw: String,
+    pub is_alias: bool,
 }
 
 #[derive(Debug)]
@@ -33,6 +24,7 @@ pub struct Module {
     pub events: Vec<Event>,
     pub types: Vec<BidiType>,
     pub results: Vec<BidiResult>,
+    pub pending_types: HashSet<String>,
 }
 
 
@@ -60,6 +52,7 @@ pub fn detect_modules(cddl_strings: Vec<&str>) -> Result<Vec<Module>, Box<dyn st
                     events: Vec::new(),
                     types: Vec::new(),
                     results: Vec::new(),
+                    pending_types: HashSet::new(),
                 });
 
                 let command_def = parse_command_definition(format!("{}Command", name), content, cddl_strings.clone(), module)?;
@@ -79,6 +72,7 @@ pub fn detect_modules(cddl_strings: Vec<&str>) -> Result<Vec<Module>, Box<dyn st
                     events: Vec::new(),
                     types: Vec::new(),
                     results: Vec::new(),
+                    pending_types: HashSet::new(),
                 });
 
                 let event_def = parse_event_definition(format!("{}Event", name), content, cddl_strings.clone(), module)?;
@@ -98,6 +92,7 @@ pub fn detect_modules(cddl_strings: Vec<&str>) -> Result<Vec<Module>, Box<dyn st
                     events: Vec::new(),
                     types: Vec::new(),
                     results: Vec::new(),
+                    pending_types: HashSet::new(),
                 });
 
                 let result_def = parse_result_definition(format!("{}Result", name), content, cddl_strings.clone(), module)?;
@@ -105,8 +100,12 @@ pub fn detect_modules(cddl_strings: Vec<&str>) -> Result<Vec<Module>, Box<dyn st
             }
         }
     }
-    
+
     let mut result: Vec<Module> = modules.into_values().collect();
+
+    // Process deferred types for each module
+    crate::parser::process_deferred_types(&mut result, cddl_strings)?;
+
     result.sort_by(|a, b| a.name.cmp(&b.name));
     Ok(result)
 }

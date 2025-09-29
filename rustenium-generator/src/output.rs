@@ -381,6 +381,9 @@ fn generate_types_file(module: &Module) -> String {
         if bidi_type.is_enum {
             // Force enum generation if BidiType is marked as enum
             output.push_str(&generate_rust_enum(&bidi_type.name, &bidi_type.properties, &module.name));
+        } else if bidi_type.is_alias {
+            // Generate type alias
+            output.push_str(&generate_type_alias(&bidi_type.name, &bidi_type.properties, &module.name));
         } else {
             output.push_str(&generate_rust_struct(&bidi_type.name, &bidi_type.properties, &module.name));
         }
@@ -537,6 +540,21 @@ fn generate_rust_regular_struct(name: &str, properties: &[crate::parser::Propert
     }
 
     output.push_str("}");
+    output
+}
+
+fn generate_type_alias(name: &str, properties: &[crate::parser::Property], module_name: &str) -> String {
+    let mut output = String::new();
+
+    // For alias types, there should be exactly one property that represents the aliased type
+    if let Some(first_property) = properties.first() {
+        let cleaned_type = clean_module_prefix(&first_property.value, module_name);
+        output.push_str(&format!("pub type {} = {};\n", name, cleaned_type));
+    } else {
+        // Fallback to unit type if no properties
+        output.push_str(&format!("pub type {} = ();\n", name));
+    }
+
     output
 }
 

@@ -2,6 +2,50 @@ use regex::Regex;
 use crate::command_parser::{CommandParams, CommandDefinition};
 use crate::event_parser::{EventParams, EventDefinition};
 use crate::module::Module;
+use std::sync::Mutex;
+
+#[derive(Debug, Clone)]
+pub struct DeferredType {
+    pub type_name: String,
+    pub content: String,
+    pub def_type: String,
+    pub target_module_name: String,
+}
+
+// Global storage for deferred types using Mutex<Vec<DeferredType>>
+static DEFERRED_TYPES: std::sync::OnceLock<Mutex<Vec<DeferredType>>> = std::sync::OnceLock::new();
+
+pub fn add_deferred_type(deferred_type: DeferredType) {
+    let deferred_types = DEFERRED_TYPES.get_or_init(|| Mutex::new(Vec::new()));
+    deferred_types.lock().unwrap().push(deferred_type);
+}
+
+pub fn take_deferred_types() -> Vec<DeferredType> {
+    let deferred_types = DEFERRED_TYPES.get_or_init(|| Mutex::new(Vec::new()));
+    let mut borrowed = deferred_types.lock().unwrap();
+    std::mem::take(&mut *borrowed)
+}
+
+pub fn process_deferred_types(modules: &mut Vec<crate::module::Module>, cddl_strings: Vec<&str>) -> Result<(), Box<dyn std::error::Error>> {
+    let deferred_types = take_deferred_types();
+
+    for deferred_type in deferred_types {
+        // Find the target module
+        if let Some(target_module) = modules.iter_mut().find(|m| m.name.to_lowercase() == deferred_type.target_module_name.to_lowercase()) {
+            // Extract just the type name without module prefix
+            let clean_type_name = if let Some(dot_pos) = deferred_type.type_name.find('.') {
+                deferred_type.type_name[dot_pos + 1..].to_string()
+            } else {
+                deferred_type.type_name.clone()
+            };
+
+            // Use generate_type_if_same_module to properly process the deferred type
+            generate_type_if_same_module(&clean_type_name, &deferred_type.content, &deferred_type.def_type, &cddl_strings, target_module);
+        }
+    }
+
+    Ok(())
+}
 
 #[derive(Debug, Clone)]
 pub struct Property {
@@ -96,7 +140,6 @@ pub fn parse_command_parameters(command_lines: &[&str], cddl_strings: Vec<&str>,
                                         if !command_def.command_params.iter().any(|p| p.name == param_struct_name) {
                                             command_def.command_params.push(command_param);
                                         }
-
                                         return Ok(param_struct_name);
                                     }
                                 }
@@ -405,8 +448,8 @@ fn parse_cddl_property_line(line: &str, cddl_strings: &[&str], current_module: &
 /// * `current_module` - The current module being processed for context
 ///
 /// # Returns
-/// Option containing the extracted content between braces if found
-fn find_and_extract_type_content(type_name: &str, cddl_strings: &[&str], current_module: &Module) -> Option<String> {
+/// Option containing tuple of (content, def_type) if found
+fn find_and_extract_type_content(type_name: &str, cddl_strings: &[&str], current_module: &Module) -> Option<(String, String)> {
     // Try direct match first (e.g., "session.CapabilityRequest = {")
     let direct_pattern = format!(r"^{}\s*=\s*\{{", regex::escape(type_name));
     if let Ok(regex) = Regex::new(&direct_pattern) {
@@ -433,7 +476,7 @@ fn find_and_extract_type_content(type_name: &str, cddl_strings: &[&str], current
                                     brace_count -= 1;
                                     if brace_count == 0 && found_start {
                                         // Found the end, return the extracted content
-                                        return Some(content_lines.join("\n").trim().to_string());
+                                        return Some((content_lines.join("\n").trim().to_string(), "struct".to_string()));
                                     }
                                 }
                                 _ => {}
@@ -476,7 +519,7 @@ fn find_and_extract_type_content(type_name: &str, cddl_strings: &[&str], current
                                     paren_count -= 1;
                                     if paren_count == 0 && found_start {
                                         // Found the end, return the extracted content
-                                        return Some(content_lines.join("\n").trim().to_string());
+                                        return Some((content_lines.join("\n").trim().to_string(), "union".to_string()));
                                     }
                                 }
                                 _ => {}
@@ -500,23 +543,20 @@ fn find_and_extract_type_content(type_name: &str, cddl_strings: &[&str], current
             for line in cddl_content.lines() {
                 if let Some(captures) = regex.captures(line.trim()) {
                     // Extract the content between braces from inline definition
-                    return Some(captures[1].trim().to_string());
+                    return Some((captures[1].trim().to_string(), "struct".to_string()));
                 }
             }
         }
     }
 
     // Try string literal pattern (e.g., 'emulation.ForcedColorsModeTheme = "light" / "dark"')
-    let literal_pattern = format!(r#"^{}\s*=\s*(.+)$"#, regex::escape(type_name));
+    let literal_pattern = format!(r#"^{}\s*=\s*(.+?)\;?$"#, regex::escape(type_name));
     if let Ok(regex) = Regex::new(&literal_pattern) {
         for cddl_content in cddl_strings {
             for line in cddl_content.lines() {
                 if let Some(captures) = regex.captures(line.trim()) {
                     let content = captures[1].trim();
-                    // Only return if it looks like a string literal pattern
-                    if content.starts_with('"') || content.contains(" / ") {
-                        return Some(content.to_string());
-                    }
+                    return Some((content.to_string(), "alias".to_string()));
                 }
             }
         }
@@ -570,32 +610,45 @@ fn generate_type_if_same_module(type_name: &str, content: &str, def_type: &str, 
     } else {
         type_name
     };
-    
+
     // Check if type already exists in module
     if current_module.types.iter().any(|t| t.name == clean_name) {
         return Some(clean_name.to_string()); // Type already exists, return the name
     }
-    
-    // Use existing process_cddl_to_struct for recursive parsing
-    if let Ok((properties, meta_comment)) = process_cddl_to_struct(content, cddl_strings.to_vec(), current_module, Some(clean_name)) {
-        // Check if properties length is 1 and meta_comment indicates type was generated
-        if properties.len() == 1 && meta_comment == Some("generated_property".to_string()) {
-            // Type was already generated by parse_custom_type, return the property type
-            return Some(properties[0].value.clone());
-        }
 
-        // Create BidiType with the properties and store in module
-        current_module.types.push(crate::module::BidiType {
-            name: clean_name.to_string(),
-            properties,
-            raw: content.to_string(),
-            is_enum: false,
-        });
-
+    // Check if type is currently being processed (cycle detection)
+    if current_module.pending_types.contains(clean_name) {
         return Some(clean_name.to_string());
     }
 
-    None
+    // Add to pending types before processing
+    current_module.pending_types.insert(clean_name.to_string());
+    
+    // Use existing process_cddl_to_struct for recursive parsing
+    let result = if let Ok((properties, meta_comment)) = process_cddl_to_struct(content, cddl_strings.to_vec(), current_module, Some(clean_name)) {
+        // Check if properties length is 1 and meta_comment indicates type was generated
+        if properties.len() == 1 && meta_comment == Some("generated_property".to_string()) {
+            // Type was already generated by parse_custom_type, return the property type
+            Some(properties[0].value.clone())
+        } else {
+            // Create BidiType with the properties and store in module
+            current_module.types.push(crate::module::BidiType {
+                name: clean_name.to_string(),
+                properties,
+                is_enum: false,
+                is_alias: def_type == "alias",
+            });
+
+            Some(clean_name.to_string())
+        }
+    } else {
+        None
+    };
+
+    // Remove from pending types after processing
+    current_module.pending_types.remove(clean_name);
+
+    result
 }
 
 /// Parses a custom CDDL type and handles generation if it's in the same module
@@ -712,8 +765,8 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
                 current_module.types.push(crate::module::BidiType {
                     name: enum_name.clone(),
                     properties,
-                    raw: type_name.to_string(),
                     is_enum: true,
+                    is_alias: false,
                 });
 
                 let result_type = if has_null {
@@ -744,20 +797,30 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
         current_module.types.push(crate::module::BidiType {
             name: enum_name.clone(),
             properties,
-            raw: type_name.to_string(),
             is_enum: true,
+            is_alias: false,
         });
-
         return (enum_name.clone(), Some(String::from("generated_property")));
     }
-    
+
+    // // Check if this type has already been processed to prevent regeneration
+    // if current_module.types.iter().any(|t| t.name == type_name) {
+    //     let result_type = if let Some(dot_pos) = type_name.find('.') {
+    //         let type_name_clean = &type_name[dot_pos + 1..];
+    //         type_name_clean.to_string()
+    //     } else {
+    //         type_name.to_string()
+    //     };
+    //     return (result_type, None);
+    // }
+
     // Check if this type belongs to the current module
     if is_same_module_type(type_name, current_module) {
         // First find the actual type definition content
-        if let Some(type_content) = find_and_extract_type_content(type_name, cddl_strings, current_module) {
+        if let Some((type_content, def_type)) = find_and_extract_type_content(type_name, cddl_strings, current_module) {
 
             // Generate type if needed
-            if let Some(generated_name) = generate_type_if_same_module(type_name, &type_content, "struct", cddl_strings, current_module) {
+            if let Some(generated_name) = generate_type_if_same_module(type_name, &type_content, &def_type, cddl_strings, current_module) {
                 return (generated_name, None);
             }
         }
@@ -770,6 +833,31 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
         };
         (result_type, None)
     } else {
+        // External module type - try to find and store for later processing
+        if let Some((type_content, def_type)) = find_and_extract_type_content(type_name, cddl_strings, current_module) {
+            // Extract the target module name
+            let target_module_name = if let Some(dot_pos) = type_name.find('.') {
+                type_name[..dot_pos].to_string()
+            } else {
+                "unknown".to_string()
+            };
+
+            // Check if this type is already deferred to prevent duplicates
+            let deferred_types = DEFERRED_TYPES.get_or_init(|| Mutex::new(Vec::new()));
+            let already_deferred = deferred_types.lock().unwrap().iter().any(|dt| dt.type_name == type_name);
+
+            if !already_deferred {
+                // Store the deferred type for later processing
+                let deferred_type = DeferredType {
+                    type_name: type_name.to_string(),
+                    content: type_content,
+                    def_type,
+                    target_module_name,
+                };
+                add_deferred_type(deferred_type);
+            }
+        }
+
         // Return module::type format for external modules
         let result_type = if let Some(dot_pos) = type_name.find('.') {
             let module_name = &type_name[..dot_pos];

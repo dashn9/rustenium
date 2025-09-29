@@ -358,8 +358,8 @@ pub fn parse_event_parameters(event_lines: &[&str], cddl_strings: Vec<&str>, mod
                                             let bidi_type = crate::module::BidiType {
                                                 name: param_struct_name.clone(),
                                                 properties: processed_properties,
-                                                raw: content,
                                                 is_enum: false,
+                                                is_alias: false,
                                             };
 
                                             // Check if this type already exists to avoid duplicates
