@@ -3,6 +3,7 @@ use crate::command_parser::{CommandParams, CommandDefinition};
 use crate::event_parser::{EventParams, EventDefinition};
 use crate::module::Module;
 use std::sync::Mutex;
+use anyhow::Context;
 
 #[derive(Debug, Clone)]
 pub struct DeferredType {
@@ -190,7 +191,6 @@ pub fn extract_parameter_types(cddl_content: &str) -> Result<Vec<String>, Box<dy
 /// A tuple of (properties, meta_comment) where meta_comment indicates if a type was generated
 pub fn process_cddl_to_struct(cddl_content: &str, cddl_strings: Vec<&str>, module: &mut Module, type_name: Option<&str>) -> Result<(Vec<Property>, Option<String>), Box<dyn std::error::Error>> {
     let mut properties = Vec::new();
-
     // Check if content is empty or only whitespace - return empty properties for empty structs
     if cddl_content.trim().is_empty() {
         return Ok((properties, None));
@@ -386,6 +386,9 @@ fn capitalize_first(s: &str) -> String {
 /// # Returns
 /// A tuple of (Optional Property, generated_type_marker) where generated_type_marker is "generated_type" if a type was created
 fn parse_cddl_property_line(line: &str, cddl_strings: &[&str], current_module: &mut Module) -> Result<(Option<Property>, Option<String>), Box<dyn std::error::Error>> {
+    // Convert multiline input to single line by replacing newlines with spaces and cleaning up extra spaces
+    let single_line = line.lines().collect::<Vec<&str>>().join(" ").trim().to_string();
+
     // Pattern for: [?] propertyName: type[,]
     let property_pattern = Regex::new(r"^\s*(\??\s*)(\w+):\s*(.+?)(?:,\s*)?$")?;
 
@@ -395,7 +398,7 @@ fn parse_cddl_property_line(line: &str, cddl_strings: &[&str], current_module: &
     //     (browser.ClientWindowNamedState // browser.ClientWindowRectState)
     // }
     // the second property should be an untagged serde
-    if let Some(captures) = property_pattern.captures(line) {
+    if let Some(captures) = property_pattern.captures(&single_line) {
         let optional_marker = captures[1].trim();
         let property_name = captures[2].trim().to_string();
         let property_type = captures[3].trim().trim_end_matches(',').to_string();
@@ -421,15 +424,16 @@ fn parse_cddl_property_line(line: &str, cddl_strings: &[&str], current_module: &
     }
 
     // Check for enum pattern: just a simple word
-    let enum_pattern = Regex::new(r"^\s*(.+)\s*$")?;
-    if let Some(captures) = enum_pattern.captures(line) {
-        let enum_type = captures[1].trim().to_string();
+    let enum_pattern = Regex::new(r"^\s*(\??\s*)(.+?)(?:,\s*)?$")?;
+    if let Some(captures) = enum_pattern.captures(&single_line) {
+        let optional_marker = captures[1].trim();
+        let enum_type = captures[2].trim().to_string();
         let (rust_type, is_primitive, validation_info, meta_comment) = convert_cddl_type_to_rust(&enum_type, cddl_strings, current_module, None);
 
         return Ok((Some(Property {
             is_enum: true,
             is_primitive,
-            is_optional: false,
+            is_optional: optional_marker.contains('?'),
             name: rust_type.clone(),
             value: rust_type,
             attributes: Vec::new(),

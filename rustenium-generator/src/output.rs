@@ -11,13 +11,21 @@ use crate::module::Module;
 /// The snake_case version of the string
 fn to_snake_case(input: &str) -> String {
     let mut result = String::new();
-    let mut chars = input.chars().peekable();
+    let chars: Vec<char> = input.chars().collect();
 
-    while let Some(ch) = chars.next() {
-        if ch.is_uppercase() && !result.is_empty() {
-            result.push('_');
+    for (i, &ch) in chars.iter().enumerate() {
+        if ch.is_uppercase() && i > 0 {
+            // Add underscore before uppercase letters, except:
+            // - When previous char is uppercase and current is the last char in an acronym
+            //   (e.g., in "namespaceURI", don't add underscore before 'U' and 'R')
+            let prev_is_upper = chars.get(i - 1).map_or(false, |c| c.is_uppercase());
+
+            // Only add underscore if previous char was not uppercase
+            if !prev_is_upper {
+                result.push('_');
+            }
         }
-        result.push(ch.to_lowercase().to_string().chars().next().unwrap());
+        result.push(ch.to_lowercase().next().unwrap());
     }
 
     result
