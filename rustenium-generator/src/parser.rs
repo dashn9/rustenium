@@ -219,7 +219,7 @@ pub fn process_cddl_to_struct(cddl_content: &str, cddl_strings: Vec<&str>, modul
     // Parse each line in the processed CDDL body
     for line in processed_content.lines() {
         let line = line.trim();
-        if line.is_empty() || line.starts_with("//") {
+        if line.is_empty() || line.starts_with("//") || line.starts_with(";") {
             continue; // Skip empty lines and comments
         }
 
@@ -281,7 +281,9 @@ fn preprocess_multiline_unions(cddl_content: &str) -> String {
             // Join all parts with " // " and wrap in parentheses
             if !union_parts.is_empty() {
                 let collapsed_union = format!("({})", union_parts.join(" // "));
-                processed_lines.push(collapsed_union);
+                // Try to flatten inline struct unions
+                let flattened = flatten_inline_struct_union(&collapsed_union);
+                processed_lines.push(flattened);
             }
         } else {
             // Regular line - just add it
@@ -291,6 +293,68 @@ fn preprocess_multiline_unions(cddl_content: &str) -> String {
     }
 
     processed_lines.join("\n")
+}
+
+/// Flattens inline struct unions into a single property
+/// Example: ((coordinates: Type1 / null) // (error: Type2))
+/// Becomes: coordinates_error: Type1 // null // Type2
+///
+/// # Arguments
+/// * `union_content` - The union content wrapped in parentheses
+///
+/// # Returns
+/// The flattened property or original content if not applicable
+fn flatten_inline_struct_union(union_content: &str) -> String {
+    let trimmed = union_content.trim();
+
+    // Check if it's wrapped in parentheses
+    if !trimmed.starts_with('(') || !trimmed.ends_with(')') {
+        return union_content.to_string();
+    }
+
+    // Remove outer parentheses
+    let inner = &trimmed[1..trimmed.len()-1];
+
+    // Split by " // " to get union parts
+    let parts: Vec<&str> = inner.split(" // ").collect();
+
+    // Check if all parts are inline structs: (property: type)
+    let inline_struct_pattern = match Regex::new(r"^\s*\(\s*(\w+)\s*:\s*(.+?)\s*\)\s*$") {
+        Ok(pattern) => pattern,
+        Err(_) => return union_content.to_string(),
+    };
+
+    let mut property_names = Vec::new();
+    let mut all_types = Vec::new();
+
+    for part in &parts {
+        if let Some(captures) = inline_struct_pattern.captures(part.trim()) {
+            let prop_name = captures[1].trim().to_string();
+            let prop_type = captures[2].trim().to_string();
+
+            property_names.push(prop_name);
+
+            // If the type itself contains unions, split them
+            if prop_type.contains(" / ") {
+                let sub_types: Vec<&str> = prop_type.split(" / ").map(|t| t.trim()).collect();
+                all_types.extend(sub_types.iter().map(|t| t.to_string()));
+            } else {
+                all_types.push(prop_type);
+            }
+        } else {
+            // Not all parts are inline structs, return original
+            return union_content.to_string();
+        }
+    }
+
+    // Create combined property name
+    let combined_name = property_names.join("_");
+
+    // Create flattened union type
+    let flattened_type = all_types.join(" // ");
+
+    // Return as a single property line
+    format!("{}: {}", combined_name, flattened_type)
 }
 
 /// Preprocesses CDDL content to extract nested inline structs and create separate type definitions
@@ -709,8 +773,7 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
                     (variant_name, None, attributes)
                 } else {
                     let (rust_type, _, _) = convert_basic_cddl_type(&part, cddl_strings, current_module, property_name);
-                    let variant_name = to_pascal_case(&rust_type);
-                    (variant_name, Some(rust_type), Vec::new()) // No attributes for non-literals
+                    (rust_type.clone(), Some(rust_type), Vec::new()) // No attributes for non-literals
                 }
             })
             .collect();
@@ -754,7 +817,7 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
                         is_enum: true,
                         is_primitive: false,
                         is_optional: false,
-                        name: variant_name.clone(),
+                        name: to_pascal_case(variant_name.as_str()),
                         value: if let Some(value) = variant_value {
                             value.clone()
                         } else {
@@ -901,6 +964,52 @@ fn convert_basic_cddl_type(cddl_type: &str, cddl_strings: &[&str], current_modul
     }
 }
 
+/// Replaces numeric range notation with Rust type and extracts validation info
+/// Example: "(0.0..1.5707963267948966) .default 0.0" -> "(f64) .default 0.0" + ValidationInfo
+///
+/// # Arguments
+/// * `input` - The string potentially containing a range
+///
+/// # Returns
+/// Option containing (modified_string, ValidationInfo) if a range was found and replaced
+fn parse_numeric_range(input: &str) -> Option<(String, ValidationInfo)> {
+    // Simple check: does it contain .. or ...?
+    if !input.contains("..") {
+        return None;
+    }
+
+    // Find the range pattern: number..number or number...number
+    let range_pattern = Regex::new(r"(-?\d+(?:\.\d+)?)\.{2,3}(-?\d+(?:\.\d+)?)").ok()?;
+
+    if let Some(captures) = range_pattern.captures(input) {
+        let min_val = captures[1].to_string();
+        let max_val = captures[2].to_string();
+        let full_match = captures.get(0)?.as_str();
+
+        // Determine if it's a float or integer range
+        let is_float = min_val.contains('.') || max_val.contains('.');
+        let rust_type = if is_float { "f64" } else { "i64" };
+
+        // Create validation info with range constraints
+        let mut validation_info = ValidationInfo::new();
+        validation_info.constraints.push(ConstraintInfo {
+            constraint_type: "ge".to_string(),
+            value: min_val,
+        });
+        validation_info.constraints.push(ConstraintInfo {
+            constraint_type: "le".to_string(),
+            value: max_val,
+        });
+
+        // Replace the range with the Rust type
+        let modified_string = input.replace(full_match, rust_type);
+
+        return Some((modified_string, validation_info));
+    }
+
+    None
+}
+
 /// Splits a string by commas while respecting nested brackets
 /// 
 /// # Arguments
@@ -959,6 +1068,7 @@ fn extract_bracket_content(input: &str) -> Option<String> {
 }
 
 /// Parses type expressions with modifiers like "bool .default false" or "(float .ge 0.0) .default 1.0"
+/// Also handles range types with defaults like "(0.1..2.0) .default 1.0"
 ///
 /// # Arguments
 /// * `type_name` - The full type expression to parse
@@ -999,12 +1109,31 @@ fn parse_validation_pattern(type_name: &str) -> Option<(String, ValidationInfo)>
         return None;
     }
 
-    // Extract base type - just the first word, clean it up
-    let base_type = input.split_whitespace()
+    // Extract base type - first word plus any union parts (/ or //)
+    let first_word = input.split_whitespace()
         .next()
         .unwrap_or("")
         .trim_start_matches('(')
+        .trim_end_matches(')')
         .to_string();
+
+    // Check if there's a union separator after the first word
+    let mut base_type = first_word.clone();
+
+    // Look for / or // after the first word
+    if let Some(union_pos) = input.find(" // ").or_else(|| input.find(" / ")) {
+        // Find what comes after the separator (before any .default or constraint)
+        let after_separator = &input[union_pos..];
+
+        // Extract the next word after / or //
+        let separator_and_word = if after_separator.starts_with(" // ") {
+            after_separator.split_whitespace().take(2).collect::<Vec<_>>().join(" ")
+        } else {
+            after_separator.split_whitespace().take(2).collect::<Vec<_>>().join(" ")
+        };
+
+        base_type = format!("{} {}", first_word, separator_and_word);
+    }
 
     if base_type.is_empty() {
         None
@@ -1049,17 +1178,37 @@ pub struct ConstraintInfo {
 /// # Returns
 /// A tuple of (rust_type, is_primitive, validation_info, meta_comment_on_type)
 fn convert_cddl_type_to_rust(cddl_type: &str, cddl_strings: &[&str], current_module: &mut Module, property_name: Option<&str>) -> (String, bool, Option<ValidationInfo>, Option<String>) {
-    let trimmed = cddl_type.trim();
+    let mut trimmed = cddl_type.trim().to_string();
+    let mut range_validation: Option<ValidationInfo> = None;
 
+    // First check for numeric range types and replace them
+    if let Some((replaced_string, validation_info)) = parse_numeric_range(&trimmed) {
+        trimmed = replaced_string;
+        range_validation = Some(validation_info);
+    }
 
-    // First check for validation patterns like "(float .ge 0.0) .default 1.0"
-    if let Some((base_type, validation_info)) = parse_validation_pattern(trimmed) {
+    // Check for validation patterns like "(float .ge 0.0) .default 1.0"
+    if let Some((base_type, mut validation_info)) = parse_validation_pattern(&trimmed) {
+        // Merge range validation if present
+        if let Some(range_val) = range_validation {
+            for constraint in range_val.constraints {
+                validation_info.constraints.push(constraint);
+            }
+        }
+
         let (rust_type, is_primitive, _, meta_comment) = convert_cddl_type_to_rust(&base_type, cddl_strings, current_module, property_name);
         return (rust_type, is_primitive, Some(validation_info), meta_comment);
     }
 
+    // Return range validation if we only had a range (no other modifiers)
+    if let Some(validation_info) = range_validation {
+        // Extract just the type from trimmed (strip parentheses if present)
+        let rust_type = trimmed.trim().trim_start_matches('(').trim_end_matches(')').trim().to_string();
+        return (rust_type, true, Some(validation_info), None);
+    }
+
     // Check if it's a bracketed type [...]
-    if let Some(inner_content) = extract_bracket_content(trimmed) {
+    if let Some(inner_content) = extract_bracket_content(&trimmed) {
         // Check for arrays: [+type] or [*type]
         if let Ok(array_pattern) = Regex::new(r"^\s*[\+\*]\s*(.+)$") {
             if let Some(captures) = array_pattern.captures(&inner_content) {
@@ -1096,7 +1245,7 @@ fn convert_cddl_type_to_rust(cddl_type: &str, cddl_strings: &[&str], current_mod
     }
 
     // Fall back to basic type conversion
-    let (rust_type, is_primitive, meta_comment) = convert_basic_cddl_type(trimmed, cddl_strings, current_module, property_name);
+    let (rust_type, is_primitive, meta_comment) = convert_basic_cddl_type(&trimmed, cddl_strings, current_module, property_name);
     (rust_type, is_primitive, None, meta_comment)
 }
 
