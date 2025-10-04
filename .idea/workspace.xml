@@ -46,7 +46,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Cargo.Rustenium Generator.executor": "Debug",
+    "Cargo.Rustenium Generator.executor": "Run",
     "Cargo.Test Rustenium.executor": "Debug",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
@@ -140,7 +140,9 @@
       <workItem from="1758813815928" duration="19418000" />
       <workItem from="1758902932770" duration="16604000" />
       <workItem from="1759061150174" duration="39176000" />
-      <workItem from="1759322761636" duration="14418000" />
+      <workItem from="1759322761636" duration="14900000" />
+      <workItem from="1759475591548" duration="944000" />
+      <workItem from="1759588257199" duration="9395000" />
     </task>
     <servers />
   </component>
@@ -163,11 +165,6 @@
           <url>file://$PROJECT_DIR$/rustenium-generator/src/output.rs</url>
           <line>786</line>
           <option name="timeStamp" value="76" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/rustenium-generator/src/parser.rs</url>
-          <line>1084</line>
-          <option name="timeStamp" value="123" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

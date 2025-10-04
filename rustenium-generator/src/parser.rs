@@ -621,10 +621,19 @@ fn find_and_extract_type_content(type_name: &str, cddl_strings: &[&str], current
     let literal_pattern = format!(r#"^{}\s*=\s*(.+?)\;?$"#, regex::escape(type_name));
     if let Ok(regex) = Regex::new(&literal_pattern) {
         for cddl_content in cddl_strings {
-            for line in cddl_content.lines() {
+            let lines: Vec<&str> = cddl_content.lines().collect();
+            for (i, line) in lines.iter().enumerate() {
                 if let Some(captures) = regex.captures(line.trim()) {
-                    let content = captures[1].trim();
-                    return Some((content.to_string(), "alias".to_string()));
+                    let mut content = captures[1].trim().to_string();
+                    let mut idx = i;
+
+                    while content.ends_with('/') && idx + 1 < lines.len() {
+                        idx += 1;
+                        content.push(' ');
+                        content.push_str(lines[idx].trim());
+                    }
+
+                    return Some((content, "alias".to_string()));
                 }
             }
         }
@@ -1132,7 +1141,7 @@ fn parse_validation_pattern(type_name: &str) -> Option<(String, ValidationInfo)>
             after_separator.split_whitespace().take(2).collect::<Vec<_>>().join(" ")
         };
 
-        base_type = format!("{} {}", first_word, separator_and_word);
+        base_type = format!("{} {}", first_word, separator_and_word.trim_end_matches(')').to_string());
     }
 
     if base_type.is_empty() {
