@@ -22,6 +22,9 @@
   <component name="ChangeListManager">
     <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-generator/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-generator/src/module.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/module.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-generator/src/output.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/output.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-generator/src/parser.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/parser.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -62,11 +65,17 @@
     "nodejs_package_manager_path": "npm",
     "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
     "org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon": "",
+    "org.rust.disableDetachedFileInspectionD:/Documents/m-workspace/rustenium/rustenium-generator/output/mod.rs": "true",
     "settings.editor.selected.configurable": "preferences.lookFeel",
     "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Documents\m-workspace\rustenium\rustenium-generator\src" />
+    </key>
+  </component>
   <component name="RunManager" selected="Cargo.Rustenium Generator">
     <configuration name="Rustenium Generator" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
       <option name="buildProfileId" value="dev" />
@@ -143,7 +152,7 @@
       <workItem from="1759322761636" duration="14900000" />
       <workItem from="1759475591548" duration="944000" />
       <workItem from="1759588257199" duration="9395000" />
-      <workItem from="1759699629513" duration="4141000" />
+      <workItem from="1759699629513" duration="7009000" />
     </task>
     <servers />
   </component>

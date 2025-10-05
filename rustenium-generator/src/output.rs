@@ -55,24 +55,103 @@ fn clean_module_prefix(type_name: &str, current_module: &str) -> String {
     }
 }
 
-pub fn generate_output(modules: &[Module]) -> Result<(), Box<dyn std::error::Error>> {
+pub fn generate_output(modules: &[Module], root_protocol: &crate::module::RootProtocol) -> Result<(), Box<dyn std::error::Error>> {
     // Create output directory
-    let output_dir = "./output";
+    let output_dir = "./src/generated_output";
     if !Path::new(output_dir).exists() {
         fs::create_dir_all(output_dir)?;
     }
-    
+
+    // Generate root mod.rs
+    generate_root_mod(modules, root_protocol, output_dir)?;
+
     // Generate files for each module
     for module in modules {
         generate_module_files(module, output_dir)?;
     }
-    
+
+    Ok(())
+}
+
+fn generate_root_mod(modules: &[Module], root_protocol: &crate::module::RootProtocol, output_dir: &str) -> Result<(), Box<dyn std::error::Error>> {
+    let mut output = String::new();
+
+    // Add imports
+    output.push_str("use serde::{Serialize, Deserialize};\n");
+    output.push_str("use std::collections::HashMap;\n\n");
+
+    // Declare module imports
+    for module in modules {
+        let module_snake = to_snake_case(&module.name);
+        output.push_str(&format!("pub mod {};\n", module_snake));
+    }
+    output.push_str("\n");
+
+    // Generate Extensible type
+    output.push_str("pub type Extensible = HashMap<String, serde_json::Value>;\n\n");
+
+    // Generate Command
+    output.push_str(&generate_rust_struct("Command", &root_protocol.command.properties, "root"));
+    output.push_str("\n\n");
+
+    // Generate CommandData
+    output.push_str(&generate_rust_enum("CommandData", &root_protocol.command_data.properties, "root"));
+    output.push_str("\n\n");
+
+    // Generate EmptyParams
+    output.push_str(&generate_rust_struct("EmptyParams", &root_protocol.empty_params.properties, "root"));
+    output.push_str("\n\n");
+
+    // Generate Message
+    output.push_str(&generate_rust_enum("Message", &root_protocol.message.properties, "root"));
+    output.push_str("\n\n");
+
+    // Generate CommandResponse
+    output.push_str(&generate_rust_struct("CommandResponse", &root_protocol.command_response.properties, "root"));
+    output.push_str("\n\n");
+
+    // Generate ErrorResponse
+    output.push_str(&generate_rust_struct("ErrorResponse", &root_protocol.error_response.properties, "root"));
+    output.push_str("\n\n");
+
+    // Generate ResultData
+    output.push_str(&generate_rust_enum("ResultData", &root_protocol.result_data.properties, "root"));
+    output.push_str("\n\n");
+
+    // Generate EmptyResult
+    output.push_str(&generate_rust_struct("EmptyResult", &root_protocol.empty_result.properties, "root"));
+    output.push_str("\n\n");
+
+    // Generate Event
+    output.push_str(&generate_rust_struct("Event", &root_protocol.event.properties, "root"));
+    output.push_str("\n\n");
+
+    // Generate EventData
+    output.push_str(&generate_rust_enum("EventData", &root_protocol.event_data.properties, "root"));
+    output.push_str("\n\n");
+
+    // Generate additional types (like SuccessEnum, ErrorEnum, EventEnum)
+    for bidi_type in &root_protocol.additional_types {
+        if bidi_type.is_enum {
+            output.push_str(&generate_rust_enum(&bidi_type.name, &bidi_type.properties, "root"));
+        } else if bidi_type.is_alias {
+            output.push_str(&generate_type_alias(&bidi_type.name, &bidi_type.properties, "root"));
+        } else {
+            output.push_str(&generate_rust_struct(&bidi_type.name, &bidi_type.properties, "root"));
+        }
+        output.push_str("\n\n");
+    }
+
+    // Write to mod.rs
+    fs::write(format!("{}/mod.rs", output_dir), output)?;
+
     Ok(())
 }
 
 fn generate_module_files(module: &Module, output_dir: &str) -> Result<(), Box<dyn std::error::Error>> {
-    // Create module directory
-    let module_dir = format!("{}/{}", output_dir, module.name);
+    // Create module directory with snake_case name
+    let module_dir_name = to_snake_case(&module.name);
+    let module_dir = format!("{}/{}", output_dir, module_dir_name);
     fs::create_dir_all(&module_dir)?;
     
     // Create mod.rs

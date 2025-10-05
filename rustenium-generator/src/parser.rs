@@ -517,7 +517,7 @@ fn parse_cddl_property_line(line: &str, cddl_strings: &[&str], current_module: &
 ///
 /// # Returns
 /// Option containing tuple of (content, def_type) if found
-fn find_and_extract_type_content(type_name: &str, cddl_strings: &[&str], current_module: &Module) -> Option<(String, String)> {
+pub fn find_and_extract_type_content(type_name: &str, cddl_strings: &[&str], current_module: &Module) -> Option<(String, String)> {
     // Try direct match first (e.g., "session.CapabilityRequest = {")
     let direct_pattern = format!(r"^{}\s*=\s*\{{", regex::escape(type_name));
     if let Ok(regex) = Regex::new(&direct_pattern) {
@@ -899,7 +899,7 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
     // }
 
     // Check if this type belongs to the current module
-    if is_same_module_type(type_name, current_module) {
+    if current_module.name != "root" && is_same_module_type(type_name, current_module) {
         // First find the actual type definition content
         if let Some((type_content, def_type)) = find_and_extract_type_content(type_name, cddl_strings, current_module) {
 
@@ -908,7 +908,7 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
                 return (generated_name, None);
             }
         }
-        
+
         // Return only the type name (without module prefix)
         let result_type = if let Some(dot_pos) = type_name.find('.') {
             type_name[dot_pos + 1..].to_string()
@@ -918,27 +918,29 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
         (result_type, None)
     } else {
         // External module type - try to find and store for later processing
-        if let Some((type_content, def_type)) = find_and_extract_type_content(type_name, cddl_strings, current_module) {
-            // Extract the target module name
-            let target_module_name = if let Some(dot_pos) = type_name.find('.') {
-                type_name[..dot_pos].to_string()
-            } else {
-                "unknown".to_string()
-            };
-
-            // Check if this type is already deferred to prevent duplicates
-            let deferred_types = DEFERRED_TYPES.get_or_init(|| Mutex::new(Vec::new()));
-            let already_deferred = deferred_types.lock().unwrap().iter().any(|dt| dt.type_name == type_name);
-
-            if !already_deferred {
-                // Store the deferred type for later processing
-                let deferred_type = DeferredType {
-                    type_name: type_name.to_string(),
-                    content: type_content,
-                    def_type,
-                    target_module_name,
+        if current_module.name != "root" {
+            if let Some((type_content, def_type)) = find_and_extract_type_content(type_name, cddl_strings, current_module) {
+                // Extract the target module name
+                let target_module_name = if let Some(dot_pos) = type_name.find('.') {
+                    type_name[..dot_pos].to_string()
+                } else {
+                    "unknown".to_string()
                 };
-                add_deferred_type(deferred_type);
+
+                // Check if this type is already deferred to prevent duplicates
+                let deferred_types = DEFERRED_TYPES.get_or_init(|| Mutex::new(Vec::new()));
+                let already_deferred = deferred_types.lock().unwrap().iter().any(|dt| dt.type_name == type_name);
+
+                if !already_deferred {
+                    // Store the deferred type for later processing
+                    let deferred_type = DeferredType {
+                        type_name: type_name.to_string(),
+                        content: type_content,
+                        def_type,
+                        target_module_name,
+                    };
+                    add_deferred_type(deferred_type);
+                }
             }
         }
 
