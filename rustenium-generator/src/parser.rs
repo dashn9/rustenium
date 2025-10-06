@@ -707,9 +707,6 @@ fn generate_type_if_same_module(type_name: &str, content: &str, def_type: &str, 
         if properties.len() == 1 && meta_comment == Some("generated_property".to_string()) {
             // Find the BidiType using the property value, extract its properties, and delete it
             let property_value = &properties[0].value;
-            if properties[0].name.contains("ClipRectangle") {
-                println!("");
-            }
             if let Some(idx) = current_module.types.iter().position(|t| &t.name == property_value) {
                 let bidi_type = current_module.types.remove(idx);
                 properties = bidi_type.properties;

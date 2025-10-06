@@ -186,10 +186,10 @@ pub fn detect_root_protocol(cddl_strings: Vec<&str>) -> Result<RootProtocol, Box
 
 pub fn detect_modules(cddl_strings: Vec<&str>) -> Result<Vec<Module>, Box<dyn std::error::Error>> {
     let mut modules: HashMap<String, Module> = HashMap::new();
-    
-    let command_pattern = Regex::new(r"([A-Z]\w*)Command\s*=\s*\(")?;
-    let event_pattern = Regex::new(r"([A-Z]\w*)Event\s*=\s*\(")?;
-    let result_pattern = Regex::new(r"([A-Z]\w*)Result\s*=\s*\(")?;
+
+    let command_pattern = Regex::new(r"^([A-Z]\w*)Command\s*=\s*\(")?;
+    let event_pattern = Regex::new(r"^([A-Z]\w*)Event\s*=\s*\(")?;
+    let result_pattern = Regex::new(r"^([A-Z]\w*)Result\s*=\s*\(")?;
     
     for cddl_content in cddl_strings.clone() {
         for line in cddl_content.lines() {

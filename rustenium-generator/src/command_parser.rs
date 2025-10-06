@@ -423,12 +423,32 @@ pub fn search_and_update_result(cddl_strings: Vec<&str>, bidi_result: &mut BidiR
 
             // Check for type alias pattern: result_name = TypeAlias
             else if let Some(captures) = alias_regex.captures(line_trimmed) {
-                let alias_type = captures[1].to_string();
+                let mut is_enum = false;
+                let mut alias_type = captures[1].trim().to_string();
+
+                // If it's just "(", use the next line instead
+                // this check should be propagated across commands and event also, however a need for it only exist in script result precisely EvaluateReault
+                if alias_type == "(" {
+                    is_enum = true;
+                    let mut offset = 0;
+                    alias_type = lines[line_num + 1].trim().to_string();
+                    while alias_type.ends_with("/") && line_num + 1 < lines.len() {
+                        offset += 1;
+                        alias_type = format!("{} {}", alias_type, lines[line_num + 1 + offset].trim());
+                    }
+                }
+
                 bidi_result.content = alias_type.clone();
                 bidi_result.is_alias = true;
 
                 // Still run it through process_cddl_to_struct to handle the alias type
-                let (result_properties, _) = parser::process_cddl_to_struct(&alias_type, cddl_strings.clone(), module, Some(&bidi_result.name))?;
+                let (mut result_properties, _) = parser::process_cddl_to_struct(&alias_type, cddl_strings.clone(), module, Some(&bidi_result.name))?;
+                if is_enum {
+                    if let Some(idx) = module.types.iter().position(|t| &t.name == &result_properties[0].value) {
+                        let bidi_type = module.types.remove(idx);
+                        result_properties = bidi_type.properties;
+                    }
+                }
                 bidi_result.properties = result_properties;
                 return Ok(());
             }
