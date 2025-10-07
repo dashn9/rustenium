@@ -2,6 +2,85 @@ use std::fs;
 use std::path::Path;
 use crate::module::Module;
 
+/// Checks if any types exist in module.types
+fn has_types_in_module(module: &crate::module::Module) -> bool {
+    !module.types.is_empty()
+}
+
+/// Checks if any commands/results exist in module
+fn has_commands_in_module(module: &crate::module::Module) -> bool {
+    module.command_definition.is_some() || module.result_definition.is_some()
+}
+
+/// Checks if any events exist in module
+fn has_events_in_module(module: &crate::module::Module) -> bool {
+    module.event_definition.is_some()
+}
+
+/// Extracts module and type from external reference like "browsingContext::BrowsingContext"
+/// Returns (module_name, type_name)
+fn extract_module_and_type(type_ref: &str) -> Option<(String, String)> {
+    if let Some(pos) = type_ref.find("::") {
+        let module = type_ref[..pos].to_string();
+        let type_name = type_ref[pos + 2..].to_string();
+        Some((module, type_name))
+    } else {
+        None
+    }
+}
+
+/// Extracts the inner type from generic wrappers like Vec<T>, Option<T>, Box<T>
+fn extract_inner_type(type_ref: &str) -> String {
+    // Handle Option<T>
+    if let Some(inner) = type_ref.strip_prefix("Option<").and_then(|s| s.strip_suffix('>')) {
+        return extract_inner_type(inner);
+    }
+
+    // Handle Vec<T>
+    if let Some(inner) = type_ref.strip_prefix("Vec<").and_then(|s| s.strip_suffix('>')) {
+        return extract_inner_type(inner);
+    }
+
+    // Handle Box<T>
+    if let Some(inner) = type_ref.strip_prefix("Box<").and_then(|s| s.strip_suffix('>')) {
+        return extract_inner_type(inner);
+    }
+
+    type_ref.to_string()
+}
+
+/// Collects external type imports from properties
+/// Returns Vec of (module_name, type_name) tuples
+fn collect_external_types(properties: &[crate::parser::Property]) -> Vec<(String, String)> {
+    let mut types = std::collections::HashSet::new();
+
+    for property in properties {
+        // First extract the inner type from any generic wrappers
+        let inner_type = extract_inner_type(&property.value);
+
+        // Then check if it has an external module reference
+        if let Some((module, type_name)) = extract_module_and_type(&inner_type) {
+            types.insert((module, type_name));
+        }
+    }
+
+    let mut result: Vec<(String, String)> = types.into_iter().collect();
+    result.sort();
+    result
+}
+
+/// Generates import statements for external types
+fn generate_external_imports(types: &[(String, String)]) -> String {
+    let mut output = String::new();
+
+    for (module, type_name) in types {
+        let module_snake = to_snake_case(module);
+        output.push_str(&format!("use crate::generated_output::{}::types::{};\n", module_snake, type_name));
+    }
+
+    output
+}
+
 /// Converts PascalCase to snake_case
 ///
 /// # Arguments
@@ -31,15 +110,35 @@ fn to_snake_case(input: &str) -> String {
     result
 }
 
-/// Cleans up module prefixes from type names if they belong to the same module
+/// Cleans up module prefixes from type names
 ///
 /// # Arguments
-/// * `type_name` - The type name that might have a module prefix (e.g., "browser.UserContext")
+/// * `type_name` - The type name that might have a module prefix (e.g., "browser.UserContext" or "Vec<browsingContext::BrowsingContext>")
 /// * `current_module` - The current module name (e.g., "browser")
 ///
 /// # Returns
-/// The cleaned type name without module prefix if it's the same module
+/// The cleaned type name without module prefix
 fn clean_module_prefix(type_name: &str, current_module: &str) -> String {
+    // Handle generics like Vec<module::Type>
+    if let Some(inner) = type_name.strip_prefix("Vec<").and_then(|s| s.strip_suffix('>')) {
+        let cleaned_inner = clean_module_prefix(inner, current_module);
+        return format!("Vec<{}>", cleaned_inner);
+    }
+    if let Some(inner) = type_name.strip_prefix("Option<").and_then(|s| s.strip_suffix('>')) {
+        let cleaned_inner = clean_module_prefix(inner, current_module);
+        return format!("Option<{}>", cleaned_inner);
+    }
+    if let Some(inner) = type_name.strip_prefix("Box<").and_then(|s| s.strip_suffix('>')) {
+        let cleaned_inner = clean_module_prefix(inner, current_module);
+        return format!("Box<{}>", cleaned_inner);
+    }
+
+    // Handle external module reference with ::
+    if let Some((_module, type_only)) = extract_module_and_type(type_name) {
+        return type_only;
+    }
+
+    // Handle same-module reference with .
     if let Some(dot_pos) = type_name.find('.') {
         let module_prefix = &type_name[..dot_pos];
         if module_prefix.to_lowercase() == current_module.to_lowercase() {
@@ -198,9 +297,9 @@ fn generate_command_method(method: &crate::command_parser::CommandMethods) -> St
         output.push_str(&format!("    {}\n", attribute));
     }
 
-    // Add the method variant in format method(method)
+    // Add the method variant as unit variant
     let method_variant = method.name.replace("Method", "");
-    output.push_str(&format!("    {}({}),\n", method_variant, method_variant));
+    output.push_str(&format!("    {},\n", method_variant));
 
     output.push_str("}");
     output
@@ -343,7 +442,31 @@ fn generate_commands_file(cmd_def: &crate::command_parser::CommandDefinition, mo
     output.push_str("// Generated commands for module\n\n");
 
     // Add imports for serde
-    output.push_str("use serde::{Serialize, Deserialize};\n\n");
+    output.push_str("use serde::{Serialize, Deserialize};\n");
+
+    // Collect external type references
+    let mut all_properties = Vec::new();
+    for param in &cmd_def.command_params {
+        all_properties.extend(param.properties.clone());
+    }
+    for command in &cmd_def.commands {
+        all_properties.extend(command.properties.clone());
+    }
+    if let Some(result_def) = &module.result_definition {
+        for result in &result_def.results {
+            all_properties.extend(result.properties.clone());
+        }
+    }
+
+    let external_types = collect_external_types(&all_properties);
+    let external_imports = generate_external_imports(&external_types);
+    output.push_str(&external_imports);
+
+    // Import from types if module has types
+    if has_types_in_module(module) {
+        output.push_str("use super::types::*;\n");
+    }
+    output.push_str("\n");
 
     // Generate the main command enum first
     output.push_str(&generate_command_enum(cmd_def));
@@ -390,7 +513,26 @@ fn generate_events_file(event_def: &crate::event_parser::EventDefinition, module
     output.push_str("// Generated events for module\n\n");
 
     // Add imports for serde
-    output.push_str("use serde::{Serialize, Deserialize};\n\n");
+    output.push_str("use serde::{Serialize, Deserialize};\n");
+
+    // Collect external type references
+    let mut all_properties = Vec::new();
+    for param in &event_def.event_params {
+        all_properties.extend(param.properties.clone());
+    }
+    for event in &event_def.events {
+        all_properties.extend(event.properties.clone());
+    }
+
+    let external_types = collect_external_types(&all_properties);
+    let external_imports = generate_external_imports(&external_types);
+    output.push_str(&external_imports);
+
+    // Import from types if module has types
+    if has_types_in_module(module) {
+        output.push_str("use super::types::*;\n");
+    }
+    output.push_str("\n");
 
     // Generate the main event enum first
     output.push_str(&generate_event_enum(event_def));
@@ -464,7 +606,19 @@ fn generate_types_file(module: &Module) -> String {
     output.push_str("// Generated types for module\n\n");
 
     // Add imports for serde
-    output.push_str("use serde::{Serialize, Deserialize};\n\n");
+    output.push_str("use serde::{Serialize, Deserialize};\n");
+
+    // Collect external type references
+    let mut all_properties = Vec::new();
+    for bidi_type in &module.types {
+        all_properties.extend(bidi_type.properties.clone());
+    }
+
+    let external_types = collect_external_types(&all_properties);
+    let external_imports = generate_external_imports(&external_types);
+    output.push_str(&external_imports);
+
+    output.push_str("\n");
 
     // Generate each type
     for bidi_type in &module.types {
@@ -835,9 +989,9 @@ fn generate_event_method(method: &crate::event_parser::EventMethods) -> String {
         output.push_str(&format!("    {}\n", attribute));
     }
 
-    // Add the method variant in format method(method)
+    // Add the method variant as unit variant
     let method_variant = method.name.replace("Method", "");
-    output.push_str(&format!("    {}({}),\n", method_variant, method_variant));
+    output.push_str(&format!("    {},\n", method_variant));
 
     output.push_str("}");
     output

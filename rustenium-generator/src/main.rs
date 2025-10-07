@@ -9,7 +9,6 @@ mod parser;
 // mod generated_output;
 
 
-
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let all_cddl = fs::read_to_string("raw/all.cddl")?;
     let local_cddl = fs::read_to_string("raw/local.cddl")?;
