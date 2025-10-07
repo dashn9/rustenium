@@ -342,6 +342,9 @@ fn generate_commands_file(cmd_def: &crate::command_parser::CommandDefinition, mo
     // Add header comment
     output.push_str("// Generated commands for module\n\n");
 
+    // Add imports for serde
+    output.push_str("use serde::{Serialize, Deserialize};\n\n");
+
     // Generate the main command enum first
     output.push_str(&generate_command_enum(cmd_def));
     output.push_str("\n\n");

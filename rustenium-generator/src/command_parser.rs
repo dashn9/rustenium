@@ -427,7 +427,7 @@ pub fn search_and_update_result(cddl_strings: Vec<&str>, bidi_result: &mut BidiR
                 let mut alias_type = captures[1].trim().to_string();
 
                 // If it's just "(", use the next line instead
-                // this check should be propagated across commands and event also, however a need for it only exist in script result precisely EvaluateReault
+                // this check should be propagated across commands and event also, however a need for it only exist in script result precisely scriptEvaluateResult
                 if alias_type == "(" {
                     is_enum = true;
                     let mut offset = 0;
