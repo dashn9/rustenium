@@ -968,6 +968,7 @@ fn convert_basic_cddl_type(cddl_type: &str, cddl_strings: &[&str], current_modul
     match cddl_type {
         "text" => ("String".to_string(), true, None),
         "bool" => ("bool".to_string(), true, None),
+        "false" => ("bool".to_string(), false, None),
         "js-uint" => ("u64".to_string(), true, None),
         "js-int" => ("i64".to_string(), true, None),
         "float" => ("f64".to_string(), true, None),
