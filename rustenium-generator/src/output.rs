@@ -110,6 +110,43 @@ fn to_snake_case(input: &str) -> String {
     result
 }
 
+/// Transforms a default value to its proper Rust representation
+///
+/// # Arguments
+/// * `default_value` - The raw default value from CDDL
+/// * `rust_type` - The Rust type this default value is for
+///
+/// # Returns
+/// The transformed default value as a Rust expression
+fn transform_default_value(default_value: &str, rust_type: &str) -> String {
+    // Handle null -> None
+    if default_value == "null" {
+        return "None".to_string();
+    }
+
+    // Handle string literals (quoted values) - convert to enum variant
+    // e.g., "portrait" -> ReturnType::Portrait
+    if default_value.starts_with('"') && default_value.ends_with('"') {
+        let inner_value = &default_value[1..default_value.len()-1];
+        // Convert to PascalCase for enum variant
+        let variant = inner_value
+            .split(|c| c == '-' || c == '_')
+            .map(|word| {
+                let mut chars = word.chars();
+                match chars.next() {
+                    None => String::new(),
+                    Some(first) => first.to_uppercase().collect::<String>() + chars.as_str(),
+                }
+            })
+            .collect::<String>();
+
+        return format!("{}::{}", rust_type, variant);
+    }
+
+    // For other values, return as-is
+    default_value.to_string()
+}
+
 /// Cleans up module prefixes from type names
 ///
 /// # Arguments
@@ -338,10 +375,11 @@ fn generate_command_param(param: &crate::command_parser::CommandParams, module: 
                     cleaned_type.clone()
                 };
 
+                let transformed_value = transform_default_value(default_value, &cleaned_type);
                 let return_value = if property.is_optional {
-                    format!("Some({})", default_value)
+                    format!("Some({})", transformed_value)
                 } else {
-                    default_value.clone()
+                    transformed_value
                 };
 
                 default_functions.push_str(&format!(
@@ -695,10 +733,11 @@ fn generate_rust_regular_struct(name: &str, properties: &[crate::parser::Propert
                     cleaned_type.clone()
                 };
 
+                let transformed_value = transform_default_value(default_value, &cleaned_type);
                 let return_value = if property.is_optional {
-                    format!("Some({})", default_value)
+                    format!("Some({})", transformed_value)
                 } else {
-                    default_value.clone()
+                    transformed_value
                 };
 
                 default_functions.push_str(&format!(
@@ -1033,10 +1072,11 @@ fn generate_event_param(param: &crate::event_parser::EventParams, module: &Modul
                     cleaned_type.clone()
                 };
 
+                let transformed_value = transform_default_value(default_value, &cleaned_type);
                 let return_value = if property.is_optional {
-                    format!("Some({})", default_value)
+                    format!("Some({})", transformed_value)
                 } else {
-                    default_value.clone()
+                    transformed_value
                 };
 
                 default_functions.push_str(&format!(
