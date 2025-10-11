@@ -197,7 +197,6 @@ pub fn detect_modules(cddl_strings: Vec<&str>) -> Result<Vec<Module>, Box<dyn st
             
             if let Some(captures) = command_pattern.captures(line) {
                 let name = captures[1].to_string();
-                let content = extract_definition_content(cddl_content, line)?;
 
                 let module = modules.entry(name.clone()).or_insert_with(|| Module {
                     name: name.clone(),
@@ -211,13 +210,16 @@ pub fn detect_modules(cddl_strings: Vec<&str>) -> Result<Vec<Module>, Box<dyn st
                     pending_types: HashSet::new(),
                 });
 
-                let command_def = parse_command_definition(format!("{}Command", name), content, cddl_strings.clone(), module)?;
-                module.command_definition = Some(command_def);
+                // Only parse if not already parsed
+                if module.command_definition.is_none() {
+                    let content = extract_definition_content(cddl_content, line)?;
+                    let command_def = parse_command_definition(format!("{}Command", name), content, cddl_strings.clone(), module)?;
+                    module.command_definition = Some(command_def);
+                }
             }
             
             if let Some(captures) = event_pattern.captures(line) {
                 let name = captures[1].to_string();
-                let content = extract_definition_content(cddl_content, line)?;
 
                 let module = modules.entry(name.clone()).or_insert_with(|| Module {
                     name: name.clone(),
@@ -231,13 +233,16 @@ pub fn detect_modules(cddl_strings: Vec<&str>) -> Result<Vec<Module>, Box<dyn st
                     pending_types: HashSet::new(),
                 });
 
-                let event_def = parse_event_definition(format!("{}Event", name), content, cddl_strings.clone(), module)?;
-                module.event_definition = Some(event_def);
+                // Only parse if not already parsed
+                if module.event_definition.is_none() {
+                    let content = extract_definition_content(cddl_content, line)?;
+                    let event_def = parse_event_definition(format!("{}Event", name), content, cddl_strings.clone(), module)?;
+                    module.event_definition = Some(event_def);
+                }
             }
             
             if let Some(captures) = result_pattern.captures(line) {
                 let name = captures[1].to_string();
-                let content = extract_definition_content(cddl_content, line)?;
 
                 let module = modules.entry(name.clone()).or_insert_with(|| Module {
                     name: name.clone(),
@@ -251,8 +256,12 @@ pub fn detect_modules(cddl_strings: Vec<&str>) -> Result<Vec<Module>, Box<dyn st
                     pending_types: HashSet::new(),
                 });
 
-                let result_def = parse_result_definition(format!("{}Result", name), content, cddl_strings.clone(), module)?;
-                module.result_definition = Some(result_def);
+                // Only parse if not already parsed
+                if module.result_definition.is_none() {
+                    let content = extract_definition_content(cddl_content, line)?;
+                    let result_def = parse_result_definition(format!("{}Result", name), content, cddl_strings.clone(), module)?;
+                    module.result_definition = Some(result_def);
+                }
             }
         }
     }
