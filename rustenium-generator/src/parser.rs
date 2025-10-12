@@ -875,22 +875,25 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
         let literal_value = &type_name[1..type_name.len()-1]; // Remove quotes
         let enum_name = format!("{}Enum", to_pascal_case(literal_value));
 
-        let properties = vec![Property {
-            is_enum: true,
-            is_primitive: false,
-            is_optional: false,
-            name: to_pascal_case(literal_value),
-            value: "UNIT_VARIANT".to_string(),
-            attributes: vec![format!(r#"#[serde(rename = "{}")]"#, literal_value)],
-            validation_info: None,
-        }];
+        // Check if type already exists before adding
+        if !current_module.types.iter().any(|t| t.name == enum_name) {
+            let properties = vec![Property {
+                is_enum: true,
+                is_primitive: false,
+                is_optional: false,
+                name: to_pascal_case(literal_value),
+                value: "UNIT_VARIANT".to_string(),
+                attributes: vec![format!(r#"#[serde(rename = "{}")]"#, literal_value)],
+                validation_info: None,
+            }];
 
-        current_module.types.push(crate::module::BidiType {
-            name: enum_name.clone(),
-            properties,
-            is_enum: true,
-            is_alias: false,
-        });
+            current_module.types.push(crate::module::BidiType {
+                name: enum_name.clone(),
+                properties,
+                is_enum: true,
+                is_alias: false,
+            });
+        }
         return (enum_name.clone(), Some(String::from("generated_property")));
     }
 
