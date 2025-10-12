@@ -518,7 +518,14 @@ fn generate_commands_file(cmd_def: &crate::command_parser::CommandDefinition, mo
 
     // Generate command params after methods
     for param in &cmd_def.command_params {
-        output.push_str(&generate_command_param(param, module));
+        // Check if all properties are enums - if so, generate as enum instead of struct
+        let all_enum_properties = param.properties.iter().all(|p| p.is_enum);
+
+        if all_enum_properties && !param.properties.is_empty() {
+            output.push_str(&generate_rust_enum(&param.name, &param.properties, &module.name));
+        } else {
+            output.push_str(&generate_command_param(param, module));
+        }
         output.push_str("\n\n");
     }
 

@@ -72,12 +72,12 @@ pub struct Property {
 /// 
 /// # Returns
 /// The parsed parameters as a string representation
-pub fn parse_command_parameters(command_lines: &[&str], cddl_strings: Vec<&str>, module: &mut Module, command_def: &mut CommandDefinition) -> Result<String, Box<dyn std::error::Error>> {
+pub fn  parse_command_parameters(command_lines: &[&str], cddl_strings: Vec<&str>, module: &mut Module, command_def: &mut CommandDefinition) -> Result<String, Box<dyn std::error::Error>> {
     // First, find the params line in the command definition
     let mut params_type = None;
     for line in command_lines {
         let line = line.trim();
-        
+
         // Look for params line: "params: session.NewParameters"
         if line.starts_with("params:") {
             // Extract the parameter type after "params:"
@@ -87,26 +87,31 @@ pub fn parse_command_parameters(command_lines: &[&str], cddl_strings: Vec<&str>,
             }
         }
     }
-    
+
     // If we found a parameter type, search for its definition in all CDDL content
     if let Some(param_type) = params_type {
-        // Search for the parameter definition (e.g., "browser.CreateUserContextParameters = {")
-        let pattern = format!(r"^{}\s*=\s*\{{", regex::escape(&param_type));
-        let regex = Regex::new(&pattern)?;
-        
+        // Search for the parameter definition (e.g., "browser.CreateUserContextParameters = {" or "= TypeAlias")
+        let struct_pattern = format!(r"^{}\s*=\s*\{{", regex::escape(&param_type));
+        let alias_pattern = format!(r"^{}\s*=\s*(.+)", regex::escape(&param_type));
+        let struct_regex = Regex::new(&struct_pattern)?;
+        let alias_regex = Regex::new(&alias_pattern)?;
+
         for cddl_content in cddl_strings.clone() {
             let lines: Vec<&str> = cddl_content.lines().collect();
-            
+
             for (line_num, line) in lines.iter().enumerate() {
-                if regex.is_match(line.trim()) {
+                let line_trimmed = line.trim();
+
+                // Check for struct definition pattern first
+                if struct_regex.is_match(line_trimmed) {
                     // Found the parameter definition, extract content between braces
                     let mut brace_count = 0;
                     let mut found_start = false;
                     let mut param_content_lines = Vec::new();
-                    
+
                     for i in line_num..lines.len() {
                         let current_line = lines[i];
-                        
+
                         for ch in current_line.chars() {
                             match ch {
                                 '{' => {
@@ -147,21 +152,59 @@ pub fn parse_command_parameters(command_lines: &[&str], cddl_strings: Vec<&str>,
                                 _ => {}
                             }
                         }
-                        
+
                         // Add the line if we're inside the braces (skip the first line)
                         if found_start && brace_count > 0 && i > line_num {
                             param_content_lines.push(current_line.trim());
                         }
                     }
-                    
+
                     return Ok(format!("{}", param_type));
+                }
+                // Check for alias pattern
+                else if let Some(captures) = alias_regex.captures(line_trimmed) {
+                    let alias_type = captures[1].trim().to_string();
+
+                    // Process the alias type through process_cddl_to_struct
+                    let (mut processed_properties, _) = process_cddl_to_struct(&alias_type, cddl_strings.clone(), module, None)?;
+
+                    // If only one property and it references a generated enum type, extract its properties
+                    if processed_properties.len() == 1 {
+                        if let Some(idx) = module.types.iter().position(|t| &t.name == &processed_properties[0].value) {
+                            let bidi_type = module.types.remove(idx);
+                            processed_properties = bidi_type.properties;
+                        }
+                    }
+
+                    // Create the parameter struct name from the param_type
+                    let param_struct_name = if let Some(dot_pos) = param_type.find('.') {
+                        // Remove module prefix and use just the type name
+                        param_type[dot_pos + 1..].to_string()
+                    } else {
+                        param_type.clone()
+                    };
+
+                    // Create CommandParams and add to command_def
+                    let command_param = crate::command_parser::CommandParams {
+                        name: param_struct_name.clone(),
+                        properties: processed_properties,
+                        attributes: vec![
+                            "#[derive(Debug, Clone, Serialize, Deserialize)]".to_string(),
+                        ],
+                    };
+
+                    // Check if this param already exists to avoid duplicates
+                    if !command_def.command_params.iter().any(|p| p.name == param_struct_name) {
+                        command_def.command_params.push(command_param);
+                    }
+                    return Ok(param_struct_name);
                 }
             }
         }
-        
+
         return Ok(format!("{}", param_type));
     }
-    
+
     Ok(String::new())
 }
 
