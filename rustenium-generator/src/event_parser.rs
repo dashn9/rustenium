@@ -260,8 +260,8 @@ pub fn parse_event_parameters(event_lines: &[&str], cddl_strings: Vec<&str>, mod
 
         // Check if this ends with "Params" - if so, generate EventParams, otherwise use process_cddl_to_struct
         if param_struct_name.ends_with("Params") {
-            // Search for the parameter definition (e.g., "browser.CreateUserContextParams = {")
-            let pattern = format!(r"^{}\s*=\s*\{{", regex::escape(&param_type));
+            // Search for the parameter definition (e.g., "browser.CreateUserContextParams = {" or "browser.CreateUserContextParams = (")
+            let pattern = format!(r"^{}\s*=\s*[\{{(]", regex::escape(&param_type));
             let regex = Regex::new(&pattern)?;
 
             for cddl_content in cddl_strings.clone() {
@@ -269,8 +269,12 @@ pub fn parse_event_parameters(event_lines: &[&str], cddl_strings: Vec<&str>, mod
 
                 for (line_num, line) in lines.iter().enumerate() {
                     if regex.is_match(line.trim()) {
-                        // Found the parameter definition, extract content between braces
-                        let mut brace_count = 0;
+                        // Found the parameter definition, determine if it uses braces or parentheses
+                        let uses_braces = line.trim().contains("= {");
+                        let (open_char, close_char) = if uses_braces { ('{', '}') } else { ('(', ')') };
+
+                        // Extract content between delimiters
+                        let mut delimiter_count = 0;
                         let mut found_start = false;
                         let mut param_content_lines = Vec::new();
 
@@ -278,41 +282,52 @@ pub fn parse_event_parameters(event_lines: &[&str], cddl_strings: Vec<&str>, mod
                             let current_line = lines[i];
 
                             for ch in current_line.chars() {
-                                match ch {
-                                    '{' => {
-                                        brace_count += 1;
-                                        found_start = true;
-                                    }
-                                    '}' => {
-                                        brace_count -= 1;
-                                        if brace_count == 0 && found_start {
-                                            // Found the end, process the extracted content
-                                            let content = param_content_lines.join("\n").trim().to_string();
-                                            let (processed_properties, _) = parser::process_cddl_to_struct(&content, cddl_strings.clone(), module, None)?;
+                                if ch == open_char {
+                                    delimiter_count += 1;
+                                    found_start = true;
+                                } else if ch == close_char {
+                                    delimiter_count -= 1;
+                                    if delimiter_count == 0 && found_start {
+                                        // Found the end, process the extracted content
+                                        let mut content = param_content_lines.join("\n").trim().to_string();
+                                        let is_enum = !uses_braces; // If using parentheses, might be an enum
 
-                                            // Create EventParams and add to event_def
-                                            let event_param = EventParams {
-                                                name: param_struct_name.clone(),
-                                                properties: processed_properties,
-                                                attributes: vec![
-                                                    "#[derive(Debug, Clone, Serialize, Deserialize)]".to_string(),
-                                                ],
-                                            };
-
-                                            // Check if this param already exists to avoid duplicates
-                                            if !event_def.event_params.iter().any(|p| p.name == param_struct_name) {
-                                                event_def.event_params.push(event_param);
-                                            }
-
-                                            return Ok(param_struct_name);
+                                        // If using parentheses, wrap content to retain them
+                                        if !uses_braces {
+                                            content = format!("(\n{}\n)", content);
                                         }
+
+                                        let (mut processed_properties, _) = parser::process_cddl_to_struct(&content, cddl_strings.clone(), module, None)?;
+
+                                        // If is_enum and only one property was generated, check if it's a generated enum type
+                                        if is_enum && processed_properties.len() == 1 {
+                                            if let Some(idx) = module.types.iter().position(|t| &t.name == &processed_properties[0].value) {
+                                                let bidi_type = module.types.remove(idx);
+                                                processed_properties = bidi_type.properties;
+                                            }
+                                        }
+
+                                        // Create EventParams and add to event_def
+                                        let event_param = EventParams {
+                                            name: param_struct_name.clone(),
+                                            properties: processed_properties,
+                                            attributes: vec![
+                                                "#[derive(Debug, Clone, Serialize, Deserialize)]".to_string(),
+                                            ],
+                                        };
+
+                                        // Check if this param already exists to avoid duplicates
+                                        if !event_def.event_params.iter().any(|p| p.name == param_struct_name) {
+                                            event_def.event_params.push(event_param);
+                                        }
+
+                                        return Ok(param_struct_name);
                                     }
-                                    _ => {}
                                 }
                             }
 
-                            // Add the line if we're inside the braces (skip the first line)
-                            if found_start && brace_count > 0 && i > line_num {
+                            // Add the line if we're inside the delimiters (skip the first line)
+                            if found_start && delimiter_count > 0 && i > line_num {
                                 param_content_lines.push(current_line.trim());
                             }
                         }
@@ -325,7 +340,7 @@ pub fn parse_event_parameters(event_lines: &[&str], cddl_strings: Vec<&str>, mod
             return Ok(param_struct_name);
         } else {
             // This is a regular type - run it through process_cddl_to_struct and add to module.types
-            let pattern = format!(r"^{}\s*=\s*\{{", regex::escape(&param_type));
+            let pattern = format!(r"^{}\s*=\s*[\{{(]", regex::escape(&param_type));
             let regex = Regex::new(&pattern)?;
 
             for cddl_content in cddl_strings.clone() {
@@ -333,8 +348,12 @@ pub fn parse_event_parameters(event_lines: &[&str], cddl_strings: Vec<&str>, mod
 
                 for (line_num, line) in lines.iter().enumerate() {
                     if regex.is_match(line.trim()) {
-                        // Found the type definition, extract content between braces
-                        let mut brace_count = 0;
+                        // Found the type definition, determine if it uses braces or parentheses
+                        let uses_braces = line.trim().contains("= {");
+                        let (open_char, close_char) = if uses_braces { ('{', '}') } else { ('(', ')') };
+
+                        // Extract content between delimiters
+                        let mut delimiter_count = 0;
                         let mut found_start = false;
                         let mut type_content_lines = Vec::new();
 
@@ -342,40 +361,51 @@ pub fn parse_event_parameters(event_lines: &[&str], cddl_strings: Vec<&str>, mod
                             let current_line = lines[i];
 
                             for ch in current_line.chars() {
-                                match ch {
-                                    '{' => {
-                                        brace_count += 1;
-                                        found_start = true;
-                                    }
-                                    '}' => {
-                                        brace_count -= 1;
-                                        if brace_count == 0 && found_start {
-                                            // Found the end, process through process_cddl_to_struct
-                                            let content = type_content_lines.join("\n").trim().to_string();
-                                            let (processed_properties, _) = parser::process_cddl_to_struct(&content, cddl_strings.clone(), module, None)?;
+                                if ch == open_char {
+                                    delimiter_count += 1;
+                                    found_start = true;
+                                } else if ch == close_char {
+                                    delimiter_count -= 1;
+                                    if delimiter_count == 0 && found_start {
+                                        // Found the end, process through process_cddl_to_struct
+                                        let mut content = type_content_lines.join("\n").trim().to_string();
+                                        let is_enum = !uses_braces; // If using parentheses, might be an enum
 
-                                            // Create BidiType and add to module.types
-                                            let bidi_type = crate::module::BidiType {
-                                                name: param_struct_name.clone(),
-                                                properties: processed_properties,
-                                                is_enum: false,
-                                                is_alias: false,
-                                            };
-
-                                            // Check if this type already exists to avoid duplicates
-                                            if !module.types.iter().any(|t| t.name == param_struct_name) {
-                                                module.types.push(bidi_type);
-                                            }
-
-                                            return Ok(param_struct_name);
+                                        // If using parentheses, wrap content to retain them
+                                        if !uses_braces {
+                                            content = format!("(\n{}\n)", content);
                                         }
+
+                                        let (mut processed_properties, _) = parser::process_cddl_to_struct(&content, cddl_strings.clone(), module, None)?;
+
+                                        // If is_enum and only one property was generated, check if it's a generated enum type
+                                        if is_enum && processed_properties.len() == 1 {
+                                            if let Some(idx) = module.types.iter().position(|t| &t.name == &processed_properties[0].value) {
+                                                let bidi_type = module.types.remove(idx);
+                                                processed_properties = bidi_type.properties;
+                                            }
+                                        }
+
+                                        // Create BidiType and add to module.types
+                                        let bidi_type = crate::module::BidiType {
+                                            name: param_struct_name.clone(),
+                                            properties: processed_properties,
+                                            is_enum: false,
+                                            is_alias: false,
+                                        };
+
+                                        // Check if this type already exists to avoid duplicates
+                                        if !module.types.iter().any(|t| t.name == param_struct_name) {
+                                            module.types.push(bidi_type);
+                                        }
+
+                                        return Ok(param_struct_name);
                                     }
-                                    _ => {}
                                 }
                             }
 
-                            // Add the line if we're inside the braces (skip the first line)
-                            if found_start && brace_count > 0 && i > line_num {
+                            // Add the line if we're inside the delimiters (skip the first line)
+                            if found_start && delimiter_count > 0 && i > line_num {
                                 type_content_lines.push(current_line.trim());
                             }
                         }
