@@ -536,6 +536,13 @@ fn generate_commands_file(cmd_def: &crate::command_parser::CommandDefinition, mo
 
         // Generate individual result structs
         for result in &result_def.results {
+            if result.name.contains("EvaluateResult") {
+                println!("🔍 Found result: {} - is_alias: {}, properties count: {}",
+                    result.name, result.is_alias, result.properties.len());
+                for (i, prop) in result.properties.iter().enumerate() {
+                    println!("  Property {}: name={}, value={}, is_enum={}", i, prop.name, prop.value, prop.is_enum);
+                }
+            }
             output.push_str(&generate_result_struct(result, module));
             output.push_str("\n\n");
         }

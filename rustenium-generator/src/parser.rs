@@ -714,12 +714,22 @@ fn generate_type_if_same_module(type_name: &str, content: &str, def_type: &str, 
         }
 
         let properties_len = properties.len();
+
+        // Determine if this is truly an alias or an enum
+        // Single quoted literal strings like `network.CollectorType = "blob"` should be treated as enums,
+        // not as type aliases. This allows proper enum generation with unit variants.
+        let content_is_quoted = content.trim().starts_with('"') && content.trim().ends_with('"');
+        let is_enum = content_is_quoted && properties_len == 1;
+        let is_alias = def_type == "alias"
+            && properties_len < 2
+            && !content_is_quoted;
+
         // Create BidiType with the properties and store in module
         current_module.types.push(crate::module::BidiType {
             name: clean_name.to_string(),
             properties,
-            is_enum: false,
-            is_alias: def_type == "alias" && properties_len < 2,
+            is_enum,
+            is_alias,
         });
 
         Some(clean_name.to_string())
