@@ -49,6 +49,14 @@ fn extract_inner_type(type_ref: &str) -> String {
     type_ref.to_string()
 }
 
+/// Checks if Extensible type is used in properties
+fn uses_extensible(properties: &[crate::parser::Property]) -> bool {
+    properties.iter().any(|p| {
+        let inner_type = extract_inner_type(&p.value);
+        inner_type == "Extensible"
+    })
+}
+
 /// Collects external type imports from properties
 /// Returns Vec of (module_name, type_name) tuples
 fn collect_external_types(properties: &[crate::parser::Property]) -> Vec<(String, String)> {
@@ -79,6 +87,46 @@ fn generate_external_imports(types: &[(String, String)]) -> String {
     }
 
     output
+}
+
+/// Sanitizes property names that start with special characters or numbers
+///
+/// # Arguments
+/// * `input` - The property name to sanitize
+///
+/// # Returns
+/// The sanitized property name
+fn sanitize_property_name(input: &str) -> String {
+    if input.is_empty() {
+        return input.to_string();
+    }
+
+    let first_char = input.chars().next().unwrap();
+
+    // Handle properties starting with '-'
+    if first_char == '-' {
+        return format!("Negative{}", &input[1..]);
+    }
+
+    // Handle properties starting with numbers
+    if first_char.is_numeric() {
+        let word_equiv = match first_char {
+            '0' => "Zero",
+            '1' => "One",
+            '2' => "Two",
+            '3' => "Three",
+            '4' => "Four",
+            '5' => "Five",
+            '6' => "Six",
+            '7' => "Seven",
+            '8' => "Eight",
+            '9' => "Nine",
+            _ => "Number",
+        };
+        return format!("{}{}", word_equiv, &input[1..]);
+    }
+
+    input.to_string()
 }
 
 /// Converts PascalCase to snake_case
@@ -156,6 +204,11 @@ fn transform_default_value(default_value: &str, rust_type: &str) -> String {
 /// # Returns
 /// The cleaned type name without module prefix
 fn clean_module_prefix(type_name: &str, current_module: &str) -> String {
+    // Handle special "number" type from CDDL
+    if type_name == "number" {
+        return "serde_json::value::Number".to_string();
+    }
+
     // Handle generics like Vec<module::Type>
     if let Some(inner) = type_name.strip_prefix("Vec<").and_then(|s| s.strip_suffix('>')) {
         let cleaned_inner = clean_module_prefix(inner, current_module);
@@ -366,7 +419,7 @@ fn generate_command_param(param: &crate::command_parser::CommandParams, module: 
     for property in &modified_properties {
         if let Some(validation_info) = &property.validation_info {
             if let Some(default_value) = &validation_info.default_value {
-                let function_name = format!("{}_default_{}", to_snake_case(&param.name), property.name);
+                let function_name = format!("{}_default_{}", to_snake_case(&param.name), to_snake_case(&property.name));
                 let cleaned_type = clean_module_prefix(&property.value, &module.name);
 
                 let return_type = if property.is_optional {
@@ -445,7 +498,7 @@ fn generate_command_param(param: &crate::command_parser::CommandParams, module: 
 
             // Add default value attribute
             if let Some(_default_value) = &validation_info.default_value {
-                let function_name = format!("{}_default_{}", to_snake_case(&param.name), property.name);
+                let function_name = format!("{}_default_{}", to_snake_case(&param.name), to_snake_case(&property.name));
                 output.push_str(&format!("    #[serde(default = \"{}\")]\n", function_name));
             }
         }
@@ -499,6 +552,11 @@ fn generate_commands_file(cmd_def: &crate::command_parser::CommandDefinition, mo
     let external_types = collect_external_types(&all_properties);
     let external_imports = generate_external_imports(&external_types);
     output.push_str(&external_imports);
+
+    // Import Extensible from root if used
+    if uses_extensible(&all_properties) {
+        output.push_str("use crate::generated_output::Extensible;\n");
+    }
 
     // Import from types if module has types
     if has_types_in_module(module) {
@@ -579,6 +637,11 @@ fn generate_events_file(event_def: &crate::event_parser::EventDefinition, module
     let external_types = collect_external_types(&all_properties);
     let external_imports = generate_external_imports(&external_types);
     output.push_str(&external_imports);
+
+    // Import Extensible from root if used
+    if uses_extensible(&all_properties) {
+        output.push_str("use crate::generated_output::Extensible;\n");
+    }
 
     // Import from types if module has types
     if has_types_in_module(module) {
@@ -670,6 +733,11 @@ fn generate_types_file(module: &Module) -> String {
     let external_imports = generate_external_imports(&external_types);
     output.push_str(&external_imports);
 
+    // Import Extensible from root if used
+    if uses_extensible(&all_properties) {
+        output.push_str("use crate::generated_output::Extensible;\n");
+    }
+
     output.push_str("\n");
 
     // Generate each type
@@ -738,7 +806,7 @@ fn generate_rust_regular_struct(name: &str, properties: &[crate::parser::Propert
     for property in properties {
         if let Some(validation_info) = &property.validation_info {
             if let Some(default_value) = &validation_info.default_value {
-                let function_name = format!("{}_default_{}", to_snake_case(name), property.name);
+                let function_name = format!("{}_default_{}", to_snake_case(name), to_snake_case(&property.name));
                 let cleaned_type = clean_module_prefix(&property.value, module_name);
 
                 let return_type = if property.is_optional {
@@ -813,7 +881,7 @@ fn generate_rust_regular_struct(name: &str, properties: &[crate::parser::Propert
 
             // Add default value attribute
             if let Some(_default_value) = &validation_info.default_value {
-                let function_name = format!("{}_default_{}", to_snake_case(name), property.name);
+                let function_name = format!("{}_default_{}", to_snake_case(name), to_snake_case(&property.name));
                 output.push_str(&format!("    #[serde(default = \"{}\")]\n", function_name));
             }
         }
@@ -879,18 +947,21 @@ fn generate_rust_enum(name: &str, properties: &[crate::parser::Property], module
         // Clean up property type - remove module prefix if it's the same module
         let cleaned_type = clean_module_prefix(&property.value, module_name);
 
+        // Sanitize the variant name
+        let sanitized_variant_name = sanitize_property_name(&property.name);
+
         if property.is_enum {
             // Enum variant
             if cleaned_type == "UNIT_VARIANT" {
                 // Unit variant (no value)
-                output.push_str(&format!("    {},\n", property.name));
+                output.push_str(&format!("    {},\n", sanitized_variant_name));
             } else {
                 // Tuple variant (with value)
-                output.push_str(&format!("    {}({}),\n", property.name, cleaned_type));
+                output.push_str(&format!("    {}({}),\n", sanitized_variant_name, cleaned_type));
             }
         } else {
             // Regular variant with data
-            output.push_str(&format!("    {}({}),\n", property.name, cleaned_type));
+            output.push_str(&format!("    {}({}),\n", sanitized_variant_name, cleaned_type));
         }
     }
 
@@ -1077,7 +1148,7 @@ fn generate_event_param(param: &crate::event_parser::EventParams, module: &Modul
         }
         if let Some(validation_info) = &property.validation_info {
             if let Some(default_value) = &validation_info.default_value {
-                let function_name = format!("{}_default_{}", to_snake_case(&param.name), property.name);
+                let function_name = format!("{}_default_{}", to_snake_case(&param.name), to_snake_case(&property.name));
                 let cleaned_type = clean_module_prefix(&property.value, &module.name);
 
                 let return_type = if property.is_optional {
@@ -1156,7 +1227,7 @@ fn generate_event_param(param: &crate::event_parser::EventParams, module: &Modul
 
             // Add default value attribute
             if let Some(_default_value) = &validation_info.default_value {
-                let function_name = format!("{}_default_{}", to_snake_case(&param.name), property.name);
+                let function_name = format!("{}_default_{}", to_snake_case(&param.name), to_snake_case(&property.name));
                 output.push_str(&format!("    #[serde(default = \"{}\")]\n", function_name));
             }
         }

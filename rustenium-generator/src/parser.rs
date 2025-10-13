@@ -731,6 +731,11 @@ fn generate_type_if_same_module(type_name: &str, content: &str, def_type: &str, 
         type_name
     };
 
+    // Skip generating Extensible type - it's defined in root module
+    if clean_name == "Extensible" {
+        return Some(clean_name.to_string());
+    }
+
     // Check if type already exists in module
     if current_module.types.iter().any(|t| t.name == clean_name) {
         return Some(clean_name.to_string()); // Type already exists, return the name
@@ -831,15 +836,23 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
         let processed_types: Vec<(String, Option<String>, Vec<String>)> = parts
             .into_iter()
             .map(|part| {
+                // Strip braces if present (e.g., "{ script.DateLocalValue }" -> "script.DateLocalValue")
+                let cleaned_part = if part.trim().starts_with('{') && part.trim().ends_with('}') {
+                    let inner = &part.trim()[1..part.trim().len()-1];
+                    inner.trim().to_string()
+                } else {
+                    part.trim().to_string()
+                };
+
                 // Check if part is a literal string
-                if part.starts_with('"') && part.ends_with('"') {
-                    let literal_value = &part[1..part.len()-1]; // Remove quotes
+                if cleaned_part.starts_with('"') && cleaned_part.ends_with('"') {
+                    let literal_value = &cleaned_part[1..cleaned_part.len()-1]; // Remove quotes
                     let variant_name = to_pascal_case(literal_value);
                     let attributes = vec![format!(r#"#[serde(rename = "{}")]"#, literal_value)];
 
                     (variant_name, None, attributes)
                 } else {
-                    let (rust_type, _, _) = convert_basic_cddl_type(&part, cddl_strings, current_module, property_name);
+                    let (rust_type, _, _) = convert_basic_cddl_type(&cleaned_part, cddl_strings, current_module, property_name);
                     (rust_type.clone(), Some(rust_type), Vec::new()) // No attributes for non-literals
                 }
             })
@@ -1251,7 +1264,7 @@ pub struct ConstraintInfo {
 /// # Returns
 /// A tuple of (rust_type, is_primitive, validation_info, meta_comment_on_type)
 fn convert_cddl_type_to_rust(cddl_type: &str, cddl_strings: &[&str], current_module: &mut Module, property_name: Option<&str>) -> (String, bool, Option<ValidationInfo>, Option<String>) {
-    let mut trimmed = cddl_type.trim().to_string();
+    let mut trimmed = cddl_type.trim().trim_end_matches(';').trim().to_string();
     let mut range_validation: Option<ValidationInfo> = None;
 
     // First check for numeric range types and replace them
@@ -1332,15 +1345,24 @@ fn convert_cddl_type_to_rust(cddl_type: &str, cddl_strings: &[&str], current_mod
 fn to_pascal_case(input: &str) -> String {
     let mut result = String::new();
     let mut capitalize_next = true; // Start with capitalizing the first character
+    let mut is_first_char = true;
 
     for ch in input.chars() {
-        if ch == ' ' || ch == '-' || ch == '_' {
+        // Preserve leading '-' sign
+        if ch == '-' && is_first_char {
+            result.push(ch);
+            is_first_char = false;
+            capitalize_next = true;
+        } else if ch == ' ' || ch == '-' || ch == '_' {
+            is_first_char = false;
             capitalize_next = true;
         } else if capitalize_next {
             result.push(ch.to_uppercase().next().unwrap_or(ch));
             capitalize_next = false;
+            is_first_char = false;
         } else {
             result.push(ch);
+            is_first_char = false;
         }
     }
 
