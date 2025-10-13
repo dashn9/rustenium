@@ -57,6 +57,13 @@ fn uses_extensible(properties: &[crate::parser::Property]) -> bool {
     })
 }
 
+/// Checks if validation constraints are used in properties
+fn uses_validation(properties: &[crate::parser::Property]) -> bool {
+    properties.iter().any(|p| {
+        p.validation_info.as_ref().map_or(false, |v| !v.constraints.is_empty())
+    })
+}
+
 /// Collects external type imports from properties
 /// Returns Vec of (module_name, type_name) tuples
 fn collect_external_types(properties: &[crate::parser::Property]) -> Vec<(String, String)> {
@@ -448,9 +455,18 @@ fn generate_command_param(param: &crate::command_parser::CommandParams, module: 
         output.push_str(&default_functions);
     }
 
+    // Check if validation is used
+    let has_validation = uses_validation(&modified_properties);
+
     // Add parameter struct attributes
     for attribute in &param.attributes {
-        output.push_str(&format!("{}\n", attribute));
+        // Extend derive attribute to include Validate if needed
+        if has_validation && attribute.starts_with("#[derive(") {
+            let extended = attribute.replace(")]\n", ", Validate)]\n").replace(")]", ", Validate)]");
+            output.push_str(&format!("{}\n", extended));
+        } else {
+            output.push_str(&format!("{}\n", attribute));
+        }
     }
 
     // Generate parameter struct
@@ -465,34 +481,32 @@ fn generate_command_param(param: &crate::command_parser::CommandParams, module: 
 
         // Add validation-based attributes
         if let Some(validation_info) = &property.validation_info {
-            // Add validation constraints
-            if !validation_info.constraints.is_empty() {
-                let mut constraints = Vec::new();
-                for constraint in &validation_info.constraints {
-                    match constraint.constraint_type.as_str() {
-                        "ge" => constraints.push(format!("min = {}", constraint.value)),
-                        "le" => constraints.push(format!("max = {}", constraint.value)),
-                        "gt" => {
-                            // For greater than, we need to add a small epsilon
-                            if let Ok(val) = constraint.value.parse::<f64>() {
-                                constraints.push(format!("min = {}", val + f64::EPSILON));
-                            } else {
-                                constraints.push(format!("min = {}", constraint.value));
-                            }
-                        },
-                        "lt" => {
-                            // For less than, we need to subtract a small epsilon
-                            if let Ok(val) = constraint.value.parse::<f64>() {
-                                constraints.push(format!("max = {}", val - f64::EPSILON));
-                            } else {
-                                constraints.push(format!("max = {}", constraint.value));
-                            }
-                        },
-                        _ => {} // Unknown constraint type
-                    }
-                }
-                if !constraints.is_empty() {
-                    output.push_str(&format!("    #[validate(range({}))]\n", constraints.join(", ")));
+            // Add validation constraints - each constraint gets its own #[validate(...)] attribute
+            for constraint in &validation_info.constraints {
+                match constraint.constraint_type.as_str() {
+                    "ge" => {
+                        output.push_str(&format!("    #[validate(minimum = {})]\n", constraint.value));
+                    },
+                    "le" => {
+                        output.push_str(&format!("    #[validate(maximum = {})]\n", constraint.value));
+                    },
+                    "gt" => {
+                        // For greater than, we need to add a small epsilon
+                        if let Ok(val) = constraint.value.parse::<f64>() {
+                            output.push_str(&format!("    #[validate(minimum = {})]\n", val + f64::EPSILON));
+                        } else {
+                            output.push_str(&format!("    #[validate(minimum = {})]\n", constraint.value));
+                        }
+                    },
+                    "lt" => {
+                        // For less than, we need to subtract a small epsilon
+                        if let Ok(val) = constraint.value.parse::<f64>() {
+                            output.push_str(&format!("    #[validate(maximum = {})]\n", val - f64::EPSILON));
+                        } else {
+                            output.push_str(&format!("    #[validate(maximum = {})]\n", constraint.value));
+                        }
+                    },
+                    _ => {} // Unknown constraint type
                 }
             }
 
@@ -556,6 +570,11 @@ fn generate_commands_file(cmd_def: &crate::command_parser::CommandDefinition, mo
     // Import Extensible from root if used
     if uses_extensible(&all_properties) {
         output.push_str("use crate::generated_output::Extensible;\n");
+    }
+
+    // Import serde_valid if validation is used
+    if uses_validation(&all_properties) {
+        output.push_str("use serde_valid::Validate;\n");
     }
 
     // Import from types if module has types
@@ -643,6 +662,11 @@ fn generate_events_file(event_def: &crate::event_parser::EventDefinition, module
         output.push_str("use crate::generated_output::Extensible;\n");
     }
 
+    // Import serde_valid if validation is used
+    if uses_validation(&all_properties) {
+        output.push_str("use serde_valid::Validate;\n");
+    }
+
     // Import from types if module has types
     if has_types_in_module(module) {
         output.push_str("use super::types::*;\n");
@@ -677,9 +701,18 @@ fn generate_events_file(event_def: &crate::event_parser::EventDefinition, module
 fn generate_command_struct(command: &crate::command_parser::Command) -> String {
     let mut output = String::new();
 
+    // Check if validation is used
+    let has_validation = uses_validation(&command.properties);
+
     // Add command attributes
     for attribute in &command.attributes {
-        output.push_str(&format!("{}\n", attribute));
+        // Extend derive attribute to include Validate if needed
+        if has_validation && attribute.starts_with("#[derive(") {
+            let extended = attribute.replace(")]\n", ", Validate)]\n").replace(")]", ", Validate)]");
+            output.push_str(&format!("{}\n", extended));
+        } else {
+            output.push_str(&format!("{}\n", attribute));
+        }
     }
 
     output.push_str(&format!("pub struct {} {{\n", command.name));
@@ -736,6 +769,11 @@ fn generate_types_file(module: &Module) -> String {
     // Import Extensible from root if used
     if uses_extensible(&all_properties) {
         output.push_str("use crate::generated_output::Extensible;\n");
+    }
+
+    // Import serde_valid if validation is used
+    if uses_validation(&all_properties) {
+        output.push_str("use serde_valid::Validate;\n");
     }
 
     output.push_str("\n");
@@ -816,7 +854,7 @@ fn generate_rust_regular_struct(name: &str, properties: &[crate::parser::Propert
                 };
 
                 let transformed_value = transform_default_value(default_value, &cleaned_type);
-                let return_value = if property.is_optional {
+                let return_value = if property.is_optional || (return_type.contains("Option<") && transformed_value != "None") {
                     format!("Some({})", transformed_value)
                 } else {
                     transformed_value
@@ -835,8 +873,15 @@ fn generate_rust_regular_struct(name: &str, properties: &[crate::parser::Propert
         output.push_str(&default_functions);
     }
 
+    // Check if validation is used
+    let has_validation = uses_validation(properties);
+
     // Add derive attributes
-    output.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
+    if has_validation {
+        output.push_str("#[derive(Debug, Clone, Serialize, Deserialize, Validate)]\n");
+    } else {
+        output.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
+    }
     output.push_str(&format!("pub struct {} {{\n", name));
 
     // Add properties
@@ -848,34 +893,32 @@ fn generate_rust_regular_struct(name: &str, properties: &[crate::parser::Propert
 
         // Add validation-based attributes
         if let Some(validation_info) = &property.validation_info {
-            // Add validation constraints
-            if !validation_info.constraints.is_empty() {
-                let mut constraints = Vec::new();
-                for constraint in &validation_info.constraints {
-                    match constraint.constraint_type.as_str() {
-                        "ge" => constraints.push(format!("min = {}", constraint.value)),
-                        "le" => constraints.push(format!("max = {}", constraint.value)),
-                        "gt" => {
-                            // For greater than, we need to add a small epsilon
-                            if let Ok(val) = constraint.value.parse::<f64>() {
-                                constraints.push(format!("min = {}", val + f64::EPSILON));
-                            } else {
-                                constraints.push(format!("min = {}", constraint.value));
-                            }
-                        },
-                        "lt" => {
-                            // For less than, we need to subtract a small epsilon
-                            if let Ok(val) = constraint.value.parse::<f64>() {
-                                constraints.push(format!("max = {}", val - f64::EPSILON));
-                            } else {
-                                constraints.push(format!("max = {}", constraint.value));
-                            }
-                        },
-                        _ => {} // Unknown constraint type
-                    }
-                }
-                if !constraints.is_empty() {
-                    output.push_str(&format!("    #[validate(range({}))]\n", constraints.join(", ")));
+            // Add validation constraints - each constraint gets its own #[validate(...)] attribute
+            for constraint in &validation_info.constraints {
+                match constraint.constraint_type.as_str() {
+                    "ge" => {
+                        output.push_str(&format!("    #[validate(minimum = {})]\n", constraint.value));
+                    },
+                    "le" => {
+                        output.push_str(&format!("    #[validate(maximum = {})]\n", constraint.value));
+                    },
+                    "gt" => {
+                        // For greater than, we need to add a small epsilon
+                        if let Ok(val) = constraint.value.parse::<f64>() {
+                            output.push_str(&format!("    #[validate(minimum = {})]\n", val + f64::EPSILON));
+                        } else {
+                            output.push_str(&format!("    #[validate(minimum = {})]\n", constraint.value));
+                        }
+                    },
+                    "lt" => {
+                        // For less than, we need to subtract a small epsilon
+                        if let Ok(val) = constraint.value.parse::<f64>() {
+                            output.push_str(&format!("    #[validate(maximum = {})]\n", val - f64::EPSILON));
+                        } else {
+                            output.push_str(&format!("    #[validate(maximum = {})]\n", constraint.value));
+                        }
+                    },
+                    _ => {} // Unknown constraint type
                 }
             }
 
@@ -1060,9 +1103,18 @@ fn generate_result_struct(result: &crate::command_parser::BidiResult, module: &M
     }
 
     // Generate regular struct
+    // Check if validation is used
+    let has_validation = uses_validation(&modified_properties);
+
     // Add result attributes
     for attribute in &result.attributes {
-        output.push_str(&format!("{}\n", attribute));
+        // Extend derive attribute to include Validate if needed
+        if has_validation && attribute.starts_with("#[derive(") {
+            let extended = attribute.replace(")]\n", ", Validate)]\n").replace(")]", ", Validate)]");
+            output.push_str(&format!("{}\n", extended));
+        } else {
+            output.push_str(&format!("{}\n", attribute));
+        }
     }
 
     output.push_str(&format!("pub struct {} {{\n", result.name));
@@ -1177,9 +1229,18 @@ fn generate_event_param(param: &crate::event_parser::EventParams, module: &Modul
         output.push_str(&default_functions);
     }
 
+    // Check if validation is used
+    let has_validation = uses_validation(&modified_properties);
+
     // Add parameter struct attributes
     for attribute in &param.attributes {
-        output.push_str(&format!("{}\n", attribute));
+        // Extend derive attribute to include Validate if needed
+        if has_validation && attribute.starts_with("#[derive(") {
+            let extended = attribute.replace(")]\n", ", Validate)]\n").replace(")]", ", Validate)]");
+            output.push_str(&format!("{}\n", extended));
+        } else {
+            output.push_str(&format!("{}\n", attribute));
+        }
     }
 
     // Generate parameter struct
@@ -1194,34 +1255,32 @@ fn generate_event_param(param: &crate::event_parser::EventParams, module: &Modul
 
         // Add validation-based attributes
         if let Some(validation_info) = &property.validation_info {
-            // Add validation constraints
-            if !validation_info.constraints.is_empty() {
-                let mut constraints = Vec::new();
-                for constraint in &validation_info.constraints {
-                    match constraint.constraint_type.as_str() {
-                        "ge" => constraints.push(format!("min = {}", constraint.value)),
-                        "le" => constraints.push(format!("max = {}", constraint.value)),
-                        "gt" => {
-                            // For greater than, we need to add a small epsilon
-                            if let Ok(val) = constraint.value.parse::<f64>() {
-                                constraints.push(format!("min = {}", val + f64::EPSILON));
-                            } else {
-                                constraints.push(format!("min = {}", constraint.value));
-                            }
-                        },
-                        "lt" => {
-                            // For less than, we need to subtract a small epsilon
-                            if let Ok(val) = constraint.value.parse::<f64>() {
-                                constraints.push(format!("max = {}", val - f64::EPSILON));
-                            } else {
-                                constraints.push(format!("max = {}", constraint.value));
-                            }
-                        },
-                        _ => {} // Unknown constraint type
-                    }
-                }
-                if !constraints.is_empty() {
-                    output.push_str(&format!("    #[validate(range({}))]\n", constraints.join(", ")));
+            // Add validation constraints - each constraint gets its own #[validate(...)] attribute
+            for constraint in &validation_info.constraints {
+                match constraint.constraint_type.as_str() {
+                    "ge" => {
+                        output.push_str(&format!("    #[validate(minimum = {})]\n", constraint.value));
+                    },
+                    "le" => {
+                        output.push_str(&format!("    #[validate(maximum = {})]\n", constraint.value));
+                    },
+                    "gt" => {
+                        // For greater than, we need to add a small epsilon
+                        if let Ok(val) = constraint.value.parse::<f64>() {
+                            output.push_str(&format!("    #[validate(minimum = {})]\n", val + f64::EPSILON));
+                        } else {
+                            output.push_str(&format!("    #[validate(minimum = {})]\n", constraint.value));
+                        }
+                    },
+                    "lt" => {
+                        // For less than, we need to subtract a small epsilon
+                        if let Ok(val) = constraint.value.parse::<f64>() {
+                            output.push_str(&format!("    #[validate(maximum = {})]\n", val - f64::EPSILON));
+                        } else {
+                            output.push_str(&format!("    #[validate(maximum = {})]\n", constraint.value));
+                        }
+                    },
+                    _ => {} // Unknown constraint type
                 }
             }
 
@@ -1258,9 +1317,18 @@ fn generate_event_param(param: &crate::event_parser::EventParams, module: &Modul
 fn generate_event_struct_new(event: &crate::event_parser::Event) -> String {
     let mut output = String::new();
 
+    // Check if validation is used
+    let has_validation = uses_validation(&event.properties);
+
     // Add event attributes
     for attribute in &event.attributes {
-        output.push_str(&format!("{}\n", attribute));
+        // Extend derive attribute to include Validate if needed
+        if has_validation && attribute.starts_with("#[derive(") {
+            let extended = attribute.replace(")]\n", ", Validate)]\n").replace(")]", ", Validate)]");
+            output.push_str(&format!("{}\n", extended));
+        } else {
+            output.push_str(&format!("{}\n", attribute));
+        }
     }
 
     output.push_str(&format!("pub struct {} {{\n", event.name));
