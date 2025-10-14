@@ -6,7 +6,7 @@ mod command_parser;
 mod event_parser;
 mod parser;
 
-// mod generated_output;
+// generated_output;
 
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {

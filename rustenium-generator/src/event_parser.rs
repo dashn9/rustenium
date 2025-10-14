@@ -82,7 +82,7 @@ pub fn parse_event_definition(name: String, content: String, cddl_strings: Vec<&
         event_methods: Vec::new(),
         event_params: Vec::new(),
         attributes: vec![
-            "#[derive(Debug, Serialize, Deserialize)]".to_string(),
+            "#[derive(Debug, Clone, Serialize, Deserialize)]".to_string(),
             "#[serde(untagged)]".to_string(),
         ],
     };
@@ -103,7 +103,7 @@ pub fn parse_event_definition(name: String, content: String, cddl_strings: Vec<&
                 name,
                 module_name,
                 attributes: vec![
-                    "#[derive(Debug, Serialize, Deserialize)]".to_string(),
+                    "#[derive(Debug, Clone, Serialize, Deserialize)]".to_string(),
                 ],
                 properties: vec![
                     crate::parser::Property {
@@ -178,7 +178,8 @@ pub fn search_and_update_event(cddl_strings: Vec<&str>, event: &mut Event, event
                         format!(r#"#[serde(rename = "{}")]"#, method_name)
                     ];
                     let enum_attributes = vec![
-                        "#[derive(Debug, Serialize, Deserialize)]".to_string()
+                        "#[derive(Debug, Clone, Serialize, Deserialize)]".to_string(),
+                        "#[serde(untagged)]".to_string()
                     ];
 
                     event_def.event_methods.push(EventMethods {

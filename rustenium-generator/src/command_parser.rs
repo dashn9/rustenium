@@ -77,7 +77,7 @@ pub fn parse_command_definition(name: String, content: String, cddl_strings: Vec
         command_methods: Vec::new(),
         command_params: Vec::new(),
         attributes: vec![
-            "#[derive(Debug, Serialize, Deserialize)]".to_string(),
+            "#[derive(Debug, Clone, Serialize, Deserialize)]".to_string(),
             "#[serde(untagged)]".to_string(),
         ],
     };
@@ -99,7 +99,7 @@ pub fn parse_command_definition(name: String, content: String, cddl_strings: Vec
                 name,
                 module_name,
                 attributes: vec![
-                    "#[derive(Debug, Serialize, Deserialize)]".to_string(),
+                    "#[derive(Debug, Clone, Serialize, Deserialize)]".to_string(),
                 ],
                 properties: vec![
                     crate::parser::Property {
@@ -237,7 +237,8 @@ pub fn search_and_update_command(cddl_strings: Vec<&str>, command: &mut Command,
                     format!(r#"#[serde(rename = "{}")]"#, method_name)
                 ];
                 let enum_attributes = vec![
-                    "#[derive(Debug, Serialize, Deserialize)]".to_string()
+                    "#[derive(Debug, Clone, Serialize, Deserialize)]".to_string(),
+                    "#[serde(untagged)]".to_string()
                 ];
 
                 // TODO: Use The Method within the body of the cddl as it is the more idiomatic way
@@ -315,7 +316,7 @@ pub fn parse_result_definition(name: String, content: String, cddl_strings: Vec<
         content: content.clone(),
         results: Vec::new(),
         attributes: vec![
-            "#[derive(Debug, Serialize, Deserialize)]".to_string(),
+            "#[derive(Debug, Clone, Serialize, Deserialize)]".to_string(),
             "#[serde(untagged)]".to_string(),
         ],
     };
@@ -333,7 +334,7 @@ pub fn parse_result_definition(name: String, content: String, cddl_strings: Vec<
                 module_name,
                 properties: Vec::new(),
                 attributes: vec![
-                    "#[derive(Debug, Serialize, Deserialize)]".to_string(),
+                    "#[derive(Debug, Clone, Serialize, Deserialize)]".to_string(),
                 ],
                 content: String::new(),
                 is_alias: false,

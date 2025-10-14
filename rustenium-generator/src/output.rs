@@ -276,10 +276,40 @@ fn generate_root_mod(modules: &[Module], root_protocol: &crate::module::RootProt
     output.push_str("use serde::{Serialize, Deserialize};\n");
     output.push_str("use std::collections::HashMap;\n\n");
 
-    // Declare module imports
+    // Declare all modules
     for module in modules {
         let module_snake = to_snake_case(&module.name);
         output.push_str(&format!("pub mod {};\n", module_snake));
+    }
+    output.push_str("\n");
+
+    // Re-export all definition enums
+    for module in modules {
+        let module_snake = to_snake_case(&module.name);
+
+        // Explicitly re-export command definition enum
+        if let Some(ref cmd_def) = module.command_definition {
+            output.push_str(&format!("pub use {}::commands::{};\n",
+                module_snake,
+                cmd_def.name
+            ));
+        }
+
+        // Explicitly re-export result definition enum
+        if let Some(ref result_def) = module.result_definition {
+            output.push_str(&format!("pub use {}::commands::{};\n",
+                module_snake,
+                result_def.name
+            ));
+        }
+
+        // Explicitly re-export event definition enum
+        if let Some(ref event_def) = module.event_definition {
+            output.push_str(&format!("pub use {}::events::{};\n",
+                module_snake,
+                event_def.name
+            ));
+        }
     }
     output.push_str("\n");
 
@@ -977,10 +1007,12 @@ fn generate_rust_enum(name: &str, properties: &[crate::parser::Property], module
     output.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
 
     // Check if we need untagged serde for union types
-    let is_union = properties.iter().any(|p| p.attributes.iter().any(|a| a.contains("serde(rename")));
-    if is_union {
-        output.push_str("#[serde(untagged)]\n");
-    }
+    // let is_union = properties.iter().any(|p| p.attributes.iter().any(|a| a.contains("serde(rename")));
+    // if is_union {
+    //     output.push_str("#[serde(untagged)]\n");
+    // }
+    // All enums should have untagged serde
+    output.push_str("#[serde(untagged)]\n");
 
     output.push_str(&format!("pub enum {} {{\n", name));
 
