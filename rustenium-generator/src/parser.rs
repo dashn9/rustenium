@@ -791,6 +791,23 @@ fn generate_type_if_same_module(type_name: &str, content: &str, def_type: &str, 
     result
 }
 
+/// Checks if a type should be wrapped in Box<> for specific edge cases
+///
+/// # Arguments
+/// * `type_name` - The type name to check
+/// * `property_name` - Optional property name for context
+///
+/// # Returns
+/// True if the type should be boxed
+fn should_box_type(type_name: &str, property_name: Option<&str>) -> bool {
+    // Edge case 2: shadow_root property with type NodePropertiesAttributes
+    if type_name == "NodeRemoteValue" && property_name == Some("shadowRoot") {
+        return true;
+    }
+
+    false
+}
+
 /// Parses a custom CDDL type and handles generation if it's in the same module
 ///
 /// # Arguments
@@ -971,15 +988,26 @@ fn parse_custom_type(type_name: &str, cddl_strings: &[&str], current_module: &mu
 
             // Generate type if needed
             if let Some(generated_name) = generate_type_if_same_module(type_name, &type_content, &def_type, cddl_strings, current_module) {
+                // Edge case: Box wrapper for known recursive types
+                if should_box_type(&generated_name, property_name) {
+                    return (format!("Box<{}>", generated_name), None);
+                }
                 return (generated_name, None);
             }
         }
 
         // Return only the type name (without module prefix)
-        let result_type = if let Some(dot_pos) = type_name.find('.') {
+        let clean_type_name = if let Some(dot_pos) = type_name.find('.') {
             type_name[dot_pos + 1..].to_string()
         } else {
             type_name.to_string()
+        };
+
+        // Edge case: Box wrapper for known recursive types
+        let result_type = if should_box_type(&clean_type_name, property_name) {
+            format!("Box<{}>", clean_type_name)
+        } else {
+            clean_type_name
         };
         (result_type, None)
     } else {

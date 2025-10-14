@@ -326,6 +326,10 @@ fn generate_root_mod(modules: &[Module], root_protocol: &crate::module::RootProt
     output.push_str(&generate_rust_enum("EventData", &root_protocol.event_data.properties, "root"));
     output.push_str("\n\n");
 
+    // Generate ErrorCode
+    output.push_str(&generate_rust_enum("ErrorCode", &root_protocol.error_code.properties, "root"));
+    output.push_str("\n\n");
+
     // Generate additional types (like SuccessEnum, ErrorEnum, EventEnum)
     for bidi_type in &root_protocol.additional_types {
         if bidi_type.is_enum {

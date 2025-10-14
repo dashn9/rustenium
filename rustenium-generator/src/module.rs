@@ -78,6 +78,11 @@ pub struct EventDataType {
 }
 
 #[derive(Debug)]
+pub struct ErrorCodeType {
+    pub properties: Vec<crate::parser::Property>,
+}
+
+#[derive(Debug)]
 pub struct RootProtocol {
     pub command: CommandType,
     pub command_data: CommandDataType,
@@ -89,6 +94,7 @@ pub struct RootProtocol {
     pub empty_result: EmptyResultType,
     pub event: EventType,
     pub event_data: EventDataType,
+    pub error_code: ErrorCodeType,
     pub additional_types: Vec<BidiType>,
 }
 
@@ -166,6 +172,11 @@ pub fn detect_root_protocol(cddl_strings: Vec<&str>) -> Result<RootProtocol, Box
     let properties = unwrap_union_property(properties, &mut temp_module);
     let event_data = EventDataType { properties };
 
+    let (content, _) = crate::parser::find_and_extract_type_content("ErrorCode", &cddl_strings, &temp_module).unwrap();
+    let (properties, _) = crate::parser::process_cddl_to_struct(&content, cddl_strings.clone(), &mut temp_module, Some("ErrorCode"))?;
+    let properties = unwrap_union_property(properties, &mut temp_module);
+    let error_code = ErrorCodeType { properties };
+
     // Extract any additional types that were generated (like SuccessEnum, ErrorEnum, EventEnum)
     let additional_types = temp_module.types;
 
@@ -180,6 +191,7 @@ pub fn detect_root_protocol(cddl_strings: Vec<&str>) -> Result<RootProtocol, Box
         empty_result,
         event,
         event_data,
+        error_code,
         additional_types,
     })
 }
