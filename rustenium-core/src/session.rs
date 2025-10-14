@@ -1,5 +1,5 @@
 use rand::Rng;
-use rustenium_bidi_commands::{Command, CommandData, CommandResult, ErrorResponse};
+use rustenium_bidi_commands::{Command, CommandData, CommandResponse, ErrorResponse};
 use rustenium_bidi_commands::session::commands::{New as SessionNew, NewMethod as SessionNewMethod, NewParameters as SessionNewParameters, SessionCommand, SessionResult};
 use rustenium_bidi_commands::session::types::CapabilitiesRequest;
 use tokio::sync::oneshot;
@@ -45,7 +45,7 @@ impl<'a, T: ConnectionTransport<'a>> Session<'a, T> {
                 match command_result {
                     Ok(command_result) => {
                         match command_result {
-                            CommandResult::SessionResult(session_result) => {
+                            CommandResponse::SessionResult(session_result) => {
                                 match session_result {
                                     SessionResult::NewResult(new_session_result) => {
                                         self.id = Some(new_session_result.session_id);
@@ -62,7 +62,7 @@ impl<'a, T: ConnectionTransport<'a>> Session<'a, T> {
         }
     }
 
-    async fn send(&mut self, command_data: CommandData) -> Result<CommandResult, ErrorResponse>  {
+    async fn send(&mut self, command_data: CommandData) -> Result<CommandResponse, ErrorResponse>  {
         let command_id = loop {
             let id = rand::rng().random::<u32>();
             if !self.connection.commands_response_subscriptions.lock().await.contains_key(&id) {

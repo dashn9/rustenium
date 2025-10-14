@@ -20,7 +20,5 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     output::generate_output(&modules, &root_protocol)?;
 
-    println!("Generated {} modules to ./output", modules.len());
-
     Ok(())
 }

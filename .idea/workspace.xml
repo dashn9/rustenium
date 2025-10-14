@@ -22,10 +22,42 @@
   <component name="ChangeListManager">
     <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-generator/src/command_parser.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/command_parser.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-generator/src/event_parser.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/event_parser.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/browser/commands.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/browser/commands.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/browser/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/browser/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/browser/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/browser/types.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/commands.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/commands.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/events.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/events.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/types.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/emulation/commands.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/emulation/commands.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/emulation/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/emulation/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/input/commands.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/input/commands.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/input/events.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/input/events.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/input/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/input/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/input/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/input/types.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/lib.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/log/events.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/log/events.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/log/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/log/types.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/network/commands.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/network/commands.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/network/events.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/network/events.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/network/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/network/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/network/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/network/types.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/script/commands.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/script/commands.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/script/events.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/script/events.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/script/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/script/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/script/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/script/types.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/session/commands.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/session/commands.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/session/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/session/types.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/storage/commands.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/storage/commands.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/storage/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/storage/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/storage/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/storage/types.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/web_extension/commands.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/web_extension/commands.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/web_extension/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/web_extension/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/web_extension/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/web_extension/types.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-core/src/connection.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/connection.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-core/src/listeners.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/listeners.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-core/src/session.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/session.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-generator/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/main.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-generator/src/output.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/output.rs" afterDir="false" />
     </list>

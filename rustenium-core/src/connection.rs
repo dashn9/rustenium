@@ -1,7 +1,7 @@
 use std::{collections::HashMap, net::TcpListener};
 use std::sync::Arc;
 use tokio::sync::mpsc::unbounded_channel;
-use rustenium_bidi_commands::{CommandResult, Event};
+use rustenium_bidi_commands::{CommandResponse, Event};
 use tokio::sync::{oneshot, Mutex};
 
 use crate::{listeners::CommandResponseState, transport::ConnectionTransport};

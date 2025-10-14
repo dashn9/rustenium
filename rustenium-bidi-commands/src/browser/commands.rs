@@ -1,165 +1,159 @@
-use serde::{Serialize, Deserialize};
-use serde_cbor;
-use crate::browser::types::{ClientWindow, UserContext, UserContextInfo};
-pub type CreateUserContextResult = UserContextInfo;
+// Generated commands for module
 
-#[derive(Debug, Serialize, Deserialize)]
+use serde::{Serialize, Deserialize};
+use crate::session::types::ProxyConfiguration;
+use crate::session::types::UserPromptHandler;
+use crate::Extensible;
+use super::types::*;
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum BrowserCommand {
-	Close(Close),
-	CreateUserContext(CreateUserContext),
-	GetClientWindows(GetClientWindows),
-	GetUserContexts(GetUserContexts),
-	RemoveUserContext(RemoveUserContext),
-	SetClientWindowState(SetClientWindowState),
+    Close(Close),
+    CreateUserContext(CreateUserContext),
+    GetClientWindows(GetClientWindows),
+    GetUserContexts(GetUserContexts),
+    RemoveUserContext(RemoveUserContext),
+    SetClientWindowState(SetClientWindowState),
 }
 
-pub enum BrowserResult {
-	CreateUserContextResult(CreateUserContextResult),
-	GetUserContextsResult(GetUserContextsResult),
-}
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ClientWindowState {
-	ClientWindowNamedState(ClientWindowNamedState),
-	ClientWindowRectState(ClientWindowRectState),
+pub enum BrowserCloseMethod {
+    #[serde(rename = "browser.Close")]
+    BrowserClose,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct GetUserContextsResult {
-	pub user_contexts: Vec<UserContextInfo>,
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum BrowserCreateUserContextMethod {
+    #[serde(rename = "browser.CreateUserContext")]
+    BrowserCreateUserContext,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub enum CloseMethod {
-	#[serde(rename = "browser.close")]
-	BrowserClose,
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum BrowserGetClientWindowsMethod {
+    #[serde(rename = "browser.GetClientWindows")]
+    BrowserGetClientWindows,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Close {
-	#[serde(rename = "method")]
-	pub method: CloseMethod,
-	#[serde(rename = "params")]
-	pub params: Option<serde_cbor::Value>,
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum BrowserGetUserContextsMethod {
+    #[serde(rename = "browser.GetUserContexts")]
+    BrowserGetUserContexts,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub enum CreateUserContextMethod {
-	#[serde(rename = "browser.createUserContext")]
-	BrowserCreateUserContext,
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum BrowserRemoveUserContextMethod {
+    #[serde(rename = "browser.RemoveUserContext")]
+    BrowserRemoveUserContext,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct CreateUserContext {
-	#[serde(rename = "method")]
-	pub method: CreateUserContextMethod,
-	#[serde(rename = "params")]
-	pub params: Option<serde_cbor::Value>,
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum BrowserSetClientWindowStateMethod {
+    #[serde(rename = "browser.SetClientWindowState")]
+    BrowserSetClientWindowState,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub enum GetClientWindowsMethod {
-	#[serde(rename = "browser.getClientWindows")]
-	BrowserGetClientWindows,
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum EmptyParams {
+    Extensible(Extensible),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct GetClientWindows {
-	#[serde(rename = "method")]
-	pub method: GetClientWindowsMethod,
-	#[serde(rename = "params")]
-	pub params: Option<serde_cbor::Value>,
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateUserContextParameters {
+    #[serde(rename = "acceptInsecureCerts")]
+    pub accept_insecure_certs: Option<bool>,
+    #[serde(rename = "proxy")]
+    pub proxy: Option<ProxyConfiguration>,
+    #[serde(rename = "unhandledPromptBehavior")]
+    pub unhandled_prompt_behavior: Option<UserPromptHandler>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub enum GetUserContextsMethod {
-	#[serde(rename = "browser.getUserContexts")]
-	BrowserGetUserContexts,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct GetUserContexts {
-	#[serde(rename = "method")]
-	pub method: GetUserContextsMethod,
-	#[serde(rename = "params")]
-	pub params: Option<serde_cbor::Value>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub enum RemoveUserContextMethod {
-	#[serde(rename = "browser.removeUserContext")]
-	BrowserRemoveUserContext,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub enum SetClientWindowStateMethod {
-	#[serde(rename = "browser.setClientWindowState")]
-	BrowserSetClientWindowState,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "lowercase")]
-pub enum ClientWindowNamedStateType {
-	Fullscreen,
-	Maximized,
-	Minimized,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub enum ClientWindowRectStateType {
-	#[serde(rename = "normal")]
-	Normal,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct ClientWindowNamedState {
-	#[serde(rename = "state")]
-	pub state: ClientWindowNamedStateType,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct ClientWindowRectState {
-	#[serde(rename = "state")]
-	pub state: ClientWindowRectStateType,
-	#[serde(skip_serializing_if = "Option::is_none", rename = "width")]
-	pub width: Option<u32>,
-	#[serde(skip_serializing_if = "Option::is_none", rename = "height")]
-	pub height: Option<u32>,
-	#[serde(skip_serializing_if = "Option::is_none", rename = "x")]
-	pub x: Option<i32>,
-	#[serde(skip_serializing_if = "Option::is_none", rename = "y")]
-	pub y: Option<i32>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct RemoveUserContextParameters {
-	#[serde(rename = "userContext")]
-	pub user_context: UserContext,
+    #[serde(rename = "userContext")]
+    pub user_context: UserContext,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SetClientWindowStateParameters {
-	#[serde(rename = "clientWindow")]
-	pub client_window: ClientWindow,
-	#[serde(flatten)]
-	pub extesnsion: ClientWindowState,
+    #[serde(rename = "clientWindow")]
+    pub client_window: ClientWindow,
+    #[serde(flatten)]
+    pub client_window_named_state_client_window_rect_state_union: ClientWindowNamedStateClientWindowRectStateUnion,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Close {
+    #[serde(rename = "method")]
+    pub method: BrowserCloseMethod,
+    #[serde(rename = "params")]
+    pub params: EmptyParams,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateUserContext {
+    #[serde(rename = "method")]
+    pub method: BrowserCreateUserContextMethod,
+    #[serde(rename = "params")]
+    pub params: CreateUserContextParameters,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetClientWindows {
+    #[serde(rename = "method")]
+    pub method: BrowserGetClientWindowsMethod,
+    #[serde(rename = "params")]
+    pub params: EmptyParams,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetUserContexts {
+    #[serde(rename = "method")]
+    pub method: BrowserGetUserContextsMethod,
+    #[serde(rename = "params")]
+    pub params: EmptyParams,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct RemoveUserContext {
-	#[serde(rename = "method")]
-	pub method: RemoveUserContextMethod,
-	#[serde(rename = "params")]
-	pub params: RemoveUserContextParameters,
+    #[serde(rename = "method")]
+    pub method: BrowserRemoveUserContextMethod,
+    #[serde(rename = "params")]
+    pub params: RemoveUserContextParameters,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SetClientWindowState {
-	#[serde(rename = "method")]
-	pub method: SetClientWindowStateMethod,
-	#[serde(rename = "params")]
-	pub params: SetClientWindowStateParameters,
+    #[serde(rename = "method")]
+    pub method: BrowserSetClientWindowStateMethod,
+    #[serde(rename = "params")]
+    pub params: SetClientWindowStateParameters,
+}
+
+// Generated results
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum BrowserResult {
+    CreateUserContextResult(CreateUserContextResult),
+    GetUserContextsResult(GetUserContextsResult),
+}
+
+
+pub type CreateUserContextResult = UserContextInfo;
+
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetUserContextsResult {
+    #[serde(rename = "userContexts")]
+    pub user_contexts: Vec<UserContextInfo>,
 }
 

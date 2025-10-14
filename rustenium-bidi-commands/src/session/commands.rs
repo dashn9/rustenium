@@ -1,152 +1,156 @@
+// Generated commands for module
+
 use serde::{Serialize, Deserialize};
+use crate::browser::types::UserContext;
+use crate::browsing_context::types::BrowsingContext;
+use crate::Extensible;
+use super::types::*;
 
-use super::types::{CapabilitiesRequest, ProxyConfiguration, ProxyConfigurationOption, SubscriptionRequest, UnsubscribeByAttributesRequest, UnsubscribeByIDRequest, UserPromptHandler, UserPromptHandlerOption};
-
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum SessionCommand {
-	End(End),
-	New(New),
-	Status(Status),
-	Subscribe(Subscribe),
-	Unsubscribe(Unsubscribe),
+    End(End),
+    New(New),
+    Status(Status),
+    Subscribe(Subscribe),
+    Unsubscribe(Unsubscribe),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum SessionResult {
-	NewResult(NewResult),
-	StatusResult(StatusResult),
-	SubscribeResult(SubscribeResult),
+pub enum SessionEndMethod {
+    #[serde(rename = "session.End")]
+    SessionEnd,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct NewResult {
-    #[serde(rename = "sessionId")]
-    pub session_id: String,
-    #[serde(rename = "capabilities")]
-    pub capabilities: Capabilities,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Capabilities {
-    #[serde(rename = "acceptInsecureCerts")]
-    pub accept_insecure_certs: bool,
-    #[serde(rename = "browserName")]
-    pub browser_name: String,
-    #[serde(rename = "browserVersion")]
-    pub browser_version: String,
-    #[serde(rename = "platformName")]
-    pub platform_name: String,
-    #[serde(rename = "setWindowRect")]
-    pub set_window_rect: bool,
-    #[serde(rename = "userAgent")]
-    // TODO: Remove Option from UserAgent, CDDL Definition Specified it's always going to be present, however, It was absent during testing which might have been because I wasn't using the right chrome version for the driver, Once ChromeOptions has been created to help with this and confirms it's present, remove.
-    pub user_agent: Option<String>,
-    #[serde(rename = "proxy")]
-    pub proxy: ProxyConfigurationOption,
-    #[serde(rename = "unhandledPromptBehavior")]
-    pub unhandled_prompt_behavior: UserPromptHandlerOption,
-    #[serde(skip_serializing_if = "Option::is_none", rename = "webSocketUrl")]
-    pub web_socket_url: Option<String>,
-    #[serde(flatten)]
-    pub extension: Option<serde_cbor::Value>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct StatusResult {
-    #[serde(rename = "ready")]
-    pub ready: bool,
-    #[serde(rename = "message")]
-    pub message: String,  // 'text' type maps to String in Rust
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct SubscribeResult {
-    #[serde(rename = "subscription")]
-    pub subscription: String,  // Based on usage in UnsubscribeByIDRequest, Subscription appears to be a String
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub enum StatusMethod {
-    #[serde(rename = "session.status")]
-    SessionStatus,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Status {
-    #[serde(rename = "method")]
-    pub method: StatusMethod,
-    #[serde(rename = "params")]
-    pub params: Option<serde_cbor::Value>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub enum NewMethod {
-    #[serde(rename = "session.new")]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum SessionNewMethod {
+    #[serde(rename = "session.New")]
     SessionNew,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum SessionStatusMethod {
+    #[serde(rename = "session.Status")]
+    SessionStatus,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum SessionSubscribeMethod {
+    #[serde(rename = "session.Subscribe")]
+    SessionSubscribe,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum SessionUnsubscribeMethod {
+    #[serde(rename = "session.Unsubscribe")]
+    SessionUnsubscribe,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum EmptyParams {
+    Extensible(Extensible),
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NewParameters {
+    #[serde(rename = "capabilities")]
+    pub capabilities: CapabilitiesRequest,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SubscriptionRequest {
+    #[serde(rename = "events")]
+    pub events: Vec<String>,
+    #[serde(rename = "contexts")]
+    pub contexts: Option<Vec<BrowsingContext>>,
+    #[serde(rename = "userContexts")]
+    pub user_contexts: Option<Vec<UserContext>>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum UnsubscribeParameters {
+    UnsubscribeByAttributesRequest(UnsubscribeByAttributesRequest),
+    UnsubscribeByIDRequest(UnsubscribeByIDRequest),
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct End {
+    #[serde(rename = "method")]
+    pub method: SessionEndMethod,
+    #[serde(rename = "params")]
+    pub params: EmptyParams,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct New {
     #[serde(rename = "method")]
-    pub method: NewMethod,
+    pub method: SessionNewMethod,
     #[serde(rename = "params")]
     pub params: NewParameters,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct NewParameters {
-	#[serde(rename = "capabilities")]
-	pub capabilities: CapabilitiesRequest,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub enum EndMethod {
-    #[serde(rename = "session.end")]
-    SessionEnd,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct End {
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Status {
     #[serde(rename = "method")]
-    pub method: EndMethod,
+    pub method: SessionStatusMethod,
     #[serde(rename = "params")]
-    pub params: Option<serde_cbor::Value>,
+    pub params: EmptyParams,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub enum SubscribeMethod {
-    #[serde(rename = "session.subscribe")]
-    SessionSubscribe,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Subscribe {
     #[serde(rename = "method")]
-    pub method: SubscribeMethod,
+    pub method: SessionSubscribeMethod,
     #[serde(rename = "params")]
     pub params: SubscriptionRequest,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub enum UnsubscribeMethod {
-    #[serde(rename = "session.unsubscribe")]
-    SessionUnsubscribe,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Unsubscribe {
     #[serde(rename = "method")]
-    pub method: UnsubscribeMethod,
-
+    pub method: SessionUnsubscribeMethod,
     #[serde(rename = "params")]
     pub params: UnsubscribeParameters,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+// Generated results
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum UnsubscribeParameters {
-    ByAttributes(UnsubscribeByAttributesRequest),
-    ById(UnsubscribeByIDRequest),
+pub enum SessionResult {
+    NewResult(NewResult),
+    StatusResult(StatusResult),
+    SubscribeResult(SubscribeResult),
 }
+
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NewResult {
+    #[serde(rename = "sessionId")]
+    pub session_id: String,
+    #[serde(rename = "capabilities")]
+    pub capabilities: NewResultCapabilities,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct StatusResult {
+    #[serde(rename = "ready")]
+    pub ready: bool,
+    #[serde(rename = "message")]
+    pub message: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SubscribeResult {
+    #[serde(rename = "subscription")]
+    pub subscription: Subscription,
+}
+

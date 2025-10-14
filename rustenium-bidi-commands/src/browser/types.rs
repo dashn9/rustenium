@@ -1,49 +1,61 @@
-use serde::{Deserialize, Serialize};
+// Generated types for module
 
-pub type ClientWindow = String;
+use serde::{Serialize, Deserialize};
+
 pub type UserContext = String;
 
-pub type CreateUserContextResult = UserContextInfo;
 
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "lowercase")]
-pub enum ClientWindowState {
-	Fullscreen,
-	Maximized,
-	Minimized,
-	Normal,
+pub type ClientWindow = String;
+
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum StateUnion {
+    #[serde(rename = "fullscreen")]
+    Fullscreen,
+    #[serde(rename = "maximized")]
+    Maximized,
+    #[serde(rename = "minimized")]
+    Minimized,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "lowercase")]
-pub enum ClientWindowInfoState {
-	Fullscreen,
-	Maximized,
-	Minimized,
-	Normal,
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ClientWindowNamedState {
+    #[serde(rename = "state")]
+    pub state: StateUnion,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct ClientWindowInfo {
-	#[serde(rename = "active")]
-	pub active: bool,
-	#[serde(rename = "clientWindow")]
-	pub client_window: ClientWindow,
-	#[serde(rename = "height")]
-	pub height: u32,
-	#[serde(rename = "state")]
-	pub state: ClientWindowInfoState,
-	#[serde(rename = "width")]
-	pub width: u32,
-	#[serde(rename = "x")]
-	pub x: i32,
-	#[serde(rename = "y")]
-	pub y: i32,
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum NormalEnum {
+    #[serde(rename = "normal")]
+    Normal,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ClientWindowRectState {
+    #[serde(rename = "state")]
+    pub state: NormalEnum,
+    #[serde(rename = "width")]
+    pub width: Option<u64>,
+    #[serde(rename = "height")]
+    pub height: Option<u64>,
+    #[serde(rename = "x")]
+    pub x: Option<i64>,
+    #[serde(rename = "y")]
+    pub y: Option<i64>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum ClientWindowNamedStateClientWindowRectStateUnion {
+    ClientWindowNamedState(ClientWindowNamedState),
+    ClientWindowRectState(ClientWindowRectState),
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UserContextInfo {
-	#[serde(rename = "userContext")]
-	pub user_context: UserContext,
+    #[serde(rename = "userContext")]
+    pub user_context: UserContext,
 }
 

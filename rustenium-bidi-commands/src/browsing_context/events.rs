@@ -1,245 +1,249 @@
+// Generated events for module
+
 use serde::{Serialize, Deserialize};
-use super::types::{BaseNavigationInfo, BrowsingContext, Info, NavigationInfo, UserPromptType};
+use super::types::*;
 
-use super::types::UserPromptHandlerType;
-
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
 pub enum BrowsingContextEvent {
-	ContextCreated(ContextCreated),
-	ContextDestroyed(ContextDestroyed),
-	DomContentLoaded(DomContentLoaded),
-	DownloadWillBegin(DownloadWillBegin),
-	FragmentNavigated(FragmentNavigated),
-	HistoryUpdated(HistoryUpdated),
-	Load(Load),
-	NavigationAborted(NavigationAborted),
-	NavigationCommitted(NavigationCommitted),
-	NavigationFailed(NavigationFailed),
-	NavigationStarted(NavigationStarted),
-	UserPromptClosed(UserPromptClosed),
-	UserPromptOpened(UserPromptOpened),
+    ContextCreated(ContextCreated),
+    ContextDestroyed(ContextDestroyed),
+    DomContentLoaded(DomContentLoaded),
+    DownloadEnd(DownloadEnd),
+    DownloadWillBegin(DownloadWillBegin),
+    FragmentNavigated(FragmentNavigated),
+    HistoryUpdated(HistoryUpdated),
+    Load(Load),
+    NavigationAborted(NavigationAborted),
+    NavigationCommitted(NavigationCommitted),
+    NavigationFailed(NavigationFailed),
+    NavigationStarted(NavigationStarted),
+    UserPromptClosed(UserPromptClosed),
+    UserPromptOpened(UserPromptOpened),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-enum ContextCreatedMethod {
-	#[serde(rename = "browsingContext.contextCreated")]
-	BrowsingContextContextCreated,
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum BrowsingContextContextCreatedMethod {
+    #[serde(rename = "browsingContext.ContextCreated")]
+    BrowsingContextContextCreated,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-enum ContextDestroyedMethod {
-	#[serde(rename = "browsingContext.contextDestroyed")]
-	BrowsingContextContextDestroyed,
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum BrowsingContextContextDestroyedMethod {
+    #[serde(rename = "browsingContext.ContextDestroyed")]
+    BrowsingContextContextDestroyed,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-enum NavigationStartedMethod {
-	#[serde(rename = "browsingContext.navigationStarted")]
-	BrowsingContextNavigationStarted,
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum BrowsingContextDomContentLoadedMethod {
+    #[serde(rename = "browsingContext.DomContentLoaded")]
+    BrowsingContextDomContentLoaded,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-enum FragmentNavigatedMethod {
-	#[serde(rename = "browsingContext.fragmentNavigated")]
-	BrowsingContextFragmentNavigated,
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum BrowsingContextDownloadEndMethod {
+    #[serde(rename = "browsingContext.DownloadEnd")]
+    BrowsingContextDownloadEnd,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-enum HistoryUpdatedMethod {
-	#[serde(rename = "browsingContext.historyUpdated")]
-	BrowsingContextHistoryUpdated,
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum BrowsingContextDownloadWillBeginMethod {
+    #[serde(rename = "browsingContext.DownloadWillBegin")]
+    BrowsingContextDownloadWillBegin,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-enum DomContentLoadedMethod {
-	#[serde(rename = "browsingContext.domContentLoaded")]
-	BrowsingContextDomContentLoaded,
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum BrowsingContextFragmentNavigatedMethod {
+    #[serde(rename = "browsingContext.FragmentNavigated")]
+    BrowsingContextFragmentNavigated,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-enum LoadMethod {
-	#[serde(rename = "browsingContext.load")]
-	BrowsingContextLoad,
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum BrowsingContextHistoryUpdatedMethod {
+    #[serde(rename = "browsingContext.HistoryUpdated")]
+    BrowsingContextHistoryUpdated,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-enum DownloadWillBeginMethod {
-	#[serde(rename = "browsingContext.downloadWillBegin")]
-	BrowsingContextDownloadWillBegin,
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum BrowsingContextLoadMethod {
+    #[serde(rename = "browsingContext.Load")]
+    BrowsingContextLoad,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-enum NavigationAbortedMethod {
-	#[serde(rename = "browsingContext.navigationAborted")]
-	BrowsingContextNavigationAborted,
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum BrowsingContextNavigationAbortedMethod {
+    #[serde(rename = "browsingContext.NavigationAborted")]
+    BrowsingContextNavigationAborted,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-enum NavigationCommittedMethod {
-	#[serde(rename = "browsingContext.navigationCommitted")]
-	BrowsingContextNavigationCommitted,
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum BrowsingContextNavigationCommittedMethod {
+    #[serde(rename = "browsingContext.NavigationCommitted")]
+    BrowsingContextNavigationCommitted,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-enum NavigationFailedMethod {
-	#[serde(rename = "browsingContext.navigationFailed")]
-	BrowsingContextNavigationFailed,
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum BrowsingContextNavigationFailedMethod {
+    #[serde(rename = "browsingContext.NavigationFailed")]
+    BrowsingContextNavigationFailed,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-enum UserPromptClosedMethod {
-	#[serde(rename = "browsingContext.userPromptClosed")]
-	BrowsingContextUserPromptClosed,
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum BrowsingContextNavigationStartedMethod {
+    #[serde(rename = "browsingContext.NavigationStarted")]
+    BrowsingContextNavigationStarted,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-enum UserPromptOpenedMethod {
-	#[serde(rename = "browsingContext.userPromptOpened")]
-	BrowsingContextUserPromptOpened,
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum BrowsingContextUserPromptClosedMethod {
+    #[serde(rename = "browsingContext.UserPromptClosed")]
+    BrowsingContextUserPromptClosed,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct ContextCreated {
-	#[serde(rename = "method")]
-	pub method: ContextCreatedMethod,
-	#[serde(rename = "params")]
-	pub params: Info,
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum BrowsingContextUserPromptOpenedMethod {
+    #[serde(rename = "browsingContext.UserPromptOpened")]
+    BrowsingContextUserPromptOpened,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct ContextDestroyed {
-	#[serde(rename = "method")]
-	pub method: ContextDestroyedMethod,
-	#[serde(rename = "params")]
-	pub params: Info,
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DownloadEndParams {
+    #[serde(flatten)]
+    pub download_canceled_params_download_complete_params_union: DownloadCanceledParamsDownloadCompleteParamsUnion,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct NavigationStarted {
-	#[serde(rename = "method")]
-	pub method: NavigationStartedMethod,
-	#[serde(rename = "params")]
-	pub params: NavigationInfo,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct FragmentNavigated {
-	#[serde(rename = "method")]
-	pub method: FragmentNavigatedMethod,
-	#[serde(rename = "params")]
-	pub params: NavigationInfo,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct HistoryUpdated {
-	#[serde(rename = "method")]
-	pub method: HistoryUpdatedMethod,
-	#[serde(rename = "params")]
-	pub params: HistoryUpdatedParameters,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct HistoryUpdatedParameters {
-	#[serde(rename = "context")]
-	pub context: BrowsingContext,
-	#[serde(rename = "url")]
-	pub url: String,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct DomContentLoaded {
-	#[serde(rename = "method")]
-	pub method: DomContentLoadedMethod,
-	#[serde(rename = "params")]
-	pub params: NavigationInfo,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Load {
-	#[serde(rename = "method")]
-	pub method: LoadMethod,
-	#[serde(rename = "params")]
-	pub params: NavigationInfo,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct DownloadWillBegin {
-	#[serde(rename = "method")]
-	pub method: DownloadWillBeginMethod,
-	#[serde(rename = "params")]
-	pub params: DownloadWillBeginParams,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DownloadWillBeginParams {
-	#[serde(rename = "suggestedFilename")]
-	pub suggested_filename: String,
-	pub base_navigation_info: BaseNavigationInfo,
+    #[serde(rename = "suggestedFilename")]
+    pub suggested_filename: String,
+    #[serde(flatten)]
+    pub base_navigation_info: BaseNavigationInfo,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ContextCreated {
+    #[serde(rename = "method")]
+    pub method: BrowsingContextContextCreatedMethod,
+    #[serde(rename = "params")]
+    pub params: Info,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ContextDestroyed {
+    #[serde(rename = "method")]
+    pub method: BrowsingContextContextDestroyedMethod,
+    #[serde(rename = "params")]
+    pub params: Info,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DomContentLoaded {
+    #[serde(rename = "method")]
+    pub method: BrowsingContextDomContentLoadedMethod,
+    #[serde(rename = "params")]
+    pub params: NavigationInfo,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DownloadEnd {
+    #[serde(rename = "method")]
+    pub method: BrowsingContextDownloadEndMethod,
+    #[serde(rename = "params")]
+    pub params: DownloadEndParams,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DownloadWillBegin {
+    #[serde(rename = "method")]
+    pub method: BrowsingContextDownloadWillBeginMethod,
+    #[serde(rename = "params")]
+    pub params: DownloadWillBeginParams,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FragmentNavigated {
+    #[serde(rename = "method")]
+    pub method: BrowsingContextFragmentNavigatedMethod,
+    #[serde(rename = "params")]
+    pub params: NavigationInfo,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct HistoryUpdated {
+    #[serde(rename = "method")]
+    pub method: BrowsingContextHistoryUpdatedMethod,
+    #[serde(rename = "params")]
+    pub params: HistoryUpdatedParameters,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Load {
+    #[serde(rename = "method")]
+    pub method: BrowsingContextLoadMethod,
+    #[serde(rename = "params")]
+    pub params: NavigationInfo,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NavigationAborted {
-	#[serde(rename = "method")]
-	pub method: NavigationAbortedMethod,
-	#[serde(rename = "params")]
-	pub params: NavigationInfo,
+    #[serde(rename = "method")]
+    pub method: BrowsingContextNavigationAbortedMethod,
+    #[serde(rename = "params")]
+    pub params: NavigationInfo,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NavigationCommitted {
-	#[serde(rename = "method")]
-	pub method: NavigationCommittedMethod,
-	#[serde(rename = "params")]
-	pub params: NavigationInfo,
+    #[serde(rename = "method")]
+    pub method: BrowsingContextNavigationCommittedMethod,
+    #[serde(rename = "params")]
+    pub params: NavigationInfo,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NavigationFailed {
-	#[serde(rename = "method")]
-	pub method: NavigationFailedMethod,
-	#[serde(rename = "params")]
-	pub params: NavigationInfo,
+    #[serde(rename = "method")]
+    pub method: BrowsingContextNavigationFailedMethod,
+    #[serde(rename = "params")]
+    pub params: NavigationInfo,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NavigationStarted {
+    #[serde(rename = "method")]
+    pub method: BrowsingContextNavigationStartedMethod,
+    #[serde(rename = "params")]
+    pub params: NavigationInfo,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UserPromptClosed {
-	#[serde(rename = "method")]
-	pub method: UserPromptClosedMethod,
-	#[serde(rename = "params")]
-	pub params: UserPromptClosedParameters,
+    #[serde(rename = "method")]
+    pub method: BrowsingContextUserPromptClosedMethod,
+    #[serde(rename = "params")]
+    pub params: UserPromptClosedParameters,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct UserPromptClosedParameters {
-	#[serde(rename = "context")]
-	pub context: BrowsingContext,
-	#[serde(rename = "accepted")]
-	pub accepted: bool,
-	#[serde(rename = "type")]
-	pub r#type: UserPromptType,
-	#[serde(skip_serializing_if = "Option::is_none", rename = "userText")]
-	pub user_text: Option<String>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UserPromptOpened {
-	#[serde(rename = "method")]
-	pub method: UserPromptOpenedMethod,
-	#[serde(rename = "params")]
-	pub params: UserPromptOpenedParameters,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct UserPromptOpenedParameters {
-	#[serde(rename = "context")]
-	pub context: BrowsingContext,
-	#[serde(rename = "handler")]
-	pub handler: UserPromptHandlerType,
-	#[serde(rename = "message")]
-	pub message: String,
-	#[serde(rename = "type")]
-	pub r#type: UserPromptType,
-	#[serde(skip_serializing_if = "Option::is_none", rename = "defaultValue")]
-	pub default_value: Option<String>,
+    #[serde(rename = "method")]
+    pub method: BrowsingContextUserPromptOpenedMethod,
+    #[serde(rename = "params")]
+    pub params: UserPromptOpenedParameters,
 }
 

@@ -1,79 +1,84 @@
+// Generated types for module
+
 use serde::{Serialize, Deserialize};
+use crate::script::types::RemoteValue;
+use crate::script::types::Source;
+use crate::script::types::StackTrace;
 
-use crate::script::types::{RemoteValue, Source, StackTrace};	
-
-#[derive(Debug, Serialize, Deserialize)]
-pub enum Entry {
-	GenericLogEntry(GenericLogEntry),
-	ConsoleLogEntry(ConsoleLogEntry),
-	JavascriptLogEntry(JavascriptLogEntry),
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct BaseLogEntry {
-	#[serde(rename = "level")]
-	pub level: Level,
-	#[serde(rename = "source")]
-	pub source: Source,
-	#[serde(rename = "text")]
-	pub text: Option<String>,
-	#[serde(rename = "timestamp")]
-	pub timestamp: u32,
-	#[serde(skip_serializing_if = "Option::is_none", rename = "stackTrace")]
-	pub stack_trace: Option<StackTrace>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "lowercase")]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
 pub enum Level {
-	Debug,
-	Info,
-	Warn,
-	Error,
+    #[serde(rename = "debug")]
+    Debug,
+    #[serde(rename = "info")]
+    Info,
+    #[serde(rename = "warn")]
+    Warn,
+    #[serde(rename = "error")]
+    Error,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BaseLogEntry {
+    #[serde(rename = "level")]
+    pub level: Level,
+    #[serde(rename = "source")]
+    pub source: Source,
+    #[serde(rename = "text")]
+    pub text: Option<String>,
+    #[serde(rename = "timestamp")]
+    pub timestamp: u64,
+    #[serde(rename = "stackTrace")]
+    pub stack_trace: Option<StackTrace>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GenericLogEntry {
-	#[serde(flatten)]
-	pub base: BaseLogEntry,
-
-	#[serde(rename = "type")]
-	pub r#type: String,
+    #[serde(flatten)]
+    pub base_log_entry: BaseLogEntry,
+    #[serde(rename = "type")]
+    pub r#type: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-enum ConsoleLogEntryType {
-	#[serde(rename = "console")]
-	Console,
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum ConsoleEnum {
+    #[serde(rename = "console")]
+    Console,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-enum JavascriptLogEntryType {
-	#[serde(rename = "javascript")]
-	Javascript,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ConsoleLogEntry {
-	#[serde(flatten)]
-	pub base: BaseLogEntry,
-
-	#[serde(rename = "type")]
-	pub r#type: ConsoleLogEntryType,
-
-	#[serde(rename = "method")]
-	pub method: String,
-
-	#[serde(rename = "args")]
-	pub args: Vec<RemoteValue>,
+    #[serde(flatten)]
+    pub base_log_entry: BaseLogEntry,
+    #[serde(rename = "type")]
+    pub r#type: ConsoleEnum,
+    #[serde(rename = "method")]
+    pub method: String,
+    #[serde(rename = "args")]
+    pub args: Vec<RemoteValue>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct JavascriptLogEntry {
-	#[serde(flatten)]
-	pub base: BaseLogEntry,
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum JavascriptEnum {
+    #[serde(rename = "javascript")]
+    Javascript,
+}
 
-	#[serde(rename = "type")]
-	pub r#type: JavascriptLogEntryType,
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct JavascriptLogEntry {
+    #[serde(flatten)]
+    pub base_log_entry: BaseLogEntry,
+    #[serde(rename = "type")]
+    pub r#type: JavascriptEnum,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum Entry {
+    GenericLogEntry(GenericLogEntry),
+    ConsoleLogEntry(ConsoleLogEntry),
+    JavascriptLogEntry(JavascriptLogEntry),
 }
 

@@ -1,129 +1,91 @@
-use serde::{Deserialize, Serialize};
+// Generated events for module
 
-use super::types::{BaseParameters, Initiator, ResponseData};
+use serde::{Serialize, Deserialize};
+use super::types::*;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
 pub enum NetworkEvent {
-	AuthRequired(AuthRequired),
-	BeforeRequestSent(BeforeRequestSent),
-	FetchError(FetchError),
-	ResponseCompleted(ResponseCompleted),
-	ResponseStarted(ResponseStarted),
+    AuthRequired(AuthRequired),
+    BeforeRequestSent(BeforeRequestSent),
+    FetchError(FetchError),
+    ResponseCompleted(ResponseCompleted),
+    ResponseStarted(ResponseStarted),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub enum AuthRequiredMethod {
-	#[serde(rename = "network.authRequired")]
-	NetworkAuthRequired,
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum NetworkAuthRequiredMethod {
+    #[serde(rename = "network.AuthRequired")]
+    NetworkAuthRequired,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum NetworkBeforeRequestSentMethod {
+    #[serde(rename = "network.BeforeRequestSent")]
+    NetworkBeforeRequestSent,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum NetworkFetchErrorMethod {
+    #[serde(rename = "network.FetchError")]
+    NetworkFetchError,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum NetworkResponseCompletedMethod {
+    #[serde(rename = "network.ResponseCompleted")]
+    NetworkResponseCompleted,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum NetworkResponseStartedMethod {
+    #[serde(rename = "network.ResponseStarted")]
+    NetworkResponseStarted,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AuthRequired {
-	#[serde(rename = "method")]
-	pub method: AuthRequiredMethod,
-	#[serde(rename = "params")]
-	pub params: AuthRequiredParameters,
+    #[serde(rename = "method")]
+    pub method: NetworkAuthRequiredMethod,
+    #[serde(rename = "params")]
+    pub params: AuthRequiredParameters,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct AuthRequiredParameters {
-	#[serde(flatten)]
-	pub base: BaseParameters,
-	#[serde(rename = "response")]
-	pub response: ResponseData,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub enum BeforeRequestSentMethod {
-	#[serde(rename = "network.beforeRequestSent")]
-	NetworkBeforeRequestSent,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct BeforeRequestSentParameters {
-	#[serde(flatten)]
-	pub base: BaseParameters,
-	#[serde(skip_serializing_if = "Option::is_none", rename = "initiator")]
-	pub initiator: Option<Initiator>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BeforeRequestSent {
-	#[serde(rename = "method")]
-	pub method: BeforeRequestSentMethod,
-
-	#[serde(rename = "params")]
-	pub params: BeforeRequestSentParameters,
+    #[serde(rename = "method")]
+    pub method: NetworkBeforeRequestSentMethod,
+    #[serde(rename = "params")]
+    pub params: BeforeRequestSentParameters,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub enum FetchErrorMethod {
-	#[serde(rename = "network.fetchError")]
-	FetchError,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct FetchErrorParameters {
-	#[serde(flatten)]
-	pub base: BaseParameters,
-
-	#[serde(rename = "errorText")]
-	pub error_text: String,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FetchError {
-	#[serde(rename = "method")]
-	pub method: FetchErrorMethod,
-
-	#[serde(rename = "params")]
-	pub params: FetchErrorParameters,
+    #[serde(rename = "method")]
+    pub method: NetworkFetchErrorMethod,
+    #[serde(rename = "params")]
+    pub params: FetchErrorParameters,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub enum ResponseCompletedMethod {
-	#[serde(rename = "network.responseCompleted")]
-	NetworkResponseCompleted,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct ResponseCompletedParameters {
-	#[serde(flatten)]
-	pub base: BaseParameters,
-
-	#[serde(rename = "response")]
-	pub response: ResponseData,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ResponseCompleted {
-	#[serde(rename = "method")]
-	pub method: ResponseCompletedMethod,
-
-	#[serde(rename = "params")]
-	pub params: ResponseCompletedParameters,
+    #[serde(rename = "method")]
+    pub method: NetworkResponseCompletedMethod,
+    #[serde(rename = "params")]
+    pub params: ResponseCompletedParameters,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub enum ResponseStartedMethod {
-	#[serde(rename = "network.responseStarted")]
-	NetworkResponseStarted,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct ResponseStartedParameters {
-	#[serde(flatten)]
-	pub base: BaseParameters,
-
-	#[serde(rename = "response")]
-	pub response: ResponseData,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ResponseStarted {
-	#[serde(rename = "method")]
-	pub method: ResponseStartedMethod,
-
-	#[serde(rename = "params")]
-	pub params: ResponseStartedParameters,
+    #[serde(rename = "method")]
+    pub method: NetworkResponseStartedMethod,
+    #[serde(rename = "params")]
+    pub params: ResponseStartedParameters,
 }
+

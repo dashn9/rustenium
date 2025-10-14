@@ -1,33 +1,27 @@
+// Generated events for module
+
 use serde::{Serialize, Deserialize};
+use super::types::*;
 
-use crate::browsing_context::types::BrowsingContext;
-use crate::script::types::SharedReference;
-
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
 pub enum InputEvent {
-	FileDialogOpened(FileDialogOpened),
+    FileDialogOpened(FileDialogOpened),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-enum FileDialogOpenedMethod {
-	InputFileDialogOpened,
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum InputFileDialogOpenedMethod {
+    #[serde(rename = "input.FileDialogOpened")]
+    InputFileDialogOpened,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FileDialogOpened {
-	#[serde(rename = "method")]
-	pub method: FileDialogOpenedMethod,
-	#[serde(rename = "params")]
-	pub params: FileDialogInfo,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct FileDialogInfo {
-	#[serde(rename = "context")]
-	pub context: BrowsingContext,
-	#[serde(skip_serializing_if = "Option::is_none", rename = "element")]
-	pub element: Option<SharedReference>,
-	#[serde(rename = "multiple")]
-	pub multiple: bool,
+    #[serde(rename = "method")]
+    pub method: InputFileDialogOpenedMethod,
+    #[serde(rename = "params")]
+    pub params: FileDialogInfo,
 }
 

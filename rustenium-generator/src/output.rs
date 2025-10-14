@@ -90,7 +90,7 @@ fn generate_external_imports(types: &[(String, String)]) -> String {
 
     for (module, type_name) in types {
         let module_snake = to_snake_case(module);
-        output.push_str(&format!("use crate::generated_output::{}::types::{};\n", module_snake, type_name));
+        output.push_str(&format!("use crate::{}::types::{};\n", module_snake, type_name));
     }
 
     output
@@ -253,23 +253,25 @@ fn clean_module_prefix(type_name: &str, current_module: &str) -> String {
 
 pub fn generate_output(modules: &[Module], root_protocol: &crate::module::RootProtocol) -> Result<(), Box<dyn std::error::Error>> {
     // Create output directory
-    let output_dir = "./src/generated_output";
+    let output_dir = "../rustenium-bidi-commands/src";
     if !Path::new(output_dir).exists() {
         fs::create_dir_all(output_dir)?;
     }
 
-    // Generate root mod.rs
-    generate_root_mod(modules, root_protocol, output_dir)?;
+    // Generate root lib.rs
+    generate_root_lib(modules, root_protocol, output_dir)?;
 
     // Generate files for each module
     for module in modules {
         generate_module_files(module, output_dir)?;
     }
 
+    println!("Generated {} modules to {}", modules.len(), output_dir);
+
     Ok(())
 }
 
-fn generate_root_mod(modules: &[Module], root_protocol: &crate::module::RootProtocol, output_dir: &str) -> Result<(), Box<dyn std::error::Error>> {
+fn generate_root_lib(modules: &[Module], root_protocol: &crate::module::RootProtocol, output_dir: &str) -> Result<(), Box<dyn std::error::Error>> {
     let mut output = String::new();
 
     // Add imports
@@ -372,8 +374,8 @@ fn generate_root_mod(modules: &[Module], root_protocol: &crate::module::RootProt
         output.push_str("\n\n");
     }
 
-    // Write to mod.rs
-    fs::write(format!("{}/mod.rs", output_dir), output)?;
+    // Write to lib.rs
+    fs::write(format!("{}/lib.rs", output_dir), output)?;
 
     Ok(())
 }
@@ -603,7 +605,7 @@ fn generate_commands_file(cmd_def: &crate::command_parser::CommandDefinition, mo
 
     // Import Extensible from root if used
     if uses_extensible(&all_properties) {
-        output.push_str("use crate::generated_output::Extensible;\n");
+        output.push_str("use crate::Extensible;\n");
     }
 
     // Import serde_valid if validation is used
@@ -693,7 +695,7 @@ fn generate_events_file(event_def: &crate::event_parser::EventDefinition, module
 
     // Import Extensible from root if used
     if uses_extensible(&all_properties) {
-        output.push_str("use crate::generated_output::Extensible;\n");
+        output.push_str("use crate::Extensible;\n");
     }
 
     // Import serde_valid if validation is used
@@ -802,7 +804,7 @@ fn generate_types_file(module: &Module) -> String {
 
     // Import Extensible from root if used
     if uses_extensible(&all_properties) {
-        output.push_str("use crate::generated_output::Extensible;\n");
+        output.push_str("use crate::Extensible;\n");
     }
 
     // Import serde_valid if validation is used
