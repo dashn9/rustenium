@@ -9,6 +9,8 @@ use crate::Extensible;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum DataType {
+    #[serde(rename = "request")]
+    Request,
     #[serde(rename = "response")]
     Response,
 }
@@ -206,7 +208,7 @@ pub struct ContinueWithAuthCredentials {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ActionUnion {
+pub enum ContinueWithAuthNoCredentialsactionUnion {
     #[serde(rename = "default")]
     Default,
     #[serde(rename = "cancel")]
@@ -216,7 +218,7 @@ pub enum ActionUnion {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ContinueWithAuthNoCredentials {
     #[serde(rename = "action")]
-    pub action: ActionUnion,
+    pub action: ContinueWithAuthNoCredentialsactionUnion,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -392,7 +394,7 @@ pub struct AuthRequiredParameters {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum TypeUnion {
+pub enum InitiatortypeUnion {
     #[serde(rename = "parser")]
     Parser,
     #[serde(rename = "script")]
@@ -419,7 +421,7 @@ pub struct Initiator {
     pub stack_trace: Option<StackTrace>,
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub r#type: Option<TypeUnion>,
+    pub r#type: Option<InitiatortypeUnion>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

@@ -3,6 +3,7 @@
 use serde::{Serialize, Deserialize};
 use crate::browsing_context::types::BrowsingContext;
 use crate::script::types::SharedReference;
+use crate::EmptyResult;
 use super::types::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -79,4 +80,24 @@ pub struct SetFiles {
     #[serde(rename = "params")]
     pub params: SetFilesParameters,
 }
+
+// Generated results
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum InputResult {
+    PerformActionsResult(PerformActionsResult),
+    ReleaseActionsResult(ReleaseActionsResult),
+    SetFilesResult(SetFilesResult),
+}
+
+
+pub type PerformActionsResult = EmptyResult;
+
+
+pub type ReleaseActionsResult = EmptyResult;
+
+
+pub type SetFilesResult = EmptyResult;
+
 

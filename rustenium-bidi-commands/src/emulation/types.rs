@@ -66,6 +66,22 @@ pub enum CoordinatesErrorUnion {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
+pub enum OfflineEnum {
+    #[serde(rename = "offline")]
+    Offline,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NetworkConditionsOffline {
+    #[serde(rename = "type")]
+    pub r#type: OfflineEnum,
+}
+
+pub type NetworkConditions = NetworkConditionsOffline;
+
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
 pub enum ScreenOrientationNatural {
     #[serde(rename = "portrait")]
     Portrait,

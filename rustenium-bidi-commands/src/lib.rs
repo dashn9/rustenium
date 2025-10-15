@@ -1,4 +1,4 @@
-use serde::{Serialize, Deserialize, Deserializer};
+use serde::{Serialize, Deserialize};
 use std::collections::HashMap;
 
 pub mod browser;
@@ -18,7 +18,9 @@ pub use browsing_context::commands::BrowsingContextCommand;
 pub use browsing_context::commands::BrowsingContextResult;
 pub use browsing_context::events::BrowsingContextEvent;
 pub use emulation::commands::EmulationCommand;
+pub use emulation::commands::EmulationResult;
 pub use input::commands::InputCommand;
+pub use input::commands::InputResult;
 pub use input::events::InputEvent;
 pub use log::events::LogEvent;
 pub use network::commands::NetworkCommand;
@@ -34,7 +36,7 @@ pub use storage::commands::StorageResult;
 pub use web_extension::commands::WebExtensionCommand;
 pub use web_extension::commands::WebExtensionResult;
 
-pub type Extensible = HashMap<String, serde_json::Value>;
+use serde::Deserializer;
 
 fn float_or_int_to_u64<'de, D>(deserializer: D) -> Result<u64, D::Error>
 where
@@ -63,7 +65,7 @@ where
     let value = serde_json::Value::deserialize(deserializer)?;
 
     if value.is_null() {
-        ()
+        return Ok(None);
     }
 
     match value {
@@ -79,6 +81,8 @@ where
         _ => Err(serde::de::Error::custom("Expected a number")),
     }
 }
+
+pub type Extensible = HashMap<String, serde_json::Value>;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Command {
@@ -113,8 +117,8 @@ pub struct EmptyParams {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum Message {
-    CommandResponse(CommandResponse),
     ErrorResponse(ErrorResponse),
+    CommandResponse(CommandResponse),
     Event(Event),
 }
 
@@ -167,7 +171,8 @@ impl std::fmt::Display for ErrorResponse {
 pub enum ResultData {
     BrowserResult(BrowserResult),
     BrowsingContextResult(BrowsingContextResult),
-    EmptyResult(EmptyResult),
+    EmulationResult(EmulationResult),
+    InputResult(InputResult),
     NetworkResult(NetworkResult),
     ScriptResult(ScriptResult),
     SessionResult(SessionResult),

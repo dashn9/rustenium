@@ -152,7 +152,7 @@ pub enum InnerTextEnum {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum MatchTypeUnion {
+pub enum InnerTextLocatormatchTypeUnion {
     #[serde(rename = "full")]
     Full,
     #[serde(rename = "partial")]
@@ -170,7 +170,7 @@ pub struct InnerTextLocator {
     pub ignore_case: Option<bool>,
     #[serde(rename = "matchType")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub match_type: Option<MatchTypeUnion>,
+    pub match_type: Option<InnerTextLocatormatchTypeUnion>,
     #[serde(rename = "maxDepth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_depth: Option<u64>,
@@ -292,6 +292,14 @@ pub type InfoList = Vec<Info>;
 
 pub type Navigation = String;
 
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct NavigateResult {
+    #[serde(rename = "navigation")]
+    pub navigation: Option<Navigation>,
+    #[serde(rename = "url")]
+    pub url: String,
+}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BaseNavigationInfo {

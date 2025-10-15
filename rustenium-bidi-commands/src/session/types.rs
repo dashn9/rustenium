@@ -1,7 +1,6 @@
 // Generated types for module
 
 use serde::{Serialize, Deserialize};
-use crate::browsing_context::types::BrowsingContext;
 use crate::Extensible;
 use serde_valid::Validate;
 
@@ -184,9 +183,6 @@ pub struct CapabilitiesRequest {
 pub struct UnsubscribeByAttributesRequest {
     #[serde(rename = "events")]
     pub events: Vec<String>,
-    #[serde(rename = "contexts")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub contexts: Option<Vec<BrowsingContext>>,
 }
 
 pub type Subscription = String;

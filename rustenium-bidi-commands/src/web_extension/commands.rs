@@ -1,6 +1,7 @@
 // Generated commands for module
 
 use serde::{Serialize, Deserialize};
+use crate::EmptyResult;
 use super::types::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -57,6 +58,7 @@ pub struct Uninstall {
 #[serde(untagged)]
 pub enum WebExtensionResult {
     InstallResult(InstallResult),
+    UninstallResult(UninstallResult),
 }
 
 
@@ -65,4 +67,7 @@ pub struct InstallResult {
     #[serde(rename = "extension")]
     pub extension: Extension,
 }
+
+pub type UninstallResult = EmptyResult;
+
 

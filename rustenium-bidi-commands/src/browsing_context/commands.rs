@@ -5,6 +5,7 @@ use crate::browser::types::UserContext;
 use crate::script::types::NodeRemoteValue;
 use crate::script::types::SerializationOptions;
 use crate::script::types::SharedReference;
+use crate::EmptyResult;
 use serde_valid::Validate;
 use super::types::*;
 
@@ -361,14 +362,22 @@ pub struct TraverseHistory {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum BrowsingContextResult {
+    ActivateResult(ActivateResult),
     CaptureScreenshotResult(CaptureScreenshotResult),
+    CloseResult(CloseResult),
     CreateResult(CreateResult),
     GetTreeResult(GetTreeResult),
+    HandleUserPromptResult(HandleUserPromptResult),
     LocateNodesResult(LocateNodesResult),
     NavigateResult(NavigateResult),
     PrintResult(PrintResult),
+    ReloadResult(ReloadResult),
+    SetViewportResult(SetViewportResult),
     TraverseHistoryResult(TraverseHistoryResult),
 }
+
+
+pub type ActivateResult = EmptyResult;
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -376,6 +385,9 @@ pub struct CaptureScreenshotResult {
     #[serde(rename = "data")]
     pub data: String,
 }
+
+pub type CloseResult = EmptyResult;
+
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateResult {
@@ -388,6 +400,9 @@ pub struct GetTreeResult {
     #[serde(rename = "contexts")]
     pub contexts: InfoList,
 }
+
+pub type HandleUserPromptResult = EmptyResult;
+
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct LocateNodesResult {
@@ -409,7 +424,12 @@ pub struct PrintResult {
     pub data: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct TraverseHistoryResult {
-}
+pub type ReloadResult = NavigateResult;
+
+
+pub type SetViewportResult = EmptyResult;
+
+
+pub type TraverseHistoryResult = EmptyResult;
+
 

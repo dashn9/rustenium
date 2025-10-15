@@ -4,6 +4,7 @@ use serde::{Serialize, Deserialize};
 use crate::session::types::ProxyConfiguration;
 use crate::session::types::UserPromptHandler;
 use crate::EmptyParams;
+use crate::EmptyResult;
 use super::types::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -15,6 +16,7 @@ pub enum BrowserCommand {
     GetUserContexts(GetUserContexts),
     RemoveUserContext(RemoveUserContext),
     SetClientWindowState(SetClientWindowState),
+    SetDownloadBehavior(SetDownloadBehavior),
 }
 
 
@@ -55,6 +57,12 @@ pub enum BrowserSetClientWindowStateMethod {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum BrowserSetDownloadBehaviorMethod {
+    #[serde(rename = "browser.setDownloadBehavior")]
+    BrowserSetDownloadBehavior,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateUserContextParameters {
     #[serde(rename = "acceptInsecureCerts")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -79,6 +87,15 @@ pub struct SetClientWindowStateParameters {
     pub client_window: ClientWindow,
     #[serde(flatten)]
     pub client_window_named_state_client_window_rect_state_union: ClientWindowNamedStateClientWindowRectStateUnion,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SetDownloadBehaviorParameters {
+    #[serde(rename = "downloadBehavior")]
+    pub download_behavior: Option<DownloadBehavior>,
+    #[serde(rename = "userContexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_contexts: Option<Vec<UserContext>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -129,22 +146,53 @@ pub struct SetClientWindowState {
     pub params: SetClientWindowStateParameters,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SetDownloadBehavior {
+    #[serde(rename = "method")]
+    pub method: BrowserSetDownloadBehaviorMethod,
+    #[serde(rename = "params")]
+    pub params: SetDownloadBehaviorParameters,
+}
+
 // Generated results
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum BrowserResult {
+    CloseResult(CloseResult),
     CreateUserContextResult(CreateUserContextResult),
+    GetClientWindowsResult(GetClientWindowsResult),
     GetUserContextsResult(GetUserContextsResult),
+    RemoveUserContextResult(RemoveUserContextResult),
+    SetClientWindowStateResult(SetClientWindowStateResult),
+    SetDownloadBehaviorResult(SetDownloadBehaviorResult),
 }
+
+
+pub type CloseResult = EmptyResult;
 
 
 pub type CreateUserContextResult = UserContextInfo;
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetClientWindowsResult {
+    #[serde(rename = "clientWindows")]
+    pub client_windows: Vec<ClientWindowInfo>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetUserContextsResult {
     #[serde(rename = "userContexts")]
     pub user_contexts: Vec<UserContextInfo>,
 }
+
+pub type RemoveUserContextResult = EmptyResult;
+
+
+pub type SetClientWindowStateResult = ClientWindowInfo;
+
+
+pub type SetDownloadBehaviorResult = EmptyResult;
+
 

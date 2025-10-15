@@ -65,6 +65,14 @@ fn uses_empty_params(properties: &[crate::parser::Property]) -> bool {
     })
 }
 
+/// Checks if EmptyResult type is used in properties
+fn uses_empty_result(properties: &[crate::parser::Property]) -> bool {
+    properties.iter().any(|p| {
+        let inner_type = extract_inner_type(&p.value);
+        inner_type == "EmptyResult"
+    })
+}
+
 /// Checks if validation constraints are used in properties
 fn uses_validation(properties: &[crate::parser::Property]) -> bool {
     properties.iter().any(|p| {
@@ -714,6 +722,11 @@ fn generate_commands_file(cmd_def: &crate::command_parser::CommandDefinition, mo
         output.push_str("use crate::EmptyParams;\n");
     }
 
+    // Import EmptyResult from root if used
+    if uses_empty_result(&all_properties) {
+        output.push_str("use crate::EmptyResult;\n");
+    }
+
     // Import serde_valid if validation is used
     if uses_validation(&all_properties) {
         output.push_str("use serde_valid::Validate;\n");
@@ -807,6 +820,11 @@ fn generate_events_file(event_def: &crate::event_parser::EventDefinition, module
     // Import EmptyParams from root if used
     if uses_empty_params(&all_properties) {
         output.push_str("use crate::EmptyParams;\n");
+    }
+
+    // Import EmptyResult from root if used
+    if uses_empty_result(&all_properties) {
+        output.push_str("use crate::EmptyResult;\n");
     }
 
     // Import serde_valid if validation is used
@@ -923,6 +941,11 @@ fn generate_types_file(module: &Module) -> String {
         output.push_str("use crate::EmptyParams;\n");
     }
 
+    // Import EmptyResult from root if used
+    if uses_empty_result(&all_properties) {
+        output.push_str("use crate::EmptyResult;\n");
+    }
+
     // Import serde_valid if validation is used
     if uses_validation(&all_properties) {
         output.push_str("use serde_valid::Validate;\n");
@@ -930,10 +953,10 @@ fn generate_types_file(module: &Module) -> String {
 
     output.push_str("\n");
 
-    // Generate each type (skip Extensible and EmptyParams as they're generated in lib.rs)
+    // Generate each type (skip Extensible, EmptyParams, and EmptyResult as they're generated in lib.rs)
     for bidi_type in &module.types {
         // Skip types that are generated in root lib.rs
-        if bidi_type.name == "Extensible" || bidi_type.name == "EmptyParams" {
+        if bidi_type.name == "Extensible" || bidi_type.name == "EmptyParams" || bidi_type.name == "EmptyResult" {
             continue;
         }
 

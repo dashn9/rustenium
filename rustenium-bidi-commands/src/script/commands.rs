@@ -3,6 +3,7 @@
 use serde::{Serialize, Deserialize};
 use crate::browser::types::UserContext;
 use crate::browsing_context::types::BrowsingContext;
+use crate::EmptyResult;
 use super::types::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -193,8 +194,11 @@ pub struct RemovePreloadScript {
 #[serde(untagged)]
 pub enum ScriptResult {
     AddPreloadScriptResult(AddPreloadScriptResult),
+    CallFunctionResult(CallFunctionResult),
+    DisownResult(DisownResult),
     EvaluateResult(EvaluateResult),
     GetRealmsResult(GetRealmsResult),
+    RemovePreloadScriptResult(RemovePreloadScriptResult),
 }
 
 
@@ -203,6 +207,12 @@ pub struct AddPreloadScriptResult {
     #[serde(rename = "script")]
     pub script: PreloadScript,
 }
+
+pub type CallFunctionResult = EvaluateResult;
+
+
+pub type DisownResult = EmptyResult;
+
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -216,4 +226,7 @@ pub struct GetRealmsResult {
     #[serde(rename = "realms")]
     pub realms: Vec<RealmInfo>,
 }
+
+pub type RemovePreloadScriptResult = EmptyResult;
+
 

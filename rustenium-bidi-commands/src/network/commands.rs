@@ -3,6 +3,7 @@
 use serde::{Serialize, Deserialize};
 use crate::browser::types::UserContext;
 use crate::browsing_context::types::BrowsingContext;
+use crate::EmptyResult;
 use super::types::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -374,13 +375,67 @@ pub struct SetExtraHeaders {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum NetworkResult {
+    AddDataCollectorResult(AddDataCollectorResult),
     AddInterceptResult(AddInterceptResult),
+    ContinueRequestResult(ContinueRequestResult),
+    ContinueResponseResult(ContinueResponseResult),
+    ContinueWithAuthResult(ContinueWithAuthResult),
+    DisownDataResult(DisownDataResult),
+    FailRequestResult(FailRequestResult),
+    GetDataResult(GetDataResult),
+    ProvideResponseResult(ProvideResponseResult),
+    RemoveDataCollectorResult(RemoveDataCollectorResult),
+    RemoveInterceptResult(RemoveInterceptResult),
+    SetCacheBehaviorResult(SetCacheBehaviorResult),
+    SetExtraHeadersResult(SetExtraHeadersResult),
 }
 
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AddDataCollectorResult {
+    #[serde(rename = "collector")]
+    pub collector: Collector,
+}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AddInterceptResult {
     #[serde(rename = "intercept")]
     pub intercept: Intercept,
 }
+
+pub type ContinueRequestResult = EmptyResult;
+
+
+pub type ContinueResponseResult = EmptyResult;
+
+
+pub type ContinueWithAuthResult = EmptyResult;
+
+
+pub type DisownDataResult = EmptyResult;
+
+
+pub type FailRequestResult = EmptyResult;
+
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct GetDataResult {
+    #[serde(rename = "bytes")]
+    pub bytes: BytesValue,
+}
+
+pub type ProvideResponseResult = EmptyResult;
+
+
+pub type RemoveDataCollectorResult = EmptyResult;
+
+
+pub type RemoveInterceptResult = EmptyResult;
+
+
+pub type SetCacheBehaviorResult = EmptyResult;
+
+
+pub type SetExtraHeadersResult = EmptyResult;
+
 

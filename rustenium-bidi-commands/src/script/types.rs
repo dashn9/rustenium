@@ -16,7 +16,7 @@ pub type Channel = String;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum IncludeShadowTreeUnion {
+pub enum SerializationOptionsincludeShadowTreeUnion {
     #[serde(rename = "none")]
     None,
     #[serde(rename = "open")]
@@ -33,7 +33,7 @@ pub struct SerializationOptions {
     pub max_object_depth: Option<Option<u64>>,
     #[serde(rename = "includeShadowTree")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub include_shadow_tree: Option<IncludeShadowTreeUnion>,
+    pub include_shadow_tree: Option<SerializationOptionsincludeShadowTreeUnion>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -188,7 +188,7 @@ pub enum SpecialNumber {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ValueUnion {
+pub enum NumberValuevalueUnion {
     Number(serde_json::value::Number),
     SpecialNumber(SpecialNumber),
 }
@@ -198,7 +198,7 @@ pub struct NumberValue {
     #[serde(rename = "type")]
     pub r#type: NumberEnum,
     #[serde(rename = "value")]
-    pub value: ValueUnion,
+    pub value: NumberValuevalueUnion,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -284,12 +284,12 @@ pub enum MapEnum {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum MappingLocalValueUnion {
+pub enum MappingLocalValueMappingLocalValueUnion {
     LocalValue(LocalValue),
     String(String),
 }
 
-pub type MappingLocalValue = Vec<(MappingLocalValueUnion, LocalValue)>;
+pub type MappingLocalValue = Vec<(MappingLocalValueMappingLocalValueUnion, LocalValue)>;
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -393,7 +393,6 @@ pub type PreloadScript = String;
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum SuccessEnum {
     #[serde(rename = "success")]
     Success,
@@ -441,12 +440,12 @@ pub struct ArrayRemoteValue {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum MappingRemoteValueUnion {
+pub enum MappingRemoteValueMappingRemoteValueUnion {
     RemoteValue(RemoteValue),
     String(String),
 }
 
-pub type MappingRemoteValue = Vec<(MappingRemoteValueUnion, RemoteValue)>;
+pub type MappingRemoteValue = Vec<(MappingRemoteValueMappingRemoteValueUnion, RemoteValue)>;
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -595,7 +594,6 @@ pub struct GeneratorRemoteValue {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum ErrorEnum {
     #[serde(rename = "error")]
     Error,
@@ -742,7 +740,7 @@ pub enum NodeEnum {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum ModeUnion {
+pub enum NodePropertiesAttributesmodeUnion {
     #[serde(rename = "open")]
     Open,
     #[serde(rename = "closed")]
@@ -759,7 +757,7 @@ pub struct NodePropertiesAttributes {
     pub local_name: Option<String>,
     #[serde(rename = "mode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub mode: Option<ModeUnion>,
+    pub mode: Option<NodePropertiesAttributesmodeUnion>,
     #[serde(rename = "namespaceURI")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub namespace_uri: Option<String>,
@@ -910,6 +908,13 @@ pub struct EvaluateResultException {
     pub exception_details: ExceptionDetails,
     #[serde(rename = "realm")]
     pub realm: Realm,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum EvaluateResult {
+    EvaluateResultSuccess(EvaluateResultSuccess),
+    EvaluateResultException(EvaluateResultException),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

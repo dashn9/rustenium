@@ -4,6 +4,7 @@ use serde::{Serialize, Deserialize};
 use crate::browser::types::UserContext;
 use crate::browsing_context::types::BrowsingContext;
 use crate::EmptyParams;
+use crate::EmptyResult;
 use super::types::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -117,10 +118,15 @@ pub struct Unsubscribe {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum SessionResult {
+    EndResult(EndResult),
     NewResult(NewResult),
     StatusResult(StatusResult),
     SubscribeResult(SubscribeResult),
+    UnsubscribeResult(UnsubscribeResult),
 }
+
+
+pub type EndResult = EmptyResult;
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -144,4 +150,7 @@ pub struct SubscribeResult {
     #[serde(rename = "subscription")]
     pub subscription: Subscription,
 }
+
+pub type UnsubscribeResult = EmptyResult;
+
 
