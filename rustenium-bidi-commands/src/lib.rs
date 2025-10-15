@@ -102,6 +102,19 @@ pub struct ErrorResponse {
     pub extensible: Extensible,
 }
 
+impl std::fmt::Display for ErrorResponse {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "Error[{}]: {} (ID: {}){}",
+            self.error,
+            self.message,
+            self.id.map_or("None".to_string(), |id| id.to_string()),
+            self.stacktrace.as_ref().map_or("".to_string(), |st| format!("\nStacktrace:\n{}", st))
+        )
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum ResultData {
@@ -204,6 +217,42 @@ pub enum ErrorCode {
     UnsupportedOperation,
 }
 
+impl std::fmt::Display for ErrorCode {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            ErrorCode::InvalidArgument => write!(f, "invalid argument"),
+            ErrorCode::InvalidSelector => write!(f, "invalid selector"),
+            ErrorCode::InvalidSessionId => write!(f, "invalid session id"),
+            ErrorCode::InvalidWebExtension => write!(f, "invalid web extension"),
+            ErrorCode::MoveTargetOutOfBounds => write!(f, "move target out of bounds"),
+            ErrorCode::NoSuchAlert => write!(f, "no such alert"),
+            ErrorCode::NoSuchNetworkCollector => write!(f, "no such network collector"),
+            ErrorCode::NoSuchElement => write!(f, "no such element"),
+            ErrorCode::NoSuchFrame => write!(f, "no such frame"),
+            ErrorCode::NoSuchHandle => write!(f, "no such handle"),
+            ErrorCode::NoSuchHistoryEntry => write!(f, "no such history entry"),
+            ErrorCode::NoSuchIntercept => write!(f, "no such intercept"),
+            ErrorCode::NoSuchNetworkData => write!(f, "no such network data"),
+            ErrorCode::NoSuchNode => write!(f, "no such node"),
+            ErrorCode::NoSuchRequest => write!(f, "no such request"),
+            ErrorCode::NoSuchScript => write!(f, "no such script"),
+            ErrorCode::NoSuchStoragePartition => write!(f, "no such storage partition"),
+            ErrorCode::NoSuchUserContext => write!(f, "no such user context"),
+            ErrorCode::NoSuchWebExtension => write!(f, "no such web extension"),
+            ErrorCode::SessionNotCreated => write!(f, "session not created"),
+            ErrorCode::UnableToCaptureScreen => write!(f, "unable to capture screen"),
+            ErrorCode::UnableToCloseBrowser => write!(f, "unable to close browser"),
+            ErrorCode::UnableToSetCookie => write!(f, "unable to set cookie"),
+            ErrorCode::UnableToSetFileInput => write!(f, "unable to set file input"),
+            ErrorCode::UnavailableNetworkData => write!(f, "unavailable network data"),
+            ErrorCode::UnderspecifiedStoragePartition => write!(f, "underspecified storage partition"),
+            ErrorCode::UnknownCommand => write!(f, "unknown command"),
+            ErrorCode::UnknownError => write!(f, "unknown error"),
+            ErrorCode::UnsupportedOperation => write!(f, "unsupported operation"),
+        }
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum SuccessEnum {
@@ -225,15 +274,3 @@ pub enum EventEnum {
     Event,
 }
 
-impl std::fmt::Display for ErrorResponse {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(
-            f,
-            "Error[{}]: {} (ID: {}){}",
-            self.error,
-            self.message,
-            self.id.map_or("None".to_string(), |id| id.to_string()),
-            self.stacktrace.as_ref().map_or("".to_string(), |st| format!("\nStacktrace:\n{}", st))
-        )
-    }
-}

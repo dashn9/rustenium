@@ -342,6 +342,20 @@ fn generate_root_lib(modules: &[Module], root_protocol: &crate::module::RootProt
     output.push_str(&generate_rust_struct("ErrorResponse", &root_protocol.error_response.properties, "root"));
     output.push_str("\n\n");
 
+    // Add Display implementation for ErrorResponse
+    output.push_str("impl std::fmt::Display for ErrorResponse {\n");
+    output.push_str("    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {\n");
+    output.push_str("        write!(\n");
+    output.push_str("            f,\n");
+    output.push_str("            \"Error[{}]: {} (ID: {}){}\",\n");
+    output.push_str("            self.error,\n");
+    output.push_str("            self.message,\n");
+    output.push_str("            self.id.map_or(\"None\".to_string(), |id| id.to_string()),\n");
+    output.push_str("            self.stacktrace.as_ref().map_or(\"\".to_string(), |st| format!(\"\\nStacktrace:\\n{}\", st))\n");
+    output.push_str("        )\n");
+    output.push_str("    }\n");
+    output.push_str("}\n\n");
+
     // Generate ResultData
     output.push_str(&generate_rust_enum("ResultData", &root_protocol.result_data.properties, "root"));
     output.push_str("\n\n");
@@ -361,6 +375,20 @@ fn generate_root_lib(modules: &[Module], root_protocol: &crate::module::RootProt
     // Generate ErrorCode
     output.push_str(&generate_rust_enum("ErrorCode", &root_protocol.error_code.properties, "root"));
     output.push_str("\n\n");
+
+    // Add Display implementation for ErrorCode
+    output.push_str("impl std::fmt::Display for ErrorCode {\n");
+    output.push_str("    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {\n");
+    output.push_str("        match self {\n");
+    for property in &root_protocol.error_code.properties {
+        let variant_name = &property.name;
+        // Convert PascalCase to "lowercase with spaces" (e.g., InvalidArgument -> invalid argument)
+        let display_str = to_snake_case(variant_name).replace('_', " ");
+        output.push_str(&format!("            ErrorCode::{} => write!(f, \"{}\"),\n", variant_name, display_str));
+    }
+    output.push_str("        }\n");
+    output.push_str("    }\n");
+    output.push_str("}\n\n");
 
     // Generate additional types (like SuccessEnum, ErrorEnum, EventEnum)
     for bidi_type in &root_protocol.additional_types {
