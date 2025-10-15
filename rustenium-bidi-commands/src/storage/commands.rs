@@ -14,23 +14,20 @@ pub enum StorageCommand {
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum StorageDeleteCookiesMethod {
-    #[serde(rename = "storage.DeleteCookies")]
+    #[serde(rename = "storage.deleteCookies")]
     StorageDeleteCookies,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum StorageGetCookiesMethod {
-    #[serde(rename = "storage.GetCookies")]
+    #[serde(rename = "storage.getCookies")]
     StorageGetCookies,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum StorageSetCookieMethod {
-    #[serde(rename = "storage.SetCookie")]
+    #[serde(rename = "storage.setCookie")]
     StorageSetCookie,
 }
 

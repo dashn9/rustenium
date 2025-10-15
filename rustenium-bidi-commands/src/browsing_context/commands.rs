@@ -27,86 +27,74 @@ pub enum BrowsingContextCommand {
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum BrowsingContextActivateMethod {
-    #[serde(rename = "browsingContext.Activate")]
+    #[serde(rename = "browsingContext.activate")]
     BrowsingContextActivate,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum BrowsingContextCaptureScreenshotMethod {
-    #[serde(rename = "browsingContext.CaptureScreenshot")]
+    #[serde(rename = "browsingContext.captureScreenshot")]
     BrowsingContextCaptureScreenshot,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum BrowsingContextCloseMethod {
-    #[serde(rename = "browsingContext.Close")]
+    #[serde(rename = "browsingContext.close")]
     BrowsingContextClose,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum BrowsingContextCreateMethod {
-    #[serde(rename = "browsingContext.Create")]
+    #[serde(rename = "browsingContext.create")]
     BrowsingContextCreate,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum BrowsingContextGetTreeMethod {
-    #[serde(rename = "browsingContext.GetTree")]
+    #[serde(rename = "browsingContext.getTree")]
     BrowsingContextGetTree,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum BrowsingContextHandleUserPromptMethod {
-    #[serde(rename = "browsingContext.HandleUserPrompt")]
+    #[serde(rename = "browsingContext.handleUserPrompt")]
     BrowsingContextHandleUserPrompt,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum BrowsingContextLocateNodesMethod {
-    #[serde(rename = "browsingContext.LocateNodes")]
+    #[serde(rename = "browsingContext.locateNodes")]
     BrowsingContextLocateNodes,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum BrowsingContextNavigateMethod {
-    #[serde(rename = "browsingContext.Navigate")]
+    #[serde(rename = "browsingContext.navigate")]
     BrowsingContextNavigate,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum BrowsingContextPrintMethod {
-    #[serde(rename = "browsingContext.Print")]
+    #[serde(rename = "browsingContext.print")]
     BrowsingContextPrint,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum BrowsingContextReloadMethod {
-    #[serde(rename = "browsingContext.Reload")]
+    #[serde(rename = "browsingContext.reload")]
     BrowsingContextReload,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum BrowsingContextSetViewportMethod {
-    #[serde(rename = "browsingContext.SetViewport")]
+    #[serde(rename = "browsingContext.setViewport")]
     BrowsingContextSetViewport,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum BrowsingContextTraverseHistoryMethod {
-    #[serde(rename = "browsingContext.TraverseHistory")]
+    #[serde(rename = "browsingContext.traverseHistory")]
     BrowsingContextTraverseHistory,
 }
 

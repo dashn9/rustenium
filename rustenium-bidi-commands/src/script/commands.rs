@@ -18,44 +18,38 @@ pub enum ScriptCommand {
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum ScriptAddPreloadScriptMethod {
-    #[serde(rename = "script.AddPreloadScript")]
+    #[serde(rename = "script.addPreloadScript")]
     ScriptAddPreloadScript,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum ScriptCallFunctionMethod {
-    #[serde(rename = "script.CallFunction")]
+    #[serde(rename = "script.callFunction")]
     ScriptCallFunction,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum ScriptDisownMethod {
-    #[serde(rename = "script.Disown")]
+    #[serde(rename = "script.disown")]
     ScriptDisown,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum ScriptEvaluateMethod {
-    #[serde(rename = "script.Evaluate")]
+    #[serde(rename = "script.evaluate")]
     ScriptEvaluate,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum ScriptGetRealmsMethod {
-    #[serde(rename = "script.GetRealms")]
+    #[serde(rename = "script.getRealms")]
     ScriptGetRealms,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum ScriptRemovePreloadScriptMethod {
-    #[serde(rename = "script.RemovePreloadScript")]
+    #[serde(rename = "script.removePreloadScript")]
     ScriptRemovePreloadScript,
 }
 

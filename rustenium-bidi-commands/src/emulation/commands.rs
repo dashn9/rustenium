@@ -18,44 +18,38 @@ pub enum EmulationCommand {
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum EmulationSetForcedColorsModeThemeOverrideMethod {
-    #[serde(rename = "emulation.SetForcedColorsModeThemeOverride")]
+    #[serde(rename = "emulation.setForcedColorsModeThemeOverride")]
     EmulationSetForcedColorsModeThemeOverride,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum EmulationSetGeolocationOverrideMethod {
-    #[serde(rename = "emulation.SetGeolocationOverride")]
+    #[serde(rename = "emulation.setGeolocationOverride")]
     EmulationSetGeolocationOverride,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum EmulationSetLocaleOverrideMethod {
-    #[serde(rename = "emulation.SetLocaleOverride")]
+    #[serde(rename = "emulation.setLocaleOverride")]
     EmulationSetLocaleOverride,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum EmulationSetScreenOrientationOverrideMethod {
-    #[serde(rename = "emulation.SetScreenOrientationOverride")]
+    #[serde(rename = "emulation.setScreenOrientationOverride")]
     EmulationSetScreenOrientationOverride,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum EmulationSetScriptingEnabledMethod {
-    #[serde(rename = "emulation.SetScriptingEnabled")]
+    #[serde(rename = "emulation.setScriptingEnabled")]
     EmulationSetScriptingEnabled,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum EmulationSetTimezoneOverrideMethod {
-    #[serde(rename = "emulation.SetTimezoneOverride")]
+    #[serde(rename = "emulation.setTimezoneOverride")]
     EmulationSetTimezoneOverride,
 }
 

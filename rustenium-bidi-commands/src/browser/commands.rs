@@ -3,7 +3,7 @@
 use serde::{Serialize, Deserialize};
 use crate::session::types::ProxyConfiguration;
 use crate::session::types::UserPromptHandler;
-use crate::Extensible;
+use crate::EmptyParams;
 use super::types::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -19,51 +19,39 @@ pub enum BrowserCommand {
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum BrowserCloseMethod {
-    #[serde(rename = "browser.Close")]
+    #[serde(rename = "browser.close")]
     BrowserClose,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum BrowserCreateUserContextMethod {
-    #[serde(rename = "browser.CreateUserContext")]
+    #[serde(rename = "browser.createUserContext")]
     BrowserCreateUserContext,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum BrowserGetClientWindowsMethod {
-    #[serde(rename = "browser.GetClientWindows")]
+    #[serde(rename = "browser.getClientWindows")]
     BrowserGetClientWindows,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum BrowserGetUserContextsMethod {
-    #[serde(rename = "browser.GetUserContexts")]
+    #[serde(rename = "browser.getUserContexts")]
     BrowserGetUserContexts,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum BrowserRemoveUserContextMethod {
-    #[serde(rename = "browser.RemoveUserContext")]
+    #[serde(rename = "browser.removeUserContext")]
     BrowserRemoveUserContext,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum BrowserSetClientWindowStateMethod {
-    #[serde(rename = "browser.SetClientWindowState")]
+    #[serde(rename = "browser.setClientWindowState")]
     BrowserSetClientWindowState,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-pub enum EmptyParams {
-    Extensible(Extensible),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

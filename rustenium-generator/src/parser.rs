@@ -90,6 +90,10 @@ pub fn  parse_command_parameters(command_lines: &[&str], cddl_strings: Vec<&str>
 
     // If we found a parameter type, search for its definition in all CDDL content
     if let Some(param_type) = params_type {
+        // Skip EmptyParams - it's defined in root module
+        if param_type == "EmptyParams" {
+            return Ok(param_type);
+        }
         // Search for the parameter definition (e.g., "browser.CreateUserContextParameters = {" or "= TypeAlias")
         let struct_pattern = format!(r"^{}\s*=\s*\{{", regex::escape(&param_type));
         let alias_pattern = format!(r"^{}\s*=\s*(.+)", regex::escape(&param_type));
@@ -731,8 +735,8 @@ fn generate_type_if_same_module(type_name: &str, content: &str, def_type: &str, 
         type_name
     };
 
-    // Skip generating Extensible type - it's defined in root module
-    if clean_name == "Extensible" {
+    // Skip generating Extensible and EmptyParams types - they're defined in root module
+    if clean_name == "Extensible" || clean_name == "EmptyParams" {
         return Some(clean_name.to_string());
     }
 

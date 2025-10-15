@@ -223,50 +223,44 @@ pub fn search_and_update_command(cddl_strings: Vec<&str>, command: &mut Command,
 
     for (line_num, line) in lines.iter().enumerate() {
         if regex.is_match(line.trim()) {
-            // Found the command definition, set the method
-
-            // Create CommandMethods if it doesn't exist yet
-            let rust_method_name = format!("{}{}",
-                command.module_name.replace("_", "").to_string().chars().next().unwrap().to_uppercase().to_string() + &command.module_name[1..],
-                command.name
-            );
-
-            let method_exists = command_def.command_methods.iter().any(|m| m.name == rust_method_name);
-            if !method_exists {
-                let method_attributes = vec![
-                    format!(r#"#[serde(rename = "{}")]"#, method_name)
-                ];
-                let enum_attributes = vec![
-                    "#[derive(Debug, Clone, Serialize, Deserialize)]".to_string(),
-                    "#[serde(untagged)]".to_string()
-                ];
-
-                // TODO: Use The Method within the body of the cddl as it is the more idiomatic way
-
-                command_def.command_methods.push(CommandMethods {
-                    name: format!("{}Method", rust_method_name),
-                    method_attributes,
-                    enum_attributes,
-                });
-            }
-
-            // Collect lines between the parentheses (skip the first line with opening paren)
+            // Collect lines between the parentheses
             let mut paren_count = 0;
-            let mut param_lines = Vec::new();
+            let mut param_lines: Vec<&str> = Vec::new();
 
             for i in (line_num + 1)..lines.len() {
                 let current_line = lines[i];
 
                 for ch in current_line.chars() {
                     match ch {
-                        '(' => {
-                            paren_count += 1;
-                        }
+                        '(' => paren_count += 1,
                         ')' => {
                             paren_count -= 1;
                             if paren_count < 0 {
-                                // Found the closing paren, join the collected lines
-                                let param_content = param_lines.join("\n").trim().to_string();
+                                // Extract the actual method value from CDDL
+                                let mut actual_method_value = method_name.clone();
+                                for line in &param_lines {
+                                    let line_trimmed = line.trim();
+                                    if line_trimmed.starts_with("method:") {
+                                        if let Some(method_str) = line_trimmed.strip_prefix("method:").map(|s| s.trim().trim_end_matches(',')) {
+                                            actual_method_value = method_str.trim_matches('"').to_string();
+                                        }
+                                        break;
+                                    }
+                                }
+
+                                // Create CommandMethods with the actual method value
+                                let rust_method_name = format!("{}{}",
+                                    command.module_name.replace("_", "").chars().next().unwrap().to_uppercase().to_string() + &command.module_name[1..],
+                                    command.name
+                                );
+
+                                if !command_def.command_methods.iter().any(|m| m.name == rust_method_name) {
+                                    command_def.command_methods.push(CommandMethods {
+                                        name: format!("{}Method", rust_method_name),
+                                        method_attributes: vec![format!(r#"#[serde(rename = "{}")]"#, actual_method_value)],
+                                        enum_attributes: vec!["#[derive(Debug, Clone, Serialize, Deserialize)]".to_string()],
+                                    });
+                                }
 
                                 // Parse the parameter content
                                 let command_value = parser::parse_command_parameters(&param_lines, cddl_strings.clone(), module, command_def)?;
@@ -281,11 +275,10 @@ pub fn search_and_update_command(cddl_strings: Vec<&str>, command: &mut Command,
                     }
                 }
 
-                // Add the line (we start from line_num + 1, so first line is skipped)
                 param_lines.push(current_line.trim());
             }
 
-            return Ok(()); // Found and processed the command, return early
+            return Ok(());
         }
     }
     }

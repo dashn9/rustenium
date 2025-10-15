@@ -57,6 +57,14 @@ fn uses_extensible(properties: &[crate::parser::Property]) -> bool {
     })
 }
 
+/// Checks if EmptyParams type is used in properties
+fn uses_empty_params(properties: &[crate::parser::Property]) -> bool {
+    properties.iter().any(|p| {
+        let inner_type = extract_inner_type(&p.value);
+        inner_type == "EmptyParams"
+    })
+}
+
 /// Checks if validation constraints are used in properties
 fn uses_validation(properties: &[crate::parser::Property]) -> bool {
     properties.iter().any(|p| {
@@ -636,6 +644,11 @@ fn generate_commands_file(cmd_def: &crate::command_parser::CommandDefinition, mo
         output.push_str("use crate::Extensible;\n");
     }
 
+    // Import EmptyParams from root if used
+    if uses_empty_params(&all_properties) {
+        output.push_str("use crate::EmptyParams;\n");
+    }
+
     // Import serde_valid if validation is used
     if uses_validation(&all_properties) {
         output.push_str("use serde_valid::Validate;\n");
@@ -724,6 +737,11 @@ fn generate_events_file(event_def: &crate::event_parser::EventDefinition, module
     // Import Extensible from root if used
     if uses_extensible(&all_properties) {
         output.push_str("use crate::Extensible;\n");
+    }
+
+    // Import EmptyParams from root if used
+    if uses_empty_params(&all_properties) {
+        output.push_str("use crate::EmptyParams;\n");
     }
 
     // Import serde_valid if validation is used
@@ -835,6 +853,11 @@ fn generate_types_file(module: &Module) -> String {
         output.push_str("use crate::Extensible;\n");
     }
 
+    // Import EmptyParams from root if used
+    if uses_empty_params(&all_properties) {
+        output.push_str("use crate::EmptyParams;\n");
+    }
+
     // Import serde_valid if validation is used
     if uses_validation(&all_properties) {
         output.push_str("use serde_valid::Validate;\n");
@@ -842,8 +865,13 @@ fn generate_types_file(module: &Module) -> String {
 
     output.push_str("\n");
 
-    // Generate each type
+    // Generate each type (skip Extensible and EmptyParams as they're generated in lib.rs)
     for bidi_type in &module.types {
+        // Skip types that are generated in root lib.rs
+        if bidi_type.name == "Extensible" || bidi_type.name == "EmptyParams" {
+            continue;
+        }
+
         if bidi_type.is_enum {
             // Force enum generation if BidiType is marked as enum
             output.push_str(&generate_rust_enum(&bidi_type.name, &bidi_type.properties, &module.name));

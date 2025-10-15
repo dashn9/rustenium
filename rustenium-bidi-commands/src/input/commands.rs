@@ -15,23 +15,20 @@ pub enum InputCommand {
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum InputPerformActionsMethod {
-    #[serde(rename = "input.PerformActions")]
+    #[serde(rename = "input.performActions")]
     InputPerformActions,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum InputReleaseActionsMethod {
-    #[serde(rename = "input.ReleaseActions")]
+    #[serde(rename = "input.releaseActions")]
     InputReleaseActions,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum InputSetFilesMethod {
-    #[serde(rename = "input.SetFiles")]
+    #[serde(rename = "input.setFiles")]
     InputSetFiles,
 }
 

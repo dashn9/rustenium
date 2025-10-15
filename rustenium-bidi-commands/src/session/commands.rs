@@ -3,7 +3,7 @@
 use serde::{Serialize, Deserialize};
 use crate::browser::types::UserContext;
 use crate::browsing_context::types::BrowsingContext;
-use crate::Extensible;
+use crate::EmptyParams;
 use super::types::*;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -18,44 +18,33 @@ pub enum SessionCommand {
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum SessionEndMethod {
-    #[serde(rename = "session.End")]
+    #[serde(rename = "session.end")]
     SessionEnd,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum SessionNewMethod {
-    #[serde(rename = "session.New")]
+    #[serde(rename = "session.new")]
     SessionNew,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum SessionStatusMethod {
-    #[serde(rename = "session.Status")]
+    #[serde(rename = "session.status")]
     SessionStatus,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum SessionSubscribeMethod {
-    #[serde(rename = "session.Subscribe")]
+    #[serde(rename = "session.subscribe")]
     SessionSubscribe,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum SessionUnsubscribeMethod {
-    #[serde(rename = "session.Unsubscribe")]
+    #[serde(rename = "session.unsubscribe")]
     SessionUnsubscribe,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-pub enum EmptyParams {
-    Extensible(Extensible),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

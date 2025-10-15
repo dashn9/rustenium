@@ -12,16 +12,14 @@ pub enum WebExtensionCommand {
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum WebExtensionInstallMethod {
-    #[serde(rename = "webExtension.Install")]
+    #[serde(rename = "webExtension.install")]
     WebExtensionInstall,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum WebExtensionUninstallMethod {
-    #[serde(rename = "webExtension.Uninstall")]
+    #[serde(rename = "webExtension.uninstall")]
     WebExtensionUninstall,
 }
 

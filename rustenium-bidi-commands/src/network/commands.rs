@@ -25,93 +25,80 @@ pub enum NetworkCommand {
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum NetworkAddDataCollectorMethod {
-    #[serde(rename = "network.AddDataCollector")]
+    #[serde(rename = "network.addDataCollector")]
     NetworkAddDataCollector,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum NetworkAddInterceptMethod {
-    #[serde(rename = "network.AddIntercept")]
+    #[serde(rename = "network.addIntercept")]
     NetworkAddIntercept,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum NetworkContinueRequestMethod {
-    #[serde(rename = "network.ContinueRequest")]
+    #[serde(rename = "network.continueRequest")]
     NetworkContinueRequest,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum NetworkContinueResponseMethod {
-    #[serde(rename = "network.ContinueResponse")]
+    #[serde(rename = "network.continueResponse")]
     NetworkContinueResponse,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum NetworkContinueWithAuthMethod {
-    #[serde(rename = "network.ContinueWithAuth")]
+    #[serde(rename = "network.continueWithAuth")]
     NetworkContinueWithAuth,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum NetworkDisownDataMethod {
-    #[serde(rename = "network.DisownData")]
+    #[serde(rename = "network.disownData")]
     NetworkDisownData,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum NetworkFailRequestMethod {
-    #[serde(rename = "network.FailRequest")]
+    #[serde(rename = "network.failRequest")]
     NetworkFailRequest,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum NetworkGetDataMethod {
-    #[serde(rename = "network.GetData")]
+    #[serde(rename = "network.getData")]
     NetworkGetData,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum NetworkProvideResponseMethod {
-    #[serde(rename = "network.ProvideResponse")]
+    #[serde(rename = "network.provideResponse")]
     NetworkProvideResponse,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum NetworkRemoveDataCollectorMethod {
-    #[serde(rename = "network.RemoveDataCollector")]
+    #[serde(rename = "network.removeDataCollector")]
     NetworkRemoveDataCollector,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum NetworkRemoveInterceptMethod {
-    #[serde(rename = "network.RemoveIntercept")]
+    #[serde(rename = "network.removeIntercept")]
     NetworkRemoveIntercept,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum NetworkSetCacheBehaviorMethod {
-    #[serde(rename = "network.SetCacheBehavior")]
+    #[serde(rename = "network.setCacheBehavior")]
     NetworkSetCacheBehavior,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum NetworkSetExtraHeadersMethod {
-    #[serde(rename = "network.SetExtraHeaders")]
+    #[serde(rename = "network.setExtraHeaders")]
     NetworkSetExtraHeaders,
 }
 
