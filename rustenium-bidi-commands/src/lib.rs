@@ -113,8 +113,8 @@ pub struct EmptyParams {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum Message {
-    ErrorResponse(ErrorResponse),
     CommandResponse(CommandResponse),
+    ErrorResponse(ErrorResponse),
     Event(Event),
 }
 
@@ -202,7 +202,6 @@ pub enum EventData {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum ErrorCode {
     #[serde(rename = "invalid argument")]
     InvalidArgument,
@@ -301,21 +300,18 @@ impl std::fmt::Display for ErrorCode {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum SuccessEnum {
     #[serde(rename = "success")]
     Success,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum ErrorEnum {
     #[serde(rename = "error")]
     Error,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum EventEnum {
     #[serde(rename = "event")]
     Event,

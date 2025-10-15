@@ -1130,12 +1130,10 @@ fn generate_rust_enum(name: &str, properties: &[crate::parser::Property], module
     output.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
 
     // Check if we need untagged serde for union types
-    // let is_union = properties.iter().any(|p| p.attributes.iter().any(|a| a.contains("serde(rename")));
-    // if is_union {
-    //     output.push_str("#[serde(untagged)]\n");
-    // }
-    // All enums should have untagged serde
-    output.push_str("#[serde(untagged)]\n");
+    // ErrorCode, SuccessEnum, ErrorEnum, and EventEnum should not be untagged
+    if name != "ErrorCode" && name != "SuccessEnum" && name != "ErrorEnum" && name != "EventEnum" {
+        output.push_str("#[serde(untagged)]\n");
+    }
 
     output.push_str(&format!("pub enum {} {{\n", name));
 
