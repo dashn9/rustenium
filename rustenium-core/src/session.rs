@@ -1,6 +1,7 @@
+use std::collections::HashMap;
 use rand::Rng;
-use rustenium_bidi_commands::{Command, CommandData, CommandResponse, ErrorResponse};
-use rustenium_bidi_commands::session::commands::{New as SessionNew, NewMethod as SessionNewMethod, NewParameters as SessionNewParameters, SessionCommand, SessionResult};
+use rustenium_bidi_commands::{Command, CommandData, CommandResponse, ErrorResponse, ResultData};
+use rustenium_bidi_commands::session::commands::{New as SessionNew, SessionNewMethod, NewParameters as SessionNewParameters, SessionCommand, SessionResult};
 use rustenium_bidi_commands::session::types::CapabilitiesRequest;
 use tokio::sync::oneshot;
 use crate::listeners::CommandResponseState;
@@ -45,7 +46,7 @@ impl<'a, T: ConnectionTransport<'a>> Session<'a, T> {
                 match command_result {
                     Ok(command_result) => {
                         match command_result {
-                            CommandResponse::SessionResult(session_result) => {
+                            ResultData::SessionResult(session_result) => {
                                 match session_result {
                                     SessionResult::NewResult(new_session_result) => {
                                         self.id = Some(new_session_result.session_id);
@@ -62,9 +63,9 @@ impl<'a, T: ConnectionTransport<'a>> Session<'a, T> {
         }
     }
 
-    async fn send(&mut self, command_data: CommandData) -> Result<CommandResponse, ErrorResponse>  {
+    async fn send(&mut self, command_data: CommandData) -> Result<ResultData, ErrorResponse>  {
         let command_id = loop {
-            let id = rand::rng().random::<u32>();
+            let id = rand::rng().random::<u64>();
             if !self.connection.commands_response_subscriptions.lock().await.contains_key(&id) {
                 break id;
             }
@@ -72,7 +73,7 @@ impl<'a, T: ConnectionTransport<'a>> Session<'a, T> {
         let command = Command {
             id : command_id,
             command_data,
-            extension: None
+            extensible: HashMap::new(),
         };
         let (tx, rx) = oneshot::channel::<CommandResponseState>();
         self.connection.commands_response_subscriptions.lock().await.insert(command_id, tx);

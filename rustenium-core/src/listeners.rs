@@ -1,6 +1,6 @@
 use std::{collections::HashMap, sync::{Arc}};
 
-use rustenium_bidi_commands::{CommandResponse, CommandResponse, ErrorResponse, Event, EventData, Message};
+use rustenium_bidi_commands::{CommandResponse, ErrorResponse, Event, EventData, Message};
 use serde::{Deserialize, Serialize};
 use tokio::sync::{mpsc::{unbounded_channel, UnboundedReceiver, UnboundedSender}, oneshot, Mutex};
 
@@ -58,12 +58,12 @@ pub enum CommandResponseState {
     Error(ErrorResponse),
 }
 pub struct CommandResponseListener {
-    subscriptions: Arc<Mutex<HashMap<u32, oneshot::Sender<CommandResponseState>>>>,
+    subscriptions: Arc<Mutex<HashMap<u64, oneshot::Sender<CommandResponseState>>>>,
     rx: UnboundedReceiver<CommandResponseState>,
 }
 
 impl CommandResponseListener {
-    pub fn new(rx: UnboundedReceiver<CommandResponseState>, subscriptions: Arc<Mutex<HashMap<u32, oneshot::Sender<CommandResponseState>>>>) -> Self {
+    pub fn new(rx: UnboundedReceiver<CommandResponseState>, subscriptions: Arc<Mutex<HashMap<u64, oneshot::Sender<CommandResponseState>>>>) -> Self {
         Self { rx, subscriptions }
     }
     pub fn start(mut self) {

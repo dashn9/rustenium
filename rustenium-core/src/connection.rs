@@ -10,7 +10,7 @@ use crate::transport::WebsocketConnectionTransport;
 
 pub struct Connection<'a, T: ConnectionTransport<'a>> {
     transport: T,
-    pub commands_response_subscriptions: Arc<Mutex<HashMap<u32, oneshot::Sender<CommandResponseState>>>>,
+    pub commands_response_subscriptions: Arc<Mutex<HashMap<u64, oneshot::Sender<CommandResponseState>>>>,
     _marker: std::marker::PhantomData<&'a ()>,
 }
 

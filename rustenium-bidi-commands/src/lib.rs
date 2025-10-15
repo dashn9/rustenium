@@ -225,3 +225,15 @@ pub enum EventEnum {
     Event,
 }
 
+impl std::fmt::Display for ErrorResponse {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "Error[{}]: {} (ID: {}){}",
+            self.error,
+            self.message,
+            self.id.map_or("None".to_string(), |id| id.to_string()),
+            self.stacktrace.as_ref().map_or("".to_string(), |st| format!("\nStacktrace:\n{}", st))
+        )
+    }
+}
