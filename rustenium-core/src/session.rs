@@ -67,11 +67,12 @@ impl<'a, T: ConnectionTransport<'a>> Session<'a, T> {
 
     async fn send(&mut self, command_data: CommandData) -> Result<ResultData, SessionSendError>  {
         let command_id = loop {
-            let id = rand::rng().random::<u64>();
+            let id = rand::rng().random::<u32>() as u64;
             if !self.connection.commands_response_subscriptions.lock().await.contains_key(&id) {
                 break id;
             }
         };
+
         let command = Command {
             id : command_id,
             command_data,
@@ -82,7 +83,7 @@ impl<'a, T: ConnectionTransport<'a>> Session<'a, T> {
         let raw_message = serde_json::to_string(&command).unwrap();
         self.connection.send(raw_message).await;
 
-        match timeout(Duration::from_millis(5000), rx).await {
+        match timeout(Duration::from_millis(10000), rx).await {
             Ok(Ok(command_result)) => match command_result {
                 CommandResponseState::Success(response) => Ok(response.result),
                 CommandResponseState::Error(err) => Err(SessionSendError::ErrorResponse(err))

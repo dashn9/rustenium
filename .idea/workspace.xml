@@ -23,7 +23,8 @@
     <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-generator/src/output.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/output.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-core/src/listeners.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/listeners.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-core/src/session.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/session.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -175,29 +176,24 @@
           <option name="timeStamp" value="70" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/rustenium-core/src/listeners.rs</url>
-          <line>73</line>
-          <option name="timeStamp" value="71" />
+          <url>file://$PROJECT_DIR$/rustenium-core/src/session.rs</url>
+          <line>88</line>
+          <option name="timeStamp" value="84" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/rustenium-core/src/listeners.rs</url>
-          <line>79</line>
-          <option name="timeStamp" value="72" />
+          <line>71</line>
+          <option name="timeStamp" value="87" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/rustenium-core/src/listeners.rs</url>
-          <line>27</line>
-          <option name="timeStamp" value="73" />
+          <url>file://$PROJECT_DIR$/rustenium-core/src/session.rs</url>
+          <line>83</line>
+          <option name="timeStamp" value="89" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/rustenium-bidi-commands/src/lib.rs</url>
-          <line>135</line>
-          <option name="timeStamp" value="82" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/rustenium-bidi-commands/src/lib.rs</url>
-          <line>237</line>
-          <option name="timeStamp" value="83" />
+          <line>62</line>
+          <option name="timeStamp" value="90" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
