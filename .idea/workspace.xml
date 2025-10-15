@@ -23,50 +23,33 @@
     <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/browser/commands.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/browser/commands.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/browser/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/browser/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/browser/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/browser/types.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/commands.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/commands.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/events.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/events.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/types.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/emulation/commands.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/emulation/commands.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/emulation/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/emulation/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/emulation/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/emulation/types.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/input/commands.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/input/commands.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/input/events.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/input/events.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/input/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/input/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/input/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/input/types.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/log/events.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/log/events.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/log/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/log/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/log/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/log/types.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/network/commands.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/network/commands.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/network/events.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/network/events.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/network/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/network/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/network/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/network/types.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/script/commands.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/script/commands.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/script/events.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/script/events.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/script/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/script/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/script/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/script/types.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/session/commands.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/session/commands.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/session/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/session/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/session/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/session/types.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/storage/commands.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/storage/commands.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/storage/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/storage/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/storage/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/storage/types.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/web_extension/commands.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/web_extension/commands.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/web_extension/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/web_extension/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/web_extension/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/web_extension/types.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-generator/src/command_parser.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/command_parser.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-generator/src/output.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/output.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-core/src/listeners.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/listeners.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-core/src/session.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/session.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-generator/src/parser.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/parser.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/browser/bidi/chrome.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/browser/bidi/chrome.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="RsBuildProfile:dev" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="RsBuildProfile:test" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -81,36 +64,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Cargo.Rustenium Generator.executor&quot;: &quot;Run&quot;,
-    &quot;Cargo.Test Rustenium.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.rust.reset.selective.auto.import&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/Documents/m-workspace/rustenium&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;org.rust.cargo.project.model.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
-    &quot;org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon&quot;: &quot;&quot;,
-    &quot;org.rust.disableDetachedFileInspectionD:/Documents/m-workspace/rustenium/rustenium-generator/output/mod.rs&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Cargo.Rustenium Generator.executor": "Debug",
+    "Cargo.Test Rustenium.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.rust.reset.selective.auto.import": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "D:/Documents/m-workspace/rustenium",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
+    "org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon": "",
+    "org.rust.disableDetachedFileInspectionD:/Documents/m-workspace/rustenium/rustenium-generator/output/mod.rs": "true",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Documents\m-workspace\rustenium\rustenium-generator\src" />
     </key>
   </component>
-  <component name="RunManager" selected="Cargo.Rustenium Generator">
+  <component name="RunManager" selected="Cargo.Test Rustenium">
     <configuration name="Rustenium Generator" type="CargoCommandRunConfiguration" factoryName="Cargo Command">
       <option name="buildProfileId" value="dev" />
       <option name="command" value="run" />
@@ -202,18 +185,33 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/rustenium-core/src/session.rs</url>
-          <line>72</line>
-          <option name="timeStamp" value="52" />
+          <line>47</line>
+          <option name="timeStamp" value="69" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/rustenium-core/src/session.rs</url>
-          <line>82</line>
-          <option name="timeStamp" value="54" />
+          <url>file://$PROJECT_DIR$/rustenium-core/src/transport.rs</url>
+          <line>130</line>
+          <option name="timeStamp" value="70" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/rustenium-generator/src/command_parser.rs</url>
-          <line>249</line>
-          <option name="timeStamp" value="55" />
+          <url>file://$PROJECT_DIR$/rustenium-core/src/listeners.rs</url>
+          <line>73</line>
+          <option name="timeStamp" value="71" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/rustenium-core/src/listeners.rs</url>
+          <line>79</line>
+          <option name="timeStamp" value="72" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/rustenium-core/src/listeners.rs</url>
+          <line>27</line>
+          <option name="timeStamp" value="73" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/rustenium-bidi-commands/src/lib.rs</url>
+          <line>45</line>
+          <option name="timeStamp" value="74" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

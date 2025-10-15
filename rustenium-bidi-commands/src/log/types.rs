@@ -29,6 +29,7 @@ pub struct BaseLogEntry {
     #[serde(rename = "timestamp")]
     pub timestamp: u64,
     #[serde(rename = "stackTrace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub stack_trace: Option<StackTrace>,
 }
 

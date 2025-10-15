@@ -12,26 +12,6 @@ pub enum ForcedColorsModeTheme {
     Dark,
 }
 
-fn geolocation_coordinates_default_accuracy() -> f64 {
-    1.0
-}
-
-fn geolocation_coordinates_default_altitude() -> Option<f64> {
-    None
-}
-
-fn geolocation_coordinates_default_altitude_accuracy() -> Option<f64> {
-    None
-}
-
-fn geolocation_coordinates_default_heading() -> Option<f64> {
-    None
-}
-
-fn geolocation_coordinates_default_speed() -> Option<f64> {
-    None
-}
-
 #[derive(Debug, Clone, Serialize, Deserialize, Validate)]
 pub struct GeolocationCoordinates {
     #[serde(rename = "latitude")]
@@ -43,25 +23,25 @@ pub struct GeolocationCoordinates {
     #[validate(maximum = 180.0)]
     pub longitude: f64,
     #[serde(rename = "accuracy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[validate(minimum = 0.0)]
-    #[serde(default = "geolocation_coordinates_default_accuracy")]
-    pub accuracy: f64,
+    pub accuracy: Option<f64>,
     #[serde(rename = "altitude")]
-    #[serde(default = "geolocation_coordinates_default_altitude")]
-    pub altitude: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub altitude: Option<Option<f64>>,
     #[serde(rename = "altitudeAccuracy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[validate(minimum = 0.0)]
-    #[serde(default = "geolocation_coordinates_default_altitude_accuracy")]
-    pub altitude_accuracy: Option<f64>,
+    pub altitude_accuracy: Option<Option<f64>>,
     #[serde(rename = "heading")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[validate(minimum = 0.0)]
     #[validate(maximum = 360.0)]
-    #[serde(default = "geolocation_coordinates_default_heading")]
-    pub heading: Option<f64>,
+    pub heading: Option<Option<f64>>,
     #[serde(rename = "speed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[validate(minimum = 0.0)]
-    #[serde(default = "geolocation_coordinates_default_speed")]
-    pub speed: Option<f64>,
+    pub speed: Option<Option<f64>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

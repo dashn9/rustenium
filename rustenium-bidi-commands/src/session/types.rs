@@ -57,12 +57,15 @@ pub struct ManualProxyConfiguration {
     #[serde(rename = "proxyType")]
     pub proxy_type: ManualEnum,
     #[serde(rename = "httpProxy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub http_proxy: Option<String>,
     #[serde(rename = "sslProxy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ssl_proxy: Option<String>,
     #[serde(flatten)]
     pub socks_proxy_configuration: Option<SocksProxyConfiguration>,
     #[serde(rename = "noProxy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub no_proxy: Option<Vec<String>>,
     #[serde(flatten)]
     pub extensible: Extensible,
@@ -124,32 +127,44 @@ pub enum UserPromptHandlerType {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UserPromptHandler {
     #[serde(rename = "alert")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub alert: Option<UserPromptHandlerType>,
     #[serde(rename = "beforeUnload")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub before_unload: Option<UserPromptHandlerType>,
     #[serde(rename = "confirm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub confirm: Option<UserPromptHandlerType>,
     #[serde(rename = "default")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub default: Option<UserPromptHandlerType>,
     #[serde(rename = "file")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub file: Option<UserPromptHandlerType>,
     #[serde(rename = "prompt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub prompt: Option<UserPromptHandlerType>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CapabilityRequest {
     #[serde(rename = "acceptInsecureCerts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_insecure_certs: Option<bool>,
     #[serde(rename = "browserName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub browser_name: Option<String>,
     #[serde(rename = "browserVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub browser_version: Option<String>,
     #[serde(rename = "platformName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub platform_name: Option<String>,
     #[serde(rename = "proxy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub proxy: Option<ProxyConfiguration>,
     #[serde(rename = "unhandledPromptBehavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub unhandled_prompt_behavior: Option<UserPromptHandler>,
     #[serde(flatten)]
     pub extensible: Extensible,
@@ -158,8 +173,10 @@ pub struct CapabilityRequest {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CapabilitiesRequest {
     #[serde(rename = "alwaysMatch")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub always_match: Option<CapabilityRequest>,
     #[serde(rename = "firstMatch")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub first_match: Option<Vec<CapabilityRequest>>,
 }
 
@@ -168,6 +185,7 @@ pub struct UnsubscribeByAttributesRequest {
     #[serde(rename = "events")]
     pub events: Vec<String>,
     #[serde(rename = "contexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub contexts: Option<Vec<BrowsingContext>>,
 }
 
@@ -195,10 +213,13 @@ pub struct NewResultCapabilities {
     #[serde(rename = "userAgent")]
     pub user_agent: String,
     #[serde(rename = "proxy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub proxy: Option<ProxyConfiguration>,
     #[serde(rename = "unhandledPromptBehavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub unhandled_prompt_behavior: Option<UserPromptHandler>,
     #[serde(rename = "webSocketUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub web_socket_url: Option<String>,
     #[serde(flatten)]
     pub extensible: Extensible,

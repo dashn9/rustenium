@@ -23,29 +23,17 @@ pub enum IncludeShadowTreeUnion {
     Open,
 }
 
-fn serialization_options_default_max_dom_depth() -> Option<u64> {
-    Some(0)
-}
-
-fn serialization_options_default_max_object_depth() -> Option<u64> {
-    None
-}
-
-fn serialization_options_default_include_shadow_tree() -> IncludeShadowTreeUnion {
-    IncludeShadowTreeUnion::None
-}
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SerializationOptions {
     #[serde(rename = "maxDomDepth")]
-    #[serde(default = "serialization_options_default_max_dom_depth")]
-    pub max_dom_depth: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_dom_depth: Option<Option<u64>>,
     #[serde(rename = "maxObjectDepth")]
-    #[serde(default = "serialization_options_default_max_object_depth")]
-    pub max_object_depth: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_object_depth: Option<Option<u64>>,
     #[serde(rename = "includeShadowTree")]
-    #[serde(default = "serialization_options_default_include_shadow_tree")]
-    pub include_shadow_tree: IncludeShadowTreeUnion,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_shadow_tree: Option<IncludeShadowTreeUnion>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -62,8 +50,10 @@ pub struct ChannelProperties {
     #[serde(rename = "channel")]
     pub channel: Channel,
     #[serde(rename = "serializationOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub serialization_options: Option<SerializationOptions>,
     #[serde(rename = "ownership")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ownership: Option<ResultOwnership>,
 }
 
@@ -80,6 +70,7 @@ pub struct ContextTarget {
     #[serde(rename = "context")]
     pub context: BrowsingContext,
     #[serde(rename = "sandbox")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sandbox: Option<String>,
 }
 
@@ -110,6 +101,7 @@ pub struct SharedReference {
     #[serde(rename = "sharedId")]
     pub shared_id: SharedId,
     #[serde(rename = "handle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub handle: Option<Handle>,
     #[serde(flatten)]
     pub extensible: Extensible,
@@ -120,6 +112,7 @@ pub struct RemoteObjectReference {
     #[serde(rename = "handle")]
     pub handle: Handle,
     #[serde(rename = "sharedId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub shared_id: Option<SharedId>,
     #[serde(flatten)]
     pub extensible: Extensible,
@@ -334,6 +327,7 @@ pub struct RegExpValue {
     #[serde(rename = "pattern")]
     pub pattern: String,
     #[serde(rename = "flags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub flags: Option<String>,
 }
 
@@ -420,8 +414,10 @@ pub struct SymbolRemoteValue {
     #[serde(rename = "type")]
     pub r#type: SymbolEnum,
     #[serde(rename = "handle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub handle: Option<Handle>,
     #[serde(rename = "internalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub internal_id: Option<InternalId>,
 }
 
@@ -433,10 +429,13 @@ pub struct ArrayRemoteValue {
     #[serde(rename = "type")]
     pub r#type: ArrayEnum,
     #[serde(rename = "handle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub handle: Option<Handle>,
     #[serde(rename = "internalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub internal_id: Option<InternalId>,
     #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<ListRemoteValue>,
 }
 
@@ -455,10 +454,13 @@ pub struct ObjectRemoteValue {
     #[serde(rename = "type")]
     pub r#type: ObjectEnum,
     #[serde(rename = "handle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub handle: Option<Handle>,
     #[serde(rename = "internalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub internal_id: Option<InternalId>,
     #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<MappingRemoteValue>,
 }
 
@@ -474,8 +476,10 @@ pub struct FunctionRemoteValue {
     #[serde(rename = "type")]
     pub r#type: FunctionEnum,
     #[serde(rename = "handle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub handle: Option<Handle>,
     #[serde(rename = "internalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub internal_id: Option<InternalId>,
 }
 
@@ -484,8 +488,10 @@ pub struct RegExpRemoteValue {
     #[serde(flatten)]
     pub reg_exp_local_value: RegExpLocalValue,
     #[serde(rename = "handle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub handle: Option<Handle>,
     #[serde(rename = "internalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub internal_id: Option<InternalId>,
 }
 
@@ -494,8 +500,10 @@ pub struct DateRemoteValue {
     #[serde(flatten)]
     pub date_local_value: DateLocalValue,
     #[serde(rename = "handle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub handle: Option<Handle>,
     #[serde(rename = "internalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub internal_id: Option<InternalId>,
 }
 
@@ -504,10 +512,13 @@ pub struct MapRemoteValue {
     #[serde(rename = "type")]
     pub r#type: MapEnum,
     #[serde(rename = "handle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub handle: Option<Handle>,
     #[serde(rename = "internalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub internal_id: Option<InternalId>,
     #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<MappingRemoteValue>,
 }
 
@@ -516,10 +527,13 @@ pub struct SetRemoteValue {
     #[serde(rename = "type")]
     pub r#type: SetEnum,
     #[serde(rename = "handle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub handle: Option<Handle>,
     #[serde(rename = "internalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub internal_id: Option<InternalId>,
     #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<ListRemoteValue>,
 }
 
@@ -535,8 +549,10 @@ pub struct WeakMapRemoteValue {
     #[serde(rename = "type")]
     pub r#type: WeakmapEnum,
     #[serde(rename = "handle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub handle: Option<Handle>,
     #[serde(rename = "internalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub internal_id: Option<InternalId>,
 }
 
@@ -552,8 +568,10 @@ pub struct WeakSetRemoteValue {
     #[serde(rename = "type")]
     pub r#type: WeaksetEnum,
     #[serde(rename = "handle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub handle: Option<Handle>,
     #[serde(rename = "internalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub internal_id: Option<InternalId>,
 }
 
@@ -569,8 +587,10 @@ pub struct GeneratorRemoteValue {
     #[serde(rename = "type")]
     pub r#type: GeneratorEnum,
     #[serde(rename = "handle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub handle: Option<Handle>,
     #[serde(rename = "internalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub internal_id: Option<InternalId>,
 }
 
@@ -586,8 +606,10 @@ pub struct ErrorRemoteValue {
     #[serde(rename = "type")]
     pub r#type: ErrorEnum,
     #[serde(rename = "handle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub handle: Option<Handle>,
     #[serde(rename = "internalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub internal_id: Option<InternalId>,
 }
 
@@ -603,8 +625,10 @@ pub struct ProxyRemoteValue {
     #[serde(rename = "type")]
     pub r#type: ProxyEnum,
     #[serde(rename = "handle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub handle: Option<Handle>,
     #[serde(rename = "internalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub internal_id: Option<InternalId>,
 }
 
@@ -620,8 +644,10 @@ pub struct PromiseRemoteValue {
     #[serde(rename = "type")]
     pub r#type: PromiseEnum,
     #[serde(rename = "handle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub handle: Option<Handle>,
     #[serde(rename = "internalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub internal_id: Option<InternalId>,
 }
 
@@ -637,8 +663,10 @@ pub struct TypedArrayRemoteValue {
     #[serde(rename = "type")]
     pub r#type: TypedarrayEnum,
     #[serde(rename = "handle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub handle: Option<Handle>,
     #[serde(rename = "internalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub internal_id: Option<InternalId>,
 }
 
@@ -654,8 +682,10 @@ pub struct ArrayBufferRemoteValue {
     #[serde(rename = "type")]
     pub r#type: ArraybufferEnum,
     #[serde(rename = "handle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub handle: Option<Handle>,
     #[serde(rename = "internalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub internal_id: Option<InternalId>,
 }
 
@@ -671,10 +701,13 @@ pub struct NodeListRemoteValue {
     #[serde(rename = "type")]
     pub r#type: NodelistEnum,
     #[serde(rename = "handle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub handle: Option<Handle>,
     #[serde(rename = "internalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub internal_id: Option<InternalId>,
     #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<ListRemoteValue>,
 }
 
@@ -690,10 +723,13 @@ pub struct HTMLCollectionRemoteValue {
     #[serde(rename = "type")]
     pub r#type: HtmlcollectionEnum,
     #[serde(rename = "handle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub handle: Option<Handle>,
     #[serde(rename = "internalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub internal_id: Option<InternalId>,
     #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<ListRemoteValue>,
 }
 
@@ -716,16 +752,22 @@ pub enum ModeUnion {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NodePropertiesAttributes {
     #[serde(rename = "children")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub children: Option<Vec<NodeRemoteValue>>,
     #[serde(rename = "localName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub local_name: Option<String>,
     #[serde(rename = "mode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub mode: Option<ModeUnion>,
     #[serde(rename = "namespaceURI")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub namespace_uri: Option<String>,
     #[serde(rename = "nodeValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub node_value: Option<String>,
     #[serde(rename = "shadowRoot")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub shadow_root: Option<Option<Box<NodeRemoteValue>>>,
 }
 
@@ -736,6 +778,7 @@ pub struct NodeProperties {
     #[serde(rename = "childNodeCount")]
     pub child_node_count: u64,
     #[serde(rename = "attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes: Option<NodePropertiesAttributes>,
 }
 
@@ -744,12 +787,16 @@ pub struct NodeRemoteValue {
     #[serde(rename = "type")]
     pub r#type: NodeEnum,
     #[serde(rename = "sharedId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub shared_id: Option<SharedId>,
     #[serde(rename = "handle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub handle: Option<Handle>,
     #[serde(rename = "internalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub internal_id: Option<InternalId>,
     #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<NodeProperties>,
 }
 
@@ -773,8 +820,10 @@ pub struct WindowProxyRemoteValue {
     #[serde(rename = "value")]
     pub value: WindowProxyProperties,
     #[serde(rename = "handle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub handle: Option<Handle>,
     #[serde(rename = "internalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub internal_id: Option<InternalId>,
 }
 
@@ -880,6 +929,7 @@ pub struct WindowRealmInfo {
     #[serde(rename = "context")]
     pub context: BrowsingContext,
     #[serde(rename = "sandbox")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sandbox: Option<String>,
 }
 
@@ -1008,6 +1058,7 @@ pub struct Source {
     #[serde(rename = "realm")]
     pub realm: Realm,
     #[serde(rename = "context")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub context: Option<BrowsingContext>,
 }
 

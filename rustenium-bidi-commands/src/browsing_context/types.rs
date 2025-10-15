@@ -24,6 +24,7 @@ pub struct ImageFormat {
     #[serde(rename = "type")]
     pub r#type: String,
     #[serde(rename = "quality")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[validate(minimum = 0.0)]
     #[validate(maximum = 1.0)]
     pub quality: Option<f64>,
@@ -91,8 +92,10 @@ pub enum AccessibilityEnum {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AccessibilityLocatorValue {
     #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     #[serde(rename = "role")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
 }
 
@@ -163,10 +166,13 @@ pub struct InnerTextLocator {
     #[serde(rename = "value")]
     pub value: String,
     #[serde(rename = "ignoreCase")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub ignore_case: Option<bool>,
     #[serde(rename = "matchType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub match_type: Option<MatchTypeUnion>,
     #[serde(rename = "maxDepth")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_depth: Option<u64>,
 }
 
@@ -206,40 +212,24 @@ pub enum ReadinessState {
     Complete,
 }
 
-fn print_margin_parameters_default_bottom() -> f64 {
-    1.0
-}
-
-fn print_margin_parameters_default_left() -> f64 {
-    1.0
-}
-
-fn print_margin_parameters_default_right() -> f64 {
-    1.0
-}
-
-fn print_margin_parameters_default_top() -> f64 {
-    1.0
-}
-
 #[derive(Debug, Clone, Serialize, Deserialize, Validate)]
 pub struct PrintMarginParameters {
     #[serde(rename = "bottom")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[validate(minimum = 0.0)]
-    #[serde(default = "print_margin_parameters_default_bottom")]
-    pub bottom: f64,
+    pub bottom: Option<f64>,
     #[serde(rename = "left")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[validate(minimum = 0.0)]
-    #[serde(default = "print_margin_parameters_default_left")]
-    pub left: f64,
+    pub left: Option<f64>,
     #[serde(rename = "right")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[validate(minimum = 0.0)]
-    #[serde(default = "print_margin_parameters_default_right")]
-    pub right: f64,
+    pub right: Option<f64>,
     #[serde(rename = "top")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[validate(minimum = 0.0)]
-    #[serde(default = "print_margin_parameters_default_top")]
-    pub top: f64,
+    pub top: Option<f64>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -251,24 +241,16 @@ pub enum OrientationUnion {
     Landscape,
 }
 
-fn print_page_parameters_default_height() -> f64 {
-    27.94
-}
-
-fn print_page_parameters_default_width() -> f64 {
-    21.59
-}
-
 #[derive(Debug, Clone, Serialize, Deserialize, Validate)]
 pub struct PrintPageParameters {
     #[serde(rename = "height")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[validate(minimum = 0.0352)]
-    #[serde(default = "print_page_parameters_default_height")]
-    pub height: f64,
+    pub height: Option<f64>,
     #[serde(rename = "width")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[validate(minimum = 0.0352)]
-    #[serde(default = "print_page_parameters_default_width")]
-    pub width: f64,
+    pub width: Option<f64>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -301,6 +283,7 @@ pub struct Info {
     #[serde(rename = "userContext")]
     pub user_context: UserContext,
     #[serde(rename = "parent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parent: Option<Option<BrowsingContext>>,
 }
 
@@ -399,6 +382,7 @@ pub struct UserPromptClosedParameters {
     #[serde(rename = "type")]
     pub r#type: UserPromptType,
     #[serde(rename = "userText")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_text: Option<String>,
 }
 
@@ -413,6 +397,7 @@ pub struct UserPromptOpenedParameters {
     #[serde(rename = "type")]
     pub r#type: UserPromptType,
     #[serde(rename = "defaultValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub default_value: Option<String>,
 }
 

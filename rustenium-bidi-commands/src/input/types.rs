@@ -24,6 +24,7 @@ pub struct PauseAction {
     #[serde(rename = "type")]
     pub r#type: PauseEnum,
     #[serde(rename = "duration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub duration: Option<u64>,
 }
 
@@ -113,15 +114,11 @@ pub enum PointerType {
     Touch,
 }
 
-fn pointer_parameters_default_pointer_type() -> PointerType {
-    PointerType::Mouse
-}
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PointerParameters {
     #[serde(rename = "pointerType")]
-    #[serde(default = "pointer_parameters_default_pointer_type")]
-    pub pointer_type: PointerType,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pointer_type: Option<PointerType>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -131,63 +128,35 @@ pub enum PointerDownEnum {
     PointerDown,
 }
 
-fn pointer_common_properties_default_width() -> u64 {
-    1
-}
-
-fn pointer_common_properties_default_height() -> u64 {
-    1
-}
-
-fn pointer_common_properties_default_pressure() -> f64 {
-    0.0
-}
-
-fn pointer_common_properties_default_tangential_pressure() -> f64 {
-    0.0
-}
-
-fn pointer_common_properties_default_twist() -> i64 {
-    0
-}
-
-fn pointer_common_properties_default_altitude_angle() -> f64 {
-    0.0
-}
-
-fn pointer_common_properties_default_azimuth_angle() -> f64 {
-    0.0
-}
-
 #[derive(Debug, Clone, Serialize, Deserialize, Validate)]
 pub struct PointerCommonProperties {
     #[serde(rename = "width")]
-    #[serde(default = "pointer_common_properties_default_width")]
-    pub width: u64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub width: Option<u64>,
     #[serde(rename = "height")]
-    #[serde(default = "pointer_common_properties_default_height")]
-    pub height: u64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub height: Option<u64>,
     #[serde(rename = "pressure")]
-    #[serde(default = "pointer_common_properties_default_pressure")]
-    pub pressure: f64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pressure: Option<f64>,
     #[serde(rename = "tangentialPressure")]
-    #[serde(default = "pointer_common_properties_default_tangential_pressure")]
-    pub tangential_pressure: f64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tangential_pressure: Option<f64>,
     #[serde(rename = "twist")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[validate(minimum = 0)]
     #[validate(maximum = 359)]
-    #[serde(default = "pointer_common_properties_default_twist")]
-    pub twist: i64,
+    pub twist: Option<i64>,
     #[serde(rename = "altitudeAngle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[validate(minimum = 0.0)]
     #[validate(maximum = 1.5707963267948966)]
-    #[serde(default = "pointer_common_properties_default_altitude_angle")]
-    pub altitude_angle: f64,
+    pub altitude_angle: Option<f64>,
     #[serde(rename = "azimuthAngle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[validate(minimum = 0.0)]
     #[validate(maximum = 6.283185307179586)]
-    #[serde(default = "pointer_common_properties_default_azimuth_angle")]
-    pub azimuth_angle: f64,
+    pub azimuth_angle: Option<f64>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -256,8 +225,10 @@ pub struct PointerMoveAction {
     #[serde(rename = "y")]
     pub y: f64,
     #[serde(rename = "duration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub duration: Option<u64>,
     #[serde(rename = "origin")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub origin: Option<Origin>,
     #[serde(flatten)]
     pub pointer_common_properties: PointerCommonProperties,
@@ -279,6 +250,7 @@ pub struct PointerSourceActions {
     #[serde(rename = "id")]
     pub id: String,
     #[serde(rename = "parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<PointerParameters>,
     #[serde(rename = "actions")]
     pub actions: Vec<PointerSourceAction>,
@@ -298,10 +270,6 @@ pub enum ScrollEnum {
     Scroll,
 }
 
-fn wheel_scroll_action_default_origin() -> Origin {
-    Origin::Viewport
-}
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WheelScrollAction {
     #[serde(rename = "type")]
@@ -315,10 +283,11 @@ pub struct WheelScrollAction {
     #[serde(rename = "deltaY")]
     pub delta_y: i64,
     #[serde(rename = "duration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub duration: Option<u64>,
     #[serde(rename = "origin")]
-    #[serde(default = "wheel_scroll_action_default_origin")]
-    pub origin: Origin,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub origin: Option<Origin>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -352,6 +321,7 @@ pub struct FileDialogInfo {
     #[serde(rename = "context")]
     pub context: BrowsingContext,
     #[serde(rename = "element")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub element: Option<SharedReference>,
     #[serde(rename = "multiple")]
     pub multiple: bool,

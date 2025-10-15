@@ -58,17 +58,17 @@ pub struct AddPreloadScriptParameters {
     #[serde(rename = "functionDeclaration")]
     pub function_declaration: String,
     #[serde(rename = "arguments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arguments: Option<Vec<ChannelValue>>,
     #[serde(rename = "contexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub contexts: Option<Vec<BrowsingContext>>,
     #[serde(rename = "userContexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_contexts: Option<Vec<UserContext>>,
     #[serde(rename = "sandbox")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub sandbox: Option<String>,
-}
-
-fn call_function_parameters_default_user_activation() -> bool {
-    false
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -80,16 +80,20 @@ pub struct CallFunctionParameters {
     #[serde(rename = "target")]
     pub target: Target,
     #[serde(rename = "arguments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub arguments: Option<Vec<LocalValue>>,
     #[serde(rename = "resultOwnership")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub result_ownership: Option<ResultOwnership>,
     #[serde(rename = "serializationOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub serialization_options: Option<SerializationOptions>,
     #[serde(rename = "this")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub this: Option<LocalValue>,
     #[serde(rename = "userActivation")]
-    #[serde(default = "call_function_parameters_default_user_activation")]
-    pub user_activation: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_activation: Option<bool>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -98,10 +102,6 @@ pub struct DisownParameters {
     pub handles: Vec<Handle>,
     #[serde(rename = "target")]
     pub target: Target,
-}
-
-fn evaluate_parameters_default_user_activation() -> bool {
-    false
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -113,19 +113,23 @@ pub struct EvaluateParameters {
     #[serde(rename = "awaitPromise")]
     pub await_promise: bool,
     #[serde(rename = "resultOwnership")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub result_ownership: Option<ResultOwnership>,
     #[serde(rename = "serializationOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub serialization_options: Option<SerializationOptions>,
     #[serde(rename = "userActivation")]
-    #[serde(default = "evaluate_parameters_default_user_activation")]
-    pub user_activation: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_activation: Option<bool>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetRealmsParameters {
     #[serde(rename = "context")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub context: Option<BrowsingContext>,
     #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub r#type: Option<RealmType>,
 }
 

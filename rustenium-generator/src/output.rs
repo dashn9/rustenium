@@ -323,6 +323,49 @@ fn generate_root_lib(modules: &[Module], root_protocol: &crate::module::RootProt
     }
     output.push_str("\n");
 
+    // Add deserializer helper functions
+    output.push_str("use serde::Deserializer;\n\n");
+    output.push_str("fn float_or_int_to_u64<'de, D>(deserializer: D) -> Result<u64, D::Error>\n");
+    output.push_str("where\n");
+    output.push_str("    D: Deserializer<'de>,\n");
+    output.push_str("{\n");
+    output.push_str("    let value = serde_json::Value::deserialize(deserializer)?;\n\n");
+    output.push_str("    match value {\n");
+    output.push_str("        serde_json::Value::Number(num) => {\n");
+    output.push_str("            if let Some(i) = num.as_u64() {\n");
+    output.push_str("                Ok(i)\n");
+    output.push_str("            } else if let Some(f) = num.as_f64() {\n");
+    output.push_str("                Ok(f as u64)\n");
+    output.push_str("            } else {\n");
+    output.push_str("                Err(serde::de::Error::custom(\"Invalid number\"))\n");
+    output.push_str("            }\n");
+    output.push_str("        }\n");
+    output.push_str("        _ => Err(serde::de::Error::custom(\"Expected a number\")),\n");
+    output.push_str("    }\n");
+    output.push_str("}\n\n");
+
+    output.push_str("fn option_float_or_int_to_u64<'de, D>(deserializer: D) -> Result<Option<u64>, D::Error>\n");
+    output.push_str("where\n");
+    output.push_str("    D: Deserializer<'de>,\n");
+    output.push_str("{\n");
+    output.push_str("    let value = serde_json::Value::deserialize(deserializer)?;\n\n");
+    output.push_str("    if value.is_null() {\n");
+    output.push_str("        return Ok(None);\n");
+    output.push_str("    }\n\n");
+    output.push_str("    match value {\n");
+    output.push_str("        serde_json::Value::Number(num) => {\n");
+    output.push_str("            if let Some(i) = num.as_u64() {\n");
+    output.push_str("                Ok(Some(i))\n");
+    output.push_str("            } else if let Some(f) = num.as_f64() {\n");
+    output.push_str("                Ok(Some(f as u64))\n");
+    output.push_str("            } else {\n");
+    output.push_str("                Err(serde::de::Error::custom(\"Invalid number\"))\n");
+    output.push_str("            }\n");
+    output.push_str("        }\n");
+    output.push_str("        _ => Err(serde::de::Error::custom(\"Expected a number\")),\n");
+    output.push_str("    }\n");
+    output.push_str("}\n\n");
+
     // Generate Extensible type
     output.push_str("pub type Extensible = HashMap<String, serde_json::Value>;\n\n");
 
@@ -338,16 +381,38 @@ fn generate_root_lib(modules: &[Module], root_protocol: &crate::module::RootProt
     output.push_str(&generate_rust_struct("EmptyParams", &root_protocol.empty_params.properties, "root"));
     output.push_str("\n\n");
 
-    // Generate Message
-    output.push_str(&generate_rust_enum("Message", &root_protocol.message.properties, "root"));
+    // Generate Message with ErrorResponse before CommandResponse
+    let mut message_properties = root_protocol.message.properties.clone();
+    // Find and swap ErrorResponse and CommandResponse
+    if let (Some(error_idx), Some(cmd_idx)) = (
+        message_properties.iter().position(|p| p.value == "ErrorResponse"),
+        message_properties.iter().position(|p| p.value == "CommandResponse")
+    ) {
+        if error_idx > cmd_idx {
+            message_properties.swap(error_idx, cmd_idx);
+        }
+    }
+    output.push_str(&generate_rust_enum("Message", &message_properties, "root"));
     output.push_str("\n\n");
 
-    // Generate CommandResponse
-    output.push_str(&generate_rust_struct("CommandResponse", &root_protocol.command_response.properties, "root"));
+    // Generate CommandResponse with deserialize_with on id field
+    let mut cmd_response_properties = root_protocol.command_response.properties.clone();
+    for property in &mut cmd_response_properties {
+        if to_snake_case(&property.name) == "id" {
+            property.attributes.push("#[serde(deserialize_with = \"float_or_int_to_u64\")]".to_string());
+        }
+    }
+    output.push_str(&generate_rust_struct("CommandResponse", &cmd_response_properties, "root"));
     output.push_str("\n\n");
 
-    // Generate ErrorResponse
-    output.push_str(&generate_rust_struct("ErrorResponse", &root_protocol.error_response.properties, "root"));
+    // Generate ErrorResponse with deserialize_with on id field
+    let mut error_response_properties = root_protocol.error_response.properties.clone();
+    for property in &mut error_response_properties {
+        if to_snake_case(&property.name) == "id" {
+            property.attributes.push("#[serde(deserialize_with = \"option_float_or_int_to_u64\")]".to_string());
+        }
+    }
+    output.push_str(&generate_rust_struct("ErrorResponse", &error_response_properties, "root"));
     output.push_str("\n\n");
 
     // Add Display implementation for ErrorResponse

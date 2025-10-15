@@ -1,4 +1,4 @@
-use serde::{Serialize, Deserialize};
+use serde::{Serialize, Deserialize, Deserializer};
 use std::collections::HashMap;
 
 pub mod browser;
@@ -36,6 +36,50 @@ pub use web_extension::commands::WebExtensionResult;
 
 pub type Extensible = HashMap<String, serde_json::Value>;
 
+fn float_or_int_to_u64<'de, D>(deserializer: D) -> Result<u64, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let value = serde_json::Value::deserialize(deserializer)?;
+
+    match value {
+        serde_json::Value::Number(num) => {
+            if let Some(i) = num.as_u64() {
+                Ok(i)
+            } else if let Some(f) = num.as_f64() {
+                Ok(f as u64)
+            } else {
+                Err(serde::de::Error::custom("Invalid number"))
+            }
+        }
+        _ => Err(serde::de::Error::custom("Expected a number")),
+    }
+}
+
+fn option_float_or_int_to_u64<'de, D>(deserializer: D) -> Result<Option<u64>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let value = serde_json::Value::deserialize(deserializer)?;
+
+    if value.is_null() {
+        ()
+    }
+
+    match value {
+        serde_json::Value::Number(num) => {
+            if let Some(i) = num.as_u64() {
+                Ok(Some(i))
+            } else if let Some(f) = num.as_f64() {
+                Ok(Some(f as u64))
+            } else {
+                Err(serde::de::Error::custom("Invalid number"))
+            }
+        }
+        _ => Err(serde::de::Error::custom("Expected a number")),
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Command {
     #[serde(rename = "id")]
@@ -69,8 +113,8 @@ pub struct EmptyParams {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum Message {
-    CommandResponse(CommandResponse),
     ErrorResponse(ErrorResponse),
+    CommandResponse(CommandResponse),
     Event(Event),
 }
 
@@ -79,6 +123,7 @@ pub struct CommandResponse {
     #[serde(rename = "type")]
     pub r#type: SuccessEnum,
     #[serde(rename = "id")]
+    #[serde(deserialize_with = "float_or_int_to_u64")]
     pub id: u64,
     #[serde(rename = "result")]
     pub result: ResultData,
@@ -91,12 +136,14 @@ pub struct ErrorResponse {
     #[serde(rename = "type")]
     pub r#type: ErrorEnum,
     #[serde(rename = "id")]
+    #[serde(deserialize_with = "option_float_or_int_to_u64")]
     pub id: Option<u64>,
     #[serde(rename = "error")]
     pub error: ErrorCode,
     #[serde(rename = "message")]
     pub message: String,
     #[serde(rename = "stacktrace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub stacktrace: Option<String>,
     #[serde(flatten)]
     pub extensible: Extensible,

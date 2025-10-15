@@ -58,8 +58,10 @@ pub struct SetForcedColorsModeThemeOverrideParameters {
     #[serde(rename = "theme")]
     pub theme: Option<ForcedColorsModeTheme>,
     #[serde(rename = "contexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub contexts: Option<Vec<BrowsingContext>>,
     #[serde(rename = "userContexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_contexts: Option<Vec<UserContext>>,
 }
 
@@ -68,8 +70,10 @@ pub struct SetGeolocationOverrideParameters {
     #[serde(rename = "coordinates_error")]
     pub coordinates_error: Option<CoordinatesErrorUnion>,
     #[serde(rename = "contexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub contexts: Option<Vec<BrowsingContext>>,
     #[serde(rename = "userContexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_contexts: Option<Vec<UserContext>>,
 }
 
@@ -78,8 +82,10 @@ pub struct SetLocaleOverrideParameters {
     #[serde(rename = "locale")]
     pub locale: Option<String>,
     #[serde(rename = "contexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub contexts: Option<Vec<BrowsingContext>>,
     #[serde(rename = "userContexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_contexts: Option<Vec<UserContext>>,
 }
 
@@ -88,8 +94,10 @@ pub struct SetScreenOrientationOverrideParameters {
     #[serde(rename = "screenOrientation")]
     pub screen_orientation: Option<ScreenOrientation>,
     #[serde(rename = "contexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub contexts: Option<Vec<BrowsingContext>>,
     #[serde(rename = "userContexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_contexts: Option<Vec<UserContext>>,
 }
 
@@ -98,8 +106,10 @@ pub struct SetScriptingEnabledParameters {
     #[serde(rename = "enabled")]
     pub enabled: Option<bool>,
     #[serde(rename = "contexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub contexts: Option<Vec<BrowsingContext>>,
     #[serde(rename = "userContexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_contexts: Option<Vec<UserContext>>,
 }
 
@@ -108,8 +118,10 @@ pub struct SetTimezoneOverrideParameters {
     #[serde(rename = "timezone")]
     pub timezone: Option<String>,
     #[serde(rename = "contexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub contexts: Option<Vec<BrowsingContext>>,
     #[serde(rename = "userContexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_contexts: Option<Vec<UserContext>>,
 }
 

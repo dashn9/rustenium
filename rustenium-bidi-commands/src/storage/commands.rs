@@ -34,16 +34,20 @@ pub enum StorageSetCookieMethod {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DeleteCookiesParameters {
     #[serde(rename = "filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<CookieFilter>,
     #[serde(rename = "partition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub partition: Option<PartitionDescriptor>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetCookiesParameters {
     #[serde(rename = "filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<CookieFilter>,
     #[serde(rename = "partition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub partition: Option<PartitionDescriptor>,
 }
 
@@ -52,6 +56,7 @@ pub struct SetCookieParameters {
     #[serde(rename = "cookie")]
     pub cookie: PartialCookie,
     #[serde(rename = "partition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub partition: Option<PartitionDescriptor>,
 }
 

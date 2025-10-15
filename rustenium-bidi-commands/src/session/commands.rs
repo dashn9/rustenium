@@ -58,8 +58,10 @@ pub struct SubscriptionRequest {
     #[serde(rename = "events")]
     pub events: Vec<String>,
     #[serde(rename = "contexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub contexts: Option<Vec<BrowsingContext>>,
     #[serde(rename = "userContexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_contexts: Option<Vec<UserContext>>,
 }
 

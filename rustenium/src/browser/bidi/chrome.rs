@@ -50,6 +50,9 @@ impl <'a>ChromeDriver<'a> {
         let result = self.start(connection_transport_config).await;
         self.driver.session = Some(result.0);
         self.driver.driver_process = Some(result.1);
-        self.driver.new_session(SessionConnectionType::WebSocket).await.unwrap();
+        match self.driver.new_session(SessionConnectionType::WebSocket).await {
+            Ok(session) => (),
+            Err(e) => panic!("A problem occurred creating the session: {e:?}"),
+        }
     }
 }

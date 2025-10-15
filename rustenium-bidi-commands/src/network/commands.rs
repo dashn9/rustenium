@@ -102,10 +102,6 @@ pub enum NetworkSetExtraHeadersMethod {
     NetworkSetExtraHeaders,
 }
 
-fn add_data_collector_parameters_default_collector_type() -> CollectorType {
-    CollectorType::Blob
-}
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AddDataCollectorParameters {
     #[serde(rename = "dataTypes")]
@@ -113,11 +109,13 @@ pub struct AddDataCollectorParameters {
     #[serde(rename = "maxEncodedDataSize")]
     pub max_encoded_data_size: u64,
     #[serde(rename = "collectorType")]
-    #[serde(default = "add_data_collector_parameters_default_collector_type")]
-    pub collector_type: CollectorType,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub collector_type: Option<CollectorType>,
     #[serde(rename = "contexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub contexts: Option<Vec<BrowsingContext>>,
     #[serde(rename = "userContexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_contexts: Option<Vec<UserContext>>,
 }
 
@@ -126,8 +124,10 @@ pub struct AddInterceptParameters {
     #[serde(rename = "phases")]
     pub phases: Vec<InterceptPhase>,
     #[serde(rename = "contexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub contexts: Option<Vec<BrowsingContext>>,
     #[serde(rename = "urlPatterns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub url_patterns: Option<Vec<UrlPattern>>,
 }
 
@@ -136,14 +136,19 @@ pub struct ContinueRequestParameters {
     #[serde(rename = "request")]
     pub request: Request,
     #[serde(rename = "body")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub body: Option<BytesValue>,
     #[serde(rename = "cookies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cookies: Option<Vec<CookieHeader>>,
     #[serde(rename = "headers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub headers: Option<Vec<Header>>,
     #[serde(rename = "method")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub method: Option<String>,
     #[serde(rename = "url")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
 }
 
@@ -152,14 +157,19 @@ pub struct ContinueResponseParameters {
     #[serde(rename = "request")]
     pub request: Request,
     #[serde(rename = "cookies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cookies: Option<Vec<SetCookieHeader>>,
     #[serde(rename = "credentials")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub credentials: Option<AuthCredentials>,
     #[serde(rename = "headers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub headers: Option<Vec<Header>>,
     #[serde(rename = "reasonPhrase")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub reason_phrase: Option<String>,
     #[serde(rename = "statusCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_code: Option<u64>,
 }
 
@@ -187,19 +197,16 @@ pub struct FailRequestParameters {
     pub request: Request,
 }
 
-fn get_data_parameters_default_disown() -> bool {
-    false
-}
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GetDataParameters {
     #[serde(rename = "dataType")]
     pub data_type: DataType,
     #[serde(rename = "collector")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub collector: Option<Collector>,
     #[serde(rename = "disown")]
-    #[serde(default = "get_data_parameters_default_disown")]
-    pub disown: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disown: Option<bool>,
     #[serde(rename = "request")]
     pub request: Request,
 }
@@ -209,14 +216,19 @@ pub struct ProvideResponseParameters {
     #[serde(rename = "request")]
     pub request: Request,
     #[serde(rename = "body")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub body: Option<BytesValue>,
     #[serde(rename = "cookies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub cookies: Option<Vec<SetCookieHeader>>,
     #[serde(rename = "headers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub headers: Option<Vec<Header>>,
     #[serde(rename = "reasonPhrase")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub reason_phrase: Option<String>,
     #[serde(rename = "statusCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub status_code: Option<u64>,
 }
 
@@ -237,6 +249,7 @@ pub struct SetCacheBehaviorParameters {
     #[serde(rename = "cacheBehavior")]
     pub cache_behavior: CacheBehaviorUnion,
     #[serde(rename = "contexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub contexts: Option<Vec<BrowsingContext>>,
 }
 
@@ -245,8 +258,10 @@ pub struct SetExtraHeadersParameters {
     #[serde(rename = "headers")]
     pub headers: Vec<Header>,
     #[serde(rename = "contexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub contexts: Option<Vec<BrowsingContext>>,
     #[serde(rename = "userContexts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user_contexts: Option<Vec<UserContext>>,
 }
 

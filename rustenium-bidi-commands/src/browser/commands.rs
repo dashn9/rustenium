@@ -57,10 +57,13 @@ pub enum BrowserSetClientWindowStateMethod {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateUserContextParameters {
     #[serde(rename = "acceptInsecureCerts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_insecure_certs: Option<bool>,
     #[serde(rename = "proxy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub proxy: Option<ProxyConfiguration>,
     #[serde(rename = "unhandledPromptBehavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub unhandled_prompt_behavior: Option<UserPromptHandler>,
 }
 

@@ -517,16 +517,21 @@ fn parse_cddl_property_line(line: &str, cddl_strings: &[&str], current_module: &
         let is_optional_marker = optional_marker.contains('?');
         let (rust_type, is_primitive, validation_info, meta_comment) = convert_cddl_type_to_rust(&property_type, cddl_strings, current_module, Some(property_name.as_str()));
 
-        // If the property has a default value, it shouldn't be  optional
-        let is_optional = is_optional_marker &&
-            validation_info.as_ref().map_or(true, |v| v.default_value.is_none());
+        // // If the property has a default value, it shouldn't be  optional
+        // let is_optional = is_optional_marker &&
+        //     validation_info.as_ref().map_or(true, |v| v.default_value.is_none());
 
         let mut attributes = vec![format!(r#"#[serde(rename = "{}")]"#, property_name)];
+
+        // Add skip_serializing_if for optional fields
+        if is_optional_marker {
+            attributes.push(r#"#[serde(skip_serializing_if = "Option::is_none")]"#.to_string());
+        }
 
         return Ok((Some(Property {
             is_enum: false,
             is_primitive,
-            is_optional,
+            is_optional: is_optional_marker,
             name: property_name,
             value: rust_type,
             attributes,
@@ -1203,7 +1208,8 @@ fn parse_validation_pattern(type_name: &str) -> Option<(String, ValidationInfo)>
         let after_default = &input[default_pos + 9..]; // Skip ".default "
         let default_value = after_default.split_whitespace().next().unwrap_or("").to_string();
         if !default_value.is_empty() {
-            validation_info.default_value = Some(default_value);
+            // temp removed adding default, because I found out, it was meant as an indication of what the bidi server would assume the value as if property is absent
+            // validation_info.default_value = Some(default_value);
             has_modifiers = true;
         }
     }

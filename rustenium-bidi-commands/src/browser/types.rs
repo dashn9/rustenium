@@ -37,12 +37,16 @@ pub struct ClientWindowRectState {
     #[serde(rename = "state")]
     pub state: NormalEnum,
     #[serde(rename = "width")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub width: Option<u64>,
     #[serde(rename = "height")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub height: Option<u64>,
     #[serde(rename = "x")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub x: Option<i64>,
     #[serde(rename = "y")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub y: Option<i64>,
 }
 

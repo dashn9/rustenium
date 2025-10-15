@@ -43,14 +43,19 @@ pub struct UrlPatternPattern {
     #[serde(rename = "type")]
     pub r#type: PatternEnum,
     #[serde(rename = "protocol")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub protocol: Option<String>,
     #[serde(rename = "hostname")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub hostname: Option<String>,
     #[serde(rename = "port")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub port: Option<String>,
     #[serde(rename = "pathname")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub pathname: Option<String>,
     #[serde(rename = "search")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub search: Option<String>,
 }
 
@@ -145,18 +150,25 @@ pub struct SetCookieHeader {
     #[serde(rename = "value")]
     pub value: BytesValue,
     #[serde(rename = "domain")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub domain: Option<String>,
     #[serde(rename = "httpOnly")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub http_only: Option<bool>,
     #[serde(rename = "expiry")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub expiry: Option<String>,
     #[serde(rename = "maxAge")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub max_age: Option<i64>,
     #[serde(rename = "path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub path: Option<String>,
     #[serde(rename = "sameSite")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub same_site: Option<SameSite>,
     #[serde(rename = "secure")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub secure: Option<bool>,
 }
 
@@ -248,6 +260,7 @@ pub struct Cookie {
     #[serde(rename = "sameSite")]
     pub same_site: SameSite,
     #[serde(rename = "expiry")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub expiry: Option<u64>,
     #[serde(flatten)]
     pub extensible: Extensible,
@@ -322,6 +335,7 @@ pub struct BaseParameters {
     #[serde(rename = "timestamp")]
     pub timestamp: u64,
     #[serde(rename = "intercepts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub intercepts: Option<Vec<Intercept>>,
 }
 
@@ -364,6 +378,7 @@ pub struct ResponseData {
     #[serde(rename = "content")]
     pub content: ResponseContent,
     #[serde(rename = "authChallenges")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_challenges: Option<Vec<AuthChallenge>>,
 }
 
@@ -391,14 +406,19 @@ pub enum TypeUnion {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Initiator {
     #[serde(rename = "columnNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub column_number: Option<u64>,
     #[serde(rename = "lineNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub line_number: Option<u64>,
     #[serde(rename = "request")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub request: Option<Request>,
     #[serde(rename = "stackTrace")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub stack_trace: Option<StackTrace>,
     #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub r#type: Option<TypeUnion>,
 }
 
@@ -407,6 +427,7 @@ pub struct BeforeRequestSentParameters {
     #[serde(flatten)]
     pub base_parameters: BaseParameters,
     #[serde(rename = "initiator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub initiator: Option<Initiator>,
 }
 

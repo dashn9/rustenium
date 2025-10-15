@@ -28,7 +28,7 @@ impl Listener {
                 let parsed_message = match serde_json::from_str::<Message>(&message) {
                     Ok(result) => result,
                     Err(e) => {
-                        println!("Failed to parse message: {:?}", e.to_string());
+                        eprintln!("Failed to parse message: {:?}", e.to_string());
                         return;
                     }
                 };
