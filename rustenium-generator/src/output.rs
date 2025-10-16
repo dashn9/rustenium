@@ -374,6 +374,18 @@ fn generate_root_lib(modules: &[Module], root_protocol: &crate::module::RootProt
     output.push_str("    }\n");
     output.push_str("}\n\n");
 
+    output.push_str("fn deserialize_empty_map<'de, D>(deserializer: D) -> Result<Extensible, D::Error>\n");
+    output.push_str("where\n");
+    output.push_str("    D: serde::Deserializer<'de>,\n");
+    output.push_str("{\n");
+    output.push_str("    let map = Extensible::deserialize(deserializer)?;\n\n");
+    output.push_str("    if map.is_empty() {\n");
+    output.push_str("        Ok(map)\n");
+    output.push_str("    } else {\n");
+    output.push_str("        Err(serde::de::Error::custom(\"expected empty object\"))\n");
+    output.push_str("    }\n");
+    output.push_str("}\n\n");
+
     // Generate Extensible type
     output.push_str("pub type Extensible = HashMap<String, serde_json::Value>;\n\n");
 
@@ -385,9 +397,12 @@ fn generate_root_lib(modules: &[Module], root_protocol: &crate::module::RootProt
     output.push_str(&generate_rust_enum("CommandData", &root_protocol.command_data.properties, "root"));
     output.push_str("\n\n");
 
-    // Generate EmptyParams
-    output.push_str(&generate_rust_struct("EmptyParams", &root_protocol.empty_params.properties, "root"));
-    output.push_str("\n\n");
+    // Generate EmptyParams - special case with flattened Extensible
+    output.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
+    output.push_str("pub struct EmptyParams {\n");
+    output.push_str("    #[serde(flatten, deserialize_with = \"deserialize_empty_map\")]\n");
+    output.push_str("    pub extensible: Extensible,\n");
+    output.push_str("}\n\n");
 
     // Generate Message with ErrorResponse before CommandResponse
     let mut message_properties = root_protocol.message.properties.clone();
@@ -441,9 +456,12 @@ fn generate_root_lib(modules: &[Module], root_protocol: &crate::module::RootProt
     output.push_str(&generate_rust_enum("ResultData", &root_protocol.result_data.properties, "root"));
     output.push_str("\n\n");
 
-    // Generate EmptyResult
-    output.push_str(&generate_rust_struct("EmptyResult", &root_protocol.empty_result.properties, "root"));
-    output.push_str("\n\n");
+    // Generate EmptyResult - special case with flattened Extensible
+    output.push_str("#[derive(Debug, Clone, Serialize, Deserialize)]\n");
+    output.push_str("pub struct EmptyResult {\n");
+    output.push_str("    #[serde(flatten, deserialize_with = \"deserialize_empty_map\")]\n");
+    output.push_str("    pub extensible: Extensible,\n");
+    output.push_str("}\n\n");
 
     // Generate Event
     output.push_str(&generate_rust_struct("Event", &root_protocol.event.properties, "root"));

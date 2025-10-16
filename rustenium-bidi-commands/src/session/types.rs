@@ -1,7 +1,7 @@
 // Generated types for module
 
 use serde::{Serialize, Deserialize};
-use crate::Extensible;
+use crate::{EmptyParams, Extensible};
 use serde_valid::Validate;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -110,6 +110,7 @@ pub enum ProxyConfiguration {
     ManualProxyConfiguration(ManualProxyConfiguration),
     PacProxyConfiguration(PacProxyConfiguration),
     SystemProxyConfiguration(SystemProxyConfiguration),
+    Empty {},
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -194,6 +195,14 @@ pub struct UnsubscribeByIDRequest {
     pub subscriptions: Vec<Subscription>,
 }
 
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum NewResultCapabilitiesUnhandledPromptBehaviorUnion {
+    UserPromptHandler(UserPromptHandler),
+    String(String)
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct NewResultCapabilities {
     #[serde(rename = "acceptInsecureCerts")]
@@ -207,13 +216,14 @@ pub struct NewResultCapabilities {
     #[serde(rename = "setWindowRect")]
     pub set_window_rect: bool,
     #[serde(rename = "userAgent")]
-    pub user_agent: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_agent: Option<String>,
     #[serde(rename = "proxy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub proxy: Option<ProxyConfiguration>,
     #[serde(rename = "unhandledPromptBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub unhandled_prompt_behavior: Option<UserPromptHandler>,
+    pub unhandled_prompt_behavior: Option<NewResultCapabilitiesUnhandledPromptBehaviorUnion>,
     #[serde(rename = "webSocketUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub web_socket_url: Option<String>,

@@ -82,6 +82,19 @@ where
     }
 }
 
+fn deserialize_empty_map<'de, D>(deserializer: D) -> Result<Extensible, D::Error>
+where
+    D: serde::Deserializer<'de>,
+{
+    let map = Extensible::deserialize(deserializer)?;
+
+    if map.is_empty() {
+        Ok(map)
+    } else {
+        Err(serde::de::Error::custom("expected empty object"))
+    }
+}
+
 pub type Extensible = HashMap<String, serde_json::Value>;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -110,8 +123,8 @@ pub enum CommandData {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct EmptyParams {
-    #[serde(rename = "EmptyParams")]
-    pub empty_params: Extensible,
+    #[serde(flatten, deserialize_with = "deserialize_empty_map")]
+    pub extensible: Extensible,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -182,8 +195,8 @@ pub enum ResultData {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct EmptyResult {
-    #[serde(rename = "EmptyResult")]
-    pub empty_result: Extensible,
+    #[serde(flatten, deserialize_with = "deserialize_empty_map")]
+    pub extensible: Extensible,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
