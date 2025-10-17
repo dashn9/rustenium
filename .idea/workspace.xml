@@ -21,10 +21,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/rustenium-core/src/contexts.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/session/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/session/types.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-generator/src/output.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/output.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-core/src/error.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/error.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-core/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/lib.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-core/src/session.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/session.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/browser/browser.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/browser/browser.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/browser/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/browser/mod.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,6 +35,13 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="RsBuildProfile:test" />
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Rust File" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -72,6 +82,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Documents\m-workspace\rustenium\rustenium-core\src" />
       <recent name="D:\Documents\m-workspace\rustenium\rustenium-generator\src" />
     </key>
   </component>
@@ -156,28 +167,13 @@
       <workItem from="1760194365749" duration="8293000" />
       <workItem from="1760209150608" duration="24603000" />
       <workItem from="1760359051227" duration="13055000" />
-      <workItem from="1760630523057" duration="11798000" />
+      <workItem from="1760630523057" duration="19750000" />
+      <workItem from="1760711819475" duration="12645000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/rustenium-core/src/session.rs</url>
-          <line>47</line>
-          <option name="timeStamp" value="69" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/rustenium-core/src/listeners.rs</url>
-          <line>27</line>
-          <option name="timeStamp" value="91" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

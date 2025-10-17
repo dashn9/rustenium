@@ -47,7 +47,7 @@ impl<'a, T: ConnectionTransport<'a>> Session<'a, T> {
                 let command_result = self.send(CommandData::SessionCommand(SessionCommand::New(command))).await;
                 match command_result {
                     Ok(command_result) => {
-                        match command_result {
+                            match command_result {
                             ResultData::SessionResult(session_result) => {
                                 match session_result {
                                     SessionResult::NewResult(new_session_result) => {
@@ -65,7 +65,7 @@ impl<'a, T: ConnectionTransport<'a>> Session<'a, T> {
         }
     }
 
-    async fn send(&mut self, command_data: CommandData) -> Result<ResultData, SessionSendError>  {
+    pub async fn send(&mut self, command_data: CommandData) -> Result<ResultData, SessionSendError>  {
         let command_id = loop {
             let id = rand::rng().random::<u32>() as u64;
             if !self.connection.commands_response_subscriptions.lock().await.contains_key(&id) {

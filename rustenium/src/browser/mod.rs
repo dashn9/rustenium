@@ -6,8 +6,6 @@ use rustenium_core::{process::Process, transport::ConnectionTransport, Session};
 
 pub use bidi::chrome::ChromeDriver;
 use rustenium_core::session::SessionConnectionType;
-use rustenium_core::transport::WebsocketConnectionTransport;
-
 pub struct Driver<'a, T: ConnectionTransport<'a>>  {
     pub exe_path: &'static str,
     pub flags: Vec<String>,

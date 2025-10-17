@@ -2,13 +2,13 @@ mod connection;
 pub mod process;
 pub mod session;
 pub mod transport;
-pub mod error;
 
 mod listeners;
+mod contexts;
+mod error;
 
 pub use session::Session;
 pub use connection::find_free_port;
-pub use error::{ErrorCode, parse_error_code};
 
 pub fn add(left: u64, right: u64) -> u64 {
     left + right

@@ -4,8 +4,7 @@ use rustenium_core::{
     transport::{ConnectionTransport, ConnectionTransportConfig, WebsocketConnectionTransport},
     Session,
 };
-use rustenium_core::transport::ConnectionTransportProtocol;
-use serde::Deserialize;
+
 use tokio::io;
 
 fn is_connection_refused(e: &reqwest::Error) -> bool {
