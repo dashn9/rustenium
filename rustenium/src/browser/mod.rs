@@ -1,10 +1,10 @@
-mod browser;
 mod bidi;
+pub mod chrome;
 
 use std::error::Error;
 use rustenium_core::{process::Process, transport::ConnectionTransport, Session};
 
-pub use bidi::chrome::ChromeDriver;
+pub use chrome::ChromeDriver;
 use rustenium_core::contexts::BrowsingContext;
 use rustenium_core::session::SessionConnectionType;
 pub struct Driver<'a, T: ConnectionTransport<'a>>  {

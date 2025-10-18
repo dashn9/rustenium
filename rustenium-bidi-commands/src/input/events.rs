@@ -11,7 +11,6 @@ pub enum InputEvent {
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum InputFileDialogOpenedMethod {
     #[serde(rename = "input.FileDialogOpened")]
     InputFileDialogOpened,

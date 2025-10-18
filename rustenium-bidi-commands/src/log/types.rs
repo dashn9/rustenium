@@ -6,7 +6,6 @@ use crate::script::types::Source;
 use crate::script::types::StackTrace;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum Level {
     #[serde(rename = "debug")]
     Debug,
@@ -42,7 +41,6 @@ pub struct GenericLogEntry {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum ConsoleEnum {
     #[serde(rename = "console")]
     Console,
@@ -61,7 +59,6 @@ pub struct ConsoleLogEntry {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum JavascriptEnum {
     #[serde(rename = "javascript")]
     Javascript,

@@ -9,7 +9,6 @@ pub type ClientWindow = String;
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum ClientWindowNamedStatestateUnion {
     #[serde(rename = "fullscreen")]
     Fullscreen,
@@ -26,7 +25,6 @@ pub struct ClientWindowNamedState {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum NormalEnum {
     #[serde(rename = "normal")]
     Normal,

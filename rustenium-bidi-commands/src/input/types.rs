@@ -13,7 +13,6 @@ pub enum NoneEnum {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum PauseEnum {
     #[serde(rename = "pause")]
     Pause,
@@ -42,14 +41,12 @@ pub struct NoneSourceActions {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum KeyEnum {
     #[serde(rename = "key")]
     Key,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum KeyDownEnum {
     #[serde(rename = "keyDown")]
     KeyDown,
@@ -64,7 +61,6 @@ pub struct KeyDownAction {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum KeyUpEnum {
     #[serde(rename = "keyUp")]
     KeyUp,
@@ -97,14 +93,12 @@ pub struct KeySourceActions {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum PointerEnum {
     #[serde(rename = "pointer")]
     Pointer,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum PointerType {
     #[serde(rename = "mouse")]
     Mouse,
@@ -122,7 +116,6 @@ pub struct PointerParameters {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum PointerDownEnum {
     #[serde(rename = "pointerDown")]
     PointerDown,
@@ -170,7 +163,6 @@ pub struct PointerDownAction {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum PointerUpEnum {
     #[serde(rename = "pointerUp")]
     PointerUp,
@@ -185,14 +177,12 @@ pub struct PointerUpAction {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum PointerMoveEnum {
     #[serde(rename = "pointerMove")]
     PointerMove,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum ElementEnum {
     #[serde(rename = "element")]
     Element,
@@ -257,14 +247,12 @@ pub struct PointerSourceActions {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum WheelEnum {
     #[serde(rename = "wheel")]
     Wheel,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum ScrollEnum {
     #[serde(rename = "scroll")]
     Scroll,

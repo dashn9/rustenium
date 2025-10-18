@@ -11,7 +11,6 @@ pub enum LogEvent {
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum LogEntryAddedMethod {
     #[serde(rename = "log.EntryAdded")]
     LogEntryAdded,

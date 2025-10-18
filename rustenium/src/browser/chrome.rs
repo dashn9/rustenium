@@ -1,10 +1,8 @@
-use std::error::Error;
-use rustenium_core::{find_free_port, process::Process, transport::WebsocketConnectionTransport, Session};
+use rustenium_core::{find_free_port, transport::WebsocketConnectionTransport};
 use rustenium_core::session::SessionConnectionType;
-use crate::{Driver, browser::browser::Driver as DriverTrait};
-use reqwest::Client;
-use serde::Deserialize;
+use crate::Driver;
 use rustenium_core::transport::ConnectionTransportConfig;
+use crate::browser::bidi::drivers::Driver as DriverTrait;
 
 pub struct ChromeDriver<'a> {
     connection_transport_config: ConnectionTransportConfig<'a>,

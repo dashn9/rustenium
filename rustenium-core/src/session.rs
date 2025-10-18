@@ -11,6 +11,7 @@ use crate::{
     connection::Connection,
     transport::{ConnectionTransport, ConnectionTransportConfig, WebsocketConnectionTransport},
 };
+use crate::contexts::BrowsingContext;
 
 pub struct Session<'a, T: ConnectionTransport<'a>> {
     id: Option<String>,
@@ -45,7 +46,6 @@ impl<'a, T: ConnectionTransport<'a>> Session<'a, T> {
                     }
                 };
                 let command_result = self.send(CommandData::SessionCommand(SessionCommand::New(command.clone()))).await;
-                self.send(CommandData::SessionCommand(SessionCommand::New(command))).await;
                 match command_result {
                     Ok(command_result) => {
                             match command_result {

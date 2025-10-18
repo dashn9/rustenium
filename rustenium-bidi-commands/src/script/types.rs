@@ -5,7 +5,6 @@ use crate::browsing_context::types::BrowsingContext;
 use crate::Extensible;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum ChannelEnum {
     #[serde(rename = "channel")]
     Channel,
@@ -15,7 +14,6 @@ pub type Channel = String;
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum SerializationOptionsincludeShadowTreeUnion {
     #[serde(rename = "none")]
     None,
@@ -37,7 +35,6 @@ pub struct SerializationOptions {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum ResultOwnership {
     #[serde(rename = "root")]
     Root,
@@ -126,7 +123,6 @@ pub enum RemoteReference {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum UndefinedEnum {
     #[serde(rename = "undefined")]
     Undefined,
@@ -139,7 +135,6 @@ pub struct UndefinedValue {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum NullEnum {
     #[serde(rename = "null")]
     Null,
@@ -152,7 +147,6 @@ pub struct NullValue {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum StringEnum {
     #[serde(rename = "string")]
     String,
@@ -167,14 +161,12 @@ pub struct StringValue {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum NumberEnum {
     #[serde(rename = "number")]
     Number,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum SpecialNumber {
     #[serde(rename = "NaN")]
     NaN,
@@ -202,7 +194,6 @@ pub struct NumberValue {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum BooleanEnum {
     #[serde(rename = "boolean")]
     Boolean,
@@ -217,7 +208,6 @@ pub struct BooleanValue {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum BigintEnum {
     #[serde(rename = "bigint")]
     Bigint,
@@ -243,7 +233,6 @@ pub enum PrimitiveProtocolValue {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum ArrayEnum {
     #[serde(rename = "array")]
     Array,
@@ -261,7 +250,6 @@ pub struct ArrayLocalValue {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum DateEnum {
     #[serde(rename = "date")]
     Date,
@@ -276,7 +264,6 @@ pub struct DateLocalValue {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum MapEnum {
     #[serde(rename = "map")]
     Map,
@@ -301,7 +288,6 @@ pub struct MapLocalValue {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum ObjectEnum {
     #[serde(rename = "object")]
     Object,
@@ -316,7 +302,6 @@ pub struct ObjectLocalValue {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum RegexpEnum {
     #[serde(rename = "regexp")]
     Regexp,
@@ -340,7 +325,6 @@ pub struct RegExpLocalValue {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum SetEnum {
     #[serde(rename = "set")]
     Set,
@@ -369,7 +353,6 @@ pub enum LocalValue {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum RealmType {
     #[serde(rename = "window")]
     Window,
@@ -399,7 +382,6 @@ pub enum SuccessEnum {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum SymbolEnum {
     #[serde(rename = "symbol")]
     Symbol,
@@ -464,7 +446,6 @@ pub struct ObjectRemoteValue {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum FunctionEnum {
     #[serde(rename = "function")]
     Function,
@@ -537,7 +518,6 @@ pub struct SetRemoteValue {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum WeakmapEnum {
     #[serde(rename = "weakmap")]
     Weakmap,
@@ -556,7 +536,6 @@ pub struct WeakMapRemoteValue {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum WeaksetEnum {
     #[serde(rename = "weakset")]
     Weakset,
@@ -575,7 +554,6 @@ pub struct WeakSetRemoteValue {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum GeneratorEnum {
     #[serde(rename = "generator")]
     Generator,
@@ -612,7 +590,6 @@ pub struct ErrorRemoteValue {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum ProxyEnum {
     #[serde(rename = "proxy")]
     Proxy,
@@ -631,7 +608,6 @@ pub struct ProxyRemoteValue {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum PromiseEnum {
     #[serde(rename = "promise")]
     Promise,
@@ -650,7 +626,6 @@ pub struct PromiseRemoteValue {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum TypedarrayEnum {
     #[serde(rename = "typedarray")]
     Typedarray,
@@ -669,7 +644,6 @@ pub struct TypedArrayRemoteValue {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum ArraybufferEnum {
     #[serde(rename = "arraybuffer")]
     Arraybuffer,
@@ -688,7 +662,6 @@ pub struct ArrayBufferRemoteValue {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum NodelistEnum {
     #[serde(rename = "nodelist")]
     Nodelist,
@@ -710,7 +683,6 @@ pub struct NodeListRemoteValue {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum HtmlcollectionEnum {
     #[serde(rename = "htmlcollection")]
     Htmlcollection,
@@ -732,14 +704,12 @@ pub struct HTMLCollectionRemoteValue {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum NodeEnum {
     #[serde(rename = "node")]
     Node,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum NodePropertiesAttributesmodeUnion {
     #[serde(rename = "open")]
     Open,
@@ -799,7 +769,6 @@ pub struct NodeRemoteValue {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum WindowEnum {
     #[serde(rename = "window")]
     Window,
@@ -862,7 +831,6 @@ pub struct EvaluateResultSuccess {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum ExceptionEnum {
     #[serde(rename = "exception")]
     Exception,
@@ -939,7 +907,6 @@ pub struct WindowRealmInfo {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum DedicatedWorkerEnum {
     #[serde(rename = "dedicated-worker")]
     DedicatedWorker,
@@ -956,7 +923,6 @@ pub struct DedicatedWorkerRealmInfo {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum SharedWorkerEnum {
     #[serde(rename = "shared-worker")]
     SharedWorker,
@@ -971,7 +937,6 @@ pub struct SharedWorkerRealmInfo {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum ServiceWorkerEnum {
     #[serde(rename = "service-worker")]
     ServiceWorker,
@@ -986,7 +951,6 @@ pub struct ServiceWorkerRealmInfo {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum WorkerEnum {
     #[serde(rename = "worker")]
     Worker,
@@ -1001,7 +965,6 @@ pub struct WorkerRealmInfo {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum PaintWorkletEnum {
     #[serde(rename = "paint-worklet")]
     PaintWorklet,
@@ -1016,7 +979,6 @@ pub struct PaintWorkletRealmInfo {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum AudioWorkletEnum {
     #[serde(rename = "audio-worklet")]
     AudioWorklet,
@@ -1031,7 +993,6 @@ pub struct AudioWorkletRealmInfo {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum WorkletEnum {
     #[serde(rename = "worklet")]
     Worklet,
