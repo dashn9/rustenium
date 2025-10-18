@@ -1,8 +1,7 @@
 use std::{error::Error, future::Future};
-use std::fmt::Display;
-use std::ops::Deref;
+use std::fmt::{Display};
 use std::sync::Arc;
-use fastwebsockets::{handshake, FragmentCollector, Frame, OpCode, Role, WebSocket, WebSocketError};
+use fastwebsockets::{handshake, Frame, OpCode, WebSocket, WebSocketError, WebSocketRead, WebSocketWrite};
 use hyper::{
     body::Bytes,
     header::{CONNECTION, UPGRADE},
@@ -10,11 +9,10 @@ use hyper::{
     Request,
 };
 use hyper_util::rt::TokioIo;
+use tokio::io::{ReadHalf, WriteHalf};
 use tokio::net::TcpStream;
 use tokio::sync::mpsc::UnboundedSender;
 use tokio::sync::Mutex;
-use url::Url;
-use crate::listeners::Listener;
 
 #[derive(Debug, Clone)]
 pub enum ConnectionTransportProtocol {
@@ -85,17 +83,18 @@ pub trait ConnectionTransport<'a> {
 
 pub struct WebsocketConnectionTransport<'a> {
     pub config: &'a ConnectionTransportConfig<'a>,
-    client: Arc<Mutex<FragmentCollector<TokioIo<Upgraded>>>>,
+    client_tx: Arc<Mutex<WebSocketWrite<WriteHalf<TokioIo<Upgraded>>>>>,
+    client_rx: Arc<Mutex<WebSocketRead<ReadHalf<TokioIo<Upgraded>>>>>,
 }
 
 impl <'a>ConnectionTransport<'a> for WebsocketConnectionTransport<'a> {
     async fn send(&mut self, message: String) -> () {
         let frame = Frame::text(fastwebsockets::Payload::from(message.as_bytes()));
-        self.client.lock().await.write_frame(frame).await.unwrap();
+        self.client_tx.lock().await.write_frame(frame).await.unwrap();
     }
 
     fn listen(&self, listener: UnboundedSender<String>) -> () {
-        WebsocketConnectionTransport::listener_loop(self.client.clone(), listener);
+        WebsocketConnectionTransport::listener_loop(self.client_rx.clone(), self.client_tx.clone(), listener).unwrap();
     }
 
     fn close(&self) -> () {
@@ -127,12 +126,13 @@ impl <'a> WebsocketConnectionTransport<'a> {
 
         let (mut ws, _) = handshake::client(&SpawnExecutor, req, stream).await.unwrap();
         ws = Self::configure_client(ws);
-        let client = Arc::new(Mutex::new(FragmentCollector::new(ws)));
+        let (rx, tx) = ws.split(tokio::io::split);
         println!("Successfully connected to browser");
 
         Ok(Self {
             config: connection_config,
-            client,
+            client_rx: Arc::new(Mutex::new(rx)),
+            client_tx: Arc::new(Mutex::new(tx))
         })
     }
 
@@ -143,11 +143,16 @@ impl <'a> WebsocketConnectionTransport<'a> {
 
         ws
     }
-    pub fn listener_loop(ws: Arc<Mutex<FragmentCollector<TokioIo<Upgraded>>>>, tx: UnboundedSender<String>) -> Result<(), WebSocketError>
+    pub fn listener_loop(ws_rx: Arc<Mutex<WebSocketRead<ReadHalf<TokioIo<Upgraded>>>>>, ws_tx: Arc<Mutex<WebSocketWrite<WriteHalf<TokioIo<Upgraded>>>>>, tx: UnboundedSender<String>) -> Result<(), WebSocketError>
     {
         tokio::spawn(async move {
             loop {
-                let frame = ws.lock().await.read_frame().await.unwrap();
+                let mut ws_rx_half = ws_rx.lock().await;
+                let frame = ws_rx_half.read_frame(&mut |frame| async {
+                    // Handles obligated send
+                    let mut ws_write_half = ws_tx.lock().await;
+                    return ws_write_half.write_frame(frame).await;
+                }).await.unwrap();
 
                 match frame.opcode {
                     OpCode::Close => break,
