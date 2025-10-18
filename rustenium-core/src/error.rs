@@ -1,3 +1,4 @@
+#[derive(Debug, Clone)]
 pub struct BrowsingContextCreationInvalidResultError;
 
 impl std::fmt::Display for BrowsingContextCreationInvalidResultError {

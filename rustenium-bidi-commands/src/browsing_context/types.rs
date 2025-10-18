@@ -74,7 +74,6 @@ pub enum ClipRectangle {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum CreateType {
     #[serde(rename = "tab")]
     Tab,

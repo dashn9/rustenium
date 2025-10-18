@@ -34,6 +34,7 @@ impl <'a>Default for ChromeDriver<'a> {
                 exe_path: "google-chrome",
                 flags: vec![],
                 session: None,
+                browsing_contexts: Vec::new(),
                 driver_process: None,
             },
         };
@@ -54,5 +55,6 @@ impl <'a>ChromeDriver<'a> {
             Ok(session) => (),
             Err(e) => panic!("A problem occurred creating the session: {e:?}"),
         }
+        self.driver.new_browsing_context().await;
     }
 }

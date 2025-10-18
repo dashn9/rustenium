@@ -2,9 +2,9 @@ mod connection;
 pub mod process;
 pub mod session;
 pub mod transport;
+pub mod contexts;
 
 mod listeners;
-mod contexts;
 mod error;
 
 pub use session::Session;

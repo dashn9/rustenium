@@ -6,18 +6,19 @@ use crate::Session;
 use crate::session::SessionSendError;
 use crate::transport::ConnectionTransport;
 
+#[derive(Debug)]
 pub struct BrowsingContext {
     r#type: BrowsingContextCreateType,
     context: String,
 }
 
 impl BrowsingContext {
-    async fn new<'oa, OT: ConnectionTransport<'oa>>(session: &mut Session<'oa, OT>, context_creation_type: Option<BrowsingContextCreateType>, reference_context: Option<&BrowsingContext>, background: bool) -> Result<Self, BrowsingContextCreationError>  {
+    pub async fn new<'oa, OT: ConnectionTransport<'oa>>(session: &mut Session<'oa, OT>, context_creation_type: Option<BrowsingContextCreateType>, reference_context: Option<&BrowsingContext>, background: bool) -> Result<Self, BrowsingContextCreationError>  {
         let context_creation_type = context_creation_type.unwrap_or(BrowsingContextCreateType::Tab);
         let create_browsing_context_command = BrowsingContextCreate {
             method: BrowsingContextCreateMethod::BrowsingContextCreate,
             params: BrowsingContextCreateParameters {
-                r#type: context_creation_type.clone(),
+                r#type: BrowsingContextCreateType::Tab,
                 reference_context: match reference_context {
                     Some(reference_context) =>  Some(reference_context.context.clone()),
                     None => None
@@ -44,7 +45,8 @@ impl BrowsingContext {
     }
 }
 
-enum BrowsingContextCreationError {
+#[derive(Debug, Clone)]
+pub enum BrowsingContextCreationError {
     SessionSendError(SessionSendError),
     BrowsingContextCreationInvalidResultError(BrowsingContextCreationInvalidResultError)
 }
