@@ -22,12 +22,7 @@
   <component name="ChangeListManager">
     <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-core/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-core/src/contexts.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/contexts.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-core/src/error.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/error.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-core/src/events.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/events.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-core/src/session.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/session.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -170,7 +165,7 @@
       <workItem from="1760209150608" duration="24603000" />
       <workItem from="1760359051227" duration="13055000" />
       <workItem from="1760630523057" duration="19750000" />
-      <workItem from="1760711819475" duration="54351000" />
+      <workItem from="1760711819475" duration="62719000" />
     </task>
     <servers />
   </component>
@@ -182,7 +177,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/rustenium-core/src/session.rs</url>
-          <line>88</line>
+          <line>89</line>
           <option name="timeStamp" value="74" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
