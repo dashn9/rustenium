@@ -1,19 +1,18 @@
 use rustenium_bidi_commands::browsing_context::commands::{BrowsingContextCreateMethod, Create as BrowsingContextCreate, CreateParameters as BrowsingContextCreateParameters, BrowsingContextResult};
 use rustenium_bidi_commands::browsing_context::types::CreateType as BrowsingContextCreateType;
 use rustenium_bidi_commands::{BrowsingContextCommand, CommandData, ResultData};
-use crate::error::BrowsingContextCreationInvalidResultError;
+use crate::error::{CommandResultError, SessionSendError};
 use crate::Session;
-use crate::session::SessionSendError;
 use crate::transport::ConnectionTransport;
 
 #[derive(Debug)]
 pub struct BrowsingContext {
-    r#type: BrowsingContextCreateType,
-    context: String,
+    pub r#type: BrowsingContextCreateType,
+    pub context: String,
 }
 
 impl BrowsingContext {
-    pub async fn new<'oa, OT: ConnectionTransport<'oa>>(session: &mut Session<'oa, OT>, context_creation_type: Option<BrowsingContextCreateType>, reference_context: Option<&BrowsingContext>, background: bool) -> Result<Self, BrowsingContextCreationError>  {
+    pub async fn new<'oa, OT: ConnectionTransport<'oa>>(session: &mut Session<'oa, OT>, context_creation_type: Option<BrowsingContextCreateType>, reference_context: Option<&BrowsingContext>, background: bool) -> Result<Self, CommandResultError>  {
         let context_creation_type = context_creation_type.unwrap_or(BrowsingContextCreateType::Tab);
         let create_browsing_context_command = BrowsingContextCreate {
             method: BrowsingContextCreateMethod::BrowsingContextCreate,
@@ -37,25 +36,10 @@ impl BrowsingContext {
                         context: context.context
                     })
                 },
-                _ => Err(BrowsingContextCreationError::BrowsingContextCreationInvalidResultError(BrowsingContextCreationInvalidResultError))
+                _ => Err(CommandResultError::InvalidResultTypeError(ResultData::BrowsingContextResult(context)))
             },
-            Err(e) => Err(BrowsingContextCreationError::SessionSendError(e)),
-            _ => Err(BrowsingContextCreationError::BrowsingContextCreationInvalidResultError(BrowsingContextCreationInvalidResultError))
-        }
-    }
-}
-
-#[derive(Debug, Clone)]
-pub enum BrowsingContextCreationError {
-    SessionSendError(SessionSendError),
-    BrowsingContextCreationInvalidResultError(BrowsingContextCreationInvalidResultError)
-}
-
-impl std::fmt::Display for BrowsingContextCreationError {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        match self {
-            BrowsingContextCreationError::SessionSendError(err) => write!(f, "{}", err),
-            BrowsingContextCreationError::BrowsingContextCreationInvalidResultError(err) => write!(f, "{}", err),
+            Ok(result) => Err(CommandResultError::InvalidResultTypeError(result)),
+            Err(e) => Err(CommandResultError::SessionSendError(e)),
         }
     }
 }

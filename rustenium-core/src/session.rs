@@ -12,6 +12,7 @@ use crate::{
     transport::{ConnectionTransport, ConnectionTransportConfig, WebsocketConnectionTransport},
 };
 use crate::contexts::BrowsingContext;
+use crate::error::{ResponseReceiveTimeoutError, SessionSendError};
 
 pub struct Session<'a, T: ConnectionTransport<'a>> {
     id: Option<String>,
@@ -31,6 +32,11 @@ impl<'a, T: ConnectionTransport<'a>> Session<'a, T> {
         let connection = Connection::new(connection_transport);
         connection.start_listeners();
         Session { id: None, connection }
+    }
+
+    // I don't know what to do with UserContexts yet
+    pub async fn subscribe_events(self, events: Vec<String>, contexts: Option<Vec<&BrowsingContext>>, user_contexts: Option<Vec<&str>>) {
+
     }
 
     pub async fn create_new_bidi_session(&mut self, connection_type: SessionConnectionType) -> () {
@@ -92,30 +98,6 @@ impl<'a, T: ConnectionTransport<'a>> Session<'a, T> {
             Ok(Err(err)) => panic!("A recv error occurred: {}", err),
             // I might need to remove command from commands response subscriptions
             Err(_) => Err(SessionSendError::ResponseReceiveTimeoutError(ResponseReceiveTimeoutError))
-        }
-    }
-}
-
-#[derive(Debug, Clone)]
-pub struct  ResponseReceiveTimeoutError;
-
-impl std::fmt::Display for ResponseReceiveTimeoutError {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "Could not receive response for command in time")
-    }
-}
-
-#[derive(Debug, Clone)]
-pub enum SessionSendError {
-    ErrorResponse(ErrorResponse),
-    ResponseReceiveTimeoutError(ResponseReceiveTimeoutError)
-}
-
-impl std::fmt::Display for SessionSendError {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        match self {
-            SessionSendError::ErrorResponse(err) => write!(f, "{}", err),
-            SessionSendError::ResponseReceiveTimeoutError(err) => write!(f, "{}", err),
         }
     }
 }
