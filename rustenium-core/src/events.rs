@@ -1,14 +1,75 @@
 use crate::contexts::BrowsingContext;
 use crate::error::{CommandResultError, SessionSendError};
 use crate::transport::ConnectionTransport;
+use crate::{impl_has_method, impl_has_method_getter};
 use rustenium_bidi_commands::session::commands::{
     SessionSubscribeMethod, Subscribe, SubscriptionRequest,
 };
-use rustenium_bidi_commands::{CommandData, Event, EventData, ResultData, SessionCommand, SessionResult};
-use std::collections::{HashMap, HashSet};
-use std::rc::Rc;
+use rustenium_bidi_commands::{
+    BrowsingContextEvent, CommandData, Event, EventData, InputEvent, LogEvent, NetworkEvent,
+    ResultData, ScriptEvent, SessionCommand, SessionResult,
+};
+use std::collections::HashSet;
 use std::vec;
 
+trait HasMethod {
+    fn get_method(&self) -> String;
+}
+
+trait HasMethodGetter {
+    fn get_method(&self) -> String;
+}
+trait HasContext {
+    fn get_context(&self) -> Option<&str>;
+}
+
+impl_has_method_getter!(
+    EventData,
+    [
+        BrowsingContextEvent,
+        ScriptEvent,
+        NetworkEvent,
+        LogEvent,
+        InputEvent
+    ]
+);
+
+impl_has_method!(
+    BrowsingContextEvent,
+    [
+        ContextCreated,
+        ContextDestroyed,
+        DomContentLoaded,
+        DownloadEnd,
+        DownloadWillBegin,
+        FragmentNavigated,
+        HistoryUpdated,
+        Load,
+        NavigationAborted,
+        NavigationCommitted,
+        NavigationFailed,
+        NavigationStarted,
+        UserPromptClosed,
+        UserPromptOpened
+    ]
+);
+
+impl_has_method!(InputEvent, [FileDialogOpened]);
+
+impl_has_method!(LogEvent, [EntryAdded]);
+
+impl_has_method!(
+    NetworkEvent,
+    [
+        AuthRequired,
+        BeforeRequestSent,
+        FetchError,
+        ResponseCompleted,
+        ResponseStarted
+    ]
+);
+
+impl_has_method!(ScriptEvent, [Message, RealmCreated, RealmDestroyed]);
 pub struct BidiEvent {
     pub id: String,
     pub events: Vec<String>,
@@ -76,8 +137,6 @@ pub trait EventManagement<'a, T: ConnectionTransport<'a>> {
 
     async fn dispatch_event(&self, event: Event) {
         let bidi_events = self.get_bidi_events();
-        for bidi_event in bidi_events {
-            if
-        }
+        let event_method = event.event_data.get_method();
     }
 }

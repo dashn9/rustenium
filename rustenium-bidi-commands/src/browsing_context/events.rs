@@ -24,42 +24,36 @@ pub enum BrowsingContextEvent {
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum BrowsingContextContextCreatedMethod {
     #[serde(rename = "browsingContext.ContextCreated")]
     BrowsingContextContextCreated,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum BrowsingContextContextDestroyedMethod {
     #[serde(rename = "browsingContext.ContextDestroyed")]
     BrowsingContextContextDestroyed,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum BrowsingContextDomContentLoadedMethod {
     #[serde(rename = "browsingContext.DomContentLoaded")]
     BrowsingContextDomContentLoaded,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum BrowsingContextDownloadEndMethod {
     #[serde(rename = "browsingContext.DownloadEnd")]
     BrowsingContextDownloadEnd,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum BrowsingContextDownloadWillBeginMethod {
     #[serde(rename = "browsingContext.DownloadWillBegin")]
     BrowsingContextDownloadWillBegin,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum BrowsingContextFragmentNavigatedMethod {
     #[serde(rename = "browsingContext.FragmentNavigated")]
     BrowsingContextFragmentNavigated,

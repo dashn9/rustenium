@@ -6,7 +6,6 @@ use crate::script::types::SharedReference;
 use serde_valid::Validate;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum NoneEnum {
     #[serde(rename = "none")]
     None,

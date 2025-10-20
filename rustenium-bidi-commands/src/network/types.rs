@@ -7,7 +7,6 @@ use crate::script::types::StackTrace;
 use crate::Extensible;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum DataType {
     #[serde(rename = "request")]
     Request,
@@ -16,14 +15,12 @@ pub enum DataType {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum CollectorType {
     #[serde(rename = "blob")]
     Blob,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum InterceptPhase {
     #[serde(rename = "beforeRequestSent")]
     BeforeRequestSent,
@@ -34,7 +31,6 @@ pub enum InterceptPhase {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum PatternEnum {
     #[serde(rename = "pattern")]
     Pattern,
@@ -62,7 +58,6 @@ pub struct UrlPatternPattern {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum StringEnum {
     #[serde(rename = "string")]
     String,
@@ -95,7 +90,6 @@ pub struct StringValue {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum Base64Enum {
     #[serde(rename = "base64")]
     Base64,
@@ -133,7 +127,6 @@ pub struct Header {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum SameSite {
     #[serde(rename = "strict")]
     Strict,
@@ -175,7 +168,6 @@ pub struct SetCookieHeader {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum PasswordEnum {
     #[serde(rename = "password")]
     Password,
@@ -192,7 +184,6 @@ pub struct AuthCredentials {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum ProvideCredentialsEnum {
     #[serde(rename = "provideCredentials")]
     ProvideCredentials,
@@ -207,7 +198,6 @@ pub struct ContinueWithAuthCredentials {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum ContinueWithAuthNoCredentialsactionUnion {
     #[serde(rename = "default")]
     Default,
@@ -235,7 +225,6 @@ pub type Intercept = String;
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum CacheBehaviorUnion {
     #[serde(rename = "default")]
     Default,
@@ -393,7 +382,6 @@ pub struct AuthRequiredParameters {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum InitiatortypeUnion {
     #[serde(rename = "parser")]
     Parser,

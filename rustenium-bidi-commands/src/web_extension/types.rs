@@ -3,7 +3,6 @@
 use serde::{Serialize, Deserialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum ArchivePathEnum {
     #[serde(rename = "archivePath")]
     ArchivePath,
@@ -18,7 +17,6 @@ pub struct ExtensionArchivePath {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum Base64Enum {
     #[serde(rename = "base64")]
     Base64,
@@ -33,7 +31,6 @@ pub struct ExtensionBase64Encoded {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum PathEnum {
     #[serde(rename = "path")]
     Path,

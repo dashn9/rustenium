@@ -40,7 +40,6 @@ pub struct CookieFilter {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum ContextEnum {
     #[serde(rename = "context")]
     Context,
@@ -55,7 +54,6 @@ pub struct BrowsingContextPartitionDescriptor {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum StorageKeyEnum {
     #[serde(rename = "storageKey")]
     StorageKey,

@@ -7,6 +7,7 @@ pub mod contexts;
 mod listeners;
 mod error;
 mod events;
+mod macros;
 
 pub use session::Session;
 pub use connection::find_free_port;

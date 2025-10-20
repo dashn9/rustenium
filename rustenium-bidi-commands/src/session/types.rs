@@ -5,7 +5,6 @@ use crate::{EmptyParams, Extensible};
 use serde_valid::Validate;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum AutodetectEnum {
     #[serde(rename = "autodetect")]
     Autodetect,
@@ -20,7 +19,6 @@ pub struct AutodetectProxyConfiguration {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum DirectEnum {
     #[serde(rename = "direct")]
     Direct,
@@ -35,7 +33,6 @@ pub struct DirectProxyConfiguration {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum ManualEnum {
     #[serde(rename = "manual")]
     Manual,
@@ -71,7 +68,6 @@ pub struct ManualProxyConfiguration {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum PacEnum {
     #[serde(rename = "pac")]
     Pac,
@@ -88,7 +84,6 @@ pub struct PacProxyConfiguration {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum SystemEnum {
     #[serde(rename = "system")]
     System,
@@ -114,7 +109,6 @@ pub enum ProxyConfiguration {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum UserPromptHandlerType {
     #[serde(rename = "accept")]
     Accept,
