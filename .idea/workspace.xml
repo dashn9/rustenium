@@ -21,17 +21,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/rustenium-core/src/macros.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/events.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/events.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/input/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/input/types.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/network/events.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/network/events.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/network/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/network/types.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/session/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/session/types.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/storage/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/storage/types.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/web_extension/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/web_extension/types.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-core/src/events.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/events.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-core/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/lib.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-core/src/macros.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/macros.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -174,7 +166,7 @@
       <workItem from="1760209150608" duration="24603000" />
       <workItem from="1760359051227" duration="13055000" />
       <workItem from="1760630523057" duration="19750000" />
-      <workItem from="1760711819475" duration="81288000" />
+      <workItem from="1760711819475" duration="92171000" />
     </task>
     <servers />
   </component>

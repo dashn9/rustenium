@@ -19,10 +19,8 @@ trait HasMethod {
 trait HasMethodGetter {
     fn get_method(&self) -> String;
 }
-trait HasContext {
-    fn get_context(&self) -> Option<&str>;
-}
 
+// Some events do not have context, need to specify to macro which has and which do not
 impl_has_method_getter!(
     EventData,
     [
@@ -68,7 +66,6 @@ impl_has_method!(
         ResponseStarted
     ]
 );
-
 impl_has_method!(ScriptEvent, [Message, RealmCreated, RealmDestroyed]);
 pub struct BidiEvent {
     pub id: String,
@@ -138,5 +135,11 @@ pub trait EventManagement<'a, T: ConnectionTransport<'a>> {
     async fn dispatch_event(&self, event: Event) {
         let bidi_events = self.get_bidi_events();
         let event_method = event.event_data.get_method();
+        // Manually handling context check was abandoned, too much variation/nesting of context
+        for bidi_event in bidi_events {
+            if bidi_event.events.contains(&event_method) {
+                bidi_event.handler().await;
+            }
+        }
     }
 }
