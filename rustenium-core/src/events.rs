@@ -10,6 +10,9 @@ use rustenium_bidi_commands::{
     ResultData, ScriptEvent, SessionCommand, SessionResult,
 };
 use std::collections::HashSet;
+use std::future::{Future, IntoFuture};
+use std::pin::Pin;
+use std::sync::Arc;
 use std::vec;
 
 trait HasMethod {
@@ -67,11 +70,15 @@ impl_has_method!(
     ]
 );
 impl_has_method!(ScriptEvent, [Message, RealmCreated, RealmDestroyed]);
-pub struct BidiEvent {
+
+type BidiEventHandler = Arc<dyn Fn(Event) -> Pin<Box<dyn Future<Output = ()> + Send>> + Send + Sync + 'static>;
+pub struct BidiEvent
+{
     pub id: String,
     pub events: Vec<String>,
-    pub handler: Box<dyn Fn(Event) -> ()>,
+    pub handler: BidiEventHandler,
 }
+
 pub trait EventManagement<'a, T: ConnectionTransport<'a>> {
     async fn send(&self, command_data: CommandData) -> Result<ResultData, SessionSendError>;
 
@@ -81,12 +88,12 @@ pub trait EventManagement<'a, T: ConnectionTransport<'a>> {
     async fn subscribe_events<F>(
         &self,
         events: HashSet<String>,
-        handler: F,
+        handler: &'static F,
         browsing_contexts: Option<Vec<&BrowsingContext>>,
         user_contexts: Option<Vec<&str>>,
     ) -> Result<Option<ResultData>, CommandResultError>
     where
-        F: Fn(Event) -> () + 'static,
+        F: Fn(Event) -> Pin<Box<dyn Future<Output = ()> + Send>> + Send + Sync + 'static,
     {
         let browsing_context_strings = match &browsing_contexts {
             Some(browsing_contexts) => browsing_contexts
@@ -116,7 +123,7 @@ pub trait EventManagement<'a, T: ConnectionTransport<'a>> {
                     let bidi_event = BidiEvent {
                         id: subscribe_result.subscription.clone(),
                         events: events.into_iter().collect(),
-                        handler: Box::new(handler),
+                        handler: Arc::new(handler),
                     };
                     bidi_events.push(bidi_event);
                     Ok(Some(ResultData::SessionResult(
@@ -134,11 +141,15 @@ pub trait EventManagement<'a, T: ConnectionTransport<'a>> {
 
     async fn dispatch_event(&self, event: Event) {
         let bidi_events = self.get_bidi_events();
-        let event_method = event.event_data.get_method();
+        let event_method = &event.event_data.get_method();
         // Manually handling context check was abandoned, too much variation/nesting of context
         for bidi_event in bidi_events {
             if bidi_event.events.contains(&event_method) {
-                bidi_event.handler().await;
+                let ch = bidi_event.handler.clone()    ;
+                let ce = event.clone();
+                tokio::spawn(async move {
+                    ch(ce).await;
+                });
             }
         }
     }
