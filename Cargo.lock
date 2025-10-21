@@ -1109,6 +1109,7 @@ name = "rustenium"
 version = "0.1.0"
 dependencies = [
  "reqwest",
+ "rustenium-bidi-commands",
  "rustenium-core",
  "serde",
  "tokio",

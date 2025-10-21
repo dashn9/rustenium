@@ -6,6 +6,7 @@ use std::collections::HashSet;
 use std::error::Error;
 
 pub use chrome::ChromeDriver;
+use rustenium_bidi_commands::{BrowsingContextEvent, EventData};
 use rustenium_core::contexts::BrowsingContext;
 use rustenium_core::error::CommandResultError;
 use rustenium_core::events::EventManagement;
@@ -18,7 +19,8 @@ pub struct Driver<'a, T: ConnectionTransport<'a>> {
     driver_process: Option<Process>,
 }
 
-impl<'a, T: ConnectionTransport<'a>> Driver<'a, T> {
+impl<'a, T: ConnectionTransport<'a>> Driver<'a, T>
+{
     async fn new_session(
         &mut self,
         connection_type: SessionConnectionType,
@@ -32,13 +34,22 @@ impl<'a, T: ConnectionTransport<'a>> Driver<'a, T> {
     }
 
     pub async fn listen_to_context_creation(&mut self) -> Result<(), CommandResultError> {
+        let session = self.session.as_mut().unwrap();
+        let browsing_context_mut = &mut self.browsing_contexts;
         let result = self
             .session
             .as_mut()
             .unwrap()
             .subscribe_events(
                 HashSet::from(["browsingContext.contextCreated"]),
-                |event| async {},
+                |event| async {
+                    if let EventData::BrowsingContextEvent(BrowsingContextEvent::ContextCreated(
+                        context,
+                    )) = event.event_data
+                    {
+
+                    }
+                },
                 None,
                 None,
             )

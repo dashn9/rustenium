@@ -164,32 +164,7 @@ pub fn search_and_update_event(cddl_strings: Vec<&str>, event: &mut Event, event
 
         for (line_num, line) in lines.iter().enumerate() {
             if regex.is_match(line.trim()) {
-                // Found the event definition, set the method
-
-                // Create EventMethods if it doesn't exist yet
-                let rust_method_name = format!("{}{}",
-                    event.module_name.replace("_", "").to_string().chars().next().unwrap().to_uppercase().to_string() + &event.module_name[1..],
-                    event.name
-                );
-
-                let method_exists = event_def.event_methods.iter().any(|m| m.name == rust_method_name);
-                if !method_exists {
-                    let method_attributes = vec![
-                        format!(r#"#[serde(rename = "{}")]"#, method_name)
-                    ];
-                    let enum_attributes = vec![
-                        "#[derive(Debug, Clone, Serialize, Deserialize)]".to_string(),
-                        "#[serde(untagged)]".to_string()
-                    ];
-
-                    event_def.event_methods.push(EventMethods {
-                        name: format!("{}Method", rust_method_name),
-                        method_attributes,
-                        enum_attributes,
-                    });
-                }
-
-                // Collect lines between the parentheses (skip the first line with opening paren)
+                // Collect lines between the parentheses first
                 let mut paren_count = 0;
                 let mut param_lines: Vec<&str> = Vec::new();
 
@@ -204,8 +179,34 @@ pub fn search_and_update_event(cddl_strings: Vec<&str>, event: &mut Event, event
                             ')' => {
                                 paren_count -= 1;
                                 if paren_count < 0 {
-                                    // Found the closing paren, join the collected lines
-                                    let param_content = param_lines.join("\n").trim().to_string();
+                                    // Extract the actual method value from CDDL
+                                    let mut actual_method_value = method_name.clone();
+                                    for line in &param_lines {
+                                        let line_trimmed = line.trim();
+                                        if line_trimmed.starts_with("method:") {
+                                            if let Some(method_str) = line_trimmed.strip_prefix("method:").map(|s| s.trim().trim_end_matches(',')) {
+                                                actual_method_value = method_str.trim_matches('"').to_string();
+                                            }
+                                            break;
+                                        }
+                                    }
+
+                                    // Create EventMethods with the actual method value
+                                    let rust_method_name = format!("{}{}",
+                                        event.module_name.replace("_", "").chars().next().unwrap().to_uppercase().to_string() + &event.module_name[1..],
+                                        event.name
+                                    );
+
+                                    if !event_def.event_methods.iter().any(|m| m.name == rust_method_name) {
+                                        event_def.event_methods.push(EventMethods {
+                                            name: format!("{}Method", rust_method_name),
+                                            method_attributes: vec![format!(r#"#[serde(rename = "{}")]"#, actual_method_value)],
+                                            enum_attributes: vec![
+                                                "#[derive(Debug, Clone, Serialize, Deserialize)]".to_string(),
+                                                "#[serde(untagged)]".to_string()
+                                            ],
+                                        });
+                                    }
 
                                     // Parse the parameter content
                                     let event_value = parse_event_parameters(&param_lines, cddl_strings.clone(), module, event_def)?;

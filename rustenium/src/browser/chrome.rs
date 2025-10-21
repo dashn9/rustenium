@@ -53,5 +53,6 @@ impl <'a>ChromeDriver<'a> {
             Ok(session) => (),
             Err(e) => panic!("A problem occurred creating the session: {e:?}"),
         }
+        self.driver.listen_to_context_creation().await.unwrap();
     }
 }
