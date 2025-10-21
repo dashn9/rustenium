@@ -13,10 +13,12 @@ use crate::{
 };
 use crate::contexts::BrowsingContext;
 use crate::error::{ResponseReceiveTimeoutError, SessionSendError};
+use crate::events::{BidiEvent, EventManagement};
 
 pub struct Session<'a, T: ConnectionTransport<'a>> {
     id: Option<String>,
     connection: Connection<'a, T>,
+    bidi_events: Vec<BidiEvent>,
 }
 
 pub enum SessionConnectionType {
@@ -31,12 +33,7 @@ impl<'a, T: ConnectionTransport<'a>> Session<'a, T> {
             .unwrap();
         let connection = Connection::new(connection_transport);
         connection.start_listeners();
-        Session { id: None, connection }
-    }
-
-    // I don't know what to do with UserContexts yet
-    pub async fn subscribe_events(self, events: Vec<String>, contexts: Option<Vec<&BrowsingContext>>, user_contexts: Option<Vec<&str>>) {
-
+        Session { id: None, connection, bidi_events: Vec::new() }
     }
 
     pub async fn create_new_bidi_session(&mut self, connection_type: SessionConnectionType) -> () {
@@ -99,5 +96,19 @@ impl<'a, T: ConnectionTransport<'a>> Session<'a, T> {
             // I might need to remove command from commands response subscriptions
             Err(_) => Err(SessionSendError::ResponseReceiveTimeoutError(ResponseReceiveTimeoutError))
         }
+    }
+}
+
+impl <'a, T: ConnectionTransport<'a>>EventManagement for Session<'a, T> {
+    async fn send_event(&mut self, command_data: CommandData) -> Result<ResultData, SessionSendError> {
+        self.send(command_data).await
+    }
+
+    fn get_bidi_events(&mut self) -> &mut Vec<BidiEvent> {
+        &mut self.bidi_events
+    }
+
+    fn push_event(&mut self, event: BidiEvent) {
+        self.bidi_events.push(event);
     }
 }

@@ -5,8 +5,8 @@ pub mod transport;
 pub mod contexts;
 
 mod listeners;
-mod error;
-mod events;
+pub mod error;
+pub mod events;
 mod macros;
 
 pub use session::Session;
