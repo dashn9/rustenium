@@ -25,93 +25,93 @@ pub enum BrowsingContextEvent {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum BrowsingContextContextCreatedMethod {
-    #[serde(rename = "browsingContext.ContextCreated")]
+    #[serde(rename = "browsingContext.contextCreated")]
     BrowsingContextContextCreated,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum BrowsingContextContextDestroyedMethod {
-    #[serde(rename = "browsingContext.ContextDestroyed")]
+    #[serde(rename = "browsingContext.contextDestroyed")]
     BrowsingContextContextDestroyed,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum BrowsingContextDomContentLoadedMethod {
-    #[serde(rename = "browsingContext.DomContentLoaded")]
+    #[serde(rename = "browsingContext.domContentLoaded")]
     BrowsingContextDomContentLoaded,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum BrowsingContextDownloadEndMethod {
-    #[serde(rename = "browsingContext.DownloadEnd")]
+    #[serde(rename = "browsingContext.downloadEnd")]
     BrowsingContextDownloadEnd,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum BrowsingContextDownloadWillBeginMethod {
-    #[serde(rename = "browsingContext.DownloadWillBegin")]
+    #[serde(rename = "browsingContext.downloadWillBegin")]
     BrowsingContextDownloadWillBegin,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum BrowsingContextFragmentNavigatedMethod {
-    #[serde(rename = "browsingContext.FragmentNavigated")]
+    #[serde(rename = "browsingContext.fragmentNavigated")]
     BrowsingContextFragmentNavigated,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum BrowsingContextHistoryUpdatedMethod {
-    #[serde(rename = "browsingContext.HistoryUpdated")]
+    #[serde(rename = "browsingContext.historyUpdated")]
     BrowsingContextHistoryUpdated,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum BrowsingContextLoadMethod {
-    #[serde(rename = "browsingContext.Load")]
+    #[serde(rename = "browsingContext.load")]
     BrowsingContextLoad,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum BrowsingContextNavigationAbortedMethod {
-    #[serde(rename = "browsingContext.NavigationAborted")]
+    #[serde(rename = "browsingContext.navigationAborted")]
     BrowsingContextNavigationAborted,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum BrowsingContextNavigationCommittedMethod {
-    #[serde(rename = "browsingContext.NavigationCommitted")]
+    #[serde(rename = "browsingContext.navigationCommitted")]
     BrowsingContextNavigationCommitted,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum BrowsingContextNavigationFailedMethod {
-    #[serde(rename = "browsingContext.NavigationFailed")]
+    #[serde(rename = "browsingContext.navigationFailed")]
     BrowsingContextNavigationFailed,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum BrowsingContextNavigationStartedMethod {
-    #[serde(rename = "browsingContext.NavigationStarted")]
+    #[serde(rename = "browsingContext.navigationStarted")]
     BrowsingContextNavigationStarted,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum BrowsingContextUserPromptClosedMethod {
-    #[serde(rename = "browsingContext.UserPromptClosed")]
+    #[serde(rename = "browsingContext.userPromptClosed")]
     BrowsingContextUserPromptClosed,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum BrowsingContextUserPromptOpenedMethod {
-    #[serde(rename = "browsingContext.UserPromptOpened")]
+    #[serde(rename = "browsingContext.userPromptOpened")]
     BrowsingContextUserPromptOpened,
 }
 

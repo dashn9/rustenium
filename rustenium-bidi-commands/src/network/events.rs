@@ -22,25 +22,25 @@ pub enum NetworkAuthRequiredMethod {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum NetworkBeforeRequestSentMethod {
-    #[serde(rename = "network.BeforeRequestSent")]
+    #[serde(rename = "network.beforeRequestSent")]
     NetworkBeforeRequestSent,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum NetworkFetchErrorMethod {
-    #[serde(rename = "network.FetchError")]
+    #[serde(rename = "network.fetchError")]
     NetworkFetchError,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum NetworkResponseCompletedMethod {
-    #[serde(rename = "network.ResponseCompleted")]
+    #[serde(rename = "network.responseCompleted")]
     NetworkResponseCompleted,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum NetworkResponseStartedMethod {
-    #[serde(rename = "network.ResponseStarted")]
+    #[serde(rename = "network.responseStarted")]
     NetworkResponseStarted,
 }
 

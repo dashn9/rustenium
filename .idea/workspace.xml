@@ -21,12 +21,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-generator/src/event_parser.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/event_parser.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/src/browser/chrome.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/browser/chrome.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/src/browser/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/browser/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/events.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/events.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +52,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Cargo.Rustenium Generator.executor": "Run",
+    "Cargo.Rustenium Generator.executor": "Debug",
     "Cargo.Test Rustenium.executor": "Debug",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",

@@ -12,7 +12,7 @@ pub enum InputEvent {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum InputFileDialogOpenedMethod {
-    #[serde(rename = "input.FileDialogOpened")]
+    #[serde(rename = "input.fileDialogOpened")]
     InputFileDialogOpened,
 }
 

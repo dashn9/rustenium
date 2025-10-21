@@ -14,19 +14,19 @@ pub enum ScriptEvent {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum ScriptMessageMethod {
-    #[serde(rename = "script.Message")]
+    #[serde(rename = "script.message")]
     ScriptMessage,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum ScriptRealmCreatedMethod {
-    #[serde(rename = "script.RealmCreated")]
+    #[serde(rename = "script.realmCreated")]
     ScriptRealmCreated,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum ScriptRealmDestroyedMethod {
-    #[serde(rename = "script.RealmDestroyed")]
+    #[serde(rename = "script.realmDestroyed")]
     ScriptRealmDestroyed,
 }
 

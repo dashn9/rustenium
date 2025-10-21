@@ -12,7 +12,7 @@ pub enum LogEvent {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum LogEntryAddedMethod {
-    #[serde(rename = "log.EntryAdded")]
+    #[serde(rename = "log.entryAdded")]
     LogEntryAdded,
 }
 
