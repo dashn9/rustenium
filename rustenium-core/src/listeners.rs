@@ -3,7 +3,9 @@ use std::{collections::HashMap, sync::{Arc}};
 use rustenium_bidi_commands::{CommandResponse, ErrorResponse, Event, EventData, Message};
 use serde::{Deserialize, Serialize};
 use tokio::sync::{mpsc::{unbounded_channel, UnboundedReceiver, UnboundedSender}, oneshot, Mutex};
+use tokio::task::JoinHandle;
 
+#[derive(Debug)]
 pub struct Listener {
     rx: UnboundedReceiver<String>,
     pub command_response_tx: UnboundedSender<CommandResponseState>,
@@ -29,22 +31,22 @@ impl Listener {
                     Ok(result) => result,
                     Err(e) => {
                         eprintln!("Failed to parse message: {:?}", e.to_string());
-                        return;
+                        continue;
                     }
                 };
                 match parsed_message {
                     Message::CommandResponse(command_response) => {
                         self.command_response_tx
                             .send(CommandResponseState::Success(command_response))
-                            .unwrap();
+                            .expect("Failed to send command response");
                     }
                     Message::Event(event) => {
-                        self.event_tx.send(event).unwrap();
+                        self.event_tx.send(event).expect("Failed to send event to event channel");
                     }
                     Message::ErrorResponse(error_response) => {
                         self.command_response_tx
                             .send(CommandResponseState::Error(error_response))
-                            .unwrap();
+                            .expect("Failed to send error response");
                     }
                 }
             }
@@ -100,14 +102,14 @@ impl EventListener {
             listeners: Arc::new(Mutex::new(Vec::new())),
         }
     }
-    pub fn start(&self, mut rx: UnboundedReceiver<Event>) -> () {
+    pub fn start(&self, mut rx: UnboundedReceiver<Event>) -> JoinHandle<()>{
         let listeners = self.listeners.clone();
         tokio::spawn(async move {
             while let Some(event) = rx.recv().await {
-                for handler in listeners.lock().await.iter_mut() {
-                    handler.send(event.clone()).unwrap();
+                for listener in listeners.lock().await.iter_mut() {
+                    listener.send(event.clone()).expect("Unable to send event to event channel");
                 }
             }
-        });
+        })
     }
 }
