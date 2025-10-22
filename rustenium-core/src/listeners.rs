@@ -89,3 +89,25 @@ impl CommandResponseListener {
         });
     }
 }
+
+pub struct EventListener {
+    pub listeners: Arc<Mutex<Vec<UnboundedSender<Event>>>>,
+}
+
+impl EventListener {
+    pub fn new() -> Self {
+        Self {
+            listeners: Arc::new(Mutex::new(Vec::new())),
+        }
+    }
+    pub fn start(&self, mut rx: UnboundedReceiver<Event>) -> () {
+        let listeners = self.listeners.clone();
+        tokio::spawn(async move {
+            while let Some(event) = rx.recv().await {
+                for handler in listeners.lock().await.iter_mut() {
+                    handler.send(event.clone()).unwrap();
+                }
+            }
+        });
+    }
+}

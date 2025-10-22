@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::sync::{Arc, Mutex};
 use std::time::{Duration};
 use rand::Rng;
 use rustenium_bidi_commands::{Command, CommandData, CommandResponse, ErrorResponse, ResultData};
@@ -18,7 +19,7 @@ use crate::events::{BidiEvent, EventManagement};
 pub struct Session<'a, T: ConnectionTransport<'a>> {
     id: Option<String>,
     connection: Connection<'a, T>,
-    bidi_events: Vec<BidiEvent>,
+    bidi_events: Arc<Mutex<Vec<BidiEvent>>>,
 }
 
 pub enum SessionConnectionType {
@@ -33,7 +34,7 @@ impl<'a, T: ConnectionTransport<'a>> Session<'a, T> {
             .unwrap();
         let connection = Connection::new(connection_transport);
         connection.start_listeners();
-        Session { id: None, connection, bidi_events: Vec::new() }
+        Session { id: None, connection, bidi_events: Arc::new(Mutex::new(Vec::new())) }
     }
 
     pub async fn create_new_bidi_session(&mut self, connection_type: SessionConnectionType) -> () {
@@ -104,11 +105,11 @@ impl <'a, T: ConnectionTransport<'a>>EventManagement for Session<'a, T> {
         self.send(command_data).await
     }
 
-    fn get_bidi_events(&mut self) -> &mut Vec<BidiEvent> {
+    fn get_bidi_events(&mut self) -> &mut Arc<Mutex<Vec<BidiEvent>>> {
         &mut self.bidi_events
     }
 
     fn push_event(&mut self, event: BidiEvent) {
-        self.bidi_events.push(event);
+        self.bidi_events.lock().unwrap().push(event);
     }
 }

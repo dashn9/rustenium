@@ -1,16 +1,19 @@
 use std::{collections::HashMap, net::TcpListener};
+use std::future::Future;
+use std::pin::Pin;
 use std::sync::Arc;
-use tokio::sync::mpsc::unbounded_channel;
+use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
 use rustenium_bidi_commands::{CommandResponse, Event};
 use tokio::sync::{oneshot, Mutex};
 
 use crate::{listeners::CommandResponseState, transport::ConnectionTransport};
-use crate::listeners::{CommandResponseListener, Listener};
+use crate::listeners::{CommandResponseListener, EventListener, Listener};
 use crate::transport::WebsocketConnectionTransport;
 
 pub struct Connection<'a, T: ConnectionTransport<'a>> {
     transport: T,
     pub commands_response_subscriptions: Arc<Mutex<HashMap<u64, oneshot::Sender<CommandResponseState>>>>,
+    event_listener: EventListener,
     _marker: std::marker::PhantomData<&'a ()>,
 }
 
@@ -28,8 +31,13 @@ where
         Self {
             transport: connection_transport,
             commands_response_subscriptions: Arc::new(Mutex::new(HashMap::new())),
+            event_listener: EventListener::new(),
             _marker: std::marker::PhantomData,
         }
+    }
+
+    pub async fn register_event_listener_channel(&mut self, channel: UnboundedSender<Event>) {
+        self.event_listener.listeners.lock().await.push(channel);
     }
 
     pub fn start_listeners(&self) -> () {
@@ -44,6 +52,7 @@ where
         
         let commands_response_listener = CommandResponseListener::new(command_response_rx, self.commands_response_subscriptions.clone());
         commands_response_listener.start();
+        self.event_listener.start(event_rx);
     }
 
     pub async fn send(&mut self, data: String) {

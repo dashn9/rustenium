@@ -21,7 +21,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/events.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/events.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-core/src/connection.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/connection.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-core/src/events.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/events.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-core/src/listeners.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/listeners.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-core/src/session.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/session.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -177,7 +181,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/rustenium-core/src/session.rs</url>
-          <line>86</line>
+          <line>87</line>
           <option name="timeStamp" value="74" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
@@ -186,49 +190,9 @@
           <option name="timeStamp" value="97" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/types.rs</url>
-          <line>271</line>
-          <option name="timeStamp" value="98" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/rustenium-bidi-commands/src/lib.rs</url>
-          <line>214</line>
-          <option name="timeStamp" value="106" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/rustenium-bidi-commands/src/lib.rs</url>
           <line>212</line>
           <option name="timeStamp" value="108" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/types.rs</url>
-          <line>269</line>
-          <option name="timeStamp" value="114" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/types.rs</url>
-          <line>270</line>
-          <option name="timeStamp" value="115" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/types.rs</url>
-          <line>261</line>
-          <option name="timeStamp" value="116" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/types.rs</url>
-          <line>262</line>
-          <option name="timeStamp" value="117" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/events.rs</url>
-          <line>132</line>
-          <option name="timeStamp" value="118" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/events.rs</url>
-          <line>131</line>
-          <option name="timeStamp" value="119" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

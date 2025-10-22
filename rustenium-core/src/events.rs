@@ -12,7 +12,7 @@ use rustenium_bidi_commands::{
 use std::collections::HashSet;
 use std::future::{Future, IntoFuture};
 use std::pin::Pin;
-use std::sync::Arc;
+use std::sync::{Arc, Mutex};
 use std::vec;
 
 trait HasMethod {
@@ -71,18 +71,21 @@ impl_has_method!(
 );
 impl_has_method!(ScriptEvent, [Message, RealmCreated, RealmDestroyed]);
 
-type BidiEventHandler = Arc<dyn Fn(Event) -> Pin<Box<dyn Future<Output = ()> + Send>> + Send + Sync + 'static>;
-pub struct BidiEvent
-{
+type BidiEventHandler =
+    Arc<dyn Fn(Event) -> Pin<Box<dyn Future<Output = ()> + Send>> + Send + Sync + 'static>;
+pub struct BidiEvent {
     pub id: String,
     pub events: Vec<String>,
     pub handler: BidiEventHandler,
 }
 
 pub trait EventManagement {
-    async fn send_event(&mut self, command_data: CommandData) -> Result<ResultData, SessionSendError>;
+    async fn send_event(
+        &mut self,
+        command_data: CommandData,
+    ) -> Result<ResultData, SessionSendError>;
 
-    fn get_bidi_events(&mut self) -> &mut Vec<BidiEvent>;
+    fn get_bidi_events(&mut self) -> &mut Arc<Mutex<Vec<BidiEvent>>>;
 
     fn push_event(&mut self, event: BidiEvent) -> ();
 
@@ -96,7 +99,7 @@ pub trait EventManagement {
     ) -> Result<Option<ResultData>, CommandResultError>
     where
         F: Fn(Event) -> R + Send + Sync + 'static,
-        R: Future<Output = ()> + Send + 'static
+        R: Future<Output = ()> + Send + 'static,
     {
         let browsing_context_strings = match &browsing_contexts {
             Some(browsing_contexts) => browsing_contexts
@@ -109,7 +112,11 @@ pub trait EventManagement {
             CommandData::SessionCommand(SessionCommand::Subscribe(Subscribe {
                 method: SessionSubscribeMethod::SessionSubscribe,
                 params: SubscriptionRequest {
-                    events: events.clone().into_iter().map(|event| event.to_string()).collect(),
+                    events: events
+                        .clone()
+                        .into_iter()
+                        .map(|event| event.to_string())
+                        .collect(),
                     contexts: if browsing_contexts.is_none() {
                         None
                     } else {
@@ -124,8 +131,12 @@ pub trait EventManagement {
                 SessionResult::SubscribeResult(subscribe_result) => {
                     let bidi_event = BidiEvent {
                         id: subscribe_result.subscription.clone(),
-                        events: events.clone().into_iter().map(|event| event.to_string()).collect(),
-                        handler: Arc::new(move |event| {Box::pin(handler(event))}),
+                        events: events
+                            .clone()
+                            .into_iter()
+                            .map(|event| event.to_string())
+                            .collect(),
+                        handler: Arc::new(move |event| Box::pin(handler(event))),
                     };
                     self.push_event(bidi_event);
                     Ok(Some(ResultData::SessionResult(
@@ -142,17 +153,19 @@ pub trait EventManagement {
     }
 
     async fn dispatch_event(&mut self, event: Event) {
-        let bidi_events = self.get_bidi_events();
-        let event_method = &event.event_data.get_method();
-        // Manually handling context check was abandoned, too much variation/nesting of context
-        for bidi_event in bidi_events {
-            if bidi_event.events.contains(&event_method) {
-                let ch = Arc::clone(&bidi_event.handler)   ;
-                let ce = event.clone();
-                tokio::spawn(async move {
-                    ch(ce).await;
-                });
+        let bidi_events = self.get_bidi_events().clone();
+        tokio::task::spawn_blocking(move || {
+            let event_method = &event.event_data.get_method();
+            // Manually handling context check was abandoned, too much variation/nesting of context
+            for bidi_event in bidi_events.lock().unwrap().iter() {
+                if bidi_event.events.contains(&event_method) {
+                    let ch = Arc::clone(&bidi_event.handler);
+                    let ce = event.clone();
+                    tokio::spawn(async move {
+                        ch(ce).await;
+                    });
+                }
             }
-        }
+        });
     }
 }
