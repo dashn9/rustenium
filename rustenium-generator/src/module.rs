@@ -154,7 +154,19 @@ pub fn detect_root_protocol(cddl_strings: Vec<&str>) -> Result<RootProtocol, Box
 
     let (content, _) = crate::parser::find_and_extract_type_content("ResultData", &cddl_strings, &temp_module).unwrap();
     let (properties, _) = crate::parser::process_cddl_to_struct(&content, cddl_strings.clone(), &mut temp_module, Some("ResultData"))?;
-    let properties = unwrap_union_property(properties, &mut temp_module);
+    let mut properties = unwrap_union_property(properties, &mut temp_module);
+
+    // Add EmptyResult to the top of ResultData enum variants
+    properties.insert(0, crate::parser::Property {
+        is_enum: true,
+        is_primitive: false,
+        is_optional: false,
+        name: "EmptyResult".to_string(),
+        value: "EmptyResult".to_string(),
+        attributes: vec![],
+        validation_info: None,
+    });
+
     let result_data = ResultDataType { properties };
 
     let (content, _) = crate::parser::find_and_extract_type_content("EmptyResult", &cddl_strings, &temp_module).unwrap();

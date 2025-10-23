@@ -18,7 +18,7 @@ use std::future::{Future, IntoFuture};
 use std::pin::Pin;
 use std::sync::Arc;
 use std::sync::Mutex as StdMutex;
-use std::vec;
+use std::{fmt, vec};
 use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
 use tokio::sync::Mutex;
 use tokio::task::JoinHandle;
@@ -80,12 +80,22 @@ impl_has_method!(
 impl_has_method!(ScriptEvent, [Message, RealmCreated, RealmDestroyed]);
 
 type BidiEventHandler = Arc<
-    Mutex<dyn FnMut(Event) -> Pin<Box<dyn Future<Output = ()> + Send>> + Send + Sync + 'static>,
+    Mutex<dyn FnMut(Event) -> Pin<Box<dyn Future<Output=()> + Send>> + Send + Sync + 'static>,
 >;
 pub struct BidiEvent {
     pub id: String,
     pub events: Vec<String>,
     pub handler: BidiEventHandler,
+}
+
+impl fmt::Debug for BidiEvent {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("BidiEvent")
+            .field("id", &self.id)
+            .field("events", &self.events)
+            .field("handler", &"<BidiEventHandler>")
+            .finish()
+    }
 }
 
 pub trait EventManagement {
@@ -108,7 +118,7 @@ pub trait EventManagement {
     ) -> Result<Option<SubscribeResult>, CommandResultError>
     where
         F: FnMut(Event) -> R + Send + Sync + 'static,
-        R: Future<Output = ()> + Send + 'static,
+        R: Future<Output=()> + Send + 'static,
     {
         let browsing_context_strings = match &browsing_contexts {
             Some(browsing_contexts) => browsing_contexts
@@ -117,6 +127,20 @@ pub trait EventManagement {
                 .collect(),
             None => vec![],
         };
+
+        // Optimistically push event before sending to avoid race condition
+        let temp_id = format!("temp_{}", std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos());
+        let bidi_event = BidiEvent {
+            id: temp_id.clone(),
+            events: events
+                .clone()
+                .into_iter()
+                .map(|event| event.to_string())
+                .collect(),
+            handler: Arc::new(Mutex::new(move |event| Box::pin(handler(event)) as Pin<Box<dyn Future<Output=()> + Send>>)),
+        };
+        self.push_event(bidi_event);
+
         let subscribe_event_command =
             CommandData::SessionCommand(SessionCommand::Subscribe(Subscribe {
                 method: SessionSubscribeMethod::SessionSubscribe,
@@ -138,24 +162,34 @@ pub trait EventManagement {
         match event_result {
             Ok(ResultData::SessionResult(session_result)) => match session_result {
                 SessionResult::SubscribeResult(subscribe_result) => {
-                    let bidi_event = BidiEvent {
-                        id: subscribe_result.subscription.clone(),
-                        events: events
-                            .clone()
-                            .into_iter()
-                            .map(|event| event.to_string())
-                            .collect(),
-                        handler: Arc::new(Mutex::new(move |event| Box::pin(handler(event)) as Pin<Box<dyn Future<Output = ()> + Send>>)),
-                    };
-                    self.push_event(bidi_event);
+                    // Update temp ID with actual subscription ID
+                    let mut bidi_events = self.get_bidi_events().lock().unwrap();
+                    if let Some(event) = bidi_events.iter_mut().find(|e| e.id == temp_id) {
+                        event.id = subscribe_result.subscription.clone();
+                    }
                     Ok(Some(subscribe_result))
                 }
-                _ => Err(CommandResultError::InvalidResultTypeError(
-                    ResultData::SessionResult(session_result),
-                )),
+                _ => {
+                    // Remove on failure
+                    let mut bidi_events = self.get_bidi_events().lock().unwrap();
+                    bidi_events.retain(|e| e.id != temp_id);
+                    Err(CommandResultError::InvalidResultTypeError(
+                        ResultData::SessionResult(session_result),
+                    ))
+                }
             },
-            Ok(result) => Err(CommandResultError::InvalidResultTypeError(result)),
-            Err(e) => Err(CommandResultError::SessionSendError(e)),
+            Ok(result) => {
+                // Remove on failure
+                let mut bidi_events = self.get_bidi_events().lock().unwrap();
+                bidi_events.retain(|e| e.id != temp_id);
+                Err(CommandResultError::InvalidResultTypeError(result))
+            }
+            Err(e) => {
+                // Remove on failure
+                let mut bidi_events = self.get_bidi_events().lock().unwrap();
+                bidi_events.retain(|e| e.id != temp_id);
+                Err(CommandResultError::SessionSendError(e))
+            }
         }
     }
 
@@ -219,16 +253,13 @@ pub trait EventManagement {
 
         let event_result = self.send_event(unsubscribe_command).await;
         match event_result {
-            Ok(ResultData::SessionResult(session_result)) => match session_result {
-                SessionResult::UnsubscribeResult(unsubscribe_result) => {
-                    // Remove the subscriptions from our local tracking
-                    let mut bidi_events = self.get_bidi_events().lock().unwrap();
-                    bidi_events.retain(|bidi_event| !subscription_ids.contains(&bidi_event.id));
-                    Ok(Some(unsubscribe_result))
-                }
-                _ => Err(CommandResultError::InvalidResultTypeError(
-                    ResultData::SessionResult(session_result),
-                )),
+            Ok(ResultData::EmptyResult(empty_result)) => {
+                // Remove the subscriptions from our local tracking
+                let mut bidi_events = self.get_bidi_events().lock().unwrap();
+                println!("{:?}", bidi_events);
+                bidi_events.retain(| bidi_event | !subscription_ids.contains(&bidi_event.id));
+                println!("{:?}", bidi_events);
+                Ok(Some(empty_result))
             },
             Ok(result) => Err(CommandResultError::InvalidResultTypeError(result)),
             Err(e) => Err(CommandResultError::SessionSendError(e)),
@@ -241,7 +272,7 @@ pub trait EventManagement {
         (
             tokio::spawn(async move {
                 while let Some(event) = rx.recv().await {
-                    let event_method = &event.event_data.get_method();
+                    let event_method = event.event_data.get_method().trim_matches('"').to_string();
                     // Manually handling context check was abandoned, too much variation/nesting of context
                     for bidi_event in bidi_events.lock().unwrap().iter() {
                         if bidi_event.events.contains(&event_method) {

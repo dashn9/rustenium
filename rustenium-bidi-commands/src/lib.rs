@@ -182,6 +182,7 @@ impl std::fmt::Display for ErrorResponse {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum ResultData {
+    EmptyResult(EmptyResult),
     BrowserResult(BrowserResult),
     BrowsingContextResult(BrowsingContextResult),
     EmulationResult(EmulationResult),

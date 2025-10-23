@@ -3,6 +3,7 @@ pub mod chrome;
 
 pub use chrome::ChromeDriver;
 use rustenium_bidi_commands::browsing_context::types::CreateType;
+use rustenium_bidi_commands::session::commands::SubscribeResult;
 use rustenium_bidi_commands::{BrowsingContextEvent, EventData};
 use rustenium_core::contexts::BrowsingContext;
 use rustenium_core::error::CommandResultError;
@@ -12,6 +13,9 @@ use rustenium_core::{process::Process, transport::ConnectionTransport, Session};
 use std::collections::HashSet;
 use std::error::Error;
 use std::sync::{Arc, Mutex};
+use std::time::Duration;
+use tokio::time::sleep;
+use crate::error::ContextCreationListenError;
 
 pub struct Driver<'a, T: ConnectionTransport<'a>> {
     pub exe_path: &'static str,
@@ -34,21 +38,20 @@ impl<'a, T: ConnectionTransport<'a>> Driver<'a, T> {
         Ok(())
     }
 
-    pub async fn listen_to_context_creation(&mut self) -> Result<(), CommandResultError> {
+    pub async fn listen_to_context_creation(
+        &mut self,
+    ) -> Result<Option<SubscribeResult>, ContextCreationListenError> {
         let session = self.session.as_mut().unwrap();
         let browsing_contexts = self.browsing_contexts.clone();
-        let result = self
-            .session
-            .as_mut()
-            .unwrap()
+        let result = session
             .subscribe_events(
                 HashSet::from(["browsingContext.contextCreated"]),
                 move |event| {
                     let bc = browsing_contexts.clone();
                     async move {
-                        if let EventData::BrowsingContextEvent(BrowsingContextEvent::ContextCreated(
-                                                                   context,
-                                                               )) = event.event_data
+                        if let EventData::BrowsingContextEvent(
+                            BrowsingContextEvent::ContextCreated(context),
+                        ) = event.event_data
                         {
                             bc.lock().unwrap().push(BrowsingContext {
                                 r#type: CreateType::Window,
@@ -61,10 +64,29 @@ impl<'a, T: ConnectionTransport<'a>> Driver<'a, T> {
                 None,
             )
             .await;
+        // Wait for 2s, to allow current BrowsingContext be updated via the event.
+        sleep(Duration::from_millis(2000)).await;
+        if (self
+            .browsing_contexts
+            .lock()
+            .expect("Unable to acquire lock")
+            .len()
+            > 0)
+        {
+            if let Ok(Some(result)) = &result {
+                match session
+                    .unsubscribe_events_by_ids(vec![result.subscription.clone()]).await {
+                    Err(error) => return Err(ContextCreationListenError::CommandResultError(error)),
+                    Ok(None) => return Ok(None),
+                    _ => {},
+                }
+            };
+        } else {
 
+        }
         match result {
-            Ok(_) => Ok(()),
-            Err(e) => Err(e),
+            Err(error) => Err(ContextCreationListenError::CommandResultError(error)),
+            Ok(result) => Ok(result),
         }
     }
 

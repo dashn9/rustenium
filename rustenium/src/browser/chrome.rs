@@ -1,5 +1,7 @@
 use std::sync::{Arc, Mutex};
+use tokio::time::{sleep, Duration};
 use rustenium_core::{find_free_port, transport::WebsocketConnectionTransport};
+use rustenium_core::events::EventManagement;
 use rustenium_core::session::SessionConnectionType;
 use crate::Driver;
 use rustenium_core::transport::ConnectionTransportConfig;
@@ -54,6 +56,7 @@ impl <'a>ChromeDriver<'a> {
             Ok(session) => (),
             Err(e) => panic!("A problem occurred creating the session: {e:?}"),
         }
-        self.driver.listen_to_context_creation().await.unwrap();
+        let session = self.driver.session.as_ref().expect("Session has not been initialized");
+        let context_result = self.driver.listen_to_context_creation().await.unwrap();
     }
 }

@@ -21,11 +21,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/rustenium/src/error.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/lib.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-core/src/events.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/events.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-core/src/session.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/session.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-generator/src/module.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/module.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/Cargo.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium/src/browser/chrome.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/browser/chrome.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium/src/browser/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/browser/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/lib.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -171,7 +176,7 @@
       <workItem from="1760711819475" duration="95169000" />
       <workItem from="1761045380291" duration="17292000" />
       <workItem from="1761125503805" duration="1354000" />
-      <workItem from="1761146610779" duration="19408000" />
+      <workItem from="1761146610779" duration="31958000" />
     </task>
     <servers />
   </component>
@@ -182,29 +187,9 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/rustenium-core/src/session.rs</url>
-          <line>89</line>
-          <option name="timeStamp" value="74" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/rustenium-core/src/listeners.rs</url>
-          <line>29</line>
-          <option name="timeStamp" value="97" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/rustenium-bidi-commands/src/lib.rs</url>
-          <line>212</line>
-          <option name="timeStamp" value="108" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/rustenium/src/browser/mod.rs</url>
-          <line>48</line>
-          <option name="timeStamp" value="109" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/rustenium-core/src/events.rs</url>
-          <line>242</line>
-          <option name="timeStamp" value="111" />
+          <line>245</line>
+          <option name="timeStamp" value="118" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
