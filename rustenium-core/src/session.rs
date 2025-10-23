@@ -49,6 +49,8 @@ impl<'a, T: ConnectionTransport<'a>> Session<'a, T> {
                         },
                     }
                 };
+                let (_, event_tx) = self.event_dispatch().await;
+                self.connection.register_event_listener_channel(event_tx).await;
                 let command_result = self.send(CommandData::SessionCommand(SessionCommand::New(command.clone()))).await;
                 match command_result {
                     Ok(command_result) => {

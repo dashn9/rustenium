@@ -16,9 +16,11 @@ use rustenium_bidi_commands::{
 use std::collections::HashSet;
 use std::future::{Future, IntoFuture};
 use std::pin::Pin;
-use std::sync::{Arc, Mutex};
+use std::sync::Arc;
+use std::sync::Mutex as StdMutex;
 use std::vec;
 use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
+use tokio::sync::Mutex;
 use tokio::task::JoinHandle;
 
 trait HasMethod {
@@ -77,8 +79,9 @@ impl_has_method!(
 );
 impl_has_method!(ScriptEvent, [Message, RealmCreated, RealmDestroyed]);
 
-type BidiEventHandler =
-    Arc<dyn Fn(Event) -> Pin<Box<dyn Future<Output = ()> + Send>> + Send + Sync + 'static>;
+type BidiEventHandler = Arc<
+    Mutex<dyn FnMut(Event) -> Pin<Box<dyn Future<Output = ()> + Send>> + Send + Sync + 'static>,
+>;
 pub struct BidiEvent {
     pub id: String,
     pub events: Vec<String>,
@@ -91,7 +94,7 @@ pub trait EventManagement {
         command_data: CommandData,
     ) -> Result<ResultData, SessionSendError>;
 
-    fn get_bidi_events(&mut self) -> &mut Arc<Mutex<Vec<BidiEvent>>>;
+    fn get_bidi_events(&mut self) -> &mut Arc<StdMutex<Vec<BidiEvent>>>;
 
     fn push_event(&mut self, event: BidiEvent) -> ();
 
@@ -99,12 +102,12 @@ pub trait EventManagement {
     async fn subscribe_events<F, R>(
         &mut self,
         events: HashSet<&str>,
-        handler: F,
+        mut handler: F,
         browsing_contexts: Option<Vec<&BrowsingContext>>,
         user_contexts: Option<Vec<&str>>,
     ) -> Result<Option<SubscribeResult>, CommandResultError>
     where
-        F: Fn(Event) -> R + Send + Sync + 'static,
+        F: FnMut(Event) -> R + Send + Sync + 'static,
         R: Future<Output = ()> + Send + 'static,
     {
         let browsing_context_strings = match &browsing_contexts {
@@ -142,7 +145,7 @@ pub trait EventManagement {
                             .into_iter()
                             .map(|event| event.to_string())
                             .collect(),
-                        handler: Arc::new(move |event| Box::pin(handler(event))),
+                        handler: Arc::new(Mutex::new(move |event| Box::pin(handler(event)) as Pin<Box<dyn Future<Output = ()> + Send>>)),
                     };
                     self.push_event(bidi_event);
                     Ok(Some(subscribe_result))
@@ -166,7 +169,8 @@ pub trait EventManagement {
                 method: SessionUnsubscribeMethod::SessionUnsubscribe,
                 params: UnsubscribeParameters::UnsubscribeByAttributesRequest(
                     UnsubscribeByAttributesRequest {
-                        events: events.clone()
+                        events: events
+                            .clone()
                             .into_iter()
                             .map(|event| event.to_string())
                             .collect(),
@@ -244,7 +248,7 @@ pub trait EventManagement {
                             let ch = Arc::clone(&bidi_event.handler);
                             let ce = event.clone();
                             tokio::spawn(async move {
-                                ch(ce).await;
+                                (ch.lock().await)(ce).await;
                             });
                         }
                     }

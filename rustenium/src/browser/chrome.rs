@@ -1,3 +1,4 @@
+use std::sync::{Arc, Mutex};
 use rustenium_core::{find_free_port, transport::WebsocketConnectionTransport};
 use rustenium_core::session::SessionConnectionType;
 use crate::Driver;
@@ -32,7 +33,7 @@ impl <'a>Default for ChromeDriver<'a> {
                 exe_path: "google-chrome",
                 flags: vec![],
                 session: None,
-                browsing_contexts: Vec::new(),
+                browsing_contexts: Arc::new(Mutex::new(Vec::new())),
                 driver_process: None,
             },
         };
