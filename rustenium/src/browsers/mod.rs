@@ -1,1 +1,1 @@
-mod chrome;
+pub mod chrome;

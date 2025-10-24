@@ -4,31 +4,31 @@ pub struct ChromeBrowserConfig {
     pub host: Option<String>,
     pub port: Option<u16>,
 }
-pub struct ChromeBrowser<'a> {
+pub struct ChromeBrowser {
     config: ChromeBrowserConfig,
-    driver: ChromeDriver<'a>,
+    driver: ChromeDriver,
 }
 
-impl<'a> ChromeBrowser<'a> {
-    pub fn new(config: ChromeBrowserConfig) -> ChromeBrowser<'a> {
+impl ChromeBrowser {
+    pub fn new(config: ChromeBrowserConfig) -> ChromeBrowser {
         let driver_path = config.driver_path.clone();
         Self {
             config,
             driver: create_chrome_driver(driver_path),
         }
     }
-    pub async fn launch(&'a mut self) -> () {
+    pub async fn launch(&mut self) -> () {
         let host = self.config.host.clone().unwrap_or(String::from("localhost"));
         self.driver.launch(Some(host), self.config.port).await;
     }
 }
 
-async fn create_chrome_browser<'a>(config: ChromeBrowserConfig) -> ChromeBrowser<'a> {
+pub async fn create_chrome_browser(config: ChromeBrowserConfig) -> ChromeBrowser {
     let mut chrome_browser = ChromeBrowser::new(config);
     chrome_browser.launch().await;
     chrome_browser
 }
-fn create_chrome_driver<'a>(driver_path: String) -> ChromeDriver<'a> {
+fn create_chrome_driver<'a>(driver_path: String) -> ChromeDriver {
     let mut chrome_driver = ChromeDriver::default();
     chrome_driver.driver.exe_path = driver_path;
     chrome_driver

@@ -16,15 +16,15 @@ use std::time::Duration;
 use tokio::time::sleep;
 use crate::error::ContextCreationListenError;
 
-pub struct Driver<'a, T: ConnectionTransport<'a>> {
+pub struct Driver<T: ConnectionTransport> {
     pub exe_path: String,
     pub flags: Vec<String>,
-    pub session: Option<Session<'a, T>>,
+    pub session: Option<Session<T>>,
     browsing_contexts: Arc<Mutex<Vec<BrowsingContext>>>,
     driver_process: Option<Process>,
 }
 
-impl<'a, T: ConnectionTransport<'a>> Driver<'a, T> {
+impl<T: ConnectionTransport> Driver<T> {
     async fn new_session(
         &mut self,
         connection_type: SessionConnectionType,

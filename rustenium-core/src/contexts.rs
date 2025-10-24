@@ -12,7 +12,7 @@ pub struct BrowsingContext {
 }
 
 impl BrowsingContext {
-    pub async fn new<'oa, OT: ConnectionTransport<'oa>>(session: &mut Session<'oa, OT>, context_creation_type: Option<BrowsingContextCreateType>, reference_context: Option<&BrowsingContext>, background: bool) -> Result<Self, CommandResultError>  {
+    pub async fn new<OT: ConnectionTransport>(session: &mut Session<OT>, context_creation_type: Option<BrowsingContextCreateType>, reference_context: Option<&BrowsingContext>, background: bool) -> Result<Self, CommandResultError>  {
         let context_creation_type = context_creation_type.unwrap_or(BrowsingContextCreateType::Tab);
         let create_browsing_context_command = BrowsingContextCreate {
             method: BrowsingContextCreateMethod::BrowsingContextCreate,

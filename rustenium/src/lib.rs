@@ -1,6 +1,6 @@
 mod drivers;
 mod error;
-mod browsers;
+pub mod browsers;
 
 pub use drivers::*;
 #[cfg(test)]

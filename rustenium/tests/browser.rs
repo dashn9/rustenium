@@ -1,18 +1,16 @@
 use tokio::time::{Duration, sleep};
 use rustenium::{Driver, ChromeDriver};
+use rustenium::browsers::chrome::{create_chrome_browser, ChromeBrowserConfig};
 use rustenium_core::session::SessionConnectionType;
-
-async fn create_browser() -> ChromeDriver<'static> {
-    let mut browser = ChromeDriver::default();
-    browser.driver.exe_path = "D:/Documents/m-workspace/rustenium/apps/drivers/chromedriver.exe";
-    browser
-}
 
 #[tokio::test]
 async fn open_browser() {
-    let config = Chrome
-    let mut browser = create_browser().await;
-    browser.launch(None, None).await;
+    let config = ChromeBrowserConfig {
+        driver_path: "D:/Documents/m-workspace/rustenium/apps/drivers/chromedriver.exe".to_string(),
+        host: None,
+        port: None,
+    };
+    let mut browser = create_chrome_browser(config).await;
     sleep(Duration::from_secs(13)).await;
     drop(browser);
 }

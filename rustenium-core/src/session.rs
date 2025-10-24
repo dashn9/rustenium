@@ -16,19 +16,19 @@ use crate::contexts::BrowsingContext;
 use crate::error::{ResponseReceiveTimeoutError, SessionSendError};
 use crate::events::{BidiEvent, EventManagement};
 
-pub struct Session<'a, T: ConnectionTransport<'a>> {
+pub struct Session<T: ConnectionTransport> {
     id: Option<String>,
-    connection: Connection<'a, T>,
+    connection: Connection<T>,
     bidi_events: Arc<Mutex<Vec<BidiEvent>>>,
 }
 
 pub enum SessionConnectionType {
     WebSocket
 }
-impl<'a, T: ConnectionTransport<'a>> Session<'a, T> {
+impl<T: ConnectionTransport> Session<T> {
     pub async fn ws_new(
-        connection_config: &'a ConnectionTransportConfig<'a>,
-    ) -> Session<WebsocketConnectionTransport<'a>> {
+        connection_config: &ConnectionTransportConfig,
+    ) -> Session<WebsocketConnectionTransport> {
         let connection_transport = WebsocketConnectionTransport::new(connection_config)
             .await
             .unwrap();
@@ -102,7 +102,7 @@ impl<'a, T: ConnectionTransport<'a>> Session<'a, T> {
     }
 }
 
-impl <'a, T: ConnectionTransport<'a>>EventManagement for Session<'a, T> {
+impl <T: ConnectionTransport>EventManagement for Session<T> {
     async fn send_event(&mut self, command_data: CommandData) -> Result<ResultData, SessionSendError> {
         self.send(command_data).await
     }

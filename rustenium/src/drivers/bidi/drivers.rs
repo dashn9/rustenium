@@ -14,10 +14,10 @@ fn is_connection_refused(e: &reqwest::Error) -> bool {
     false
 }
 
-pub trait Driver<'a, T: ConnectionTransport<'a>> {
+pub trait Driver<T: ConnectionTransport> {
     fn exe_path(&self) -> &str;
     fn flags(&self) -> Vec<String>;
-    async fn start(& self, connection_transport_config: &'a ConnectionTransportConfig<'a>) -> (Session<'a, WebsocketConnectionTransport<'a>>, Process) {
+    async fn start(& self, connection_transport_config: &ConnectionTransportConfig) -> (Session<WebsocketConnectionTransport>, Process) {
         let driver_process = Process::create(self.exe_path(), self.flags());
         let session =
             Session::<T>::ws_new(connection_transport_config)

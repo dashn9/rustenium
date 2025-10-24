@@ -7,12 +7,12 @@ use crate::Driver;
 use rustenium_core::transport::ConnectionTransportConfig;
 use crate::drivers::bidi::drivers::Driver as DriverTrait;
 
-pub struct ChromeDriver<'a> {
-    connection_transport_config: ConnectionTransportConfig<'a>,
-    pub driver: Driver<'a, WebsocketConnectionTransport<'a>>,
+pub struct ChromeDriver {
+    connection_transport_config: ConnectionTransportConfig,
+    pub driver: Driver<WebsocketConnectionTransport>,
 }
 
-impl <'a>DriverTrait<'a, WebsocketConnectionTransport<'a>> for ChromeDriver<'a> {
+impl DriverTrait<WebsocketConnectionTransport> for ChromeDriver {
     fn exe_path(&self) -> &str {
         &self.driver.exe_path
     }
@@ -27,7 +27,7 @@ impl <'a>DriverTrait<'a, WebsocketConnectionTransport<'a>> for ChromeDriver<'a> 
     }
 }
 
-impl <'a>Default for ChromeDriver<'a> {
+impl Default for ChromeDriver {
     fn default() -> Self {
         ChromeDriver {
             connection_transport_config: Default::default(),
@@ -42,8 +42,8 @@ impl <'a>Default for ChromeDriver<'a> {
     }
 }
 
-impl <'a>ChromeDriver<'a> {
-    pub async fn launch(&'a mut self, host: Option<String>, port: Option<u16>) -> () {
+impl ChromeDriver {
+    pub async fn launch(& mut self, host: Option<String>, port: Option<u16>) -> () {
         let host = host.unwrap_or(String::from("localhost"));
         let port = port.unwrap_or(find_free_port().unwrap());
         self.connection_transport_config.host = host;

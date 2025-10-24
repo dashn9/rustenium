@@ -10,11 +10,10 @@ use crate::{listeners::CommandResponseState, transport::ConnectionTransport};
 use crate::listeners::{CommandResponseListener, EventListener, Listener};
 use crate::transport::WebsocketConnectionTransport;
 
-pub struct Connection<'a, T: ConnectionTransport<'a>> {
+pub struct Connection<T: ConnectionTransport> {
     transport: T,
     pub commands_response_subscriptions: Arc<Mutex<HashMap<u64, oneshot::Sender<CommandResponseState>>>>,
     event_listener: EventListener,
-    _marker: std::marker::PhantomData<&'a ()>,
 }
 
 pub fn find_free_port() -> std::io::Result<u16> {
@@ -23,16 +22,15 @@ pub fn find_free_port() -> std::io::Result<u16> {
     Ok(port)
 }
 
-impl<'a, T> Connection<'a, T>
+impl<T> Connection<T>
 where
-    T: ConnectionTransport<'a>,
+    T: ConnectionTransport,
 {
     pub fn new(connection_transport: T) -> Self {
         Self {
             transport: connection_transport,
             commands_response_subscriptions: Arc::new(Mutex::new(HashMap::new())),
             event_listener: EventListener::new(),
-            _marker: std::marker::PhantomData,
         }
     }
 
