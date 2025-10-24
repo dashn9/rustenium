@@ -94,7 +94,7 @@ pub fn  parse_command_parameters(command_lines: &[&str], cddl_strings: Vec<&str>
         if param_type == "EmptyParams" {
             return Ok(param_type);
         }
-        // Search for the parameter definition (e.g., "browser.CreateUserContextParameters = {" or "= TypeAlias")
+        // Search for the parameter definition (e.g., "drivers.CreateUserContextParameters = {" or "= TypeAlias")
         let struct_pattern = format!(r"^{}\s*=\s*\{{", regex::escape(&param_type));
         let alias_pattern = format!(r"^{}\s*=\s*(.+)", regex::escape(&param_type));
         let struct_regex = Regex::new(&struct_pattern)?;
@@ -270,7 +270,7 @@ pub fn process_cddl_to_struct(cddl_content: &str, cddl_strings: Vec<&str>, modul
             continue; // Skip empty lines and comments
         }
 
-        // Parse line like: "? userContext: browser.UserContext,"
+        // Parse line like: "? userContext: drivers.UserContext,"
         let (property, meta_comment) = parse_cddl_property_line(line, &updated_cddl_refs, module, type_name)?;
         if let Some(property) = property {
             properties.push(property);
@@ -490,7 +490,7 @@ fn capitalize_first(s: &str) -> String {
 /// Parses a single CDDL property line and returns a Property struct
 ///
 /// # Arguments
-/// * `line` - A single line of CDDL content (e.g., "? userContext: browser.UserContext,")
+/// * `line` - A single line of CDDL content (e.g., "? userContext: drivers.UserContext,")
 /// * `cddl_strings` - All CDDL content for type lookups
 /// * `current_module` - Current module being processed
 /// * `struct_name` - Optional struct name for context in union generation
@@ -505,9 +505,9 @@ fn parse_cddl_property_line(line: &str, cddl_strings: &[&str], current_module: &
     let property_pattern = Regex::new(r"^\s*(\??\s*)(\w+):\s*(.+?)(?:,\s*)?$")?;
 
     // TODO: Move enum to the type or property holder, for context
-    // browser.SetClientWindowStateParameters = {
-    //     clientWindow: browser.ClientWindow,
-    //     (browser.ClientWindowNamedState // browser.ClientWindowRectState)
+    // drivers.SetClientWindowStateParameters = {
+    //     clientWindow: drivers.ClientWindow,
+    //     (drivers.ClientWindowNamedState // drivers.ClientWindowRectState)
     // }
     // the second property should be an untagged serde
     if let Some(captures) = property_pattern.captures(&single_line) {

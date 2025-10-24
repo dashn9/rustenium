@@ -42,7 +42,7 @@ pub enum UrlFormat {
 #[derive(Debug, Clone)]
 pub struct ConnectionTransportConfig<'a> {
     pub protocol: ConnectionTransportProtocol,
-    pub host: &'a str,
+    pub host: String,
     pub port: u16,
     pub path:  &'a str,
 }
@@ -51,7 +51,7 @@ impl <'a>Default for ConnectionTransportConfig<'a> {
     fn default() -> Self {
         Self {
             protocol: ConnectionTransportProtocol::Ws,
-            host: "localhost",
+            host: String::from("localhost"),
             port: 0,
             path: "session",
         }
@@ -127,7 +127,7 @@ impl <'a> WebsocketConnectionTransport<'a> {
         let (mut ws, _) = handshake::client(&SpawnExecutor, req, stream).await.unwrap();
         ws = Self::configure_client(ws);
         let (rx, tx) = ws.split(tokio::io::split);
-        println!("Successfully connected to browser");
+        println!("Successfully connected to drivers");
 
         Ok(Self {
             config: connection_config,

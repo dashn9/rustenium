@@ -221,8 +221,8 @@ fn transform_default_value(default_value: &str, rust_type: &str) -> String {
 /// Cleans up module prefixes from type names
 ///
 /// # Arguments
-/// * `type_name` - The type name that might have a module prefix (e.g., "browser.UserContext" or "Vec<browsingContext::BrowsingContext>")
-/// * `current_module` - The current module name (e.g., "browser")
+/// * `type_name` - The type name that might have a module prefix (e.g., "drivers.UserContext" or "Vec<browsingContext::BrowsingContext>")
+/// * `current_module` - The current module name (e.g., "drivers")
 ///
 /// # Returns
 /// The cleaned type name without module prefix

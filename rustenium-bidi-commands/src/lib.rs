@@ -264,7 +264,7 @@ pub enum ErrorCode {
     SessionNotCreated,
     #[serde(rename = "unable to capture screen")]
     UnableToCaptureScreen,
-    #[serde(rename = "unable to close browser")]
+    #[serde(rename = "unable to close drivers")]
     UnableToCloseBrowser,
     #[serde(rename = "unable to set cookie")]
     UnableToSetCookie,
@@ -306,7 +306,7 @@ impl std::fmt::Display for ErrorCode {
             ErrorCode::NoSuchWebExtension => write!(f, "no such web extension"),
             ErrorCode::SessionNotCreated => write!(f, "session not created"),
             ErrorCode::UnableToCaptureScreen => write!(f, "unable to capture screen"),
-            ErrorCode::UnableToCloseBrowser => write!(f, "unable to close browser"),
+            ErrorCode::UnableToCloseBrowser => write!(f, "unable to close drivers"),
             ErrorCode::UnableToSetCookie => write!(f, "unable to set cookie"),
             ErrorCode::UnableToSetFileInput => write!(f, "unable to set file input"),
             ErrorCode::UnavailableNetworkData => write!(f, "unavailable network data"),

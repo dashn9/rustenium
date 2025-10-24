@@ -6,7 +6,6 @@ use rustenium_bidi_commands::browsing_context::types::CreateType;
 use rustenium_bidi_commands::session::commands::SubscribeResult;
 use rustenium_bidi_commands::{BrowsingContextEvent, EventData};
 use rustenium_core::contexts::BrowsingContext;
-use rustenium_core::error::CommandResultError;
 use rustenium_core::events::EventManagement;
 use rustenium_core::session::SessionConnectionType;
 use rustenium_core::{process::Process, transport::ConnectionTransport, Session};
@@ -18,7 +17,7 @@ use tokio::time::sleep;
 use crate::error::ContextCreationListenError;
 
 pub struct Driver<'a, T: ConnectionTransport<'a>> {
-    pub exe_path: &'static str,
+    pub exe_path: String,
     pub flags: Vec<String>,
     pub session: Option<Session<'a, T>>,
     browsing_contexts: Arc<Mutex<Vec<BrowsingContext>>>,

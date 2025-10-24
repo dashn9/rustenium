@@ -21,16 +21,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/rustenium/src/error.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rustenium/src/browsers/chrome.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rustenium/src/browsers/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/browser/commands.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/browser/commands.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/lib.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium-core/src/events.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/events.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-generator/src/module.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/module.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/src/browser/chrome.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/browser/chrome.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/src/browser/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/browser/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-core/src/transport.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/transport.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-generator/src/command_parser.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/command_parser.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-generator/src/event_parser.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/event_parser.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-generator/src/output.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/output.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-generator/src/parser.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/parser.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/browser/bidi/drivers.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/drivers/bidi/drivers.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/browser/bidi/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/drivers/bidi/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/browser/chrome.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/drivers/chrome.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/browser/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/drivers/mod.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/lib.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/tests/browser.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/tests/browser.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -176,23 +183,12 @@
       <workItem from="1760711819475" duration="95169000" />
       <workItem from="1761045380291" duration="17292000" />
       <workItem from="1761125503805" duration="1354000" />
-      <workItem from="1761146610779" duration="31958000" />
+      <workItem from="1761146610779" duration="42807000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/rustenium-core/src/events.rs</url>
-          <line>245</line>
-          <option name="timeStamp" value="118" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

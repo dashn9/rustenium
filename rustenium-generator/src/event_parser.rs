@@ -43,12 +43,12 @@ pub struct EventMethods {
 }
 
 /// Represents a single WebDriver BiDi event parsed from CDDL
-/// Events follow the pattern module.event (e.g., "browser.contextCreated", "network.responseReceived")
+/// Events follow the pattern module.event (e.g., "drivers.contextCreated", "network.responseReceived")
 #[derive(Debug, Clone)]
 pub struct Event {
     /// The event name as found in CDDL (e.g., "contextCreated", "responseReceived")
     pub name: String,
-    /// The name of the module this event belongs to (e.g., "browser", "network", "session")
+    /// The name of the module this event belongs to (e.g., "drivers", "network", "session")
     pub module_name: String,
     /// Rust attributes to be applied to this event variant
     pub attributes: Vec<String>,
@@ -262,7 +262,7 @@ pub fn parse_event_parameters(event_lines: &[&str], cddl_strings: Vec<&str>, mod
 
         // Check if this ends with "Params" - if so, generate EventParams, otherwise use process_cddl_to_struct
         if param_struct_name.ends_with("Params") {
-            // Search for the parameter definition (e.g., "browser.CreateUserContextParams = {" or "browser.CreateUserContextParams = (")
+            // Search for the parameter definition (e.g., "drivers.CreateUserContextParams = {" or "drivers.CreateUserContextParams = (")
             let pattern = format!(r"^{}\s*=\s*[\{{(]", regex::escape(&param_type));
             let regex = Regex::new(&pattern)?;
 

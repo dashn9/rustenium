@@ -22,43 +22,43 @@ pub enum BrowserCommand {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum BrowserCloseMethod {
-    #[serde(rename = "browser.close")]
+    #[serde(rename = "drivers.close")]
     BrowserClose,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum BrowserCreateUserContextMethod {
-    #[serde(rename = "browser.createUserContext")]
+    #[serde(rename = "drivers.createUserContext")]
     BrowserCreateUserContext,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum BrowserGetClientWindowsMethod {
-    #[serde(rename = "browser.getClientWindows")]
+    #[serde(rename = "drivers.getClientWindows")]
     BrowserGetClientWindows,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum BrowserGetUserContextsMethod {
-    #[serde(rename = "browser.getUserContexts")]
+    #[serde(rename = "drivers.getUserContexts")]
     BrowserGetUserContexts,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum BrowserRemoveUserContextMethod {
-    #[serde(rename = "browser.removeUserContext")]
+    #[serde(rename = "drivers.removeUserContext")]
     BrowserRemoveUserContext,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum BrowserSetClientWindowStateMethod {
-    #[serde(rename = "browser.setClientWindowState")]
+    #[serde(rename = "drivers.setClientWindowState")]
     BrowserSetClientWindowState,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum BrowserSetDownloadBehaviorMethod {
-    #[serde(rename = "browser.setDownloadBehavior")]
+    #[serde(rename = "drivers.setDownloadBehavior")]
     BrowserSetDownloadBehavior,
 }
 

@@ -5,7 +5,7 @@ use rustenium_core::events::EventManagement;
 use rustenium_core::session::SessionConnectionType;
 use crate::Driver;
 use rustenium_core::transport::ConnectionTransportConfig;
-use crate::browser::bidi::drivers::Driver as DriverTrait;
+use crate::drivers::bidi::drivers::Driver as DriverTrait;
 
 pub struct ChromeDriver<'a> {
     connection_transport_config: ConnectionTransportConfig<'a>,
@@ -14,7 +14,7 @@ pub struct ChromeDriver<'a> {
 
 impl <'a>DriverTrait<'a, WebsocketConnectionTransport<'a>> for ChromeDriver<'a> {
     fn exe_path(&self) -> &str {
-        return &self.driver.exe_path;
+        &self.driver.exe_path
     }
 
     fn flags(&self) -> Vec<String> {
@@ -29,22 +29,22 @@ impl <'a>DriverTrait<'a, WebsocketConnectionTransport<'a>> for ChromeDriver<'a> 
 
 impl <'a>Default for ChromeDriver<'a> {
     fn default() -> Self {
-        return ChromeDriver {
+        ChromeDriver {
             connection_transport_config: Default::default(),
             driver: Driver {
-                exe_path: "google-chrome",
+                exe_path: String::from("chromedriver"),
                 flags: vec![],
                 session: None,
                 browsing_contexts: Arc::new(Mutex::new(Vec::new())),
                 driver_process: None,
             },
-        };
+        }
     }
 }
 
 impl <'a>ChromeDriver<'a> {
-    pub async fn launch(&'a mut self, host: Option<&'a str>, port: Option<u16>) -> () {
-        let host = host.unwrap_or("localhost");
+    pub async fn launch(&'a mut self, host: Option<String>, port: Option<u16>) -> () {
+        let host = host.unwrap_or(String::from("localhost"));
         let port = port.unwrap_or(find_free_port().unwrap());
         self.connection_transport_config.host = host;
         self.connection_transport_config.port = port;
@@ -56,7 +56,6 @@ impl <'a>ChromeDriver<'a> {
             Ok(session) => (),
             Err(e) => panic!("A problem occurred creating the session: {e:?}"),
         }
-        let session = self.driver.session.as_ref().expect("Session has not been initialized");
-        let context_result = self.driver.listen_to_context_creation().await.unwrap();
+        self.driver.listen_to_context_creation().await.unwrap();
     }
 }

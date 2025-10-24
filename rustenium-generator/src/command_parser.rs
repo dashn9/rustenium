@@ -35,12 +35,12 @@ pub struct ResultDefinition {
 }
 
 /// Represents a single WebDriver BiDi result type parsed from CDDL
-/// Results follow the pattern module.ResultType (e.g., "browser.CreateUserContextResult")
+/// Results follow the pattern module.ResultType (e.g., "drivers.CreateUserContextResult")
 #[derive(Debug, Clone)]
 pub struct BidiResult {
     /// The result type name as found in CDDL (e.g., "CreateUserContextResult", "GetTreeResult")
     pub name: String,
-    /// The module name this result belongs to (e.g., "browser", "session")
+    /// The module name this result belongs to (e.g., "drivers", "session")
     pub module_name: String,
     /// Properties for the result struct
     pub properties: Vec<crate::parser::Property>,
@@ -179,12 +179,12 @@ pub struct CommandMethods {
 }
 
 /// Represents a single WebDriver BiDi command parsed from CDDL
-/// Commands follow the pattern module.method (e.g., "browser.close", "network.enable")
+/// Commands follow the pattern module.method (e.g., "drivers.close", "network.enable")
 #[derive(Debug, Clone)]
 pub struct Command {
     /// The command name as found in CDDL (e.g., "close", "enable")
     pub name: String,
-    /// The name of the module this command belongs to (e.g., "browser", "network", "session")
+    /// The name of the module this command belongs to (e.g., "drivers", "network", "session")
     pub module_name: String,
     /// Rust attributes to be applied to this command variant
     pub attributes: Vec<String>,

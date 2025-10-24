@@ -10,7 +10,9 @@ async fn create_browser() -> ChromeDriver<'static> {
 
 #[tokio::test]
 async fn open_browser() {
+    let config = Chrome
     let mut browser = create_browser().await;
     browser.launch(None, None).await;
     sleep(Duration::from_secs(13)).await;
+    drop(browser);
 }

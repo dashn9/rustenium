@@ -256,9 +256,7 @@ pub trait EventManagement {
             Ok(ResultData::EmptyResult(empty_result)) => {
                 // Remove the subscriptions from our local tracking
                 let mut bidi_events = self.get_bidi_events().lock().unwrap();
-                println!("{:?}", bidi_events);
                 bidi_events.retain(| bidi_event | !subscription_ids.contains(&bidi_event.id));
-                println!("{:?}", bidi_events);
                 Ok(Some(empty_result))
             },
             Ok(result) => Err(CommandResultError::InvalidResultTypeError(result)),
