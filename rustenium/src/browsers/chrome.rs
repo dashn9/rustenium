@@ -1,4 +1,4 @@
-use crate::ChromeDriver;
+use crate::chrome::ChromeDriver;
 pub struct ChromeBrowserConfig {
     pub driver_path: String,
     pub host: Option<String>,
@@ -20,6 +20,10 @@ impl ChromeBrowser {
     pub async fn launch(&mut self) -> () {
         let host = self.config.host.clone().unwrap_or(String::from("localhost"));
         self.driver.launch(Some(host), self.config.port).await;
+    }
+
+    pub async fn open_url(&self, url: &str) {
+
     }
 }
 

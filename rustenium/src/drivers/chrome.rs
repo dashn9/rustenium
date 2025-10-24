@@ -1,18 +1,18 @@
 use std::sync::{Arc, Mutex};
 use tokio::time::{sleep, Duration};
 use rustenium_core::{find_free_port, transport::WebsocketConnectionTransport};
+use rustenium_core::contexts::BrowsingContext;
 use rustenium_core::events::EventManagement;
 use rustenium_core::session::SessionConnectionType;
-use crate::Driver;
 use rustenium_core::transport::ConnectionTransportConfig;
-use crate::drivers::bidi::drivers::Driver as DriverTrait;
+use crate::drivers::bidi::drivers::{BidiDrive, BidiDriver};
 
 pub struct ChromeDriver {
     connection_transport_config: ConnectionTransportConfig,
-    pub driver: Driver<WebsocketConnectionTransport>,
+    pub driver: BidiDriver<WebsocketConnectionTransport>,
 }
 
-impl DriverTrait<WebsocketConnectionTransport> for ChromeDriver {
+impl BidiDrive<WebsocketConnectionTransport> for ChromeDriver {
     fn exe_path(&self) -> &str {
         &self.driver.exe_path
     }
@@ -31,10 +31,11 @@ impl Default for ChromeDriver {
     fn default() -> Self {
         ChromeDriver {
             connection_transport_config: Default::default(),
-            driver: Driver {
+            driver: BidiDriver {
                 exe_path: String::from("chromedriver"),
                 flags: vec![],
                 session: None,
+                active_bc_index: 0,
                 browsing_contexts: Arc::new(Mutex::new(Vec::new())),
                 driver_process: None,
             },
@@ -58,4 +59,6 @@ impl ChromeDriver {
         }
         self.driver.listen_to_context_creation().await.unwrap();
     }
+    
+    pub async fn open_url()
 }

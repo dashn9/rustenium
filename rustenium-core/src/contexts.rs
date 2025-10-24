@@ -42,4 +42,8 @@ impl BrowsingContext {
             Err(e) => Err(CommandResultError::SessionSendError(e)),
         }
     }
+    
+    pub fn get_context_id(&self) -> String {
+        self.context.clone()
+    }
 }
