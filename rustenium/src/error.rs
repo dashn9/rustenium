@@ -25,3 +25,11 @@ pub enum OpenUrlError {
     #[error("An error occured executing command")]
     CommandResultError(CommandResultError),
 }
+
+#[derive(Debug, Error)]
+pub enum FindNodesError {
+    #[error(transparent)]
+    ContextIndexError(#[from] ContextIndexError),
+    #[error("An error occured executing command")]
+    CommandResultError(CommandResultError),
+}

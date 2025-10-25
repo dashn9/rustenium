@@ -6,12 +6,15 @@ use rustenium_core::{
 use std::error::Error;
 
 pub use crate::drivers::chrome::ChromeDriver;
-use crate::error::{ContextCreationListenError, ContextIndexError, OpenUrlError};
+use crate::error::{ContextCreationListenError, ContextIndexError, FindNodesError, OpenUrlError};
 use rustenium_bidi_commands::browsing_context::types::{
-    BrowsingContext as BidiBrowsingContext, CreateType, ReadinessState,
+    BrowsingContext as BidiBrowsingContext, CreateType, Locator, ReadinessState,
 };
 use rustenium_bidi_commands::session::commands::SubscribeResult;
-use rustenium_bidi_commands::{BrowsingContextCommand, BrowsingContextEvent, BrowsingContextResult, CommandData, EventData, ResultData, SessionResult};
+use rustenium_bidi_commands::{
+    BrowsingContextCommand, BrowsingContextEvent, BrowsingContextResult, CommandData, EventData,
+    ResultData, SessionResult,
+};
 use rustenium_core::contexts::BrowsingContext;
 use rustenium_core::events::EventManagement;
 use rustenium_core::session::SessionConnectionType;
@@ -20,9 +23,13 @@ use std::sync::{Arc, Mutex};
 use std::time::Duration;
 use tokio::time::sleep;
 
-use rustenium_bidi_commands::browsing_context::commands::{BrowsingContextNavigateMethod, Navigate, NavigateParameters, NavigateResult};
-use tokio::io;
+use rustenium_bidi_commands::browsing_context::commands::{
+    BrowsingContextLocateNodesMethod, BrowsingContextNavigateMethod, LocateNodes,
+    LocateNodesParameters, LocateNodesResult, Navigate, NavigateParameters, NavigateResult,
+};
+use rustenium_bidi_commands::script::types::{SerializationOptions, SharedReference};
 use rustenium_core::error::CommandResultError;
+use tokio::io;
 
 fn is_connection_refused(e: &reqwest::Error) -> bool {
     if let Some(io_err) = e.source().and_then(|s| s.downcast_ref::<io::Error>()) {
@@ -116,7 +123,8 @@ impl<T: ConnectionTransport> BidiDriver<T> {
                     _ => {}
                 }
             };
-        } else {}
+        } else {
+        }
         match result {
             Err(error) => Err(ContextCreationListenError::CommandResultError(error)),
             Ok(result) => Ok(result),
@@ -156,12 +164,68 @@ impl<T: ConnectionTransport> BidiDriver<T> {
             ))
             .await;
         match result {
-            Ok(ResultData::BrowsingContextResult(browsing_context_result)) => match browsing_context_result {
-                BrowsingContextResult::NavigateResult(navigate_result) => Ok(navigate_result),
-                _ => Err(OpenUrlError::CommandResultError(CommandResultError::InvalidResultTypeError(ResultData::BrowsingContextResult(browsing_context_result))))
-            },
-            Ok(result) => Err(OpenUrlError::CommandResultError(CommandResultError::InvalidResultTypeError(result))),
-            Err(err) => Err(OpenUrlError::CommandResultError(CommandResultError::SessionSendError(err)))
+            Ok(ResultData::BrowsingContextResult(browsing_context_result)) => {
+                match browsing_context_result {
+                    BrowsingContextResult::NavigateResult(navigate_result) => Ok(navigate_result),
+                    _ => Err(OpenUrlError::CommandResultError(
+                        CommandResultError::InvalidResultTypeError(
+                            ResultData::BrowsingContextResult(browsing_context_result),
+                        ),
+                    )),
+                }
+            }
+            Ok(result) => Err(OpenUrlError::CommandResultError(
+                CommandResultError::InvalidResultTypeError(result),
+            )),
+            Err(err) => Err(OpenUrlError::CommandResultError(
+                CommandResultError::SessionSendError(err),
+            )),
+        }
+    }
+
+    pub async fn find_nodes(
+        &mut self,
+        locator: Locator,
+        context_id: Option<BidiBrowsingContext>,
+        max_node_count: Option<u64>,
+        serialization_options: Option<SerializationOptions>,
+        start_nodes: Option<Vec<SharedReference>>,
+    ) -> Result<LocateNodesResult, FindNodesError> {
+        let context_id = context_id.unwrap_or(self.get_active_context_id()?);
+        let result = self
+            .session
+            .send(CommandData::BrowsingContextCommand(
+                BrowsingContextCommand::LocateNodes(LocateNodes {
+                    method: BrowsingContextLocateNodesMethod::BrowsingContextLocateNodes,
+                    params: LocateNodesParameters {
+                        locator,
+                        context: context_id,
+                        max_node_count,
+                        serialization_options,
+                        start_nodes,
+                    },
+                }),
+            ))
+            .await;
+        match result {
+            Ok(ResultData::BrowsingContextResult(browsing_context_result)) => {
+                match browsing_context_result {
+                    BrowsingContextResult::LocateNodesResult(locate_nodes_result) => {
+                        Ok(locate_nodes_result)
+                    }
+                    _ => Err(FindNodesError::CommandResultError(
+                        CommandResultError::InvalidResultTypeError(
+                            ResultData::BrowsingContextResult(browsing_context_result),
+                        ),
+                    )),
+                }
+            }
+            Ok(result) => Err(FindNodesError::CommandResultError(
+                CommandResultError::InvalidResultTypeError(result),
+            )),
+            Err(err) => Err(FindNodesError::CommandResultError(
+                CommandResultError::SessionSendError(err),
+            )),
         }
     }
 

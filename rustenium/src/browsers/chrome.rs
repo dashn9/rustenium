@@ -1,7 +1,8 @@
-use rustenium_bidi_commands::browsing_context::commands::NavigateResult;
-use rustenium_bidi_commands::browsing_context::types::{BrowsingContext, ReadinessState};
+use rustenium_bidi_commands::browsing_context::commands::{LocateNodes, LocateNodesResult, NavigateResult};
+use rustenium_bidi_commands::browsing_context::types::{BrowsingContext, Locator, ReadinessState};
+use rustenium_bidi_commands::script::types::{SerializationOptions, SharedReference};
 use crate::chrome::{ChromeConfig, ChromeDriver};
-use crate::error::OpenUrlError;
+use crate::error::{FindNodesError, OpenUrlError};
 
 pub struct ChromeBrowser {
     config: ChromeConfig,
@@ -23,6 +24,17 @@ impl ChromeBrowser {
         context_id: Option<BrowsingContext>,
     ) -> Result<NavigateResult, OpenUrlError> {
         self.driver.open_url(url.to_string(), wait, context_id).await
+    }
+
+    pub async fn find_nodes(
+        &mut self,
+        locator: Locator,
+        context_id: Option<BrowsingContext>,
+        max_node_count: Option<u64>,
+        serialization_options: Option<SerializationOptions>,
+        start_nodes: Option<Vec<SharedReference>>,
+    ) -> Result<LocateNodesResult, FindNodesError> {
+        self.driver.find_nodes(locator, context_id, max_node_count, serialization_options, start_nodes).await
     }
 }
 

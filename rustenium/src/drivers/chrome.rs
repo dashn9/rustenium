@@ -1,12 +1,13 @@
 use std::sync::{Arc, Mutex};
-use rustenium_bidi_commands::browsing_context::commands::NavigateResult;
-use rustenium_bidi_commands::browsing_context::types::{ReadinessState, BrowsingContext};
+use rustenium_bidi_commands::browsing_context::commands::{LocateNodesResult, NavigateResult};
+use rustenium_bidi_commands::browsing_context::types::{ReadinessState, BrowsingContext, Locator};
+use rustenium_bidi_commands::script::types::{SerializationOptions, SharedReference};
 use rustenium_core::{find_free_port, transport::WebsocketConnectionTransport};
 use rustenium_core::session::SessionConnectionType;
 use rustenium_core::transport::ConnectionTransportConfig;
 use crate::bidi::drivers::DriverConfiguration;
 use crate::drivers::bidi::drivers::{BidiDrive, BidiDriver};
-use crate::error::OpenUrlError;
+use crate::error::{FindNodesError, OpenUrlError};
 
 #[derive(Debug, Clone)]
 pub struct ChromeConfig {
@@ -58,12 +59,23 @@ impl ChromeDriver {
         driver
     }
 
-    pub(crate) async fn open_url(
+    pub async fn open_url(
         &mut self,
         url: String,
         wait: Option<ReadinessState>,
         context_id: Option<BrowsingContext>,
     ) -> Result<NavigateResult, OpenUrlError> {
         self.driver.open_url(url, wait, context_id).await
+    }
+
+    pub async fn find_nodes(
+        &mut self,
+        locator: Locator,
+        context_id: Option<BrowsingContext>,
+        max_node_count: Option<u64>,
+        serialization_options: Option<SerializationOptions>,
+        start_nodes: Option<Vec<SharedReference>>,
+    ) -> Result<LocateNodesResult, FindNodesError> {
+        self.driver.find_nodes(locator, context_id, max_node_count, serialization_options, start_nodes).await
     }
 }

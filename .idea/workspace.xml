@@ -21,13 +21,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/rustenium/src/nodes/bidi/mod.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rustenium/src/nodes/bidi/node.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rustenium/src/nodes/chrome.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rustenium/src/nodes/mod.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/rustenium/src/nodes/node.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/types.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-core/src/events.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/events.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium/src/browsers/chrome.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/browsers/chrome.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium/src/drivers/bidi/drivers.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/drivers/bidi/drivers.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium/src/drivers/chrome.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/drivers/chrome.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/tests/browser.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/tests/browser.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/error.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/error.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/lib.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -174,6 +178,7 @@
       <workItem from="1761045380291" duration="17292000" />
       <workItem from="1761125503805" duration="1354000" />
       <workItem from="1761146610779" duration="55782000" />
+      <workItem from="1761410585838" duration="9433000" />
     </task>
     <servers />
   </component>
