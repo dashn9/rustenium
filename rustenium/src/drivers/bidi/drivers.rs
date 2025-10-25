@@ -28,14 +28,20 @@ fn is_connection_refused(e: &reqwest::Error) -> bool {
     false
 }
 
-pub trait BidiDrive<T: ConnectionTransport> {
+pub trait DriverConfiguration {
     fn exe_path(&self) -> &str;
     fn flags(&self) -> Vec<String>;
-    async fn start(&self, connection_transport_config: &ConnectionTransportConfig) -> (Session<WebsocketConnectionTransport>, Process) {
-        let driver_process = Process::create(self.exe_path(), self.flags());
-        let session =
+}
+
+pub trait BidiDrive<T: ConnectionTransport> {
+    async fn start(driver_config: &impl DriverConfiguration, connection_transport_config: &ConnectionTransportConfig, session_connection_type: SessionConnectionType) -> (Session<WebsocketConnectionTransport>, Process) {
+        let driver_process = Process::create(driver_config.exe_path(), driver_config.flags());
+        let mut session =
             Session::<T>::ws_new(connection_transport_config)
                 .await;
+        session
+            .create_new_bidi_session(session_connection_type)
+            .await;
         (session, driver_process)
     }
 }
@@ -55,11 +61,6 @@ impl<T: ConnectionTransport> BidiDriver<T> {
         &mut self,
         connection_type: SessionConnectionType,
     ) -> Result<(), Box<dyn Error>> {
-        self.session
-            .as_mut()
-            .unwrap()
-            .create_new_bidi_session(connection_type)
-            .await;
         Ok(())
     }
 

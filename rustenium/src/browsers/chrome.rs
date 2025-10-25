@@ -1,25 +1,18 @@
 use crate::chrome::ChromeDriver;
-pub struct ChromeBrowserConfig {
-    pub driver_path: String,
-    pub host: Option<String>,
-    pub port: Option<u16>,
-}
+
+impl
 pub struct ChromeBrowser {
-    config: ChromeBrowserConfig,
+    config: ChromeConfig,
     driver: ChromeDriver,
 }
 
 impl ChromeBrowser {
-    pub fn new(config: ChromeBrowserConfig) -> ChromeBrowser {
+    pub fn new(config: ChromeConfig) -> ChromeBrowser {
         let driver_path = config.driver_path.clone();
         Self {
+            driver: create_chrome_driver(&config),
             config,
-            driver: create_chrome_driver(driver_path),
         }
-    }
-    pub async fn launch(&mut self) -> () {
-        let host = self.config.host.clone().unwrap_or(String::from("localhost"));
-        self.driver.launch(Some(host), self.config.port).await;
     }
 
     pub async fn open_url(&self, url: &str) {
@@ -27,13 +20,12 @@ impl ChromeBrowser {
     }
 }
 
-pub async fn create_chrome_browser(config: ChromeBrowserConfig) -> ChromeBrowser {
+
+pub async fn create_chrome_browser(config: ChromeConfig) -> ChromeBrowser {
     let mut chrome_browser = ChromeBrowser::new(config);
-    chrome_browser.launch().await;
     chrome_browser
 }
-fn create_chrome_driver<'a>(driver_path: String) -> ChromeDriver {
-    let mut chrome_driver = ChromeDriver::default();
-    chrome_driver.driver.exe_path = driver_path;
+fn create_chrome_driver<'a>(config: &ChromeConfig) -> ChromeDriver {
+    let mut chrome_driver = ChromeDriver::new(config);
     chrome_driver
 }

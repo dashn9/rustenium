@@ -1,2 +1,2 @@
-mod bidi;
+pub mod bidi;
 pub mod chrome;

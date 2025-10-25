@@ -25,6 +25,7 @@ pub struct Session<T: ConnectionTransport> {
 pub enum SessionConnectionType {
     WebSocket
 }
+
 impl<T: ConnectionTransport> Session<T> {
     pub async fn ws_new(
         connection_config: &ConnectionTransportConfig,
