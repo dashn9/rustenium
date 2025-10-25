@@ -3,6 +3,7 @@ use rustenium_bidi_commands::browsing_context::types::{BrowsingContext, Locator,
 use rustenium_bidi_commands::script::types::{SerializationOptions, SharedReference};
 use crate::chrome::{ChromeConfig, ChromeDriver};
 use crate::error::{FindNodesError, OpenUrlError};
+use crate::nodes::chrome::ChromeNode;
 
 pub struct ChromeBrowser {
     config: ChromeConfig,
@@ -33,7 +34,7 @@ impl ChromeBrowser {
         max_node_count: Option<u64>,
         serialization_options: Option<SerializationOptions>,
         start_nodes: Option<Vec<SharedReference>>,
-    ) -> Result<LocateNodesResult, FindNodesError> {
+    ) -> Result<Vec<ChromeNode>, FindNodesError> {
         self.driver.find_nodes(locator, context_id, max_node_count, serialization_options, start_nodes).await
     }
 }

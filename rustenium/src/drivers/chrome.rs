@@ -8,6 +8,7 @@ use rustenium_core::transport::ConnectionTransportConfig;
 use crate::bidi::drivers::DriverConfiguration;
 use crate::drivers::bidi::drivers::{BidiDrive, BidiDriver};
 use crate::error::{FindNodesError, OpenUrlError};
+use crate::nodes::chrome::ChromeNode;
 
 #[derive(Debug, Clone)]
 pub struct ChromeConfig {
@@ -75,7 +76,12 @@ impl ChromeDriver {
         max_node_count: Option<u64>,
         serialization_options: Option<SerializationOptions>,
         start_nodes: Option<Vec<SharedReference>>,
-    ) -> Result<LocateNodesResult, FindNodesError> {
-        self.driver.find_nodes(locator, context_id, max_node_count, serialization_options, start_nodes).await
+    ) -> Result<Vec<ChromeNode>, FindNodesError> {
+        let node_result = self.driver.find_nodes(locator, context_id, max_node_count, serialization_options, start_nodes).await?;
+        let mut nodes = Vec::new();
+        for node in node_result.nodes {
+            nodes.push(ChromeNode::from_bidi(node));
+        }
+        Ok(nodes)
     }
 }

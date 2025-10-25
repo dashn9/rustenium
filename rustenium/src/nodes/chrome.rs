@@ -6,7 +6,7 @@ pub struct ChromeNode {
 }
 
 impl ChromeNode {
-    fn from_bidi(_raw_bidi_node: NodeRemoteValue) -> Self {
+    pub fn from_bidi(_raw_bidi_node: NodeRemoteValue) -> Self {
         Self {
             bidi_node: BidiNode::new(_raw_bidi_node)
         }

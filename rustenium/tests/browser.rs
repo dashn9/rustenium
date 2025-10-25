@@ -1,6 +1,8 @@
 use tokio::time::{Duration, sleep};
 use rustenium::browsers::chrome::{create_chrome_browser};
 use rustenium::chrome::ChromeConfig;
+use rustenium::css;
+use rustenium_bidi_commands::browsing_context::types::{CssEnum, CssLocator, Locator, ReadinessState};
 
 #[tokio::test]
 async fn open_browser() {
@@ -10,6 +12,7 @@ async fn open_browser() {
         port: None,
     };
     let mut browser = create_chrome_browser(config).await;
-    browser.open_url("https://linkedin.com", None, None).await.unwrap();
+    browser.open_url("https://linkedin.com", Some(ReadinessState::Complete), None).await.unwrap();
+    let elements = browser.find_nodes(css!("body"), None, None, None, None).await.unwrap();
     sleep(Duration::from_secs(13)).await;
 }
