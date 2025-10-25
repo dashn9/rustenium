@@ -293,14 +293,6 @@ pub type Navigation = String;
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct NavigateResult {
-    #[serde(rename = "navigation")]
-    pub navigation: Option<Navigation>,
-    #[serde(rename = "url")]
-    pub url: String,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BaseNavigationInfo {
     #[serde(rename = "context")]
     pub context: BrowsingContext,

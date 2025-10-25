@@ -1,14 +1,14 @@
 use std::sync::{Arc, Mutex};
-use tokio::time::{sleep, Duration};
+use rustenium_bidi_commands::browsing_context::commands::NavigateResult;
+use rustenium_bidi_commands::browsing_context::types::{ReadinessState, BrowsingContext};
 use rustenium_core::{find_free_port, transport::WebsocketConnectionTransport};
-use rustenium_core::contexts::BrowsingContext;
-use rustenium_core::events::EventManagement;
 use rustenium_core::session::SessionConnectionType;
 use rustenium_core::transport::ConnectionTransportConfig;
 use crate::bidi::drivers::DriverConfiguration;
 use crate::drivers::bidi::drivers::{BidiDrive, BidiDriver};
+use crate::error::OpenUrlError;
 
-
+#[derive(Debug, Clone)]
 pub struct ChromeConfig {
     pub driver_executable_path: String,
     pub host: Option<String>,
@@ -21,12 +21,12 @@ impl DriverConfiguration for ChromeConfig {
     }
 
     fn flags(&self) -> Vec<String> {
-        return vec![
-            format!("--host={}", self.host.unwrap_or(String::from("localhost"))),
-            format!("--port={}", self.connection_transport_config.port),
+        vec![
+            format!("--host={}", self.host.clone().unwrap_or(String::from("localhost"))),
+            format!("--port={}", self.port.unwrap_or(find_free_port().unwrap())),
         ].into_iter()
             .map(String::from)
-            .collect();
+            .collect()
     }
 }
 pub struct ChromeDriver {
@@ -34,28 +34,36 @@ pub struct ChromeDriver {
     pub driver: BidiDriver<WebsocketConnectionTransport>,
 }
 
+impl BidiDrive<WebsocketConnectionTransport> for ChromeDriver {}
 impl ChromeDriver {
-    pub async fn new(config: ChromeConfig) -> Self {
-        let result = self.start(&config).await;
-        self.driver.session = Some(result.0);
-        self.driver.driver_process = Some(result.1);
-        match self.driver.new_session(SessionConnectionType::WebSocket).await {
-            Ok(session) => (),
-            Err(e) => panic!("A problem occurred creating the session: {e:?}"),
-        }
-        self.driver.listen_to_context_creation().await.unwrap();
-        ChromeDriver {
-            connection_transport_config: Default::default(),
+    pub async fn new(mut config: ChromeConfig) -> Self {
+        let port = find_free_port().unwrap();
+        config.port = Some(config.port.unwrap_or(port));
+        let mut ct_config = ConnectionTransportConfig::default();
+        ct_config.host = config.host.clone().unwrap_or(String::from("localhost"));
+        ct_config.port = port;
+        let result = Self::start(&config, &ct_config, SessionConnectionType::WebSocket).await;
+        let mut driver = ChromeDriver {
+            connection_transport_config: ct_config,
             driver: BidiDriver {
                 exe_path: String::from("chromedriver"),
                 flags: vec![],
-                session: None,
+                session: result.0,
                 active_bc_index: 0,
                 browsing_contexts: Arc::new(Mutex::new(Vec::new())),
-                driver_process: None,
+                driver_process: result.1,
             },
-        }
+        };
+        driver.driver.listen_to_context_creation().await.unwrap();
+        driver
     }
 
-    pub async fn open_url()
+    pub(crate) async fn open_url(
+        &mut self,
+        url: String,
+        wait: Option<ReadinessState>,
+        context_id: Option<BrowsingContext>,
+    ) -> Result<NavigateResult, OpenUrlError> {
+        self.driver.open_url(url, wait, context_id).await
+    }
 }

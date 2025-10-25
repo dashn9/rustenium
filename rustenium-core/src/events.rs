@@ -1,6 +1,5 @@
 use crate::contexts::BrowsingContext;
 use crate::error::{CommandResultError, SessionSendError};
-use crate::transport::ConnectionTransport;
 use crate::{impl_has_method, impl_has_method_getter};
 use rustenium_bidi_commands::session::commands::{
     SessionSubscribeMethod, SessionUnsubscribeMethod, Subscribe, SubscribeResult,
