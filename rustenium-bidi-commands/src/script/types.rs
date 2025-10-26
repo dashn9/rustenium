@@ -18,6 +18,8 @@ pub enum SerializationOptionsincludeShadowTreeUnion {
     None,
     #[serde(rename = "open")]
     Open,
+    #[serde(rename = "all")]
+    All,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

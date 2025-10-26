@@ -1,7 +1,7 @@
 use std::sync::{Arc, Mutex};
 use rustenium_bidi_commands::browsing_context::commands::{LocateNodesResult, NavigateResult};
 use rustenium_bidi_commands::browsing_context::types::{ReadinessState, BrowsingContext, Locator};
-use rustenium_bidi_commands::script::types::{SerializationOptions, SharedReference};
+use rustenium_bidi_commands::script::types::{SerializationOptions, SerializationOptionsincludeShadowTreeUnion, SharedReference};
 use rustenium_core::{find_free_port, transport::WebsocketConnectionTransport};
 use rustenium_core::session::SessionConnectionType;
 use rustenium_core::transport::ConnectionTransportConfig;
@@ -77,6 +77,11 @@ impl ChromeDriver {
         serialization_options: Option<SerializationOptions>,
         start_nodes: Option<Vec<SharedReference>>,
     ) -> Result<Vec<ChromeNode>, FindNodesError> {
+        let new_so = SerializationOptions {
+            max_dom_depth: Some(Some(99)),
+            max_object_depth: Some(Some(99)),
+            include_shadow_tree: Some(SerializationOptionsincludeShadowTreeUnion::Open)
+        };
         let node_result = self.driver.find_nodes(locator, context_id, max_node_count, serialization_options, start_nodes).await?;
         let mut nodes = Vec::new();
         for node in node_result.nodes {
