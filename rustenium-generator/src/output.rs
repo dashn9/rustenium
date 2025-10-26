@@ -80,6 +80,14 @@ fn uses_validation(properties: &[crate::parser::Property]) -> bool {
     })
 }
 
+/// Checks if HashMap is used in properties
+fn uses_hashmap(properties: &[crate::parser::Property]) -> bool {
+    properties.iter().any(|p| {
+        let inner_type = extract_inner_type(&p.value);
+        inner_type.contains("HashMap")
+    })
+}
+
 /// Collects external type imports from properties
 /// Returns Vec of (module_name, type_name) tuples
 fn collect_external_types(properties: &[crate::parser::Property]) -> Vec<(String, String)> {
@@ -750,6 +758,11 @@ fn generate_commands_file(cmd_def: &crate::command_parser::CommandDefinition, mo
         output.push_str("use serde_valid::Validate;\n");
     }
 
+    // Import HashMap if used
+    if uses_hashmap(&all_properties) {
+        output.push_str("use std::collections::HashMap;\n");
+    }
+
     // Import from types if module has types
     if has_types_in_module(module) {
         output.push_str("use super::types::*;\n");
@@ -848,6 +861,11 @@ fn generate_events_file(event_def: &crate::event_parser::EventDefinition, module
     // Import serde_valid if validation is used
     if uses_validation(&all_properties) {
         output.push_str("use serde_valid::Validate;\n");
+    }
+
+    // Import HashMap if used
+    if uses_hashmap(&all_properties) {
+        output.push_str("use std::collections::HashMap;\n");
     }
 
     // Import from types if module has types
@@ -967,6 +985,11 @@ fn generate_types_file(module: &Module) -> String {
     // Import serde_valid if validation is used
     if uses_validation(&all_properties) {
         output.push_str("use serde_valid::Validate;\n");
+    }
+
+    // Import HashMap if used
+    if uses_hashmap(&all_properties) {
+        output.push_str("use std::collections::HashMap;\n");
     }
 
     output.push_str("\n");
