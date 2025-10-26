@@ -107,7 +107,6 @@ pub struct AccessibilityLocator {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum CssEnum {
     #[serde(rename = "css")]
     Css,
@@ -122,7 +121,6 @@ pub struct CssLocator {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum ContextEnum {
     #[serde(rename = "context")]
     Context,
@@ -143,14 +141,12 @@ pub struct ContextLocator {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum InnerTextEnum {
     #[serde(rename = "innerText")]
     InnerText,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum InnerTextLocatormatchTypeUnion {
     #[serde(rename = "full")]
     Full,
@@ -176,7 +172,6 @@ pub struct InnerTextLocator {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum XpathEnum {
     #[serde(rename = "xpath")]
     Xpath,
@@ -201,7 +196,6 @@ pub enum Locator {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum ReadinessState {
     #[serde(rename = "none")]
     None,
@@ -232,7 +226,6 @@ pub struct PrintMarginParameters {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum OrientationUnion {
     #[serde(rename = "portrait")]
     Portrait,
@@ -311,7 +304,6 @@ pub struct NavigationInfo {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum CanceledEnum {
     #[serde(rename = "canceled")]
     Canceled,
@@ -326,7 +318,6 @@ pub struct DownloadCanceledParams {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum CompleteEnum {
     #[serde(rename = "complete")]
     Complete,
@@ -360,7 +351,6 @@ pub struct HistoryUpdatedParameters {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum UserPromptType {
     #[serde(rename = "alert")]
     Alert,

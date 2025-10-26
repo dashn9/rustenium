@@ -1080,6 +1080,7 @@ fn convert_basic_cddl_type(cddl_type: &str, cddl_strings: &[&str], current_modul
         "js-uint" => ("u64".to_string(), true, None),
         "js-int" => ("i64".to_string(), true, None),
         "float" => ("f64".to_string(), true, None),
+        "{*text => text}" => ("HashMap<String, String>".to_string(), true, None),
         "null" => ("Option<()>".to_string(), false, None), // null is typically represented as Option
         _ => {
                 // Parse the custom type (this function will handle generation if same module)

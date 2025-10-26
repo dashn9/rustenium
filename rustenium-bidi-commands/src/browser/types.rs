@@ -56,7 +56,6 @@ pub enum ClientWindowNamedStateClientWindowRectStateUnion {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum AllowedEnum {
     #[serde(rename = "allowed")]
     Allowed,
@@ -71,7 +70,6 @@ pub struct DownloadBehaviorAllowed {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum DeniedEnum {
     #[serde(rename = "denied")]
     Denied,
@@ -97,7 +95,6 @@ pub struct UserContextInfo {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum ClientWindowInfostateUnion {
     #[serde(rename = "fullscreen")]
     Fullscreen,

@@ -91,7 +91,7 @@ impl<T: ConnectionTransport> Session<T> {
         let raw_message = serde_json::to_string(&command).unwrap();
         self.connection.send(raw_message).await;
 
-        match timeout(Duration::from_millis(10000), rx).await {
+        match timeout(Duration::from_secs(100), rx).await {
             Ok(Ok(command_result)) => match command_result {
                 CommandResponseState::Success(response) => Ok(response.result),
                 CommandResponseState::Error(err) => Err(SessionSendError::ErrorResponse(err))

@@ -1,5 +1,4 @@
 // Generated types for module
-
 use serde::{Serialize, Deserialize};
 use crate::browsing_context::types::BrowsingContext;
 use crate::Extensible;
@@ -710,33 +709,11 @@ pub enum NodeEnum {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub enum NodePropertiesAttributesmodeUnion {
+pub enum NodePropertiesModeUnion {
     #[serde(rename = "open")]
     Open,
     #[serde(rename = "closed")]
     Closed,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct NodePropertiesAttributes {
-    #[serde(rename = "children")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub children: Option<Vec<NodeRemoteValue>>,
-    #[serde(rename = "localName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub local_name: Option<String>,
-    #[serde(rename = "mode")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub mode: Option<NodePropertiesAttributesmodeUnion>,
-    #[serde(rename = "namespaceURI")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub namespace_uri: Option<String>,
-    #[serde(rename = "nodeValue")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub node_value: Option<String>,
-    #[serde(rename = "shadowRoot")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub shadow_root: Option<Option<Box<NodeRemoteValue>>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -747,7 +724,25 @@ pub struct NodeProperties {
     pub child_node_count: u64,
     #[serde(rename = "attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub attributes: Option<NodePropertiesAttributes>,
+    pub attributes: Option<std::collections::HashMap<String, String>>,
+    #[serde(rename = "children")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub children: Option<Vec<NodeRemoteValue>>,
+    #[serde(rename = "localName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub local_name: Option<String>,
+    #[serde(rename = "mode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mode: Option<NodePropertiesModeUnion>,
+    #[serde(rename = "namespaceURI")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub namespace_uri: Option<String>,
+    #[serde(rename = "nodeValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub node_value: Option<String>,
+    #[serde(rename = "shadowRoot")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub shadow_root: Option<Option<Box<NodeRemoteValue>>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
