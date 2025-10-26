@@ -424,7 +424,7 @@ fn preprocess_nested_structs(cddl_content: &str, parent_type_name: Option<&str>,
         let line = lines[i].trim();
 
         // Check if line contains inline struct: "property: {"
-        if line.contains(": {") && !line.trim_end().ends_with('}') {
+        if line.contains(": {") && !(line.trim_end().ends_with('}') || line.trim_end().ends_with("},")) {
             // Extract property name and handle nested struct
             if let Some(colon_pos) = line.find(": {") {
                 let property_part = &line[..colon_pos].trim();
@@ -1080,7 +1080,7 @@ fn convert_basic_cddl_type(cddl_type: &str, cddl_strings: &[&str], current_modul
         "js-uint" => ("u64".to_string(), true, None),
         "js-int" => ("i64".to_string(), true, None),
         "float" => ("f64".to_string(), true, None),
-        "{*text => text}" => ("HashMap<String, String>".to_string(), true, None),
+        "{*text => text}" => ("std::collections::HashMap<String, String>".to_string(), true, None),
         "null" => ("Option<()>".to_string(), false, None), // null is typically represented as Option
         _ => {
                 // Parse the custom type (this function will handle generation if same module)
