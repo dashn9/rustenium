@@ -82,11 +82,12 @@ impl ChromeDriver {
             max_object_depth: Some(Some(99)),
             include_shadow_tree: Some(SerializationOptionsincludeShadowTreeUnion::Open)
         };
-        let node_result = self.driver.find_nodes(locator, context_id, max_node_count, serialization_options, start_nodes).await?;
-        let mut nodes = Vec::new();
+        let node_result = self.driver.find_nodes(locator, context_id, max_node_count, Some(new_so), start_nodes).await?;
+        let mut chrome_nodes = Vec::new();
         for node in node_result.nodes {
-            nodes.push(ChromeNode::from_bidi(node));
+            let chrome_node = ChromeNode::from_bidi(node);
+            chrome_nodes.push(chrome_node);
         }
-        Ok(nodes)
+        Ok(chrome_nodes)
     }
 }

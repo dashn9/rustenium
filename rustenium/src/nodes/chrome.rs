@@ -1,14 +1,14 @@
-use rustenium_bidi_commands::script::types::NodeRemoteValue;
 use crate::nodes::bidi::node::BidiNode;
+use rustenium_bidi_commands::script::types::NodeRemoteValue;
 
 pub struct ChromeNode {
-    bidi_node: BidiNode
+    bidi_node: BidiNode,
 }
 
 impl ChromeNode {
     pub fn from_bidi(_raw_bidi_node: NodeRemoteValue) -> Self {
         Self {
-            bidi_node: BidiNode::new(_raw_bidi_node)
+            bidi_node: BidiNode::new(_raw_bidi_node),
         }
     }
 }
