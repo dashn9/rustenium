@@ -1,14 +1,23 @@
-use std::sync::{Arc, Mutex};
-use rustenium_bidi_commands::browsing_context::commands::{LocateNodesResult, NavigateResult};
-use rustenium_bidi_commands::browsing_context::types::{ReadinessState, BrowsingContext, Locator};
-use rustenium_bidi_commands::script::types::{SerializationOptions, SerializationOptionsincludeShadowTreeUnion, SharedReference};
-use rustenium_core::{find_free_port, transport::WebsocketConnectionTransport};
-use rustenium_core::session::SessionConnectionType;
-use rustenium_core::transport::ConnectionTransportConfig;
 use crate::bidi::drivers::DriverConfiguration;
 use crate::drivers::bidi::drivers::{BidiDrive, BidiDriver};
-use crate::error::{FindNodesError, OpenUrlError};
+use crate::error::{EvaluateResultError, FindNodesError, OpenUrlError};
 use crate::nodes::chrome::ChromeNode;
+use crate::nodes::NodePosition;
+use rustenium_bidi_commands::browsing_context::commands::NavigateResult;
+use rustenium_bidi_commands::browsing_context::types::{BrowsingContext, Locator, ReadinessState};
+use rustenium_bidi_commands::script::types::{
+    PrimitiveProtocolValue, RemoteValue, SerializationOptions,
+    SerializationOptionsincludeShadowTreeUnion, SharedReference,
+};
+use rustenium_bidi_commands::ResultData::ScriptResult;
+use rustenium_bidi_commands::ScriptResult::EvaluateResult;
+use rustenium_core::error::CommandResultError;
+use rustenium_core::error::CommandResultError::InvalidResultTypeError;
+use rustenium_core::session::SessionConnectionType;
+use rustenium_core::transport::ConnectionTransportConfig;
+use rustenium_core::{find_free_port, transport::WebsocketConnectionTransport};
+use std::collections::HashMap;
+use std::sync::{Arc, Mutex};
 
 #[derive(Debug, Clone)]
 pub struct ChromeConfig {
@@ -24,11 +33,15 @@ impl DriverConfiguration for ChromeConfig {
 
     fn flags(&self) -> Vec<String> {
         vec![
-            format!("--host={}", self.host.clone().unwrap_or(String::from("localhost"))),
+            format!(
+                "--host={}",
+                self.host.clone().unwrap_or(String::from("localhost"))
+            ),
             format!("--port={}", self.port.unwrap_or(find_free_port().unwrap())),
-        ].into_iter()
-            .map(String::from)
-            .collect()
+        ]
+        .into_iter()
+        .map(String::from)
+        .collect()
     }
 }
 pub struct ChromeDriver {
@@ -69,6 +82,56 @@ impl ChromeDriver {
         self.driver.open_url(url, wait, context_id).await
     }
 
+    async fn find_node_position(
+        &mut self,
+        locator: Locator,
+        index: usize,
+    ) -> Result<Option<NodePosition>, EvaluateResultError> {
+        let mut script = String::new();
+        if let Locator::CssLocator(locator) = locator {
+            script = format!(
+                "
+        (function() {{
+            const element = document.querySelectorAll('{}')[{}];
+            if (!element) {{
+                return null;
+            }}
+            const rect = element.getBoundingClientRect();
+            const scroll_x = window.pageXOffset || document.documentElement.scrollLeft;
+            const scroll_y = window.pageYOffset || document.documentElement.scrollTop;
+
+            return JSON.stringify({{
+                x: rect.x,
+                y: rect.y,
+                width: rect.width,
+                height: rect.height,
+                scroll_x: rect.x + scroll_x,
+                scroll_y: rect.y + scroll_y
+            }});
+        }})()",
+                locator.value, index
+            );
+        }
+        let result = self
+            .driver
+            .evaluate_script(script, false, None, None, None, None)
+            .await;
+        match result {
+            Ok(result_success) => {
+                if let RemoteValue::PrimitiveProtocolValue(PrimitiveProtocolValue::StringValue(
+                    rv_sv,
+                )) = result_success.clone().result
+                {
+                    let position: Option<NodePosition> =
+                        serde_json::from_str(rv_sv.value.as_str()).ok();
+                    return Ok(position);
+                }
+                Ok(None)
+            }
+            Err(e) => Err(e),
+        }
+    }
+
     pub async fn find_nodes(
         &mut self,
         locator: Locator,
@@ -80,9 +143,18 @@ impl ChromeDriver {
         let new_so = SerializationOptions {
             max_dom_depth: Some(Some(99)),
             max_object_depth: Some(Some(99)),
-            include_shadow_tree: Some(SerializationOptionsincludeShadowTreeUnion::Open)
+            include_shadow_tree: Some(SerializationOptionsincludeShadowTreeUnion::Open),
         };
-        let node_result = self.driver.find_nodes(locator, context_id, max_node_count, Some(new_so), start_nodes).await?;
+        let node_result = self
+            .driver
+            .find_nodes(
+                locator,
+                context_id,
+                max_node_count,
+                Some(new_so),
+                start_nodes,
+            )
+            .await?;
         let mut chrome_nodes = Vec::new();
         for node in node_result.nodes {
             let chrome_node = ChromeNode::from_bidi(node);

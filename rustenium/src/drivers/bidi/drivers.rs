@@ -242,8 +242,8 @@ impl<T: ConnectionTransport> BidiDriver<T> {
     pub async fn evaluate_script(
         &mut self,
         expression: String,
-        target: Option<Target>,
         await_promise: bool,
+        target: Option<Target>,
         result_ownership: Option<ResultOwnership>,
         serialization_options: Option<SerializationOptions>,
         user_activation: Option<bool>,

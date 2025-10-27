@@ -22,10 +22,13 @@
   <component name="ChangeListManager">
     <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/script/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/script/types.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/Cargo.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium/src/drivers/bidi/drivers.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/drivers/bidi/drivers.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/src/error.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/error.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/src/nodes/bidi/node.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/nodes/bidi/node.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/drivers/chrome.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/drivers/chrome.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/lib.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/nodes/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/nodes/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/nodes/node.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/nodes/node.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -189,7 +192,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/rustenium/src/drivers/chrome.rs</url>
-          <line>90</line>
+          <line>160</line>
           <option name="timeStamp" value="13" />
         </line-breakpoint>
       </breakpoints>
