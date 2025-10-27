@@ -876,13 +876,6 @@ pub struct EvaluateResultException {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-pub enum EvaluateResult {
-    EvaluateResultSuccess(EvaluateResultSuccess),
-    EvaluateResultException(EvaluateResultException),
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BaseRealmInfo {
     #[serde(rename = "realm")]
     pub realm: Realm,

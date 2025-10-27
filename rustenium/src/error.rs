@@ -1,5 +1,6 @@
 use thiserror::Error;
 use rustenium_bidi_commands::ErrorResponse;
+use rustenium_bidi_commands::script::types::EvaluateResultException;
 use rustenium_core::error::{CommandResultError};
 
 #[derive(Debug, Error)]
@@ -30,6 +31,16 @@ pub enum OpenUrlError {
 pub enum FindNodesError {
     #[error(transparent)]
     ContextIndexError(#[from] ContextIndexError),
+    #[error("An error occured executing command")]
+    CommandResultError(CommandResultError),
+}
+
+#[derive(Debug, Error)]
+pub enum EvaluateResultError {
+    #[error(transparent)]
+    ContextIndexError(#[from] ContextIndexError),
+    #[error("Script Evaluation failed with Exception")]
+    ExceptionError(EvaluateResultException),
     #[error("An error occured executing command")]
     CommandResultError(CommandResultError),
 }

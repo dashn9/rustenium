@@ -6,14 +6,18 @@ use rustenium_core::{
 use std::error::Error;
 
 pub use crate::drivers::chrome::ChromeDriver;
-use crate::error::{ContextCreationListenError, ContextIndexError, FindNodesError, OpenUrlError};
+use crate::error::{
+    ContextCreationListenError, ContextIndexError, EvaluateResultError, FindNodesError,
+    OpenUrlError,
+};
 use rustenium_bidi_commands::browsing_context::types::{
     BrowsingContext as BidiBrowsingContext, CreateType, Locator, ReadinessState,
 };
+use rustenium_bidi_commands::script::commands::EvaluateResult;
 use rustenium_bidi_commands::session::commands::SubscribeResult;
 use rustenium_bidi_commands::{
     BrowsingContextCommand, BrowsingContextEvent, BrowsingContextResult, CommandData, EventData,
-    ResultData, SessionResult,
+    ResultData, ScriptCommand, ScriptResult, SessionResult,
 };
 use rustenium_core::contexts::BrowsingContext;
 use rustenium_core::events::EventManagement;
@@ -27,8 +31,14 @@ use rustenium_bidi_commands::browsing_context::commands::{
     BrowsingContextLocateNodesMethod, BrowsingContextNavigateMethod, LocateNodes,
     LocateNodesParameters, LocateNodesResult, Navigate, NavigateParameters, NavigateResult,
 };
-use rustenium_bidi_commands::script::types::{SerializationOptions, SharedReference};
-use rustenium_core::error::CommandResultError;
+use rustenium_bidi_commands::script::commands::{
+    Evaluate, EvaluateParameters, ScriptEvaluateMethod,
+};
+use rustenium_bidi_commands::script::types::{
+    ContextTarget, EvaluateResultSuccess, ResultOwnership, SerializationOptions, SharedReference,
+    Target,
+};
+use rustenium_core::error::{CommandResultError, SessionSendError};
 use tokio::io;
 
 fn is_connection_refused(e: &reqwest::Error) -> bool {
@@ -224,6 +234,60 @@ impl<T: ConnectionTransport> BidiDriver<T> {
                 CommandResultError::InvalidResultTypeError(result),
             )),
             Err(err) => Err(FindNodesError::CommandResultError(
+                CommandResultError::SessionSendError(err),
+            )),
+        }
+    }
+
+    pub async fn evaluate_script(
+        &mut self,
+        expression: String,
+        target: Option<Target>,
+        await_promise: bool,
+        result_ownership: Option<ResultOwnership>,
+        serialization_options: Option<SerializationOptions>,
+        user_activation: Option<bool>,
+    ) -> Result<EvaluateResultSuccess, EvaluateResultError> {
+        let target = target.unwrap_or(Target::ContextTarget(ContextTarget {
+            context: self.get_active_context_id()?,
+            sandbox: None,
+        }));
+        let result = self
+            .session
+            .send(CommandData::ScriptCommand(ScriptCommand::Evaluate(
+                Evaluate {
+                    method: ScriptEvaluateMethod::ScriptEvaluate,
+                    params: EvaluateParameters {
+                        expression,
+                        target,
+                        await_promise,
+                        result_ownership,
+                        serialization_options,
+                        user_activation,
+                    },
+                },
+            )))
+            .await;
+        match result {
+            Ok(ResultData::ScriptResult(script_result)) => match script_result {
+                ScriptResult::EvaluateResult(evaluate_result) => match evaluate_result {
+                    EvaluateResult::EvaluateResultSuccess(evaluate_result_success) => {
+                        Ok(evaluate_result_success)
+                    }
+                    EvaluateResult::EvaluateResultException(evaluate_result_error) => {
+                        Err(EvaluateResultError::ExceptionError(evaluate_result_error))
+                    }
+                },
+                _ => Err(EvaluateResultError::CommandResultError(
+                    CommandResultError::InvalidResultTypeError(ResultData::ScriptResult(
+                        script_result,
+                    )),
+                )),
+            },
+            Ok(result) => Err(EvaluateResultError::CommandResultError(
+                CommandResultError::InvalidResultTypeError(result),
+            )),
+            Err(err) => Err(EvaluateResultError::CommandResultError(
                 CommandResultError::SessionSendError(err),
             )),
         }
