@@ -7,12 +7,10 @@ use rustenium_bidi_commands::script::types::{Handle, SharedId};
 pub struct NodePosition {
     pub x: f64,
     pub y: f64,
+    pub scroll_x: f64,
+    pub scroll_y: f64,
     pub width: f64,
     pub height: f64,
-    pub top: f64,
-    pub right: f64,
-    pub bottom: f64,
-    pub left: f64,
 }
 
 pub trait Node {

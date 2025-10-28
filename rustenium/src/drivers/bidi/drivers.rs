@@ -257,14 +257,14 @@ impl<T: ConnectionTransport> BidiDriver<T> {
     const scroll_x = window.pageXOffset || document.documentElement.scrollLeft;
     const scroll_y = window.pageYOffset || document.documentElement.scrollTop;
 
-    return {
+    return JSON.stringify({
         x: rect.x,
         y: rect.y,
         width: rect.width,
         height: rect.height,
         scroll_x: rect.x + scroll_x,
         scroll_y: rect.y + scroll_y
-    };
+    });
 }";
         }
         let result = self
@@ -379,7 +379,7 @@ impl<T: ConnectionTransport> BidiDriver<T> {
 
         match result {
             Ok(ResultData::ScriptResult(script_result)) => match script_result {
-                ScriptResult::EvaluateResult(evaluate_result) => match evaluate_result {
+                ScriptResult::CallFunctionResult(evaluate_result) => match evaluate_result {
                     EvaluateResult::EvaluateResultSuccess(evaluate_result_success) => {
                         Ok(evaluate_result_success)
                     }
