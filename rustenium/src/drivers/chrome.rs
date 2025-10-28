@@ -2,17 +2,10 @@ use crate::bidi::drivers::DriverConfiguration;
 use crate::drivers::bidi::drivers::{BidiDrive, BidiDriver};
 use crate::error::{EvaluateResultError, FindNodesError, OpenUrlError};
 use crate::nodes::chrome::ChromeNode;
-use crate::nodes::NodePosition;
+use crate::nodes::{Node, NodePosition};
 use rustenium_bidi_commands::browsing_context::commands::NavigateResult;
 use rustenium_bidi_commands::browsing_context::types::{BrowsingContext, Locator, ReadinessState};
-use rustenium_bidi_commands::script::types::{
-    PrimitiveProtocolValue, RemoteValue, SerializationOptions,
-    SerializationOptionsincludeShadowTreeUnion, SharedReference,
-};
-use rustenium_bidi_commands::ResultData::ScriptResult;
-use rustenium_bidi_commands::ScriptResult::EvaluateResult;
-use rustenium_core::error::CommandResultError;
-use rustenium_core::error::CommandResultError::InvalidResultTypeError;
+use rustenium_bidi_commands::script::types::{LocalValue, RemoteReference, PrimitiveProtocolValue, RemoteValue, SerializationOptions, SerializationOptionsincludeShadowTreeUnion, SharedReference};
 use rustenium_core::session::SessionConnectionType;
 use rustenium_core::transport::ConnectionTransportConfig;
 use rustenium_core::{find_free_port, transport::WebsocketConnectionTransport};
@@ -82,56 +75,6 @@ impl ChromeDriver {
         self.driver.open_url(url, wait, context_id).await
     }
 
-    async fn find_node_position(
-        &mut self,
-        locator: Locator,
-        index: usize,
-    ) -> Result<Option<NodePosition>, EvaluateResultError> {
-        let mut script = String::new();
-        if let Locator::CssLocator(locator) = locator {
-            script = format!(
-                "
-        (function() {{
-            const element = document.querySelectorAll('{}')[{}];
-            if (!element) {{
-                return null;
-            }}
-            const rect = element.getBoundingClientRect();
-            const scroll_x = window.pageXOffset || document.documentElement.scrollLeft;
-            const scroll_y = window.pageYOffset || document.documentElement.scrollTop;
-
-            return JSON.stringify({{
-                x: rect.x,
-                y: rect.y,
-                width: rect.width,
-                height: rect.height,
-                scroll_x: rect.x + scroll_x,
-                scroll_y: rect.y + scroll_y
-            }});
-        }})()",
-                locator.value, index
-            );
-        }
-        let result = self
-            .driver
-            .evaluate_script(script, false, None, None, None, None)
-            .await;
-        match result {
-            Ok(result_success) => {
-                if let RemoteValue::PrimitiveProtocolValue(PrimitiveProtocolValue::StringValue(
-                    rv_sv,
-                )) = result_success.clone().result
-                {
-                    let position: Option<NodePosition> =
-                        serde_json::from_str(rv_sv.value.as_str()).ok();
-                    return Ok(position);
-                }
-                Ok(None)
-            }
-            Err(e) => Err(e),
-        }
-    }
-
     pub async fn find_nodes(
         &mut self,
         locator: Locator,
@@ -148,7 +91,7 @@ impl ChromeDriver {
         let node_result = self
             .driver
             .find_nodes(
-                locator,
+                locator.clone(),
                 context_id,
                 max_node_count,
                 Some(new_so),
@@ -156,10 +99,32 @@ impl ChromeDriver {
             )
             .await?;
         let mut chrome_nodes = Vec::new();
-        for node in node_result.nodes {
-            let chrome_node = ChromeNode::from_bidi(node);
+        for (i, node) in node_result.nodes.iter().enumerate() {
+            let chrome_node = ChromeNode::from_bidi(node.clone(), locator.clone());
             chrome_nodes.push(chrome_node);
         }
         Ok(chrome_nodes)
+    }
+
+    pub async fn update_node_position_bidi(&mut self, node: &mut impl Node) -> Result<bool, EvaluateResultError> {
+        let shared_id = match node.get_shared_id() {
+            Some(id) => id.clone(),
+            None => return Ok(false),
+        };
+        let shared_reference = LocalValue::RemoteReference(
+            RemoteReference::SharedReference(SharedReference {
+                shared_id,
+                handle: node.get_handle().clone(),
+                extensible: Default::default(),
+            }),
+        );
+        let position = self.driver.get_node_position(shared_reference, node.get_bidi_locator()).await?;
+        match position {
+            Some(position) => {
+                node.set_position(position);
+                Ok(true)
+            }
+            None => Ok(false)
+        }
     }
 }

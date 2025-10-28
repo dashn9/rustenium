@@ -2,8 +2,9 @@ use rustenium_bidi_commands::browsing_context::commands::{LocateNodes, LocateNod
 use rustenium_bidi_commands::browsing_context::types::{BrowsingContext, Locator, ReadinessState};
 use rustenium_bidi_commands::script::types::{SerializationOptions, SharedReference};
 use crate::chrome::{ChromeConfig, ChromeDriver};
-use crate::error::{FindNodesError, OpenUrlError};
+use crate::error::{EvaluateResultError, FindNodesError, OpenUrlError};
 use crate::nodes::chrome::ChromeNode;
+use crate::nodes::Node;
 
 pub struct ChromeBrowser {
     config: ChromeConfig,
@@ -36,6 +37,10 @@ impl ChromeBrowser {
         start_nodes: Option<Vec<SharedReference>>,
     ) -> Result<Vec<ChromeNode>, FindNodesError> {
         self.driver.find_nodes(locator, context_id, max_node_count, serialization_options, start_nodes).await
+    }
+
+    pub async fn update_node_position(&mut self, node: &mut ChromeNode) -> Result<bool, EvaluateResultError> {
+        self.driver.update_node_position_bidi(node).await
     }
 }
 

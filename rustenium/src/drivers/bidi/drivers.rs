@@ -13,7 +13,9 @@ use crate::error::{
 use rustenium_bidi_commands::browsing_context::types::{
     BrowsingContext as BidiBrowsingContext, CreateType, Locator, ReadinessState,
 };
-use rustenium_bidi_commands::script::commands::EvaluateResult;
+use rustenium_bidi_commands::script::commands::{
+    CallFunction, CallFunctionParameters, EvaluateResult, ScriptCallFunctionMethod,
+};
 use rustenium_bidi_commands::session::commands::SubscribeResult;
 use rustenium_bidi_commands::{
     BrowsingContextCommand, BrowsingContextEvent, BrowsingContextResult, CommandData, EventData,
@@ -27,6 +29,7 @@ use std::sync::{Arc, Mutex};
 use std::time::Duration;
 use tokio::time::sleep;
 
+use crate::nodes::{Node, NodePosition};
 use rustenium_bidi_commands::browsing_context::commands::{
     BrowsingContextLocateNodesMethod, BrowsingContextNavigateMethod, LocateNodes,
     LocateNodesParameters, LocateNodesResult, Navigate, NavigateParameters, NavigateResult,
@@ -35,8 +38,8 @@ use rustenium_bidi_commands::script::commands::{
     Evaluate, EvaluateParameters, ScriptEvaluateMethod,
 };
 use rustenium_bidi_commands::script::types::{
-    ContextTarget, EvaluateResultSuccess, ResultOwnership, SerializationOptions, SharedReference,
-    Target,
+    ContextTarget, EvaluateResultSuccess, LocalValue, PrimitiveProtocolValue, RemoteReference,
+    RemoteValue, ResultOwnership, SerializationOptions, SharedReference, Target,
 };
 use rustenium_core::error::{CommandResultError, SessionSendError};
 use tokio::io;
@@ -239,6 +242,52 @@ impl<T: ConnectionTransport> BidiDriver<T> {
         }
     }
 
+    pub async fn get_node_position(
+        &mut self,
+        shared_reference: LocalValue,
+        locator: &Locator,
+    ) -> Result<Option<NodePosition>, EvaluateResultError> {
+        let mut script = "";
+        if let Locator::CssLocator(locator) = locator {
+            script = "function() {
+    if (!this) {
+        return null;
+    }
+    const rect = this.getBoundingClientRect();
+    const scroll_x = window.pageXOffset || document.documentElement.scrollLeft;
+    const scroll_y = window.pageYOffset || document.documentElement.scrollTop;
+
+    return {
+        x: rect.x,
+        y: rect.y,
+        width: rect.width,
+        height: rect.height,
+        scroll_x: rect.x + scroll_x,
+        scroll_y: rect.y + scroll_y
+    };
+}";
+        }
+        let result = self
+            .call_function(
+                script.to_string(),
+                false,
+                None,
+                None,
+                None,
+                None,
+                Some(shared_reference),
+                None,
+            )
+            .await?;
+        if let RemoteValue::PrimitiveProtocolValue(PrimitiveProtocolValue::StringValue(rv_sv)) =
+            result.clone().result
+        {
+            let position: Option<NodePosition> = serde_json::from_str(rv_sv.value.as_str()).ok();
+            return Ok(position);
+        }
+        Ok(None)
+    }
+
     pub async fn evaluate_script(
         &mut self,
         expression: String,
@@ -268,6 +317,66 @@ impl<T: ConnectionTransport> BidiDriver<T> {
                 },
             )))
             .await;
+        match result {
+            Ok(ResultData::ScriptResult(script_result)) => match script_result {
+                ScriptResult::EvaluateResult(evaluate_result) => match evaluate_result {
+                    EvaluateResult::EvaluateResultSuccess(evaluate_result_success) => {
+                        Ok(evaluate_result_success)
+                    }
+                    EvaluateResult::EvaluateResultException(evaluate_result_error) => {
+                        Err(EvaluateResultError::ExceptionError(evaluate_result_error))
+                    }
+                },
+                _ => Err(EvaluateResultError::CommandResultError(
+                    CommandResultError::InvalidResultTypeError(ResultData::ScriptResult(
+                        script_result,
+                    )),
+                )),
+            },
+            Ok(result) => Err(EvaluateResultError::CommandResultError(
+                CommandResultError::InvalidResultTypeError(result),
+            )),
+            Err(err) => Err(EvaluateResultError::CommandResultError(
+                CommandResultError::SessionSendError(err),
+            )),
+        }
+    }
+
+    pub async fn call_function(
+        &mut self,
+        function_declaration: String,
+        await_promise: bool,
+        target: Option<Target>,
+        arguments: Option<Vec<LocalValue>>,
+        result_ownership: Option<ResultOwnership>,
+        serialization_options: Option<SerializationOptions>,
+        this: Option<LocalValue>,
+        user_activation: Option<bool>,
+    ) -> Result<EvaluateResultSuccess, EvaluateResultError> {
+        let target = target.unwrap_or(Target::ContextTarget(ContextTarget {
+            context: self.get_active_context_id()?,
+            sandbox: None,
+        }));
+
+        let result = self
+            .session
+            .send(CommandData::ScriptCommand(ScriptCommand::CallFunction(
+                CallFunction {
+                    method: ScriptCallFunctionMethod::ScriptCallFunction,
+                    params: CallFunctionParameters {
+                        function_declaration,
+                        await_promise,
+                        target,
+                        arguments,
+                        result_ownership,
+                        serialization_options,
+                        this,
+                        user_activation,
+                    },
+                },
+            )))
+            .await;
+
         match result {
             Ok(ResultData::ScriptResult(script_result)) => match script_result {
                 ScriptResult::EvaluateResult(evaluate_result) => match evaluate_result {
