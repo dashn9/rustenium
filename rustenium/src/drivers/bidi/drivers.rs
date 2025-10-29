@@ -288,6 +288,87 @@ impl<T: ConnectionTransport> BidiDriver<T> {
         Ok(None)
     }
 
+    pub async fn get_node_inner_text(
+        &mut self,
+        shared_reference: LocalValue,
+    ) -> Result<String, EvaluateResultError> {
+        let script = "function() { return this.innerText || ''; }";
+
+        let result = self
+            .call_function(
+                script.to_string(),
+                false,
+                None,
+                None,
+                None,
+                None,
+                Some(shared_reference),
+                None,
+            )
+            .await?;
+
+        if let RemoteValue::PrimitiveProtocolValue(PrimitiveProtocolValue::StringValue(rv_sv)) =
+            result.result
+        {
+            return Ok(rv_sv.value);
+        }
+        Ok(String::new())
+    }
+
+    pub async fn get_node_text_content(
+        &mut self,
+        shared_reference: LocalValue,
+    ) -> Result<String, EvaluateResultError> {
+        let script = "function() { return this.textContent || ''; }";
+
+        let result = self
+            .call_function(
+                script.to_string(),
+                false,
+                None,
+                None,
+                None,
+                None,
+                Some(shared_reference),
+                None,
+            )
+            .await?;
+
+        if let RemoteValue::PrimitiveProtocolValue(PrimitiveProtocolValue::StringValue(rv_sv)) =
+            result.result
+        {
+            return Ok(rv_sv.value);
+        }
+        Ok(String::new())
+    }
+
+    pub async fn get_node_inner_html(
+        &mut self,
+        shared_reference: LocalValue,
+    ) -> Result<String, EvaluateResultError> {
+        let script = "function() { return this.innerHTML || ''; }";
+
+        let result = self
+            .call_function(
+                script.to_string(),
+                false,
+                None,
+                None,
+                None,
+                None,
+                Some(shared_reference),
+                None,
+            )
+            .await?;
+
+        if let RemoteValue::PrimitiveProtocolValue(PrimitiveProtocolValue::StringValue(rv_sv)) =
+            result.result
+        {
+            return Ok(rv_sv.value);
+        }
+        Ok(String::new())
+    }
+
     pub async fn evaluate_script(
         &mut self,
         expression: String,

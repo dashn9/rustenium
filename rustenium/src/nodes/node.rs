@@ -3,6 +3,49 @@ use serde::Deserialize;
 use rustenium_bidi_commands::browsing_context::types::Locator;
 use rustenium_bidi_commands::script::types::{Handle, SharedId};
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[repr(u16)]
+pub enum NodeType {
+    Element = 1,
+    Attribute = 2,   
+    Text = 3,
+    CDataSection = 4,
+    ProcessingInstruction = 7,
+    Comment = 8,
+    Document = 9,
+    DocumentType = 10,
+    DocumentFragment = 11,
+}
+
+impl NodeType {
+    pub fn from_u16(value: u16) -> Option<Self> {
+        match value {
+            1 => Some(NodeType::Element),
+            2 => Some(NodeType::Attribute),
+            3 => Some(NodeType::Text),
+            4 => Some(NodeType::CDataSection),
+            7 => Some(NodeType::ProcessingInstruction),
+            8 => Some(NodeType::Comment),
+            9 => Some(NodeType::Document),
+            10 => Some(NodeType::DocumentType),
+            11 => Some(NodeType::DocumentFragment),
+            _ => None,
+        }
+    }
+
+    pub fn as_u16(&self) -> u16 {
+        *self as u16
+    }
+
+    pub fn is_element(&self) -> bool {
+        matches!(self, NodeType::Element)
+    }
+
+    pub fn is_text(&self) -> bool {
+        matches!(self, NodeType::Text)
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 pub struct NodePosition {
     pub x: f64,

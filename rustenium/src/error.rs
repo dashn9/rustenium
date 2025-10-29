@@ -43,4 +43,6 @@ pub enum EvaluateResultError {
     ExceptionError(EvaluateResultException),
     #[error("An error occured executing command")]
     CommandResultError(CommandResultError),
+    #[error("Node does not have a shared ID")]
+    NoSharedId,
 }

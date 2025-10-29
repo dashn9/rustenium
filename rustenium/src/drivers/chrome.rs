@@ -127,4 +127,55 @@ impl ChromeDriver {
             None => Ok(false)
         }
     }
+
+    pub async fn get_node_inner_text_bidi(&mut self, node: &mut impl Node) -> Result<String, EvaluateResultError> {
+        let shared_id = match node.get_shared_id() {
+            Some(id) => id.clone(),
+            None => return Err(EvaluateResultError::NoSharedId),
+        };
+
+        let shared_reference = LocalValue::RemoteReference(
+            RemoteReference::SharedReference(SharedReference {
+                shared_id,
+                handle: node.get_handle().clone(),
+                extensible: Default::default(),
+            }),
+        );
+
+        self.driver.get_node_inner_text(shared_reference).await
+    }
+
+    pub async fn get_node_text_content_bidi(&mut self, node: &mut impl Node) -> Result<String, EvaluateResultError> {
+        let shared_id = match node.get_shared_id() {
+            Some(id) => id.clone(),
+            None => return Err(EvaluateResultError::NoSharedId),
+        };
+
+        let shared_reference = LocalValue::RemoteReference(
+            RemoteReference::SharedReference(SharedReference {
+                shared_id,
+                handle: node.get_handle().clone(),
+                extensible: Default::default(),
+            }),
+        );
+
+        self.driver.get_node_text_content(shared_reference).await
+    }
+
+    pub async fn get_node_inner_html_bidi(&mut self, node: &mut impl Node) -> Result<String, EvaluateResultError> {
+        let shared_id = match node.get_shared_id() {
+            Some(id) => id.clone(),
+            None => return Err(EvaluateResultError::NoSharedId),
+        };
+
+        let shared_reference = LocalValue::RemoteReference(
+            RemoteReference::SharedReference(SharedReference {
+                shared_id,
+                handle: node.get_handle().clone(),
+                extensible: Default::default(),
+            }),
+        );
+
+        self.driver.get_node_inner_html(shared_reference).await
+    }
 }
