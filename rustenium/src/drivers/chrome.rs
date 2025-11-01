@@ -19,6 +19,16 @@ pub struct ChromeConfig {
     pub port: Option<u16>,
 }
 
+impl Default for ChromeConfig {
+    fn default() -> Self {
+        ChromeConfig {
+            driver_executable_path: "".to_string(),
+            host: None,
+            port: None,
+        }
+    }
+}
+
 impl DriverConfiguration for ChromeConfig {
     fn exe_path(&self) -> &str {
         &self.driver_executable_path
