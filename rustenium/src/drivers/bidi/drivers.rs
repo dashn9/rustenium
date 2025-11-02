@@ -5,7 +5,6 @@ use rustenium_core::{
 };
 use std::error::Error;
 
-pub use crate::drivers::chrome::ChromeDriver;
 use crate::error::{
     ContextCreationListenError, ContextIndexError, EvaluateResultError, FindNodesError,
     OpenUrlError,

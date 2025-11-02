@@ -1,6 +1,5 @@
 use tokio::time::{Duration, sleep};
-use rustenium::browsers::chrome::{create_chrome_browser};
-use rustenium::chrome::ChromeConfig;
+use rustenium::browsers::{create_chrome_browser, ChromeConfig};
 use rustenium::css;
 use rustenium_bidi_commands::browsing_context::types::{CssEnum, CssLocator, Locator, ReadinessState};
 

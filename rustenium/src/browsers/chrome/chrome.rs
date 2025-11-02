@@ -1,18 +1,20 @@
-use crate::bidi::drivers::DriverConfiguration;
-use crate::drivers::bidi::drivers::{BidiDrive, BidiDriver};
+use rustenium_bidi_commands::browsing_context::commands::{LocateNodes, LocateNodesResult, NavigateResult};
+use rustenium_bidi_commands::browsing_context::types::{BrowsingContext, Locator, ReadinessState};
+use rustenium_bidi_commands::{CommandData, ResultData};
+use rustenium_bidi_commands::script::types::{
+    LocalValue, PrimitiveProtocolValue, RemoteReference, RemoteValue,
+    SerializationOptions, SerializationOptionsincludeShadowTreeUnion, SharedReference
+};
+use rustenium_core::error::SessionSendError;
+use rustenium_core::transport::{ConnectionTransportConfig, WebsocketConnectionTransport};
+use rustenium_core::{find_free_port};
+
+use rustenium_core::session::SessionConnectionType;
+use crate::drivers::bidi::drivers::{BidiDriver, BidiDrive, DriverConfiguration};
 use crate::error::{EvaluateResultError, FindNodesError, OpenUrlError};
 use crate::nodes::chrome::ChromeNode;
 use crate::nodes::{Node, NodePosition};
-use rustenium_bidi_commands::browsing_context::commands::NavigateResult;
-use rustenium_bidi_commands::browsing_context::types::{BrowsingContext, Locator, ReadinessState};
-use rustenium_bidi_commands::script::types::{LocalValue, RemoteReference, PrimitiveProtocolValue, RemoteValue, SerializationOptions, SerializationOptionsincludeShadowTreeUnion, SharedReference};
-use rustenium_core::session::SessionConnectionType;
-use rustenium_core::transport::ConnectionTransportConfig;
-use rustenium_core::{find_free_port, transport::WebsocketConnectionTransport};
-use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
-use rustenium_bidi_commands::{CommandData, ResultData};
-use rustenium_core::error::SessionSendError;
 
 #[derive(Debug, Clone)]
 pub struct ChromeConfig {
@@ -53,22 +55,24 @@ impl DriverConfiguration for ChromeConfig {
         flags
     }
 }
-pub struct ChromeDriver {
-    connection_transport_config: ConnectionTransportConfig,
-    pub driver: BidiDriver<WebsocketConnectionTransport>,
+
+pub struct ChromeBrowser {
+    config: ChromeConfig,
+    driver: BidiDriver<WebsocketConnectionTransport>,
 }
 
-impl BidiDrive<WebsocketConnectionTransport> for ChromeDriver {}
-impl ChromeDriver {
-    pub async fn new(mut config: ChromeConfig) -> Self {
+impl BidiDrive<WebsocketConnectionTransport> for ChromeBrowser {}
+
+impl ChromeBrowser {
+    pub async fn new(mut config: ChromeConfig) -> ChromeBrowser {
         let port = find_free_port().unwrap();
         config.port = Some(config.port.unwrap_or(port));
         let mut ct_config = ConnectionTransportConfig::default();
         ct_config.host = config.host.clone().unwrap_or(String::from("localhost"));
         ct_config.port = port;
         let result = Self::start(&config, &ct_config, SessionConnectionType::WebSocket).await;
-        let mut driver = ChromeDriver {
-            connection_transport_config: ct_config,
+        let mut browser = ChromeBrowser {
+            config,
             driver: BidiDriver {
                 exe_path: String::from("chromedriver"),
                 flags: vec![],
@@ -78,17 +82,17 @@ impl ChromeDriver {
                 driver_process: result.1,
             },
         };
-        driver.driver.listen_to_context_creation().await.unwrap();
-        driver
+        browser.driver.listen_to_context_creation().await.unwrap();
+        browser
     }
 
     pub async fn open_url(
         &mut self,
-        url: String,
+        url: &str,
         wait: Option<ReadinessState>,
         context_id: Option<BrowsingContext>,
     ) -> Result<NavigateResult, OpenUrlError> {
-        self.driver.open_url(url, wait, context_id).await
+        self.driver.open_url(url.to_string(), wait, context_id).await
     }
 
     pub async fn find_nodes(
@@ -122,7 +126,7 @@ impl ChromeDriver {
         Ok(chrome_nodes)
     }
 
-    pub async fn update_node_position_bidi(&mut self, node: &mut impl Node) -> Result<bool, EvaluateResultError> {
+    pub async fn update_node_position(&mut self, node: &mut ChromeNode) -> Result<bool, EvaluateResultError> {
         let shared_id = match node.get_shared_id() {
             Some(id) => id.clone(),
             None => return Ok(false),
@@ -144,7 +148,7 @@ impl ChromeDriver {
         }
     }
 
-    pub async fn get_node_inner_text_bidi(&mut self, node: &mut impl Node) -> Result<String, EvaluateResultError> {
+    pub async fn get_node_inner_text(&mut self, node: &mut ChromeNode) -> Result<String, EvaluateResultError> {
         let shared_id = match node.get_shared_id() {
             Some(id) => id.clone(),
             None => return Err(EvaluateResultError::NoSharedId),
@@ -161,7 +165,7 @@ impl ChromeDriver {
         self.driver.get_node_inner_text(shared_reference).await
     }
 
-    pub async fn get_node_text_content_bidi(&mut self, node: &mut impl Node) -> Result<String, EvaluateResultError> {
+    pub async fn get_node_text_content(&mut self, node: &mut ChromeNode) -> Result<String, EvaluateResultError> {
         let shared_id = match node.get_shared_id() {
             Some(id) => id.clone(),
             None => return Err(EvaluateResultError::NoSharedId),
@@ -178,7 +182,7 @@ impl ChromeDriver {
         self.driver.get_node_text_content(shared_reference).await
     }
 
-    pub async fn get_node_inner_html_bidi(&mut self, node: &mut impl Node) -> Result<String, EvaluateResultError> {
+    pub async fn get_node_inner_html(&mut self, node: &mut ChromeNode) -> Result<String, EvaluateResultError> {
         let shared_id = match node.get_shared_id() {
             Some(id) => id.clone(),
             None => return Err(EvaluateResultError::NoSharedId),
@@ -198,4 +202,10 @@ impl ChromeDriver {
     pub async fn send_bidi_command(&mut self, command: CommandData) -> Result<ResultData, SessionSendError> {
         return self.driver.send_command(command).await;
     }
+}
+
+
+pub async fn create_chrome_browser(config: ChromeConfig) -> ChromeBrowser {
+    let chrome_browser = ChromeBrowser::new(config).await;
+    chrome_browser
 }
