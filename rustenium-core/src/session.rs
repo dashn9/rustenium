@@ -38,16 +38,16 @@ impl<T: ConnectionTransport> Session<T> {
         Session { id: None, connection, bidi_events: Arc::new(Mutex::new(Vec::new())) }
     }
 
-    pub async fn create_new_bidi_session(&mut self, connection_type: SessionConnectionType) -> () {
+    pub async fn create_new_bidi_session(&mut self, connection_type: SessionConnectionType, capabilities: Option<CapabilitiesRequest>) -> () {
         match connection_type {
             SessionConnectionType::WebSocket => {
                 let command = SessionNew {
                     method: SessionNewMethod::SessionNew,
                     params: SessionNewParameters {
-                        capabilities: CapabilitiesRequest {
+                        capabilities: capabilities.unwrap_or(CapabilitiesRequest {
                             always_match: None,
                             first_match: None,
-                        },
+                        }),
                     }
                 };
                 let (_, event_tx) = self.event_dispatch().await;

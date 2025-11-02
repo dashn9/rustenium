@@ -5,13 +5,7 @@ use rustenium_bidi_commands::browsing_context::types::{CssEnum, CssLocator, Loca
 
 #[tokio::test]
 async fn open_browser() {
-    let config = ChromeConfig {
-        driver_executable_path: "D:/Documents/m-workspace/rustenium/apps/drivers/chromedriver.exe".to_string(),
-        host: None,
-        port: None,
-        flags: vec![],
-    };
-    let mut browser = create_chrome_browser(config).await;
+    let mut browser = create_chrome_browser(None).await;
     browser.open_url("https://linkedin.com", Some(ReadinessState::Complete), None).await.unwrap();
     let elements = browser.find_nodes(css!("body"), None, None, None, None).await.unwrap();
     for mut element in elements {

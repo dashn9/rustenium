@@ -5,6 +5,7 @@ use rustenium_bidi_commands::script::types::{
     LocalValue, PrimitiveProtocolValue, RemoteReference, RemoteValue,
     SerializationOptions, SerializationOptionsincludeShadowTreeUnion, SharedReference
 };
+use rustenium_bidi_commands::session::types::CapabilitiesRequest;
 use rustenium_core::error::SessionSendError;
 use rustenium_core::transport::{ConnectionTransportConfig, WebsocketConnectionTransport};
 use rustenium_core::{find_free_port};
@@ -14,6 +15,7 @@ use crate::drivers::bidi::drivers::{BidiDriver, BidiDrive, DriverConfiguration};
 use crate::error::{EvaluateResultError, FindNodesError, OpenUrlError};
 use crate::nodes::chrome::ChromeNode;
 use crate::nodes::{Node, NodePosition};
+use super::capabilities::ChromeCapabilities;
 use std::sync::{Arc, Mutex};
 
 #[derive(Debug, Clone)]
@@ -22,6 +24,7 @@ pub struct ChromeConfig {
     pub host: Option<String>,
     pub port: Option<u16>,
     pub flags: Vec<&'static str>,
+    pub capabilities: Option<ChromeCapabilities>,
 }
 
 impl Default for ChromeConfig {
@@ -31,6 +34,7 @@ impl Default for ChromeConfig {
             host: None,
             port: None,
             flags: Vec::new(),
+            capabilities: None,
         }
     }
 }
@@ -70,7 +74,11 @@ impl ChromeBrowser {
         let mut ct_config = ConnectionTransportConfig::default();
         ct_config.host = config.host.clone().unwrap_or(String::from("localhost"));
         ct_config.port = port;
-        let result = Self::start(&config, &ct_config, SessionConnectionType::WebSocket).await;
+
+        // Convert ChromeCapabilities to CapabilitiesRequest if provided
+        let capabilities = config.capabilities.clone().map(|caps| caps.build());
+
+        let result = Self::start(&config, &ct_config, SessionConnectionType::WebSocket, capabilities).await;
         let mut browser = ChromeBrowser {
             config,
             driver: BidiDriver {
@@ -205,7 +213,7 @@ impl ChromeBrowser {
 }
 
 
-pub async fn create_chrome_browser(config: ChromeConfig) -> ChromeBrowser {
-    let chrome_browser = ChromeBrowser::new(config).await;
+pub async fn create_chrome_browser(config: Option<ChromeConfig>) -> ChromeBrowser {
+    let chrome_browser = ChromeBrowser::new(config.unwrap_or_default()).await;
     chrome_browser
 }

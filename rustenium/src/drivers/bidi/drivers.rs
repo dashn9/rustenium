@@ -16,6 +16,7 @@ use rustenium_bidi_commands::script::commands::{
     CallFunction, CallFunctionParameters, EvaluateResult, ScriptCallFunctionMethod,
 };
 use rustenium_bidi_commands::session::commands::SubscribeResult;
+use rustenium_bidi_commands::session::types::CapabilitiesRequest;
 use rustenium_bidi_commands::{BrowsingContextCommand, BrowsingContextEvent, BrowsingContextResult, Command, CommandData, EventData, ResultData, ScriptCommand, ScriptResult, SessionResult};
 use rustenium_core::contexts::BrowsingContext;
 use rustenium_core::events::EventManagement;
@@ -57,11 +58,12 @@ pub trait BidiDrive<T: ConnectionTransport> {
         driver_config: &impl DriverConfiguration,
         connection_transport_config: &ConnectionTransportConfig,
         session_connection_type: SessionConnectionType,
+        capabilities: Option<CapabilitiesRequest>,
     ) -> (Session<WebsocketConnectionTransport>, Process) {
         let driver_process = Process::create(driver_config.exe_path(), driver_config.flags());
         let mut session = Session::<T>::ws_new(connection_transport_config).await;
         session
-            .create_new_bidi_session(session_connection_type)
+            .create_new_bidi_session(session_connection_type, capabilities)
             .await;
         (session, driver_process)
     }
