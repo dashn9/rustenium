@@ -24,7 +24,7 @@ pub struct ChromeConfig {
     pub host: Option<String>,
     pub port: Option<u16>,
     pub flags: Vec<&'static str>,
-    pub capabilities: Option<ChromeCapabilities>,
+    pub capabilities: ChromeCapabilities,
 }
 
 impl Default for ChromeConfig {
@@ -34,7 +34,7 @@ impl Default for ChromeConfig {
             host: None,
             port: None,
             flags: Vec::new(),
-            capabilities: None,
+            capabilities: ChromeCapabilities::default(),
         }
     }
 }
@@ -75,8 +75,8 @@ impl ChromeBrowser {
         ct_config.host = config.host.clone().unwrap_or(String::from("localhost"));
         ct_config.port = port;
 
-        // Convert ChromeCapabilities to CapabilitiesRequest if provided
-        let capabilities = config.capabilities.clone().map(|caps| caps.build());
+        // Convert ChromeCapabilities to CapabilitiesRequest
+        let capabilities = Some(config.capabilities.clone().build());
 
         let result = Self::start(&config, &ct_config, SessionConnectionType::WebSocket, capabilities).await;
         let mut browser = ChromeBrowser {
