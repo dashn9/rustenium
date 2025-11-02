@@ -11,6 +11,8 @@ use rustenium_core::transport::ConnectionTransportConfig;
 use rustenium_core::{find_free_port, transport::WebsocketConnectionTransport};
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
+use rustenium_bidi_commands::{CommandData, ResultData};
+use rustenium_core::error::SessionSendError;
 
 #[derive(Debug, Clone)]
 pub struct ChromeConfig {
@@ -187,5 +189,9 @@ impl ChromeDriver {
         );
 
         self.driver.get_node_inner_html(shared_reference).await
+    }
+
+    pub async fn send_bidi_command(&mut self, command: CommandData) -> Result<ResultData, SessionSendError> {
+        return self.driver.send_command(command).await;
     }
 }

@@ -17,10 +17,7 @@ use rustenium_bidi_commands::script::commands::{
     CallFunction, CallFunctionParameters, EvaluateResult, ScriptCallFunctionMethod,
 };
 use rustenium_bidi_commands::session::commands::SubscribeResult;
-use rustenium_bidi_commands::{
-    BrowsingContextCommand, BrowsingContextEvent, BrowsingContextResult, CommandData, EventData,
-    ResultData, ScriptCommand, ScriptResult, SessionResult,
-};
+use rustenium_bidi_commands::{BrowsingContextCommand, BrowsingContextEvent, BrowsingContextResult, Command, CommandData, EventData, ResultData, ScriptCommand, ScriptResult, SessionResult};
 use rustenium_core::contexts::BrowsingContext;
 use rustenium_core::events::EventManagement;
 use rustenium_core::session::SessionConnectionType;
@@ -88,6 +85,10 @@ impl<T: ConnectionTransport> BidiDriver<T> {
         Ok(())
     }
 
+    pub async fn send_command(&mut self, command: CommandData) -> Result<ResultData, SessionSendError> {
+        return self.session.send(command).await;
+    }
+        
     pub async fn listen_to_context_creation(
         &mut self,
     ) -> Result<Option<SubscribeResult>, ContextCreationListenError> {

@@ -2,7 +2,7 @@ mod drivers;
 mod error;
 pub mod browsers;
 mod nodes;
-mod macros;
+pub mod macros;
 
 pub use drivers::*;
 

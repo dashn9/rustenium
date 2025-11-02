@@ -1,6 +1,8 @@
 use rustenium_bidi_commands::browsing_context::commands::{LocateNodes, LocateNodesResult, NavigateResult};
 use rustenium_bidi_commands::browsing_context::types::{BrowsingContext, Locator, ReadinessState};
+use rustenium_bidi_commands::{CommandData, ResultData};
 use rustenium_bidi_commands::script::types::{SerializationOptions, SharedReference};
+use rustenium_core::error::SessionSendError;
 use crate::chrome::{ChromeConfig, ChromeDriver};
 use crate::error::{EvaluateResultError, FindNodesError, OpenUrlError};
 use crate::nodes::chrome::ChromeNode;
@@ -41,6 +43,9 @@ impl ChromeBrowser {
 
     pub async fn update_node_position(&mut self, node: &mut ChromeNode) -> Result<bool, EvaluateResultError> {
         self.driver.update_node_position_bidi(node).await
+    }
+    pub async fn send_bidi_command(&mut self, command: CommandData) -> Result<ResultData, SessionSendError>  {
+        self.driver.send_bidi_command(command).await
     }
 }
 
