@@ -10,6 +10,7 @@ async fn open_browser() {
         driver_executable_path: "D:/Documents/m-workspace/rustenium/apps/drivers/chromedriver.exe".to_string(),
         host: None,
         port: None,
+        flags: vec![],
     };
     let mut browser = create_chrome_browser(config).await;
     browser.open_url("https://linkedin.com", Some(ReadinessState::Complete), None).await.unwrap();

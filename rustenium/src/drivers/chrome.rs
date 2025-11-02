@@ -19,6 +19,7 @@ pub struct ChromeConfig {
     pub driver_executable_path: String,
     pub host: Option<String>,
     pub port: Option<u16>,
+    pub flags: Vec<&'static str>,
 }
 
 impl Default for ChromeConfig {
@@ -27,6 +28,7 @@ impl Default for ChromeConfig {
             driver_executable_path: "".to_string(),
             host: None,
             port: None,
+            flags: Vec::new(),
         }
     }
 }
@@ -37,16 +39,18 @@ impl DriverConfiguration for ChromeConfig {
     }
 
     fn flags(&self) -> Vec<String> {
-        vec![
+        let mut flags = vec![
             format!(
                 "--host={}",
                 self.host.clone().unwrap_or(String::from("localhost"))
             ),
             format!("--port={}", self.port.unwrap_or(find_free_port().unwrap())),
-        ]
-        .into_iter()
-        .map(String::from)
-        .collect()
+        ];
+
+        // Convert &'static str flags to String and append
+        flags.extend(self.flags.iter().map(|s| s.to_string()));
+
+        flags
     }
 }
 pub struct ChromeDriver {
