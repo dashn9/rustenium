@@ -1,22 +1,27 @@
 use rustenium_bidi_commands::browsing_context::commands::{LocateNodes, LocateNodesResult, NavigateResult};
 use rustenium_bidi_commands::browsing_context::types::{BrowsingContext, Locator, ReadinessState};
-use rustenium_bidi_commands::{CommandData, ResultData};
+use rustenium_bidi_commands::{CommandData, ResultData, Event, EventData, NetworkEvent};
 use rustenium_bidi_commands::script::types::{
     LocalValue, PrimitiveProtocolValue, RemoteReference, RemoteValue,
     SerializationOptions, SerializationOptionsincludeShadowTreeUnion, SharedReference
 };
 use rustenium_bidi_commands::session::types::CapabilitiesRequest;
-use rustenium_core::error::SessionSendError;
+use rustenium_bidi_commands::network::commands::{AddIntercept, NetworkAddInterceptMethod, AddInterceptParameters};
+use rustenium_bidi_commands::network::types::{InterceptPhase, UrlPattern};
+use rustenium_core::error::{CommandResultError, SessionSendError};
 use rustenium_core::transport::{ConnectionTransportConfig, WebsocketConnectionTransport};
-use rustenium_core::{find_free_port};
-
+use rustenium_core::{find_free_port, NetworkRequest};
+use rustenium_core::events::EventManagement;
 use rustenium_core::session::SessionConnectionType;
 use crate::drivers::bidi::drivers::{BidiDriver, BidiDrive, DriverConfiguration};
-use crate::error::{EvaluateResultError, FindNodesError, OpenUrlError};
+use crate::error::{EvaluateResultError, FindNodesError, OpenUrlError, InterceptNetworkError};
 use crate::nodes::chrome::ChromeNode;
 use crate::nodes::{Node, NodePosition};
 use super::capabilities::ChromeCapabilities;
 use std::sync::{Arc, Mutex};
+use std::collections::HashSet;
+use std::future::Future;
+use tokio::sync::mpsc::unbounded_channel;
 
 #[derive(Debug, Clone)]
 pub struct ChromeConfig {
@@ -209,6 +214,96 @@ impl ChromeBrowser {
 
     pub async fn send_bidi_command(&mut self, command: CommandData) -> Result<ResultData, SessionSendError> {
         return self.driver.send_command(command).await;
+    }
+
+    /// Enable network interception with a callback for each request
+    ///
+    /// # Example
+    /// ```ignore
+    /// browser.intercept_network(None, |request| async move {
+    ///     if request.params.base_parameters.request.url.contains("ads") {
+    ///         request.abort().await?;
+    ///     } else {
+    ///         request.continue_().await?;
+    ///     }
+    ///     Ok(())
+    /// }).await?;
+    /// ```
+    pub async fn intercept_network<F, Fut>(
+        &mut self,
+        url_patterns: Option<Vec<UrlPattern>>,
+        contexts: Option<Vec<BrowsingContext>>,
+        handler: F,
+    ) -> Result<(), InterceptNetworkError>
+    where
+        F: Fn(NetworkRequest<WebsocketConnectionTransport>) -> Fut + Send + Sync + 'static,
+        Fut: Future<Output = Result<(), SessionSendError>> + Send + 'static,
+    {
+        // Use active context if no contexts provided
+        let contexts = match contexts {
+            Some(ctxs) => Some(ctxs),
+            None => Some(vec![self.driver.get_active_context_id()?]),
+        };
+
+        // Add network intercept
+        let add_intercept_command = CommandData::NetworkCommand(
+            rustenium_bidi_commands::NetworkCommand::AddIntercept(AddIntercept {
+                method: NetworkAddInterceptMethod::NetworkAddIntercept,
+                params: AddInterceptParameters {
+                    phases: vec![InterceptPhase::BeforeRequestSent],
+                    url_patterns,
+                    contexts,
+                },
+            })
+        );
+
+        self.driver.send_command(add_intercept_command).await
+            .map_err(|e| InterceptNetworkError::CommandResultError(CommandResultError::SessionSendError(e)))?;
+
+        // Clone Arc to session for use in handler (cheap - just clones the Arc pointer)
+        let session = Arc::clone(&self.driver.session);
+
+        // Subscribe to network.beforeRequestSent events
+        let handler = Arc::new(handler);
+        self.driver.session.lock().await.subscribe_events(
+            HashSet::from(["network.beforeRequestSent"]),
+            move |event: Event| {
+                let handler = Arc::clone(&handler);
+                let session = Arc::clone(&session);
+                async move {
+                    if let EventData::NetworkEvent(NetworkEvent::BeforeRequestSent(before_request)) = event.event_data {
+                        let request = NetworkRequest::new(before_request.params, session);
+                        if let Err(e) = handler(request).await {
+                            eprintln!("Network intercept handler error: {:?}", e);
+                        }
+                    }
+                }
+            },
+            None,
+            None,
+        ).await
+            .map_err(|e| InterceptNetworkError::CommandResultError(e))?;
+
+        Ok(())
+    }
+
+    pub async fn subscribe_events<F, R>(
+        &mut self,
+        events: HashSet<&str>,
+        handler: F,
+        browsing_contexts: Option<Vec<&rustenium_core::contexts::BrowsingContext>>,
+        user_contexts: Option<Vec<&str>>,
+    ) -> Result<Option<rustenium_bidi_commands::session::commands::SubscribeResult>, CommandResultError>
+    where
+        F: FnMut(Event) -> R + Send + Sync + 'static,
+        R: Future<Output = ()> + Send + 'static,
+    {
+        self.driver.session.lock().await.subscribe_events(
+            events,
+            handler,
+            browsing_contexts,
+            user_contexts,
+        ).await
     }
 }
 

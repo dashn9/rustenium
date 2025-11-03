@@ -3,6 +3,7 @@ pub mod process;
 pub mod session;
 pub mod transport;
 pub mod contexts;
+pub mod network;
 
 mod listeners;
 pub mod error;
@@ -11,6 +12,8 @@ mod macros;
 
 pub use session::Session;
 pub use connection::find_free_port;
+pub use network::NetworkRequest;
+pub use transport::WebsocketConnectionTransport;
 
 pub fn add(left: u64, right: u64) -> u64 {
     left + right

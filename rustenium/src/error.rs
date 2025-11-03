@@ -46,3 +46,11 @@ pub enum EvaluateResultError {
     #[error("Node does not have a shared ID")]
     NoSharedId,
 }
+
+#[derive(Debug, Error)]
+pub enum InterceptNetworkError {
+    #[error(transparent)]
+    ContextIndexError(#[from] ContextIndexError),
+    #[error("An error occured executing command")]
+    CommandResultError(CommandResultError),
+}

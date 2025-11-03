@@ -24,6 +24,7 @@ use rustenium_core::session::SessionConnectionType;
 use std::collections::HashSet;
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
+use tokio::sync::Mutex as TokioMutex;
 use tokio::time::sleep;
 
 use crate::nodes::{Node, NodePosition};
@@ -59,20 +60,20 @@ pub trait BidiDrive<T: ConnectionTransport> {
         connection_transport_config: &ConnectionTransportConfig,
         session_connection_type: SessionConnectionType,
         capabilities: Option<CapabilitiesRequest>,
-    ) -> (Session<WebsocketConnectionTransport>, Process) {
+    ) -> (Arc<TokioMutex<Session<WebsocketConnectionTransport>>>, Process) {
         let driver_process = Process::create(driver_config.exe_path(), driver_config.flags());
         let mut session = Session::<T>::ws_new(connection_transport_config).await;
         session
             .create_new_bidi_session(session_connection_type, capabilities)
             .await;
-        (session, driver_process)
+        (Arc::new(TokioMutex::new(session)), driver_process)
     }
 }
 
 pub struct BidiDriver<T: ConnectionTransport> {
     pub exe_path: String,
     pub flags: Vec<String>,
-    pub session: Session<T>,
+    pub session: Arc<TokioMutex<Session<T>>>,
     pub active_bc_index: usize,
     pub browsing_contexts: Arc<Mutex<Vec<BrowsingContext>>>,
     pub driver_process: Process,
@@ -87,7 +88,7 @@ impl<T: ConnectionTransport> BidiDriver<T> {
     }
 
     pub async fn send_command(&mut self, command: CommandData) -> Result<ResultData, SessionSendError> {
-        return self.session.send(command).await;
+        return self.session.lock().await.send(command).await;
     }
         
     pub async fn listen_to_context_creation(
@@ -96,6 +97,8 @@ impl<T: ConnectionTransport> BidiDriver<T> {
         let browsing_contexts = self.browsing_contexts.clone();
         let result = self
             .session
+            .lock()
+            .await
             .subscribe_events(
                 HashSet::from(["browsingContext.contextCreated"]),
                 move |event| {
@@ -128,6 +131,8 @@ impl<T: ConnectionTransport> BidiDriver<T> {
             if let Ok(Some(result)) = &result {
                 match self
                     .session
+                    .lock()
+                    .await
                     .unsubscribe_events_by_ids(vec![result.subscription.clone()])
                     .await
                 {
@@ -147,7 +152,7 @@ impl<T: ConnectionTransport> BidiDriver<T> {
     }
 
     async fn new_browsing_context(&mut self) -> bool {
-        let browsing_context = BrowsingContext::new(&mut self.session, None, None, false)
+        let browsing_context = BrowsingContext::new(&mut *self.session.lock().await, None, None, false)
             .await
             .unwrap();
         self.browsing_contexts
@@ -167,6 +172,8 @@ impl<T: ConnectionTransport> BidiDriver<T> {
         let context_id = context_id.unwrap_or(self.get_active_context_id()?);
         let result = self
             .session
+            .lock()
+            .await
             .send(CommandData::BrowsingContextCommand(
                 BrowsingContextCommand::Navigate(Navigate {
                     method: BrowsingContextNavigateMethod::BrowsingContextNavigate,
@@ -209,6 +216,8 @@ impl<T: ConnectionTransport> BidiDriver<T> {
         let context_id = context_id.unwrap_or(self.get_active_context_id()?);
         let result = self
             .session
+            .lock()
+            .await
             .send(CommandData::BrowsingContextCommand(
                 BrowsingContextCommand::LocateNodes(LocateNodes {
                     method: BrowsingContextLocateNodesMethod::BrowsingContextLocateNodes,
@@ -386,6 +395,8 @@ impl<T: ConnectionTransport> BidiDriver<T> {
         }));
         let result = self
             .session
+            .lock()
+            .await
             .send(CommandData::ScriptCommand(ScriptCommand::Evaluate(
                 Evaluate {
                     method: ScriptEvaluateMethod::ScriptEvaluate,
@@ -443,6 +454,8 @@ impl<T: ConnectionTransport> BidiDriver<T> {
 
         let result = self
             .session
+            .lock()
+            .await
             .send(CommandData::ScriptCommand(ScriptCommand::CallFunction(
                 CallFunction {
                     method: ScriptCallFunctionMethod::ScriptCallFunction,
@@ -496,7 +509,7 @@ impl<T: ConnectionTransport> BidiDriver<T> {
             None => Err(ContextIndexError {}),
         }
     }
-    fn get_active_context_id(&self) -> Result<String, ContextIndexError> {
+    pub fn get_active_context_id(&self) -> Result<String, ContextIndexError> {
         self.get_context_id(self.active_bc_index)
     }
 }

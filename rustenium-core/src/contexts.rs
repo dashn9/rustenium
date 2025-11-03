@@ -17,7 +17,7 @@ impl BrowsingContext {
         let create_browsing_context_command = BrowsingContextCreate {
             method: BrowsingContextCreateMethod::BrowsingContextCreate,
             params: BrowsingContextCreateParameters {
-                r#type: BrowsingContextCreateType::Tab,
+                r#type: context_creation_type.clone(),
                 reference_context: match reference_context {
                     Some(reference_context) =>  Some(reference_context.context.clone()),
                     None => None
