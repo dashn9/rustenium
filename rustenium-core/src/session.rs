@@ -73,7 +73,9 @@ impl<T: ConnectionTransport> Session<T> {
         }
     }
 
-    pub async fn send(&mut self, command_data: CommandData) -> Result<ResultData, SessionSendError>  {
+    /// Send a command and return the receiver to wait for response
+    /// This allows the caller to release locks before waiting for the response
+    pub async fn send_and_get_receiver(&mut self, command_data: CommandData) -> oneshot::Receiver<CommandResponseState> {
         let command_id = loop {
             let id = rand::rng().random::<u32>() as u64;
             if !self.connection.commands_response_subscriptions.lock().await.contains_key(&id) {
@@ -90,6 +92,12 @@ impl<T: ConnectionTransport> Session<T> {
         self.connection.commands_response_subscriptions.lock().await.insert(command_id, tx);
         let raw_message = serde_json::to_string(&command).unwrap();
         self.connection.send(raw_message).await;
+
+        rx
+    }
+
+    pub async fn send(&mut self, command_data: CommandData) -> Result<ResultData, SessionSendError>  {
+        let rx = self.send_and_get_receiver(command_data).await;
 
         match timeout(Duration::from_secs(100), rx).await {
             Ok(Ok(command_result)) => match command_result {

@@ -216,28 +216,27 @@ impl ChromeBrowser {
         return self.driver.send_command(command).await;
     }
 
-    /// Enable network interception with a callback for each request
+    /// Register a handler to be called for each network request
     ///
     /// # Example
     /// ```ignore
-    /// browser.intercept_network(None, |request| async move {
+    /// browser.on_request(|request| async move {
     ///     if request.params.base_parameters.request.url.contains("ads") {
-    ///         request.abort().await?;
+    ///         let _ = request.abort().await;
     ///     } else {
-    ///         request.continue_().await?;
+    ///         let _ = request.continue_().await;
     ///     }
-    ///     Ok(())
-    /// }).await?;
+    /// }, None, None).await?;
     /// ```
-    pub async fn intercept_network<F, Fut>(
+    pub async fn on_request<F, Fut>(
         &mut self,
+        handler: F,
         url_patterns: Option<Vec<UrlPattern>>,
         contexts: Option<Vec<BrowsingContext>>,
-        handler: F,
     ) -> Result<(), InterceptNetworkError>
     where
         F: Fn(NetworkRequest<WebsocketConnectionTransport>) -> Fut + Send + Sync + 'static,
-        Fut: Future<Output = Result<(), SessionSendError>> + Send + 'static,
+        Fut: Future<Output = ()> + Send + 'static,
     {
         // Use active context if no contexts provided
         let contexts = match contexts {
@@ -272,10 +271,8 @@ impl ChromeBrowser {
                 let session = Arc::clone(&session);
                 async move {
                     if let EventData::NetworkEvent(NetworkEvent::BeforeRequestSent(before_request)) = event.event_data {
-                        let request = NetworkRequest::new(before_request.params, session);
-                        if let Err(e) = handler(request).await {
-                            eprintln!("Network intercept handler error: {:?}", e);
-                        }
+                         let request = NetworkRequest::new(before_request.params, session);
+                        handler(request).await;
                     }
                 }
             },

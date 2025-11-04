@@ -88,7 +88,19 @@ impl<T: ConnectionTransport> BidiDriver<T> {
     }
 
     pub async fn send_command(&mut self, command: CommandData) -> Result<ResultData, SessionSendError> {
-        return self.session.lock().await.send(command).await;
+        let rx = {
+            let mut session = self.session.lock().await;
+            session.send_and_get_receiver(command).await
+        };
+
+        match tokio::time::timeout(std::time::Duration::from_secs(100), rx).await {
+            Ok(Ok(command_result)) => match command_result {
+                rustenium_core::CommandResponseState::Success(response) => Ok(response.result),
+                rustenium_core::CommandResponseState::Error(err) => Err(SessionSendError::ErrorResponse(err))
+            }
+            Ok(Err(err)) => panic!("A recv error occurred: {}", err),
+            Err(_) => Err(SessionSendError::ResponseReceiveTimeoutError(rustenium_core::error::ResponseReceiveTimeoutError))
+        }
     }
         
     pub async fn listen_to_context_creation(
@@ -171,10 +183,7 @@ impl<T: ConnectionTransport> BidiDriver<T> {
     ) -> Result<NavigateResult, OpenUrlError> {
         let context_id = context_id.unwrap_or(self.get_active_context_id()?);
         let result = self
-            .session
-            .lock()
-            .await
-            .send(CommandData::BrowsingContextCommand(
+            .send_command(CommandData::BrowsingContextCommand(
                 BrowsingContextCommand::Navigate(Navigate {
                     method: BrowsingContextNavigateMethod::BrowsingContextNavigate,
                     params: NavigateParameters {
@@ -215,10 +224,7 @@ impl<T: ConnectionTransport> BidiDriver<T> {
     ) -> Result<LocateNodesResult, FindNodesError> {
         let context_id = context_id.unwrap_or(self.get_active_context_id()?);
         let result = self
-            .session
-            .lock()
-            .await
-            .send(CommandData::BrowsingContextCommand(
+            .send_command(CommandData::BrowsingContextCommand(
                 BrowsingContextCommand::LocateNodes(LocateNodes {
                     method: BrowsingContextLocateNodesMethod::BrowsingContextLocateNodes,
                     params: LocateNodesParameters {
@@ -394,10 +400,7 @@ impl<T: ConnectionTransport> BidiDriver<T> {
             sandbox: None,
         }));
         let result = self
-            .session
-            .lock()
-            .await
-            .send(CommandData::ScriptCommand(ScriptCommand::Evaluate(
+            .send_command(CommandData::ScriptCommand(ScriptCommand::Evaluate(
                 Evaluate {
                     method: ScriptEvaluateMethod::ScriptEvaluate,
                     params: EvaluateParameters {
@@ -453,10 +456,7 @@ impl<T: ConnectionTransport> BidiDriver<T> {
         }));
 
         let result = self
-            .session
-            .lock()
-            .await
-            .send(CommandData::ScriptCommand(ScriptCommand::CallFunction(
+            .send_command(CommandData::ScriptCommand(ScriptCommand::CallFunction(
                 CallFunction {
                     method: ScriptCallFunctionMethod::ScriptCallFunction,
                     params: CallFunctionParameters {

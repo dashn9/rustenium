@@ -18,9 +18,33 @@ pub struct NetworkRequest<T: ConnectionTransport> {
     session: Arc<Mutex<Session<T>>>,
 }
 
+impl<T: ConnectionTransport> std::fmt::Debug for NetworkRequest<T> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("NetworkRequest")
+            .field("params", &self.params)
+            .field("session", &"<Arc<Mutex<Session>>>")
+            .finish()
+    }
+}
+
 impl<T: ConnectionTransport> NetworkRequest<T> {
     pub fn new(params: BeforeRequestSentParameters, session: Arc<Mutex<Session<T>>>) -> Self {
         NetworkRequest { params, session }
+    }
+
+    /// Get the request ID
+    pub fn request_id(&self) -> &str {
+        &self.params.base_parameters.request.request
+    }
+
+    /// Get the request URL
+    pub fn url(&self) -> &str {
+        &self.params.base_parameters.request.url
+    }
+
+    /// Get the request headers
+    pub fn headers(&self) -> &Vec<Header> {
+        &self.params.base_parameters.request.headers
     }
 
     /// Continue the request without modifications
@@ -45,17 +69,18 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
     /// Continue the request with modifications
     pub async fn continue_with(
         &self,
-        url: Option<String>,
-        method: Option<String>,
         headers: Option<Vec<Header>>,
         cookies: Option<Vec<CookieHeader>>,
+        url: Option<String>,
+        method: Option<String>,
         body: Option<BytesValue>,
     ) -> Result<(), SessionSendError> {
+        let request = self.params.base_parameters.request.request.clone();
         let command =
             CommandData::NetworkCommand(NetworkCommand::ContinueRequest(ContinueRequest {
                 method: NetworkContinueRequestMethod::NetworkContinueRequest,
                 params: ContinueRequestParameters {
-                    request: self.params.base_parameters.request.request.clone(),
+                    request,
                     body,
                     cookies,
                     headers,
