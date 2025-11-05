@@ -18,7 +18,7 @@ use rustenium_bidi_commands::script::commands::{
 use rustenium_bidi_commands::session::commands::SubscribeResult;
 use rustenium_bidi_commands::session::types::CapabilitiesRequest;
 use rustenium_bidi_commands::{BrowsingContextCommand, BrowsingContextEvent, BrowsingContextResult, Command, CommandData, EventData, ResultData, ScriptCommand, ScriptResult, SessionResult};
-use rustenium_core::contexts::BrowsingContext;
+use rustenium_core::Context;
 use rustenium_core::events::EventManagement;
 use rustenium_core::session::SessionConnectionType;
 use std::collections::HashSet;
@@ -75,7 +75,7 @@ pub struct BidiDriver<T: ConnectionTransport> {
     pub flags: Vec<String>,
     pub session: Arc<TokioMutex<Session<T>>>,
     pub active_bc_index: usize,
-    pub browsing_contexts: Arc<Mutex<Vec<BrowsingContext>>>,
+    pub browsing_contexts: Arc<Mutex<Vec<Context>>>,
     pub driver_process: Process,
 }
 
@@ -120,10 +120,10 @@ impl<T: ConnectionTransport> BidiDriver<T> {
                             BrowsingContextEvent::ContextCreated(context),
                         ) = event.event_data
                         {
-                            bc.lock().unwrap().push(BrowsingContext {
-                                r#type: CreateType::Window,
-                                context: context.params.context,
-                            });
+                            bc.lock().unwrap().push(Context::from_id(
+                                context.params.context,
+                                CreateType::Window,
+                            ));
                         }
                     }
                 },
@@ -164,7 +164,7 @@ impl<T: ConnectionTransport> BidiDriver<T> {
     }
 
     async fn new_browsing_context(&mut self) -> bool {
-        let browsing_context = BrowsingContext::new(&mut *self.session.lock().await, None, None, false)
+        let browsing_context = Context::new(&mut *self.session.lock().await, None, None, false)
             .await
             .unwrap();
         self.browsing_contexts
@@ -509,7 +509,22 @@ impl<T: ConnectionTransport> BidiDriver<T> {
             None => Err(ContextIndexError {}),
         }
     }
+
+    /// Get the active context
+    pub fn get_active_context(&self) -> Result<Context, ContextIndexError> {
+        match self
+            .browsing_contexts
+            .lock()
+            .unwrap()
+            .get(self.active_bc_index)
+        {
+            Some(context) => Ok(context.clone()),
+            None => Err(ContextIndexError {}),
+        }
+    }
+
+    /// Get the active context ID
     pub fn get_active_context_id(&self) -> Result<String, ContextIndexError> {
-        self.get_context_id(self.active_bc_index)
+        self.get_active_context().map(|c| c.id().to_string())
     }
 }

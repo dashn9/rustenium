@@ -288,7 +288,7 @@ impl ChromeBrowser {
         &mut self,
         events: HashSet<&str>,
         handler: F,
-        browsing_contexts: Option<Vec<&rustenium_core::contexts::BrowsingContext>>,
+        browsing_contexts: Option<Vec<&rustenium_core::Context>>,
         user_contexts: Option<Vec<&str>>,
     ) -> Result<Option<rustenium_bidi_commands::session::commands::SubscribeResult>, CommandResultError>
     where

@@ -28,7 +28,7 @@ impl Listener {
         tokio::spawn(async move {
             while let Some(message) = self.rx.recv().await {
                 let parsed_message = match serde_json::from_str::<Message>(&message) {
-                    Ok(result) => result,
+                    Ok(result) => {println!("Command Resp: {:?}", result); result},
                     Err(e) => {
                         eprintln!("Failed to parse message: {}, {:?}", e.to_string(), message);
                         continue;

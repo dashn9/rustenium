@@ -1,4 +1,4 @@
-use crate::contexts::BrowsingContext;
+use crate::Context;
 use crate::error::{CommandResultError, SessionSendError};
 use crate::{impl_has_method, impl_has_method_getter};
 use rustenium_bidi_commands::session::commands::{
@@ -112,7 +112,7 @@ pub trait EventManagement {
         &mut self,
         events: HashSet<&str>,
         mut handler: F,
-        browsing_contexts: Option<Vec<&BrowsingContext>>,
+        browsing_contexts: Option<Vec<&Context>>,
         user_contexts: Option<Vec<&str>>,
     ) -> Result<Option<SubscribeResult>, CommandResultError>
     where
@@ -122,7 +122,7 @@ pub trait EventManagement {
         let browsing_context_strings = match &browsing_contexts {
             Some(browsing_contexts) => browsing_contexts
                 .iter()
-                .map(|browsing_context| browsing_context.context.clone())
+                .map(|browsing_context| browsing_context.id().to_string())
                 .collect(),
             None => vec![],
         };

@@ -15,6 +15,7 @@ pub use connection::find_free_port;
 pub use network::NetworkRequest;
 pub use transport::WebsocketConnectionTransport;
 pub use listeners::CommandResponseState;
+pub use contexts::Context;
 
 pub fn add(left: u64, right: u64) -> u64 {
     left + right

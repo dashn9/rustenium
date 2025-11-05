@@ -12,7 +12,6 @@ use crate::{
     connection::Connection,
     transport::{ConnectionTransport, ConnectionTransportConfig, WebsocketConnectionTransport},
 };
-use crate::contexts::BrowsingContext;
 use crate::error::{ResponseReceiveTimeoutError, SessionSendError};
 use crate::events::{BidiEvent, EventManagement};
 

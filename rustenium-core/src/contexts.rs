@@ -5,23 +5,28 @@ use crate::error::{CommandResultError, SessionSendError};
 use crate::Session;
 use crate::transport::ConnectionTransport;
 
-#[derive(Debug)]
-pub struct BrowsingContext {
+#[derive(Debug, Clone)]
+pub struct Context {
     pub r#type: BrowsingContextCreateType,
-    pub context: String,
+    id: String,
 }
 
-impl BrowsingContext {
-    pub async fn new<OT: ConnectionTransport>(session: &mut Session<OT>, context_creation_type: Option<BrowsingContextCreateType>, reference_context: Option<&BrowsingContext>, background: bool) -> Result<Self, CommandResultError>  {
+impl Context {
+    /// Create a Context from existing ID and type
+    pub fn from_id(id: String, context_type: BrowsingContextCreateType) -> Self {
+        Self {
+            r#type: context_type,
+            id,
+        }
+    }
+
+    pub async fn new<OT: ConnectionTransport>(session: &mut Session<OT>, context_creation_type: Option<BrowsingContextCreateType>, reference_context: Option<&Context>, background: bool) -> Result<Self, CommandResultError>  {
         let context_creation_type = context_creation_type.unwrap_or(BrowsingContextCreateType::Tab);
         let create_browsing_context_command = BrowsingContextCreate {
             method: BrowsingContextCreateMethod::BrowsingContextCreate,
             params: BrowsingContextCreateParameters {
                 r#type: context_creation_type.clone(),
-                reference_context: match reference_context {
-                    Some(reference_context) =>  Some(reference_context.context.clone()),
-                    None => None
-                },
+                reference_context: reference_context.map(|c| c.id.clone()),
                 background: Option::from(background),
                 // I don't know how to deal with UserContext yet.
                 user_context: None,
@@ -33,7 +38,7 @@ impl BrowsingContext {
                 BrowsingContextResult::CreateResult(context) => {
                     Ok(Self {
                         r#type: context_creation_type,
-                        context: context.context
+                        id: context.context
                     })
                 },
                 _ => Err(CommandResultError::InvalidResultTypeError(ResultData::BrowsingContextResult(context)))
@@ -42,8 +47,14 @@ impl BrowsingContext {
             Err(e) => Err(CommandResultError::SessionSendError(e)),
         }
     }
-    
+
+    /// Get the context ID as a string reference
+    pub fn id(&self) -> &str {
+        &self.id
+    }
+
+    /// Get a cloned context ID (deprecated - use id() instead)
     pub fn get_context_id(&self) -> String {
-        self.context.clone()
+        self.id.clone()
     }
 }
