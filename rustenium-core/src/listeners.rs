@@ -75,14 +75,18 @@ impl CommandResponseListener {
                     CommandResponseState::Success(command_response) => {
                         let sender = self.subscriptions.lock().await.remove(&command_response.id);
                         if let Some(sender) = sender {
-                            sender.send(CommandResponseState::Success(command_response)).unwrap();
+                            if (!sender.is_closed()) {
+                                sender.send(CommandResponseState::Success(command_response)).unwrap();
+                            }
                         }
                     }
                     CommandResponseState::Error(error_response) => {
                         let id = error_response.id;
                         if let Some(id) = id {
                             if let Some(sender) = self.subscriptions.lock().await.remove(&id) {
-                                sender.send(CommandResponseState::Error(error_response)).unwrap();
+                                if (!sender.is_closed()) {
+                                    sender.send(CommandResponseState::Error(error_response)).unwrap();
+                                }
                             }
                         }
                     }

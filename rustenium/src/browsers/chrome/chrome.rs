@@ -10,7 +10,7 @@ use rustenium_bidi_commands::network::commands::{AddIntercept, NetworkAddInterce
 use rustenium_bidi_commands::network::types::{InterceptPhase, UrlPattern};
 use rustenium_core::error::{CommandResultError, SessionSendError};
 use rustenium_core::transport::{ConnectionTransportConfig, WebsocketConnectionTransport};
-use rustenium_core::{find_free_port, NetworkRequest};
+use rustenium_core::{find_free_port, Context, NetworkRequest};
 use rustenium_core::events::EventManagement;
 use rustenium_core::session::SessionConnectionType;
 use crate::drivers::bidi::drivers::{BidiDriver, BidiDrive, DriverConfiguration};
@@ -232,7 +232,7 @@ impl ChromeBrowser {
         &mut self,
         handler: F,
         url_patterns: Option<Vec<UrlPattern>>,
-        contexts: Option<Vec<BrowsingContext>>,
+        contexts: Option<Vec<String>>,
     ) -> Result<(), InterceptNetworkError>
     where
         F: Fn(NetworkRequest<WebsocketConnectionTransport>) -> Fut + Send + Sync + 'static,
@@ -244,6 +244,7 @@ impl ChromeBrowser {
             None => Some(vec![self.driver.get_active_context_id()?]),
         };
 
+
         // Add network intercept
         let add_intercept_command = CommandData::NetworkCommand(
             rustenium_bidi_commands::NetworkCommand::AddIntercept(AddIntercept {
@@ -251,13 +252,22 @@ impl ChromeBrowser {
                 params: AddInterceptParameters {
                     phases: vec![InterceptPhase::BeforeRequestSent],
                     url_patterns,
-                    contexts,
+                    contexts: None,
                 },
             })
         );
 
-        self.driver.send_command(add_intercept_command).await
+        let result = self.driver.send_command(add_intercept_command).await
             .map_err(|e| InterceptNetworkError::CommandResultError(CommandResultError::SessionSendError(e)))?;
+
+        // Extract intercept ID from result
+        let intercept_id = if let ResultData::NetworkResult(rustenium_bidi_commands::NetworkResult::AddInterceptResult(intercept_result)) = result {
+            intercept_result.intercept
+        } else {
+            return Err(InterceptNetworkError::CommandResultError(
+                CommandResultError::InvalidResultTypeError(result)
+            ));
+        };
 
         // Clone Arc to session for use in handler (cheap - just clones the Arc pointer)
         let session = Arc::clone(&self.driver.session);
@@ -271,7 +281,7 @@ impl ChromeBrowser {
                 let session = Arc::clone(&session);
                 async move {
                     if let EventData::NetworkEvent(NetworkEvent::BeforeRequestSent(before_request)) = event.event_data {
-                         let request = NetworkRequest::new(before_request.params, session);
+                        let request = NetworkRequest::new(before_request.params, session);
                         handler(request).await;
                     }
                 }
@@ -288,7 +298,7 @@ impl ChromeBrowser {
         &mut self,
         events: HashSet<&str>,
         handler: F,
-        browsing_contexts: Option<Vec<&rustenium_core::Context>>,
+        browsing_contexts: Option<Vec<String>>,
         user_contexts: Option<Vec<&str>>,
     ) -> Result<Option<rustenium_bidi_commands::session::commands::SubscribeResult>, CommandResultError>
     where
@@ -300,6 +310,53 @@ impl ChromeBrowser {
             handler,
             browsing_contexts,
             user_contexts,
+        ).await
+    }
+
+    /// Add an event handler without sending a subscription command
+    /// Returns the handler ID (either provided or generated)
+    pub async fn add_event_handler<F, R>(
+        &mut self,
+        events: HashSet<&str>,
+        handler: F,
+        handler_id: Option<String>,
+    ) -> String
+    where
+        F: FnMut(Event) -> R + Send + Sync + 'static,
+        R: Future<Output = ()> + Send + 'static,
+    {
+        self.driver.add_event_handler(events, handler, handler_id).await
+    }
+
+    /// Evaluate a JavaScript expression in the browser context using BiDi
+    ///
+    /// # Example
+    /// ```ignore
+    /// let result = browser.evaluate_script_bidi(
+    ///     "document.title".to_string(),
+    ///     false,
+    ///     None,
+    ///     None,
+    ///     None,
+    ///     None,
+    /// ).await?;
+    /// ```
+    pub async fn evaluate_script_bidi(
+        &mut self,
+        expression: String,
+        await_promise: bool,
+        target: Option<rustenium_bidi_commands::script::types::Target>,
+        result_ownership: Option<rustenium_bidi_commands::script::types::ResultOwnership>,
+        serialization_options: Option<SerializationOptions>,
+        user_activation: Option<bool>,
+    ) -> Result<rustenium_bidi_commands::script::types::EvaluateResultSuccess, EvaluateResultError> {
+        self.driver.evaluate_script(
+            expression,
+            await_promise,
+            target,
+            result_ownership,
+            serialization_options,
+            user_activation,
         ).await
     }
 }

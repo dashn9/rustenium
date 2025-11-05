@@ -112,7 +112,7 @@ pub trait EventManagement {
         &mut self,
         events: HashSet<&str>,
         mut handler: F,
-        browsing_contexts: Option<Vec<&Context>>,
+        browsing_contexts: Option<Vec<String>>,
         user_contexts: Option<Vec<&str>>,
     ) -> Result<Option<SubscribeResult>, CommandResultError>
     where
@@ -120,10 +120,7 @@ pub trait EventManagement {
         R: Future<Output=()> + Send + 'static,
     {
         let browsing_context_strings = match &browsing_contexts {
-            Some(browsing_contexts) => browsing_contexts
-                .iter()
-                .map(|browsing_context| browsing_context.id().to_string())
-                .collect(),
+            Some(browsing_contexts) => browsing_contexts.clone(),
             None => vec![],
         };
 
@@ -190,6 +187,35 @@ pub trait EventManagement {
                 Err(CommandResultError::SessionSendError(e))
             }
         }
+    }
+
+    /// Add an event handler without sending a subscription command
+    /// Returns the handler ID (either provided or generated)
+    fn add_event_handler<F, R>(
+        &mut self,
+        events: HashSet<&str>,
+        mut handler: F,
+        handler_id: Option<String>,
+    ) -> String
+    where
+        F: FnMut(Event) -> R + Send + Sync + 'static,
+        R: Future<Output=()> + Send + 'static,
+    {
+        let id = handler_id.unwrap_or_else(|| {
+            format!("handler_{}", std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos())
+        });
+
+        let bidi_event = BidiEvent {
+            id: id.clone(),
+            events: events
+                .into_iter()
+                .map(|event| event.to_string())
+                .collect(),
+            handler: Arc::new(Mutex::new(move |event| Box::pin(handler(event)) as Pin<Box<dyn Future<Output=()> + Send>>)),
+        };
+        self.push_event(bidi_event);
+
+        id
     }
 
     /// Unsubscribe from events by event names

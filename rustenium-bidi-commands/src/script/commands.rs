@@ -194,9 +194,9 @@ pub struct RemovePreloadScript {
 #[serde(untagged)]
 pub enum ScriptResult {
     AddPreloadScriptResult(AddPreloadScriptResult),
+    EvaluateResult(EvaluateResult),
     CallFunctionResult(CallFunctionResult),
     DisownResult(DisownResult),
-    EvaluateResult(EvaluateResult),
     GetRealmsResult(GetRealmsResult),
     RemovePreloadScriptResult(RemovePreloadScriptResult),
 }

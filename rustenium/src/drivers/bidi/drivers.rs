@@ -527,4 +527,19 @@ impl<T: ConnectionTransport> BidiDriver<T> {
     pub fn get_active_context_id(&self) -> Result<String, ContextIndexError> {
         self.get_active_context().map(|c| c.id().to_string())
     }
+
+    /// Add an event handler without sending a subscription command
+    /// Returns the handler ID (either provided or generated)
+    pub async fn add_event_handler<F, R>(
+        &mut self,
+        events: HashSet<&str>,
+        handler: F,
+        handler_id: Option<String>,
+    ) -> String
+    where
+        F: FnMut(rustenium_bidi_commands::Event) -> R + Send + Sync + 'static,
+        R: std::future::Future<Output = ()> + Send + 'static,
+    {
+        self.session.lock().await.add_event_handler(events, handler, handler_id)
+    }
 }

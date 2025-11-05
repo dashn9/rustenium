@@ -1,6 +1,7 @@
 use crate::error::SessionSendError;
 use crate::transport::ConnectionTransport;
-use crate::Session;
+use crate::{CommandResponseState, Session};
+use tokio::sync::oneshot;
 use rustenium_bidi_commands::network::commands::{
     ContinueRequest, ContinueRequestParameters, FailRequest, NetworkFailRequestMethod,
     FailRequestParameters, NetworkContinueRequestMethod, ProvideResponse, NetworkProvideResponseMethod,
@@ -48,7 +49,7 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
     }
 
     /// Continue the request without modifications
-    pub async fn continue_(&self) -> Result<(), SessionSendError> {
+    pub async fn continue_(&self) -> oneshot::Receiver<CommandResponseState> {
         let command =
             CommandData::NetworkCommand(NetworkCommand::ContinueRequest(ContinueRequest {
                 method: NetworkContinueRequestMethod::NetworkContinueRequest,
@@ -62,8 +63,8 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
                 },
             }));
 
-        self.session.lock().await.send(command).await?;
-        Ok(())
+        let mut session = self.session.lock().await;
+        session.send_and_get_receiver(command).await
     }
 
     /// Continue the request with modifications
@@ -74,7 +75,7 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
         url: Option<String>,
         method: Option<String>,
         body: Option<BytesValue>,
-    ) -> Result<(), SessionSendError> {
+    ) -> oneshot::Receiver<CommandResponseState> {
         let request = self.params.base_parameters.request.request.clone();
         let command =
             CommandData::NetworkCommand(NetworkCommand::ContinueRequest(ContinueRequest {
@@ -89,13 +90,12 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
                 },
             }));
 
-        let res = self.session.lock().await.send(command).await?;
-        println!("{:?}", res);
-        Ok(())
+        let mut session = self.session.lock().await;
+        session.send_and_get_receiver(command).await
     }
 
     /// Abort/fail the request
-    pub async fn abort(&self) -> Result<(), SessionSendError> {
+    pub async fn abort(&self) -> oneshot::Receiver<CommandResponseState> {
         let command = CommandData::NetworkCommand(NetworkCommand::FailRequest(FailRequest {
             method: NetworkFailRequestMethod::NetworkFailRequest,
             params: FailRequestParameters {
@@ -103,8 +103,8 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
             },
         }));
 
-        self.session.lock().await.send(command).await?;
-        Ok(())
+        let mut session = self.session.lock().await;
+        session.send_and_get_receiver(command).await
     }
 
     /// Provide a custom response
@@ -115,7 +115,7 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
         headers: Option<Vec<Header>>,
         cookies: Option<Vec<SetCookieHeader>>,
         body: Option<BytesValue>,
-    ) -> Result<(), SessionSendError> {
+    ) -> oneshot::Receiver<CommandResponseState> {
         let command =
             CommandData::NetworkCommand(NetworkCommand::ProvideResponse(ProvideResponse {
                 method: NetworkProvideResponseMethod::NetworkProvideResponse,
@@ -129,7 +129,7 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
                 },
             }));
 
-        self.session.lock().await.send(command).await?;
-        Ok(())
+        let mut session = self.session.lock().await;
+        session.send_and_get_receiver(command).await
     }
 }
