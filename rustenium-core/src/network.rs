@@ -89,7 +89,8 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
                 },
             }));
 
-        self.session.lock().await.send(command).await?;
+        let res = self.session.lock().await.send(command).await?;
+        println!("{:?}", res);
         Ok(())
     }
 
