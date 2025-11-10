@@ -54,3 +54,13 @@ pub enum InterceptNetworkError {
     #[error("An error occured executing command")]
     CommandResultError(CommandResultError),
 }
+
+#[derive(Debug, Error)]
+pub enum InputError {
+    #[error("Unknown key: \"{0}\"")]
+    UnknownKey(String),
+    #[error("Touch has already started")]
+    TouchAlreadyStarted,
+    #[error("An error occured executing command")]
+    CommandResultError(CommandResultError),
+}

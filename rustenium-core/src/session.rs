@@ -95,8 +95,7 @@ impl<T: ConnectionTransport> Session<T> {
         rx
     }
 
-    pub async fn send(&mut self, command_data: CommandData) -> Result<ResultData, SessionSendError>  {;
-        println!("command_data: {:?}", command_data);
+    pub async fn send(&mut self, command_data: CommandData) -> Result<ResultData, SessionSendError>  {
         let rx = self.send_and_get_receiver(command_data).await;
         match timeout(Duration::from_secs(100), rx).await {
             Ok(Ok(command_result)) => match command_result {
