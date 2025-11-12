@@ -25,10 +25,13 @@
   <component name="ChangeListManager">
     <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/src/input/bidi/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/input/bidi/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/browsers/chrome/chrome.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/browsers/chrome/chrome.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/drivers/bidi/drivers.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/drivers/bidi/drivers.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/error.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/error.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium/src/input/bidi/mouse.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/input/bidi/mouse.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/src/input/bidi/touchscreen.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/input/bidi/touchscreen.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/input/human_mouse.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/input/human_mouse.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium/src/input/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/input/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/input/mouse.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/input/mouse.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,7 +183,7 @@
       <workItem from="1762019688535" duration="66377000" />
       <workItem from="1762345069210" duration="4750000" />
       <workItem from="1762702549475" duration="8168000" />
-      <workItem from="1762865748316" duration="7274000" />
+      <workItem from="1762865748316" duration="23748000" />
     </task>
     <servers />
   </component>
@@ -197,12 +200,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/rustenium/src/drivers/bidi/drivers.rs</url>
-          <line>416</line>
+          <line>438</line>
           <option name="timeStamp" value="16" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/rustenium/src/drivers/bidi/drivers.rs</url>
-          <line>298</line>
+          <line>320</line>
           <option name="timeStamp" value="24" />
         </line-breakpoint>
       </breakpoints>

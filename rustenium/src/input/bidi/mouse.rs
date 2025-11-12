@@ -18,15 +18,15 @@ use tokio::sync::Mutex;
 
 use super::MOUSE_ID;
 use super::WHEEL_ID;
-use crate::input::mouse::{MouseTrait, MouseMoveOptions, MouseClickOptions, MouseOptions, MouseWheelOptions, MouseButton, Point};
+use crate::input::mouse::{Mouse, MouseMoveOptions, MouseClickOptions, MouseOptions, MouseWheelOptions, MouseButton, Point};
 
 /// BiDi Mouse implementation - direct, precise movements
-pub struct Mouse<OT: ConnectionTransport> {
+pub struct BidiMouse<OT: ConnectionTransport> {
     session: Arc<Mutex<Session<OT>>>,
     last_move_point: Arc<Mutex<Point>>,
 }
 
-impl<OT: ConnectionTransport> Mouse<OT> {
+impl<OT: ConnectionTransport> BidiMouse<OT> {
     /// Create a new Mouse instance
     pub fn new(session: Arc<Mutex<Session<OT>>>) -> Self {
         Self {
@@ -332,7 +332,7 @@ impl<OT: ConnectionTransport> Mouse<OT> {
     }
 }
 
-impl<OT: ConnectionTransport> MouseTrait for Mouse<OT> {
+impl<OT: ConnectionTransport> Mouse for BidiMouse<OT> {
     async fn reset(&self, context: &BrowsingContext) -> Result<(), InputError> {
         Self::reset(self, context).await
     }

@@ -3,15 +3,15 @@ use crate::error::InputError;
 use std::sync::Arc;
 use tokio::sync::Mutex;
 
-use super::mouse::{MouseTrait, MouseMoveOptions, MouseClickOptions, MouseOptions, MouseWheelOptions, MouseButton, Point};
+use super::mouse::{Mouse, MouseMoveOptions, MouseClickOptions, MouseOptions, MouseWheelOptions, MouseButton, Point};
 
 /// Human-like mouse implementation with randomness and natural movement patterns
-pub struct HumanMouse<M: MouseTrait> {
+pub struct HumanMouse<M: Mouse> {
     mouse: M,
     last_move_point: Arc<Mutex<Point>>,
 }
 
-impl<M: MouseTrait> HumanMouse<M> {
+impl<M: Mouse> HumanMouse<M> {
     /// Create a new HumanMouse instance
     pub fn new(mouse: M) -> Self {
         Self {
@@ -66,7 +66,7 @@ impl<M: MouseTrait> HumanMouse<M> {
     }
 }
 
-impl<M: MouseTrait> MouseTrait for HumanMouse<M> {
+impl<M: Mouse> Mouse for HumanMouse<M> {
     async fn reset(&self, context: &BrowsingContext) -> Result<(), InputError> {
         let mut last_point = self.last_move_point.lock().await;
         *last_point = Point::default();

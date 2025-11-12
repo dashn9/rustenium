@@ -57,7 +57,7 @@ pub struct Point {
 }
 
 /// Trait for mouse input behavior
-pub trait MouseTrait {
+pub trait Mouse {
     /// Reset the mouse state
     async fn reset(&self, context: &BrowsingContext) -> Result<(), InputError>;
 

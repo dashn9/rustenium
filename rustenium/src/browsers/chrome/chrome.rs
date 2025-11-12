@@ -21,7 +21,6 @@ use super::capabilities::ChromeCapabilities;
 use std::sync::{Arc, Mutex};
 use std::collections::HashSet;
 use std::future::Future;
-use tokio::sync::mpsc::unbounded_channel;
 
 #[derive(Debug, Clone)]
 pub struct ChromeConfig {
@@ -84,16 +83,19 @@ impl ChromeBrowser {
         let capabilities = Some(config.capabilities.clone().build());
 
         let result = Self::start(&config, &ct_config, SessionConnectionType::WebSocket, capabilities).await;
+
+        let session = result.0;
+
         let mut browser = ChromeBrowser {
             config,
-            driver: BidiDriver {
-                exe_path: String::from("chromedriver"),
-                flags: vec![],
-                session: result.0,
-                active_bc_index: 0,
-                browsing_contexts: Arc::new(Mutex::new(Vec::new())),
-                driver_process: result.1,
-            },
+            driver: BidiDriver::new(
+                String::from("chromedriver"),
+                vec![],
+                session,
+                0,
+                Arc::new(Mutex::new(Vec::new())),
+                result.1,
+            ),
         };
         browser.driver.listen_to_context_creation().await.unwrap();
         browser
@@ -139,7 +141,7 @@ impl ChromeBrowser {
         Ok(chrome_nodes)
     }
 
-    pub async fn update_node_position(&mut self, node: &mut ChromeNode) -> Result<bool, EvaluateResultError> {
+    pub async fn update_node_position_bidi(&mut self, node: &mut ChromeNode) -> Result<bool, EvaluateResultError> {
         let shared_id = match node.get_shared_id() {
             Some(id) => id.clone(),
             None => return Ok(false),
@@ -161,7 +163,7 @@ impl ChromeBrowser {
         }
     }
 
-    pub async fn get_node_inner_text(&mut self, node: &mut ChromeNode) -> Result<String, EvaluateResultError> {
+    pub async fn get_node_inner_text_bidi(&mut self, node: &mut ChromeNode) -> Result<String, EvaluateResultError> {
         let shared_id = match node.get_shared_id() {
             Some(id) => id.clone(),
             None => return Err(EvaluateResultError::NoSharedId),
@@ -178,7 +180,7 @@ impl ChromeBrowser {
         self.driver.get_node_inner_text(shared_reference).await
     }
 
-    pub async fn get_node_text_content(&mut self, node: &mut ChromeNode) -> Result<String, EvaluateResultError> {
+    pub async fn get_node_text_content_bidi(&mut self, node: &mut ChromeNode) -> Result<String, EvaluateResultError> {
         let shared_id = match node.get_shared_id() {
             Some(id) => id.clone(),
             None => return Err(EvaluateResultError::NoSharedId),
@@ -195,7 +197,7 @@ impl ChromeBrowser {
         self.driver.get_node_text_content(shared_reference).await
     }
 
-    pub async fn get_node_inner_html(&mut self, node: &mut ChromeNode) -> Result<String, EvaluateResultError> {
+    pub async fn get_node_inner_html_bidi(&mut self, node: &mut ChromeNode) -> Result<String, EvaluateResultError> {
         let shared_id = match node.get_shared_id() {
             Some(id) => id.clone(),
             None => return Err(EvaluateResultError::NoSharedId),
@@ -220,7 +222,7 @@ impl ChromeBrowser {
     ///
     /// # Example
     /// ```ignore
-    /// browser.on_request(|request| async move {
+    /// browser.on_request_bidi(|request| async move {
     ///     if request.params.base_parameters.request.url.contains("ads") {
     ///         let _ = request.abort().await;
     ///     } else {
@@ -228,7 +230,7 @@ impl ChromeBrowser {
     ///     }
     /// }, None, None).await?;
     /// ```
-    pub async fn on_request<F, Fut>(
+    pub async fn on_request_bidi<F, Fut>(
         &mut self,
         handler: F,
         url_patterns: Option<Vec<UrlPattern>>,
@@ -244,54 +246,7 @@ impl ChromeBrowser {
             None => Some(vec![self.driver.get_active_context_id()?]),
         };
 
-
-        // Add network intercept
-        let add_intercept_command = CommandData::NetworkCommand(
-            rustenium_bidi_commands::NetworkCommand::AddIntercept(AddIntercept {
-                method: NetworkAddInterceptMethod::NetworkAddIntercept,
-                params: AddInterceptParameters {
-                    phases: vec![InterceptPhase::BeforeRequestSent],
-                    url_patterns,
-                    contexts: None,
-                },
-            })
-        );
-
-        let result = self.driver.send_command(add_intercept_command).await
-            .map_err(|e| InterceptNetworkError::CommandResultError(CommandResultError::SessionSendError(e)))?;
-
-        // Extract intercept ID from result
-        let intercept_id = if let ResultData::NetworkResult(rustenium_bidi_commands::NetworkResult::AddInterceptResult(intercept_result)) = result {
-            intercept_result.intercept
-        } else {
-            return Err(InterceptNetworkError::CommandResultError(
-                CommandResultError::InvalidResultTypeError(result)
-            ));
-        };
-
-        // Clone Arc to session for use in handler (cheap - just clones the Arc pointer)
-        let session = Arc::clone(&self.driver.session);
-
-        // Subscribe to network.beforeRequestSent events
-        let handler = Arc::new(handler);
-        self.driver.session.lock().await.subscribe_events(
-            HashSet::from(["network.beforeRequestSent"]),
-            move |event: Event| {
-                let handler = Arc::clone(&handler);
-                let session = Arc::clone(&session);
-                async move {
-                    if let EventData::NetworkEvent(NetworkEvent::BeforeRequestSent(before_request)) = event.event_data {
-                        let request = NetworkRequest::new(before_request.params, session);
-                        handler(request).await;
-                    }
-                }
-            },
-            None,
-            None,
-        ).await
-            .map_err(|e| InterceptNetworkError::CommandResultError(e))?;
-
-        Ok(())
+        self.driver.on_request(handler, url_patterns, contexts).await
     }
 
     pub async fn subscribe_events<F, R>(
@@ -359,6 +314,31 @@ impl ChromeBrowser {
             user_activation,
         ).await
     }
+
+    /// Get a reference to the BiDi mouse
+    pub fn mouse(&self) -> &crate::input::BidiMouse<WebsocketConnectionTransport> {
+        &self.driver.mouse
+    }
+
+    /// Get a reference to the BiDi keyboard
+    pub fn keyboard(&self) -> &crate::input::Keyboard<WebsocketConnectionTransport> {
+        &self.driver.keyboard
+    }
+
+    /// Move mouse to the center of a node
+    pub async fn move_mouse_to_node_bidi(
+        &mut self,
+        node: &mut ChromeNode,
+        context: Option<&BrowsingContext>,
+    ) -> Result<(), crate::error::MoveMouseToNodeError> {
+        // Update position if not available
+        if node.get_position().is_none() {
+            self.update_node_position_bidi(node).await?;
+        }
+
+        self.driver.move_mouse_to_node(node, context).await
+    }
+
 }
 
 

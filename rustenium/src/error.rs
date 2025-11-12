@@ -64,3 +64,19 @@ pub enum InputError {
     #[error("An error occured executing command")]
     CommandResultError(CommandResultError),
 }
+
+#[derive(Debug, Error)]
+#[error("Node does not have a valid position")]
+pub struct InvalidPositionError;
+
+#[derive(Debug, Error)]
+pub enum MoveMouseToNodeError {
+    #[error(transparent)]
+    ContextIndexError(#[from] ContextIndexError),
+    #[error(transparent)]
+    EvaluateResultError(#[from] EvaluateResultError),
+    #[error(transparent)]
+    InputError(#[from] InputError),
+    #[error(transparent)]
+    InvalidPositionError(#[from] InvalidPositionError),
+}

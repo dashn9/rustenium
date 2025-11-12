@@ -1,14 +1,7 @@
-use rustenium_core::{
-    process::Process,
-    transport::{ConnectionTransport, ConnectionTransportConfig, WebsocketConnectionTransport},
-    Session,
-};
+use rustenium_core::{process::Process, transport::{ConnectionTransport, ConnectionTransportConfig, WebsocketConnectionTransport}, NetworkRequest, Session};
 use std::error::Error;
 
-use crate::error::{
-    ContextCreationListenError, ContextIndexError, EvaluateResultError, FindNodesError,
-    OpenUrlError,
-};
+use crate::error::{ContextCreationListenError, ContextIndexError, EvaluateResultError, FindNodesError, InterceptNetworkError, OpenUrlError};
 use rustenium_bidi_commands::browsing_context::types::{
     BrowsingContext as BidiBrowsingContext, CreateType, Locator, ReadinessState,
 };
@@ -17,11 +10,12 @@ use rustenium_bidi_commands::script::commands::{
 };
 use rustenium_bidi_commands::session::commands::SubscribeResult;
 use rustenium_bidi_commands::session::types::CapabilitiesRequest;
-use rustenium_bidi_commands::{BrowsingContextCommand, BrowsingContextEvent, BrowsingContextResult, Command, CommandData, EventData, ResultData, ScriptCommand, ScriptResult, SessionResult};
+use rustenium_bidi_commands::{BrowsingContextCommand, BrowsingContextEvent, BrowsingContextResult, Command, CommandData, Event, EventData, NetworkEvent, ResultData, ScriptCommand, ScriptResult, SessionResult};
 use rustenium_core::Context;
 use rustenium_core::events::EventManagement;
 use rustenium_core::session::SessionConnectionType;
 use std::collections::HashSet;
+use std::future::Future;
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 use tokio::sync::Mutex as TokioMutex;
@@ -41,6 +35,9 @@ use rustenium_bidi_commands::script::types::{
 };
 use rustenium_core::error::{CommandResultError, SessionSendError};
 use tokio::io;
+use rustenium_bidi_commands::network::commands::{AddIntercept, AddInterceptParameters, NetworkAddInterceptMethod};
+use rustenium_bidi_commands::network::types::{InterceptPhase, UrlPattern};
+use crate::input::{BidiMouse, Keyboard};
 
 fn is_connection_refused(e: &reqwest::Error) -> bool {
     if let Some(io_err) = e.source().and_then(|s| s.downcast_ref::<io::Error>()) {
@@ -70,16 +67,41 @@ pub trait BidiDrive<T: ConnectionTransport> {
     }
 }
 
-pub struct BidiDriver<T: ConnectionTransport> {
+pub struct BidiDriver<T: ConnectionTransport + Send + Sync> {
     pub exe_path: String,
     pub flags: Vec<String>,
     pub session: Arc<TokioMutex<Session<T>>>,
     pub active_bc_index: usize,
     pub browsing_contexts: Arc<Mutex<Vec<Context>>>,
     pub driver_process: Process,
+    pub mouse: BidiMouse<T>,
+    pub keyboard: Keyboard<T>,
 }
 
-impl<T: ConnectionTransport> BidiDriver<T> {
+impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
+    pub fn new(
+        exe_path: String,
+        flags: Vec<String>,
+        session: Arc<TokioMutex<Session<T>>>,
+        active_bc_index: usize,
+        browsing_contexts: Arc<Mutex<Vec<Context>>>,
+        driver_process: Process,
+    ) -> Self {
+        let mouse = BidiMouse::new(session.clone());
+        let keyboard = Keyboard::new(session.clone());
+
+        Self {
+            exe_path,
+            flags,
+            session,
+            active_bc_index,
+            browsing_contexts,
+            driver_process,
+            mouse,
+            keyboard,
+        }
+    }
+
     pub async fn new_session(
         &mut self,
         connection_type: SessionConnectionType,
@@ -524,7 +546,7 @@ impl<T: ConnectionTransport> BidiDriver<T> {
     }
 
     /// Get the active context ID
-    pub fn get_active_context_id(&self) -> Result<String, ContextIndexError> {
+    pub fn get_active_context_id(&self) -> Result<BidiBrowsingContext, ContextIndexError> {
         self.get_active_context().map(|c| c.id().to_string())
     }
 
@@ -541,5 +563,92 @@ impl<T: ConnectionTransport> BidiDriver<T> {
         R: std::future::Future<Output = ()> + Send + 'static,
     {
         self.session.lock().await.add_event_handler(events, handler, handler_id)
+    }
+
+    /// Move mouse to the center of a node
+    pub async fn move_mouse_to_node<N: crate::nodes::Node>(
+        &self,
+        node: &N,
+        context: Option<&BidiBrowsingContext>,
+    ) -> Result<(), crate::error::MoveMouseToNodeError> {
+        let context = match context {
+            Some(ctx) => ctx,
+            None => &self.get_active_context_id()?,
+        };
+        let position = node.get_position().as_ref()
+            .ok_or(crate::error::InvalidPositionError)?;
+
+        let center_x = position.x + (position.width / 2.0);
+        let center_y = position.y + (position.height / 2.0);
+
+        self.mouse.move_to(center_x, center_y, context, None).await?;
+        Ok(())
+    }
+
+    /// Register a handler to be called for each network request
+    pub async fn on_request<F, Fut>(
+        &mut self,
+        handler: F,
+        url_patterns: Option<Vec<UrlPattern>>,
+        contexts: Option<Vec<String>>,
+    ) -> Result<(), InterceptNetworkError>
+    where
+        F: Fn(NetworkRequest<T>) -> Fut + Send + Sync + 'static,
+        Fut: Future<Output = ()> + Send + 'static,
+    {
+        // Use active context if no contexts provided
+        let contexts = match contexts {
+            Some(ctxs) => Some(ctxs),
+            None => Some(vec![self.get_active_context_id()?]),
+        };
+
+
+        // Add network intercept
+        let add_intercept_command = CommandData::NetworkCommand(
+            rustenium_bidi_commands::NetworkCommand::AddIntercept(AddIntercept {
+                method: NetworkAddInterceptMethod::NetworkAddIntercept,
+                params: AddInterceptParameters {
+                    phases: vec![InterceptPhase::BeforeRequestSent],
+                    url_patterns,
+                    contexts: None,
+                },
+            })
+        );
+
+        let result = self.send_command(add_intercept_command).await
+            .map_err(|e| InterceptNetworkError::CommandResultError(CommandResultError::SessionSendError(e)))?;
+
+        // Extract intercept ID from result
+        let intercept_id = if let ResultData::NetworkResult(rustenium_bidi_commands::NetworkResult::AddInterceptResult(intercept_result)) = result {
+            intercept_result.intercept
+        } else {
+            return Err(InterceptNetworkError::CommandResultError(
+                CommandResultError::InvalidResultTypeError(result)
+            ));
+        };
+
+        // Clone Arc to session for use in handler (cheap - just clones the Arc pointer)
+        let session = Arc::clone(&self.session);
+
+        // Subscribe to network.beforeRequestSent events
+        let handler = Arc::new(handler);
+        self.session.lock().await.subscribe_events(
+            HashSet::from(["network.beforeRequestSent"]),
+            move |event: Event| {
+                let handler = Arc::clone(&handler);
+                let session = Arc::clone(&session);
+                async move {
+                    if let EventData::NetworkEvent(NetworkEvent::BeforeRequestSent(before_request)) = event.event_data {
+                        let request = NetworkRequest::new(before_request.params, session);
+                        handler(request).await;
+                    }
+                }
+            },
+            None,
+            None,
+        ).await
+            .map_err(|e| InterceptNetworkError::CommandResultError(e))?;
+
+        Ok(())
     }
 }
