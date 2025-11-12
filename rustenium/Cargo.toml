@@ -3,11 +3,19 @@ name = "rustenium"
 version = "0.1.0"
 edition = "2021"
 
+[features]
+default = []
+macros = ["rustenium-macros"]
+
 [dependencies]
 rustenium-core = { path = "../rustenium-core" }
 rustenium-bidi-commands = { path = "../rustenium-bidi-commands"}
+rustenium-macros = { path = "../rustenium-macros", optional = true }
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1.0.219", features = ["derive"] }
 reqwest = { version = "0.12.15", features = ["json"] }
 thiserror = "2.0.17"
 serde_json = "1.0.145"
+
+[dev-dependencies]
+rustenium-macros = { path = "../rustenium-macros" }
