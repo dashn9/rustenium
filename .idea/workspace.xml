@@ -24,16 +24,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/rustenium.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/rustenium.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/src/macros/mod.rs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/src/macros/node_selectors.rs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/src/macros/over.rs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/tests/browser.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/tests/browser.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/input/bidi/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/input/bidi/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/input/bidi/mouse.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/input/bidi/mouse.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/input/bidi/touchscreen.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/input/bidi/touchscreen.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/input/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/input/mod.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -185,7 +180,7 @@
       <workItem from="1762019688535" duration="66377000" />
       <workItem from="1762345069210" duration="4750000" />
       <workItem from="1762702549475" duration="8168000" />
-      <workItem from="1762865748316" duration="4261000" />
+      <workItem from="1762865748316" duration="7274000" />
     </task>
     <servers />
   </component>

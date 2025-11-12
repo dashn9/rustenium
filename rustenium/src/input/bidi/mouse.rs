@@ -8,7 +8,6 @@ use rustenium_bidi_commands::input::types::{
     PointerMoveAction, WheelSourceActions, WheelSourceAction, WheelScrollAction,
     SourceActions, PointerEnum, WheelEnum, PointerDownEnum, PointerUpEnum,
     PointerMoveEnum, PauseEnum, ScrollEnum, PointerCommonProperties, PauseAction,
-    Origin,
 };
 use rustenium_bidi_commands::CommandData;
 use rustenium_core::Session;
@@ -17,47 +16,11 @@ use crate::error::InputError;
 use std::sync::Arc;
 use tokio::sync::Mutex;
 
-use super::{MOUSE_ID, WHEEL_ID, MouseButton, Point};
+use super::MOUSE_ID;
+use super::WHEEL_ID;
+use crate::input::mouse::{MouseTrait, MouseMoveOptions, MouseClickOptions, MouseOptions, MouseWheelOptions, MouseButton, Point};
 
-/// Options for mouse movement
-#[derive(Debug, Clone, Default)]
-pub struct MouseMoveOptions {
-    /// Number of intermediate steps for the move
-    pub steps: Option<usize>,
-    /// Origin for the movement
-    pub origin: Option<Origin>,
-}
-
-/// Options for mouse click
-#[derive(Debug, Clone, Default)]
-pub struct MouseClickOptions {
-    /// Mouse button to click
-    pub button: Option<MouseButton>,
-    /// Number of clicks
-    pub count: Option<u64>,
-    /// Delay in milliseconds between mousedown and mouseup
-    pub delay: Option<u64>,
-    /// Origin for the click
-    pub origin: Option<Origin>,
-}
-
-/// Options for mouse button actions
-#[derive(Debug, Clone, Default)]
-pub struct MouseOptions {
-    /// Mouse button
-    pub button: Option<MouseButton>,
-}
-
-/// Options for mouse wheel
-#[derive(Debug, Clone, Default)]
-pub struct MouseWheelOptions {
-    /// Delta X for horizontal scroll
-    pub delta_x: Option<i64>,
-    /// Delta Y for vertical scroll
-    pub delta_y: Option<i64>,
-}
-
-/// BiDi Mouse implementation
+/// BiDi Mouse implementation - direct, precise movements
 pub struct Mouse<OT: ConnectionTransport> {
     session: Arc<Mutex<Session<OT>>>,
     last_move_point: Arc<Mutex<Point>>,
@@ -366,5 +329,55 @@ impl<OT: ConnectionTransport> Mouse<OT> {
             .await
             .map_err(|e| InputError::CommandResultError(rustenium_core::error::CommandResultError::SessionSendError(e)))?;
         Ok(())
+    }
+}
+
+impl<OT: ConnectionTransport> MouseTrait for Mouse<OT> {
+    async fn reset(&self, context: &BrowsingContext) -> Result<(), InputError> {
+        Self::reset(self, context).await
+    }
+
+    async fn move_to(
+        &self,
+        x: f64,
+        y: f64,
+        context: &BrowsingContext,
+        options: Option<MouseMoveOptions>,
+    ) -> Result<(), InputError> {
+        Self::move_to(self, x, y, context, options).await
+    }
+
+    async fn down(
+        &self,
+        context: &BrowsingContext,
+        options: Option<MouseOptions>,
+    ) -> Result<(), InputError> {
+        Self::down(self, context, options).await
+    }
+
+    async fn up(
+        &self,
+        context: &BrowsingContext,
+        options: Option<MouseOptions>,
+    ) -> Result<(), InputError> {
+        Self::up(self, context, options).await
+    }
+
+    async fn click(
+        &self,
+        x: f64,
+        y: f64,
+        context: &BrowsingContext,
+        options: Option<MouseClickOptions>,
+    ) -> Result<(), InputError> {
+        Self::click(self, x, y, context, options).await
+    }
+
+    async fn wheel(
+        &self,
+        context: &BrowsingContext,
+        options: Option<MouseWheelOptions>,
+    ) -> Result<(), InputError> {
+        Self::wheel(self, context, options).await
     }
 }

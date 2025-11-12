@@ -13,8 +13,8 @@ use rustenium_core::transport::ConnectionTransport;
 use crate::error::InputError;
 use std::sync::Arc;
 use tokio::sync::Mutex;
-
-use super::{FINGER_ID_PREFIX, Point};
+use crate::input::mouse::Point;
+use super::{FINGER_ID_PREFIX};
 
 /// Options for touch move
 #[derive(Debug, Clone, Default)]
