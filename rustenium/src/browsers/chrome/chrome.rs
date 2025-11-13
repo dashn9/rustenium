@@ -2,7 +2,7 @@ use rustenium_bidi_commands::browsing_context::commands::{LocateNodes, LocateNod
 use rustenium_bidi_commands::browsing_context::types::{BrowsingContext, Locator, ReadinessState};
 use rustenium_bidi_commands::{CommandData, ResultData, Event, EventData, NetworkEvent};
 use rustenium_bidi_commands::script::types::{
-    LocalValue, PrimitiveProtocolValue, RemoteReference, RemoteValue,
+    ChannelValue, LocalValue, PrimitiveProtocolValue, RemoteReference, RemoteValue,
     SerializationOptions, SerializationOptionsincludeShadowTreeUnion, SharedReference
 };
 use rustenium_bidi_commands::session::types::CapabilitiesRequest;
@@ -330,13 +330,36 @@ impl ChromeBrowser {
         &mut self,
         node: &mut ChromeNode,
         context: Option<&BrowsingContext>,
+        scroll_into_view: bool,
     ) -> Result<(), crate::error::MoveMouseToNodeError> {
         // Update position if not available
         if node.get_position().is_none() {
             self.update_node_position_bidi(node).await?;
         }
 
-        self.driver.move_mouse_to_node(node, context).await
+        self.driver.move_mouse_to_node(node, context, scroll_into_view).await
+    }
+
+    /// Add a preload script that will be executed in new contexts
+    pub async fn add_preload_script_bidi(
+        &mut self,
+        function_declaration: String,
+        arguments: Option<Vec<ChannelValue>>,
+        contexts: Option<Vec<String>>,
+        user_contexts: Option<Vec<String>>,
+        sandbox: Option<String>,
+    ) -> Result<String, EvaluateResultError> {
+        self.driver
+            .add_preload_script(function_declaration, arguments, contexts, user_contexts, sandbox)
+            .await
+    }
+
+    /// Remove a preload script by its ID
+    pub async fn remove_preload_script_bidi(
+        &mut self,
+        script: String,
+    ) -> Result<(), EvaluateResultError> {
+        self.driver.remove_preload_script(script).await
     }
 
 }

@@ -67,7 +67,7 @@ pub trait Node {
 
     fn get_position(&self) -> &Option<NodePosition>;
 
-    fn get_shared_id(&self) -> &Option<SharedId>;
+    fn get_shared_id(&self) -> Option<&SharedId>;
 
     fn get_handle(&self) -> &Option<Handle>;
 

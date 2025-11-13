@@ -38,8 +38,8 @@ impl Node for ChromeNode {
         &self.bidi_node.position
     }
 
-    fn get_shared_id(&self) -> &Option<SharedId> {
-        &self.bidi_node.get_raw_node_ref().shared_id
+    fn get_shared_id(&self) -> Option<&SharedId> {
+        self.bidi_node.get_raw_node_ref().shared_id.as_ref()
     }
 
     fn get_handle(&self) -> &Option<Handle> {

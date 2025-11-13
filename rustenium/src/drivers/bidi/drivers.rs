@@ -6,11 +6,13 @@ use rustenium_bidi_commands::browsing_context::types::{
     BrowsingContext as BidiBrowsingContext, CreateType, Locator, ReadinessState,
 };
 use rustenium_bidi_commands::script::commands::{
-    CallFunction, CallFunctionParameters, EvaluateResult, ScriptCallFunctionMethod,
+    AddPreloadScript, AddPreloadScriptParameters, CallFunction,
+    CallFunctionParameters, EvaluateResult, RemovePreloadScript, RemovePreloadScriptParameters,
+    ScriptAddPreloadScriptMethod, ScriptCallFunctionMethod, ScriptRemovePreloadScriptMethod,
 };
 use rustenium_bidi_commands::session::commands::SubscribeResult;
 use rustenium_bidi_commands::session::types::CapabilitiesRequest;
-use rustenium_bidi_commands::{BrowsingContextCommand, BrowsingContextEvent, BrowsingContextResult, Command, CommandData, Event, EventData, NetworkEvent, ResultData, ScriptCommand, ScriptResult, SessionResult};
+use rustenium_bidi_commands::{BrowsingContextCommand, BrowsingContextEvent, BrowsingContextResult, CommandData, Event, EventData, NetworkCommand, NetworkEvent, NetworkResult, ResultData, ScriptCommand, ScriptResult};
 use rustenium_core::Context;
 use rustenium_core::events::EventManagement;
 use rustenium_core::session::SessionConnectionType;
@@ -30,8 +32,9 @@ use rustenium_bidi_commands::script::commands::{
     Evaluate, EvaluateParameters, ScriptEvaluateMethod,
 };
 use rustenium_bidi_commands::script::types::{
-    ContextTarget, EvaluateResultSuccess, LocalValue, PrimitiveProtocolValue, RemoteReference,
-    RemoteValue, ResultOwnership, SerializationOptions, SharedReference, Target,
+    ChannelValue, ContextTarget, EvaluateResultSuccess, LocalValue, PreloadScript,
+    PrimitiveProtocolValue, RemoteReference, RemoteValue, ResultOwnership, SerializationOptions,
+    SharedReference, Target
 };
 use rustenium_core::error::{CommandResultError, SessionSendError};
 use tokio::io;
@@ -496,21 +499,88 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
             .await;
 
         match result {
-            Ok(ResultData::ScriptResult(script_result)) => match script_result {
-                ScriptResult::CallFunctionResult(evaluate_result) => match evaluate_result {
+            Ok(ResultData::ScriptResult(script_result)) => {
+                let evaluate_result = match script_result {
+                    ScriptResult::CallFunctionResult(eval_result) => eval_result,
+                    ScriptResult::EvaluateResult(eval_result) => eval_result,
+                    _ => return Err(EvaluateResultError::CommandResultError(
+                        CommandResultError::InvalidResultTypeError(ResultData::ScriptResult(
+                            script_result,
+                        )),
+                    )),
+                };
+
+                match evaluate_result {
                     EvaluateResult::EvaluateResultSuccess(evaluate_result_success) => {
                         Ok(evaluate_result_success)
                     }
                     EvaluateResult::EvaluateResultException(evaluate_result_error) => {
                         Err(EvaluateResultError::ExceptionError(evaluate_result_error))
                     }
+                }
+            }
+            Ok(result) => Err(EvaluateResultError::CommandResultError(
+                CommandResultError::InvalidResultTypeError(result),
+            )),
+            Err(err) => Err(EvaluateResultError::CommandResultError(
+                CommandResultError::SessionSendError(err),
+            )),
+        }
+    }
+
+    /// Add a preload script that will be executed in new contexts
+    pub async fn add_preload_script(
+        &mut self,
+        function_declaration: String,
+        arguments: Option<Vec<ChannelValue>>,
+        contexts: Option<Vec<String>>,
+        user_contexts: Option<Vec<String>>,
+        sandbox: Option<String>,
+    ) -> Result<PreloadScript, EvaluateResultError> {
+        let result = self
+            .send_command(CommandData::ScriptCommand(ScriptCommand::AddPreloadScript(
+                AddPreloadScript {
+                    method: ScriptAddPreloadScriptMethod::ScriptAddPreloadScript,
+                    params: AddPreloadScriptParameters {
+                        function_declaration,
+                        arguments,
+                        contexts,
+                        user_contexts,
+                        sandbox,
+                    },
                 },
-                _ => Err(EvaluateResultError::CommandResultError(
-                    CommandResultError::InvalidResultTypeError(ResultData::ScriptResult(
-                        script_result,
-                    )),
-                )),
-            },
+            )))
+            .await;
+
+        match result {
+            Ok(ResultData::ScriptResult(ScriptResult::AddPreloadScriptResult(script_result))) => {
+                Ok(script_result.script)
+            }
+            Ok(result) => Err(EvaluateResultError::CommandResultError(
+                CommandResultError::InvalidResultTypeError(result),
+            )),
+            Err(err) => Err(EvaluateResultError::CommandResultError(
+                CommandResultError::SessionSendError(err),
+            )),
+        }
+    }
+
+    /// Remove a preload script by its ID
+    pub async fn remove_preload_script(
+        &mut self,
+        script: PreloadScript,
+    ) -> Result<(), EvaluateResultError> {
+        let result = self
+            .send_command(CommandData::ScriptCommand(ScriptCommand::RemovePreloadScript(
+                RemovePreloadScript {
+                    method: ScriptRemovePreloadScriptMethod::ScriptRemovePreloadScript,
+                    params: RemovePreloadScriptParameters { script },
+                },
+            )))
+            .await;
+
+        match result {
+            Ok(ResultData::ScriptResult(ScriptResult::RemovePreloadScriptResult(_))) => Ok(()),
             Ok(result) => Err(EvaluateResultError::CommandResultError(
                 CommandResultError::InvalidResultTypeError(result),
             )),
@@ -559,22 +629,71 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
         handler_id: Option<String>,
     ) -> String
     where
-        F: FnMut(rustenium_bidi_commands::Event) -> R + Send + Sync + 'static,
-        R: std::future::Future<Output = ()> + Send + 'static,
+        F: FnMut(Event) -> R + Send + Sync + 'static,
+        R: Future<Output = ()> + Send + 'static,
     {
         self.session.lock().await.add_event_handler(events, handler, handler_id)
     }
 
+    /// Scroll a node into view
+    pub async fn scroll_into_view<N: Node>(
+        &mut self,
+        node: &N,
+        context: &BidiBrowsingContext,
+    ) -> Result<(), EvaluateResultError> {
+        let shared_id = node.get_shared_id()
+            .ok_or(EvaluateResultError::NoSharedId)?;
+
+        let scroll_script = r#"
+        function() {
+            if (!this) {
+                return null;
+            }
+            this.scrollIntoView({block: 'center', inline: 'center', behavior: 'instant'});
+        }
+        "#.to_string();
+
+        let shared_reference = LocalValue::RemoteReference(
+            RemoteReference::SharedReference(SharedReference {
+                shared_id: shared_id.clone(),
+                handle: node.get_handle().clone(),
+                extensible: Default::default(),
+            }),
+        );
+
+        self.call_function(
+            scroll_script,
+            false,
+            Some(Target::ContextTarget(ContextTarget {
+                context: context.clone(),
+                sandbox: None,
+            })),
+            None,
+            None,
+            None,
+            Some(shared_reference),
+            None,
+        ).await?;
+
+        Ok(())
+    }
+
     /// Move mouse to the center of a node
     pub async fn move_mouse_to_node<N: crate::nodes::Node>(
-        &self,
+        &mut self,
         node: &N,
         context: Option<&BidiBrowsingContext>,
+        scroll_into_view: bool,
     ) -> Result<(), crate::error::MoveMouseToNodeError> {
         let context = match context {
             Some(ctx) => ctx,
             None => &self.get_active_context_id()?,
         };
+
+        if scroll_into_view {
+            self.scroll_into_view(node, context).await?;
+        }
+
         let position = node.get_position().as_ref()
             .ok_or(crate::error::InvalidPositionError)?;
 
@@ -605,7 +724,7 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
 
         // Add network intercept
         let add_intercept_command = CommandData::NetworkCommand(
-            rustenium_bidi_commands::NetworkCommand::AddIntercept(AddIntercept {
+            NetworkCommand::AddIntercept(AddIntercept {
                 method: NetworkAddInterceptMethod::NetworkAddIntercept,
                 params: AddInterceptParameters {
                     phases: vec![InterceptPhase::BeforeRequestSent],
@@ -619,7 +738,7 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
             .map_err(|e| InterceptNetworkError::CommandResultError(CommandResultError::SessionSendError(e)))?;
 
         // Extract intercept ID from result
-        let intercept_id = if let ResultData::NetworkResult(rustenium_bidi_commands::NetworkResult::AddInterceptResult(intercept_result)) = result {
+        let intercept_id = if let ResultData::NetworkResult(NetworkResult::AddInterceptResult(intercept_result)) = result {
             intercept_result.intercept
         } else {
             return Err(InterceptNetworkError::CommandResultError(
