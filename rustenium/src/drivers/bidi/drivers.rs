@@ -40,7 +40,7 @@ use rustenium_core::error::{CommandResultError, SessionSendError};
 use tokio::io;
 use rustenium_bidi_commands::network::commands::{AddIntercept, AddInterceptParameters, NetworkAddInterceptMethod};
 use rustenium_bidi_commands::network::types::{InterceptPhase, UrlPattern};
-use crate::input::{BidiMouse, Keyboard};
+use crate::input::{BidiMouse, HumanMouse, Keyboard, Mouse};
 
 fn is_connection_refused(e: &reqwest::Error) -> bool {
     if let Some(io_err) = e.source().and_then(|s| s.downcast_ref::<io::Error>()) {
@@ -77,7 +77,7 @@ pub struct BidiDriver<T: ConnectionTransport + Send + Sync> {
     pub active_bc_index: usize,
     pub browsing_contexts: Arc<Mutex<Vec<Context>>>,
     pub driver_process: Process,
-    pub mouse: BidiMouse<T>,
+    pub mouse: HumanMouse<BidiMouse<T>>,
     pub keyboard: Keyboard<T>,
 }
 
@@ -90,7 +90,8 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
         browsing_contexts: Arc<Mutex<Vec<Context>>>,
         driver_process: Process,
     ) -> Self {
-        let mouse = BidiMouse::new(session.clone());
+        let bidi_mouse = BidiMouse::new(session.clone());
+        let mouse = HumanMouse::new(bidi_mouse);
         let keyboard = Keyboard::new(session.clone());
 
         Self {
@@ -282,133 +283,6 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
                 CommandResultError::SessionSendError(err),
             )),
         }
-    }
-
-    pub async fn get_node_position(
-        &mut self,
-        shared_reference: LocalValue,
-        locator: &Locator,
-    ) -> Result<Option<NodePosition>, EvaluateResultError> {
-        let mut script = "";
-        if let Locator::CssLocator(locator) = locator {
-            script = "function() {
-    if (!this) {
-        return null;
-    }
-    const rect = this.getBoundingClientRect();
-    const scroll_x = window.pageXOffset || document.documentElement.scrollLeft;
-    const scroll_y = window.pageYOffset || document.documentElement.scrollTop;
-
-    return JSON.stringify({
-        x: rect.x,
-        y: rect.y,
-        width: rect.width,
-        height: rect.height,
-        scroll_x: rect.x + scroll_x,
-        scroll_y: rect.y + scroll_y
-    });
-}";
-        }
-        let result = self
-            .call_function(
-                script.to_string(),
-                false,
-                None,
-                None,
-                None,
-                None,
-                Some(shared_reference),
-                None,
-            )
-            .await?;
-        if let RemoteValue::PrimitiveProtocolValue(PrimitiveProtocolValue::StringValue(rv_sv)) =
-            result.clone().result
-        {
-            let position: Option<NodePosition> = serde_json::from_str(rv_sv.value.as_str()).ok();
-            return Ok(position);
-        }
-        Ok(None)
-    }
-
-    pub async fn get_node_inner_text(
-        &mut self,
-        shared_reference: LocalValue,
-    ) -> Result<String, EvaluateResultError> {
-        let script = "function() { return this.innerText || ''; }";
-
-        let result = self
-            .call_function(
-                script.to_string(),
-                false,
-                None,
-                None,
-                None,
-                None,
-                Some(shared_reference),
-                None,
-            )
-            .await?;
-
-        if let RemoteValue::PrimitiveProtocolValue(PrimitiveProtocolValue::StringValue(rv_sv)) =
-            result.result
-        {
-            return Ok(rv_sv.value);
-        }
-        Ok(String::new())
-    }
-
-    pub async fn get_node_text_content(
-        &mut self,
-        shared_reference: LocalValue,
-    ) -> Result<String, EvaluateResultError> {
-        let script = "function() { return this.textContent || ''; }";
-
-        let result = self
-            .call_function(
-                script.to_string(),
-                false,
-                None,
-                None,
-                None,
-                None,
-                Some(shared_reference),
-                None,
-            )
-            .await?;
-
-        if let RemoteValue::PrimitiveProtocolValue(PrimitiveProtocolValue::StringValue(rv_sv)) =
-            result.result
-        {
-            return Ok(rv_sv.value);
-        }
-        Ok(String::new())
-    }
-
-    pub async fn get_node_inner_html(
-        &mut self,
-        shared_reference: LocalValue,
-    ) -> Result<String, EvaluateResultError> {
-        let script = "function() { return this.innerHTML || ''; }";
-
-        let result = self
-            .call_function(
-                script.to_string(),
-                false,
-                None,
-                None,
-                None,
-                None,
-                Some(shared_reference),
-                None,
-            )
-            .await?;
-
-        if let RemoteValue::PrimitiveProtocolValue(PrimitiveProtocolValue::StringValue(rv_sv)) =
-            result.result
-        {
-            return Ok(rv_sv.value);
-        }
-        Ok(String::new())
     }
 
     pub async fn evaluate_script(
@@ -681,7 +555,7 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
     /// Move mouse to the center of a node
     pub async fn move_mouse_to_node<N: crate::nodes::Node>(
         &mut self,
-        node: &N,
+        node: &mut N,
         context: Option<&BidiBrowsingContext>,
         scroll_into_view: bool,
     ) -> Result<(), crate::error::MoveMouseToNodeError> {
@@ -694,7 +568,7 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
             self.scroll_into_view(node, context).await?;
         }
 
-        let position = node.get_position().as_ref()
+        let position = node.get_position().await
             .ok_or(crate::error::InvalidPositionError)?;
 
         let center_x = position.x + (position.width / 2.0);

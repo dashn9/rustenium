@@ -27,9 +27,10 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium/src/browsers/chrome/chrome.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/browsers/chrome/chrome.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium/src/drivers/bidi/drivers.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/drivers/bidi/drivers.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/input/human_mouse.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/input/human_mouse.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/nodes/bidi/node.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/nodes/bidi/node.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium/src/nodes/chrome.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/nodes/chrome.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium/src/nodes/node.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/nodes/node.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/tests/browser.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/tests/browser.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -181,7 +182,7 @@
       <workItem from="1762019688535" duration="66377000" />
       <workItem from="1762345069210" duration="4750000" />
       <workItem from="1762702549475" duration="8168000" />
-      <workItem from="1762865748316" duration="33463000" />
+      <workItem from="1762865748316" duration="41742000" />
     </task>
     <servers />
   </component>
@@ -198,12 +199,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/rustenium/src/drivers/bidi/drivers.rs</url>
-          <line>441</line>
+          <line>315</line>
           <option name="timeStamp" value="16" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/rustenium/src/drivers/bidi/drivers.rs</url>
-          <line>323</line>
+          <line>287</line>
           <option name="timeStamp" value="24" />
         </line-breakpoint>
       </breakpoints>

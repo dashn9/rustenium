@@ -61,11 +61,15 @@ pub trait Node {
 
     fn get_bidi_locator(&self) -> &Locator;
 
-    fn get_text(&self) -> String;
+    async fn get_inner_text(&self) -> String;
+
+    async fn get_text_content(&self) -> String;
+
+    async fn get_inner_html(&self) -> String;
 
     fn get_attributes(&self) -> Vec<HashMap<String, String>>;
 
-    fn get_position(&self) -> &Option<NodePosition>;
+    async fn get_position(&mut self) -> Option<&NodePosition>;
 
     fn get_shared_id(&self) -> Option<&SharedId>;
 

@@ -2,23 +2,32 @@ use std::collections::HashMap;
 use rustenium_bidi_commands::browsing_context::types::Locator;
 use crate::nodes::bidi::node::BidiNode;
 use rustenium_bidi_commands::script::types::{Handle, NodeRemoteValue, SharedId};
+use rustenium_core::transport::ConnectionTransport;
+use rustenium_core::Session;
 use crate::nodes::node::Node;
 use crate::nodes::NodePosition;
+use std::sync::Arc;
+use tokio::sync::Mutex;
 
-pub struct ChromeNode {
-    bidi_node: BidiNode,
+pub struct ChromeNode<T: ConnectionTransport = rustenium_core::transport::WebsocketConnectionTransport> {
+    bidi_node: BidiNode<T>,
 }
 
-impl ChromeNode {
-    pub fn from_bidi(_raw_bidi_node: NodeRemoteValue, locator: Locator) -> Self {
+impl<T: ConnectionTransport> ChromeNode<T> {
+    pub fn from_bidi(
+        _raw_bidi_node: NodeRemoteValue,
+        locator: Locator,
+        session: Arc<Mutex<Session<T>>>,
+        context: String,
+    ) -> Self {
         Self {
-            bidi_node: BidiNode::new(_raw_bidi_node, locator),
+            bidi_node: BidiNode::new(_raw_bidi_node, locator, session, context),
         }
     }
 }
 
-impl Node for ChromeNode {
-    fn get_children_nodes(&self) -> &Vec<ChromeNode> {
+impl<T: ConnectionTransport> Node for ChromeNode<T> {
+    fn get_children_nodes(&self) -> &Vec<ChromeNode<T>> {
         todo!()
     }
 
@@ -26,16 +35,25 @@ impl Node for ChromeNode {
         &self.bidi_node.locator
     }
 
-    fn get_text(&self) -> String {
-        todo!()
+    async fn get_inner_text(&self) -> String {
+        self.bidi_node.get_inner_text().await.unwrap()
+    }
+
+    async fn get_text_content(&self) -> String {
+        self.bidi_node.get_text_content().await.unwrap()
+    }
+
+    async fn get_inner_html(&self) -> String {
+        self.bidi_node.get_inner_html().await.unwrap()
     }
 
     fn get_attributes(&self) -> Vec<HashMap<String, String>> {
         todo!()
     }
 
-    fn get_position(&self) -> &Option<NodePosition> {
-        &self.bidi_node.position
+    async fn get_position(&mut self) -> Option<&NodePosition> {
+        // TODO: Add a log / warning if unable to get position
+        self.bidi_node.get_position().await.unwrap_or(None)
     }
 
     fn get_shared_id(&self) -> Option<&SharedId> {

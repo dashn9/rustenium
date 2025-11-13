@@ -111,8 +111,8 @@ impl<M: Mouse> Mouse for HumanMouse<M> {
                 let curve_point = Self::bezier_curve(progress, last_point, cp1, cp2, to);
 
                 // Add slight jitter to each point for human-like imprecision
-                let jittered_x = Self::add_jitter(curve_point.x);
-                let jittered_y = Self::add_jitter(curve_point.y);
+                let jittered_x = Self::add_jitter(curve_point.x).max(0.0);
+                let jittered_y = Self::add_jitter(curve_point.y).max(0.0);
 
                 // Use the underlying mouse to actually move (with 1 step for direct movement)
                 self.mouse.move_to(jittered_x, jittered_y, context, Some(MouseMoveOptions {

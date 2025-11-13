@@ -117,12 +117,13 @@ impl ChromeBrowser {
         max_node_count: Option<u64>,
         serialization_options: Option<SerializationOptions>,
         start_nodes: Option<Vec<SharedReference>>,
-    ) -> Result<Vec<ChromeNode>, FindNodesError> {
+    ) -> Result<Vec<ChromeNode<WebsocketConnectionTransport>>, FindNodesError> {
         let new_so = SerializationOptions {
             max_dom_depth: Some(Some(99)),
             max_object_depth: Some(Some(99)),
             include_shadow_tree: Some(SerializationOptionsincludeShadowTreeUnion::Open),
         };
+        let context = context_id.clone().unwrap_or_else(|| self.driver.get_active_context_id().unwrap());
         let node_result = self
             .driver
             .find_nodes(
@@ -135,83 +136,15 @@ impl ChromeBrowser {
             .await?;
         let mut chrome_nodes = Vec::new();
         for (i, node) in node_result.nodes.iter().enumerate() {
-            let chrome_node = ChromeNode::from_bidi(node.clone(), locator.clone());
+            let chrome_node = ChromeNode::from_bidi(
+                node.clone(),
+                locator.clone(),
+                self.driver.session.clone(),
+                context.clone(),
+            );
             chrome_nodes.push(chrome_node);
         }
         Ok(chrome_nodes)
-    }
-
-    pub async fn update_node_position_bidi(&mut self, node: &mut ChromeNode) -> Result<bool, EvaluateResultError> {
-        let shared_id = match node.get_shared_id() {
-            Some(id) => id.clone(),
-            None => return Ok(false),
-        };
-        let shared_reference = LocalValue::RemoteReference(
-            RemoteReference::SharedReference(SharedReference {
-                shared_id,
-                handle: node.get_handle().clone(),
-                extensible: Default::default(),
-            }),
-        );
-        let position = self.driver.get_node_position(shared_reference, node.get_bidi_locator()).await?;
-        match position {
-            Some(position) => {
-                node.set_position(position);
-                Ok(true)
-            }
-            None => Ok(false)
-        }
-    }
-
-    pub async fn get_node_inner_text_bidi(&mut self, node: &mut ChromeNode) -> Result<String, EvaluateResultError> {
-        let shared_id = match node.get_shared_id() {
-            Some(id) => id.clone(),
-            None => return Err(EvaluateResultError::NoSharedId),
-        };
-
-        let shared_reference = LocalValue::RemoteReference(
-            RemoteReference::SharedReference(SharedReference {
-                shared_id,
-                handle: node.get_handle().clone(),
-                extensible: Default::default(),
-            }),
-        );
-
-        self.driver.get_node_inner_text(shared_reference).await
-    }
-
-    pub async fn get_node_text_content_bidi(&mut self, node: &mut ChromeNode) -> Result<String, EvaluateResultError> {
-        let shared_id = match node.get_shared_id() {
-            Some(id) => id.clone(),
-            None => return Err(EvaluateResultError::NoSharedId),
-        };
-
-        let shared_reference = LocalValue::RemoteReference(
-            RemoteReference::SharedReference(SharedReference {
-                shared_id,
-                handle: node.get_handle().clone(),
-                extensible: Default::default(),
-            }),
-        );
-
-        self.driver.get_node_text_content(shared_reference).await
-    }
-
-    pub async fn get_node_inner_html_bidi(&mut self, node: &mut ChromeNode) -> Result<String, EvaluateResultError> {
-        let shared_id = match node.get_shared_id() {
-            Some(id) => id.clone(),
-            None => return Err(EvaluateResultError::NoSharedId),
-        };
-
-        let shared_reference = LocalValue::RemoteReference(
-            RemoteReference::SharedReference(SharedReference {
-                shared_id,
-                handle: node.get_handle().clone(),
-                extensible: Default::default(),
-            }),
-        );
-
-        self.driver.get_node_inner_html(shared_reference).await
     }
 
     pub async fn send_bidi_command(&mut self, command: CommandData) -> Result<ResultData, SessionSendError> {
@@ -315,8 +248,8 @@ impl ChromeBrowser {
         ).await
     }
 
-    /// Get a reference to the BiDi mouse
-    pub fn mouse(&self) -> &crate::input::BidiMouse<WebsocketConnectionTransport> {
+    /// Get a reference to the Human mouse
+    pub fn mouse(&self) -> &crate::input::HumanMouse<crate::input::BidiMouse<WebsocketConnectionTransport>> {
         &self.driver.mouse
     }
 
@@ -332,11 +265,6 @@ impl ChromeBrowser {
         context: Option<&BrowsingContext>,
         scroll_into_view: bool,
     ) -> Result<(), crate::error::MoveMouseToNodeError> {
-        // Update position if not available
-        if node.get_position().is_none() {
-            self.update_node_position_bidi(node).await?;
-        }
-
         self.driver.move_mouse_to_node(node, context, scroll_into_view).await
     }
 
