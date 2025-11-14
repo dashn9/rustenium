@@ -47,8 +47,12 @@ impl<T: ConnectionTransport> Node for ChromeNode<T> {
         self.bidi_node.get_inner_html().await.unwrap()
     }
 
-    fn get_attributes(&self) -> Vec<HashMap<String, String>> {
-        todo!()
+    fn get_attribute(&self, attribute_name: &str) -> Option<String> {
+        self.bidi_node.get_attribute(attribute_name)
+    }
+
+    fn get_attributes(&self) -> HashMap<String, String> {
+        self.bidi_node.get_attributes()
     }
 
     async fn get_position(&mut self) -> Option<&NodePosition> {

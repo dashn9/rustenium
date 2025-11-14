@@ -317,6 +317,20 @@ impl<T: ConnectionTransport> BidiNode<T> {
         }
     }
 
+    /// Get a specific attribute value from the node
+    pub fn get_attribute(&self, attribute_name: &str) -> Option<String> {
+        self._raw_node.value.as_ref()
+            .and_then(|props| props.attributes.as_ref())
+            .and_then(|attrs| attrs.get(attribute_name).cloned())
+    }
+
+    /// Get all attributes from the node
+    pub fn get_attributes(&self) -> std::collections::HashMap<String, String> {
+        self._raw_node.value.as_ref()
+            .and_then(|props| props.attributes.clone())
+            .unwrap_or_default()
+    }
+
     /// Scroll the node into view
     pub async fn scroll_into_view(&self) -> Result<(), crate::error::EvaluateResultError> {
         let shared_id = self._raw_node.shared_id.as_ref()

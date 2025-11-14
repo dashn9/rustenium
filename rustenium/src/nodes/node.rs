@@ -67,7 +67,9 @@ pub trait Node {
 
     async fn get_inner_html(&self) -> String;
 
-    fn get_attributes(&self) -> Vec<HashMap<String, String>>;
+    fn get_attribute(&self, attribute_name: &str) -> Option<String>;
+
+    fn get_attributes(&self) -> HashMap<String, String>;
 
     async fn get_position(&mut self) -> Option<&NodePosition>;
 
