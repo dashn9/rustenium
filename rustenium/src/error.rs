@@ -70,7 +70,7 @@ pub enum InputError {
 pub struct InvalidPositionError;
 
 #[derive(Debug, Error)]
-pub enum MoveMouseToNodeError {
+pub enum MouseInputError {
     #[error(transparent)]
     ContextIndexError(#[from] ContextIndexError),
     #[error(transparent)]

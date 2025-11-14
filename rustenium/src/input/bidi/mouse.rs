@@ -57,16 +57,15 @@ impl<OT: ConnectionTransport> BidiMouse<OT> {
     /// Move the mouse to a position
     pub async fn move_to(
         &self,
-        x: f64,
-        y: f64,
+        point: Point,
         context: &BrowsingContext,
         options: Option<MouseMoveOptions>,
     ) -> Result<(), InputError> {
         let options = options.unwrap_or_default();
         let last_point = *self.last_move_point.lock().await;
         let to = Point {
-            x: x.round(),
-            y: y.round(),
+            x: point.x.round(),
+            y: point.y.round(),
         };
 
         let mut actions = Vec::new();
@@ -210,8 +209,7 @@ impl<OT: ConnectionTransport> BidiMouse<OT> {
     /// Click at a position
     pub async fn click(
         &self,
-        x: f64,
-        y: f64,
+        point: Option<Point>,
         context: &BrowsingContext,
         options: Option<MouseClickOptions>,
     ) -> Result<(), InputError> {
@@ -219,10 +217,16 @@ impl<OT: ConnectionTransport> BidiMouse<OT> {
         let button = options.button.unwrap_or(MouseButton::Left) as u64;
         let count = options.count.unwrap_or(1);
 
+        // Use provided point or last position
+        let click_point = match point {
+            Some(p) => p,
+            None => *self.last_move_point.lock().await,
+        };
+
         let mut actions = vec![PointerSourceAction::PointerMoveAction(PointerMoveAction {
             r#type: PointerMoveEnum::PointerMove,
-            x: x.round(),
-            y: y.round(),
+            x: click_point.x.round(),
+            y: click_point.y.round(),
             duration: None,
             origin: options.origin.clone(),
             pointer_common_properties: PointerCommonProperties {
@@ -333,18 +337,27 @@ impl<OT: ConnectionTransport> BidiMouse<OT> {
 }
 
 impl<OT: ConnectionTransport> Mouse for BidiMouse<OT> {
+    fn get_last_position(&self) -> Arc<Mutex<Point>> {
+        self.last_move_point.clone()
+    }
+
+    fn set_last_position(&self, point: Point) {
+        if let Ok(mut last_point) = self.last_move_point.try_lock() {
+            *last_point = point;
+        }
+    }
+
     async fn reset(&self, context: &BrowsingContext) -> Result<(), InputError> {
         Self::reset(self, context).await
     }
 
     async fn move_to(
         &self,
-        x: f64,
-        y: f64,
+        point: Point,
         context: &BrowsingContext,
         options: Option<MouseMoveOptions>,
     ) -> Result<(), InputError> {
-        Self::move_to(self, x, y, context, options).await
+        Self::move_to(self, point, context, options).await
     }
 
     async fn down(
@@ -365,12 +378,11 @@ impl<OT: ConnectionTransport> Mouse for BidiMouse<OT> {
 
     async fn click(
         &self,
-        x: f64,
-        y: f64,
+        point: Option<Point>,
         context: &BrowsingContext,
         options: Option<MouseClickOptions>,
     ) -> Result<(), InputError> {
-        Self::click(self, x, y, context, options).await
+        Self::click(self, point, context, options).await
     }
 
     async fn wheel(

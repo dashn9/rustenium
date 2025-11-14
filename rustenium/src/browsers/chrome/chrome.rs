@@ -118,11 +118,11 @@ impl ChromeBrowser {
         serialization_options: Option<SerializationOptions>,
         start_nodes: Option<Vec<SharedReference>>,
     ) -> Result<Vec<ChromeNode<WebsocketConnectionTransport>>, FindNodesError> {
-        let new_so = SerializationOptions {
+        let serialization_options = serialization_options.unwrap_or(SerializationOptions {
             max_dom_depth: Some(Some(99)),
             max_object_depth: Some(Some(99)),
             include_shadow_tree: Some(SerializationOptionsincludeShadowTreeUnion::Open),
-        };
+        });
         let context = context_id.clone().unwrap_or_else(|| self.driver.get_active_context_id().unwrap());
         let node_result = self
             .driver
@@ -130,7 +130,7 @@ impl ChromeBrowser {
                 locator.clone(),
                 context_id,
                 max_node_count,
-                Some(new_so),
+                Some(serialization_options),
                 start_nodes,
             )
             .await?;
@@ -145,6 +145,18 @@ impl ChromeBrowser {
             chrome_nodes.push(chrome_node);
         }
         Ok(chrome_nodes)
+    }
+
+    pub async fn find_node(
+        &mut self,
+        locator: Locator,
+        context_id: Option<BrowsingContext>,
+        max_node_count: Option<u64>,
+        serialization_options: Option<SerializationOptions>,
+        start_nodes: Option<Vec<SharedReference>>,
+    ) -> Result<Option<ChromeNode<WebsocketConnectionTransport>>, FindNodesError> {
+        let nodes = self.find_nodes(locator, context_id, max_node_count, serialization_options, start_nodes).await?;
+        Ok(nodes.into_iter().next())
     }
 
     pub async fn send_bidi_command(&mut self, command: CommandData) -> Result<ResultData, SessionSendError> {
@@ -248,9 +260,14 @@ impl ChromeBrowser {
         ).await
     }
 
-    /// Get a reference to the Human mouse
-    pub fn mouse(&self) -> &crate::input::HumanMouse<crate::input::BidiMouse<WebsocketConnectionTransport>> {
+    /// Get a reference to the BiDi mouse
+    pub fn mouse(&self) -> &crate::input::BidiMouse<WebsocketConnectionTransport> {
         &self.driver.mouse
+    }
+
+    /// Get a reference to the Human mouse
+    pub fn human_mouse(&self) -> &crate::input::HumanMouse<crate::input::BidiMouse<WebsocketConnectionTransport>> {
+        &self.driver.human_mouse
     }
 
     /// Get a reference to the BiDi keyboard
@@ -264,8 +281,18 @@ impl ChromeBrowser {
         node: &mut ChromeNode,
         context: Option<&BrowsingContext>,
         scroll_into_view: bool,
-    ) -> Result<(), crate::error::MoveMouseToNodeError> {
+    ) -> Result<(), crate::error::MouseInputError> {
         self.driver.move_mouse_to_node(node, context, scroll_into_view).await
+    }
+
+    /// Click on a node (scrolls into view and moves mouse first)
+    pub async fn click_on_node_bidi(
+        &mut self,
+        node: &mut ChromeNode,
+        context: Option<&BrowsingContext>,
+        options: Option<crate::input::MouseClickOptions>,
+    ) -> Result<(), crate::error::MouseInputError> {
+        self.driver.click_on_node(node, context, options).await
     }
 
     /// Add a preload script that will be executed in new contexts

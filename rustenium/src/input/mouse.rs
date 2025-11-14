@@ -1,3 +1,5 @@
+use std::sync::Arc;
+use tokio::sync::Mutex;
 use rustenium_bidi_commands::browsing_context::types::BrowsingContext;
 use crate::error::InputError;
 
@@ -58,14 +60,19 @@ pub struct Point {
 
 /// Trait for mouse input behavior
 pub trait Mouse {
+    /// Get the last mouse position
+    fn get_last_position(&self) -> Arc<Mutex<Point>>;
+
+    /// Set the last mouse position
+    fn set_last_position(&self, point: Point);
+
     /// Reset the mouse state
     async fn reset(&self, context: &BrowsingContext) -> Result<(), InputError>;
 
     /// Move the mouse to a position
     async fn move_to(
         &self,
-        x: f64,
-        y: f64,
+        point: Point,
         context: &BrowsingContext,
         options: Option<MouseMoveOptions>,
     ) -> Result<(), InputError>;
@@ -84,11 +91,10 @@ pub trait Mouse {
         options: Option<MouseOptions>,
     ) -> Result<(), InputError>;
 
-    /// Click at a position
+    /// Click at a position (or last position if point is None)
     async fn click(
         &self,
-        x: f64,
-        y: f64,
+        point: Option<Point>,
         context: &BrowsingContext,
         options: Option<MouseClickOptions>,
     ) -> Result<(), InputError>;

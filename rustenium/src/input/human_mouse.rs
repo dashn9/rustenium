@@ -8,7 +8,6 @@ use super::mouse::{Mouse, MouseMoveOptions, MouseClickOptions, MouseOptions, Mou
 /// Human-like mouse implementation with randomness and natural movement patterns
 pub struct HumanMouse<M: Mouse> {
     mouse: M,
-    last_move_point: Arc<Mutex<Point>>,
 }
 
 impl<M: Mouse> HumanMouse<M> {
@@ -16,8 +15,12 @@ impl<M: Mouse> HumanMouse<M> {
     pub fn new(mouse: M) -> Self {
         Self {
             mouse,
-            last_move_point: Arc::new(Mutex::new(Point::default())),
         }
+    }
+
+    /// Get the last mouse position from the underlying mouse
+    pub fn get_last_position(&self) -> Arc<Mutex<Point>> {
+        self.mouse.get_last_position()
     }
 
     /// Generate a bezier curve point for natural mouse movement
@@ -67,24 +70,29 @@ impl<M: Mouse> HumanMouse<M> {
 }
 
 impl<M: Mouse> Mouse for HumanMouse<M> {
+    fn get_last_position(&self) -> Arc<Mutex<Point>> {
+        self.mouse.get_last_position()
+    }
+
+    fn set_last_position(&self, point: Point) {
+        self.mouse.set_last_position(point)
+    }
+
     async fn reset(&self, context: &BrowsingContext) -> Result<(), InputError> {
-        let mut last_point = self.last_move_point.lock().await;
-        *last_point = Point::default();
         self.mouse.reset(context).await
     }
 
     async fn move_to(
         &self,
-        x: f64,
-        y: f64,
+        point: Point,
         context: &BrowsingContext,
         options: Option<MouseMoveOptions>,
     ) -> Result<(), InputError> {
             let options = options.unwrap_or_default();
-            let last_point = *self.last_move_point.lock().await;
+            let last_point = *self.mouse.get_last_position().lock().await;
             let to = Point {
-                x: x.round(),
-                y: y.round(),
+                x: point.x.round(),
+                y: point.y.round(),
             };
 
             // Use provided steps or calculate based on distance
@@ -115,7 +123,7 @@ impl<M: Mouse> Mouse for HumanMouse<M> {
                 let jittered_y = Self::add_jitter(curve_point.y).max(0.0);
 
                 // Use the underlying mouse to actually move (with 1 step for direct movement)
-                self.mouse.move_to(jittered_x, jittered_y, context, Some(MouseMoveOptions {
+                self.mouse.move_to(Point { x: jittered_x, y: jittered_y }, context, Some(MouseMoveOptions {
                     steps: Some(1),
                     origin: options.origin.clone(),
                 })).await?;
@@ -127,13 +135,10 @@ impl<M: Mouse> Mouse for HumanMouse<M> {
             }
 
             // Final move to exact position
-            self.mouse.move_to(to.x, to.y, context, Some(MouseMoveOptions {
+            self.mouse.move_to(to, context, Some(MouseMoveOptions {
                 steps: Some(1),
                 origin: options.origin.clone(),
             })).await?;
-
-        // Update last position
-        *self.last_move_point.lock().await = to;
 
         Ok(())
     }
@@ -156,18 +161,11 @@ impl<M: Mouse> Mouse for HumanMouse<M> {
 
     async fn click(
         &self,
-        x: f64,
-        y: f64,
+        point: Option<Point>,
         context: &BrowsingContext,
         options: Option<MouseClickOptions>,
     ) -> Result<(), InputError> {
             let options = options.unwrap_or_default();
-
-            // Move to position first with human-like movement
-            self.move_to(x, y, context, Some(MouseMoveOptions {
-                steps: None,
-                origin: options.origin.clone(),
-            })).await?;
 
             // Human-like click delay (100-200ms default)
             let click_delay = options.delay.unwrap_or(120 + (Self::add_jitter(0.0).abs() * 80.0) as u64);

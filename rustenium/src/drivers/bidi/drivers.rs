@@ -40,7 +40,7 @@ use rustenium_core::error::{CommandResultError, SessionSendError};
 use tokio::io;
 use rustenium_bidi_commands::network::commands::{AddIntercept, AddInterceptParameters, NetworkAddInterceptMethod};
 use rustenium_bidi_commands::network::types::{InterceptPhase, UrlPattern};
-use crate::input::{BidiMouse, HumanMouse, Keyboard, Mouse};
+use crate::input::{BidiMouse, HumanMouse, Keyboard, Mouse, Point};
 
 fn is_connection_refused(e: &reqwest::Error) -> bool {
     if let Some(io_err) = e.source().and_then(|s| s.downcast_ref::<io::Error>()) {
@@ -77,7 +77,8 @@ pub struct BidiDriver<T: ConnectionTransport + Send + Sync> {
     pub active_bc_index: usize,
     pub browsing_contexts: Arc<Mutex<Vec<Context>>>,
     pub driver_process: Process,
-    pub mouse: HumanMouse<BidiMouse<T>>,
+    pub mouse: BidiMouse<T>,
+    pub human_mouse: HumanMouse<BidiMouse<T>>,
     pub keyboard: Keyboard<T>,
 }
 
@@ -90,8 +91,8 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
         browsing_contexts: Arc<Mutex<Vec<Context>>>,
         driver_process: Process,
     ) -> Self {
-        let bidi_mouse = BidiMouse::new(session.clone());
-        let mouse = HumanMouse::new(bidi_mouse);
+        let mouse = BidiMouse::new(session.clone());
+        let human_mouse = HumanMouse::new(BidiMouse::new(session.clone()));
         let keyboard = Keyboard::new(session.clone());
 
         Self {
@@ -102,6 +103,7 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
             browsing_contexts,
             driver_process,
             mouse,
+            human_mouse,
             keyboard,
         }
     }
@@ -558,7 +560,7 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
         node: &mut N,
         context: Option<&BidiBrowsingContext>,
         scroll_into_view: bool,
-    ) -> Result<(), crate::error::MoveMouseToNodeError> {
+    ) -> Result<(), crate::error::MouseInputError> {
         let context = match context {
             Some(ctx) => ctx,
             None => &self.get_active_context_id()?,
@@ -571,10 +573,30 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
         let position = node.get_position().await
             .ok_or(crate::error::InvalidPositionError)?;
 
-        let center_x = position.x + (position.width / 2.0);
-        let center_y = position.y + (position.height / 2.0);
+        let center_point = Point {
+            x: position.x + (position.width / 2.0),
+            y: position.y + (position.height / 2.0),
+        };
 
-        self.mouse.move_to(center_x, center_y, context, None).await?;
+        self.mouse.move_to(center_point, context, None).await?;
+        Ok(())
+    }
+
+    /// Click on a node (scrolls into view and moves mouse first)
+    pub async fn click_on_node<N: crate::nodes::Node>(
+        &mut self,
+        node: &mut N,
+        context: Option<&BidiBrowsingContext>,
+        options: Option<crate::input::MouseClickOptions>,
+    ) -> Result<(), crate::error::MouseInputError> {
+        let context = match context {
+            Some(ctx) => ctx,
+            None => &self.get_active_context_id()?,
+        };
+
+        self.move_mouse_to_node(node, Some(context), true).await?;
+        // Then click
+        self.mouse.click(None, context, options).await?;
         Ok(())
     }
 
