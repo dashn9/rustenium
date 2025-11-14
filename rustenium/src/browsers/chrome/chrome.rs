@@ -110,6 +110,16 @@ impl ChromeBrowser {
         self.driver.open_url(url.to_string(), wait, context_id).await
     }
 
+    /// Create a new browsing context (tab or window)
+    pub async fn create_context_bidi(
+        &mut self,
+        context_type: Option<rustenium_bidi_commands::browsing_context::types::CreateType>,
+        reference_context: Option<&rustenium_core::Context>,
+        background: bool,
+    ) -> Result<rustenium_core::Context, rustenium_core::error::CommandResultError> {
+        self.driver.create_context(context_type, reference_context, background).await
+    }
+
     pub async fn find_nodes(
         &mut self,
         locator: Locator,

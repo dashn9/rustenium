@@ -77,4 +77,6 @@ pub trait Node {
 
     fn set_position(&mut self, position: NodePosition) -> ();
 
+    async fn scroll_into_view(&self) -> Result<(), crate::error::EvaluateResultError>;
+
 }

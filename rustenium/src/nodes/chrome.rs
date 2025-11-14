@@ -67,4 +67,8 @@ impl<T: ConnectionTransport> Node for ChromeNode<T> {
     fn set_position(&mut self, position: NodePosition) -> () {
         self.bidi_node.position = Some(position);
     }
+
+    async fn scroll_into_view(&self) -> Result<(), crate::error::EvaluateResultError> {
+        self.bidi_node.scroll_into_view().await
+    }
 }

@@ -511,47 +511,15 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
         self.session.lock().await.add_event_handler(events, handler, handler_id)
     }
 
-    /// Scroll a node into view
-    pub async fn scroll_into_view<N: Node>(
+    /// Create a new browsing context (tab or window)
+    pub async fn create_context(
         &mut self,
-        node: &N,
-        context: &BidiBrowsingContext,
-    ) -> Result<(), EvaluateResultError> {
-        let shared_id = node.get_shared_id()
-            .ok_or(EvaluateResultError::NoSharedId)?;
-
-        let scroll_script = r#"
-        function() {
-            if (!this) {
-                return null;
-            }
-            this.scrollIntoView({block: 'center', inline: 'center', behavior: 'instant'});
-        }
-        "#.to_string();
-
-        let shared_reference = LocalValue::RemoteReference(
-            RemoteReference::SharedReference(SharedReference {
-                shared_id: shared_id.clone(),
-                handle: node.get_handle().clone(),
-                extensible: Default::default(),
-            }),
-        );
-
-        self.call_function(
-            scroll_script,
-            false,
-            Some(Target::ContextTarget(ContextTarget {
-                context: context.clone(),
-                sandbox: None,
-            })),
-            None,
-            None,
-            None,
-            Some(shared_reference),
-            None,
-        ).await?;
-
-        Ok(())
+        context_type: Option<rustenium_bidi_commands::browsing_context::types::CreateType>,
+        reference_context: Option<&rustenium_core::Context>,
+        background: bool,
+    ) -> Result<rustenium_core::Context, rustenium_core::error::CommandResultError> {
+        let mut session = self.session.lock().await;
+        rustenium_core::Context::new(&mut *session, context_type, reference_context, background).await
     }
 
     /// Move mouse to the center of a node
@@ -567,7 +535,7 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
         };
 
         if scroll_into_view {
-            self.scroll_into_view(node, context).await?;
+            node.scroll_into_view().await?;
         }
 
         let position = node.get_position().await

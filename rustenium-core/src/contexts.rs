@@ -1,5 +1,5 @@
 use rustenium_bidi_commands::browsing_context::commands::{BrowsingContextCreateMethod, Create as BrowsingContextCreate, CreateParameters as BrowsingContextCreateParameters, BrowsingContextResult};
-use rustenium_bidi_commands::browsing_context::types::CreateType as BrowsingContextCreateType;
+use rustenium_bidi_commands::browsing_context::types::{BrowsingContext, CreateType as BrowsingContextCreateType};
 use rustenium_bidi_commands::{BrowsingContextCommand, CommandData, ResultData};
 use crate::error::{CommandResultError, SessionSendError};
 use crate::Session;
@@ -8,7 +8,7 @@ use crate::transport::ConnectionTransport;
 #[derive(Debug, Clone)]
 pub struct Context {
     pub r#type: BrowsingContextCreateType,
-    id: String,
+    id: BrowsingContext,
 }
 
 impl Context {
@@ -49,7 +49,7 @@ impl Context {
     }
 
     /// Get the context ID as a string reference
-    pub fn id(&self) -> &str {
+    pub fn id(&self) -> &BrowsingContext {
         &self.id
     }
 
