@@ -81,4 +81,6 @@ pub trait Node {
 
     async fn scroll_into_view(&self) -> Result<(), crate::error::EvaluateResultError>;
 
+    async fn is_visible(&self) -> Result<bool, crate::error::EvaluateResultError>;
+
 }

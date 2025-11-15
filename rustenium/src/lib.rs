@@ -4,7 +4,8 @@ pub mod browsers;
 mod nodes;
 mod input;
 
-pub use nodes::Node;
+pub use nodes::{Node};
+pub use nodes::chrome::ChromeNode;
 
 #[cfg(feature = "macros")]
 pub use rustenium_macros::*;

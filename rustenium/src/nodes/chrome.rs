@@ -75,4 +75,8 @@ impl<T: ConnectionTransport> Node for ChromeNode<T> {
     async fn scroll_into_view(&self) -> Result<(), crate::error::EvaluateResultError> {
         self.bidi_node.scroll_into_view().await
     }
+
+    async fn is_visible(&self) -> Result<bool, crate::error::EvaluateResultError> {
+        self.bidi_node.is_visible().await
+    }
 }

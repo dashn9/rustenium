@@ -331,6 +331,79 @@ impl<T: ConnectionTransport> BidiNode<T> {
             .unwrap_or_default()
     }
 
+    /// Check if the node is visible in the viewport
+    pub async fn is_visible(&self) -> Result<bool, crate::error::EvaluateResultError> {
+        let shared_id = self._raw_node.shared_id.as_ref()
+            .ok_or(crate::error::EvaluateResultError::NoSharedId)?;
+
+        let shared_reference = LocalValue::RemoteReference(
+            RemoteReference::SharedReference(SharedReference {
+                shared_id: shared_id.clone(),
+                handle: self._raw_node.handle.clone(),
+                extensible: Default::default(),
+            }),
+        );
+
+        let script = r#"function() {
+            if (!this) return false;
+            const rect = this.getBoundingClientRect();
+            const style = window.getComputedStyle(this);
+            return rect.width > 0 &&
+                   rect.height > 0 &&
+                   style.visibility !== 'hidden' &&
+                   style.display !== 'none' &&
+                   style.opacity !== '0';
+        }"#;
+        let context = self.context.as_ref().ok_or(crate::error::EvaluateResultError::NoSharedId)?;
+
+        let target = Target::ContextTarget(ContextTarget {
+            context: context.clone(),
+            sandbox: None,
+        });
+
+        let command = CommandData::ScriptCommand(ScriptCommand::CallFunction(CallFunction {
+            method: ScriptCallFunctionMethod::ScriptCallFunction,
+            params: CallFunctionParameters {
+                function_declaration: script.to_string(),
+                await_promise: false,
+                target,
+                arguments: None,
+                result_ownership: None,
+                serialization_options: None,
+                this: Some(shared_reference),
+                user_activation: None,
+            },
+        }));
+
+        let result = self.send_command(command).await
+            .map_err(|e| crate::error::EvaluateResultError::CommandResultError(
+                CommandResultError::SessionSendError(e)
+            ))?;
+
+        match result {
+            ResultData::ScriptResult(script_result) => {
+                let evaluate_result = match script_result {
+                    ScriptResult::CallFunctionResult(eval_result) => eval_result,
+                    ScriptResult::EvaluateResult(eval_result) => eval_result,
+                    _ => return Ok(false),
+                };
+
+                match evaluate_result {
+                    EvaluateResult::EvaluateResultSuccess(evaluate_result_success) => {
+                        if let RemoteValue::PrimitiveProtocolValue(PrimitiveProtocolValue::BooleanValue(bv)) =
+                            evaluate_result_success.result
+                        {
+                            return Ok(bv.value);
+                        }
+                        Ok(false)
+                    }
+                    EvaluateResult::EvaluateResultException(_) => Ok(false),
+                }
+            }
+            _ => Ok(false),
+        }
+    }
+
     /// Scroll the node into view
     pub async fn scroll_into_view(&self) -> Result<(), crate::error::EvaluateResultError> {
         let shared_id = self._raw_node.shared_id.as_ref()

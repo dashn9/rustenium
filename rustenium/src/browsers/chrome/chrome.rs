@@ -169,6 +169,51 @@ impl ChromeBrowser {
         Ok(nodes.into_iter().next())
     }
 
+    /// Wait for nodes to appear with a timeout (in milliseconds)
+    pub async fn wait_for_nodes(
+        &mut self,
+        locator: Locator,
+        context_id: Option<BrowsingContext>,
+        timeout_ms: Option<u64>,
+        poll_interval_ms: Option<u64>,
+    ) -> Result<Vec<ChromeNode<WebsocketConnectionTransport>>, FindNodesError> {
+        let timeout = timeout_ms.unwrap_or(4000);
+        let poll_interval = poll_interval_ms.unwrap_or(timeout / 6);
+        let start = std::time::Instant::now();
+
+        loop {
+            let nodes = self.find_nodes(
+                locator.clone(),
+                context_id.clone(),
+                None,
+                None,
+                None,
+            ).await?;
+
+            if !nodes.is_empty() {
+                return Ok(nodes);
+            }
+
+            if start.elapsed().as_millis() as u64 >= timeout {
+                return Ok(Vec::new());
+            }
+
+            tokio::time::sleep(tokio::time::Duration::from_millis(poll_interval)).await;
+        }
+    }
+
+    /// Wait for a single node to appear with a timeout (in milliseconds)
+    pub async fn wait_for_node(
+        &mut self,
+        locator: Locator,
+        context_id: Option<BrowsingContext>,
+        timeout_ms: Option<u64>,
+        poll_interval_ms: Option<u64>,
+    ) -> Result<Option<ChromeNode<WebsocketConnectionTransport>>, FindNodesError> {
+        let nodes = self.wait_for_nodes(locator, context_id, timeout_ms, poll_interval_ms).await?;
+        Ok(nodes.into_iter().next())
+    }
+
     pub async fn send_bidi_command(&mut self, command: CommandData) -> Result<ResultData, SessionSendError> {
         return self.driver.send_command(command).await;
     }
