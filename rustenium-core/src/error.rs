@@ -24,3 +24,13 @@ impl std::fmt::Display for ResponseReceiveTimeoutError {
         write!(f, "Could not receive response for command in time")
     }
 }
+
+#[derive(Debug, Error)]
+pub enum PostDataError {
+    #[error("No POST data available")]
+    NoPostData,
+    #[error("Failed to parse POST data as JSON: {0}")]
+    JsonParseError(#[from] serde_json::Error),
+    #[error("POST data is valid JSON but not a JSON object")]
+    NotJsonObject,
+}

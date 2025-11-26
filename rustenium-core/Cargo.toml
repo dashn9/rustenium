@@ -8,6 +8,7 @@ rustenium-bidi-commands = { path = "../rustenium-bidi-commands"}
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
+form_urlencoded = "1.2.2"
 fastwebsockets = { version = "0.10.0", features = ["upgrade", "unstable-split"] }
 hyper = "1.6.0"
 http-body-util = "0.1.2"

@@ -309,6 +309,8 @@ pub struct RequestData {
     pub initiator_type: Option<String>,
     #[serde(rename = "timings")]
     pub timings: FetchTimingInfo,
+    #[serde(flatten)]
+    pub extensible: Extensible,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

@@ -25,9 +25,11 @@
   <component name="ChangeListManager">
     <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/src/browsers/chrome/chrome.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/browsers/chrome/chrome.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/lib.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/src/nodes/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/nodes/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/network/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/network/types.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-core/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-core/src/error.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/error.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-core/src/network.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/network.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -179,7 +181,9 @@
       <workItem from="1762019688535" duration="66377000" />
       <workItem from="1762345069210" duration="4750000" />
       <workItem from="1762702549475" duration="8168000" />
-      <workItem from="1762865748316" duration="56480000" />
+      <workItem from="1762865748316" duration="57281000" />
+      <workItem from="1763998233013" duration="594000" />
+      <workItem from="1764089493139" duration="8945000" />
     </task>
     <servers />
   </component>
