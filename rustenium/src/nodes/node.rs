@@ -83,4 +83,6 @@ pub trait Node {
 
     async fn is_visible(&self) -> Result<bool, crate::error::EvaluateResultError>;
 
+    async fn delete(&self) -> Result<(), crate::error::EvaluateResultError>;
+
 }

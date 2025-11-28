@@ -79,4 +79,8 @@ impl<T: ConnectionTransport> Node for ChromeNode<T> {
     async fn is_visible(&self) -> Result<bool, crate::error::EvaluateResultError> {
         self.bidi_node.is_visible().await
     }
+
+    async fn delete(&self) -> Result<(), crate::error::EvaluateResultError> {
+        self.bidi_node.delete().await
+    }
 }

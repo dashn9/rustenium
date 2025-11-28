@@ -510,4 +510,47 @@ impl<T: ConnectionTransport> BidiNode<T> {
             _ => Ok(String::new()),
         }
     }
+
+    /// Delete the node from the DOM
+    pub async fn delete(&self) -> Result<(), crate::error::EvaluateResultError> {
+        let shared_id = self._raw_node.shared_id.as_ref()
+            .ok_or(crate::error::EvaluateResultError::NoSharedId)?;
+
+        let shared_reference = LocalValue::RemoteReference(
+            RemoteReference::SharedReference(SharedReference {
+                shared_id: shared_id.clone(),
+                handle: self._raw_node.handle.clone(),
+                extensible: Default::default(),
+            }),
+        );
+
+        let script = "function() { if (this && this.parentNode) { this.parentNode.removeChild(this); } }";
+        let context = self.context.as_ref().ok_or(crate::error::EvaluateResultError::NoSharedId)?;
+
+        let target = Target::ContextTarget(ContextTarget {
+            context: context.clone(),
+            sandbox: None,
+        });
+
+        let command = CommandData::ScriptCommand(ScriptCommand::CallFunction(CallFunction {
+            method: ScriptCallFunctionMethod::ScriptCallFunction,
+            params: CallFunctionParameters {
+                function_declaration: script.to_string(),
+                await_promise: false,
+                target,
+                arguments: None,
+                result_ownership: None,
+                serialization_options: None,
+                this: Some(shared_reference),
+                user_activation: None,
+            },
+        }));
+
+        self.send_command(command).await
+            .map_err(|e| crate::error::EvaluateResultError::CommandResultError(
+                CommandResultError::SessionSendError(e)
+            ))?;
+
+        Ok(())
+    }
 }
