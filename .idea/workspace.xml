@@ -25,7 +25,7 @@
   <component name="ChangeListManager">
     <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-macros/src/node_selectors.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-macros/src/node_selectors.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/nodes/bidi/node.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/nodes/bidi/node.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -181,7 +181,7 @@
       <workItem from="1763998233013" duration="594000" />
       <workItem from="1764089493139" duration="10798000" />
       <workItem from="1764190443528" duration="91000" />
-      <workItem from="1764259817825" duration="3118000" />
+      <workItem from="1764259817825" duration="5422000" />
     </task>
     <servers />
   </component>

@@ -113,7 +113,7 @@ impl<T: ConnectionTransport> BidiNode<T> {
             }),
         );
 
-        let script = if let Locator::CssLocator(_) = &self.locator {
+        let script =
             "function() {
     if (!this) {
         return null;
@@ -130,10 +130,7 @@ impl<T: ConnectionTransport> BidiNode<T> {
         scroll_x: rect.x + scroll_x,
         scroll_y: rect.y + scroll_y
     });
-}"
-        } else {
-            return Ok(false);
-        };
+}";
 
         let context = self.context.as_ref().ok_or(crate::error::EvaluateResultError::NoSharedId)?;
 
