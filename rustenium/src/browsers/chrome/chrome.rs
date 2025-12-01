@@ -29,6 +29,7 @@ pub struct ChromeConfig {
     pub port: Option<u16>,
     pub flags: Vec<&'static str>,
     pub capabilities: ChromeCapabilities,
+    pub sandbox: bool,
 }
 
 impl Default for ChromeConfig {
@@ -39,6 +40,7 @@ impl Default for ChromeConfig {
             port: None,
             flags: Vec::new(),
             capabilities: ChromeCapabilities::default(),
+            sandbox: true,
         }
     }
 }
@@ -59,6 +61,11 @@ impl DriverConfiguration for ChromeConfig {
 
         // Convert &'static str flags to String and append
         flags.extend(self.flags.iter().map(|s| s.to_string()));
+
+        // Add sandbox flag if disabled
+        if !self.sandbox {
+            flags.push("--no-sandbox".to_string());
+        }
 
         flags
     }
