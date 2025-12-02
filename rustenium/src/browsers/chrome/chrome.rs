@@ -27,7 +27,7 @@ pub struct ChromeConfig {
     pub driver_executable_path: String,
     pub host: Option<String>,
     pub port: Option<u16>,
-    pub flags: Vec<&'static str>,
+    pub driver_flags: Vec<&'static str>,
     pub capabilities: ChromeCapabilities,
     pub sandbox: bool,
 }
@@ -38,9 +38,9 @@ impl Default for ChromeConfig {
             driver_executable_path: "".to_string(),
             host: None,
             port: None,
-            flags: Vec::new(),
+            driver_flags: Vec::new(),
             capabilities: ChromeCapabilities::default(),
-            sandbox: true,
+            sandbox: false,
         }
     }
 }
@@ -59,13 +59,8 @@ impl DriverConfiguration for ChromeConfig {
             format!("--port={}", self.port.unwrap_or(find_free_port().unwrap())),
         ];
 
-        // Convert &'static str flags to String and append
-        flags.extend(self.flags.iter().map(|s| s.to_string()));
-
-        // Add sandbox flag if disabled
-        if !self.sandbox {
-            flags.push("--no-sandbox".to_string());
-        }
+        // Convert &'static str driver_flags to String and append
+        flags.extend(self.driver_flags.iter().map(|s| s.to_string()));
 
         flags
     }
@@ -85,6 +80,14 @@ impl ChromeBrowser {
         let mut ct_config = ConnectionTransportConfig::default();
         ct_config.host = config.host.clone().unwrap_or(String::from("localhost"));
         ct_config.port = port;
+
+        config.capabilities.add_arg("start-maximized".to_string());
+        config.capabilities.add_arg("disable-infobars".to_string());
+
+        // Add --no-sandbox arg to Chrome options if sandbox is disabled
+        if !config.sandbox {
+            config.capabilities.add_arg("no-sandbox".to_string());
+        }
 
         // Convert ChromeCapabilities to CapabilitiesRequest
         let capabilities = Some(config.capabilities.clone().build());
