@@ -180,7 +180,6 @@ impl ChromeBrowser {
     }
 
     /// Wait for nodes to appear with a timeout (in milliseconds)
-    /// Returns Ok(nodes) if found, Ok(empty vec) if timeout without error, Err only if an actual error occurred
     pub async fn wait_for_nodes(
         &mut self,
         locator: Locator,
@@ -191,35 +190,22 @@ impl ChromeBrowser {
         let timeout = timeout_ms.unwrap_or(4000);
         let poll_interval = poll_interval_ms.unwrap_or(timeout / 6);
         let start = std::time::Instant::now();
-        let mut last_error: Option<FindNodesError> = None;
 
         loop {
-            match self.find_nodes(
+            let nodes = self.find_nodes(
                 locator.clone(),
                 context_id.clone(),
                 None,
                 None,
                 None,
-            ).await {
-                Ok(nodes) => {
-                    if !nodes.is_empty() {
-                        return Ok(nodes);
-                    }
-                    // Clear any previous errors since this attempt succeeded (just found no nodes)
-                    last_error = None;
-                }
-                Err(e) => {
-                    // Store the error but don't return it yet
-                    last_error = Some(e);
-                }
+            ).await?;
+
+            if !nodes.is_empty() {
+                return Ok(nodes);
             }
 
             if start.elapsed().as_millis() as u64 >= timeout {
-                // Timeout reached - return error only if we had one, otherwise return empty vec
-                return match last_error {
-                    Some(err) => Err(err),
-                    None => Ok(Vec::new()),
-                };
+                return Ok(Vec::new());
             }
 
             tokio::time::sleep(tokio::time::Duration::from_millis(poll_interval)).await;
