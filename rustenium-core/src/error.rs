@@ -3,7 +3,7 @@ use rustenium_bidi_commands::{ErrorResponse, ResultData};
 
 #[derive(Debug, Error)]
 pub enum SessionSendError {
-    #[error("Remote End Returned an Error Response")]
+    #[error("Remote End Returned an Error Response: {0:?}")]
     ErrorResponse(ErrorResponse),
     #[error("Could not receive response for command in time")]
     ResponseReceiveTimeoutError(ResponseReceiveTimeoutError)

@@ -11,7 +11,6 @@ pub type BrowsingContext = String;
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
 pub enum OriginUnion {
     #[serde(rename = "viewport")]
     Viewport,

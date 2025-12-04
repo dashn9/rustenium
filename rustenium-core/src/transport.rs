@@ -110,7 +110,7 @@ impl WebsocketConnectionTransport {
         let addr_host = connection_config.host_port();
 
         // Retry on connection refused (driver starting up)
-        let retry_delay_ms = 200;
+        let retry_delay_ms = 400;
         let mut retries = 3;
 
         let stream = loop {
