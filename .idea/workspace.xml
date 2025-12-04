@@ -25,7 +25,9 @@
   <component name="ChangeListManager">
     <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/src/browsers/chrome/chrome.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/browsers/chrome/chrome.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-core/src/transport.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/transport.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/Cargo.toml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,7 +67,7 @@
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "junie.onboarding.icon.badge.shown": "true",
-    "last_opened_file_path": "D:/Documents/m-workspace/rustenium/apps/drivers/chrome",
+    "last_opened_file_path": "D:/Documents/m-workspace/rustenium/apps/linux",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
@@ -79,12 +81,16 @@
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Documents\m-workspace\rustenium\apps\linux" />
+      <recent name="D:\Documents\m-workspace\rustenium\apps\drivers\chrome" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Documents\m-workspace\rustenium\apps\drivers\chrome\142.0.7444.176\chrome-win64" />
       <recent name="D:\Documents\m-workspace\rustenium\rustenium\src\browsers\chrome" />
       <recent name="D:\Documents\m-workspace\rustenium\rustenium-core\src" />
       <recent name="D:\Documents\m-workspace\rustenium\rustenium\src\browser\bidi" />
       <recent name="D:\Documents\m-workspace\rustenium\rustenium\src\browser" />
-      <recent name="D:\Documents\m-workspace\rustenium\rustenium-generator\src" />
     </key>
   </component>
   <component name="RunManager" selected="Cargo.Test Rustenium">
@@ -184,7 +190,8 @@
       <workItem from="1764259817825" duration="5422000" />
       <workItem from="1764438844154" duration="596000" />
       <workItem from="1764523117625" duration="899000" />
-      <workItem from="1764606711970" duration="5045000" />
+      <workItem from="1764606711970" duration="8296000" />
+      <workItem from="1764784020896" duration="4367000" />
     </task>
     <servers />
   </component>

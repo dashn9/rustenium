@@ -108,7 +108,23 @@ impl ConnectionTransport for WebsocketConnectionTransport {
 impl WebsocketConnectionTransport {
     pub async fn new(connection_config: &ConnectionTransportConfig) -> Result<Self, Box<dyn Error>> {
         let addr_host = connection_config.host_port();
-        let stream = TcpStream::connect(&addr_host).await.unwrap();
+
+        // Retry on connection refused (driver starting up)
+        let retry_delay_ms = 200;
+        let mut retries = 3;
+
+        let stream = loop {
+            match TcpStream::connect(&addr_host).await {
+                Ok(stream) => break stream,
+                Err(e) if e.kind() == std::io::ErrorKind::ConnectionRefused && retries > 0 => {
+                    println!("Connection refused, retrying... ({} attempts remaining)", retries);
+                    retries -= 1;
+                    tokio::time::sleep(tokio::time::Duration::from_millis(retry_delay_ms)).await;
+                }
+                Err(e) => return Err(Box::new(e)),
+            }
+        };
+
         let uri = connection_config.path();
         let req = Request::builder()
             .method("GET")
