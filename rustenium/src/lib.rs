@@ -1,5 +1,5 @@
 mod drivers;
-mod error;
+pub mod error;
 pub mod browsers;
 mod nodes;
 mod input;
