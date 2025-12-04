@@ -3,7 +3,7 @@ use std::error::Error;
 
 use crate::error::{ContextCreationListenError, ContextIndexError, EvaluateResultError, FindNodesError, InterceptNetworkError, OpenUrlError};
 use rustenium_bidi_commands::browsing_context::types::{
-    BrowsingContext as BidiBrowsingContext, CreateType, Locator, ReadinessState,
+    BrowsingContext as BidiBrowsingContext, ClipRectangle, CreateType, ImageFormat, Locator, OriginUnion, ReadinessState,
 };
 use rustenium_bidi_commands::script::commands::{
     AddPreloadScript, AddPreloadScriptParameters, CallFunction,
@@ -25,7 +25,8 @@ use tokio::time::sleep;
 
 use crate::nodes::{Node, NodePosition};
 use rustenium_bidi_commands::browsing_context::commands::{
-    BrowsingContextLocateNodesMethod, BrowsingContextNavigateMethod, LocateNodes,
+    BrowsingContextCaptureScreenshotMethod, BrowsingContextLocateNodesMethod, BrowsingContextNavigateMethod,
+    CaptureScreenshot, CaptureScreenshotParameters, CaptureScreenshotResult, LocateNodes,
     LocateNodesParameters, LocateNodesResult, Navigate, NavigateParameters, NavigateResult,
 };
 use rustenium_bidi_commands::script::commands::{
@@ -633,5 +634,97 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
             .map_err(|e| InterceptNetworkError::CommandResultError(e))?;
 
         Ok(())
+    }
+
+    /// Capture a screenshot of the current browsing context
+    /// If `save_path` is provided:
+    ///   - If it's a directory, saves with auto-generated filename (screenshot_TIMESTAMP.png)
+    ///   - If it's a file path, saves to that exact location
+    ///   Returns the final path where the file was saved
+    /// Otherwise, returns the base64-encoded image data
+    pub async fn screenshot(
+        &mut self,
+        context_id: Option<BidiBrowsingContext>,
+        origin: Option<OriginUnion>,
+        format: Option<ImageFormat>,
+        clip: Option<ClipRectangle>,
+        save_path: Option<&str>,
+    ) -> Result<String, crate::error::ScreenshotError> {
+        let context_id = context_id.unwrap_or(self.get_active_context_id()?);
+
+        let result = self
+            .send_command(CommandData::BrowsingContextCommand(
+                BrowsingContextCommand::CaptureScreenshot(CaptureScreenshot {
+                    method: BrowsingContextCaptureScreenshotMethod::BrowsingContextCaptureScreenshot,
+                    params: CaptureScreenshotParameters {
+                        context: context_id,
+                        origin,
+                        format,
+                        clip,
+                    },
+                }),
+            ))
+            .await;
+
+        let base64_data = match result {
+            Ok(ResultData::BrowsingContextResult(browsing_context_result)) => {
+                match browsing_context_result {
+                    BrowsingContextResult::CaptureScreenshotResult(screenshot_result) => {
+                        screenshot_result.data
+                    }
+                    _ => return Err(crate::error::ScreenshotError::CommandResultError(
+                        CommandResultError::InvalidResultTypeError(
+                            ResultData::BrowsingContextResult(browsing_context_result),
+                        ),
+                    )),
+                }
+            }
+            Ok(result) => return Err(crate::error::ScreenshotError::CommandResultError(
+                CommandResultError::InvalidResultTypeError(result),
+            )),
+            Err(err) => return Err(crate::error::ScreenshotError::CommandResultError(
+                CommandResultError::SessionSendError(err),
+            )),
+        };
+
+        // If save_path is provided, save to file
+        if let Some(path) = save_path {
+            use std::path::Path;
+
+            let path_obj = Path::new(path);
+
+            // Determine the final file path
+            let final_path = if path_obj.is_dir() {
+                // Generate timestamp-based filename
+                let timestamp = std::time::SystemTime::now()
+                    .duration_since(std::time::UNIX_EPOCH)
+                    .map(|d| d.as_millis())
+                    .unwrap_or(0);
+                let filename = format!("screenshot_{}.png", timestamp);
+                path_obj.join(filename)
+            } else {
+                // Verify parent directory exists
+                if let Some(parent) = path_obj.parent() {
+                    if !parent.as_os_str().is_empty() && !parent.exists() {
+                        return Err(crate::error::ScreenshotError::InvalidPath(
+                            format!("Parent directory does not exist: {}", parent.display())
+                        ));
+                    }
+                }
+                path_obj.to_path_buf()
+            };
+
+            // Decode base64 and write to file
+            use base64::{Engine as _, engine::general_purpose};
+            let decoded = general_purpose::STANDARD.decode(&base64_data)
+                .map_err(|e| crate::error::ScreenshotError::Base64DecodeError(e.to_string()))?;
+
+            std::fs::write(&final_path, decoded)
+                .map_err(|e| crate::error::ScreenshotError::FileWriteError(e.to_string()))?;
+
+            Ok(final_path.to_string_lossy().to_string())
+        } else {
+            Ok(base64_data)
+        }
     }
 }

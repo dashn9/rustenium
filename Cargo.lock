@@ -1008,6 +1008,7 @@ checksum = "357703d41365b4b27c590e3ed91eabb1b663f07c4c084095e60cbed4362dff0d"
 name = "rustenium"
 version = "0.1.0"
 dependencies = [
+ "base64 0.22.1",
  "reqwest",
  "rustenium-bidi-commands",
  "rustenium-core",

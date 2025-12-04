@@ -1,5 +1,5 @@
 use rustenium_bidi_commands::browsing_context::commands::{LocateNodes, LocateNodesResult, NavigateResult};
-use rustenium_bidi_commands::browsing_context::types::{BrowsingContext, Locator, ReadinessState};
+use rustenium_bidi_commands::browsing_context::types::{BrowsingContext, ClipRectangle, ImageFormat, Locator, OriginUnion, ReadinessState};
 use rustenium_bidi_commands::{CommandData, ResultData, Event, EventData, NetworkEvent};
 use rustenium_bidi_commands::script::types::{
     ChannelValue, LocalValue, PrimitiveProtocolValue, RemoteReference, RemoteValue,
@@ -380,6 +380,35 @@ impl ChromeBrowser {
         script: String,
     ) -> Result<(), EvaluateResultError> {
         self.driver.remove_preload_script(script).await
+    }
+
+    /// Capture a screenshot of the current browsing context
+    /// If `save_path` is provided:
+    ///   - If it's a directory, saves with auto-generated filename (screenshot_TIMESTAMP.png)
+    ///   - If it's a file path, saves to that exact location
+    ///   Returns the final path where the file was saved
+    /// Otherwise, returns the base64-encoded image data
+    ///
+    /// # Example
+    /// ```ignore
+    /// // Get base64 data
+    /// let base64_data = browser.screenshot(None, None, None, None, None).await?;
+    ///
+    /// // Save to specific file
+    /// let path = browser.screenshot(None, None, None, None, Some("screenshot.png")).await?;
+    ///
+    /// // Save to directory with auto-generated filename
+    /// let path = browser.screenshot(None, None, None, None, Some("./screenshots/")).await?;
+    /// ```
+    pub async fn screenshot(
+        &mut self,
+        context_id: Option<BrowsingContext>,
+        origin: Option<OriginUnion>,
+        format: Option<ImageFormat>,
+        clip: Option<ClipRectangle>,
+        save_path: Option<&str>,
+    ) -> Result<String, crate::error::ScreenshotError> {
+        self.driver.screenshot(context_id, origin, format, clip, save_path).await
     }
 
 }

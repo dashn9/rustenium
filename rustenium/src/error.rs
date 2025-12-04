@@ -80,3 +80,21 @@ pub enum MouseInputError {
     #[error(transparent)]
     InvalidPositionError(#[from] InvalidPositionError),
 }
+
+#[derive(Debug, Error)]
+pub enum ScreenshotError {
+    #[error(transparent)]
+    ContextIndexError(#[from] ContextIndexError),
+    #[error("An error occured executing command")]
+    CommandResultError(CommandResultError),
+    #[error("Invalid path: {0}")]
+    InvalidPath(String),
+    #[error("Failed to decode base64 data: {0}")]
+    Base64DecodeError(String),
+    #[error("Failed to write file: {0}")]
+    FileWriteError(String),
+    #[error("Node does not have a shared ID")]
+    NoSharedId,
+    #[error("Node does not have a context")]
+    NoContext,
+}

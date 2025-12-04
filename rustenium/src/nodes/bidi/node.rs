@@ -1,10 +1,13 @@
-use rustenium_bidi_commands::browsing_context::types::Locator;
+use rustenium_bidi_commands::browsing_context::types::{ClipRectangle, ElementClipRectangle, ElementEnum, ImageFormat, Locator, OriginUnion};
 use rustenium_bidi_commands::script::types::{
     ContextTarget, LocalValue, NodeRemoteValue,
     PrimitiveProtocolValue, RemoteReference, RemoteValue, SharedReference, Target
 };
 use rustenium_bidi_commands::script::commands::{CallFunction, CallFunctionParameters, EvaluateResult, ScriptCallFunctionMethod};
-use rustenium_bidi_commands::{CommandData, ResultData, ScriptCommand, ScriptResult};
+use rustenium_bidi_commands::{BrowsingContextCommand, BrowsingContextResult, CommandData, ResultData, ScriptCommand, ScriptResult};
+use rustenium_bidi_commands::browsing_context::commands::{
+    BrowsingContextCaptureScreenshotMethod, CaptureScreenshot, CaptureScreenshotParameters,
+};
 use rustenium_core::transport::ConnectionTransport;
 use rustenium_core::{CommandResponseState, Session};
 use rustenium_core::error::{CommandResultError, ResponseReceiveTimeoutError, SessionSendError};
@@ -549,5 +552,109 @@ impl<T: ConnectionTransport> BidiNode<T> {
             ))?;
 
         Ok(())
+    }
+
+    /// Capture a screenshot of this element
+    /// If `save_path` is provided:
+    ///   - If it's a directory, saves with auto-generated filename (screenshot_TIMESTAMP.png)
+    ///   - If it's a file path, saves to that exact location
+    ///   Returns the final path where the file was saved
+    /// Otherwise, returns the base64-encoded image data
+    pub async fn screenshot(
+        &self,
+        origin: Option<OriginUnion>,
+        format: Option<ImageFormat>,
+        save_path: Option<&str>,
+    ) -> Result<String, crate::error::ScreenshotError> {
+        let shared_id = self._raw_node.shared_id.as_ref()
+            .ok_or(crate::error::ScreenshotError::NoSharedId)?;
+
+        let context = self.context.as_ref()
+            .ok_or(crate::error::ScreenshotError::NoContext)?;
+
+        // Create clip rectangle for this element
+        let clip = Some(ClipRectangle::ElementClipRectangle(ElementClipRectangle {
+            r#type: ElementEnum::Element,
+            element: SharedReference {
+                shared_id: shared_id.clone(),
+                handle: self._raw_node.handle.clone(),
+                extensible: Default::default(),
+            },
+        }));
+
+        let result = self
+            .send_command(CommandData::BrowsingContextCommand(
+                BrowsingContextCommand::CaptureScreenshot(CaptureScreenshot {
+                    method: BrowsingContextCaptureScreenshotMethod::BrowsingContextCaptureScreenshot,
+                    params: CaptureScreenshotParameters {
+                        context: context.clone(),
+                        origin,
+                        format,
+                        clip,
+                    },
+                }),
+            ))
+            .await;
+
+        let base64_data = match result {
+            Ok(ResultData::BrowsingContextResult(browsing_context_result)) => {
+                match browsing_context_result {
+                    BrowsingContextResult::CaptureScreenshotResult(screenshot_result) => {
+                        screenshot_result.data
+                    }
+                    _ => return Err(crate::error::ScreenshotError::CommandResultError(
+                        CommandResultError::InvalidResultTypeError(
+                            ResultData::BrowsingContextResult(browsing_context_result),
+                        ),
+                    )),
+                }
+            }
+            Ok(result) => return Err(crate::error::ScreenshotError::CommandResultError(
+                CommandResultError::InvalidResultTypeError(result),
+            )),
+            Err(err) => return Err(crate::error::ScreenshotError::CommandResultError(
+                CommandResultError::SessionSendError(err),
+            )),
+        };
+
+        // If save_path is provided, save to file
+        if let Some(path) = save_path {
+            use std::path::Path;
+
+            let path_obj = Path::new(path);
+
+            // Determine the final file path
+            let final_path = if path_obj.is_dir() {
+                // Generate timestamp-based filename
+                let timestamp = std::time::SystemTime::now()
+                    .duration_since(std::time::UNIX_EPOCH)
+                    .map(|d| d.as_millis())
+                    .unwrap_or(0);
+                let filename = format!("screenshot_{}.png", timestamp);
+                path_obj.join(filename)
+            } else {
+                // Verify parent directory exists
+                if let Some(parent) = path_obj.parent() {
+                    if !parent.as_os_str().is_empty() && !parent.exists() {
+                        return Err(crate::error::ScreenshotError::InvalidPath(
+                            format!("Parent directory does not exist: {}", parent.display())
+                        ));
+                    }
+                }
+                path_obj.to_path_buf()
+            };
+
+            // Decode base64 and write to file
+            use base64::{Engine as _, engine::general_purpose};
+            let decoded = general_purpose::STANDARD.decode(&base64_data)
+                .map_err(|e| crate::error::ScreenshotError::Base64DecodeError(e.to_string()))?;
+
+            std::fs::write(&final_path, decoded)
+                .map_err(|e| crate::error::ScreenshotError::FileWriteError(e.to_string()))?;
+
+            Ok(final_path.to_string_lossy().to_string())
+        } else {
+            Ok(base64_data)
+        }
     }
 }
