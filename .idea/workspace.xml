@@ -25,9 +25,8 @@
   <component name="ChangeListManager">
     <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/types.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-bidi-commands/src/browsing_context/types.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-core/src/error.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/error.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-core/src/transport.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/transport.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-core/src/network.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/network.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-core/src/session.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/session.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -193,7 +192,8 @@
       <workItem from="1764606711970" duration="8296000" />
       <workItem from="1764784020896" duration="8297000" />
       <workItem from="1764816669349" duration="1600000" />
-      <workItem from="1764854872352" duration="3098000" />
+      <workItem from="1764854872352" duration="5305000" />
+      <workItem from="1765048667496" duration="4719000" />
     </task>
     <servers />
   </component>

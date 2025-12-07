@@ -1,7 +1,8 @@
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
-use std::time::{Duration};
+use std::time::Duration;
 use rand::Rng;
+use crate::network::NetworkRequestHandledState;
 use rustenium_bidi_commands::{Command, CommandData, CommandResponse, ErrorResponse, ResultData};
 use rustenium_bidi_commands::session::commands::{New as SessionNew, SessionNewMethod, NewParameters as SessionNewParameters, SessionCommand, SessionResult};
 use rustenium_bidi_commands::session::types::CapabilitiesRequest;
@@ -19,6 +20,8 @@ pub struct Session<T: ConnectionTransport> {
     id: Option<String>,
     connection: Connection<T>,
     bidi_events: Arc<Mutex<Vec<BidiEvent>>>,
+    /// Tracks network requests that have been handled, keyed by request ID
+    pub handled_network_requests: Arc<Mutex<HashMap<String, NetworkRequestHandledState>>>,
 }
 
 pub enum SessionConnectionType {
@@ -34,7 +37,12 @@ impl<T: ConnectionTransport> Session<T> {
             .unwrap();
         let connection = Connection::new(connection_transport);
         connection.start_listeners();
-        Session { id: None, connection, bidi_events: Arc::new(Mutex::new(Vec::new())) }
+        Session {
+            id: None,
+            connection,
+            bidi_events: Arc::new(Mutex::new(Vec::new())),
+            handled_network_requests: Arc::new(Mutex::new(HashMap::new())),
+        }
     }
 
     pub async fn create_new_bidi_session(&mut self, connection_type: SessionConnectionType, capabilities: Option<CapabilitiesRequest>) -> () {

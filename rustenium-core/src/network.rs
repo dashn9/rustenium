@@ -3,6 +3,17 @@ use crate::transport::ConnectionTransport;
 use crate::{CommandResponseState, Session};
 use form_urlencoded;
 use tokio::sync::oneshot;
+
+/// How a network request was handled
+#[derive(Debug, Clone)]
+pub enum NetworkRequestHandledState {
+    /// Request was continued (with or without modifications)
+    Continued,
+    /// Request was aborted/failed
+    Aborted,
+    /// Request was responded with a custom response
+    Responded,
+}
 use rustenium_bidi_commands::network::commands::{
     ContinueRequest, ContinueRequestParameters, FailRequest, NetworkFailRequestMethod,
     FailRequestParameters, NetworkContinueRequestMethod, ProvideResponse, NetworkProvideResponseMethod,
@@ -103,6 +114,37 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
         Ok(parsed)
     }
 
+    /// Check if this request has already been handled
+    pub async fn is_handled(&self) -> bool {
+        self.session.lock().await.handled_network_requests
+            .lock()
+            .unwrap()
+            .contains_key(&self.params.base_parameters.request.request)
+    }
+
+    /// Get the handled state if the request was already handled
+    pub async fn get_handled_state(&self) -> Option<NetworkRequestHandledState> {
+        self.session.lock().await
+            .handled_network_requests
+            .lock()
+            .unwrap()
+            .get(&self.params.base_parameters.request.request)
+            .cloned()
+    }
+
+    /// Mark this request as handled with the given state
+    async fn mark_handled(&self, state: NetworkRequestHandledState) {
+        let session = self.session.lock().await;
+        session
+            .handled_network_requests
+            .lock()
+            .unwrap()
+            .insert(
+                self.params.base_parameters.request.request.clone(),
+                state,
+            );
+    }
+
     /// Continue the request without modifications
     pub async fn continue_(&self) -> oneshot::Receiver<CommandResponseState> {
         let command =
@@ -118,8 +160,9 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
                 },
             }));
 
-        let mut session = self.session.lock().await;
-        session.send_and_get_receiver(command).await
+        let rx = self.session.lock().await.send_and_get_receiver(command).await;
+        self.mark_handled(NetworkRequestHandledState::Continued).await;
+        rx
     }
 
     /// Continue the request with modifications
@@ -131,12 +174,11 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
         method: Option<String>,
         body: Option<BytesValue>,
     ) -> oneshot::Receiver<CommandResponseState> {
-        let request = self.params.base_parameters.request.request.clone();
         let command =
             CommandData::NetworkCommand(NetworkCommand::ContinueRequest(ContinueRequest {
                 method: NetworkContinueRequestMethod::NetworkContinueRequest,
                 params: ContinueRequestParameters {
-                    request,
+                    request: self.params.base_parameters.request.request.clone(),
                     body,
                     cookies,
                     headers,
@@ -145,8 +187,9 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
                 },
             }));
 
-        let mut session = self.session.lock().await;
-        session.send_and_get_receiver(command).await
+        let rx = self.session.lock().await.send_and_get_receiver(command).await;
+        self.mark_handled(NetworkRequestHandledState::Continued).await;
+        rx
     }
 
     /// Abort/fail the request
@@ -158,8 +201,9 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
             },
         }));
 
-        let mut session = self.session.lock().await;
-        session.send_and_get_receiver(command).await
+        let rx = self.session.lock().await.send_and_get_receiver(command).await;
+        self.mark_handled(NetworkRequestHandledState::Aborted).await;
+        rx
     }
 
     /// Provide a custom response
@@ -184,7 +228,8 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
                 },
             }));
 
-        let mut session = self.session.lock().await;
-        session.send_and_get_receiver(command).await
+        let rx = self.session.lock().await.send_and_get_receiver(command).await;
+        self.mark_handled(NetworkRequestHandledState::Responded).await;
+        rx
     }
 }
