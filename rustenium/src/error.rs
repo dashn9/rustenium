@@ -98,3 +98,11 @@ pub enum ScreenshotError {
     #[error("Node does not have a context")]
     NoContext,
 }
+
+#[derive(Debug, Error)]
+pub enum EmulationError {
+    #[error(transparent)]
+    ContextIndexError(#[from] ContextIndexError),
+    #[error("An error occured executing command")]
+    CommandResultError(CommandResultError),
+}

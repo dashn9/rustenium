@@ -12,7 +12,7 @@ use rustenium_bidi_commands::script::commands::{
 };
 use rustenium_bidi_commands::session::commands::SubscribeResult;
 use rustenium_bidi_commands::session::types::CapabilitiesRequest;
-use rustenium_bidi_commands::{BrowsingContextCommand, BrowsingContextEvent, BrowsingContextResult, CommandData, Event, EventData, NetworkCommand, NetworkEvent, NetworkResult, ResultData, ScriptCommand, ScriptResult};
+use rustenium_bidi_commands::{BrowsingContextCommand, BrowsingContextEvent, BrowsingContextResult, CommandData, EmulationCommand, EmulationResult, Event, EventData, NetworkCommand, NetworkEvent, NetworkResult, ResultData, ScriptCommand, ScriptResult};
 use rustenium_core::Context;
 use rustenium_core::events::EventManagement;
 use rustenium_core::session::SessionConnectionType;
@@ -725,6 +725,55 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
             Ok(final_path.to_string_lossy().to_string())
         } else {
             Ok(base64_data)
+        }
+    }
+
+    /// Set the timezone override for the browsing contexts
+    ///
+    /// # Arguments
+    /// * `timezone` - Optional timezone ID (e.g., "America/New_York", "Europe/London"). Pass None to clear the override.
+    /// * `contexts` - Optional list of browsing context IDs to apply the override to. If None, applies to the active context.
+    /// * `user_contexts` - Optional list of user context IDs
+    ///
+    /// # Example
+    /// ```ignore
+    /// // Set timezone to New York
+    /// driver.set_timezone_override(Some("America/New_York".to_string()), None, None).await?;
+    ///
+    /// // Clear timezone override
+    /// driver.set_timezone_override(None, None, None).await?;
+    /// ```
+    pub async fn set_timezone_override(
+        &mut self,
+        timezone: Option<String>,
+        contexts: Option<Vec<BidiBrowsingContext>>,
+        user_contexts: Option<Vec<String>>,
+    ) -> Result<(), crate::error::EmulationError> {
+        use rustenium_bidi_commands::emulation::commands::{
+            EmulationSetTimezoneOverrideMethod, SetTimezoneOverride, SetTimezoneOverrideParameters,
+        };
+
+        let result = self
+            .send_command(CommandData::EmulationCommand(
+                EmulationCommand::SetTimezoneOverride(SetTimezoneOverride {
+                    method: EmulationSetTimezoneOverrideMethod::EmulationSetTimezoneOverride,
+                    params: SetTimezoneOverrideParameters {
+                        timezone,
+                        contexts,
+                        user_contexts,
+                    },
+                }),
+            ))
+            .await;
+
+        match result {
+            Ok(ResultData::EmulationResult(EmulationResult::SetTimezoneOverrideResult(_))) => Ok(()),
+            Ok(result) => Err(crate::error::EmulationError::CommandResultError(
+                CommandResultError::InvalidResultTypeError(result),
+            )),
+            Err(err) => Err(crate::error::EmulationError::CommandResultError(
+                CommandResultError::SessionSendError(err),
+            )),
         }
     }
 }

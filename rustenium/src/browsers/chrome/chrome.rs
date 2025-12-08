@@ -411,6 +411,30 @@ impl ChromeBrowser {
         self.driver.screenshot(context_id, origin, format, clip, save_path).await
     }
 
+    /// Set the timezone override for the browsing contexts
+    ///
+    /// # Arguments
+    /// * `timezone` - Optional timezone ID (e.g., "America/New_York", "Europe/London"). Pass None to clear the override.
+    /// * `contexts` - Optional list of browsing context IDs to apply the override to. If None, applies to the active context.
+    /// * `user_contexts` - Optional list of user context IDs
+    ///
+    /// # Example
+    /// ```ignore
+    /// // Set timezone to New York
+    /// browser.set_timezone_override(Some("America/New_York".to_string()), None, None).await?;
+    ///
+    /// // Clear timezone override
+    /// browser.set_timezone_override(None, None, None).await?;
+    /// ```
+    pub async fn set_timezone_override(
+        &mut self,
+        timezone: Option<String>,
+        contexts: Option<Vec<BrowsingContext>>,
+        user_contexts: Option<Vec<String>>,
+    ) -> Result<(), crate::error::EmulationError> {
+        self.driver.set_timezone_override(timezone, contexts, user_contexts).await
+    }
+
 }
 
 
