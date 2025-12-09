@@ -772,7 +772,7 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
             .await;
 
         match result {
-            Ok(ResultData::EmulationResult(EmulationResult::SetTimezoneOverrideResult(_))) => Ok(()),
+            Ok(ResultData::EmptyResult(_)) => Ok(()),
             Ok(result) => Err(crate::error::EmulationError::CommandResultError(
                 CommandResultError::InvalidResultTypeError(result),
             )),
