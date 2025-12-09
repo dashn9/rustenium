@@ -257,12 +257,6 @@ impl ChromeBrowser {
         F: Fn(NetworkRequest<WebsocketConnectionTransport>) -> Fut + Send + Sync + 'static,
         Fut: Future<Output = ()> + Send + 'static,
     {
-        // Use active context if no contexts provided
-        let contexts = match contexts {
-            Some(ctxs) => Some(ctxs),
-            None => Some(vec![self.driver.get_active_context_id()?]),
-        };
-
         self.driver.on_request(handler, url_patterns, contexts).await
     }
 
@@ -440,6 +434,37 @@ impl ChromeBrowser {
         user_contexts: Option<Vec<String>>,
     ) -> Result<(), crate::error::EmulationError> {
         self.driver.set_timezone_override(timezone, contexts, user_contexts).await
+    }
+
+    /// Set HTTP authentication credentials (similar to Puppeteer's authenticate)
+    ///
+    /// # Arguments
+    /// * `username` - The username for HTTP authentication
+    /// * `password` - The password for HTTP authentication
+    /// * `url_patterns` - Optional URL patterns to apply authentication to
+    /// * `contexts` - Optional list of browsing contexts
+    ///
+    /// # Example
+    /// ```ignore
+    /// // Authenticate for all requests
+    /// browser.authenticate("user", "pass", None, None).await?;
+    ///
+    /// // Authenticate for specific URLs
+    /// use rustenium_bidi_commands::network::types::UrlPattern;
+    /// let patterns = vec![UrlPattern {
+    ///     pattern: Some("https://example.com/*".to_string()),
+    ///     ..Default::default()
+    /// }];
+    /// browser.authenticate("user", "pass", Some(patterns), None).await?;
+    /// ```
+    pub async fn authenticate(
+        &mut self,
+        username: impl Into<String> + Send + 'static,
+        password: impl Into<String> + Send + 'static,
+        url_patterns: Option<Vec<UrlPattern>>,
+        contexts: Option<Vec<String>>,
+    ) -> Result<(), crate::error::InterceptNetworkError> {
+        self.driver.authenticate(username, password, url_patterns, contexts).await
     }
 
 }

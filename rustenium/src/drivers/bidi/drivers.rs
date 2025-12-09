@@ -12,7 +12,7 @@ use rustenium_bidi_commands::script::commands::{
 };
 use rustenium_bidi_commands::session::commands::SubscribeResult;
 use rustenium_bidi_commands::session::types::CapabilitiesRequest;
-use rustenium_bidi_commands::{BrowsingContextCommand, BrowsingContextEvent, BrowsingContextResult, CommandData, EmulationCommand, EmulationResult, Event, EventData, NetworkCommand, NetworkEvent, NetworkResult, ResultData, ScriptCommand, ScriptResult};
+use rustenium_bidi_commands::{BrowsingContextCommand, BrowsingContextEvent, BrowsingContextResult, CommandData, EmulationCommand, EmulationResult, Event, EventData, NetworkCommand, NetworkEvent, NetworkResult, ResultData, ScriptCommand, ScriptResult, EmptyResult};
 use rustenium_core::Context;
 use rustenium_core::events::EventManagement;
 use rustenium_core::session::SessionConnectionType;
@@ -569,6 +569,60 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
         Ok(())
     }
 
+    /// Generic network event handler
+    async fn on_network<F>(
+        &mut self,
+        phase: InterceptPhase,
+        event_name: &'static str,
+        handler: F,
+        url_patterns: Option<Vec<UrlPattern>>,
+        contexts: Option<Vec<String>>,
+    ) -> Result<(), InterceptNetworkError>
+    where
+        F: FnMut(Event) -> std::pin::Pin<Box<dyn Future<Output = ()> + Send>> + Send + Sync + 'static,
+    {
+        // Use active context if no contexts provided
+        let contexts = match contexts {
+            Some(ctxs) => Some(ctxs),
+            None => Some(vec![self.get_active_context_id()?]),
+        };
+
+        // Add network intercept
+        let add_intercept_command = CommandData::NetworkCommand(
+            NetworkCommand::AddIntercept(AddIntercept {
+                method: NetworkAddInterceptMethod::NetworkAddIntercept,
+                params: AddInterceptParameters {
+                    phases: vec![phase],
+                    url_patterns,
+                    contexts,
+                },
+            })
+        );
+
+        let result = self.send_command(add_intercept_command).await
+            .map_err(|e| InterceptNetworkError::CommandResultError(CommandResultError::SessionSendError(e)))?;
+
+        // Extract intercept ID from result (optional, can be used later)
+        if let ResultData::NetworkResult(NetworkResult::AddInterceptResult(_intercept_result)) = result {
+            // intercept_id available here if needed
+        } else {
+            return Err(InterceptNetworkError::CommandResultError(
+                CommandResultError::InvalidResultTypeError(result)
+            ));
+        }
+
+        // Subscribe to the network event
+        self.session.lock().await.subscribe_events(
+            HashSet::from([event_name]),
+            handler,
+            None,
+            None,
+        ).await
+            .map_err(|e| InterceptNetworkError::CommandResultError(e))?;
+
+        Ok(())
+    }
+
     /// Register a handler to be called for each network request
     pub async fn on_request<F, Fut>(
         &mut self,
@@ -580,205 +634,93 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
         F: Fn(NetworkRequest<T>) -> Fut + Send + Sync + 'static,
         Fut: Future<Output = ()> + Send + 'static,
     {
-        // Use active context if no contexts provided
-        let contexts = match contexts {
-            Some(ctxs) => Some(ctxs),
-            None => Some(vec![self.get_active_context_id()?]),
-        };
-
-
-        // Add network intercept
-        let add_intercept_command = CommandData::NetworkCommand(
-            NetworkCommand::AddIntercept(AddIntercept {
-                method: NetworkAddInterceptMethod::NetworkAddIntercept,
-                params: AddInterceptParameters {
-                    phases: vec![InterceptPhase::BeforeRequestSent],
-                    url_patterns,
-                    contexts: None,
-                },
-            })
-        );
-
-        let result = self.send_command(add_intercept_command).await
-            .map_err(|e| InterceptNetworkError::CommandResultError(CommandResultError::SessionSendError(e)))?;
-
-        // Extract intercept ID from result
-        let intercept_id = if let ResultData::NetworkResult(NetworkResult::AddInterceptResult(intercept_result)) = result {
-            intercept_result.intercept
-        } else {
-            return Err(InterceptNetworkError::CommandResultError(
-                CommandResultError::InvalidResultTypeError(result)
-            ));
-        };
-
-        // Clone Arc to session for use in handler (cheap - just clones the Arc pointer)
         let session = Arc::clone(&self.session);
-
-        // Subscribe to network.beforeRequestSent events
         let handler = Arc::new(handler);
-        self.session.lock().await.subscribe_events(
-            HashSet::from(["network.beforeRequestSent"]),
+
+        self.on_network(
+            InterceptPhase::BeforeRequestSent,
+            "network.beforeRequestSent",
             move |event: Event| {
                 let handler = Arc::clone(&handler);
                 let session = Arc::clone(&session);
-                async move {
+                Box::pin(async move {
                     if let EventData::NetworkEvent(NetworkEvent::BeforeRequestSent(before_request)) = event.event_data {
                         let request = NetworkRequest::new(before_request.params, session);
                         handler(request).await;
                     }
-                }
+                })
             },
-            None,
-            None,
+            url_patterns,
+            contexts,
         ).await
-            .map_err(|e| InterceptNetworkError::CommandResultError(e))?;
-
-        Ok(())
     }
 
-    /// Capture a screenshot of the current browsing context
-    /// If `save_path` is provided:
-    ///   - If it's a directory, saves with auto-generated filename (screenshot_TIMESTAMP.png)
-    ///   - If it's a file path, saves to that exact location
-    ///   Returns the final path where the file was saved
-    /// Otherwise, returns the base64-encoded image data
-    pub async fn screenshot(
-        &mut self,
-        context_id: Option<BidiBrowsingContext>,
-        origin: Option<OriginUnion>,
-        format: Option<ImageFormat>,
-        clip: Option<ClipRectangle>,
-        save_path: Option<&str>,
-    ) -> Result<String, crate::error::ScreenshotError> {
-        let context_id = context_id.unwrap_or(self.get_active_context_id()?);
-
-        let result = self
-            .send_command(CommandData::BrowsingContextCommand(
-                BrowsingContextCommand::CaptureScreenshot(CaptureScreenshot {
-                    method: BrowsingContextCaptureScreenshotMethod::BrowsingContextCaptureScreenshot,
-                    params: CaptureScreenshotParameters {
-                        context: context_id,
-                        origin,
-                        format,
-                        clip,
-                    },
-                }),
-            ))
-            .await;
-
-        let base64_data = match result {
-            Ok(ResultData::BrowsingContextResult(browsing_context_result)) => {
-                match browsing_context_result {
-                    BrowsingContextResult::CaptureScreenshotResult(screenshot_result) => {
-                        screenshot_result.data
-                    }
-                    _ => return Err(crate::error::ScreenshotError::CommandResultError(
-                        CommandResultError::InvalidResultTypeError(
-                            ResultData::BrowsingContextResult(browsing_context_result),
-                        ),
-                    )),
-                }
-            }
-            Ok(result) => return Err(crate::error::ScreenshotError::CommandResultError(
-                CommandResultError::InvalidResultTypeError(result),
-            )),
-            Err(err) => return Err(crate::error::ScreenshotError::CommandResultError(
-                CommandResultError::SessionSendError(err),
-            )),
-        };
-
-        // If save_path is provided, save to file
-        if let Some(path) = save_path {
-            use std::path::Path;
-
-            let path_obj = Path::new(path);
-
-            // Determine the final file path
-            let final_path = if path_obj.is_dir() {
-                // Generate timestamp-based filename
-                let timestamp = std::time::SystemTime::now()
-                    .duration_since(std::time::UNIX_EPOCH)
-                    .map(|d| d.as_millis())
-                    .unwrap_or(0);
-                let filename = format!("screenshot_{}.png", timestamp);
-                path_obj.join(filename)
-            } else {
-                // Verify parent directory exists
-                if let Some(parent) = path_obj.parent() {
-                    if !parent.as_os_str().is_empty() && !parent.exists() {
-                        return Err(crate::error::ScreenshotError::InvalidPath(
-                            format!("Parent directory does not exist: {}", parent.display())
-                        ));
-                    }
-                }
-                path_obj.to_path_buf()
-            };
-
-            // Decode base64 and write to file
-            use base64::{Engine as _, engine::general_purpose};
-            let decoded = general_purpose::STANDARD.decode(&base64_data)
-                .map_err(|e| crate::error::ScreenshotError::Base64DecodeError(e.to_string()))?;
-
-            std::fs::write(&final_path, decoded)
-                .map_err(|e| crate::error::ScreenshotError::FileWriteError(e.to_string()))?;
-
-            Ok(final_path.to_string_lossy().to_string())
-        } else {
-            Ok(base64_data)
-        }
-    }
-
-    /// Set the timezone override for the browsing contexts
-    ///
-    /// # Arguments
-    /// * `timezone` - Optional timezone ID (e.g., "America/New_York", "Europe/London"). Pass None to clear the override.
-    /// * `contexts` - Optional list of browsing context IDs to apply the override to. If None, applies to the active context.
-    /// * `user_contexts` - Optional list of user context IDs
+    /// Set HTTP authentication credentials (similar to Puppeteer's authenticate)
     ///
     /// # Example
     /// ```ignore
-    /// // Set timezone to New York
-    /// driver.set_timezone_override(Some("America/New_York".to_string()), None, None).await?;
-    ///
-    /// // Clear timezone override
-    /// driver.set_timezone_override(None, None, None).await?;
+    /// driver.authenticate("user", "pass", None, None).await?;
     /// ```
-    pub async fn set_timezone_override(
+    pub async fn authenticate(
         &mut self,
-        timezone: Option<String>,
-        contexts: Option<Vec<BidiBrowsingContext>>,
-        user_contexts: Option<Vec<String>>,
-    ) -> Result<(), crate::error::EmulationError> {
-        use rustenium_bidi_commands::emulation::commands::{
-            EmulationSetTimezoneOverrideMethod, SetTimezoneOverride, SetTimezoneOverrideParameters,
+        username: impl Into<String> + Send + 'static,
+        password: impl Into<String> + Send + 'static,
+        url_patterns: Option<Vec<UrlPattern>>,
+        contexts: Option<Vec<String>>,
+    ) -> Result<(), InterceptNetworkError> {
+        use rustenium_bidi_commands::network::commands::{
+            ContinueWithAuth, NetworkContinueWithAuthMethod, ContinueWithAuthParameters,
+        };
+        use rustenium_bidi_commands::network::types::{
+            AuthCredentials, ContinueWithAuthCredentials,
+            ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion,
+            PasswordEnum, ProvideCredentialsEnum,
         };
 
-        let contexts = match contexts {
-            Some(ctxs) => Some(ctxs),
-            None => Some(vec![self.get_active_context_id()?]),
-        };
+        let username = username.into();
+        let password = password.into();
+        let session = Arc::clone(&self.session);
 
-        let result = self
-            .send_command(CommandData::EmulationCommand(
-                EmulationCommand::SetTimezoneOverride(SetTimezoneOverride {
-                    method: EmulationSetTimezoneOverrideMethod::EmulationSetTimezoneOverride,
-                    params: SetTimezoneOverrideParameters {
-                        timezone,
-                        contexts,
-                        user_contexts,
-                    },
-                }),
-            ))
-            .await;
+        self.on_network(
+            InterceptPhase::AuthRequired,
+            "network.AuthRequired",
+            move |event: Event| {
+                let session = Arc::clone(&session);
+                let username = username.clone();
+                let password = password.clone();
 
-        match result {
-            Ok(ResultData::EmptyResult(_)) => Ok(()),
-            Ok(result) => Err(crate::error::EmulationError::CommandResultError(
-                CommandResultError::InvalidResultTypeError(result),
-            )),
-            Err(err) => Err(crate::error::EmulationError::CommandResultError(
-                CommandResultError::SessionSendError(err),
-            )),
-        }
+                Box::pin(async move {
+                    if let EventData::NetworkEvent(NetworkEvent::AuthRequired(auth_required)) = event.event_data {
+                        let request_id = auth_required.params.base_parameters.request.request;
+
+                        let credentials = AuthCredentials {
+                            r#type: PasswordEnum::Password,
+                            username,
+                            password,
+                        };
+
+                        let auth_creds = ContinueWithAuthCredentials {
+                            action: ProvideCredentialsEnum::ProvideCredentials,
+                            credentials,
+                        };
+
+                        let command = CommandData::NetworkCommand(
+                            NetworkCommand::ContinueWithAuth(ContinueWithAuth {
+                                method: NetworkContinueWithAuthMethod::NetworkContinueWithAuth,
+                                params: ContinueWithAuthParameters {
+                                    request: request_id,
+                                    continue_with_auth_credentials_continue_with_auth_no_credentials_union:
+                                        ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion::ContinueWithAuthCredentials(auth_creds),
+                                },
+                            })
+                        );
+
+                        let _ = session.lock().await.send(command).await;
+                    }
+                })
+            },
+            url_patterns,
+            contexts,
+        ).await
     }
 }
