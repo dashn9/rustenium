@@ -5,7 +5,7 @@ use rustenium_bidi_commands::script::types::{
     ChannelValue, LocalValue, PrimitiveProtocolValue, RemoteReference, RemoteValue,
     SerializationOptions, SerializationOptionsincludeShadowTreeUnion, SharedReference
 };
-use rustenium_bidi_commands::session::types::CapabilitiesRequest;
+use rustenium_bidi_commands::session::types::{CapabilitiesRequest, ProxyConfiguration};
 use rustenium_bidi_commands::network::commands::{AddIntercept, NetworkAddInterceptMethod, AddInterceptParameters};
 use rustenium_bidi_commands::network::types::{InterceptPhase, UrlPattern};
 use rustenium_core::error::{CommandResultError, SessionSendError};
@@ -30,6 +30,7 @@ pub struct ChromeConfig {
     pub driver_flags: Vec<&'static str>,
     pub capabilities: ChromeCapabilities,
     pub sandbox: bool,
+    pub proxy: Option<ProxyConfiguration>,
 }
 
 impl Default for ChromeConfig {
@@ -41,6 +42,7 @@ impl Default for ChromeConfig {
             driver_flags: Vec::new(),
             capabilities: ChromeCapabilities::default(),
             sandbox: false,
+            proxy: None,
         }
     }
 }
@@ -87,6 +89,11 @@ impl ChromeBrowser {
         // Add --no-sandbox arg to Chrome options if sandbox is disabled
         if !config.sandbox {
             config.capabilities.add_arg("no-sandbox".to_string());
+        }
+
+        // Set proxy if provided
+        if let Some(proxy) = config.proxy.clone() {
+            config.capabilities.base_capabilities.proxy = Some(proxy);
         }
 
         // Convert ChromeCapabilities to CapabilitiesRequest
@@ -411,7 +418,7 @@ impl ChromeBrowser {
         self.driver.screenshot(context_id, origin, format, clip, save_path).await
     }
 
-    /// Set the timezone override for the browsing contexts
+    /// Emulate a timezone for the browsing contexts
     ///
     /// # Arguments
     /// * `timezone` - Optional timezone ID (e.g., "America/New_York", "Europe/London"). Pass None to clear the override.
@@ -421,12 +428,12 @@ impl ChromeBrowser {
     /// # Example
     /// ```ignore
     /// // Set timezone to New York
-    /// browser.set_timezone_override(Some("America/New_York".to_string()), None, None).await?;
+    /// browser.emulate_timezone(Some("America/New_York".to_string()), None, None).await?;
     ///
     /// // Clear timezone override
-    /// browser.set_timezone_override(None, None, None).await?;
+    /// browser.emulate_timezone(None, None, None).await?;
     /// ```
-    pub async fn set_timezone_override(
+    pub async fn emulate_timezone(
         &mut self,
         timezone: Option<String>,
         contexts: Option<Vec<BrowsingContext>>,

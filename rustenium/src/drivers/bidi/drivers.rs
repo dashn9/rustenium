@@ -753,6 +753,11 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
             EmulationSetTimezoneOverrideMethod, SetTimezoneOverride, SetTimezoneOverrideParameters,
         };
 
+        let contexts = match contexts {
+            Some(ctxs) => Some(ctxs),
+            None => Some(vec![self.get_active_context_id()?]),
+        };
+
         let result = self
             .send_command(CommandData::EmulationCommand(
                 EmulationCommand::SetTimezoneOverride(SetTimezoneOverride {
