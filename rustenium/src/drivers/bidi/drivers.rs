@@ -570,7 +570,7 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
     }
 
     /// Generic network event handler
-    async fn on_network<F>(
+    async fn on_network<F, R>(
         &mut self,
         phase: InterceptPhase,
         event_name: &'static str,
@@ -579,7 +579,8 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
         contexts: Option<Vec<String>>,
     ) -> Result<(), InterceptNetworkError>
     where
-        F: FnMut(Event) -> std::pin::Pin<Box<dyn Future<Output = ()> + Send>> + Send + Sync + 'static,
+        F: Fn(Event) -> R + Send + Sync + 'static,
+        R: Future<Output=()> + Send + 'static,
     {
         // Use active context if no contexts provided
         let contexts = match contexts {
@@ -643,12 +644,12 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
             move |event: Event| {
                 let handler = Arc::clone(&handler);
                 let session = Arc::clone(&session);
-                Box::pin(async move {
+                async move {
                     if let EventData::NetworkEvent(NetworkEvent::BeforeRequestSent(before_request)) = event.event_data {
                         let request = NetworkRequest::new(before_request.params, session);
                         handler(request).await;
                     }
-                })
+                }
             },
             url_patterns,
             contexts,
@@ -689,7 +690,7 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
                 let username = username.clone();
                 let password = password.clone();
 
-                Box::pin(async move {
+                async move {
                     if let EventData::NetworkEvent(NetworkEvent::AuthRequired(auth_required)) = event.event_data {
                         let request_id = auth_required.params.base_parameters.request.request;
 
@@ -717,7 +718,7 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
 
                         let _ = session.lock().await.send(command).await;
                     }
-                })
+                }
             },
             url_patterns,
             contexts,
