@@ -15,11 +15,17 @@ pub enum NetworkRequestHandledState {
     Responded,
 }
 use rustenium_bidi_commands::network::commands::{
-    ContinueRequest, ContinueRequestParameters, FailRequest, NetworkFailRequestMethod,
-    FailRequestParameters, NetworkContinueRequestMethod, ProvideResponse, NetworkProvideResponseMethod,
+    ContinueRequest, ContinueRequestParameters, ContinueWithAuth, ContinueWithAuthParameters,
+    FailRequest, NetworkFailRequestMethod, FailRequestParameters, NetworkContinueRequestMethod,
+    NetworkContinueWithAuthMethod, ProvideResponse, NetworkProvideResponseMethod,
     ProvideResponseParameters,
 };
-use rustenium_bidi_commands::network::types::BeforeRequestSentParameters;
+use rustenium_bidi_commands::network::types::{
+    AuthRequiredParameters, BaseParameters, BeforeRequestSentParameters,
+    ContinueWithAuthCredentials, ContinueWithAuthNoCredentials,
+    ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion,
+    ContinueWithAuthNoCredentialsactionUnion, ProvideCredentialsEnum,
+};
 use rustenium_bidi_commands::network::types::{BytesValue, CookieHeader, SetCookieHeader, Header};
 use rustenium_bidi_commands::{CommandData, NetworkCommand};
 use serde_json;
@@ -29,14 +35,14 @@ use tokio::sync::Mutex;
 
 /// Represents a network request that can be intercepted
 pub struct  NetworkRequest<T: ConnectionTransport> {
-    pub params: BeforeRequestSentParameters,
+    pub base: BaseParameters,
     session: Arc<Mutex<Session<T>>>,
 }
 
 impl<T: ConnectionTransport> std::fmt::Debug for NetworkRequest<T> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("NetworkRequest")
-            .field("params", &self.params)
+            .field("base", &self.base)
             .field("session", &"<Arc<Mutex<Session>>>")
             .finish()
     }
@@ -44,33 +50,42 @@ impl<T: ConnectionTransport> std::fmt::Debug for NetworkRequest<T> {
 
 impl<T: ConnectionTransport> NetworkRequest<T> {
     pub fn new(params: BeforeRequestSentParameters, session: Arc<Mutex<Session<T>>>) -> Self {
-        NetworkRequest { params, session }
+        NetworkRequest {
+            base: params.base_parameters,
+            session
+        }
+    }
+
+    pub fn from_auth_required(params: AuthRequiredParameters, session: Arc<Mutex<Session<T>>>) -> Self {
+        NetworkRequest {
+            base: params.base_parameters,
+            session
+        }
     }
 
     /// Get the request ID
     pub fn request_id(&self) -> &str {
-        &self.params.base_parameters.request.request
+        &self.base.request.request
     }
 
     /// Get the request URL
     pub fn url(&self) -> &str {
-        &self.params.base_parameters.request.url
+        &self.base.request.url
     }
 
     /// Get the request headers
     pub fn headers(&self) -> &Vec<Header> {
-        &self.params.base_parameters.request.headers
+        &self.base.request.headers
     }
 
     /// Get the request method
     pub fn method(&self) -> &str {
-        &self.params.base_parameters.request.method
+        &self.base.request.method
     }
 
     /// Check if the request has POST data (Chrome-specific)
     pub fn has_post_data(&self) -> bool {
-        self.params
-            .base_parameters
+        self.base
             .request
             .extensible
             .get("goog:hasPostData")
@@ -80,8 +95,7 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
 
     /// Get the POST data as a raw string if available (Chrome-specific)
     pub fn post_data(&self) -> Option<&str> {
-        self.params
-            .base_parameters
+        self.base
             .request
             .extensible
             .get("goog:postData")
@@ -119,7 +133,7 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
         self.session.lock().await.handled_network_requests
             .lock()
             .unwrap()
-            .contains_key(&self.params.base_parameters.request.request)
+            .contains_key(&self.base.request.request)
     }
 
     /// Get the handled state if the request was already handled
@@ -128,7 +142,7 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
             .handled_network_requests
             .lock()
             .unwrap()
-            .get(&self.params.base_parameters.request.request)
+            .get(&self.base.request.request)
             .cloned()
     }
 
@@ -140,7 +154,7 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
             .lock()
             .unwrap()
             .insert(
-                self.params.base_parameters.request.request.clone(),
+                self.base.request.request.clone(),
                 state,
             );
     }
@@ -151,7 +165,7 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
             CommandData::NetworkCommand(NetworkCommand::ContinueRequest(ContinueRequest {
                 method: NetworkContinueRequestMethod::NetworkContinueRequest,
                 params: ContinueRequestParameters {
-                    request: self.params.base_parameters.request.request.clone(),
+                    request: self.base.request.request.clone(),
                     body: None,
                     cookies: None,
                     headers: None,
@@ -178,7 +192,7 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
             CommandData::NetworkCommand(NetworkCommand::ContinueRequest(ContinueRequest {
                 method: NetworkContinueRequestMethod::NetworkContinueRequest,
                 params: ContinueRequestParameters {
-                    request: self.params.base_parameters.request.request.clone(),
+                    request: self.base.request.request.clone(),
                     body,
                     cookies,
                     headers,
@@ -197,7 +211,7 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
         let command = CommandData::NetworkCommand(NetworkCommand::FailRequest(FailRequest {
             method: NetworkFailRequestMethod::NetworkFailRequest,
             params: FailRequestParameters {
-                request: self.params.base_parameters.request.request.clone(),
+                request: self.base.request.request.clone(),
             },
         }));
 
@@ -219,7 +233,7 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
             CommandData::NetworkCommand(NetworkCommand::ProvideResponse(ProvideResponse {
                 method: NetworkProvideResponseMethod::NetworkProvideResponse,
                 params: ProvideResponseParameters {
-                    request: self.params.base_parameters.request.request.clone(),
+                    request: self.base.request.request.clone(),
                     body,
                     cookies,
                     headers,
@@ -231,5 +245,38 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
         let rx = self.session.lock().await.send_and_get_receiver(command).await;
         self.mark_handled(NetworkRequestHandledState::Responded).await;
         rx
+    }
+
+    /// Continue with HTTP authentication
+    pub async fn continue_with_auth(&self, credentials: Option<rustenium_bidi_commands::network::types::AuthCredentials>) -> Result<(), SessionSendError> {
+        let auth_union = match credentials {
+            Some(credentials) => {
+                ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion::ContinueWithAuthCredentials(
+                    ContinueWithAuthCredentials {
+                        action: ProvideCredentialsEnum::ProvideCredentials,
+                        credentials,
+                    }
+                )
+            },
+            None => {
+                ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion::ContinueWithAuthNoCredentials(
+                    ContinueWithAuthNoCredentials {
+                        action: ContinueWithAuthNoCredentialsactionUnion::Default,
+                    }
+                )
+            }
+        };
+
+        let command = CommandData::NetworkCommand(
+            NetworkCommand::ContinueWithAuth(ContinueWithAuth {
+                method: NetworkContinueWithAuthMethod::NetworkContinueWithAuth,
+                params: ContinueWithAuthParameters {
+                    request: self.base.request.request.clone(),
+                    continue_with_auth_credentials_continue_with_auth_no_credentials_union: auth_union,
+                },
+            })
+        );
+
+        self.session.lock().await.send(command).await.map(|_| ())
     }
 }

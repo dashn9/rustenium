@@ -75,7 +75,7 @@ impl ConnectionTransportConfig {
 }
 
 pub trait ConnectionTransport {
-    async fn send(&mut self, message: String) -> ();
+    fn send(&mut self, message: String) -> impl Future<Output=()> + Send;
     fn listen(&self, listener: UnboundedSender<String>) -> ();
     fn close(&self) -> ();
     fn on_close(&self) -> ();
@@ -87,9 +87,12 @@ pub struct WebsocketConnectionTransport {
 }
 
 impl ConnectionTransport for WebsocketConnectionTransport {
-    async fn send(&mut self, message: String) -> () {
-        let frame = Frame::text(fastwebsockets::Payload::from(message.as_bytes()));
-        self.client_tx.lock().await.write_frame(frame).await.unwrap();
+    fn send(&mut self, message: String) -> impl Future<Output=()> + Send
+    {
+        async move {
+            let frame = Frame::text(fastwebsockets::Payload::from(message.as_bytes()));
+            self.client_tx.lock().await.write_frame(frame).await.unwrap();
+        }
     }
 
     fn listen(&self, listener: UnboundedSender<String>) -> () {
