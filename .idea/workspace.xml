@@ -25,8 +25,6 @@
   <component name="ChangeListManager">
     <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-core/src/network.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/network.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium-core/src/transport.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/transport.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rustenium/src/drivers/bidi/drivers.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/drivers/bidi/drivers.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -196,6 +194,8 @@
       <workItem from="1764854872352" duration="5305000" />
       <workItem from="1765048667496" duration="13925000" />
       <workItem from="1765286696142" duration="5865000" />
+      <workItem from="1765331478202" duration="470000" />
+      <workItem from="1765377506962" duration="4637000" />
     </task>
     <servers />
   </component>

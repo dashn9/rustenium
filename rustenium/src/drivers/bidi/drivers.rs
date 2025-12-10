@@ -572,8 +572,8 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
     /// Generic network event handler
     async fn on_network<F, R>(
         &mut self,
-        phase: InterceptPhase,
-        event_name: &'static str,
+        phases: Vec<InterceptPhase>,
+        event_names: Vec<&'static str>,
         handler: F,
         url_patterns: Option<Vec<UrlPattern>>,
         contexts: Option<Vec<String>>,
@@ -593,9 +593,9 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
             NetworkCommand::AddIntercept(AddIntercept {
                 method: NetworkAddInterceptMethod::NetworkAddIntercept,
                 params: AddInterceptParameters {
-                    phases: vec![phase],
-                    url_patterns : None,
-                    contexts: None,
+                    phases,
+                    url_patterns,
+                    contexts: contexts.clone(),
                 },
             })
         );
@@ -614,9 +614,9 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
 
         // Subscribe to the network event
         self.session.lock().await.subscribe_events(
-            HashSet::from([event_name]),
+            HashSet::from_iter(event_names),
             handler,
-            None,
+            contexts,
             None,
         ).await
             .map_err(|e| InterceptNetworkError::CommandResultError(e))?;
@@ -639,8 +639,8 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
         let handler = Arc::new(handler);
 
         self.on_network(
-            InterceptPhase::BeforeRequestSent,
-            "network.beforeRequestSent",
+            vec![InterceptPhase::BeforeRequestSent],
+            vec!["network.beforeRequestSent"],
             move |event: Event| {
                 let handler = Arc::clone(&handler);
                 let session = Arc::clone(&session);
@@ -675,16 +675,17 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
         let password = password.into();
         let session = Arc::clone(&self.session);
 
+        println!("Activated Authenticate");
         self.on_network(
-            InterceptPhase::AuthRequired,
-            "network.authRequired",
+            vec![InterceptPhase::AuthRequired, InterceptPhase::ResponseStarted],
+            vec!["network.authRequired"],
             move |event: Event| {
                 let session = Arc::clone(&session);
                 let username = username.clone();
                 let password = password.clone();
-
+                println!("Authenticate Outer Closure");
                 async move {
-                    println!("Auth Requireed Came In");
+                    println!("Authenticate Future Closure");
                     if let EventData::NetworkEvent(NetworkEvent::AuthRequired(auth_required)) = event.event_data {
                         let request = NetworkRequest::from_auth_required(auth_required.params, session);
 
