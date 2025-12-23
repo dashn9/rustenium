@@ -122,7 +122,12 @@ impl<T: ConnectionTransport> Session<T> {
             params: EmptyParams { extensible: Default::default() },
         };
 
-        self.send(CommandData::SessionCommand(SessionCommand::End(command))).await
+        let result = self.send(CommandData::SessionCommand(SessionCommand::End(command))).await;
+
+        // Close the connection after ending the session
+        self.connection.close();
+
+        result
     }
 }
 

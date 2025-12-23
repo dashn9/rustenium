@@ -56,4 +56,8 @@ where
     pub async fn send(&mut self, data: String) {
         self.transport.send(data).await;
     }
+
+    pub fn close(&self) {
+        self.transport.close();
+    }
 }

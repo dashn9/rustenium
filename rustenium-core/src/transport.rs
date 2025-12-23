@@ -100,7 +100,11 @@ impl ConnectionTransport for WebsocketConnectionTransport {
     }
 
     fn close(&self) -> () {
-        todo!()
+        let client_tx = self.client_tx.clone();
+        tokio::spawn(async move {
+            let mut tx = client_tx.lock().await;
+            let _ = tx.write_frame(Frame::close(1000, b"")).await;
+        });
     }
 
     fn on_close(&self) -> () {
@@ -165,11 +169,24 @@ impl WebsocketConnectionTransport {
         tokio::spawn(async move {
             loop {
                 let mut ws_rx_half = ws_rx.lock().await;
-                let frame = ws_rx_half.read_frame(&mut |frame| async {
+                let frame = match ws_rx_half.read_frame(&mut |frame| async {
                     // Handles obligated send
                     let mut ws_write_half = ws_tx.lock().await;
                     return ws_write_half.write_frame(frame).await;
-                }).await.unwrap();
+                }).await {
+                    Ok(frame) => frame,
+                    // Err(WebSocketError::IoError(e)) if e.kind() == std::io::ErrorKind::ConnectionAborted => {
+                    //     eprintln!("WebSocket connection aborted: {}. Exiting listener loop.", e);
+                    //     break;
+                    // }
+                    Err(WebSocketError::UnexpectedEOF) => {
+                        eprintln!("WebSocket connection closed (unexpected EOF). Exiting listener loop.");
+                        break;
+                    }
+                    Err(e) => {
+                        panic!("Unexpected WebSocket error: {:?}", e);
+                    }
+                };
 
                 match frame.opcode {
                     OpCode::Close => break,
