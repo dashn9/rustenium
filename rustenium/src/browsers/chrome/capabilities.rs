@@ -154,6 +154,19 @@ impl ChromeCapabilities {
         self
     }
 
+    pub fn add_args<I, S>(&mut self, new_args: I) -> &mut Self
+    where
+        I: IntoIterator<Item = S>,
+        S: Into<String>,
+    {
+        if let Some(ref mut args) = self.chrome_options.args {
+            args.extend(new_args.into_iter().map(|s| s.into()));
+        } else {
+            self.chrome_options.args = Some(new_args.into_iter().map(|s| s.into()).collect());
+        }
+        self
+    }
+
     pub fn binary(&mut self, binary: impl Into<String>) -> &mut Self {
         self.chrome_options.binary = Some(binary.into());
         self

@@ -31,6 +31,24 @@ pub struct ChromeConfig {
     pub capabilities: ChromeCapabilities,
     pub sandbox: bool,
     pub proxy: Option<ProxyConfiguration>,
+
+    /// Chrome remote debugging port. Controls how Chrome is launched and managed:
+    /// - `None` (default): Normal mode - chromedriver launches Chrome
+    /// - `Some(0)`: Auto mode - Rustenium starts Chrome and manages it internally
+    /// - `Some(port)`: Manual mode - Connect to existing Chrome running on specified port
+    pub remote_debugging_port: Option<u16>,
+
+    /// Path to Chrome executable. Used when remote_debugging_port is Some(0).
+    /// Defaults to "google-chrome" if not specified.
+    pub chrome_executable_path: Option<String>,
+
+    /// Chrome user data directory. Used when remote_debugging_port is Some(0).
+    /// If not specified, uses a temporary directory.
+    pub user_data_dir: Option<String>,
+
+    /// Additional Chrome command-line arguments (browser flags).
+    /// Used when remote_debugging_port is Some(0).
+    pub browser_flags: Option<Vec<String>>,
 }
 
 impl Default for ChromeConfig {
@@ -43,6 +61,10 @@ impl Default for ChromeConfig {
             capabilities: ChromeCapabilities::default(),
             sandbox: false,
             proxy: None,
+            remote_debugging_port: None,
+            chrome_executable_path: None,
+            user_data_dir: None,
+            browser_flags: None,
         }
     }
 }
@@ -83,6 +105,59 @@ impl ChromeBrowser {
         ct_config.host = config.host.clone().unwrap_or(String::from("localhost"));
         ct_config.port = port;
 
+        // Handle remote debugging modes FIRST, before modifying capabilities
+        let (debugger_address, chrome_process) = match config.remote_debugging_port {
+            Some(0) => {
+                // Auto mode (port 0): Start Chrome ourselves, then attach
+                let chrome_port = find_free_port().unwrap();
+                let chrome_exe = config.chrome_executable_path
+                    .as_deref()
+                    .unwrap_or("google-chrome");
+
+                // Use user-specified or default tmp directory for user data
+                let user_data_dir = config.user_data_dir.clone().unwrap_or_else(|| {
+                    std::env::temp_dir()
+                        .join(format!("rustenium-chrome-{}", chrome_port))
+                        .display()
+                        .to_string()
+                });
+
+                let mut chrome_args = vec![
+                    format!("--remote-debugging-port={}", chrome_port),
+                    format!("--user-data-dir={}", user_data_dir),
+                    "--no-first-run".to_string(),
+                    "--no-default-browser-check".to_string(),
+                ];
+
+                // Add user-specified browser flags
+                if let Some(ref flags) = config.browser_flags {
+                    chrome_args.extend(flags.iter().cloned());
+                }
+
+                use rustenium_core::process::Process;
+                let chrome_proc = Process::create(chrome_exe, chrome_args);
+
+                // Wait briefly for Chrome to start
+                tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
+
+                (Some(format!("localhost:{}", chrome_port)), Some(chrome_proc))
+            }
+            Some(port) => {
+                // Manual mode (specific port): Connect to existing Chrome on that port
+                (Some(format!("localhost:{}", port)), None)
+            }
+            None => {
+                // Normal mode: chromedriver will launch Chrome
+                (None, None)
+            }
+        };
+
+        // Set debugger_address capability if attaching
+        if let Some(addr) = debugger_address {
+            config.capabilities.debugger_address(addr);
+        }
+
+        // Continue with normal capability setup
         config.capabilities.add_arg("start-maximized".to_string());
         config.capabilities.add_arg("disable-infobars".to_string());
 
@@ -99,9 +174,11 @@ impl ChromeBrowser {
         // Convert ChromeCapabilities to CapabilitiesRequest
         let capabilities = Some(config.capabilities.clone().build());
 
+        // Start chromedriver (it will attach to Chrome if debugger_address is set)
         let result = Self::start(&config, &ct_config, SessionConnectionType::WebSocket, capabilities).await;
 
         let session = result.0;
+        let driver_process = result.1;
 
         let mut browser = ChromeBrowser {
             config,
@@ -111,7 +188,8 @@ impl ChromeBrowser {
                 session,
                 0,
                 Arc::new(Mutex::new(Vec::new())),
-                result.1,
+                driver_process,
+                chrome_process,  // Pass the Chrome process (Some or None)
             ),
         };
         browser.driver.listen_to_context_creation().await.unwrap();
@@ -468,7 +546,6 @@ impl ChromeBrowser {
     }
 
 }
-
 
 pub async fn create_chrome_browser(config: Option<ChromeConfig>) -> ChromeBrowser {
     let chrome_browser = ChromeBrowser::new(config.unwrap_or_default()).await;
