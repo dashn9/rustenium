@@ -3,8 +3,8 @@ use std::sync::{Arc, Mutex};
 use std::time::Duration;
 use rand::Rng;
 use crate::network::NetworkRequestHandledState;
-use rustenium_bidi_commands::{Command, CommandData, CommandResponse, ErrorResponse, ResultData};
-use rustenium_bidi_commands::session::commands::{New as SessionNew, SessionNewMethod, NewParameters as SessionNewParameters, SessionCommand, SessionResult};
+use rustenium_bidi_commands::{Command, CommandData, CommandResponse, ErrorResponse, ResultData, EmptyParams};
+use rustenium_bidi_commands::session::commands::{New as SessionNew, SessionNewMethod, NewParameters as SessionNewParameters, SessionCommand, SessionResult, End, SessionEndMethod};
 use rustenium_bidi_commands::session::types::CapabilitiesRequest;
 use tokio::sync::oneshot;
 use tokio::time::timeout;
@@ -114,6 +114,15 @@ impl<T: ConnectionTransport> Session<T> {
             // I might need to remove command from commands response subscriptions
             Err(_) => Err(SessionSendError::ResponseReceiveTimeoutError(ResponseReceiveTimeoutError))
         }
+    }
+
+    pub async fn end_session(&mut self) -> Result<ResultData, SessionSendError> {
+        let command = End {
+            method: SessionEndMethod::SessionEnd,
+            params: EmptyParams { extensible: Default::default() },
+        };
+
+        self.send(CommandData::SessionCommand(SessionCommand::End(command))).await
     }
 }
 

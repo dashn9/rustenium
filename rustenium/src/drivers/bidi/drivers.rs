@@ -78,7 +78,6 @@ pub struct BidiDriver<T: ConnectionTransport + Send + Sync> {
     pub active_bc_index: usize,
     pub browsing_contexts: Arc<Mutex<Vec<Context>>>,
     pub driver_process: Process,
-    pub chrome_process: Option<Process>,
     pub mouse: BidiMouse<T>,
     pub human_mouse: HumanMouse<BidiMouse<T>>,
     pub keyboard: Keyboard<T>,
@@ -92,7 +91,6 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
         active_bc_index: usize,
         browsing_contexts: Arc<Mutex<Vec<Context>>>,
         driver_process: Process,
-        chrome_process: Option<Process>,
     ) -> Self {
         let mouse = BidiMouse::new(session.clone());
         let human_mouse = HumanMouse::new(BidiMouse::new(session.clone()));
@@ -105,7 +103,6 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
             active_bc_index,
             browsing_contexts,
             driver_process,
-            chrome_process,
             mouse,
             human_mouse,
             keyboard,
@@ -851,5 +848,11 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
                 CommandResultError::SessionSendError(err),
             )),
         }
+    }
+
+    /// End the session
+    pub async fn end_session(&mut self) -> Result<(), SessionSendError> {
+        self.session.lock().await.end_session().await?;
+        Ok(())
     }
 }

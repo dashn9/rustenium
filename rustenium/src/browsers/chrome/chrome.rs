@@ -21,6 +21,7 @@ use super::capabilities::ChromeCapabilities;
 use std::sync::{Arc, Mutex};
 use std::collections::HashSet;
 use std::future::Future;
+use rustenium_core::process::Process;
 
 #[derive(Debug, Clone)]
 pub struct ChromeConfig {
@@ -93,6 +94,7 @@ impl DriverConfiguration for ChromeConfig {
 pub struct ChromeBrowser {
     config: ChromeConfig,
     driver: BidiDriver<WebsocketConnectionTransport>,
+    chrome_process: Option<Process>
 }
 
 impl BidiDrive<WebsocketConnectionTransport> for ChromeBrowser {}
@@ -189,8 +191,8 @@ impl ChromeBrowser {
                 0,
                 Arc::new(Mutex::new(Vec::new())),
                 driver_process,
-                chrome_process,  // Pass the Chrome process (Some or None)
             ),
+            chrome_process
         };
         browser.driver.listen_to_context_creation().await.unwrap();
         browser
@@ -543,6 +545,18 @@ impl ChromeBrowser {
         contexts: Option<Vec<String>>,
     ) -> Result<(), crate::error::InterceptNetworkError> {
         self.driver.authenticate(username, password, url_patterns, contexts).await
+    }
+
+    /// End the BiDi session and clean up resources
+    ///
+    /// # Example
+    /// ```ignore
+    /// let mut browser = ChromeBrowser::new(config).await;
+    /// // ... use browser ...
+    /// browser.end_bidi_session().await.unwrap();
+    /// ```
+    pub async fn end_bidi_session(&mut self) -> Result<(), SessionSendError> {
+        self.driver.end_session().await
     }
 
 }
