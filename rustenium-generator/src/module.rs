@@ -15,6 +15,7 @@ pub struct BidiType {
 }
 
 #[derive(Debug)]
+#[allow(dead_code)]
 pub struct Module {
     pub name: String,
     pub command_definition: Option<CommandDefinition>,
@@ -38,6 +39,7 @@ pub struct CommandDataType {
 }
 
 #[derive(Debug)]
+#[allow(dead_code)]
 pub struct EmptyParamsType {
     pub properties: Vec<crate::parser::Property>,
 }
@@ -63,6 +65,7 @@ pub struct ResultDataType {
 }
 
 #[derive(Debug)]
+#[allow(dead_code)]
 pub struct EmptyResultType {
     pub properties: Vec<crate::parser::Property>,
 }
@@ -83,6 +86,7 @@ pub struct ErrorCodeType {
 }
 
 #[derive(Debug)]
+#[allow(dead_code)]
 pub struct RootProtocol {
     pub command: CommandType,
     pub command_data: CommandDataType,

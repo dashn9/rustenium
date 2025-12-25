@@ -1,9 +1,7 @@
 use regex::Regex;
-use crate::command_parser::{CommandParams, CommandDefinition};
-use crate::event_parser::{EventParams, EventDefinition};
+use crate::command_parser::{CommandDefinition};
 use crate::module::Module;
 use std::sync::Mutex;
-use anyhow::Context;
 
 #[derive(Debug, Clone)]
 pub struct DeferredType {
@@ -49,6 +47,7 @@ pub fn process_deferred_types(modules: &mut Vec<crate::module::Module>, cddl_str
 }
 
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct Property {
     pub is_enum: bool,
     pub is_primitive: bool,
@@ -212,20 +211,6 @@ pub fn  parse_command_parameters(command_lines: &[&str], cddl_strings: Vec<&str>
     Ok(String::new())
 }
 
-/// Extracts parameter types from CDDL content
-/// 
-/// # Arguments
-/// * `cddl_content` - Raw CDDL content to parse
-/// 
-/// # Returns
-/// A vector of parameter type definitions
-pub fn extract_parameter_types(cddl_content: &str) -> Result<Vec<String>, Box<dyn std::error::Error>> {
-    // TODO: Parse different parameter types from CDDL
-    // Handle types like: text, bool, js-uint, custom types, arrays, objects, etc.
-    
-    Ok(Vec::new()) // Placeholder for now
-}
-
 /// Processes CDDL content and converts it to a Rust parameter struct
 ///
 /// # Arguments
@@ -271,7 +256,7 @@ pub fn process_cddl_to_struct(cddl_content: &str, cddl_strings: Vec<&str>, modul
         }
 
         // Parse line like: "? userContext: drivers.UserContext,"
-        let (property, meta_comment) = parse_cddl_property_line(line, &updated_cddl_refs, module, type_name)?;
+        let (property, _) = parse_cddl_property_line(line, &updated_cddl_refs, module, type_name)?;
         if let Some(property) = property {
             properties.push(property);
         }
@@ -414,7 +399,7 @@ fn flatten_inline_struct_union(union_content: &str) -> String {
 ///
 /// # Returns
 /// A tuple of (processed_content, updated_cddl_strings) where nested structs are replaced with type references
-fn preprocess_nested_structs(cddl_content: &str, parent_type_name: Option<&str>, mut cddl_strings: Vec<&str>, module: &mut Module) -> Result<(String, Vec<String>), Box<dyn std::error::Error>> {
+fn preprocess_nested_structs(cddl_content: &str, parent_type_name: Option<&str>, cddl_strings: Vec<&str>, module: &mut Module) -> Result<(String, Vec<String>), Box<dyn std::error::Error>> {
     let mut processed_lines = Vec::new();
     let mut owned_cddl_strings: Vec<String> = cddl_strings.iter().map(|s| s.to_string()).collect();
     let lines: Vec<&str> = cddl_content.lines().collect();

@@ -5,6 +5,7 @@ use crate::parser;
 /// Represents a complete command definition parsed from CDDL (Concise Data Definition Language)
 /// This contains both the raw CDDL content and the parsed command structures
 #[derive(Debug)]
+#[allow(dead_code)]
 pub struct CommandDefinition {
     /// The name of the command definition (e.g., "BrowserCommand", "NetworkCommand")
     pub name: String,
@@ -23,6 +24,7 @@ pub struct CommandDefinition {
 /// Represents a complete result definition parsed from CDDL (Concise Data Definition Language)
 /// This contains both the raw CDDL content and the parsed result structures
 #[derive(Debug)]
+#[allow(dead_code)]
 pub struct ResultDefinition {
     /// The name of the result definition (e.g., "BrowserResult", "NetworkResult")
     pub name: String,
@@ -89,7 +91,7 @@ pub fn parse_command_definition(name: String, content: String, cddl_strings: Vec
         if let Some(captures) = command_enum_pattern.captures(line) {
             let module_name = captures[1].to_string(); // Extract module name (before the dot)
             let name = captures[2].to_string(); // Extract command name (after the dot)
-            let attributes = extract_attributes(line)?;
+            let _attributes = extract_attributes(line)?;
 
             let rust_method_name = format!("{}{}",
                                            module_name.replace("_", "").to_string().chars().next().unwrap().to_uppercase().to_string() + &module_name[1..],
@@ -147,8 +149,8 @@ pub fn parse_command_definition(name: String, content: String, cddl_strings: Vec
 /// 
 /// # Note
 /// Currently returns an empty vector - can be expanded based on specific CDDL format needs
-fn extract_attributes(line: &str) -> Result<Vec<String>, Box<dyn std::error::Error>> {
-    let mut attributes = Vec::new();
+fn extract_attributes(_line: &str) -> Result<Vec<String>, Box<dyn std::error::Error>> {
+    let attributes = Vec::new();
     
     // Extract attributes from comments or other patterns as needed
     // For now, return empty vector - can be expanded based on your specific format
@@ -358,7 +360,7 @@ pub fn parse_result_definition(name: String, content: String, cddl_strings: Vec<
 ///
 /// # Returns
 /// Ok(()) if successful, or an error if parsing fails
-pub fn search_and_update_result(cddl_strings: Vec<&str>, bidi_result: &mut BidiResult, result_def: &mut ResultDefinition, module: &mut Module) -> Result<(), Box<dyn std::error::Error>> {
+pub fn search_and_update_result(cddl_strings: Vec<&str>, bidi_result: &mut BidiResult, _result_def: &mut ResultDefinition, module: &mut Module) -> Result<(), Box<dyn std::error::Error>> {
     // Search for result definition using pattern: result_name = { or result_name = TypeAlias
     let result_name = format!("{}.{}", bidi_result.module_name, bidi_result.name);
     let struct_pattern = format!(r"^{}\s*=\s*\{{", regex::escape(&result_name));

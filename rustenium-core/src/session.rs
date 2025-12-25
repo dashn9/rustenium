@@ -3,7 +3,7 @@ use std::sync::{Arc, Mutex};
 use std::time::Duration;
 use rand::Rng;
 use crate::network::NetworkRequestHandledState;
-use rustenium_bidi_commands::{Command, CommandData, CommandResponse, ErrorResponse, ResultData, EmptyParams};
+use rustenium_bidi_commands::{Command, CommandData, ResultData, EmptyParams};
 use rustenium_bidi_commands::session::commands::{New as SessionNew, SessionNewMethod, NewParameters as SessionNewParameters, SessionCommand, SessionResult, End, SessionEndMethod};
 use rustenium_bidi_commands::session::types::CapabilitiesRequest;
 use tokio::sync::oneshot;

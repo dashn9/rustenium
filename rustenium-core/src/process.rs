@@ -31,7 +31,7 @@ impl Process {
     pub async fn wait_for_pattern(&mut self, pattern: &str, timeout_secs: Option<u64>) -> String {
         let timeout_secs = timeout_secs.unwrap_or(20);
         let regex = Regex::new(pattern).expect("Invalid regex pattern");
-        let mut child = self.child.as_mut().unwrap();
+        let child = self.child.as_mut().unwrap();
 
         let stdout = child.stdout.as_mut().expect("Failed to access stdout");
         let stderr = child.stderr.as_mut().expect("Failed to access stderr");
@@ -39,7 +39,7 @@ impl Process {
         let mut stdout_lines = BufReader::new(stdout).lines();
         let mut stderr_lines = BufReader::new(stderr).lines();
 
-        let mut check_line = |label: &str, line: Result<Option<String>, _>| -> Option<String> {
+        let check_line = |_label: &str, line: Result<Option<String>, _>| -> Option<String> {
             if let Ok(Some(line)) = line {
                 if let Some(captures) = regex.captures(&line) {
                     if let Some(url) = captures.get(1) {

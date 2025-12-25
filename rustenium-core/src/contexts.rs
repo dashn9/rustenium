@@ -1,7 +1,7 @@
 use rustenium_bidi_commands::browsing_context::commands::{BrowsingContextCreateMethod, Create as BrowsingContextCreate, CreateParameters as BrowsingContextCreateParameters, BrowsingContextResult};
 use rustenium_bidi_commands::browsing_context::types::{BrowsingContext, CreateType as BrowsingContextCreateType};
 use rustenium_bidi_commands::{BrowsingContextCommand, CommandData, ResultData};
-use crate::error::{CommandResultError, SessionSendError};
+use crate::error::{CommandResultError};
 use crate::Session;
 use crate::transport::ConnectionTransport;
 

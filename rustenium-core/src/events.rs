@@ -1,4 +1,3 @@
-use crate::Context;
 use crate::error::{CommandResultError, SessionSendError};
 use crate::{impl_has_method, impl_has_method_getter};
 use rustenium_bidi_commands::session::commands::{
@@ -13,7 +12,7 @@ use rustenium_bidi_commands::{
     ResultData, ScriptEvent, SessionCommand, SessionResult,
 };
 use std::collections::HashSet;
-use std::future::{Future, IntoFuture};
+use std::future::{Future};
 use std::pin::Pin;
 use std::sync::Arc;
 use std::sync::Mutex as StdMutex;
@@ -98,27 +97,28 @@ impl fmt::Debug for BidiEvent {
 }
 
 pub trait EventManagement {
-    async fn send_event(
+    fn send_event(
         &mut self,
         command_data: CommandData,
-    ) -> Result<ResultData, SessionSendError>;
+    ) -> impl Future<Output = Result<ResultData, SessionSendError>>;
 
     fn get_bidi_events(&mut self) -> &mut Arc<StdMutex<Vec<BidiEvent>>>;
 
     fn push_event(&mut self, event: BidiEvent) -> ();
 
     // I don't know what to do with UserContexts yet
-    async fn subscribe_events<F, R>(
+    fn subscribe_events<F, R>(
         &mut self,
         events: HashSet<&str>,
         mut handler: F,
         browsing_contexts: Option<Vec<String>>,
-        user_contexts: Option<Vec<&str>>,
-    ) -> Result<Option<SubscribeResult>, CommandResultError>
+        _user_contexts: Option<Vec<&str>>,
+    ) -> impl Future<Output = Result<Option<SubscribeResult>, CommandResultError>>
     where
         F: FnMut(Event) -> R + Send + Sync + 'static,
         R: Future<Output=()> + Send + 'static,
     {
+        async move {
         let browsing_context_strings = match &browsing_contexts {
             Some(browsing_contexts) => browsing_contexts.clone(),
             None => vec![],
@@ -187,6 +187,7 @@ pub trait EventManagement {
                 Err(CommandResultError::SessionSendError(e))
             }
         }
+        }
     }
 
     /// Add an event handler without sending a subscription command
@@ -219,10 +220,11 @@ pub trait EventManagement {
     }
 
     /// Unsubscribe from events by event names
-    async fn unsubscribe_events_by_names(
+    fn unsubscribe_events_by_names(
         &mut self,
         events: HashSet<&str>,
-    ) -> Result<Option<UnsubscribeResult>, CommandResultError> {
+    ) -> impl Future<Output = Result<Option<UnsubscribeResult>, CommandResultError>> {
+        async move {
         let unsubscribe_command =
             CommandData::SessionCommand(SessionCommand::Unsubscribe(Unsubscribe {
                 method: SessionUnsubscribeMethod::SessionUnsubscribe,
@@ -261,13 +263,15 @@ pub trait EventManagement {
             Ok(result) => Err(CommandResultError::InvalidResultTypeError(result)),
             Err(e) => Err(CommandResultError::SessionSendError(e)),
         }
+        }
     }
 
     /// Unsubscribe from events by subscription IDs
-    async fn unsubscribe_events_by_ids(
+    fn unsubscribe_events_by_ids(
         &mut self,
         subscription_ids: Vec<Subscription>,
-    ) -> Result<Option<UnsubscribeResult>, CommandResultError> {
+    ) -> impl Future<Output = Result<Option<UnsubscribeResult>, CommandResultError>> {
+        async move {
         let unsubscribe_command =
             CommandData::SessionCommand(SessionCommand::Unsubscribe(Unsubscribe {
                 method: SessionUnsubscribeMethod::SessionUnsubscribe,
@@ -287,9 +291,11 @@ pub trait EventManagement {
             Ok(result) => Err(CommandResultError::InvalidResultTypeError(result)),
             Err(e) => Err(CommandResultError::SessionSendError(e)),
         }
+        }
     }
 
-    async fn event_dispatch(&mut self) -> (JoinHandle<()>, UnboundedSender<Event>) {
+    fn event_dispatch(&mut self) -> impl Future<Output = (JoinHandle<()>, UnboundedSender<Event>)> {
+        async move {
         let (tx, mut rx) = unbounded_channel::<Event>();
         let bidi_events = self.get_bidi_events().clone();
         (
@@ -310,5 +316,6 @@ pub trait EventManagement {
             }),
             tx,
         )
+        }
     }
 }

@@ -8,11 +8,13 @@ fn has_types_in_module(module: &crate::module::Module) -> bool {
 }
 
 /// Checks if any commands/results exist in module
+#[allow(dead_code)]
 fn has_commands_in_module(module: &crate::module::Module) -> bool {
     module.command_definition.is_some() || module.result_definition.is_some()
 }
 
 /// Checks if any events exist in module
+#[allow(dead_code)]
 fn has_events_in_module(module: &crate::module::Module) -> bool {
     module.event_definition.is_some()
 }
@@ -1296,7 +1298,7 @@ fn generate_event_enum(event_def: &crate::event_parser::EventDefinition) -> Stri
     output
 }
 
-fn generate_result_struct(result: &crate::command_parser::BidiResult, module: &Module) -> String {
+fn generate_result_struct(result: &crate::command_parser::BidiResult, _module: &Module) -> String {
     let mut output = String::new();
 
     // Handle type aliases differently from structs

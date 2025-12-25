@@ -5,6 +5,7 @@ use crate::parser;
 /// Represents a complete event definition parsed from CDDL (Concise Data Definition Language)
 /// This contains both the raw CDDL content and the parsed event structures
 #[derive(Debug)]
+#[allow(dead_code)]
 pub struct EventDefinition {
     /// The name of the event definition (e.g., "BrowserEvent", "NetworkEvent")
     pub name: String,

@@ -1,8 +1,5 @@
-use std::collections::HashMap;
-use regex::Regex;
-
-
 #[derive(Debug)]
+#[allow(dead_code)]
 pub struct EventDefinition {
     pub name: String,
     pub content: String,

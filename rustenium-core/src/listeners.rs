@@ -1,8 +1,8 @@
 use std::{collections::HashMap, sync::{Arc}};
 
-use rustenium_bidi_commands::{CommandResponse, ErrorResponse, Event, EventData, Message};
+use rustenium_bidi_commands::{CommandResponse, ErrorResponse, Event, Message};
 use serde::{Deserialize, Serialize};
-use tokio::sync::{mpsc::{unbounded_channel, UnboundedReceiver, UnboundedSender}, oneshot, Mutex};
+use tokio::sync::{mpsc::{UnboundedReceiver, UnboundedSender}, oneshot, Mutex};
 use tokio::task::JoinHandle;
 
 #[derive(Debug)]
@@ -29,7 +29,7 @@ impl Listener {
             while let Some(message) = self.rx.recv().await {
                 let parsed_message = match serde_json::from_str::<Message>(&message) {
                     Ok(result) => result,
-                    Err(e) => continue
+                    Err(_) => continue
                 };
                 match parsed_message {
                     Message::CommandResponse(command_response) => {
@@ -72,7 +72,7 @@ impl CommandResponseListener {
                     CommandResponseState::Success(command_response) => {
                         let sender = self.subscriptions.lock().await.remove(&command_response.id);
                         if let Some(sender) = sender {
-                            if (!sender.is_closed()) {
+                            if !sender.is_closed() {
                                 sender.send(CommandResponseState::Success(command_response)).unwrap();
                             }
                         }
@@ -81,7 +81,7 @@ impl CommandResponseListener {
                         let id = error_response.id;
                         if let Some(id) = id {
                             if let Some(sender) = self.subscriptions.lock().await.remove(&id) {
-                                if (!sender.is_closed()) {
+                                if !sender.is_closed() {
                                     sender.send(CommandResponseState::Error(error_response)).unwrap();
                                 }
                             }
