@@ -23,17 +23,7 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/src/browsers/chrome/capabilities.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/browsers/chrome/capabilities.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/src/browsers/chrome/chrome.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/browsers/chrome/chrome.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/src/input/bidi/keyboard.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/input/bidi/keyboard.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/src/input/bidi/mouse.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/input/bidi/mouse.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/src/input/bidi/touchscreen.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/input/bidi/touchscreen.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/src/input/human_mouse.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/input/human_mouse.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/src/input/mouse.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/input/mouse.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rustenium/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/lib.rs" afterDir="false" />
-    </list>
+    <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -213,7 +203,7 @@
       <workItem from="1766196791524" duration="593000" />
       <workItem from="1766240592933" duration="1412000" />
       <workItem from="1766336951722" duration="17638000" />
-      <workItem from="1766676124345" duration="8498000" />
+      <workItem from="1766676124345" duration="8903000" />
     </task>
     <servers />
   </component>

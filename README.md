@@ -197,18 +197,23 @@ element.screenshot(None, None, Some("element.png")).await?;
 ### Network Interception
 
 ```rust
-// Subscribe to network events
-browser.on_network(|event| {
-    println!("Network event: {:?}", event);
+// Intercept and handle network requests
+browser.on_request_bidi(|request| async move {
+    println!("Request URL: {}", request.params.base_parameters.request.url);
+
+    // Block requests to specific domains
+    if request.params.base_parameters.request.url.contains("ads.example.com") {
+        let _ = request.abort().await;
+    }
 }).await?;
 
 // Add authentication handler
 browser.add_authentication(|params| async move {
     // Return credentials for authentication challenges
-    Ok(AuthenticationResponse {
+    AuthenticationCredentials {
         username: "user".to_string(),
         password: "pass".to_string(),
-    })
+    }
 }).await?;
 ```
 
