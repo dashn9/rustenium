@@ -5,13 +5,44 @@ use tokio::sync::Mutex;
 
 use super::mouse::{Mouse, MouseMoveOptions, MouseClickOptions, MouseOptions, MouseWheelOptions, Point};
 
-/// Human-like mouse implementation with randomness and natural movement patterns
+/// Human-like mouse implementation with realistic movements and natural behavior.
+///
+/// `HumanMouse` wraps another mouse implementation (typically [`BidiMouse`](crate::input::BidiMouse))
+/// and adds human-like characteristics to mouse movements:
+///
+/// - **Bezier curves**: Movements follow natural curved paths instead of straight lines
+/// - **Random jitter**: Small random variations simulate human imprecision
+/// - **Variable speed**: Movement speed varies naturally along the path
+/// - **Realistic delays**: Pauses between actions mimic human timing
+///
+/// This makes automation harder to detect as it closely mimics real user behavior.
+///
+/// # Examples
+///
+/// ```no_run
+/// # use rustenium::input::{HumanMouse, BidiMouse, Point};
+/// # use rustenium_bidi_commands::browsing_context::types::BrowsingContext;
+/// # use std::sync::Arc;
+/// # use tokio::sync::Mutex;
+/// # use rustenium_core::Session;
+/// # async fn example(session: Arc<Mutex<Session<rustenium_core::transport::WebsocketConnectionTransport>>>, context: BrowsingContext) -> Result<(), Box<dyn std::error::Error>> {
+/// let bidi_mouse = BidiMouse::new(session);
+/// let human_mouse = HumanMouse::new(bidi_mouse);
+///
+/// // Move with natural curve and jitter
+/// human_mouse.move_to(Point { x: 500.0, y: 300.0 }, &context, None).await?;
+///
+/// // Click with realistic delays
+/// human_mouse.click(Some(Point { x: 500.0, y: 300.0 }), &context, None).await?;
+/// # Ok(())
+/// # }
+/// ```
 pub struct HumanMouse<M: Mouse> {
     mouse: M,
 }
 
 impl<M: Mouse> HumanMouse<M> {
-    /// Create a new HumanMouse instance
+    /// Creates a new HumanMouse wrapping the given mouse implementation.
     pub fn new(mouse: M) -> Self {
         Self {
             mouse,

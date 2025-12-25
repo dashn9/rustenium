@@ -21,14 +21,56 @@ use std::collections::HashSet;
 use std::future::Future;
 use rustenium_core::process::Process;
 
+/// Configuration for Chrome browser and chromedriver.
+///
+/// This struct configures both the chromedriver process and the Chrome browser instance.
+/// It supports three remote debugging modes via `remote_debugging_port`:
+///
+/// - **Normal mode (`None`)**: Chromedriver launches and manages Chrome automatically
+/// - **Auto mode (`Some(0)`)**: Rustenium starts Chrome first, then chromedriver attaches to it
+/// - **Manual mode (`Some(port)`)**: Connect to an existing Chrome instance on the specified port
+///
+/// # Examples
+///
+/// ```
+/// use rustenium::browsers::ChromeConfig;
+///
+/// // Basic configuration
+/// let config = ChromeConfig {
+///     driver_executable_path: "chromedriver".to_string(),
+///     ..Default::default()
+/// };
+///
+/// // Headless mode with custom Chrome
+/// let config = ChromeConfig {
+///     driver_executable_path: "chromedriver".to_string(),
+///     remote_debugging_port: Some(0), // Auto mode
+///     chrome_executable_path: Some("/usr/bin/google-chrome".to_string()),
+///     browser_flags: Some(vec!["--headless".to_string()]),
+///     ..Default::default()
+/// };
+/// ```
 #[derive(Debug, Clone)]
 pub struct ChromeConfig {
+    /// Path to the chromedriver executable.
     pub driver_executable_path: String,
+
+    /// Host for the WebDriver server (default: localhost).
     pub host: Option<String>,
+
+    /// Port for the WebDriver server (auto-assigned if None).
     pub port: Option<u16>,
+
+    /// Additional flags to pass to chromedriver.
     pub driver_flags: Vec<&'static str>,
+
+    /// Chrome capabilities for configuring browser behavior.
     pub capabilities: ChromeCapabilities,
+
+    /// Whether to enable Chrome sandbox (default: false).
     pub sandbox: bool,
+
+    /// Optional proxy configuration.
     pub proxy: Option<ProxyConfiguration>,
 
     /// Chrome remote debugging port. Controls how Chrome is launched and managed:
@@ -37,16 +79,16 @@ pub struct ChromeConfig {
     /// - `Some(port)`: Manual mode - Connect to existing Chrome running on specified port
     pub remote_debugging_port: Option<u16>,
 
-    /// Path to Chrome executable. Used when remote_debugging_port is Some(0).
+    /// Path to Chrome executable. Used when `remote_debugging_port` is `Some(0)`.
     /// Defaults to "google-chrome" if not specified.
     pub chrome_executable_path: Option<String>,
 
-    /// Chrome user data directory. Used when remote_debugging_port is Some(0).
+    /// Chrome user data directory. Used when `remote_debugging_port` is `Some(0)`.
     /// If not specified, uses a temporary directory.
     pub user_data_dir: Option<String>,
 
     /// Additional Chrome command-line arguments (browser flags).
-    /// Used when remote_debugging_port is Some(0).
+    /// Used when `remote_debugging_port` is `Some(0)`.
     pub browser_flags: Option<Vec<String>>,
 }
 
@@ -98,6 +140,30 @@ pub struct ChromeBrowser {
 impl BidiDrive<WebsocketConnectionTransport> for ChromeBrowser {}
 
 impl ChromeBrowser {
+    /// Creates a new Chrome browser instance with the specified configuration.
+    ///
+    /// This method initializes chromedriver, establishes a WebDriver BiDi session,
+    /// and optionally launches or connects to a Chrome browser instance.
+    ///
+    /// # Arguments
+    ///
+    /// * `config` - Chrome configuration including driver path, browser options, and capabilities
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use rustenium::browsers::{ChromeBrowser, ChromeConfig};
+    ///
+    /// # async fn example() -> Result<(), Box<dyn std::error::Error>> {
+    /// let config = ChromeConfig {
+    ///     driver_executable_path: "chromedriver".to_string(),
+    ///     ..Default::default()
+    /// };
+    ///
+    /// let mut browser = ChromeBrowser::new(config).await;
+    /// # Ok(())
+    /// # }
+    /// ```
     pub async fn new(mut config: ChromeConfig) -> ChromeBrowser {
         let port = find_free_port().unwrap();
         config.port = Some(config.port.unwrap_or(port));
@@ -196,6 +262,32 @@ impl ChromeBrowser {
         browser
     }
 
+    /// Navigates to the specified URL.
+    ///
+    /// # Arguments
+    ///
+    /// * `url` - The URL to navigate to
+    /// * `wait` - Optional readiness state to wait for (e.g., `ReadinessState::Complete`)
+    /// * `context_id` - Optional browsing context ID (uses active context if None)
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// # use rustenium::browsers::ChromeBrowser;
+    /// # async fn example(mut browser: ChromeBrowser) -> Result<(), Box<dyn std::error::Error>> {
+    /// // Navigate to a URL
+    /// browser.open_url("https://example.com", None, None).await?;
+    ///
+    /// // Wait for page to fully load
+    /// use rustenium_bidi_commands::browsing_context::types::ReadinessState;
+    /// browser.open_url(
+    ///     "https://example.com",
+    ///     Some(ReadinessState::Complete),
+    ///     None
+    /// ).await?;
+    /// # Ok(())
+    /// # }
+    /// ```
     pub async fn open_url(
         &mut self,
         url: &str,
@@ -215,6 +307,33 @@ impl ChromeBrowser {
         self.driver.create_context(context_type, reference_context, background).await
     }
 
+    /// Finds all elements matching the given locator.
+    ///
+    /// # Arguments
+    ///
+    /// * `locator` - Element locator (CSS selector, XPath, etc.)
+    /// * `context_id` - Optional browsing context (uses active context if None)
+    /// * `max_node_count` - Optional maximum number of nodes to return
+    /// * `serialization_options` - Optional serialization options for node data
+    /// * `start_nodes` - Optional starting nodes for the search
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// # use rustenium::browsers::ChromeBrowser;
+    /// # use rustenium::{css, xpath};
+    /// # async fn example(mut browser: ChromeBrowser) -> Result<(), Box<dyn std::error::Error>> {
+    /// // Find all buttons using CSS selector
+    /// let buttons = browser.find_nodes(css!("button"), None, None, None, None).await?;
+    ///
+    /// // Find up to 5 links
+    /// let links = browser.find_nodes(css!("a"), None, Some(5), None, None).await?;
+    ///
+    /// // Find using XPath
+    /// let elements = browser.find_nodes(xpath!("//div[@class='content']"), None, None, None, None).await?;
+    /// # Ok(())
+    /// # }
+    /// ```
     pub async fn find_nodes(
         &mut self,
         locator: Locator,
@@ -252,6 +371,24 @@ impl ChromeBrowser {
         Ok(chrome_nodes)
     }
 
+    /// Finds the first element matching the given locator.
+    ///
+    /// Returns `None` if no matching element is found.
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// # use rustenium::browsers::ChromeBrowser;
+    /// # use rustenium::css;
+    /// # async fn example(mut browser: ChromeBrowser) -> Result<(), Box<dyn std::error::Error>> {
+    /// // Find the submit button
+    /// if let Some(button) = browser.find_node(css!("#submit"), None, None, None, None).await? {
+    ///     let text = button.get_inner_text().await;
+    ///     println!("Button text: {}", text);
+    /// }
+    /// # Ok(())
+    /// # }
+    /// ```
     pub async fn find_node(
         &mut self,
         locator: Locator,
@@ -264,7 +401,37 @@ impl ChromeBrowser {
         Ok(nodes.into_iter().next())
     }
 
-    /// Wait for nodes to appear with a timeout (in milliseconds)
+    /// Waits for elements matching the locator to appear, with a configurable timeout.
+    ///
+    /// Polls for elements at regular intervals until they appear or the timeout is reached.
+    ///
+    /// # Arguments
+    ///
+    /// * `locator` - Element locator
+    /// * `context_id` - Optional browsing context
+    /// * `timeout_ms` - Timeout in milliseconds (default: 4000ms)
+    /// * `poll_interval_ms` - Polling interval in milliseconds (default: timeout/6)
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// # use rustenium::browsers::ChromeBrowser;
+    /// # use rustenium::css;
+    /// # async fn example(mut browser: ChromeBrowser) -> Result<(), Box<dyn std::error::Error>> {
+    /// // Wait up to 5 seconds for dynamic content to load
+    /// let elements = browser.wait_for_nodes(
+    ///     css!(".dynamic-content"),
+    ///     None,
+    ///     Some(5000),
+    ///     None,
+    /// ).await?;
+    ///
+    /// if !elements.is_empty() {
+    ///     println!("Found {} elements", elements.len());
+    /// }
+    /// # Ok(())
+    /// # }
+    /// ```
     pub async fn wait_for_nodes(
         &mut self,
         locator: Locator,
@@ -297,7 +464,28 @@ impl ChromeBrowser {
         }
     }
 
-    /// Wait for a single node to appear with a timeout (in milliseconds)
+    /// Waits for a single element matching the locator to appear.
+    ///
+    /// Returns `None` if no matching element appears within the timeout.
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// # use rustenium::browsers::ChromeBrowser;
+    /// # use rustenium::css;
+    /// # async fn example(mut browser: ChromeBrowser) -> Result<(), Box<dyn std::error::Error>> {
+    /// // Wait for login button to appear
+    /// if let Some(button) = browser.wait_for_node(
+    ///     css!("#login-btn"),
+    ///     None,
+    ///     Some(3000), // 3 second timeout
+    ///     None,
+    /// ).await? {
+    ///     println!("Login button appeared!");
+    /// }
+    /// # Ok(())
+    /// # }
+    /// ```
     pub async fn wait_for_node(
         &mut self,
         locator: Locator,
@@ -309,6 +497,23 @@ impl ChromeBrowser {
         Ok(nodes.into_iter().next())
     }
 
+    /// Sends a raw WebDriver BiDi command.
+    ///
+    /// This is a low-level method for sending custom BiDi commands not covered by the high-level API.
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// # use rustenium::browsers::ChromeBrowser;
+    /// # use rustenium_bidi_commands::CommandData;
+    /// # async fn example(mut browser: ChromeBrowser) -> Result<(), Box<dyn std::error::Error>> {
+    /// // Send a custom BiDi command
+    /// let command = CommandData::/*...*/;
+    /// # let command: CommandData = unimplemented!();
+    /// let result = browser.send_bidi_command(command).await?;
+    /// # Ok(())
+    /// # }
+    /// ```
     pub async fn send_bidi_command(&mut self, command: CommandData) -> Result<ResultData, SessionSendError> {
         self.driver.send_command(command).await
     }
@@ -338,6 +543,43 @@ impl ChromeBrowser {
         self.driver.on_request(handler, url_patterns, contexts).await
     }
 
+    /// Subscribes to browser events and registers a handler to process them.
+    ///
+    /// # Arguments
+    ///
+    /// * `events` - Set of event names to subscribe to (e.g., "browsingContext.load", "network.responseCompleted")
+    /// * `handler` - Async function called for each matching event
+    /// * `browsing_contexts` - Optional list of browsing context IDs to filter events
+    /// * `user_contexts` - Optional list of user context IDs
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// # use rustenium::browsers::ChromeBrowser;
+    /// # use std::collections::HashSet;
+    /// # async fn example(mut browser: ChromeBrowser) -> Result<(), Box<dyn std::error::Error>> {
+    /// // Subscribe to page load events
+    /// browser.subscribe_events(
+    ///     HashSet::from(["browsingContext.load"]),
+    ///     |event| async move {
+    ///         println!("Page loaded: {:?}", event);
+    ///     },
+    ///     None,
+    ///     None,
+    /// ).await?;
+    ///
+    /// // Subscribe to multiple network events
+    /// browser.subscribe_events(
+    ///     HashSet::from(["network.responseStarted", "network.responseCompleted"]),
+    ///     |event| async move {
+    ///         println!("Network event: {:?}", event);
+    ///     },
+    ///     None,
+    ///     None,
+    /// ).await?;
+    /// # Ok(())
+    /// # }
+    /// ```
     pub async fn subscribe_events<F, R>(
         &mut self,
         events: HashSet<&str>,
@@ -414,22 +656,82 @@ impl ChromeBrowser {
         &self.chrome_process
     }
 
-    /// Get a reference to the BiDi mouse
+    /// Returns a reference to the direct BiDi mouse for precise, instant movements.
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// # use rustenium::browsers::ChromeBrowser;
+    /// # use rustenium::input::Point;
+    /// # use rustenium_bidi_commands::browsing_context::types::BrowsingContext;
+    /// # async fn example(browser: ChromeBrowser, context: BrowsingContext) -> Result<(), Box<dyn std::error::Error>> {
+    /// let mouse = browser.mouse();
+    /// mouse.move_to(Point { x: 100.0, y: 200.0 }, &context, None).await?;
+    /// mouse.click(None, &context, None).await?;
+    /// # Ok(())
+    /// # }
+    /// ```
     pub fn mouse(&self) -> &crate::input::BidiMouse<WebsocketConnectionTransport> {
         &self.driver.mouse
     }
 
-    /// Get a reference to the Human mouse
+    /// Returns a reference to the human mouse for realistic, human-like movements with Bezier curves and jitter.
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// # use rustenium::browsers::ChromeBrowser;
+    /// # use rustenium::input::Point;
+    /// # use rustenium_bidi_commands::browsing_context::types::BrowsingContext;
+    /// # async fn example(browser: ChromeBrowser, context: BrowsingContext) -> Result<(), Box<dyn std::error::Error>> {
+    /// let human_mouse = browser.human_mouse();
+    /// // Moves with natural curve and realistic delays
+    /// human_mouse.move_to(Point { x: 300.0, y: 400.0 }, &context, None).await?;
+    /// human_mouse.click(None, &context, None).await?;
+    /// # Ok(())
+    /// # }
+    /// ```
     pub fn human_mouse(&self) -> &crate::input::HumanMouse<crate::input::BidiMouse<WebsocketConnectionTransport>> {
         &self.driver.human_mouse
     }
 
-    /// Get a reference to the BiDi keyboard
+    /// Returns a reference to the keyboard for text input and key presses.
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// # use rustenium::browsers::ChromeBrowser;
+    /// # use rustenium_bidi_commands::browsing_context::types::BrowsingContext;
+    /// # async fn example(browser: ChromeBrowser, context: BrowsingContext) -> Result<(), Box<dyn std::error::Error>> {
+    /// let keyboard = browser.keyboard();
+    /// keyboard.type_text("Hello, World!", &context).await?;
+    /// keyboard.press("Enter", &context).await?;
+    /// # Ok(())
+    /// # }
+    /// ```
     pub fn keyboard(&self) -> &crate::input::Keyboard<WebsocketConnectionTransport> {
         &self.driver.keyboard
     }
 
-    /// Move mouse to the center of a node
+    /// Moves the mouse to the center of an element.
+    ///
+    /// # Arguments
+    ///
+    /// * `node` - The element to move the mouse to
+    /// * `context` - Optional browsing context
+    /// * `scroll_into_view` - Whether to scroll the element into view first
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// # use rustenium::browsers::ChromeBrowser;
+    /// # use rustenium::css;
+    /// # async fn example(mut browser: ChromeBrowser) -> Result<(), Box<dyn std::error::Error>> {
+    /// let mut button = browser.find_node(css!("#submit"), None, None, None, None).await?.unwrap();
+    /// browser.move_mouse_to_node_bidi(&mut button, None, true).await?;
+    /// # Ok(())
+    /// # }
+    /// ```
     pub async fn move_mouse_to_node_bidi(
         &mut self,
         node: &mut ChromeNode,
@@ -439,7 +741,32 @@ impl ChromeBrowser {
         self.driver.move_mouse_to_node(node, context, scroll_into_view).await
     }
 
-    /// Click on a node (scrolls into view and moves mouse first)
+    /// Clicks on an element (automatically scrolls into view and moves mouse to center).
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// # use rustenium::browsers::ChromeBrowser;
+    /// # use rustenium::css;
+    /// # use rustenium::input::MouseClickOptions;
+    /// # async fn example(mut browser: ChromeBrowser) -> Result<(), Box<dyn std::error::Error>> {
+    /// let mut button = browser.find_node(css!("#submit"), None, None, None, None).await?.unwrap();
+    ///
+    /// // Single click
+    /// browser.click_on_node_bidi(&mut button, None, None).await?;
+    ///
+    /// // Double click
+    /// browser.click_on_node_bidi(
+    ///     &mut button,
+    ///     None,
+    ///     Some(MouseClickOptions {
+    ///         count: Some(2),
+    ///         ..Default::default()
+    ///     })
+    /// ).await?;
+    /// # Ok(())
+    /// # }
+    /// ```
     pub async fn click_on_node_bidi(
         &mut self,
         node: &mut ChromeNode,

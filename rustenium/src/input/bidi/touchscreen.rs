@@ -16,14 +16,17 @@ use tokio::sync::Mutex;
 use crate::input::mouse::Point;
 use super::{FINGER_ID_PREFIX};
 
-/// Options for touch move
+/// Options for touch movement operations.
 #[derive(Debug, Clone, Default)]
 pub struct TouchMoveOptions {
-    /// Origin for the touch movement
+    /// Origin for the touch movement.
     pub origin: Option<Origin>,
 }
 
-/// Touch handle for multi-touch interactions
+/// Handle representing a single touch point for multi-touch gestures.
+///
+/// Each `TouchHandle` represents one finger/touch point. Create multiple handles
+/// to simulate multi-touch gestures like pinch, zoom, or multi-finger swipes.
 pub struct TouchHandle<OT: ConnectionTransport> {
     session: Arc<Mutex<Session<OT>>>,
     touchscreen: Arc<Touchscreen<OT>>,
@@ -63,7 +66,13 @@ impl<OT: ConnectionTransport> TouchHandle<OT> {
         }
     }
 
-    /// Start the touch
+    /// Start the touch at the handle's initial position.
+    ///
+    /// This performs a touch down event at the coordinates specified when the handle was created.
+    /// Must be called before `move_to` or `end`.
+    ///
+    /// # Errors
+    /// Returns `InputError::TouchAlreadyStarted` if this handle has already been started.
     pub async fn start(
         &self,
         context: &BrowsingContext,
@@ -122,7 +131,15 @@ impl<OT: ConnectionTransport> TouchHandle<OT> {
         Ok(())
     }
 
-    /// Move the touch to a new position
+    /// Move the touch to a new position.
+    ///
+    /// Simulates dragging the touch point from its current position to the new coordinates.
+    /// The touch must be started first with `start()`.
+    ///
+    /// # Arguments
+    /// * `x` - Target X coordinate in pixels
+    /// * `y` - Target Y coordinate in pixels
+    /// * `context` - The browsing context to perform the touch in
     pub async fn move_to(
         &self,
         x: f64,
@@ -162,7 +179,10 @@ impl<OT: ConnectionTransport> TouchHandle<OT> {
         Ok(())
     }
 
-    /// End the touch
+    /// End the touch by releasing it.
+    ///
+    /// This performs a touch up event, completing the touch gesture. After calling this method,
+    /// the handle is automatically removed from the touchscreen and cannot be reused.
     pub async fn end(&self, context: &BrowsingContext) -> Result<(), InputError> {
         let command = InputCommand::PerformActions(PerformActions {
             method: InputPerformActionsMethod::InputPerformActions,
@@ -193,7 +213,37 @@ impl<OT: ConnectionTransport> TouchHandle<OT> {
     }
 }
 
-/// BiDi Touchscreen implementation
+/// BiDi Touchscreen implementation for simulating multi-touch gestures.
+///
+/// `Touchscreen` manages multiple touch points simultaneously, allowing you to simulate
+/// complex multi-touch gestures like pinch-to-zoom, multi-finger swipes, and other
+/// touch interactions.
+///
+/// # Examples
+///
+/// ```no_run
+/// # use rustenium::input::{Touchscreen, TouchMoveOptions};
+/// # use rustenium_bidi_commands::browsing_context::types::BrowsingContext;
+/// # use std::sync::Arc;
+/// # use tokio::sync::Mutex;
+/// # use rustenium_core::Session;
+/// # async fn example(session: Arc<Mutex<Session<rustenium_core::transport::WebsocketConnectionTransport>>>, context: BrowsingContext) -> Result<(), Box<dyn std::error::Error>> {
+/// let touchscreen = Arc::new(Touchscreen::new(session));
+///
+/// // Simulate a pinch gesture with two fingers
+/// let touch1 = touchscreen.touch_start(100.0, 200.0, &context, None).await?;
+/// let touch2 = touchscreen.touch_start(300.0, 200.0, &context, None).await?;
+///
+/// // Move fingers closer together
+/// touch1.move_to(150.0, 200.0, &context).await?;
+/// touch2.move_to(250.0, 200.0, &context).await?;
+///
+/// // Release both touches
+/// touch1.end(&context).await?;
+/// touch2.end(&context).await?;
+/// # Ok(())
+/// # }
+/// ```
 pub struct Touchscreen<OT: ConnectionTransport> {
     session: Arc<Mutex<Session<OT>>>,
     touches: Arc<Mutex<Vec<usize>>>,
@@ -201,7 +251,7 @@ pub struct Touchscreen<OT: ConnectionTransport> {
 }
 
 impl<OT: ConnectionTransport> Touchscreen<OT> {
-    /// Create a new Touchscreen instance
+    /// Creates a new Touchscreen instance.
     pub fn new(session: Arc<Mutex<Session<OT>>>) -> Self {
         Self {
             session,
@@ -210,7 +260,19 @@ impl<OT: ConnectionTransport> Touchscreen<OT> {
         }
     }
 
-    /// Start a new touch at the given position
+    /// Start a new touch at the given position and return a handle to control it.
+    ///
+    /// Creates a new touch point and immediately performs a touch down event at the specified
+    /// coordinates. Returns a `TouchHandle` that can be used to move or end the touch.
+    ///
+    /// # Arguments
+    /// * `x` - X coordinate in pixels where the touch starts
+    /// * `y` - Y coordinate in pixels where the touch starts
+    /// * `context` - The browsing context to perform the touch in
+    /// * `options` - Optional touch movement options
+    ///
+    /// # Returns
+    /// A `TouchHandle` that represents this touch point and can be used to control its movement.
     pub async fn touch_start(
         self: &Arc<Self>,
         x: f64,

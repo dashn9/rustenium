@@ -15,17 +15,17 @@ use tokio::sync::Mutex;
 
 use super::KEYBOARD_ID;
 
-/// Options for keyboard key press
+/// Options for keyboard key press operations.
 #[derive(Debug, Clone, Default)]
 pub struct KeyPressOptions {
-    /// Delay in milliseconds between keydown and keyup
+    /// Delay in milliseconds between keydown and keyup events.
     pub delay: Option<u64>,
 }
 
-/// Options for keyboard typing
+/// Options for keyboard text typing operations.
 #[derive(Debug, Clone, Default)]
 pub struct KeyboardTypeOptions {
-    /// Delay in milliseconds between each key press
+    /// Delay in milliseconds between each key press.
     pub delay: Option<u64>,
 }
 
@@ -151,18 +151,48 @@ fn get_bidi_key_value(key: &str) -> Result<String, InputError> {
     Ok(value.to_string())
 }
 
-/// BiDi Keyboard implementation
+/// Keyboard input implementation for text entry and key presses.
+///
+/// Supports typing text, pressing special keys, and modifier key combinations.
+/// Key names follow WebDriver standard key codes (e.g., "Enter", "Tab", "ArrowLeft").
+///
+/// # Examples
+///
+/// ```no_run
+/// # use rustenium::input::Keyboard;
+/// # use rustenium_bidi_commands::browsing_context::types::BrowsingContext;
+/// # use std::sync::Arc;
+/// # use tokio::sync::Mutex;
+/// # use rustenium_core::Session;
+/// # async fn example(session: Arc<Mutex<Session<rustenium_core::transport::WebsocketConnectionTransport>>>, context: BrowsingContext) -> Result<(), Box<dyn std::error::Error>> {
+/// let keyboard = Keyboard::new(session);
+///
+/// // Type text
+/// keyboard.type_text("Hello, World!", &context).await?;
+///
+/// // Press Enter
+/// keyboard.press("Enter", &context).await?;
+///
+/// // Modifier keys
+/// keyboard.down("Shift", &context).await?;
+/// keyboard.press("a", &context).await?; // Types 'A'
+/// keyboard.up("Shift", &context).await?;
+/// # Ok(())
+/// # }
+/// ```
 pub struct Keyboard<OT: ConnectionTransport> {
     session: Arc<Mutex<Session<OT>>>,
 }
 
 impl<OT: ConnectionTransport> Keyboard<OT> {
-    /// Create a new Keyboard instance
+    /// Creates a new Keyboard instance.
     pub fn new(session: Arc<Mutex<Session<OT>>>) -> Self {
         Self { session }
     }
 
-    /// Press a key down
+    /// Presses a key down (without releasing).
+    ///
+    /// Use with [`up`](#method.up) to hold modifier keys or create custom key combinations.
     pub async fn down(&self, key: &str, context: &BrowsingContext) -> Result<(), InputError> {
         let key_value = get_bidi_key_value(key)?;
 
@@ -188,7 +218,7 @@ impl<OT: ConnectionTransport> Keyboard<OT> {
         Ok(())
     }
 
-    /// Release a key
+    /// Releases a previously pressed key.
     pub async fn up(&self, key: &str, context: &BrowsingContext) -> Result<(), InputError> {
         let key_value = get_bidi_key_value(key)?;
 
@@ -214,7 +244,10 @@ impl<OT: ConnectionTransport> Keyboard<OT> {
         Ok(())
     }
 
-    /// Press and release a key
+    /// Presses and releases a key (keydown + keyup).
+    ///
+    /// Accepts standard key names like "Enter", "Tab", "Escape", "ArrowUp", etc.,
+    /// as well as single characters.
     pub async fn press(
         &self,
         key: &str,
@@ -262,7 +295,10 @@ impl<OT: ConnectionTransport> Keyboard<OT> {
         Ok(())
     }
 
-    /// Type a string of text
+    /// Types a string of text character by character.
+    ///
+    /// Each character is pressed and released in sequence. Use the `delay` option
+    /// to add pauses between characters for more human-like typing.
     pub async fn type_text(
         &self,
         text: &str,

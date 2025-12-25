@@ -3,6 +3,7 @@ use std::future::Future;
 use serde::Deserialize;
 use rustenium_bidi_commands::browsing_context::types::Locator;
 use rustenium_bidi_commands::script::types::{Handle, SharedId};
+use crate::error::EvaluateResultError;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(u16)]
@@ -80,10 +81,10 @@ pub trait Node {
 
     fn set_position(&mut self, position: NodePosition) -> ();
 
-    fn scroll_into_view(&self) -> impl Future<Output = Result<(), crate::error::EvaluateResultError>>;
+    fn scroll_into_view(&self) -> impl Future<Output = Result<(), EvaluateResultError>>;
 
-    fn is_visible(&self) -> impl Future<Output = Result<bool, crate::error::EvaluateResultError>>;
+    fn is_visible(&self) -> impl Future<Output = Result<bool, EvaluateResultError>>;
 
-    fn delete(&self) -> impl Future<Output = Result<(), crate::error::EvaluateResultError>>;
+    fn delete(&self) -> impl Future<Output = Result<(), EvaluateResultError>>;
 
 }

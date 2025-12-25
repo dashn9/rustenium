@@ -20,14 +20,40 @@ use super::MOUSE_ID;
 use super::WHEEL_ID;
 use crate::input::mouse::{Mouse, MouseMoveOptions, MouseClickOptions, MouseOptions, MouseWheelOptions, MouseButton, Point};
 
-/// BiDi Mouse implementation - direct, precise movements
+/// Direct BiDi mouse implementation with instant, precise movements.
+///
+/// `BidiMouse` provides direct control over mouse actions without any delays or smoothing.
+/// Movements are instant and precise, making it ideal for automation scenarios where
+/// speed is more important than mimicking human behavior.
+///
+/// For human-like movements with curves and realistic delays, use [`HumanMouse`](crate::input::HumanMouse) instead.
+///
+/// # Examples
+///
+/// ```no_run
+/// # use rustenium::input::{BidiMouse, Point};
+/// # use rustenium_bidi_commands::browsing_context::types::BrowsingContext;
+/// # use std::sync::Arc;
+/// # use tokio::sync::Mutex;
+/// # use rustenium_core::Session;
+/// # async fn example(session: Arc<Mutex<Session<rustenium_core::transport::WebsocketConnectionTransport>>>, context: BrowsingContext) -> Result<(), Box<dyn std::error::Error>> {
+/// let mouse = BidiMouse::new(session);
+///
+/// // Move instantly to coordinates
+/// mouse.move_to(Point { x: 100.0, y: 200.0 }, &context, None).await?;
+///
+/// // Click at current position
+/// mouse.click(None, &context, None).await?;
+/// # Ok(())
+/// # }
+/// ```
 pub struct BidiMouse<OT: ConnectionTransport> {
     session: Arc<Mutex<Session<OT>>>,
     last_move_point: Arc<Mutex<Point>>,
 }
 
 impl<OT: ConnectionTransport> BidiMouse<OT> {
-    /// Create a new Mouse instance
+    /// Creates a new BidiMouse instance.
     pub fn new(session: Arc<Mutex<Session<OT>>>) -> Self {
         Self {
             session,
