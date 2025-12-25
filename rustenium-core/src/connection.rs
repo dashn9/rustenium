@@ -1,14 +1,11 @@
 use std::{collections::HashMap, net::TcpListener};
-use std::future::Future;
-use std::pin::Pin;
 use std::sync::Arc;
 use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
-use rustenium_bidi_commands::{CommandResponse, Event};
+use rustenium_bidi_commands::{Event};
 use tokio::sync::{oneshot, Mutex};
 
 use crate::{listeners::CommandResponseState, transport::ConnectionTransport};
 use crate::listeners::{CommandResponseListener, EventListener, Listener};
-use crate::transport::WebsocketConnectionTransport;
 
 pub struct Connection<T: ConnectionTransport> {
     transport: T,

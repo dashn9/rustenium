@@ -1,8 +1,8 @@
 mod drivers;
 pub mod error;
 pub mod browsers;
-mod nodes;
-mod input;
+pub mod nodes;
+pub mod input;
 
 pub use nodes::{Node};
 pub use nodes::chrome::ChromeNode;

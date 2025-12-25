@@ -1,3 +1,4 @@
+use std::future::Future;
 use std::sync::Arc;
 use tokio::sync::Mutex;
 use rustenium_bidi_commands::browsing_context::types::BrowsingContext;
@@ -67,42 +68,42 @@ pub trait Mouse {
     fn set_last_position(&self, point: Point);
 
     /// Reset the mouse state
-    async fn reset(&self, context: &BrowsingContext) -> Result<(), InputError>;
+    fn reset(&self, context: &BrowsingContext) -> impl Future<Output = Result<(), InputError>>;
 
     /// Move the mouse to a position
-    async fn move_to(
+    fn move_to(
         &self,
         point: Point,
         context: &BrowsingContext,
         options: Option<MouseMoveOptions>,
-    ) -> Result<(), InputError>;
+    ) -> impl Future<Output = Result<(), InputError>>;
 
     /// Press a mouse button down
-    async fn down(
+    fn down(
         &self,
         context: &BrowsingContext,
         options: Option<MouseOptions>,
-    ) -> Result<(), InputError>;
+    ) -> impl Future<Output = Result<(), InputError>>;
 
     /// Release a mouse button
-    async fn up(
+    fn up(
         &self,
         context: &BrowsingContext,
         options: Option<MouseOptions>,
-    ) -> Result<(), InputError>;
+    ) -> impl Future<Output = Result<(), InputError>>;
 
     /// Click at a position (or last position if point is None)
-    async fn click(
+    fn click(
         &self,
         point: Option<Point>,
         context: &BrowsingContext,
         options: Option<MouseClickOptions>,
-    ) -> Result<(), InputError>;
+    ) -> impl Future<Output = Result<(), InputError>>;
 
     /// Scroll the mouse wheel
-    async fn wheel(
+    fn wheel(
         &self,
         context: &BrowsingContext,
         options: Option<MouseWheelOptions>,
-    ) -> Result<(), InputError>;
+    ) -> impl Future<Output = Result<(), InputError>>;
 }

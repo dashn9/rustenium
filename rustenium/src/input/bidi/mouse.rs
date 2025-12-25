@@ -260,7 +260,7 @@ impl<OT: ConnectionTransport> BidiMouse<OT> {
         });
 
         // Add multiple clicks if count > 1
-        for i in 1..count {
+        for _i in 1..count {
             actions.push(pointer_down.clone());
             actions.push(pointer_up.clone());
         }

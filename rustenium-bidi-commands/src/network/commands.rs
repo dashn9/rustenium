@@ -183,7 +183,7 @@ pub struct ContinueWithAuthParameters {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct disownDataParameters {
+pub struct DisownDataParameters {
     #[serde(rename = "dataType")]
     pub data_type: DataType,
     #[serde(rename = "collector")]
@@ -311,7 +311,7 @@ pub struct DisownData {
     #[serde(rename = "method")]
     pub method: NetworkDisownDataMethod,
     #[serde(rename = "params")]
-    pub params: disownDataParameters,
+    pub params: DisownDataParameters,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

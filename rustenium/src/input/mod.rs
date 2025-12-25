@@ -3,4 +3,12 @@ mod mouse;
 
 mod human_mouse;
 
-pub use crate::input::{human_mouse::HumanMouse, bidi::{mouse::BidiMouse, keyboard::Keyboard}, mouse::{Point, Mouse, MouseClickOptions}};
+pub use crate::input::{
+    human_mouse::HumanMouse,
+    bidi::{
+        mouse::BidiMouse,
+        keyboard::Keyboard,
+        touchscreen::{Touchscreen, TouchHandle, TouchMoveOptions}
+    },
+    mouse::{Point, Mouse, MouseClickOptions}
+};

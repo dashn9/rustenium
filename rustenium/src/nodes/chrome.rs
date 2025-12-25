@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use rustenium_bidi_commands::browsing_context::types::Locator;
+use rustenium_bidi_commands::browsing_context::types::{ImageFormat, Locator, OriginUnion};
 use crate::nodes::bidi::node::BidiNode;
 use rustenium_bidi_commands::script::types::{Handle, NodeRemoteValue, SharedId};
 use rustenium_core::transport::ConnectionTransport;
@@ -11,6 +11,7 @@ use tokio::sync::Mutex;
 
 pub struct ChromeNode<T: ConnectionTransport = rustenium_core::transport::WebsocketConnectionTransport> {
     bidi_node: BidiNode<T>,
+    children: Vec<ChromeNode<T>>,
 }
 
 impl<T: ConnectionTransport> ChromeNode<T> {
@@ -20,15 +21,46 @@ impl<T: ConnectionTransport> ChromeNode<T> {
         session: Arc<Mutex<Session<T>>>,
         context: String,
     ) -> Self {
+        let bidi_node = BidiNode::new(_raw_bidi_node, locator.clone(), session.clone(), context.clone());
+
+        // Convert BidiNode children to ChromeNode children
+        let children = bidi_node.children.iter()
+            .map(|bidi_child| {
+                ChromeNode::from_bidi(
+                    bidi_child.get_raw_node_ref().clone(),
+                    locator.clone(),
+                    session.clone(),
+                    context.clone(),
+                )
+            })
+            .collect();
+
         Self {
-            bidi_node: BidiNode::new(_raw_bidi_node, locator, session, context),
+            bidi_node,
+            children,
         }
+    }
+
+    /// Capture a screenshot of this element
+    /// If `save_path` is provided:
+    ///   - If it's a directory, saves with auto-generated filename (screenshot_TIMESTAMP.png)
+    ///   - If it's a file path, saves to that exact location
+    ///   Returns the final path where the file was saved
+    /// Otherwise, returns the base64-encoded image data
+    pub async fn screenshot(
+        &self,
+        origin: Option<OriginUnion>,
+        format: Option<ImageFormat>,
+        save_path: Option<&str>,
+    ) -> Result<String, crate::error::ScreenshotError> {
+        self.bidi_node.screenshot(origin, format, save_path).await
     }
 }
 
 impl<T: ConnectionTransport> Node for ChromeNode<T> {
+    #[allow(refining_impl_trait)]
     fn get_children_nodes(&self) -> &Vec<ChromeNode<T>> {
-        todo!()
+        &self.children
     }
 
     fn get_bidi_locator(&self) -> &Locator {

@@ -1,5 +1,4 @@
 use thiserror::Error;
-use rustenium_bidi_commands::ErrorResponse;
 use rustenium_bidi_commands::script::types::EvaluateResultException;
 use rustenium_core::error::{CommandResultError};
 

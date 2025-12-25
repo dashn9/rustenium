@@ -12,7 +12,7 @@ use rustenium_bidi_commands::script::commands::{
 };
 use rustenium_bidi_commands::session::commands::SubscribeResult;
 use rustenium_bidi_commands::session::types::CapabilitiesRequest;
-use rustenium_bidi_commands::{BrowsingContextCommand, BrowsingContextEvent, BrowsingContextResult, CommandData, EmulationCommand, EmulationResult, Event, EventData, NetworkCommand, NetworkEvent, NetworkResult, ResultData, ScriptCommand, ScriptResult, EmptyResult};
+use rustenium_bidi_commands::{BrowsingContextCommand, BrowsingContextEvent, BrowsingContextResult, CommandData, EmulationCommand, Event, EventData, NetworkCommand, NetworkEvent, NetworkResult, ResultData, ScriptCommand, ScriptResult};
 use rustenium_core::Context;
 use rustenium_core::events::EventManagement;
 use rustenium_core::session::SessionConnectionType;
@@ -23,32 +23,23 @@ use std::time::Duration;
 use tokio::sync::Mutex as TokioMutex;
 use tokio::time::sleep;
 
-use crate::nodes::{Node, NodePosition};
 use rustenium_bidi_commands::browsing_context::commands::{
     BrowsingContextCaptureScreenshotMethod, BrowsingContextLocateNodesMethod, BrowsingContextNavigateMethod,
-    CaptureScreenshot, CaptureScreenshotParameters, CaptureScreenshotResult, LocateNodes,
+    CaptureScreenshot, CaptureScreenshotParameters, LocateNodes,
     LocateNodesParameters, LocateNodesResult, Navigate, NavigateParameters, NavigateResult,
 };
 use rustenium_bidi_commands::script::commands::{
     Evaluate, EvaluateParameters, ScriptEvaluateMethod,
 };
 use rustenium_bidi_commands::script::types::{
-    ChannelValue, ContextTarget, EvaluateResultSuccess, LocalValue, PreloadScript,
-    PrimitiveProtocolValue, RemoteReference, RemoteValue, ResultOwnership, SerializationOptions,
+    ChannelValue, ContextTarget, EvaluateResultSuccess, LocalValue, PreloadScript, ResultOwnership, SerializationOptions,
     SharedReference, Target
 };
 use rustenium_core::error::{CommandResultError, SessionSendError};
 use tokio::io;
 use rustenium_bidi_commands::network::commands::{AddIntercept, AddInterceptParameters, NetworkAddInterceptMethod};
 use rustenium_bidi_commands::network::types::{InterceptPhase, UrlPattern};
-use crate::input::{BidiMouse, HumanMouse, Keyboard, Mouse, Point};
-
-fn is_connection_refused(e: &reqwest::Error) -> bool {
-    if let Some(io_err) = e.source().and_then(|s| s.downcast_ref::<io::Error>()) {
-        return io_err.kind() == io::ErrorKind::ConnectionRefused;
-    }
-    false
-}
+use crate::input::{BidiMouse, HumanMouse, Keyboard, Point};
 
 pub trait DriverConfiguration {
     fn exe_path(&self) -> &str;
@@ -56,18 +47,19 @@ pub trait DriverConfiguration {
 }
 
 pub trait BidiDrive<T: ConnectionTransport> {
-    async fn start(
+    fn start(
         driver_config: &impl DriverConfiguration,
         connection_transport_config: &ConnectionTransportConfig,
         session_connection_type: SessionConnectionType,
         capabilities: Option<CapabilitiesRequest>,
-    ) -> (Arc<TokioMutex<Session<WebsocketConnectionTransport>>>, Process) {
+    ) -> impl Future<Output = (Arc<TokioMutex<Session<WebsocketConnectionTransport>>>, Process)> { async {
         let driver_process = Process::create(driver_config.exe_path(), driver_config.flags());
         let mut session = Session::<T>::ws_new(connection_transport_config).await;
         session
             .create_new_bidi_session(session_connection_type, capabilities)
             .await;
         (Arc::new(TokioMutex::new(session)), driver_process)
+    }
     }
 }
 
@@ -107,13 +99,6 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
             human_mouse,
             keyboard,
         }
-    }
-
-    pub async fn new_session(
-        &mut self,
-        connection_type: SessionConnectionType,
-    ) -> Result<(), Box<dyn Error>> {
-        Ok(())
     }
 
     pub async fn send_command(&mut self, command: CommandData) -> Result<ResultData, SessionSendError> {
@@ -162,12 +147,12 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
             .await;
         // Wait for 2s, to allow current BrowsingContext be updated via the event.
         sleep(Duration::from_millis(2000)).await;
-        if (self
+        if self
             .browsing_contexts
             .lock()
             .expect("Unable to acquire lock")
             .len()
-            > 0)
+            > 0
         {
             if let Ok(Some(result)) = &result {
                 match self
@@ -203,7 +188,6 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
         true
     }
 
-    //TODO: ReloadResult points to NavigateResult, update Generator to prevent Results from being generated into types again due to being pointed by
     pub async fn open_url(
         &mut self,
         url: String,

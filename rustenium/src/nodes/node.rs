@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::future::Future;
 use serde::Deserialize;
 use rustenium_bidi_commands::browsing_context::types::Locator;
 use rustenium_bidi_commands::script::types::{Handle, SharedId};
@@ -61,17 +62,17 @@ pub trait Node {
 
     fn get_bidi_locator(&self) -> &Locator;
 
-    async fn get_inner_text(&self) -> String;
+    fn get_inner_text(&self) -> impl Future<Output = String>;
 
-    async fn get_text_content(&self) -> String;
+    fn get_text_content(&self) -> impl Future<Output = String>;
 
-    async fn get_inner_html(&self) -> String;
+    fn get_inner_html(&self) -> impl Future<Output = String>;
 
     fn get_attribute(&self, attribute_name: &str) -> Option<String>;
 
     fn get_attributes(&self) -> HashMap<String, String>;
 
-    async fn get_position(&mut self) -> Option<&NodePosition>;
+    fn get_position(&mut self) -> impl Future<Output = Option<&NodePosition>>;
 
     fn get_shared_id(&self) -> Option<&SharedId>;
 
@@ -79,10 +80,10 @@ pub trait Node {
 
     fn set_position(&mut self, position: NodePosition) -> ();
 
-    async fn scroll_into_view(&self) -> Result<(), crate::error::EvaluateResultError>;
+    fn scroll_into_view(&self) -> impl Future<Output = Result<(), crate::error::EvaluateResultError>>;
 
-    async fn is_visible(&self) -> Result<bool, crate::error::EvaluateResultError>;
+    fn is_visible(&self) -> impl Future<Output = Result<bool, crate::error::EvaluateResultError>>;
 
-    async fn delete(&self) -> Result<(), crate::error::EvaluateResultError>;
+    fn delete(&self) -> impl Future<Output = Result<(), crate::error::EvaluateResultError>>;
 
 }

@@ -1,22 +1,20 @@
-use rustenium_bidi_commands::browsing_context::commands::{LocateNodes, LocateNodesResult, NavigateResult};
+use rustenium_bidi_commands::browsing_context::commands::NavigateResult;
 use rustenium_bidi_commands::browsing_context::types::{BrowsingContext, ClipRectangle, ImageFormat, Locator, OriginUnion, ReadinessState};
-use rustenium_bidi_commands::{CommandData, ResultData, Event, EventData, NetworkEvent};
+use rustenium_bidi_commands::{CommandData, ResultData, Event};
 use rustenium_bidi_commands::script::types::{
-    ChannelValue, LocalValue, PrimitiveProtocolValue, RemoteReference, RemoteValue,
+    ChannelValue,
     SerializationOptions, SerializationOptionsincludeShadowTreeUnion, SharedReference
 };
-use rustenium_bidi_commands::session::types::{CapabilitiesRequest, ProxyConfiguration};
-use rustenium_bidi_commands::network::commands::{AddIntercept, NetworkAddInterceptMethod, AddInterceptParameters};
-use rustenium_bidi_commands::network::types::{InterceptPhase, UrlPattern};
+use rustenium_bidi_commands::session::types::ProxyConfiguration;
+use rustenium_bidi_commands::network::types::UrlPattern;
 use rustenium_core::error::{CommandResultError, SessionSendError};
 use rustenium_core::transport::{ConnectionTransportConfig, WebsocketConnectionTransport};
-use rustenium_core::{find_free_port, Context, NetworkRequest};
+use rustenium_core::{find_free_port, NetworkRequest};
 use rustenium_core::events::EventManagement;
 use rustenium_core::session::SessionConnectionType;
 use crate::drivers::bidi::drivers::{BidiDriver, BidiDrive, DriverConfiguration};
 use crate::error::{EvaluateResultError, FindNodesError, OpenUrlError, InterceptNetworkError};
 use crate::nodes::chrome::ChromeNode;
-use crate::nodes::{Node, NodePosition};
 use super::capabilities::ChromeCapabilities;
 use std::sync::{Arc, Mutex};
 use std::collections::HashSet;
@@ -242,7 +240,7 @@ impl ChromeBrowser {
             )
             .await?;
         let mut chrome_nodes = Vec::new();
-        for (i, node) in node_result.nodes.iter().enumerate() {
+        for (_i, node) in node_result.nodes.iter().enumerate() {
             let chrome_node = ChromeNode::from_bidi(
                 node.clone(),
                 locator.clone(),

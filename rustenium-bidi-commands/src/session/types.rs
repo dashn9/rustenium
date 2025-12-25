@@ -1,7 +1,7 @@
 // Generated types for module
 
 use serde::{Serialize, Deserialize};
-use crate::{EmptyParams, Extensible};
+use crate::{Extensible};
 use serde_valid::Validate;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

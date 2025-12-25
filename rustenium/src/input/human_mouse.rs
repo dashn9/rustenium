@@ -3,7 +3,7 @@ use crate::error::InputError;
 use std::sync::Arc;
 use tokio::sync::Mutex;
 
-use super::mouse::{Mouse, MouseMoveOptions, MouseClickOptions, MouseOptions, MouseWheelOptions, MouseButton, Point};
+use super::mouse::{Mouse, MouseMoveOptions, MouseClickOptions, MouseOptions, MouseWheelOptions, Point};
 
 /// Human-like mouse implementation with randomness and natural movement patterns
 pub struct HumanMouse<M: Mouse> {
@@ -165,6 +165,11 @@ impl<M: Mouse> Mouse for HumanMouse<M> {
         context: &BrowsingContext,
         options: Option<MouseClickOptions>,
     ) -> Result<(), InputError> {
+            // Move to point if provided
+            if let Some(p) = point {
+                self.mouse.move_to(p, context, None).await?;
+            }
+
             let options = options.unwrap_or_default();
 
             // Human-like click delay (100-200ms default)

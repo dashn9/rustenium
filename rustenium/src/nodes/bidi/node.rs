@@ -17,9 +17,9 @@ use std::time::Duration;
 use tokio::sync::Mutex;
 use tokio::time::timeout;
 
-pub struct BidiNode<T: ConnectionTransport = rustenium_core::transport::WebsocketConnectionTransport> {
+pub(crate) struct BidiNode<T: ConnectionTransport = rustenium_core::transport::WebsocketConnectionTransport> {
     _raw_node: NodeRemoteValue,
-    children: Vec<BidiNode<T>>,
+    pub children: Vec<BidiNode<T>>,
     pub locator: Locator,
     pub position: Option<NodePosition>,
     pub session: Option<Arc<Mutex<Session<T>>>>,

@@ -105,7 +105,7 @@ pub struct SetLocaleOverrideParameters {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct setNetworkConditionsParameters {
+pub struct SetNetworkConditionsParameters {
     #[serde(rename = "networkConditions")]
     pub network_conditions: Option<NetworkConditions>,
     #[serde(rename = "contexts")]
@@ -193,7 +193,7 @@ pub struct SetNetworkConditions {
     #[serde(rename = "method")]
     pub method: EmulationSetNetworkConditionsMethod,
     #[serde(rename = "params")]
-    pub params: setNetworkConditionsParameters,
+    pub params: SetNetworkConditionsParameters,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
