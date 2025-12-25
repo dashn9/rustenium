@@ -1,7 +1,6 @@
 use rustenium_core::{process::Process, transport::{ConnectionTransport, ConnectionTransportConfig, WebsocketConnectionTransport}, NetworkRequest, Session};
-use std::error::Error;
 
-use crate::error::{ContextCreationListenError, ContextIndexError, EvaluateResultError, FindNodesError, InterceptNetworkError, OpenUrlError};
+use crate::error::{ContextCreationListenError, ContextIndexError, EmulationError, EvaluateResultError, FindNodesError, InterceptNetworkError, OpenUrlError};
 use rustenium_bidi_commands::browsing_context::types::{
     BrowsingContext as BidiBrowsingContext, ClipRectangle, CreateType, ImageFormat, Locator, OriginUnion, ReadinessState,
 };
@@ -36,7 +35,6 @@ use rustenium_bidi_commands::script::types::{
     SharedReference, Target
 };
 use rustenium_core::error::{CommandResultError, SessionSendError};
-use tokio::io;
 use rustenium_bidi_commands::network::commands::{AddIntercept, AddInterceptParameters, NetworkAddInterceptMethod};
 use rustenium_bidi_commands::network::types::{InterceptPhase, UrlPattern};
 use crate::input::{BidiMouse, HumanMouse, Keyboard, Point};
@@ -107,7 +105,7 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
             session.send_and_get_receiver(command).await
         };
 
-        match tokio::time::timeout(std::time::Duration::from_secs(100), rx).await {
+        match tokio::time::timeout(Duration::from_secs(100), rx).await {
             Ok(Ok(command_result)) => match command_result {
                 rustenium_core::CommandResponseState::Success(response) => Ok(response.result),
                 rustenium_core::CommandResponseState::Error(err) => Err(SessionSendError::ErrorResponse(err))
@@ -175,17 +173,6 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
             Err(error) => Err(ContextCreationListenError::CommandResultError(error)),
             Ok(result) => Ok(result),
         }
-    }
-
-    async fn new_browsing_context(&mut self) -> bool {
-        let browsing_context = Context::new(&mut *self.session.lock().await, None, None, false)
-            .await
-            .unwrap();
-        self.browsing_contexts
-            .lock()
-            .unwrap()
-            .push(browsing_context);
-        true
     }
 
     pub async fn open_url(
@@ -451,18 +438,6 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
         }
     }
 
-    fn get_context_id(&self, context_index: usize) -> Result<String, ContextIndexError> {
-        match self
-            .browsing_contexts
-            .lock()
-            .unwrap()
-            .get(self.active_bc_index)
-        {
-            Some(context) => Ok(context.get_context_id()),
-            None => Err(ContextIndexError {}),
-        }
-    }
-
     /// Get the active context
     pub fn get_active_context(&self) -> Result<Context, ContextIndexError> {
         match self
@@ -499,12 +474,12 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
     /// Create a new browsing context (tab or window)
     pub async fn create_context(
         &mut self,
-        context_type: Option<rustenium_bidi_commands::browsing_context::types::CreateType>,
-        reference_context: Option<&rustenium_core::Context>,
+        context_type: Option<CreateType>,
+        reference_context: Option<&Context>,
         background: bool,
-    ) -> Result<rustenium_core::Context, rustenium_core::error::CommandResultError> {
+    ) -> Result<Context, CommandResultError> {
         let mut session = self.session.lock().await;
-        rustenium_core::Context::new(&mut *session, context_type, reference_context, background).await
+        Context::new(&mut *session, context_type, reference_context, background).await
     }
 
     /// Move mouse to the center of a node
@@ -568,7 +543,7 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
     {
         // Use active context if no contexts provided
         let contexts = match contexts {
-            Some(ctxs) => Some(ctxs),
+            Some(contexts) => Some(contexts),
             None => Some(vec![self.get_active_context_id()?]),
         };
 
@@ -800,13 +775,13 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
         timezone: Option<String>,
         contexts: Option<Vec<BidiBrowsingContext>>,
         user_contexts: Option<Vec<String>>,
-    ) -> Result<(), crate::error::EmulationError> {
+    ) -> Result<(), EmulationError> {
         use rustenium_bidi_commands::emulation::commands::{
             EmulationSetTimezoneOverrideMethod, SetTimezoneOverride, SetTimezoneOverrideParameters,
         };
 
         let contexts = match contexts {
-            Some(ctxs) => Some(ctxs),
+            Some(contexts) => Some(contexts),
             None => Some(vec![self.get_active_context_id()?]),
         };
 
@@ -825,10 +800,10 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
 
         match result {
             Ok(ResultData::EmptyResult(_)) => Ok(()),
-            Ok(result) => Err(crate::error::EmulationError::CommandResultError(
+            Ok(result) => Err(EmulationError::CommandResultError(
                 CommandResultError::InvalidResultTypeError(result),
             )),
-            Err(err) => Err(crate::error::EmulationError::CommandResultError(
+            Err(err) => Err(EmulationError::CommandResultError(
                 CommandResultError::SessionSendError(err),
             )),
         }

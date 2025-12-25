@@ -211,7 +211,7 @@ impl ChromeBrowser {
         context_type: Option<rustenium_bidi_commands::browsing_context::types::CreateType>,
         reference_context: Option<&rustenium_core::Context>,
         background: bool,
-    ) -> Result<rustenium_core::Context, rustenium_core::error::CommandResultError> {
+    ) -> Result<rustenium_core::Context, CommandResultError> {
         self.driver.create_context(context_type, reference_context, background).await
     }
 
@@ -310,7 +310,7 @@ impl ChromeBrowser {
     }
 
     pub async fn send_bidi_command(&mut self, command: CommandData) -> Result<ResultData, SessionSendError> {
-        return self.driver.send_command(command).await;
+        self.driver.send_command(command).await
     }
 
     /// Register a handler to be called for each network request
@@ -402,6 +402,16 @@ impl ChromeBrowser {
             serialization_options,
             user_activation,
         ).await
+    }
+
+    /// Get a reference to the Chrome configuration
+    pub fn get_config(&self) -> &ChromeConfig {
+        &self.config
+    }
+
+    /// Get a reference to the Chrome browser process
+    pub fn get_browser_process(&self) -> &Option<Process> {
+        &self.chrome_process
     }
 
     /// Get a reference to the BiDi mouse
@@ -541,7 +551,7 @@ impl ChromeBrowser {
         password: impl Into<String> + Send + 'static,
         url_patterns: Option<Vec<UrlPattern>>,
         contexts: Option<Vec<String>>,
-    ) -> Result<(), crate::error::InterceptNetworkError> {
+    ) -> Result<(), InterceptNetworkError> {
         self.driver.authenticate(username, password, url_patterns, contexts).await
     }
 
