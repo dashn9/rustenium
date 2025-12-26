@@ -1,6 +1,6 @@
 [package]
 name = "rustenium-core"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 description = "Core WebDriver BiDi protocol implementation for Rustenium"
 license = "MIT"
@@ -12,7 +12,7 @@ categories = ["web-programming", "api-bindings"]
 keywords = ["webdriver", "bidi", "protocol", "websocket", "automation"]
 
 [dependencies]
-rustenium-bidi-commands = { version = "0.1.0", path = "../rustenium-bidi-commands" }
+rustenium-bidi-commands = { version = "0.1.1", path = "../rustenium-bidi-commands" }
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"

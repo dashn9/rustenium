@@ -1,6 +1,6 @@
 [package]
 name = "rustenium-bidi-commands"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 description = "WebDriver BiDi command types and structures for Rustenium"
 license = "MIT"

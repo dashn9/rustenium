@@ -1,6 +1,6 @@
 [package]
 name = "rustenium"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 description = "A modern, high-performance WebDriver BiDi automation library for Rust"
 license = "MIT"
@@ -16,9 +16,9 @@ default = []
 macros = ["rustenium-macros"]
 
 [dependencies]
-rustenium-core = { version = "0.1.0", path = "../rustenium-core" }
-rustenium-bidi-commands = { version = "0.1.0", path = "../rustenium-bidi-commands" }
-rustenium-macros = { version = "0.1.0", path = "../rustenium-macros", optional = true }
+rustenium-core = { version = "0.1.1", path = "../rustenium-core" }
+rustenium-bidi-commands = { version = "0.1.1", path = "../rustenium-bidi-commands" }
+rustenium-macros = { version = "0.1.1", path = "../rustenium-macros", optional = true }
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1.0.219", features = ["derive"] }
 thiserror = "2.0.17"
@@ -27,4 +27,4 @@ base64 = "0.22"
 tracing = "0.1"
 
 [dev-dependencies]
-rustenium-macros = { version = "0.1.0", path = "../rustenium-macros" }
+rustenium-macros = { version = "0.1.1", path = "../rustenium-macros" }
