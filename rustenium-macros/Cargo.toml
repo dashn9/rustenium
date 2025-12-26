@@ -6,6 +6,8 @@ description = "Convenience macros for Rustenium (css! and xpath! selectors)"
 license = "MIT"
 repository = "https://github.com/dashn9/rustenium"
 homepage = "https://github.com/dashn9/rustenium"
+documentation = "https://docs.rs/rustenium-macros"
+readme = "README.md"
 categories = ["development-tools", "web-programming"]
 keywords = ["macros", "css", "xpath", "selectors", "webdriver"]
 

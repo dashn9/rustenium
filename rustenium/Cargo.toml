@@ -6,6 +6,8 @@ description = "A modern, high-performance WebDriver BiDi automation library for 
 license = "MIT"
 repository = "https://github.com/dashn9/rustenium"
 homepage = "https://github.com/dashn9/rustenium"
+documentation = "https://docs.rs/rustenium"
+readme = "../README.md"
 categories = ["web-programming", "development-tools::testing", "api-bindings"]
 keywords = ["webdriver", "browser", "automation", "testing", "selenium"]
 

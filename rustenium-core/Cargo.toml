@@ -6,6 +6,8 @@ description = "Core WebDriver BiDi protocol implementation for Rustenium"
 license = "MIT"
 repository = "https://github.com/dashn9/rustenium"
 homepage = "https://github.com/dashn9/rustenium"
+documentation = "https://docs.rs/rustenium-core"
+readme = "README.md"
 categories = ["web-programming", "api-bindings"]
 keywords = ["webdriver", "bidi", "protocol", "websocket", "automation"]
 
