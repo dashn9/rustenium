@@ -4,11 +4,13 @@ version = "0.1.0"
 edition = "2024"
 description = "Core WebDriver BiDi protocol implementation for Rustenium"
 license = "MIT"
+repository = "https://github.com/dashn9/rustenium"
+homepage = "https://github.com/dashn9/rustenium"
 categories = ["web-programming", "api-bindings"]
 keywords = ["webdriver", "bidi", "protocol", "websocket", "automation"]
 
 [dependencies]
-rustenium-bidi-commands = { path = "../rustenium-bidi-commands"}
+rustenium-bidi-commands = { version = "0.1.0", path = "../rustenium-bidi-commands" }
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"

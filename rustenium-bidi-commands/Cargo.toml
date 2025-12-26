@@ -4,6 +4,8 @@ version = "0.1.0"
 edition = "2024"
 description = "WebDriver BiDi command types and structures for Rustenium"
 license = "MIT"
+repository = "https://github.com/dashn9/rustenium"
+homepage = "https://github.com/dashn9/rustenium"
 categories = ["web-programming", "data-structures"]
 keywords = ["webdriver", "bidi", "commands", "types", "protocol"]
 
