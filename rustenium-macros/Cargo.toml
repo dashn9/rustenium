@@ -1,7 +1,11 @@
 [package]
 name = "rustenium-macros"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
+description = "Convenience macros for Rustenium (css! and xpath! selectors)"
+license = "MIT"
+categories = ["development-tools", "web-programming"]
+keywords = ["macros", "css", "xpath", "selectors", "webdriver"]
 
 [dependencies]
 rustenium-bidi-commands = { path = "../rustenium-bidi-commands" }

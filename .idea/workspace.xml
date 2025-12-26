@@ -23,7 +23,19 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="" />
+    <list default="true" id="acd4cd92-3cd4-4ffc-893e-f9b41f484d38" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-core/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-core/src/transport.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-core/src/transport.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium-generator/src/output.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium-generator/src/output.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/browsers/chrome/chrome.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/browsers/chrome/chrome.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/browsers/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/browsers/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/drivers/bidi/drivers.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/drivers/bidi/drivers.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/lib.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/lib.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rustenium/src/nodes/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/rustenium/src/nodes/mod.rs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -203,7 +215,7 @@
       <workItem from="1766196791524" duration="593000" />
       <workItem from="1766240592933" duration="1412000" />
       <workItem from="1766336951722" duration="17638000" />
-      <workItem from="1766676124345" duration="8903000" />
+      <workItem from="1766676124345" duration="11910000" />
     </task>
     <servers />
   </component>

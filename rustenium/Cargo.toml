@@ -1,7 +1,11 @@
 [package]
 name = "rustenium"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
+description = "A modern, high-performance WebDriver BiDi automation library for Rust"
+license = "MIT"
+categories = ["web-programming", "development-tools::testing", "api-bindings"]
+keywords = ["webdriver", "browser", "automation", "testing", "selenium"]
 
 [features]
 default = []
@@ -13,10 +17,10 @@ rustenium-bidi-commands = { path = "../rustenium-bidi-commands"}
 rustenium-macros = { path = "../rustenium-macros", optional = true }
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1.0.219", features = ["derive"] }
-reqwest = { version = "0.12.15", features = ["json", "rustls-tls"], default-features = false }
 thiserror = "2.0.17"
 serde_json = "1.0.145"
 base64 = "0.22"
+tracing = "0.1"
 
 [dev-dependencies]
 rustenium-macros = { path = "../rustenium-macros" }

@@ -124,7 +124,7 @@ impl WebsocketConnectionTransport {
             match TcpStream::connect(&addr_host).await {
                 Ok(stream) => break stream,
                 Err(e) if e.kind() == std::io::ErrorKind::ConnectionRefused && retries > 0 => {
-                    println!("Connection refused, retrying... ({} attempts remaining)", retries);
+                    tracing::warn!("Connection refused, retrying... ({} attempts remaining)", retries);
                     retries -= 1;
                     tokio::time::sleep(tokio::time::Duration::from_millis(retry_delay_ms)).await;
                 }
@@ -149,7 +149,7 @@ impl WebsocketConnectionTransport {
         let (mut ws, _) = handshake::client(&SpawnExecutor, req, stream).await.unwrap();
         ws = Self::configure_client(ws);
         let (rx, tx) = ws.split(tokio::io::split);
-        println!("Successfully connected to drivers");
+        tracing::info!("Successfully connected to WebDriver");
 
         Ok(Self {
             client_rx: Arc::new(Mutex::new(rx)),
@@ -176,11 +176,11 @@ impl WebsocketConnectionTransport {
                 }).await {
                     Ok(frame) => frame,
                     // Err(WebSocketError::IoError(e)) if e.kind() == std::io::ErrorKind::ConnectionAborted => {
-                    //     eprintln!("WebSocket connection aborted: {}. Exiting listener loop.", e);
+                    //     tracing::warn!("WebSocket connection aborted: {}. Exiting listener loop.", e);
                     //     break;
                     // }
                     Err(WebSocketError::UnexpectedEOF) => {
-                        eprintln!("WebSocket connection closed (unexpected EOF). Exiting listener loop.");
+                        tracing::warn!("WebSocket connection closed (unexpected EOF). Exiting listener loop.");
                         break;
                     }
                     Err(e) => {

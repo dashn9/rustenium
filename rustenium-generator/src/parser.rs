@@ -1163,7 +1163,7 @@ fn split_respecting_brackets(input: &str) -> Vec<String> {
 /// Extracts content from within brackets, handling nested structures
 ///
 /// # Arguments
-/// * `input` - The bracketed string (e.g., "[content]")
+/// * `input` - The bracketed string (e.g., "")
 ///
 /// # Returns
 /// The content inside the outermost brackets

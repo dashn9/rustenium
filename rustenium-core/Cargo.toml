@@ -1,7 +1,11 @@
 [package]
 name = "rustenium-core"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
+description = "Core WebDriver BiDi protocol implementation for Rustenium"
+license = "MIT"
+categories = ["web-programming", "api-bindings"]
+keywords = ["webdriver", "bidi", "protocol", "websocket", "automation"]
 
 [dependencies]
 rustenium-bidi-commands = { path = "../rustenium-bidi-commands"}
@@ -16,3 +20,4 @@ hyper-util = "0.1.10"
 regex = "1.11.1"
 rand = "0.9.1"
 thiserror = "2.0.17"
+tracing = "0.1"

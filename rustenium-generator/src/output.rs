@@ -31,7 +31,7 @@ fn extract_module_and_type(type_ref: &str) -> Option<(String, String)> {
     }
 }
 
-/// Extracts the inner type from generic wrappers like Vec<T>, Option<T>, Box<T>
+// Extracts the inner type from generic wrappers like Vec<T>, Option<T>, Box<T>
 fn extract_inner_type(type_ref: &str) -> String {
     // Handle Option<T>
     if let Some(inner) = type_ref.strip_prefix("Option<").and_then(|s| s.strip_suffix('>')) {

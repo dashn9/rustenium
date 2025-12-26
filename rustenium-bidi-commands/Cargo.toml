@@ -2,6 +2,10 @@
 name = "rustenium-bidi-commands"
 version = "0.1.0"
 edition = "2024"
+description = "WebDriver BiDi command types and structures for Rustenium"
+license = "MIT"
+categories = ["web-programming", "data-structures"]
+keywords = ["webdriver", "bidi", "commands", "types", "protocol"]
 
 [dependencies]
 serde = { version = "1.0.228", features = ["derive"] }

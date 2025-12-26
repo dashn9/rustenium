@@ -57,8 +57,11 @@
 //! - [`browsers::ChromeConfig`] - Browser configuration
 //! - [`browsers::ChromeCapabilities`] - Browser capabilities builder
 //! - [`browsers::create_chrome_browser()`] - Convenience function to create a browser
-//! - [`nodes::ChromeNode`] - DOM element representation
-//! - [`input`] - Mouse, keyboard, and touch input
+//! - [`nodes::ChromeNode`] - DOM element representation for Chrome
+//! - [`input::BidiMouse`] - Direct, instant mouse movements for fast automation
+//! - [`input::HumanMouse`] - Realistic mouse movements with Bezier curves and jitter
+//! - [`input::Keyboard`] - Keyboard input for typing text and pressing keys
+//! - [`input::Touchscreen`] - Multi-touch gesture support for mobile testing
 //!
 //! ## Macros
 //!
@@ -77,8 +80,6 @@ pub mod browsers;
 pub mod nodes;
 pub mod input;
 
-pub use nodes::{Node};
-pub use nodes::chrome::ChromeNode;
 
 #[cfg(feature = "macros")]
 pub use rustenium_macros::*;

@@ -634,7 +634,7 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
         let password = password.into();
         let session = Arc::clone(&self.session);
 
-        println!("Activated Authenticate");
+        tracing::debug!("Activated authentication handler");
         self.on_network(
             vec![InterceptPhase::AuthRequired, InterceptPhase::ResponseStarted],
             vec!["network.authRequired"],
@@ -642,9 +642,9 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
                 let session = Arc::clone(&session);
                 let username = username.clone();
                 let password = password.clone();
-                println!("Authenticate Outer Closure");
+                tracing::trace!("Authentication handler invoked");
                 async move {
-                    println!("Authenticate Future Closure");
+                    tracing::trace!("Processing authentication request");
                     if let EventData::NetworkEvent(NetworkEvent::AuthRequired(auth_required)) = event.event_data {
                         let request = NetworkRequest::from_auth_required(auth_required.params, session);
 

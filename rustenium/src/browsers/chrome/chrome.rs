@@ -14,7 +14,7 @@ use rustenium_core::events::EventManagement;
 use rustenium_core::session::SessionConnectionType;
 use crate::drivers::bidi::drivers::{BidiDriver, BidiDrive, DriverConfiguration};
 use crate::error::{EvaluateResultError, FindNodesError, OpenUrlError, InterceptNetworkError};
-use crate::nodes::chrome::ChromeNode;
+use crate::nodes::ChromeNode;
 use super::capabilities::ChromeCapabilities;
 use std::sync::{Arc, Mutex};
 use std::collections::HashSet;
