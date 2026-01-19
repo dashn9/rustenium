@@ -25,7 +25,7 @@ Add Rustenium to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-rustenium = "0.1.0"
+rustenium = "0.1.1"
 tokio = { version = "1", features = ["full"] }
 ```
 

@@ -13,7 +13,7 @@ Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-rustenium = { version = "0.1", features = ["macros"] }
+rustenium = { version = "0.1.1", features = ["macros"] }
 ```
 
 Then use in your code:

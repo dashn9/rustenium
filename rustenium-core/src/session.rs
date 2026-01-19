@@ -2,6 +2,7 @@ use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 use rand::Rng;
+use tracing;
 use crate::network::NetworkRequestHandledState;
 use rustenium_bidi_commands::{Command, CommandData, ResultData, EmptyParams};
 use rustenium_bidi_commands::session::commands::{New as SessionNew, SessionNewMethod, NewParameters as SessionNewParameters, SessionCommand, SessionResult, End, SessionEndMethod};
@@ -98,6 +99,8 @@ impl<T: ConnectionTransport> Session<T> {
         let (tx, rx) = oneshot::channel::<CommandResponseState>();
         self.connection.commands_response_subscriptions.lock().await.insert(command_id, tx);
         let raw_message = serde_json::to_string(&command).unwrap();
+        tracing::debug!(command_id = %command_id, raw_message = %raw_message, "Sending command");
+
         self.connection.send(raw_message).await;
 
         rx

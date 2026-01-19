@@ -69,7 +69,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! rustenium = { version = "0.1", features = ["macros"] }
+//! rustenium = { version = "0.1.1", features = ["macros"] }
 //! ```
 //!
 //! Then use `css!()` and `xpath!()` macros for element selection.
