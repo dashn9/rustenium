@@ -15,12 +15,71 @@ impl Process {
         S: AsRef<str>,
         I: IntoIterator<Item = String>,
     {
-        let child = Command::new(exe_path.as_ref())
-            .args(args.into_iter().map(|s| s))
+        let exe = exe_path.as_ref();
+        let args_vec: Vec<String> = args.into_iter().collect();
+
+        // Log the full command being executed with details
+        tracing::info!(
+            "Starting process with executable: '{}' and arguments: {:?}",
+            exe,
+            args_vec
+        );
+        tracing::info!(
+            "Full command: {} {}",
+            exe,
+            args_vec.join(" ")
+        );
+
+        let mut child = Command::new(exe)
+            .args(args_vec)
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
             .spawn()
             .expect("Failed to start process");
+
+        // Capture and log stdout
+        if let Some(stdout) = child.stdout.take() {
+            let exe_name = exe.to_string();
+            tokio::spawn(async move {
+                let mut reader = BufReader::new(stdout);
+                let mut line = String::new();
+                loop {
+                    line.clear();
+                    match reader.read_line(&mut line).await {
+                        Ok(0) => break, // EOF
+                        Ok(_) => {
+                            tracing::debug!("[{} stdout] {}", exe_name, line.trim());
+                        }
+                        Err(e) => {
+                            tracing::error!("[{} stdout] Error reading: {}", exe_name, e);
+                            break;
+                        }
+                    }
+                }
+            });
+        }
+
+        // Capture and log stderr
+        if let Some(stderr) = child.stderr.take() {
+            let exe_name = exe.to_string();
+            tokio::spawn(async move {
+                let mut reader = BufReader::new(stderr);
+                let mut line = String::new();
+                loop {
+                    line.clear();
+                    match reader.read_line(&mut line).await {
+                        Ok(0) => break, // EOF
+                        Ok(_) => {
+                            tracing::debug!("[{} stderr] {}", exe_name, line.trim());
+                        }
+                        Err(e) => {
+                            tracing::error!("[{} stderr] Error reading: {}", exe_name, e);
+                            break;
+                        }
+                    }
+                }
+            });
+        }
 
         let child = Some(child);
 
