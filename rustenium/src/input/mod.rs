@@ -7,8 +7,8 @@ pub use crate::input::{
     human_mouse::HumanMouse,
     bidi::{
         mouse::BidiMouse,
-        keyboard::Keyboard,
+        keyboard::{Keyboard, KeyboardTypeOptions, KeyPressOptions},
         touchscreen::{Touchscreen, TouchHandle, TouchMoveOptions}
     },
-    mouse::{Point, Mouse, MouseClickOptions}
+    mouse::{Point, Mouse, MouseClickOptions, MouseMoveOptions}
 };

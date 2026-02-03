@@ -13,7 +13,7 @@ use rustenium_core::{find_free_port, NetworkRequest};
 use rustenium_core::events::EventManagement;
 use rustenium_core::session::SessionConnectionType;
 use crate::drivers::bidi::drivers::{BidiDriver, BidiDrive, DriverConfiguration};
-use crate::error::{EvaluateResultError, FindNodesError, OpenUrlError, InterceptNetworkError};
+use crate::error::{EvaluateResultError, FindNodesError, OpenUrlError, InterceptNetworkError, ContextIndexError};
 use crate::nodes::ChromeNode;
 use super::capabilities::ChromeCapabilities;
 use std::sync::{Arc, Mutex};
@@ -880,6 +880,10 @@ impl ChromeBrowser {
         contexts: Option<Vec<String>>,
     ) -> Result<(), InterceptNetworkError> {
         self.driver.authenticate(username, password, url_patterns, contexts).await
+    }
+
+    pub fn get_active_context_id(&self) -> Result<BrowsingContext, ContextIndexError> {
+        self.driver.get_active_context_id()
     }
 
     /// End the BiDi session and clean up resources
