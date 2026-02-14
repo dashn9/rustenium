@@ -89,9 +89,9 @@ pub struct SetCookie {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum StorageResult {
-    DeleteCookiesResult(DeleteCookiesResult),
     GetCookiesResult(GetCookiesResult),
     SetCookieResult(SetCookieResult),
+    DeleteCookiesResult(DeleteCookiesResult),
 }
 
 
