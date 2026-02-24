@@ -252,7 +252,7 @@ pub struct Cookie {
     pub same_site: SameSite,
     #[serde(rename = "expiry")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub expiry: Option<u64>,
+    pub expiry: Option<f64>,
     #[serde(flatten)]
     pub extensible: Extensible,
 }
