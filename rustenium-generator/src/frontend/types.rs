@@ -1,4 +1,18 @@
-use std::{collections::HashMap, sync::LazyLock};
+use std::{borrow::Cow, collections::HashMap, sync::LazyLock};
+
+pub struct ModCommand {
+
+}
+
+pub struct ModEvent {}
+
+pub struct ModeType {}
+pub struct Module<'a> {
+    name: Cow<'a, str>,
+    commands: Vec<ModCommand>,
+    events: Vec<ModEvent>,
+    types: Vec<ModeType>
+}
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct TokenId(usize);
@@ -64,7 +78,6 @@ pub enum TypeDef {
         name: Token
     },
     Struct {
-        name: Token,
         properties: Vec<Property>
     }
 }

@@ -17,13 +17,13 @@ pub fn group_rule_group_entry(grge: GroupEntry, group_rule_name: Identifier) {
                 if let Some(type_choice_operator) = type_choice.type1.operator {
                     println!("{}", type_choice_operator.operator);
                 }
-                println!("{}", type_choice.type1.type2);
+                // println!("{}", type_choice.type1.type2);
             }
             if let Some(m_key) = ge.member_key {
-            println!("{}", m_key);
+            // println!("{}", m_key);
             }
             let type_def = TypeDef::Struct { 
-                name: TokenBuilder::default().name(group_rule_name.to_string()).build(),
+                // name: TokenBuilder::default().name(group_rule_name.to_string()).build(),
                 properties: Vec::new()
             };
         }
@@ -47,7 +47,7 @@ pub fn group_rule_group_entry(grge: GroupEntry, group_rule_name: Identifier) {
             leading_comments,
             trailing_comments,
         } => {
-            println!("{}", ge)
+            // println!("{}", ge)
         }
     }
 }
