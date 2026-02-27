@@ -6,12 +6,13 @@ pub struct ModCommand {
 
 pub struct ModEvent {}
 
-pub struct ModeType {}
+pub struct ModType {}
+
 pub struct Module<'a> {
     name: Cow<'a, str>,
     commands: Vec<ModCommand>,
     events: Vec<ModEvent>,
-    types: Vec<ModeType>
+    types: Vec<ModType>
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
