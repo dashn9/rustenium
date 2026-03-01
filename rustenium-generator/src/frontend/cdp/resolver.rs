@@ -1,19 +1,19 @@
 use std::fs;
 use std::path::Path;
 
-use crate::pdl::error::*;
+use crate::frontend::cdp::error::*;
 
 /// PDL can contain `include` statements that can reference
 /// other PDL files. This function resolves these includes
 /// by reading the referenced file and returning full
 /// resolved content.
-pub fn resolve_pdl(path: &Path, input: &str) -> Result<String, Error> {
+pub fn resolve_pdl(path: &Path, content: &str) -> Result<String, Error> {
     let Some(dir) = path.parent() else {
         bail!("Failed to get parent directory");
     };
 
     let mut resolved = String::new();
-    for line in input.lines() {
+    for line in content.lines() {
         if line.starts_with("include") {
             // Load the file
             let Some(name) = line.split_whitespace().nth(1) else {

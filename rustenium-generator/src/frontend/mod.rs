@@ -1,6 +1,5 @@
 pub mod bidi;
 pub mod cdp;
-pub mod types;
 
 use std::{fs::File, io::Read};
 

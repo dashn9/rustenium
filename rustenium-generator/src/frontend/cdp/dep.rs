@@ -1,10 +1,8 @@
-use std::collections::HashSet;
-
-use once_cell::sync::Lazy;
+use std::{collections::HashSet, sync::LazyLock};
 
 // circularDeps is the list of types that can cause circular dependency
 // issues.
-static CIRCULAR_DEPS: Lazy<HashSet<&'static str>> = Lazy::new(|| {
+static CIRCULAR_DEPS: LazyLock<HashSet<&'static str>> = LazyLock::new(|| {
     let mut m = HashSet::new();
     m.insert("browser.browsercontextid");
     m.insert("dom.backendnodeid");

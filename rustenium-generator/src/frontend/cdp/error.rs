@@ -22,7 +22,7 @@ impl std::error::Error for Error {}
 
 macro_rules! format_err {
     ($($tt:tt)*) => {
-        $crate::pdl::error::Error {
+        $crate::frontend::cdp::error::Error {
             message: format!($($tt)*),
         }
     };
