@@ -60,7 +60,7 @@ pub struct TypeDef<'a> {
     #[cfg_attr(feature = "serde0", serde(flatten))]
     pub extends: Type<'a>,
     #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Vec::is_empty"))]
-    pub parameters: Vec<Param<'a>>,
+    pub parameters: Option<Item<'a>>,
     // RawType is the raw type.
     pub raw_name: Cow<'a, str>,
     // is_circular_dep indicates a type that causes circular dependencies.
@@ -71,6 +71,15 @@ impl<'a> TypeDef<'a> {
     pub fn is_enum(&self) -> bool {
         matches!(self.item.as_ref(), Some(Item::Enum(_)))
     }
+}
+
+#[cfg_attr(feature = "serde0", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde0", serde(rename_all = "lowercase"))]
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum Item<'a> {
+    #[cfg_attr(feature = "serde0", serde(serialize_with = "ser::serialize_enum"))]
+    Enum(Vec<Variant<'a>>),
+    Properties(Vec<Param<'a>>),
 }
 
 #[cfg_attr(feature = "serde0", derive(Deserialize))]
@@ -221,7 +230,7 @@ pub struct Event<'a> {
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Redirect<'a> {
     pub description: Option<Cow<'a, str>>,
-    pub domain: Cow<'a, str>,
+    pub module: Cow<'a, str>,
     pub name: Option<Cow<'a, str>>,
 }
 
