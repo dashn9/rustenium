@@ -27,6 +27,23 @@ enum ModuleProperty<'a> {
     Event(Event<'a>),
 }
 
+fn add_module_property_to_module(mod_prop: ModuleProperty, module: &mut Module) {
+    match mod_prop {
+        ModuleProperty::Type(t) => module.types.push(t),
+        ModuleProperty::Command(c) => module.commands.push(c),
+        ModuleProperty::CommandResult(cr) => module.command_results.push(cr),
+        ModuleProperty::Event(e) => module.events.push(e),
+    }
+}
+fn add_param_to_module_property(mod_prop: &mut ModuleProperty, param: Param) {
+    match mod_prop {
+        ModuleProperty::Command(c) => c.parameters.push(param),
+        ModuleProperty::CommandResult(cr) => cr.parameters.push(param),
+        ModuleProperty::Event(e) => e.parameters.push(param),
+        ModuleProperty::Type(t) => t.parameters.push(param)
+    }
+}
+
 /// Parse the input into a [`Protocol`].
 ///
 /// Rewrite of the Python script from the Chromium source tree.
@@ -61,12 +78,8 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
 
         if let Some(caps) = regex!("^(experimental )?(deprecated )?module (.*)").captures(line) {
             if let Some(module) = protocol.modules.last_mut() {
-                if let Some(mut element) = element.take() {
-                    if let Some(mod_prop) = mod_prop.take() {
-                        element.add_member(mod_prop)?;
-                    }
-                    element.consume(module);
-                }
+                if let Some(mut mod_prop) = mod_prop.take() {
+                    add_module_property_to_module(mod_prop, module);
             }
 
             let module = Module {
@@ -77,6 +90,7 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
                 dependencies: vec![],
                 types: vec![],
                 commands: vec![],
+                command_results: vec![],
                 events: vec![],
             };
             protocol.modules.push(module);
@@ -103,11 +117,8 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
                 .last_mut()
                 .ok_or_else(|| format_err!("line {}: missing module declaration", line_num))?;
 
-            if let Some(mut el) = element.take() {
-                if let Some(mod_prop) = mod_prop.take() {
-                    el.add_member(mod_prop)?;
-                }
-                el.consume(module);
+            if let Some(mut mod_prop) = mod_prop.take() {
+                add_module_property_to_module(mod_prop, module);
             }
             let name = borrowed!(caps.get(3)).unwrap();
             let ty = TypeDef {
@@ -118,9 +129,9 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
                 is_circular_dep: is_circular_dep(&module.name, name.as_ref()),
                 name,
                 extends: Type::new(caps.get(5).unwrap().as_str(), caps.get(4).is_some()),
-                item: None,
+                parameters: vec![]
             };
-            element = Some(Element::Type(ty));
+            mod_prop = Some(ModuleProperty::Type(ty));
             continue;
         }
 
@@ -132,7 +143,7 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
                 .modules
                 .last_mut()
                 .ok_or_else(|| format_err!("line {}: missing module declaration", line_num))?;
-            if let Some(mut el) = element.take() {
+            if let Some(mut el) = mod_prop.take() {
                 if let Some(mod_prop) = mod_prop.take() {
                     el.add_member(mod_prop)?;
                 }
@@ -151,7 +162,7 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
                     is_circular_dep: is_circular_dep(&module.name, name.as_ref()),
                     name,
                 };
-                element = Some(Element::Commnad(cmd));
+                mod_prop = Some(ModuleProperty::Commnad(cmd));
             } else {
                 let ev = Event {
                     description: description.take().map(Cow::Owned),
@@ -162,7 +173,7 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
                     is_circular_dep: is_circular_dep(&module.name, name.as_ref()),
                     name,
                 };
-                element = Some(Element::Event(ev));
+                mod_prop = Some(ModuleProperty::Event(ev));
             };
             continue;
         }
@@ -188,17 +199,13 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
                 name,
                 r#type: Type::new(caps.get(5).unwrap().as_str(), caps.get(4).is_some()),
             };
-            match mod_prop.as_mut().ok_or_else(|| {
+            add_param_to_module_property(mod_prop.as_mut().ok_or_else(|| {
                 format_err!(
                     "line {}: parameter {} has no declared mod_prop section",
                     line_num,
                     param.name
                 )
-            })? {
-                Member::Parameters(params) => params.push(param),
-                Member::Returns(params) => params.push(param),
-                Member::Properties(params) => params.push(param),
-            };
+            })?, param);
             if Some("enum") == caps.get(5).map(|m| m.as_str()) {
                 member_enum = true;
             }
@@ -208,7 +215,7 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
         // parameters, returns, properties definition
         if let Some(caps) = regex!("^    (parameters|returns|properties)").captures(line) {
             // if let Some(mod_prop) = mod_prop.take() {
-            //     element
+            //     mod_prop
             //         .as_mut()
             //         .ok_or_else(|| format_err!("line {}: mod_prop has no parent item", line_num))?
             //         .add_member(mod_prop)?;
@@ -225,7 +232,7 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
         // enum
         if line.starts_with("    enum") {
             member_enum = false;
-            if let Some(Element::Type(ref mut ty)) = element.as_mut() {
+            if let Some(ModuleProperty::Type(ref mut ty)) = mod_prop.as_mut() {
                 if ty.item.is_none() {
                     ty.item = Some(Item::Enum(vec![]));
                     continue;
@@ -273,11 +280,11 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
                     redirect.name = name.rsplit('.').next().map(str::to_string).map(Cow::Owned);
                 }
             }
-            match element
+            match mod_prop
                 .as_mut()
                 .ok_or_else(|| format_err!("line {}: missing item declaration", line_num))?
             {
-                Element::Commnad(cmd) => {
+                ModuleProperty::Commnad(cmd) => {
                     cmd.redirect = Some(redirect);
                 }
                 _ => bail!("line {}: can't add redirect here", line_num),
@@ -307,11 +314,11 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
                     bail!("line {}: missing enum declaration", line_num)
                 }
             } else {
-                match element
+                match mod_prop
                     .as_mut()
                     .ok_or_else(|| format_err!("line {}: missing item declaration", line_num))?
                 {
-                    Element::Type(ty) => {
+                    ModuleProperty::Type(ty) => {
                         if let Some(Item::Enum(vars)) = ty.item.as_mut() {
                             vars.push(Variant {
                                 description: description.take().map(Cow::Owned),
@@ -330,11 +337,11 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
     }
 
     if let Some(module) = protocol.modules.last_mut() {
-        if let Some(mut element) = element.take() {
+        if let Some(mut mod_prop) = mod_prop.take() {
             if let Some(mod_prop) = mod_prop.take() {
-                element.add_member(mod_prop)?;
+                mod_prop.add_member(mod_prop)?;
             }
-            element.consume(module);
+            mod_prop.consume(module);
         }
     }
 

@@ -42,6 +42,8 @@ pub struct Module<'a> {
     #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Vec::is_empty"))]
     pub commands: Vec<Command<'a>>,
     #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Vec::is_empty"))]
+    pub command_results: Vec<CommandResult<'a>>,
+    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Vec::is_empty"))]
     pub events: Vec<Event<'a>>,
 }
 
@@ -57,8 +59,8 @@ pub struct TypeDef<'a> {
     pub name: Cow<'a, str>,
     #[cfg_attr(feature = "serde0", serde(flatten))]
     pub extends: Type<'a>,
-    #[cfg_attr(feature = "serde0", serde(flatten))]
-    pub item: Option<Item<'a>>,
+    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Vec::is_empty"))]
+    pub parameters: Vec<Param<'a>>,
     // RawType is the raw type.
     pub raw_name: Cow<'a, str>,
     // is_circular_dep indicates a type that causes circular dependencies.
@@ -119,15 +121,6 @@ impl Type<'_> {
 }
 
 #[cfg_attr(feature = "serde0", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "serde0", serde(rename_all = "lowercase"))]
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub enum Item<'a> {
-    #[cfg_attr(feature = "serde0", serde(serialize_with = "ser::serialize_enum"))]
-    Enum(Vec<Variant<'a>>),
-    Properties(Vec<Param<'a>>),
-}
-
-#[cfg_attr(feature = "serde0", derive(Serialize, Deserialize))]
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Variant<'a> {
     #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Option::is_none"))]
@@ -180,7 +173,7 @@ pub struct Command<'a> {
     #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Vec::is_empty"))]
     pub parameters: Vec<Param<'a>>,
     #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Vec::is_empty"))]
-    pub returns: &'a str,
+    pub returns: Vec<&'a str>,
     // RawType is the raw type.
     pub raw_name: Cow<'a, str>,
     // is_circular_dep indicates a type that causes circular dependencies.
