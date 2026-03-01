@@ -5,35 +5,35 @@ use proc_macro2::{Ident, TokenStream};
 use quote::{quote, ToTokens};
 use std::slice::Iter;
 
-pub struct DomainDataTypeIter<'a> {
+pub struct ModuleDataTypeIter<'a> {
     types: Iter<'a, TypeDef<'a>>,
     commands: Iter<'a, Command<'a>>,
     events: Iter<'a, Event<'a>>,
 }
 
-impl<'a> Iterator for DomainDataTypeIter<'a> {
-    type Item = DomainDatatype<'a>;
+impl<'a> Iterator for ModuleDataTypeIter<'a> {
+    type Item = ModuleDatatype<'a>;
 
     fn next(&mut self) -> Option<Self::Item> {
         if let Some(ty) = self.types.next() {
-            return Some(DomainDatatype::Type(ty));
+            return Some(ModuleDatatype::Type(ty));
         }
         if let Some(cmd) = self.commands.next() {
-            return Some(DomainDatatype::Command(cmd));
+            return Some(ModuleDatatype::Command(cmd));
         }
         if let Some(ev) = self.events.next() {
-            return Some(DomainDatatype::Event(ev));
+            return Some(ModuleDatatype::Event(ev));
         }
         None
     }
 }
 
 impl<'a> IntoIterator for &'a Domain<'a> {
-    type Item = DomainDatatype<'a>;
-    type IntoIter = DomainDataTypeIter<'a>;
+    type Item = ModuleDatatype<'a>;
+    type IntoIter = ModuleDataTypeIter<'a>;
 
     fn into_iter(self) -> Self::IntoIter {
-        DomainDataTypeIter {
+        ModuleDataTypeIter {
             types: self.types.iter(),
             commands: self.commands.iter(),
             events: self.events.iter(),
@@ -41,23 +41,23 @@ impl<'a> IntoIterator for &'a Domain<'a> {
     }
 }
 
-pub enum DomainDatatype<'a> {
+pub enum ModuleDatatype<'a> {
     Type(&'a TypeDef<'a>),
     Command(&'a Command<'a>),
     Event(&'a Event<'a>),
 }
 
-impl<'a> DomainDatatype<'a> {
+impl<'a> ModuleDatatype<'a> {
     pub fn is_type(&self) -> bool {
-        matches!(self, DomainDatatype::Type(_))
+        matches!(self, ModuleDatatype::Type(_))
     }
 
     pub fn is_command(&self) -> bool {
-        matches!(self, DomainDatatype::Command(_))
+        matches!(self, ModuleDatatype::Command(_))
     }
 
     pub fn is_event(&self) -> bool {
-        matches!(self, DomainDatatype::Event(_))
+        matches!(self, ModuleDatatype::Event(_))
     }
 
     pub fn size(&self) -> usize {
@@ -68,11 +68,11 @@ impl<'a> DomainDatatype<'a> {
         let base_url = "https://chromedevtools.github.io/devtools-protocol/tot/";
 
         let url = match self {
-            DomainDatatype::Type(ty) => format!("{}{}/#type-{}", base_url, domain_name, ty.name()),
-            DomainDatatype::Command(cmd) => {
+            ModuleDatatype::Type(ty) => format!("{}{}/#type-{}", base_url, domain_name, ty.name()),
+            ModuleDatatype::Command(cmd) => {
                 format!("{}{}/#method-{}", base_url, domain_name, cmd.name())
             }
-            DomainDatatype::Event(ev) => {
+            ModuleDatatype::Event(ev) => {
                 format!("{}{}/#event-{}", base_url, domain_name, ev.name())
             }
         };
@@ -89,29 +89,29 @@ impl<'a> DomainDatatype<'a> {
 
     pub fn ident_name(&self) -> String {
         match self {
-            DomainDatatype::Type(_ty) => self.name().to_upper_camel_case(),
-            DomainDatatype::Command(cmd) => format!("{}Params", cmd.name().to_upper_camel_case()),
-            DomainDatatype::Event(event) => format!("Event{}", event.name().to_upper_camel_case()),
+            ModuleDatatype::Type(_ty) => self.name().to_upper_camel_case(),
+            ModuleDatatype::Command(cmd) => format!("{}Params", cmd.name().to_upper_camel_case()),
+            ModuleDatatype::Event(event) => format!("Event{}", event.name().to_upper_camel_case()),
         }
     }
 
     pub fn params(&self) -> impl Iterator<Item = &'a Param<'a>> + 'a {
         match self {
-            DomainDatatype::Type(ty) => {
+            ModuleDatatype::Type(ty) => {
                 if let Some(Item::Properties(ref params)) = ty.item {
                     params.iter()
                 } else {
                     [].iter()
                 }
             }
-            DomainDatatype::Command(cmd) => cmd.parameters.iter(),
-            DomainDatatype::Event(ev) => ev.parameters.iter(),
+            ModuleDatatype::Command(cmd) => cmd.parameters.iter(),
+            ModuleDatatype::Event(ev) => ev.parameters.iter(),
         }
     }
 
     pub fn as_enum(&self) -> Option<&Vec<Variant<'_>>> {
         match self {
-            DomainDatatype::Type(ty) => {
+            ModuleDatatype::Type(ty) => {
                 if let Some(Item::Enum(ref vars)) = ty.item {
                     Some(vars)
                 } else {
@@ -124,51 +124,51 @@ impl<'a> DomainDatatype<'a> {
 
     pub fn raw_name(&self) -> &'a str {
         match self {
-            DomainDatatype::Type(ty) => ty.raw_name.as_ref(),
-            DomainDatatype::Command(cmd) => cmd.raw_name.as_ref(),
-            DomainDatatype::Event(ev) => ev.raw_name.as_ref(),
+            ModuleDatatype::Type(ty) => ty.raw_name.as_ref(),
+            ModuleDatatype::Command(cmd) => cmd.raw_name.as_ref(),
+            ModuleDatatype::Event(ev) => ev.raw_name.as_ref(),
         }
     }
 }
 
-impl<'a> DataType for DomainDatatype<'a> {
+impl<'a> DataType for ModuleDatatype<'a> {
     fn is_circular_dep(&self) -> bool {
         match self {
-            DomainDatatype::Type(inner) => inner.is_circular_dep(),
-            DomainDatatype::Command(inner) => inner.is_circular_dep(),
-            DomainDatatype::Event(inner) => inner.is_circular_dep(),
+            ModuleDatatype::Type(inner) => inner.is_circular_dep(),
+            ModuleDatatype::Command(inner) => inner.is_circular_dep(),
+            ModuleDatatype::Event(inner) => inner.is_circular_dep(),
         }
     }
 
     fn is_experimental(&self) -> bool {
         match self {
-            DomainDatatype::Type(inner) => inner.is_experimental(),
-            DomainDatatype::Command(inner) => inner.is_experimental(),
-            DomainDatatype::Event(inner) => inner.is_experimental(),
+            ModuleDatatype::Type(inner) => inner.is_experimental(),
+            ModuleDatatype::Command(inner) => inner.is_experimental(),
+            ModuleDatatype::Event(inner) => inner.is_experimental(),
         }
     }
 
     fn description(&self) -> Option<&str> {
         match self {
-            DomainDatatype::Type(inner) => inner.description(),
-            DomainDatatype::Command(inner) => inner.description(),
-            DomainDatatype::Event(inner) => inner.description(),
+            ModuleDatatype::Type(inner) => inner.description(),
+            ModuleDatatype::Command(inner) => inner.description(),
+            ModuleDatatype::Event(inner) => inner.description(),
         }
     }
 
     fn name(&self) -> &str {
         match self {
-            DomainDatatype::Type(inner) => inner.name(),
-            DomainDatatype::Command(inner) => inner.name(),
-            DomainDatatype::Event(inner) => inner.name(),
+            ModuleDatatype::Type(inner) => inner.name(),
+            ModuleDatatype::Command(inner) => inner.name(),
+            ModuleDatatype::Event(inner) => inner.name(),
         }
     }
 
     fn is_deprecated(&self) -> bool {
         match self {
-            DomainDatatype::Type(inner) => inner.is_deprecated(),
-            DomainDatatype::Command(inner) => inner.is_deprecated(),
-            DomainDatatype::Event(inner) => inner.is_deprecated(),
+            ModuleDatatype::Type(inner) => inner.is_deprecated(),
+            ModuleDatatype::Command(inner) => inner.is_deprecated(),
+            ModuleDatatype::Event(inner) => inner.is_deprecated(),
         }
     }
 }

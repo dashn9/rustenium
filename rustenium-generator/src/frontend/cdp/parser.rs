@@ -1,18 +1,30 @@
 //! Parser for the chrome pdl files
 //!
 //! All regexp's are copied from pdl.py in the chromium source tree.
-use crate::pdl::dep::is_circular_dep;
-use crate::pdl::error::*;
-use crate::pdl::*;
+
+use std::sync::OnceLock;
+use regex::Regex;
+use crate::backend::base_types::{Command, CommandResult, Event, Module, Param, Protocol, Type, TypeDef};
+use crate::frontend::cdp::dep::is_circular_dep;
+use crate::frontend::cdp::error::*;
+use crate::frontend::cdp::*;
 use std::borrow::Cow;
 
 /// Helper macro to create `&'static Regex`
 macro_rules! regex {
     ($re:literal $(,)?) => {{
-        static RE: once_cell::sync::OnceCell<regex::Regex> = once_cell::sync::OnceCell::new();
+        static RE: OnceLock<Regex> = OnceLock::new();
         #[allow(clippy::regex_creation_in_loops)]
         RE.get_or_init(|| regex::Regex::new($re).unwrap())
     }};
+}
+
+#[derive(Debug)]
+enum ModuleProperty<'a> {
+    Type(TypeDef<'a>),
+    Command(Command<'a>),
+    CommandResult(CommandResult<'a>),
+    Event(Event<'a>),
 }
 
 /// Parse the input into a [`Protocol`].
@@ -25,11 +37,7 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
     let mut description: Option<String> = None;
     let mut version = None;
 
-    // type, command, event
-    let mut element: Option<Element> = None;
-    // parameters, properties, returns
-    let mut member: Option<Member> = None;
-    let mut member_enum = false;
+    let mut mod_prop = None;
 
     for (idx, line) in input.lines().enumerate() {
         let line_num = idx + 1;
@@ -38,14 +46,10 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
         if trim_line.starts_with('#') {
             if let Some(desc) = description.as_mut() {
                 desc.push('\n');
-                desc.extend(trim_line.chars().skip(1).skip_while(|c| c.is_whitespace()));
+                desc.extend(trim_line[1..].trim_start().to_string());
             } else {
                 description = Some(
-                    trim_line
-                        .chars()
-                        .skip(1)
-                        .skip_while(|c| c.is_whitespace())
-                        .collect::<String>(),
+                    trim_line[1..].trim_start().to_string()
                 );
             }
             continue;
@@ -55,35 +59,35 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
             continue;
         }
 
-        if let Some(caps) = regex!("^(experimental )?(deprecated )?domain (.*)").captures(line) {
-            if let Some(domain) = protocol.domains.last_mut() {
+        if let Some(caps) = regex!("^(experimental )?(deprecated )?module (.*)").captures(line) {
+            if let Some(module) = protocol.modules.last_mut() {
                 if let Some(mut element) = element.take() {
-                    if let Some(member) = member.take() {
-                        element.add_member(member)?;
+                    if let Some(mod_prop) = mod_prop.take() {
+                        element.add_member(mod_prop)?;
                     }
-                    element.consume(domain);
+                    element.consume(module);
                 }
             }
 
-            let domain = Domain {
+            let module = Module {
                 description: description.take().map(Cow::Owned),
                 experimental: caps.get(1).is_some(),
                 deprecated: caps.get(2).is_some(),
-                name: borrowed!(caps.get(3), "line {}: No name for domain", line_num)?,
+                name: borrowed!(caps.get(3), "line {}: No name for module", line_num)?,
                 dependencies: vec![],
                 types: vec![],
                 commands: vec![],
                 events: vec![],
             };
-            protocol.domains.push(domain);
+            protocol.modules.push(module);
             continue;
         }
 
         if let Some(caps) = regex!("^  depends on ([^\\s]+)").captures(line) {
             protocol
-                .domains
+                .modules
                 .last_mut()
-                .ok_or_else(|| format_err!("line {}: missing domain declaration", line_num))?
+                .ok_or_else(|| format_err!("line {}: missing module declaration", line_num))?
                 .dependencies
                 .push(borrowed!(caps.get(1)).unwrap());
             continue;
@@ -94,24 +98,24 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
             regex!("^  (experimental )?(deprecated )?type (.*) extends (array of )?([^\\s]+)")
                 .captures(line)
         {
-            let domain = protocol
-                .domains
+            let module = protocol
+                .modules
                 .last_mut()
-                .ok_or_else(|| format_err!("line {}: missing domain declaration", line_num))?;
+                .ok_or_else(|| format_err!("line {}: missing module declaration", line_num))?;
 
             if let Some(mut el) = element.take() {
-                if let Some(member) = member.take() {
-                    el.add_member(member)?;
+                if let Some(mod_prop) = mod_prop.take() {
+                    el.add_member(mod_prop)?;
                 }
-                el.consume(domain);
+                el.consume(module);
             }
             let name = borrowed!(caps.get(3)).unwrap();
             let ty = TypeDef {
                 description: description.take().map(Cow::Owned),
                 experimental: caps.get(1).is_some(),
                 deprecated: caps.get(2).is_some(),
-                raw_name: Cow::Owned(format!("{}.{}", domain.name, name)),
-                is_circular_dep: is_circular_dep(&domain.name, name.as_ref()),
+                raw_name: Cow::Owned(format!("{}.{}", module.name, name)),
+                is_circular_dep: is_circular_dep(&module.name, name.as_ref()),
                 name,
                 extends: Type::new(caps.get(5).unwrap().as_str(), caps.get(4).is_some()),
                 item: None,
@@ -124,15 +128,15 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
         if let Some(caps) =
             regex!("^  (experimental )?(deprecated )?(command|event) (.*)").captures(line)
         {
-            let domain = protocol
-                .domains
+            let module = protocol
+                .modules
                 .last_mut()
-                .ok_or_else(|| format_err!("line {}: missing domain declaration", line_num))?;
+                .ok_or_else(|| format_err!("line {}: missing module declaration", line_num))?;
             if let Some(mut el) = element.take() {
-                if let Some(member) = member.take() {
-                    el.add_member(member)?;
+                if let Some(mod_prop) = mod_prop.take() {
+                    el.add_member(mod_prop)?;
                 }
-                el.consume(domain);
+                el.consume(module);
             }
             let name = borrowed!(caps.get(4)).unwrap();
             if Some("command") == caps.get(3).map(|m| m.as_str()) {
@@ -143,8 +147,8 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
                     parameters: vec![],
                     returns: vec![],
                     redirect: None,
-                    raw_name: Cow::Owned(format!("{}.{}", domain.name, name)),
-                    is_circular_dep: is_circular_dep(&domain.name, name.as_ref()),
+                    raw_name: Cow::Owned(format!("{}.{}", module.name, name)),
+                    is_circular_dep: is_circular_dep(&module.name, name.as_ref()),
                     name,
                 };
                 element = Some(Element::Commnad(cmd));
@@ -154,8 +158,8 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
                     experimental: caps.get(1).is_some(),
                     deprecated: caps.get(2).is_some(),
                     parameters: vec![],
-                    raw_name: Cow::Owned(format!("{}.{}", domain.name, name)),
-                    is_circular_dep: is_circular_dep(&domain.name, name.as_ref()),
+                    raw_name: Cow::Owned(format!("{}.{}", module.name, name)),
+                    is_circular_dep: is_circular_dep(&module.name, name.as_ref()),
                     name,
                 };
                 element = Some(Element::Event(ev));
@@ -163,30 +167,30 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
             continue;
         }
 
-        // member to params / returns / properties
+        // mod_prop to params / returns / properties
         if let Some(caps) = regex!(
             "^      (experimental )?(deprecated )?(optional )?(array of )?([^\\s]+) ([^\\s]+)"
         )
         .captures(line)
         {
-            let domain = protocol
-                .domains
+            let module = protocol
+                .modules
                 .last_mut()
-                .ok_or_else(|| format_err!("line {}: missing domain declaration", line_num))?;
+                .ok_or_else(|| format_err!("line {}: missing module declaration", line_num))?;
             let name = borrowed!(caps.get(6)).unwrap();
             let param = Param {
                 description: description.take().map(Cow::Owned),
                 experimental: caps.get(1).is_some(),
                 deprecated: caps.get(2).is_some(),
                 optional: caps.get(3).is_some(),
-                raw_name: Cow::Owned(format!("{}.{}", domain.name, name)),
-                is_circular_dep: is_circular_dep(&domain.name, name.as_ref()),
+                raw_name: Cow::Owned(format!("{}.{}", module.name, name)),
+                is_circular_dep: is_circular_dep(&module.name, name.as_ref()),
                 name,
                 r#type: Type::new(caps.get(5).unwrap().as_str(), caps.get(4).is_some()),
             };
-            match member.as_mut().ok_or_else(|| {
+            match mod_prop.as_mut().ok_or_else(|| {
                 format_err!(
-                    "line {}: parameter {} has no declared member section",
+                    "line {}: parameter {} has no declared mod_prop section",
                     line_num,
                     param.name
                 )
@@ -203,18 +207,18 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
 
         // parameters, returns, properties definition
         if let Some(caps) = regex!("^    (parameters|returns|properties)").captures(line) {
-            if let Some(member) = member.take() {
-                element
-                    .as_mut()
-                    .ok_or_else(|| format_err!("line {}: member has no parent item", line_num))?
-                    .add_member(member)?;
-            }
-            match caps.get(1).unwrap().as_str() {
-                "parameters" => member = Some(Member::Parameters(vec![])),
-                "returns" => member = Some(Member::Returns(vec![])),
-                "properties" => member = Some(Member::Properties(vec![])),
-                _ => unreachable!(),
-            }
+            // if let Some(mod_prop) = mod_prop.take() {
+            //     element
+            //         .as_mut()
+            //         .ok_or_else(|| format_err!("line {}: mod_prop has no parent item", line_num))?
+            //         .add_member(mod_prop)?;
+            // }
+            // match caps.get(1).unwrap().as_str() {
+            //     "parameters" => mod_prop = Some(Member::Parameters(vec![])),
+            //     "returns" => mod_prop = Some(Member::Returns(vec![])),
+            //     "properties" => mod_prop = Some(Member::Properties(vec![])),
+            //     _ => unreachable!(),
+            // }
             continue;
         }
 
@@ -260,7 +264,7 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
         if let Some(caps) = regex!("^    redirect ([^\\s]+)").captures(line) {
             let mut redirect = Redirect {
                 description: description.take().map(Cow::Owned),
-                domain: borrowed!(caps.get(1)).unwrap(),
+                module: borrowed!(caps.get(1)).unwrap(),
                 name: None,
             };
             if let Some(desc) = description.as_ref() {
@@ -284,9 +288,9 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
         // enum literal
         if regex!("^      (  )?[^\\n\\t]+$").is_match(line) {
             if member_enum {
-                let param = match member
+                let param = match mod_prop
                     .as_mut()
-                    .ok_or_else(|| format_err!("line {}: missing member declaration", line_num))?
+                    .ok_or_else(|| format_err!("line {}: missing mod_prop declaration", line_num))?
                 {
                     Member::Parameters(params) => params.last_mut(),
                     Member::Returns(params) => params.last_mut(),
@@ -325,126 +329,15 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
         bail!("line {}: unknown token `{}`", line_num, line)
     }
 
-    if let Some(domain) = protocol.domains.last_mut() {
+    if let Some(module) = protocol.modules.last_mut() {
         if let Some(mut element) = element.take() {
-            if let Some(member) = member.take() {
-                element.add_member(member)?;
+            if let Some(mod_prop) = mod_prop.take() {
+                element.add_member(mod_prop)?;
             }
-            element.consume(domain);
+            element.consume(module);
         }
     }
 
     protocol.version = version.ok_or_else(|| format_err!("Missing version"))?;
     Ok(protocol)
-}
-
-#[derive(Debug)]
-enum Member<'a> {
-    Parameters(Vec<Param<'a>>),
-    Returns(Vec<Param<'a>>),
-    Properties(Vec<Param<'a>>),
-}
-#[derive(Debug)]
-enum Element<'a> {
-    Type(TypeDef<'a>),
-    Commnad(Command<'a>),
-    Event(Event<'a>),
-}
-
-impl<'a> Element<'a> {
-    fn consume(self, domain: &mut Domain<'a>) {
-        match self {
-            Element::Type(ty) => domain.types.push(ty),
-            Element::Commnad(cmd) => domain.commands.push(cmd),
-            Element::Event(ev) => domain.events.push(ev),
-        }
-    }
-
-    fn add_member(&mut self, member: Member<'a>) -> Result<(), Error> {
-        match member {
-            Member::Parameters(params) => match self {
-                Element::Commnad(cmd) => {
-                    cmd.parameters = params;
-                    return Ok(());
-                }
-                Element::Event(ev) => {
-                    ev.parameters = params;
-                    return Ok(());
-                }
-                _ => {}
-            },
-            Member::Returns(params) => {
-                if let Element::Commnad(cmd) = self {
-                    cmd.returns = params;
-                    return Ok(());
-                }
-            }
-            Member::Properties(params) => {
-                if let Element::Type(ty) = self {
-                    if ty.item.is_some() {
-                        bail!("Type {} can't have additional properties section", ty.name)
-                    } else {
-                        ty.item = Some(Item::Properties(params));
-                        return Ok(());
-                    }
-                }
-            }
-        }
-
-        Err(format_err!("Invalid member"))
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn parse_protocol() {
-        let s = r#"# Copyright 2017 The Chromium Authors. All rights reserved.
-# Use of this source code is governed by a BSD-style license that can be
-# found in the LICENSE file.
-
-version
-  major 1
-  minor 2
-
-experimental domain DummyDomain
-  depends on DOM
-
-  # node identifier.
-  type NodeId extends string
-
-  # Enum of possible property types.
-  type SomeValueType extends string
-    enum
-      boolean
-      undefined
-      booleanOrUndefined
-
-  # Console Message.
-  type ConsoleMessage extends object
-    properties
-      # Message source.
-      enum source
-        xml
-        javascript
-        network
-      # Message severity.
-      enum level
-        log
-        warning
-        info
-      # Message text.
-      string text
-      # URL of the message origin.
-      optional string url
-      # Line number in the resource that generated this message (1-based).
-      optional integer line
-      # Column number in the resource that generated this message (1-based).
-      optional integer column
-"#;
-
-        parse_pdl(s).unwrap();
-    }
 }

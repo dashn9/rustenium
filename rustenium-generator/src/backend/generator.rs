@@ -13,9 +13,6 @@ use quote::{format_ident, quote};
 use crate::build::builder::Builder;
 use crate::build::event::{EventBuilder, EventType};
 use crate::build::types::*;
-use crate::pdl::parser::parse_pdl;
-use crate::pdl::resolver::resolve_pdl;
-use crate::pdl::{DataType, Domain, Param, Protocol, Type, Variant};
 
 /// Compile `.pdl` files into Rust files during a Cargo build.
 ///
@@ -43,12 +40,12 @@ use crate::pdl::{DataType, Domain, Param, Protocol, Type, Variant};
 /// ```rust,no_run
 /// # use std::io::Result;
 /// fn main() -> Result<()> {
-///   chromiumoxide_pdl::build::compile_pdls(&["src/js.pdl", "src/browser.pdl"])?;
+///   chromiumoxide_pdl::build::compile_protocols(&["src/js.pdl", "src/browser.pdl"])?;
 ///   Ok(())
 /// }
 /// ```
-pub fn compile_pdls<P: AsRef<Path>>(pdls: &[P]) -> io::Result<()> {
-    Generator::default().compile_pdls(pdls)
+pub fn compile_protocols<P: AsRef<Path>>(pdls: &[P]) -> io::Result<()> {
+    Generator::default().compile_protocols(pdls)
 }
 
 /// Generates rust code for the Chrome DevTools Protocol
@@ -144,7 +141,7 @@ impl Generator {
     /// Compile `.pdls` files into Rust files during a Cargo build with
     /// additional code generator configuration options.
     ///
-    /// This method is like the `chromiumoxide_pdl::build::compile_pdls`
+    /// This method is like the `chromiumoxide_pdl::build::compile_protocols`
     /// function, with the added ability to specify non-default code
     /// generation options. See that function for more information about the
     /// arguments and generated outputs.
@@ -156,56 +153,11 @@ impl Generator {
     /// fn main() -> Result<()> {
     ///   let mut pdl_build = chromiumoxide_pdl::build::Generator::default();
     ///   pdl_build.out_dir("some/path");
-    ///   pdl_build.compile_pdls(&["src/frontend.pdl", "src/backend.pdl"])?;
+    ///   pdl_build.compile_protocols(&["src/frontend.pdl", "src/backend.pdl"])?;
     ///   Ok(())
     /// }
     /// ```
-    pub fn compile_pdls<P: AsRef<Path>>(&mut self, pdls: &[P]) -> io::Result<()> {
-        let target: PathBuf = self.out_dir.clone().map(Ok).unwrap_or_else(|| {
-            std::env::var_os("OUT_DIR")
-                .ok_or_else(|| {
-                    Error::new(ErrorKind::Other, "OUT_DIR environment variable is not set")
-                })
-                .map(Into::into)
-        })?;
-
-        let mut inputs = vec![];
-
-        for path in pdls {
-            let path = path.as_ref();
-            let file_name = path.file_stem().ok_or_else(|| {
-                Error::new(
-                    ErrorKind::Other,
-                    format!("Failed to read file name for {}", path.display()),
-                )
-            })?;
-            let mod_name = file_name.to_string_lossy().to_string();
-            self.protocol_mods.push(mod_name);
-
-            let input = fs::read_to_string(path)?;
-            let resolved =
-                resolve_pdl(path, &input).map_err(|e| Error::new(ErrorKind::Other, e.message))?;
-            inputs.push(resolved);
-        }
-
-        let mut protocols = vec![];
-
-        for (idx, input) in inputs.iter().enumerate() {
-            let pdl = parse_pdl(input).map_err(|e| Error::new(ErrorKind::Other, e.message))?;
-
-            self.domains
-                .extend(pdl.domains.iter().map(|d| (d.name.to_string(), idx)));
-
-            // store enum types
-            self.enums.extend(
-                pdl.domains
-                    .iter()
-                    .flat_map(|d| d.types.iter().filter(|d| d.is_enum()))
-                    .map(|e| e.raw_name.to_string()),
-            );
-
-            protocols.push(pdl);
-        }
+    pub fn compile_protocols(&mut self, protocols: Vec<Protocol>) -> io::Result<()> {
 
         let mut modules = TokenStream::default();
 
@@ -1221,7 +1173,7 @@ mod tests {
         Generator::default()
             .out_dir(dir.join("src"))
             .serde(SerdeSupport::with_feature("serde0"))
-            .compile_pdls(&[
+            .compile_protocols(&[
                 dir.join("js_protocol.pdl"),
                 dir.join("browser_protocol.pdl"),
             ])
