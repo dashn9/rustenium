@@ -1,5 +1,4 @@
-use crate::build::SerdeSupport;
-use crate::pdl::{Command, DataType, Domain, Event, Item, Param, Type, TypeDef, Variant};
+use crate::backend::{base_types::{Command, Event, Item, Module, Param, Type, TypeDef, Variant}, generator::SerdeSupport};
 use heck::ToUpperCamelCase;
 use proc_macro2::{Ident, TokenStream};
 use quote::{quote, ToTokens};
@@ -28,7 +27,7 @@ impl<'a> Iterator for ModuleDataTypeIter<'a> {
     }
 }
 
-impl<'a> IntoIterator for &'a Domain<'a> {
+impl<'a> IntoIterator for &'a Module<'a> {
     type Item = ModuleDatatype<'a>;
     type IntoIter = ModuleDataTypeIter<'a>;
 
@@ -68,12 +67,12 @@ impl<'a> ModuleDatatype<'a> {
         let base_url = "https://chromedevtools.github.io/devtools-protocol/tot/";
 
         let url = match self {
-            ModuleDatatype::Type(ty) => format!("{}{}/#type-{}", base_url, domain_name, ty.name()),
+            ModuleDatatype::Type(ty) => format!("{}{}/#type-{}", base_url, domain_name, ty.name),
             ModuleDatatype::Command(cmd) => {
-                format!("{}{}/#method-{}", base_url, domain_name, cmd.name())
+                format!("{}{}/#method-{}", base_url, domain_name, cmd.name)
             }
             ModuleDatatype::Event(ev) => {
-                format!("{}{}/#event-{}", base_url, domain_name, ev.name())
+                format!("{}{}/#event-{}", base_url, domain_name, ev.name)
             }
         };
 
@@ -90,15 +89,15 @@ impl<'a> ModuleDatatype<'a> {
     pub fn ident_name(&self) -> String {
         match self {
             ModuleDatatype::Type(_ty) => self.name().to_upper_camel_case(),
-            ModuleDatatype::Command(cmd) => format!("{}Params", cmd.name().to_upper_camel_case()),
-            ModuleDatatype::Event(event) => format!("Event{}", event.name().to_upper_camel_case()),
+            ModuleDatatype::Command(cmd) => format!("{}Params", cmd.name.to_upper_camel_case()),
+            ModuleDatatype::Event(event) => format!("Event{}", event.name.to_upper_camel_case()),
         }
     }
 
     pub fn params(&self) -> impl Iterator<Item = &'a Param<'a>> + 'a {
         match self {
             ModuleDatatype::Type(ty) => {
-                if let Some(Item::Properties(ref params)) = ty.item {
+                if let Some(Item::Properties(ref params)) = ty.parameters {
                     params.iter()
                 } else {
                     [].iter()
@@ -112,7 +111,7 @@ impl<'a> ModuleDatatype<'a> {
     pub fn as_enum(&self) -> Option<&Vec<Variant<'_>>> {
         match self {
             ModuleDatatype::Type(ty) => {
-                if let Some(Item::Enum(ref vars)) = ty.item {
+                if let Some(Item::Enum(ref vars)) = ty.parameters {
                     Some(vars)
                 } else {
                     None
@@ -131,44 +130,44 @@ impl<'a> ModuleDatatype<'a> {
     }
 }
 
-impl<'a> DataType for ModuleDatatype<'a> {
-    fn is_circular_dep(&self) -> bool {
+impl<'a> ModuleDatatype<'a> {
+    pub fn is_circular_dep(&self) -> bool {
         match self {
-            ModuleDatatype::Type(inner) => inner.is_circular_dep(),
-            ModuleDatatype::Command(inner) => inner.is_circular_dep(),
-            ModuleDatatype::Event(inner) => inner.is_circular_dep(),
+            ModuleDatatype::Type(inner) => inner.is_circular_dep,
+            ModuleDatatype::Command(inner) => inner.is_circular_dep,
+            ModuleDatatype::Event(inner) => inner.is_circular_dep,
         }
     }
 
-    fn is_experimental(&self) -> bool {
+    pub fn is_experimental(&self) -> bool {
         match self {
-            ModuleDatatype::Type(inner) => inner.is_experimental(),
-            ModuleDatatype::Command(inner) => inner.is_experimental(),
-            ModuleDatatype::Event(inner) => inner.is_experimental(),
+            ModuleDatatype::Type(inner) => inner.experimental,
+            ModuleDatatype::Command(inner) => inner.experimental,
+            ModuleDatatype::Event(inner) => inner.experimental,
         }
     }
 
-    fn description(&self) -> Option<&str> {
+    pub fn description(&self) -> Option<&str> {
         match self {
-            ModuleDatatype::Type(inner) => inner.description(),
-            ModuleDatatype::Command(inner) => inner.description(),
-            ModuleDatatype::Event(inner) => inner.description(),
+            ModuleDatatype::Type(inner) => inner.description.as_deref(),
+            ModuleDatatype::Command(inner) => inner.description.as_deref(),
+            ModuleDatatype::Event(inner) => inner.description.as_deref(),
         }
     }
 
-    fn name(&self) -> &str {
+    pub fn name(&self) -> &str {
         match self {
-            ModuleDatatype::Type(inner) => inner.name(),
-            ModuleDatatype::Command(inner) => inner.name(),
-            ModuleDatatype::Event(inner) => inner.name(),
+            ModuleDatatype::Type(inner) => inner.name.as_ref(),
+            ModuleDatatype::Command(inner) => inner.name.as_ref(),
+            ModuleDatatype::Event(inner) => inner.name.as_ref(),
         }
     }
 
-    fn is_deprecated(&self) -> bool {
+    pub fn is_deprecated(&self) -> bool {
         match self {
-            ModuleDatatype::Type(inner) => inner.is_deprecated(),
-            ModuleDatatype::Command(inner) => inner.is_deprecated(),
-            ModuleDatatype::Event(inner) => inner.is_deprecated(),
+            ModuleDatatype::Type(inner) => inner.deprecated,
+            ModuleDatatype::Command(inner) => inner.deprecated,
+            ModuleDatatype::Event(inner) => inner.deprecated,
         }
     }
 }
@@ -257,7 +256,7 @@ pub struct FieldDefinition {
 impl FieldDefinition {
     /// Generate meta attributes: desc, serde
     pub fn generate_meta(&self, serde_support: &SerdeSupport, param: &Param) -> TokenStream {
-        let mut desc = if let Some(desc) = param.description() {
+        let mut desc = if let Some(desc) = param.description.as_deref() {
             quote! {
                 #[doc = #desc]
             }

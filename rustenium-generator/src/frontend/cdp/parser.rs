@@ -3,7 +3,8 @@
 //! All regexp's are copied from pdl.py in the chromium source tree.
 
 use crate::backend::base_types::{
-    Command, CommandResult, Event, Item, Module, Param, Protocol, Redirect, Type, TypeDef, Variant, Version
+    Command, CommandResult, Event, Item, Module, Param, Protocol, Redirect, Type, TypeDef, Variant,
+    Version,
 };
 use crate::frontend::cdp::dep::is_circular_dep;
 use crate::frontend::cdp::error::*;
@@ -28,7 +29,7 @@ enum ModuleProperty<'a> {
     Event(Event<'a>),
 }
 
-fn add_module_property_to_module(mod_prop: ModuleProperty, module: &mut Module) {
+fn add_module_property_to_module<'a>(mod_prop: ModuleProperty<'a>, module: &mut Module<'a>) {
     match mod_prop {
         ModuleProperty::Type(t) => module.types.push(t),
         ModuleProperty::Command(c) => module.commands.push(c),
@@ -36,12 +37,16 @@ fn add_module_property_to_module(mod_prop: ModuleProperty, module: &mut Module) 
         ModuleProperty::Event(e) => module.events.push(e),
     }
 }
-fn add_param_to_module_property(mod_prop: &mut ModuleProperty, param: Param) {
+fn add_param_to_module_property<'a>(mod_prop: &mut ModuleProperty<'a>, param: Param<'a>) {
     match mod_prop {
         ModuleProperty::Command(c) => c.parameters.push(param),
         ModuleProperty::CommandResult(cr) => cr.parameters.push(param),
         ModuleProperty::Event(e) => e.parameters.push(param),
-        ModuleProperty::Type(t) => t.parameters.push(param),
+        ModuleProperty::Type(t) => {                            
+            if let Some(Item::Properties(props)) = t.parameters.as_mut() {
+                props.push(param)
+            }
+        },
     }
 }
 
@@ -50,7 +55,7 @@ fn add_param_to_module_property(mod_prop: &mut ModuleProperty, param: Param) {
 /// Rewrite of the Python script from the Chromium source tree.
 ///
 ///  See: https://chromium.googlesource.com/deps/inspector_protocol/+/refs/heads/master/pdl.py
-pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
+pub fn parse_pdl(input: String) -> Result<Protocol<'static>, Error> {
     let mut protocol = Protocol::default();
     let mut description: Option<String> = None;
     let mut version = None;
@@ -65,7 +70,7 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
         if trim_line.starts_with('#') {
             if let Some(desc) = description.as_mut() {
                 desc.push('\n');
-                desc.extend(trim_line[1..].trim_start().to_string());
+                desc.push_str(trim_line[1..].trim_start());
             } else {
                 description = Some(trim_line[1..].trim_start().to_string());
             }
@@ -143,11 +148,8 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
                     .modules
                     .last_mut()
                     .ok_or_else(|| format_err!("line {}: missing module declaration", line_num))?;
-                if let Some(mut el) = mod_prop.take() {
-                    if let Some(mod_prop) = mod_prop.take() {
-                        el.add_member(mod_prop)?;
-                    }
-                    el.consume(module);
+                if let Some(mut mod_prop) = mod_prop.take() {
+                    add_module_property_to_module(mod_prop, module);
                 }
                 let name = borrowed!(caps.get(4)).unwrap();
                 if Some("command") == caps.get(3).map(|m| m.as_str()) {
@@ -162,7 +164,7 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
                         is_circular_dep: is_circular_dep(&module.name, name.as_ref()),
                         name,
                     };
-                    mod_prop = Some(ModuleProperty::Commnad(cmd));
+                    mod_prop = Some(ModuleProperty::Command(cmd));
                 } else {
                     let ev = Event {
                         description: description.take().map(Cow::Owned),
@@ -235,9 +237,9 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
             // enum
             if line.starts_with("    enum") {
                 has_enum_member = false;
-                if let Some(ModuleProperty::Type(ref mut ty)) = mod_prop.as_mut() {
-                    if ty.item.is_none() {
-                        ty.item = Some(Item::Enum(vec![]));
+                if let Some(ModuleProperty::Type(ty)) = mod_prop.as_mut() {
+                    if ty.parameters.is_none() {
+                        ty.parameters = Some(Item::Enum(vec![]));
                         continue;
                     } else {
                         bail!("line {}: enum declaration not allowed", line_num);
@@ -287,7 +289,7 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
                     .as_mut()
                     .ok_or_else(|| format_err!("line {}: missing item declaration", line_num))?
                 {
-                    ModuleProperty::Commnad(cmd) => {
+                    ModuleProperty::Command(cmd) => {
                         cmd.redirect = Some(redirect);
                     }
                     _ => bail!("line {}: can't add redirect here", line_num),
@@ -304,7 +306,13 @@ pub fn parse_pdl(input: &str) -> Result<Protocol<'_>, Error> {
                         ModuleProperty::Command(c) => c.parameters.last_mut(),
                         ModuleProperty::CommandResult(cr) => cr.parameters.last_mut(),
                         ModuleProperty::Event(e) => e.parameters.last_mut(),
-                        ModuleProperty::Type(t) => t.parameters.last_mut(),
+                        ModuleProperty::Type(t) => {
+                            if let Some(Item::Properties(props)) = t.parameters.as_mut() {
+                                props.last_mut()
+                            } else {
+                                panic!("line {}: missing parameter declaration", line_num);
+                            }
+                        }
                     }
                     .ok_or_else(|| {
                         format_err!("line {}: missing parameter declaration", line_num)

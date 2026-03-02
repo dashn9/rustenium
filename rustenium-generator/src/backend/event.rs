@@ -2,25 +2,24 @@ use heck::{ToSnakeCase, ToUpperCamelCase};
 use proc_macro2::{Ident, TokenStream};
 use quote::{format_ident, quote};
 
-use crate::pdl::{DataType, Domain, Event};
+use crate::backend::base_types::{Event, Module};
 
 pub struct EventType<'a> {
     pub protocol_mod: Ident,
-    pub domain: &'a Domain<'a>,
+    pub module: &'a Module<'a>,
     pub inner: &'a Event<'a>,
-    pub needs_box: bool,
 }
 
 impl<'a> EventType<'a> {
     fn ty_ident(&self) -> Ident {
-        format_ident!("Event{}", self.inner.name().to_upper_camel_case())
+        format_ident!("Event{}", self.inner.name.to_upper_camel_case())
     }
 
     fn var_ident(&self) -> Ident {
         format_ident!(
             "{}{}",
-            self.domain.name.to_upper_camel_case(),
-            self.inner.name().to_upper_camel_case()
+            self.module.name.to_upper_camel_case(),
+            self.inner.name.to_upper_camel_case()
         )
     }
 }
@@ -48,22 +47,22 @@ impl<'a> EventBuilder<'a> {
 
             let ty_ident = event.ty_ident();
 
-            let deprecated = if event.inner.is_deprecated() {
+            let deprecated = if event.inner.deprecated {
                 quote! {[deprecated]}
             } else {
                 TokenStream::default()
             };
 
-            let domain_mod = format_ident!("{}", event.domain.name.to_snake_case());
+            let domain_mod = format_ident!("{}", event.module.name.to_snake_case());
             let protocol_mod = &event.protocol_mod;
 
             let ty_qualifier = quote! {super::#protocol_mod::#domain_mod::#ty_ident};
 
-            let ty_ident = if event.needs_box {
-                quote! {Box<#ty_qualifier>}
-            } else {
-                ty_qualifier.clone()
-            };
+            // let ty_ident = if event.needs_box {
+            //     quote! {Box<#ty_qualifier>}
+            // } else {
+            //     ty_qualifier.clone()
+            // };
 
             variants_stream.extend(quote! {
                 #deprecated
@@ -71,22 +70,22 @@ impl<'a> EventBuilder<'a> {
             });
 
             let (variant_match, into_event, consume_event_macro_expr, event_as_boxed_result) =
-                if event.needs_box {
-                    (
-                        quote! {
-                            CdpEvent::#var_ident(val) => Ok(*val),
-                        },
-                        quote! {
-                            CdpEvent::#var_ident(Box::new(el))
-                        },
-                        quote! {
-                            CdpEvent::#var_ident(event) => {$builtin(*event);}
-                        },
-                        quote! {
-                            CdpEvent::#var_ident(event) => Ok(Box::new(*event)),
-                        },
-                    )
-                } else {
+                // if event.needs_box {
+                //     (
+                //         quote! {
+                //             CdpEvent::#var_ident(val) => Ok(*val),
+                //         },
+                //         quote! {
+                //             CdpEvent::#var_ident(Box::new(el))
+                //         },
+                //         quote! {
+                //             CdpEvent::#var_ident(event) => {$builtin(*event);}
+                //         },
+                //         quote! {
+                //             CdpEvent::#var_ident(event) => Ok(Box::new(*event)),
+                //         },
+                //     )
+                // } else {
                     (
                         quote! {
                             CdpEvent::#var_ident(val) => Ok(val),
@@ -100,8 +99,8 @@ impl<'a> EventBuilder<'a> {
                         quote! {
                             CdpEvent::#var_ident(event) => Ok(Box::new(event)),
                         },
-                    )
-                };
+                    );
+                // };
 
             event_as_boxed_results.extend(event_as_boxed_result);
 
@@ -140,7 +139,7 @@ impl<'a> EventBuilder<'a> {
 
             });
 
-            let deserialize_from = if event.needs_box {
+            let deserialize_from = if false { //events.need_box
                 quote! {
                         #ty_qualifier::IDENTIFIER =>CdpEvent::#var_ident(Box::new(map.next_value::<#ty_qualifier>()?)),
                 }

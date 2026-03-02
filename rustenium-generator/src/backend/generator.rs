@@ -5,16 +5,16 @@ use std::io::{self, Error, ErrorKind};
 use std::ops::Deref;
 use std::path::{Path, PathBuf};
 
-use either::Either;
 use heck::{ToSnakeCase, ToUpperCamelCase};
 use proc_macro2::{Ident, TokenStream};
 use quote::{format_ident, quote};
 
-use crate::build::builder::Builder;
-use crate::build::event::{EventBuilder, EventType};
-use crate::build::types::*;
+use crate::backend::base_types::{Module, Param, Protocol, Type, Variant};
+use crate::backend::builder::Builder;
+use crate::backend::event::{EventBuilder, EventType};
+use crate::backend::types::{FieldDefinition, FieldType, ModuleDatatype};
 
-/// Compile `.pdl` files into Rust files during a Cargo build.
+/// Compile `.protocol` files into Rust files during a Cargo build.
 ///
 /// The generated `.rs` files are written to the Cargo `OUT_DIR` directory,
 /// suitable for use with
@@ -23,14 +23,14 @@ use crate::build::types::*;
 ///
 /// # Arguments
 ///
-/// **`pdls`** - Paths to `.pdl` files to compile.
+/// **`protocols`** - Paths to `.protocol` files to compile.
 ///
 /// # Errors
 ///
 /// This function can fail for a number of reasons:
 ///
-///   - Failure to locate `pdl` files.
-///   - Failure to parse the `.pdl`s.
+///   - Failure to locate `protocol` files.
+///   - Failure to parse the `.protocol`s.
 ///
 /// It's expected that this function call be `unwrap`ed in a `build.rs`; there
 /// is typically no reason to gracefully recover from errors during a build.
@@ -40,12 +40,12 @@ use crate::build::types::*;
 /// ```rust,no_run
 /// # use std::io::Result;
 /// fn main() -> Result<()> {
-///   chromiumoxide_pdl::build::compile_protocols(&["src/js.pdl", "src/browser.pdl"])?;
+///   chromiumoxide_pdl::build::compile_protocols(&["src/js.protocol", "src/browser.protocol"])?;
 ///   Ok(())
 /// }
 /// ```
-pub fn compile_protocols<P: AsRef<Path>>(pdls: &[P]) -> io::Result<()> {
-    Generator::default().compile_protocols(pdls)
+pub fn compile_protocols(protocols: &Vec<Protocol>) -> io::Result<()> {
+    Generator::default().compile_protocols(protocols)
 }
 
 /// Generates rust code for the Chrome DevTools Protocol
@@ -57,14 +57,10 @@ pub struct Generator {
     allowed_deprecated_type: HashSet<String>,
     out_dir: Option<PathBuf>,
     protocol_mods: Vec<String>,
-    domains: HashMap<String, usize>,
+    modules: HashMap<String, usize>,
     target_mod: Option<String>,
-    /// Used to store the size of a specific type
-    type_size: HashMap<String, usize>,
-    /// Used to fix a type's size later if the ref was not processed yet
-    ref_sizes: VecDeque<(String, String)>,
-    /// This contains a list of all enums of all domains with their qualified
-    /// names <domain>.<name>
+    /// This contains a list of all enums of all modules with their qualified
+    /// names <module>.<name>
     ///
     /// This is a fix in order to check in struct definitions whether the
     /// targeted type is an enum
@@ -80,10 +76,8 @@ impl Default for Generator {
             allowed_deprecated_type: HashSet::new(),
             out_dir: None,
             protocol_mods: Vec::new(),
-            domains: Default::default(),
+            modules: Default::default(),
             target_mod: Default::default(),
-            type_size: Default::default(),
-            ref_sizes: VecDeque::new(),
             enums: Default::default(),
         }
     }
@@ -138,7 +132,7 @@ impl Generator {
         self
     }
 
-    /// Compile `.pdls` files into Rust files during a Cargo build with
+    /// Compile `.protocols` files into Rust files during a Cargo build with
     /// additional code generator configuration options.
     ///
     /// This method is like the `chromiumoxide_pdl::build::compile_protocols`
@@ -151,19 +145,26 @@ impl Generator {
     /// ```rust,no_run
     /// # use std::io::Result;
     /// fn main() -> Result<()> {
-    ///   let mut pdl_build = chromiumoxide_pdl::build::Generator::default();
-    ///   pdl_build.out_dir("some/path");
-    ///   pdl_build.compile_protocols(&["src/frontend.pdl", "src/backend.pdl"])?;
+    ///   let mut protocol_build = chromiumoxide_pdl::build::Generator::default();
+    ///   protocol_build.out_dir("some/path");
+    ///   protocol_build.compile_protocols(&["src/frontend.pdl", "src/backend.pdl"])?;
     ///   Ok(())
     /// }
     /// ```
-    pub fn compile_protocols(&mut self, protocols: Vec<Protocol>) -> io::Result<()> {
+    pub fn compile_protocols(&mut self, protocols: &Vec<Protocol>) -> io::Result<()> {
+        let target: PathBuf = self.out_dir.clone().map(Ok).unwrap_or_else(|| {
+            std::env::var_os("OUT_DIR")
+                .ok_or_else(|| {
+                    Error::new(ErrorKind::Other, "OUT_DIR environment variable is not set")
+                })
+                .map(Into::into)
+        })?;
 
         let mut modules = TokenStream::default();
 
-        for (idx, pdl) in protocols.iter().enumerate() {
-            let types = self.generate_types(&pdl.domains);
-            let version = format!("{}.{}", pdl.version.major, pdl.version.minor);
+        for (idx, protocol) in protocols.iter().enumerate() {
+            let types = self.generate_types(&protocol.modules);
+            let version = format!("{}.{}", protocol.version.major, protocol.version.minor);
             let module_name = format_ident!("{}", self.protocol_mods[idx]);
             let module = quote! {
                 #[allow(clippy::wrong_self_convention)]
@@ -175,22 +176,6 @@ impl Generator {
             };
 
             modules.extend(module);
-        }
-
-        // brute-force fix unresolved type sizes
-        let mut refs = std::mem::take(&mut self.ref_sizes);
-        let mut sequential_retries = 0;
-        while let Some((name, reff)) = refs.pop_front() {
-            if let Some(ref_size) = self.type_size.get(&reff).copied() {
-                sequential_retries = 0;
-                self.store_size(&name, Either::Left(ref_size));
-            } else {
-                sequential_retries += 1;
-                if sequential_retries > refs.len() {
-                    panic!("No type found for ref {reff}");
-                }
-                refs.push_back((name, reff));
-            }
         }
 
         let mod_name = self.target_mod.as_deref().unwrap_or("cdp");
@@ -356,22 +341,20 @@ impl Generator {
         Ok(())
     }
 
-    /// Generate the types for the domains.
-    ///
-    /// Each domain gets it's own module
-    fn generate_types(&mut self, domains: &[Domain]) -> TokenStream {
-        let mut modules = TokenStream::default();
+    /// Generate the types for the modules.
+    fn generate_types(&mut self, modules: &[Module]) -> TokenStream {
+        let mut modules_stream = TokenStream::default();
         let with_deprecated = self.with_deprecated;
         let with_experimental = self.with_experimental;
-        for domain in domains
+        for module in modules
             .iter()
             .filter(|d| with_deprecated || !d.deprecated)
             .filter(|d| with_experimental || !d.experimental)
         {
-            let domain_mod = self.generate_domain(domain);
-            let mod_name = format_ident!("{}", domain.name.to_snake_case());
+            let domain_mod = self.generate_module(module);
+            let mod_name = format_ident!("{}", module.name.to_snake_case());
 
-            let mut desc = if let Some(desc) = domain.description.as_ref() {
+            let mut desc = if let Some(desc) = module.description.as_ref() {
                 quote! {
                     #[doc = #desc]
                 }
@@ -379,28 +362,28 @@ impl Generator {
                 TokenStream::default()
             };
 
-            if domain.deprecated {
+            if module.deprecated {
                 desc.extend(quote! {#[deprecated]})
             }
 
-            modules.extend(quote! {
+            modules_stream.extend(quote! {
                 #desc
                 pub mod #mod_name {
                     #domain_mod
                 }
             });
         }
-        modules
+        modules_stream
     }
 
-    /// Generates all types are not circular for a single domain
-    pub fn generate_domain(&mut self, domain: &Domain) -> TokenStream {
+    /// Generates all types are not circular for a single module
+    pub fn generate_module(&mut self, module: &Module) -> TokenStream {
         let mut stream = self.serde_support.generate_serde_imports();
+        let allowed_deprecated_type = self.allowed_deprecated_type.clone();
         let with_deprecated = self.with_deprecated;
         let with_experimental = self.with_experimental;
-        let allowed_deprecated_type = self.allowed_deprecated_type.clone();
         stream.extend(
-            domain
+            module
                 .into_iter()
                 .filter(|dt| {
                     with_deprecated
@@ -408,25 +391,25 @@ impl Generator {
                         || allowed_deprecated_type.contains(dt.name())
                 })
                 .filter(|dt| with_experimental || !dt.is_experimental())
-                .map(|ty| self.generate_type(domain, ty)),
+                .map(|ty| self.generate_type(module, ty)),
         );
         stream
     }
 
-    /// Generates all rust types for a PDL `DomainDatatype` (Command, Event,
+    /// Generates all rust types for a PDL `ModuleDatatype` (Command, Event,
     /// Type)
-    fn generate_type(&mut self, domain: &Domain, dt: DomainDatatype) -> TokenStream {
+    fn generate_type(&mut self, module: &Module, dt: ModuleDatatype) -> TokenStream {
         let stream = if let Some(vars) = dt.as_enum() {
-            self.generate_enum(&Variant::from(&dt), vars)
+            self.generate_enum(&&Variant::from(&dt), vars)
         } else {
             let with_deprecated = self.with_deprecated;
             let with_experimental = self.with_experimental;
             let params = dt
                 .params()
-                .filter(|dt| with_deprecated || !dt.is_deprecated())
-                .filter(|dt| with_experimental || !dt.is_experimental());
+                .filter(|dt| with_deprecated || !dt.deprecated)
+                .filter(|dt| with_experimental || !dt.experimental);
 
-            let mut stream = self.generate_struct(domain, &dt, dt.ident_name(), params);
+            let mut stream = self.generate_struct(module, &dt, dt.ident_name(), params);
             let identifier = dt.raw_name();
             let name = format_ident!("{}", dt.ident_name());
             stream.extend(quote! {
@@ -452,22 +435,22 @@ impl Generator {
                 });
             }
 
-            if let DomainDatatype::Command(cmd) = dt {
-                let returns_name = format!("{}Returns", cmd.name().to_upper_camel_case());
+            if let ModuleDatatype::Command(cmd) = dt {
+                let returns_name = format!("{}Returns", cmd.name.to_upper_camel_case());
                 let with_deprecated = self.with_deprecated;
                 let with_experimental = self.with_experimental;
 
-                stream.extend(
-                    self.generate_struct(
-                        domain,
-                        &dt,
-                        returns_name,
-                        cmd.returns
-                            .iter()
-                            .filter(|p| with_deprecated || !p.is_deprecated())
-                            .filter(|p| with_experimental || !p.is_experimental()),
-                    ),
-                );
+                // stream.extend(
+                //     self.generate_struct(
+                //         module,
+                //         &dt,
+                //         returns_name,
+                //         cmd.returns
+                //             .iter()
+                //             .filter(|p| with_deprecated || !p.is_deprecated())
+                //             .filter(|p| with_experimental || !p.is_experimental()),
+                //     ),
+                // );
 
                 // impl `Command` trait
                 let response = format_ident!("{}Returns", dt.name().to_upper_camel_case());
@@ -489,21 +472,11 @@ impl Generator {
         }
     }
 
-    fn store_size(&mut self, ty: &str, size: Either<usize, String>) {
-        match size {
-            Either::Left(size) => {
-                let s = self.type_size.entry(ty.to_string()).or_default();
-                *s += size;
-            }
-            Either::Right(name) => self.ref_sizes.push_back((ty.to_string(), name)),
-        }
-    }
-
     /// Entry point to modify the builder for a struct manually
     ///
     /// This is useful to add utility fields that should not be serialized by
     /// make things easier
-    fn apply_struct_fixup(&self, builder: &mut Builder, dt: &DomainDatatype) {
+    fn apply_struct_fixup(&self, builder: &mut Builder, dt: &ModuleDatatype) {
         if dt.raw_name() == "Runtime.evaluate" {
             let field = FieldDefinition {
                 name: "eval_as_function_fallback".to_string(),
@@ -538,8 +511,8 @@ impl Generator {
     /// parameter enums
     fn generate_struct<'a, T>(
         &mut self,
-        domain: &Domain,
-        dt: &DomainDatatype,
+        module: &Module,
+        dt: &ModuleDatatype,
         struct_ident: String,
         params: T,
     ) -> TokenStream
@@ -554,37 +527,36 @@ impl Generator {
         for param in params {
             if let Type::Enum(vars) = &param.r#type {
                 let enum_ident = Variant {
-                    description: param.description().map(Cow::Borrowed),
-                    name: Cow::Owned(subenum_name(dt.name(), param.name())),
+                    description: param.description.as_deref().map(Cow::Borrowed),
+                    name: Cow::Owned(subenum_name(dt.name(), param.name.as_ref())),
                 };
-                if param.is_deprecated() {
+                if param.deprecated {
                     enum_definitions.extend(quote! {#[deprecated]});
                 }
                 enum_definitions.extend(self.generate_enum(&enum_ident, vars));
             }
 
-            let field_name = format_ident!("{}", generate_field_name(param.name()));
+            let field_name = format_ident!("{}", generate_field_name(param.name.as_ref()));
 
-            let (ty, size) =
-                self.generate_field_type(domain, dt.name(), param.name(), &param.r#type);
-            self.store_size(&struct_ident, size);
+            let (ty) =
+                self.generate_field_type(module, dt.name(), param.name.as_ref(), &param.r#type);
 
             // check if the type of the param points to an enum
             let is_enum = if let Type::Ref(name) = &param.r#type {
                 self.enums.contains(name.as_ref())
                     || self
                         .enums
-                        .contains(&format!("{}.{}", domain.name, name.as_ref()))
+                        .contains(&format!("{}.{}", module.name, name.as_ref()))
             } else {
                 param.r#type.is_enum()
             };
 
             let field = FieldDefinition {
-                name: param.name().to_string(),
+                name: param.name.to_string(),
                 name_ident: field_name,
                 ty,
                 optional: param.optional,
-                deprecated: param.is_deprecated(),
+                deprecated: param.deprecated,
                 is_enum,
                 serde_skip: false,
             };
@@ -604,7 +576,7 @@ impl Generator {
 
         let serde_derives = self.serde_support.generate_derives();
 
-        let desc = dt.type_description_tokens(domain.name.as_ref());
+        let desc = dt.type_description_tokens(module.name.as_ref());
 
         let mut stream = quote! {
             #desc
@@ -613,11 +585,10 @@ impl Generator {
         };
 
         if builder.fields.is_empty() {
-            if let DomainDatatype::Type(tydef) = dt {
+            if let ModuleDatatype::Type(tydef) = dt {
                 // create wrapper types if no fields present
-                let (wrapped_ty, size) =
-                    self.generate_field_type(domain, dt.name(), dt.name(), &tydef.extends);
-                self.store_size(&struct_ident, size);
+                let wrapped_ty =
+                    self.generate_field_type(module, dt.name(), dt.name(), &tydef.extends);
                 let struct_def = quote! {
                     pub struct #name( #wrapped_ty);
 
@@ -677,8 +648,6 @@ impl Generator {
                     stream.extend(struct_def);
                 }
             } else {
-                // zero sized struct
-                self.type_size.insert(struct_ident, 0);
                 stream.extend(quote! {
                     pub struct #name {}
                 })
@@ -708,8 +677,6 @@ impl Generator {
             .to_upper_camel_case();
 
         let name = format_ident!("{}", enum_name);
-
-        self.type_size.insert(enum_name, 16);
 
         let vars = variants
             .iter()
@@ -767,92 +734,61 @@ impl Generator {
     /// Generates the Tokenstream for the field type (bool, f64, etc.)
     fn generate_field_type(
         &self,
-        domain: &Domain,
+        module: &Module,
         parent: &str,
         param_name: &str,
         ty: &Type,
-    ) -> (FieldType, Either<usize, String>) {
-        use std::mem::size_of;
+    ) -> FieldType {
         match ty {
-            Type::Integer => (
-                FieldType::new(quote! {
-                    i64
-                }),
-                Either::Left(size_of::<i64>()),
-            ),
-            Type::Number => (
-                FieldType::new(quote! {
-                    f64
-                }),
-                Either::Left(size_of::<f64>()),
-            ),
-            Type::Boolean => (
-                FieldType::new(quote! {
-                    bool
-                }),
-                Either::Left(size_of::<bool>()),
-            ),
-            Type::String => (
-                FieldType::new(quote! {
-                    String
-                }),
-                Either::Left(size_of::<String>()),
-            ),
-            Type::Object | Type::Any => (
-                FieldType::new(quote! {serde_json::Value}),
-                Either::Left(size_of::<serde_json::Value>()),
-            ),
-            Type::Binary => (
-                FieldType::new(quote! {chromiumoxide_types::Binary}),
-                Either::Left(size_of::<chromiumoxide_types::Binary>()),
-            ),
+            Type::Integer => FieldType::new(quote! {
+                i64
+            }),
+            Type::Number => FieldType::new(quote! {
+                f64
+            }),
+            Type::Boolean => FieldType::new(quote! {
+                bool
+            }),
+            Type::String => FieldType::new(quote! {
+                String
+            }),
+            Type::Object | Type::Any => FieldType::new(quote! {serde_json::Value}),
+            Type::Binary => FieldType::new(quote! {chromiumoxide_types::Binary}),
             Type::Enum(_) => {
                 let ty = format_ident!("{}", subenum_name(parent, param_name));
-                (FieldType::new(quote! {#ty}), Either::Left(16))
+                FieldType::new(quote! {#ty})
             }
             Type::ArrayOf(ty) => {
                 // recursive types don't need to be boxed in vec
                 let ty = if let Type::Ref(name) = ty.deref() {
-                    self.projected_type(domain, name)
+                    self.projected_type(module, name)
                 } else {
-                    let (ty, _) = self.generate_field_type(domain, parent, param_name, ty);
+                    let ty = self.generate_field_type(module, parent, param_name, ty);
                     quote! {#ty}
                 };
-                (FieldType::new_vec(ty), Either::Left(size_of::<Vec<()>>()))
+                FieldType::new_vec(ty)
             }
             Type::Ref(name) => {
                 // consider recursive types
                 if name == parent {
                     let ident = format_ident!("{}", name.to_upper_camel_case());
-                    (
-                        FieldType::new_box(quote! {
-                           #ident
-                        }),
-                        Either::Left(size_of::<Box<()>>()),
-                    )
+                    FieldType::new_box(quote! {
+                       #ident
+                    })
                 } else {
-                    (
-                        FieldType::new(self.projected_type(domain, name)),
-                        Either::Right(
-                            name.rsplit('.')
-                                .next()
-                                .unwrap()
-                                .to_string()
-                                .to_upper_camel_case(),
-                        ),
-                    )
+                    FieldType::new(self.projected_type(module, name))
                 }
             }
         }
     }
 
     /// Resolve projections: `Runtime.ScriptId` where `Runtime` is the
-    /// referenced domain where `ScriptId` is defined.
+    /// referenced module where `ScriptId` is defined.
     ///
-    /// In order to resolve cross pdl references a domain check is necessary.
-    /// If the referenced domain is defined in another pdl than the `domain`'s
-    /// pdl, we need to move up an additional level (`super::super`)
-    fn projected_type(&self, domain: &Domain, name: &str) -> TokenStream {
+    /// In order to resolve cross protocol references a module check is necessary.
+    /// If the referenced module is defined in another protocol than the `module`'s
+    /// protocol, we need to move up an additional level (`super::super`)
+    fn projected_type(&self, module: &Module, name: &str) -> TokenStream {
         let mut iter = name.rsplitn(2, '.');
         let ty_name = iter.next().unwrap();
         let path = iter.collect::<String>();
@@ -862,11 +798,11 @@ impl Generator {
                 #ident
             }
         } else {
-            let current_domain_idx = self.domains.get(domain.name.as_ref()).unwrap();
+            let current_domain_idx = self.modules.get(module.name.as_ref()).unwrap();
             let ref_domain_idx = self
-                .domains
+                .modules
                 .get(&path)
-                .unwrap_or_else(|| panic!("No referenced domain found for {path}"));
+                .unwrap_or_else(|| panic!("No referenced module found for {path}"));
 
             if *current_domain_idx == *ref_domain_idx {
                 let super_ident = format_ident!("{}", path.to_snake_case());
@@ -883,48 +819,38 @@ impl Generator {
         }
     }
 
-    fn generate_event_enums(&self, pdls: &[Protocol]) -> TokenStream {
+    fn generate_event_enums(&self, protocols: &[Protocol]) -> TokenStream {
         let mut events = Vec::new();
-        for domain in pdls.iter().flat_map(|p| {
-            p.domains
+        for module in protocols.iter().flat_map(|p| {
+            p.modules
                 .iter()
                 .filter(|d| self.with_deprecated || !d.deprecated)
                 .filter(|d| self.with_experimental || !d.experimental)
         }) {
-            for event in domain
+            for event in module
                 .into_iter()
                 .filter_map(|d| {
-                    if let DomainDatatype::Event(ev) = d {
+                    if let ModuleDatatype::Event(ev) = d {
                         Some(ev)
                     } else {
                         None
                     }
                 })
-                .filter(|ev| self.with_deprecated || !ev.is_deprecated())
-                .filter(|ev| self.with_experimental || !ev.is_experimental())
+                .filter(|ev| self.with_deprecated || !ev.deprecated)
+                .filter(|ev| self.with_experimental || !ev.experimental)
             {
                 let domain_idx = self
-                    .domains
-                    .get(domain.name.as_ref())
-                    .unwrap_or_else(|| panic!("No matching domain registered for {}", domain.name));
+                    .modules
+                    .get(module.name.as_ref())
+                    .unwrap_or_else(|| panic!("No matching module registered for {}", module.name));
                 let protocol_mod = format_ident!("{}", self.protocol_mods[*domain_idx]);
 
-                let ev_name = format!("Event{}", event.name().to_upper_camel_case());
-
-                let size = *self
-                    .type_size
-                    .get(&ev_name)
-                    .unwrap_or_else(|| panic!("No type found for ref {ev_name}"));
-
-                // See https://rust-lang.github.io/rust-clippy/master/#large_enum_variant
-                // The maximum size of a enum’s variant to avoid box suggestion is 200
-                let needs_box = size > 200;
+                let ev_name = format!("Event{}", event.name.to_upper_camel_case());
 
                 events.push(EventType {
                     protocol_mod,
-                    domain,
+                    module,
                     inner: event,
-                    needs_box,
                 });
             }
         }
@@ -1158,25 +1084,5 @@ pub fn fmt(out_dir: impl AsRef<Path>) {
                 }
             }
         }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use std::path::Path;
-
-    use super::*;
-
-    #[test]
-    fn test_serde_import() {
-        let dir = Path::new(env!("CARGO_MANIFEST_DIR"));
-        Generator::default()
-            .out_dir(dir.join("src"))
-            .serde(SerdeSupport::with_feature("serde0"))
-            .compile_protocols(&[
-                dir.join("js_protocol.pdl"),
-                dir.join("browser_protocol.pdl"),
-            ])
-            .unwrap();
     }
 }

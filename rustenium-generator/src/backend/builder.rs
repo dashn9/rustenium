@@ -1,9 +1,9 @@
 use proc_macro2::{Ident, TokenStream};
 use quote::{format_ident, quote};
 
-use crate::build::generator::generate_field_name;
-use crate::build::types::FieldDefinition;
 use heck::*;
+
+use crate::backend::{generator::generate_field_name, types::FieldDefinition};
 pub struct Builder {
     pub fields: Vec<(TokenStream, FieldDefinition)>,
     pub name: Ident,

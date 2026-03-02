@@ -3,6 +3,8 @@ use serde::{Deserialize, Serialize};
 
 use std::borrow::Cow;
 
+use crate::backend::types::ModuleDatatype;
+
 #[cfg_attr(feature = "serde0", derive(Serialize, Deserialize))]
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct Protocol<'a> {
@@ -10,7 +12,7 @@ pub struct Protocol<'a> {
     pub description: Option<Cow<'a, str>>,
     pub version: Version,
     #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Vec::is_empty"))]
-    pub module: Vec<Module<'a>>,
+    pub modules: Vec<Module<'a>>,
 }
 
 #[cfg_attr(feature = "serde0", derive(Serialize, Deserialize))]
@@ -69,7 +71,7 @@ pub struct TypeDef<'a> {
 
 impl<'a> TypeDef<'a> {
     pub fn is_enum(&self) -> bool {
-        matches!(self.item.as_ref(), Some(Item::Enum(_)))
+        matches!(self.parameters.as_ref(), Some(Item::Enum(_)))
     }
 }
 
@@ -142,6 +144,13 @@ impl<'a> Variant<'a> {
         Variant {
             description: Default::default(),
             name: Cow::Borrowed(name),
+        }
+    }
+
+    pub fn from(dt: &'a ModuleDatatype) -> Variant<'a>{
+        Variant {
+            description: dt.description().map(Cow::Borrowed),
+            name: Cow::Borrowed(dt.name()),
         }
     }
 }
@@ -232,55 +241,4 @@ pub struct Redirect<'a> {
     pub description: Option<Cow<'a, str>>,
     pub module: Cow<'a, str>,
     pub name: Option<Cow<'a, str>>,
-}
-
-pub trait DataType {
-    fn is_circular_dep(&self) -> bool;
-
-    fn is_experimental(&self) -> bool;
-
-    fn description(&self) -> Option<&str>;
-
-    fn name(&self) -> &str;
-
-    fn is_deprecated(&self) -> bool;
-}
-
-macro_rules! impl_datatype {
-    ($($id: ident,)*) => {
-        $(
-            impl<'a> DataType for $id<'a> {
-                fn is_circular_dep(&self) -> bool {
-                    self.is_circular_dep
-                }
-
-                fn is_experimental(&self) -> bool {
-                    self.experimental
-                }
-
-                fn description(&self) -> Option<&str> {
-                    self.description.as_ref().map(|x|x.as_ref())
-                }
-
-                fn name(&self) -> &str {
-                    self.name.as_ref()
-                }
-
-                 fn is_deprecated(&self) -> bool {
-                    self.deprecated
-                }
-            }
-        )*
-    };
-}
-
-impl_datatype!(Command, Event, Param, TypeDef,);
-
-impl<'a, T: DataType> From<&'a T> for Variant<'a> {
-    fn from(dt: &'a T) -> Self {
-        Variant {
-            description: dt.description().map(Cow::Borrowed),
-            name: Cow::Borrowed(dt.name()),
-        }
-    }
 }
