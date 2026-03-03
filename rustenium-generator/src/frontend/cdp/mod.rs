@@ -12,14 +12,14 @@ pub mod parser;
 pub mod resolver;
 
 pub fn pdl_to_cdp(pdl_locations: &[&Path]) {
-    let mut protocols = vec![];
+    let inputs: Vec<String> = pdl_locations
+        .iter()
+        .map(|pdl_location| {
+            let content = fs::read_to_string(pdl_location).unwrap();
+            resolve_pdl(pdl_location, &content).unwrap()
+        })
+        .collect();
 
-    for (idx, pdl_location) in pdl_locations.iter().enumerate() {
-        let content = fs::read_to_string(pdl_location).unwrap();
-        let resolved = resolve_pdl(pdl_location, &content).unwrap();
-        let protocol = parse_pdl(resolved).unwrap();
-
-        protocols.push(protocol);
-    }
-    compile_protocols(&protocols);
+    let protocols: Vec<_> = inputs.iter().map(|input| parse_pdl(input).unwrap()).collect();
+    compile_protocols(&protocols).unwrap();
 }

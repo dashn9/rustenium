@@ -56,8 +56,6 @@ pub struct Generator {
     with_deprecated: bool,
     allowed_deprecated_type: HashSet<String>,
     out_dir: Option<PathBuf>,
-    protocol_mods: Vec<String>,
-    modules: HashMap<String, usize>,
     target_mod: Option<String>,
     /// This contains a list of all enums of all modules with their qualified
     /// names <module>.<name>
@@ -75,8 +73,6 @@ impl Default for Generator {
             with_deprecated: false,
             allowed_deprecated_type: HashSet::new(),
             out_dir: None,
-            protocol_mods: Vec::new(),
-            modules: Default::default(),
             target_mod: Default::default(),
             enums: Default::default(),
         }
@@ -165,10 +161,9 @@ impl Generator {
         for (idx, protocol) in protocols.iter().enumerate() {
             let types = self.generate_types(&protocol.modules);
             let version = format!("{}.{}", protocol.version.major, protocol.version.minor);
-            let module_name = format_ident!("{}", self.protocol_mods[idx]);
             let module = quote! {
                 #[allow(clippy::wrong_self_convention)]
-                pub mod #module_name{
+                pub mod s #idx{
                     /// The version of this protocol definition
                     pub const VERSION : &str = #version;
                     #types
@@ -793,29 +788,8 @@ impl Generator {
         let ty_name = iter.next().unwrap();
         let path = iter.collect::<String>();
         let ident = format_ident!("{}", ty_name.to_upper_camel_case());
-        if path.is_empty() {
-            quote! {
-                #ident
-            }
-        } else {
-            let current_domain_idx = self.modules.get(module.name.as_ref()).unwrap();
-            let ref_domain_idx = self
-                .modules
-                .get(&path)
-                .unwrap_or_else(|| panic!("No referenced module found for {path}"));
-
-            if *current_domain_idx == *ref_domain_idx {
-                let super_ident = format_ident!("{}", path.to_snake_case());
-                quote! {
-                    super::#super_ident::#ident
-                }
-            } else {
-                let mod_name = format_ident!("{}", self.protocol_mods[*ref_domain_idx]);
-                let super_ident = format_ident!("{}", path.to_snake_case());
-                quote! {
-                    super::super::#mod_name::#super_ident::#ident
-                }
-            }
+        quote! {
+            #ident
         }
     }
 
@@ -839,16 +813,9 @@ impl Generator {
                 .filter(|ev| self.with_deprecated || !ev.deprecated)
                 .filter(|ev| self.with_experimental || !ev.experimental)
             {
-                let domain_idx = self
-                    .modules
-                    .get(module.name.as_ref())
-                    .unwrap_or_else(|| panic!("No matching module registered for {}", module.name));
-                let protocol_mod = format_ident!("{}", self.protocol_mods[*domain_idx]);
-
                 let ev_name = format!("Event{}", event.name.to_upper_camel_case());
 
                 events.push(EventType {
-                    protocol_mod,
                     module,
                     inner: event,
                 });

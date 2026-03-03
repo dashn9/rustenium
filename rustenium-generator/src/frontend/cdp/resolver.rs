@@ -24,7 +24,7 @@ pub fn resolve_pdl(path: &Path, content: &str) -> Result<String, Error> {
             };
 
             // Replace "carriage returns" with line breaks so license header splits works for windows
-            // content = content.replace("\r\n", "\n");
+            content = content.replace("\r\n", "\n");
 
             // Remove the license header
             let Some((_, content)) = content.split_once("\n\n") else {

@@ -202,20 +202,11 @@ pub struct Command<'a> {
 pub struct CommandResult<'a> {
     #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Option::is_none"))]
     pub description: Option<Cow<'a, str>>,
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "ser::is_false"))]
-    pub experimental: bool,
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "ser::is_false"))]
-    pub deprecated: bool,
     pub name: Cow<'a, str>,
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Option::is_none"))]
-    #[cfg_attr(feature = "serde0", serde(serialize_with = "ser::serialize_redirect"))]
-    pub redirect: Option<Redirect<'a>>,
     #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Vec::is_empty"))]
     pub parameters: Vec<Param<'a>>,
     // RawType is the raw type.
     pub raw_name: Cow<'a, str>,
-    // is_circular_dep indicates a type that causes circular dependencies.
-    pub is_circular_dep: bool,
 }
 #[cfg_attr(feature = "serde0", derive(Serialize, Deserialize))]
 #[derive(Clone, Debug, PartialEq, Eq)]

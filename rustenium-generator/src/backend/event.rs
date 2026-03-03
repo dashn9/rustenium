@@ -5,7 +5,6 @@ use quote::{format_ident, quote};
 use crate::backend::base_types::{Event, Module};
 
 pub struct EventType<'a> {
-    pub protocol_mod: Ident,
     pub module: &'a Module<'a>,
     pub inner: &'a Event<'a>,
 }
@@ -54,9 +53,6 @@ impl<'a> EventBuilder<'a> {
             };
 
             let domain_mod = format_ident!("{}", event.module.name.to_snake_case());
-            let protocol_mod = &event.protocol_mod;
-
-            let ty_qualifier = quote! {super::#protocol_mod::#domain_mod::#ty_ident};
 
             // let ty_ident = if event.needs_box {
             //     quote! {Box<#ty_qualifier>}
@@ -105,51 +101,6 @@ impl<'a> EventBuilder<'a> {
             event_as_boxed_results.extend(event_as_boxed_result);
 
             consume_event_macro_exprs.extend(consume_event_macro_expr);
-
-            conversion_impls.extend(quote! {
-                impl std::convert::TryFrom<CdpEvent> for  #ty_qualifier {
-                    type Error = CdpEvent;
-
-                    fn try_from(event: CdpEvent) -> Result<Self, Self::Error> {
-                        match event {
-                            #variant_match
-                            _ => Err(event)
-                        }
-                    }
-                }
-                impl From<#ty_qualifier> for CdpEvent {
-                    fn from(el: #ty_qualifier) -> CdpEvent {
-                        #into_event
-                    }
-                }
-            });
-
-            event_trait_impls.extend(quote! {
-                    impl super::sealed::SealedEvent for #ty_qualifier {
-                        fn as_any(&self) -> &dyn ::std::any::Any {
-                            self
-                        }
-                    }
-                     impl super::IntoEventKind for #ty_qualifier {
-
-                       fn event_kind() -> super::EventKind where Self: Sized + 'static  {
-                           super::EventKind::BuiltIn
-                       }
-                     }
-
-            });
-
-            let deserialize_from = if false { //events.need_box
-                quote! {
-                        #ty_qualifier::IDENTIFIER =>CdpEvent::#var_ident(Box::new(map.next_value::<#ty_qualifier>()?)),
-                }
-            } else {
-                quote! {
-                        #ty_qualifier::IDENTIFIER =>CdpEvent::#var_ident(map.next_value::<#ty_qualifier>()?),
-                }
-            };
-
-            deserialize_from_method.extend(deserialize_from);
 
             var_idents.push(var_ident);
         }
