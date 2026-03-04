@@ -1,45 +1,9 @@
 use serde::{
-    ser::{SerializeMap, SerializeSeq},
+    ser::SerializeMap,
     Serialize, Serializer,
 };
 
-use crate::pdl::*;
-
-pub fn serialize_usize<S>(n: &usize, serializer: S) -> Result<S::Ok, S::Error>
-where
-    S: Serializer,
-{
-    serializer.serialize_str(&n.to_string())
-}
-
-pub fn serialize_enum<S>(variants: &[Variant], serializer: S) -> Result<S::Ok, S::Error>
-where
-    S: Serializer,
-{
-    let mut seq = serializer.serialize_seq(Some(variants.len()))?;
-
-    for variant in variants {
-        seq.serialize_element(variant.name.as_ref())?;
-    }
-
-    seq.end()
-}
-
-pub fn serialize_redirect<S>(redirect: &Option<Redirect>, serializer: S) -> Result<S::Ok, S::Error>
-where
-    S: Serializer,
-{
-    if let Some(redirect) = redirect {
-        if let Some(name) = redirect.name.as_ref() {
-            return serializer.serialize_str(name.as_ref());
-        }
-    }
-    serializer.serialize_none()
-}
-
-pub fn is_false(v: &bool) -> bool {
-    !*v
-}
+use crate::backend::base_types::{Protocol, Type};
 
 impl Protocol<'_> {
     /// Serialize the `Protocol` data structure as a String of JSON.
@@ -97,8 +61,14 @@ impl Serialize for Type<'_> {
                 map.serialize_entry("type", "array")?;
                 map.serialize_entry("items", &ty)?;
             }
-            Type::Ref(id) => {
-                map.serialize_entry("$ref", &id)?;
+            Type::Ref(type_ref) => {
+                // Serialize back to the original dot-separated form
+                let ref_str = if let Some(ref module) = type_ref.module {
+                    format!("{}.{}", module, type_ref.name)
+                } else {
+                    type_ref.name.to_string()
+                };
+                map.serialize_entry("$ref", &ref_str)?;
             }
         }
 

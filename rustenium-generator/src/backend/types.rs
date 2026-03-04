@@ -69,7 +69,7 @@ impl<'a> ModuleDatatype<'a> {
         let url = match self {
             ModuleDatatype::Type(ty) => format!("{}{}/#type-{}", base_url, domain_name, ty.name),
             ModuleDatatype::Command(cmd) => {
-                format!("{}{}/#method-{}", base_url, domain_name, cmd.name)
+                format!("{}{}/#method-{}", base_url, domain_name, cmd.method.name)
             }
             ModuleDatatype::Event(ev) => {
                 format!("{}{}/#event-{}", base_url, domain_name, ev.name)
@@ -89,9 +89,22 @@ impl<'a> ModuleDatatype<'a> {
     pub fn ident_name(&self) -> String {
         match self {
             ModuleDatatype::Type(_ty) => self.name().to_upper_camel_case(),
-            ModuleDatatype::Command(cmd) => format!("{}Params", cmd.name.to_upper_camel_case()),
-            ModuleDatatype::Event(event) => format!("Event{}", event.name.to_upper_camel_case()),
+            ModuleDatatype::Command(cmd) => format!("{}Params", cmd.method.name.to_upper_camel_case()),
+            ModuleDatatype::Event(event) => event.name.to_upper_camel_case(),
         }
+    }
+
+    /// For commands: the method struct name (e.g. `EvaluateMethod`)
+    pub fn method_ident_name(&self) -> Option<String> {
+        match self {
+            ModuleDatatype::Command(cmd) => Some(format!("{}Method", cmd.method.name.to_upper_camel_case())),
+            _ => None,
+        }
+    }
+
+    /// For commands: the definition name (e.g. `Evaluate`) — wraps method + params.
+    pub fn definition_name(&self) -> String {
+        self.name().to_upper_camel_case()
     }
 
     pub fn params(&self) -> impl Iterator<Item = &'a Param<'a>> + 'a {
@@ -103,7 +116,7 @@ impl<'a> ModuleDatatype<'a> {
                     [].iter()
                 }
             }
-            ModuleDatatype::Command(cmd) => cmd.parameters.iter(),
+            ModuleDatatype::Command(cmd) => cmd.params.iter(),
             ModuleDatatype::Event(ev) => ev.parameters.iter(),
         }
     }
@@ -124,7 +137,7 @@ impl<'a> ModuleDatatype<'a> {
     pub fn raw_name(&self) -> &'a str {
         match self {
             ModuleDatatype::Type(ty) => ty.raw_name.as_ref(),
-            ModuleDatatype::Command(cmd) => cmd.raw_name.as_ref(),
+            ModuleDatatype::Command(cmd) => cmd.method.raw_name.as_ref(),
             ModuleDatatype::Event(ev) => ev.raw_name.as_ref(),
         }
     }
@@ -142,7 +155,7 @@ impl<'a> ModuleDatatype<'a> {
     pub fn is_experimental(&self) -> bool {
         match self {
             ModuleDatatype::Type(inner) => inner.experimental,
-            ModuleDatatype::Command(inner) => inner.experimental,
+            ModuleDatatype::Command(inner) => inner.method.experimental,
             ModuleDatatype::Event(inner) => inner.experimental,
         }
     }
@@ -150,7 +163,7 @@ impl<'a> ModuleDatatype<'a> {
     pub fn description(&self) -> Option<&str> {
         match self {
             ModuleDatatype::Type(inner) => inner.description.as_deref(),
-            ModuleDatatype::Command(inner) => inner.description.as_deref(),
+            ModuleDatatype::Command(inner) => inner.method.description.as_deref(),
             ModuleDatatype::Event(inner) => inner.description.as_deref(),
         }
     }
@@ -158,7 +171,7 @@ impl<'a> ModuleDatatype<'a> {
     pub fn name(&self) -> &str {
         match self {
             ModuleDatatype::Type(inner) => inner.name.as_ref(),
-            ModuleDatatype::Command(inner) => inner.name.as_ref(),
+            ModuleDatatype::Command(inner) => inner.method.name.as_ref(),
             ModuleDatatype::Event(inner) => inner.name.as_ref(),
         }
     }
@@ -166,7 +179,7 @@ impl<'a> ModuleDatatype<'a> {
     pub fn is_deprecated(&self) -> bool {
         match self {
             ModuleDatatype::Type(inner) => inner.deprecated,
-            ModuleDatatype::Command(inner) => inner.deprecated,
+            ModuleDatatype::Command(inner) => inner.method.deprecated,
             ModuleDatatype::Event(inner) => inner.deprecated,
         }
     }

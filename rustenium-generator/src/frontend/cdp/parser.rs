@@ -3,8 +3,8 @@
 //! All regexp's are copied from pdl.py in the chromium source tree.
 
 use crate::backend::base_types::{
-    Command, CommandResult, Event, Item, Module, Param, Protocol, Redirect, Type, TypeDef, Variant,
-    Version,
+    Command, CommandMethod, CommandResult, Event, Item, Module, Param, Protocol, Redirect, Type,
+    TypeDef, Variant, Version,
 };
 use crate::frontend::cdp::dep::is_circular_dep;
 use crate::frontend::cdp::error::*;
@@ -39,7 +39,7 @@ fn add_module_property_to_module<'a>(mod_prop: ModuleProperty<'a>, module: &mut 
 }
 fn add_param_to_module_property<'a>(mod_prop: &mut ModuleProperty<'a>, param: Param<'a>) {
     match mod_prop {
-        ModuleProperty::Command(c) => c.parameters.push(param),
+        ModuleProperty::Command(c) => c.params.push(param),
         ModuleProperty::CommandResult(cr) => cr.parameters.push(param),
         ModuleProperty::Event(e) => e.parameters.push(param),
         ModuleProperty::Type(t) => {
@@ -154,16 +154,19 @@ pub fn parse_pdl<'a>(input: &'a str) -> Result<Protocol<'a>, Error> {
             }
             let name = borrowed!(caps.get(4)).unwrap();
             if Some("command") == caps.get(3).map(|m| m.as_str()) {
+                let is_circ = is_circular_dep(&module.name, name.as_ref());
                 let cmd = Command {
-                    description: description.take().map(Cow::Owned),
-                    experimental: caps.get(1).is_some(),
-                    deprecated: caps.get(2).is_some(),
-                    parameters: vec![],
+                    method: CommandMethod {
+                        description: description.take().map(Cow::Owned),
+                        experimental: caps.get(1).is_some(),
+                        deprecated: caps.get(2).is_some(),
+                        redirect: None,
+                        raw_name: Cow::Owned(format!("{}.{}", module.name, name)),
+                        name,
+                    },
+                    params: vec![],
                     returns: vec![],
-                    redirect: None,
-                    raw_name: Cow::Owned(format!("{}.{}", module.name, name)),
-                    is_circular_dep: is_circular_dep(&module.name, name.as_ref()),
-                    name,
+                    is_circular_dep: is_circ,
                 };
                 mod_prop = Some(ModuleProperty::Command(cmd));
             } else {
@@ -225,7 +228,7 @@ pub fn parse_pdl<'a>(input: &'a str) -> Result<Protocol<'a>, Error> {
                     let mut command_name = Cow::Borrowed("");
                     if let Some(mod_prop) = mod_prop.take() {
                         if let ModuleProperty::Command(ref mod_prop) = mod_prop {
-                            command_name = mod_prop.name.clone();
+                            command_name = mod_prop.method.name.clone();
                         }
                         add_module_property_to_module(
                             mod_prop,
@@ -314,7 +317,7 @@ pub fn parse_pdl<'a>(input: &'a str) -> Result<Protocol<'a>, Error> {
                 .ok_or_else(|| format_err!("line {}: missing item declaration", line_num))?
             {
                 ModuleProperty::Command(cmd) => {
-                    cmd.redirect = Some(redirect);
+                    cmd.method.redirect = Some(redirect);
                 }
                 _ => bail!("line {}: can't add redirect here", line_num),
             }
@@ -345,7 +348,7 @@ pub fn parse_pdl<'a>(input: &'a str) -> Result<Protocol<'a>, Error> {
                     .as_mut()
                     .ok_or_else(|| format_err!("line {}: missing mod_prop declaration", line_num))?
                 {
-                    ModuleProperty::Command(c) => handle_enum_member(c.parameters.last_mut()),
+                    ModuleProperty::Command(c) => handle_enum_member(c.params.last_mut()),
                     ModuleProperty::CommandResult(cr) => {
                         handle_enum_member(cr.parameters.last_mut())
                     }

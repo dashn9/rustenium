@@ -8,6 +8,7 @@ mod dep;
 mod error;
 pub mod parser;
 pub mod resolver;
+pub(crate) mod ser;
 
 pub fn pdl_to_cdp(pdl_locations: &[&Path]) {
     let inputs: Vec<(String, Option<&str>)> = pdl_locations

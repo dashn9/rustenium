@@ -1,5 +1,5 @@
 use std::borrow::Cow;
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use std::fs;
 use std::io::{self, Error, ErrorKind};
 use std::ops::Deref;
@@ -9,7 +9,7 @@ use heck::{ToSnakeCase, ToUpperCamelCase};
 use proc_macro2::{Ident, TokenStream};
 use quote::{format_ident, quote};
 
-use crate::backend::base_types::{Module, Param, Protocol, Type, Variant};
+use crate::backend::base_types::{Module, Param, Protocol, Type, TypeRef, Variant};
 use crate::backend::builder::Builder;
 use crate::backend::event;
 use crate::backend::types::{FieldDefinition, FieldType, ModuleDatatype};
@@ -63,6 +63,8 @@ pub struct Generator {
     /// This is a fix in order to check in struct definitions whether the
     /// targeted type is an enum
     enums: HashSet<String>,
+    /// Maps module name (original case, e.g. "Runtime") → protocol snake name (e.g. "js_protocol")
+    module_protocol_map: HashMap<String, String>,
 }
 
 impl Default for Generator {
@@ -75,6 +77,7 @@ impl Default for Generator {
             out_dir: None,
             target_mod: Default::default(),
             enums: Default::default(),
+            module_protocol_map: HashMap::new(),
         }
     }
 }
@@ -87,6 +90,14 @@ pub struct ModuleParts {
     pub type_builders: TokenStream,
     pub results: TokenStream,
     pub events: TokenStream,
+    /// Whether this module has a Type group enum
+    pub has_type_group: bool,
+    /// Whether this module has a Command group enum
+    pub has_command_group: bool,
+    /// Whether this module has an Event group enum
+    pub has_event_group: bool,
+    /// Names exported from each sub-file (types, commands, results, events)
+    pub exported_names: HashMap<String, Vec<String>>,
 }
 
 impl Generator {
@@ -169,21 +180,36 @@ impl Generator {
         fs::create_dir_all(&target_base)
             .unwrap_or_else(|e| panic!("Unable to create directory {}: {}", target_base.display(), e));
 
-        let mut protocol_names = Vec::new();
+        // Write the group_enum! macro definition
+        let macros_path = target_base.join("macros.rs");
+        fs::write(&macros_path, event::GROUP_ENUM_MACRO)
+            .unwrap_or_else(|e| panic!("Unable to write {}: {}", macros_path.display(), e));
+
+        // Build module_protocol_map: module name (original case) → protocol snake name
+        self.module_protocol_map.clear();
+        for protocol in protocols.iter() {
+            let protocol_name = protocol.name.unwrap_or("unknown");
+            let protocol_snake = protocol_name.to_snake_case();
+            for module in &protocol.modules {
+                self.module_protocol_map.insert(module.name.to_string(), protocol_snake.clone());
+            }
+        }
+
+        // (protocol_snake, has_types, has_commands, has_events)
+        let mut protocol_infos: Vec<(String, bool, bool, bool)> = Vec::new();
 
         for protocol in protocols.iter() {
             let version = format!("{}.{}", protocol.version.major, protocol.version.minor);
 
             let protocol_name = protocol.name.unwrap_or("unknown");
             let protocol_snake = protocol_name.to_snake_case();
-            protocol_names.push(protocol_snake.clone());
 
             let protocol_dir = target_base.join(&protocol_snake);
             fs::create_dir_all(&protocol_dir)
                 .unwrap_or_else(|e| panic!("Unable to create directory {}: {}", protocol_dir.display(), e));
 
-            let mut module_names = Vec::new();
-            let mut filtered_modules: Vec<&Module> = Vec::new();
+            // (mod_name, has_types, has_commands, has_events)
+            let mut module_infos: Vec<(String, bool, bool, bool)> = Vec::new();
 
             let with_deprecated = self.with_deprecated;
             let with_experimental = self.with_experimental;
@@ -195,7 +221,11 @@ impl Generator {
 
             for module in &modules_to_process {
                 let mod_name = module.name.to_snake_case();
-                let parts = self.generate_module_files(module);
+                let parts = self.generate_module_files(module, &protocol_snake);
+
+                let has_types = parts.has_type_group;
+                let has_commands = parts.has_command_group;
+                let has_events = parts.has_event_group;
 
                 let module_dir = protocol_dir.join(&mod_name);
                 fs::create_dir_all(&module_dir)
@@ -215,13 +245,24 @@ impl Generator {
                         let file_path = module_dir.join(format!("{file_name}.rs"));
                         fs::write(&file_path, content.to_string())
                             .unwrap_or_else(|e| panic!("Unable to write {}: {}", file_path.display(), e));
-                        sub_mods.push(file_name);
+                        sub_mods.push(file_name.to_string());
                     }
                 }
 
-                // Write module mod.rs with sub-module declarations
+                // Write module mod.rs with sub-module declarations and specific re-exports
                 let sub_mod_decls: Vec<_> = sub_mods.iter().map(|name| {
                     let mod_ident = format_ident!("{}", name);
+                    let exports = parts.exported_names.get(name.as_str());
+                    if let Some(names) = exports {
+                        if !names.is_empty() {
+                            let idents: Vec<_> = names.iter().map(|n| format_ident!("{}", n)).collect();
+                            return quote! {
+                                pub mod #mod_ident;
+                                pub use #mod_ident::{#(#idents),*};
+                            };
+                        }
+                    }
+                    // For builder files or files with no tracked exports, use wildcard
                     quote! {
                         pub mod #mod_ident;
                         pub use #mod_ident::*;
@@ -233,19 +274,47 @@ impl Generator {
                 fs::write(&module_mod_path, module_mod_content.to_string())
                     .unwrap_or_else(|e| panic!("Unable to write {}: {}", module_mod_path.display(), e));
 
-                module_names.push(mod_name);
-                filtered_modules.push(module);
+                module_infos.push((mod_name, has_types, has_commands, has_events));
             }
 
-            // Generate protocol-level Event enum
-            let protocol_event_enum = event::generate_protocol_event_enum(
-                &filtered_modules,
-                self.with_deprecated,
-                self.with_experimental,
-            );
+            // Build protocol-level group enum entries
+            let type_entries: Vec<_> = module_infos.iter()
+                .filter(|(_, has, _, _)| *has)
+                .map(|(name, _, _, _)| {
+                    let mod_id = format_ident!("{}", name);
+                    let var_id = format_ident!("{}", name.to_upper_camel_case());
+                    (var_id, quote!(#mod_id::Type))
+                })
+                .collect();
+
+            let cmd_entries: Vec<_> = module_infos.iter()
+                .filter(|(_, _, has, _)| *has)
+                .map(|(name, _, _, _)| {
+                    let mod_id = format_ident!("{}", name);
+                    let var_id = format_ident!("{}", name.to_upper_camel_case());
+                    (var_id, quote!(#mod_id::Command))
+                })
+                .collect();
+
+            let evt_entries: Vec<_> = module_infos.iter()
+                .filter(|(_, _, _, has)| *has)
+                .map(|(name, _, _, _)| {
+                    let mod_id = format_ident!("{}", name);
+                    let var_id = format_ident!("{}", name.to_upper_camel_case());
+                    (var_id, quote!(#mod_id::Event))
+                })
+                .collect();
+
+            let protocol_type_group = event::group_enum_closed(&format_ident!("Type"), &type_entries);
+            let protocol_cmd_group = event::group_enum_closed(&format_ident!("Command"), &cmd_entries);
+            let protocol_evt_group = event::group_enum_open(&format_ident!("Event"), &evt_entries);
+
+            let protocol_has_types = !type_entries.is_empty();
+            let protocol_has_commands = !cmd_entries.is_empty();
+            let protocol_has_events = !evt_entries.is_empty();
 
             // Write protocol mod.rs
-            let mod_decls: Vec<_> = module_names.iter().map(|name| {
+            let mod_decls: Vec<_> = module_infos.iter().map(|(name, _, _, _)| {
                 let mod_ident = format_ident!("{}", name);
                 quote! { pub mod #mod_ident; }
             }).collect();
@@ -256,26 +325,80 @@ impl Generator {
                 /// The version of this protocol definition
                 pub const VERSION: &str = #version;
 
-                #protocol_event_enum
+                #protocol_type_group
+                #protocol_cmd_group
+                #protocol_evt_group
             };
 
             let protocol_mod_path = protocol_dir.join("mod.rs");
             fs::write(&protocol_mod_path, protocol_mod_content.to_string())
                 .unwrap_or_else(|e| panic!("Unable to write {}: {}", protocol_mod_path.display(), e));
+
+            protocol_infos.push((protocol_snake, protocol_has_types, protocol_has_commands, protocol_has_events));
         }
 
-        // Write top-level mod.rs
-        let top_event_enum = event::generate_top_event_enum(&protocol_names);
+        // Build top-level group enum entries
+        let top_type_entries: Vec<_> = protocol_infos.iter()
+            .filter(|(_, has, _, _)| *has)
+            .map(|(name, _, _, _)| {
+                let mod_id = format_ident!("{}", name);
+                let var_id = format_ident!("{}", name.to_upper_camel_case());
+                (var_id, quote!(#mod_id::Type))
+            })
+            .collect();
 
-        let top_mod_decls: Vec<_> = protocol_names.iter().map(|name| {
+        let top_cmd_entries: Vec<_> = protocol_infos.iter()
+            .filter(|(_, _, has, _)| *has)
+            .map(|(name, _, _, _)| {
+                let mod_id = format_ident!("{}", name);
+                let var_id = format_ident!("{}", name.to_upper_camel_case());
+                (var_id, quote!(#mod_id::Command))
+            })
+            .collect();
+
+        let top_evt_entries: Vec<_> = protocol_infos.iter()
+            .filter(|(_, _, _, has)| *has)
+            .map(|(name, _, _, _)| {
+                let mod_id = format_ident!("{}", name);
+                let var_id = format_ident!("{}", name.to_upper_camel_case());
+                (var_id, quote!(#mod_id::Event))
+            })
+            .collect();
+
+        let top_type_group = event::group_enum_closed(&format_ident!("Type"), &top_type_entries);
+        let top_cmd_group = event::group_enum_closed(&format_ident!("Command"), &top_cmd_entries);
+        let top_evt_group = event::group_enum_open(&format_ident!("Event"), &top_evt_entries);
+
+        let event_message = if !top_evt_entries.is_empty() {
+            quote! {
+                #[derive(Debug, PartialEq, Clone)]
+                pub struct EventMessage {
+                    pub method: String,
+                    pub session_id: Option<String>,
+                    pub params: Event,
+                }
+            }
+        } else {
+            TokenStream::default()
+        };
+
+        // Write top-level mod.rs
+        let top_mod_decls: Vec<_> = protocol_infos.iter().map(|(name, _, _, _)| {
             let mod_ident = format_ident!("{}", name);
             quote! { pub mod #mod_ident; }
         }).collect();
 
         let top_mod_content = quote! {
+            #[macro_use]
+            mod macros;
+
             #(#top_mod_decls)*
 
-            #top_event_enum
+            #top_type_group
+            #top_cmd_group
+            #top_evt_group
+
+            #event_message
         };
 
         let top_mod_path = target_base.join("mod.rs");
@@ -287,7 +410,7 @@ impl Generator {
     }
 
     /// Generates the separate token streams for a module, one per output file.
-    pub fn generate_module_files(&mut self, module: &Module) -> ModuleParts {
+    pub fn generate_module_files(&mut self, module: &Module, current_protocol: &str) -> ModuleParts {
         let serde_imports = self.serde_support.generate_serde_imports();
         let with_deprecated = self.with_deprecated;
         let with_experimental = self.with_experimental;
@@ -298,6 +421,14 @@ impl Generator {
         let mut type_builders_stream = TokenStream::default();
         let mut events_stream = TokenStream::default();
         let mut results_stream = TokenStream::default();
+
+        // Track generated idents for group enum invocations: (variant_ident, type_ident)
+        let mut type_idents: Vec<(Ident, Ident)> = Vec::new();
+        let mut command_idents: Vec<(Ident, Ident)> = Vec::new();
+        let mut event_idents: Vec<(Ident, Ident)> = Vec::new();
+
+        // Track exported names per file for specific re-exports
+        let mut exported_names: HashMap<String, Vec<String>> = HashMap::new();
 
         let allowed = &self.allowed_deprecated_type;
         let datatypes: Vec<_> = module
@@ -313,22 +444,38 @@ impl Generator {
         for dt in datatypes {
             let is_type = dt.is_type();
             let is_command = dt.is_command();
+            let camel_name = dt.name().to_upper_camel_case();
 
-            let (def, builder_tokens) = self.generate_type(module, &dt);
+            let (def, builder_tokens) = self.generate_type(module, &dt, current_protocol);
             if is_type {
                 types_stream.extend(def);
                 type_builders_stream.extend(builder_tokens);
+                let ident = format_ident!("{}", camel_name);
+                type_idents.push((ident.clone(), ident));
+                exported_names.entry("types".to_string()).or_default().push(camel_name);
             } else if is_command {
                 commands_stream.extend(def);
                 command_builders_stream.extend(builder_tokens);
+                let ident = format_ident!("{}", camel_name);
+                command_idents.push((ident.clone(), ident));
+                // Commands export: FooParams, FooMethod, Foo (definition)
+                let params_name = dt.ident_name(); // e.g. "FooParams"
+                exported_names.entry("commands".to_string()).or_default().push(params_name);
+                if let Some(method_name) = dt.method_ident_name() {
+                    exported_names.entry("commands".to_string()).or_default().push(method_name);
+                }
+                exported_names.entry("commands".to_string()).or_default().push(dt.definition_name());
             } else {
                 events_stream.extend(def);
+                let ident = format_ident!("{}", camel_name);
+                event_idents.push((ident.clone(), ident));
+                exported_names.entry("events".to_string()).or_default().push(camel_name);
             }
         }
 
         // Generate CommandResult (FooReturns) structs
         for cr in &module.command_results {
-            let returns_name = format!("{}Returns", cr.name.to_upper_camel_case());
+            let returns_name = cr.name.to_upper_camel_case();
             let params = cr.parameters.iter()
                 .filter(|p| with_deprecated || !p.deprecated)
                 .filter(|p| with_experimental || !p.experimental);
@@ -346,14 +493,17 @@ impl Generator {
                         name: Cow::Owned(subenum_name(cr.name.as_ref(), param.name.as_ref())),
                     };
                     results_stream.extend(self.generate_enum(&enum_ident, vars));
+                    // Track the sub-enum name
+                    let sub_name = subenum_name(cr.name.as_ref(), param.name.as_ref());
+                    exported_names.entry("results".to_string()).or_default().push(sub_name);
                 }
 
                 let field_name = format_ident!("{}", generate_field_name(param.name.as_ref()));
-                let ty = self.generate_field_type(module, cr.name.as_ref(), param.name.as_ref(), &param.r#type);
+                let ty = self.generate_field_type(module, cr.name.as_ref(), param.name.as_ref(), &param.r#type, current_protocol);
 
-                let is_enum = if let Type::Ref(ref_name) = &param.r#type {
-                    self.enums.contains(ref_name.as_ref())
-                        || self.enums.contains(&format!("{}.{}", module.name, ref_name.as_ref()))
+                let is_enum = if let Type::Ref(type_ref) = &param.r#type {
+                    self.enums.contains(type_ref.name.as_ref())
+                        || self.enums.contains(&format!("{}.{}", module.name, type_ref.name.as_ref()))
                 } else {
                     param.r#type.is_enum()
                 };
@@ -385,15 +535,27 @@ impl Generator {
                     #struct_def
                 });
             }
+
+            exported_names.entry("results".to_string()).or_default().push(returns_name);
         }
 
-        // Append module-level Event enum to events stream
-        let module_event_enum = event::generate_module_event_enum(
-            module,
-            with_deprecated,
-            with_experimental,
-        );
-        events_stream.extend(module_event_enum);
+        // Append module-level group enum invocations (Type, Command, Event)
+        let type_entries: Vec<_> = type_idents.iter().map(|(v, t)| (v.clone(), quote!(#t))).collect();
+        let cmd_entries: Vec<_> = command_idents.iter().map(|(v, t)| (v.clone(), quote!(#t))).collect();
+        let evt_entries: Vec<_> = event_idents.iter().map(|(v, t)| (v.clone(), quote!(#t))).collect();
+
+        if !type_entries.is_empty() {
+            types_stream.extend(event::group_enum_closed(&format_ident!("Type"), &type_entries));
+            exported_names.entry("types".to_string()).or_default().push("Type".to_string());
+        }
+        if !cmd_entries.is_empty() {
+            commands_stream.extend(event::group_enum_closed(&format_ident!("Command"), &cmd_entries));
+            exported_names.entry("commands".to_string()).or_default().push("Command".to_string());
+        }
+        if !evt_entries.is_empty() {
+            events_stream.extend(event::group_enum_closed(&format_ident!("Event"), &evt_entries));
+            exported_names.entry("events".to_string()).or_default().push("Event".to_string());
+        }
 
         // Prepend serde imports to non-empty streams
         let wrap = |stream: TokenStream| -> TokenStream {
@@ -421,14 +583,26 @@ impl Generator {
             type_builders: wrap_builder(type_builders_stream),
             results: wrap(results_stream),
             events: wrap(events_stream),
+            has_type_group: !type_idents.is_empty(),
+            has_command_group: !command_idents.is_empty(),
+            has_event_group: !event_idents.is_empty(),
+            exported_names,
         }
     }
 
     /// Generated output for a single datatype (command, event, or type).
     /// Returns `(definition, builder)` — the builder may be empty.
-    fn generate_type(&mut self, module: &Module, dt: &ModuleDatatype) -> (TokenStream, TokenStream) {
+    ///
+    /// For commands, emits three structs:
+    ///   - `FooParams` — the parameter fields
+    ///   - `FooMethod` — unit struct with `IDENTIFIER`
+    ///   - `Foo`       — the definition, wrapping method + params
+    /// The builder targets `Foo` and internally constructs both parts.
+    ///
+    /// For types and events, emits the struct with `IDENTIFIER` directly.
+    fn generate_type(&mut self, module: &Module, dt: &ModuleDatatype, current_protocol: &str) -> (TokenStream, TokenStream) {
         let (def, builder) = if let Some(vars) = dt.as_enum() {
-            (self.generate_enum(&&Variant::from(dt), vars), TokenStream::default())
+            (self.generate_enum(&Variant::from(dt), vars), TokenStream::default())
         } else {
             let with_deprecated = self.with_deprecated;
             let with_experimental = self.with_experimental;
@@ -437,16 +611,72 @@ impl Generator {
                 .filter(|dt| with_deprecated || !dt.deprecated)
                 .filter(|dt| with_experimental || !dt.experimental);
 
-            let (mut stream, builder) = self.generate_struct(module, dt, dt.ident_name(), params);
-            let identifier = dt.raw_name();
-            let name = format_ident!("{}", dt.ident_name());
-            stream.extend(quote! {
-              impl #name {
-                  pub const IDENTIFIER : &'static str = #identifier;
-              }
-            });
-            (stream, builder)
+            let (mut stream, params_builder) = self.generate_struct(module, dt, dt.ident_name(), params, current_protocol);
+
+            if let Some(method_name) = dt.method_ident_name() {
+                // Command: emit Method enum + Definition, builder targets the definition
+                let method_ident = format_ident!("{}", method_name);
+                let params_ident = format_ident!("{}", dt.ident_name());
+                let def_ident = format_ident!("{}", dt.definition_name());
+                let variant_ident = def_ident.clone();
+                let identifier = dt.raw_name();
+                let desc = dt.type_description_tokens(module.name.as_ref());
+                let serde_derives = self.serde_support.generate_derives();
+
+                stream.extend(quote! {
+
+                    #[derive(Debug, Clone, PartialEq)]
+                    #serde_derives
+                    pub enum #method_ident {
+                        #[serde(rename = #identifier)]
+                        #variant_ident,
+                    }
+
+                    impl #method_ident {
+                        pub const IDENTIFIER: &'static str = #identifier;
+                    }
+
+                    #desc
+                    #[derive(Debug, Clone, PartialEq)]
+                    pub struct #def_ident {
+                        pub method: #method_ident,
+                        pub params: #params_ident,
+                    }
+
+                });
+
+                // Builder targets the command definition, wrapping method + params
+                let builder = params_builder.generate_command_builder(
+                    &def_ident,
+                    &method_ident,
+                    &variant_ident,
+                    &params_ident,
+                );
+
+                (stream, builder)
+            } else {
+                // Type or Event: IDENTIFIER directly on the struct
+                let identifier = dt.raw_name();
+                let name = format_ident!("{}", dt.ident_name());
+
+                stream.extend(quote! {
+
+                    impl #name {
+                        pub const IDENTIFIER: &'static str = #identifier;
+                    }
+
+                });
+
+                let builder = if dt.is_type() {
+                    params_builder.generate_builder()
+                } else {
+                    TokenStream::default()
+                };
+
+                (stream, builder)
+            }
         };
+
         if dt.is_deprecated() {
             (quote! { #[deprecated] #def }, builder)
         } else {
@@ -489,21 +719,20 @@ impl Generator {
         }
     }
 
-    /// Generates the struct definitions including enum definitions inner
-    /// parameter enums.
-    /// Returns `(definition, builder)`.
+    /// Generates the struct definition including inner parameter enums.
+    /// Returns `(definition_tokens, builder)` — caller decides how to use the builder.
     fn generate_struct<'a, T>(
         &mut self,
         module: &Module,
         dt: &ModuleDatatype,
         struct_ident: String,
         params: T,
-    ) -> (TokenStream, TokenStream)
+        current_protocol: &str,
+    ) -> (TokenStream, Builder)
     where
         T: Iterator<Item = &'a Param<'a>> + 'a,
     {
         let name = format_ident!("{}", struct_ident);
-        // also generate enums for inner enums
         let mut enum_definitions = TokenStream::default();
         let mut builder = Builder::new(name.clone());
 
@@ -522,14 +751,13 @@ impl Generator {
             let field_name = format_ident!("{}", generate_field_name(param.name.as_ref()));
 
             let ty =
-                self.generate_field_type(module, dt.name(), param.name.as_ref(), &param.r#type);
+                self.generate_field_type(module, dt.name(), param.name.as_ref(), &param.r#type, current_protocol);
 
-            // check if the type of the param points to an enum
-            let is_enum = if let Type::Ref(name) = &param.r#type {
-                self.enums.contains(name.as_ref())
+            let is_enum = if let Type::Ref(type_ref) = &param.r#type {
+                self.enums.contains(type_ref.name.as_ref())
                     || self
                         .enums
-                        .contains(&format!("{}.{}", module.name, name.as_ref()))
+                        .contains(&format!("{}.{}", module.name, type_ref.name.as_ref()))
             } else {
                 param.r#type.is_enum()
             };
@@ -552,13 +780,12 @@ impl Generator {
         self.apply_struct_fixup(&mut builder, dt);
 
         let derives = if !builder.has_mandatory_types() {
-            quote! { #[derive(Debug, Clone, PartialEq, Default)]}
+            quote! { #[derive(Debug, Clone, PartialEq, Default)] }
         } else {
-            quote! {#[derive(Debug, Clone, PartialEq)] }
+            quote! { #[derive(Debug, Clone, PartialEq)] }
         };
 
         let serde_derives = self.serde_support.generate_derives();
-
         let desc = dt.type_description_tokens(module.name.as_ref());
 
         let mut stream = quote! {
@@ -569,14 +796,13 @@ impl Generator {
 
         if builder.fields.is_empty() {
             if let ModuleDatatype::Type(tydef) = dt {
-                // create wrapper types if no fields present
                 let wrapped_ty =
-                    self.generate_field_type(module, dt.name(), dt.name(), &tydef.extends);
+                    self.generate_field_type(module, dt.name(), dt.name(), &tydef.extends, current_protocol);
+
                 let struct_def = quote! {
-                    pub struct #name( #wrapped_ty);
+                    pub struct #name(#wrapped_ty);
 
                     impl #name {
-
                         pub fn new(val: impl Into<#wrapped_ty>) -> Self {
                             #name(val.into())
                         }
@@ -587,14 +813,12 @@ impl Generator {
                     }
                 };
 
-                // add Hash +  Eq for integer and string types
                 if tydef.extends.is_integer() {
                     stream.extend(quote! {
                         #[derive(Eq, Copy, Hash)]
                         #struct_def
                     });
                 } else if tydef.extends.is_string() {
-                    // add string helpers
                     stream.extend(quote! {
                         #[derive(Eq, Hash)]
                         #struct_def
@@ -617,7 +841,7 @@ impl Generator {
                             }
                         }
                     });
-                    // Fixup specifically types used as keys
+
                     if struct_ident.ends_with("Id") {
                         stream.extend(quote! {
                             impl std::borrow::Borrow<str> for #name {
@@ -639,25 +863,19 @@ impl Generator {
             let struct_def = builder.generate_struct_def();
             stream.extend(quote! {
                 #struct_def
+
                 #enum_definitions
             });
 
             if dt.is_command() || dt.is_type() {
                 stream.extend(builder.generate_constructors());
             }
-
-            let builder_tokens = if dt.is_command() || dt.is_type() {
-                builder.generate_builder()
-            } else {
-                TokenStream::default()
-            };
-
-            return (stream, builder_tokens);
         }
-        (stream, TokenStream::default())
+
+        (stream, builder)
     }
 
-    /// Generate enum type with `as_str` and `FromStr` methods
+    /// Generate enum type definition
     fn generate_enum(&mut self, ident: &Variant, variants: &[Variant]) -> TokenStream {
         let enum_name = ident
             .name
@@ -683,42 +901,13 @@ impl Generator {
 
         let attr = self.serde_support.generate_derives();
 
-        let ty_def = quote! {
+        quote! {
             #desc
             #[derive(Debug, Clone, PartialEq, Eq, Hash)]
             #attr
             pub enum #name {
                 #(#vars),*
             }
-        };
-
-        // from str to string impl
-        let vars: Vec<_> = variants
-            .iter()
-            .map(|s| format_ident!("{}", generate_enum_field_name(&s.name)))
-            .collect();
-
-        let str_values: Vec<_> = variants
-            .iter()
-            .map(|s| {
-                let mut vars = vec![s.name.to_string()];
-                let lc = s.name.to_lowercase();
-                let cc = generate_enum_field_name(&s.name);
-                if cc != lc && vars[0] != cc {
-                    vars.push(cc);
-                }
-                if vars[0] != lc {
-                    vars.push(lc);
-                }
-                vars
-            })
-            .collect();
-
-        let str_fns = generate_enum_str_fns(&name, &vars, &str_values);
-
-        quote! {
-            #ty_def
-            #str_fns
         }
     }
 
@@ -729,6 +918,7 @@ impl Generator {
         parent: &str,
         param_name: &str,
         ty: &Type,
+        current_protocol: &str,
     ) -> FieldType {
         match ty {
             Type::Integer => FieldType::new(quote! {
@@ -751,23 +941,23 @@ impl Generator {
             }
             Type::ArrayOf(ty) => {
                 // recursive types don't need to be boxed in vec
-                let ty = if let Type::Ref(name) = ty.deref() {
-                    self.projected_type(module, name)
+                let ty = if let Type::Ref(type_ref) = ty.deref() {
+                    self.projected_type(module, type_ref, current_protocol)
                 } else {
-                    let ty = self.generate_field_type(module, parent, param_name, ty);
+                    let ty = self.generate_field_type(module, parent, param_name, ty, current_protocol);
                     quote! {#ty}
                 };
                 FieldType::new_vec(ty)
             }
-            Type::Ref(name) => {
+            Type::Ref(type_ref) => {
                 // consider recursive types
-                if name == parent {
-                    let ident = format_ident!("{}", name.to_upper_camel_case());
+                if type_ref.name == parent && type_ref.module.is_none() {
+                    let ident = format_ident!("{}", type_ref.name.to_upper_camel_case());
                     FieldType::new_box(quote! {
                        #ident
                     })
                 } else {
-                    FieldType::new(self.projected_type(module, name))
+                    FieldType::new(self.projected_type(module, type_ref, current_protocol))
                 }
             }
         }
@@ -778,45 +968,33 @@ impl Generator {
     ///
     /// In order to resolve cross protocol references a module check is necessary.
     /// If the referenced module is defined in another protocol than the `module`'s
-    /// protocol, we need to move up an additional level (`super::super`)
-    fn projected_type(&self, _module: &Module, name: &str) -> TokenStream {
-        let mut iter = name.rsplitn(2, '.');
-        let ty_name = iter.next().unwrap();
-        let _path = iter.collect::<String>();
-        let ident = format_ident!("{}", ty_name.to_upper_camel_case());
-        quote! {
-            #ident
-        }
-    }
-}
+    /// protocol, we need to move up an additional level (`super::super::super`)
+    fn projected_type(&self, module: &Module, type_ref: &TypeRef, current_protocol: &str) -> TokenStream {
+        let ident = format_ident!("{}", type_ref.name.to_upper_camel_case());
 
-fn generate_enum_str_fns(name: &Ident, vars: &[Ident], str_vals: &[Vec<String>]) -> TokenStream {
-    assert_eq!(vars.len(), str_vals.len());
-    let mut from_str_stream = TokenStream::default();
-    let mut as_str_idents = Vec::new();
-    for (var, strs) in vars.iter().zip(str_vals.iter()) {
-        from_str_stream.extend(quote! {
-                #(#strs)|* => Ok(#name::#var),
-        });
-        as_str_idents.push(&strs[0]);
-    }
-
-    quote! {
-        impl AsRef<str> for #name {
-            fn as_ref(&self) -> &str {
-                match self {
-                    #( #name::#vars => #as_str_idents ),*
-                }
+        match &type_ref.module {
+            None => {
+                // Local ref — bare ident
+                quote! { #ident }
             }
-        }
-
-        impl ::std::str::FromStr for #name {
-            type Err = String;
-
-            fn from_str(s: &str) -> Result<Self, Self::Err> {
-                match s {
-                    #from_str_stream
-                    _=> Err(s.to_string())
+            Some(ref_module) if ref_module.as_ref() == module.name.as_ref() => {
+                // Same module — bare ident
+                quote! { #ident }
+            }
+            Some(ref_module) => {
+                let ref_module_snake = format_ident!("{}", ref_module.to_snake_case());
+                // Check if the referenced module is in the same protocol
+                let ref_protocol = self.module_protocol_map.get(ref_module.as_ref());
+                if ref_protocol.map(|p| p.as_str()) == Some(current_protocol) {
+                    // Same protocol: super (to leave current file) -> super (to leave current module dir) -> target_module -> TypeName
+                    quote! { super::super::#ref_module_snake::#ident }
+                } else if let Some(ref_proto) = ref_protocol {
+                    // Different protocol
+                    let proto_ident = format_ident!("{}", ref_proto);
+                    quote! { super::super::super::#proto_ident::#ref_module_snake::#ident }
+                } else {
+                    // Unknown module — fall back to bare ident
+                    quote! { #ident }
                 }
             }
         }

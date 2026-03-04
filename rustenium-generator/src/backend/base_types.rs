@@ -1,68 +1,63 @@
-#[cfg(feature = "serde0")]
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 use std::borrow::Cow;
 
 use crate::backend::types::ModuleDatatype;
 
-#[cfg_attr(feature = "serde0", derive(Serialize, Deserialize))]
-#[derive(Clone, Debug, Default, PartialEq, Eq)]
+#[derive(Clone, Debug, Default, PartialEq, Eq, Serialize)]
 pub struct Protocol<'a> {
     pub name: Option<&'a str>,
-    #[cfg_attr(feature = "serde0", serde(skip_serializing))]
+    #[serde(skip_serializing)]
     pub description: Option<Cow<'a, str>>,
     pub version: Version,
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Vec::is_empty"))]
+    #[serde(skip_serializing_if = "Vec::is_empty")]
     pub modules: Vec<Module<'a>>,
 }
 
-#[cfg_attr(feature = "serde0", derive(Serialize, Deserialize))]
-#[derive(Clone, Debug, Default, PartialEq, Eq)]
+#[derive(Clone, Debug, Default, PartialEq, Eq, Serialize)]
 pub struct Version {
-    #[cfg_attr(feature = "serde0", serde(serialize_with = "ser::serialize_usize"))]
+    #[serde(serialize_with = "super::ser::serialize_usize")]
     pub major: usize,
-    #[cfg_attr(feature = "serde0", serde(serialize_with = "ser::serialize_usize"))]
+    #[serde(serialize_with = "super::ser::serialize_usize")]
     pub minor: usize,
 }
 
 
 // Module(BiDi) & Domain(CDP) are use introspectively
-#[cfg_attr(feature = "serde0", derive(Serialize, Deserialize))]
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize)]
 pub struct Module<'a> {
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Option::is_none"))]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<Cow<'a, str>>,
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "ser::is_false"))]
+    #[serde(skip_serializing_if = "super::ser::is_false")]
     pub experimental: bool,
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "ser::is_false"))]
+    #[serde(skip_serializing_if = "super::ser::is_false")]
     pub deprecated: bool,
-    #[cfg_attr(feature = "serde0", serde(rename = "domain"))]
+    #[serde(rename = "domain")]
     pub name: Cow<'a, str>,
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Vec::is_empty"))]
+    #[serde(skip_serializing_if = "Vec::is_empty")]
     pub dependencies: Vec<Cow<'a, str>>,
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Vec::is_empty"))]
+    #[serde(skip_serializing_if = "Vec::is_empty")]
     pub types: Vec<TypeDef<'a>>,
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Vec::is_empty"))]
+    #[serde(skip_serializing_if = "Vec::is_empty")]
     pub commands: Vec<Command<'a>>,
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Vec::is_empty"))]
+    #[serde(skip_serializing_if = "Vec::is_empty")]
     pub command_results: Vec<CommandResult<'a>>,
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Vec::is_empty"))]
+    #[serde(skip_serializing_if = "Vec::is_empty")]
     pub events: Vec<Event<'a>>,
 }
 
-#[cfg_attr(feature = "serde0", derive(Serialize, Deserialize))]
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize)]
 pub struct TypeDef<'a> {
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Option::is_none"))]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<Cow<'a, str>>,
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "ser::is_false"))]
+    #[serde(skip_serializing_if = "super::ser::is_false")]
     pub experimental: bool,
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "ser::is_false"))]
+    #[serde(skip_serializing_if = "super::ser::is_false")]
     pub deprecated: bool,
     pub name: Cow<'a, str>,
-    #[cfg_attr(feature = "serde0", serde(flatten))]
+    #[serde(flatten)]
     pub extends: Type<'a>,
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Vec::is_empty"))]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<Item<'a>>,
     // RawType is the raw type.
     pub raw_name: Cow<'a, str>,
@@ -76,16 +71,23 @@ impl<'a> TypeDef<'a> {
     }
 }
 
-#[cfg_attr(feature = "serde0", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "serde0", serde(rename_all = "lowercase"))]
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "lowercase")]
 pub enum Item<'a> {
-    #[cfg_attr(feature = "serde0", serde(serialize_with = "ser::serialize_enum"))]
+    #[serde(serialize_with = "super::ser::serialize_enum")]
     Enum(Vec<Variant<'a>>),
     Properties(Vec<Param<'a>>),
 }
 
-#[cfg_attr(feature = "serde0", derive(Deserialize))]
+/// A structured reference to a type, possibly in another module.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct TypeRef<'a> {
+    /// The referenced module name, if cross-module (e.g., "Runtime")
+    pub module: Option<Cow<'a, str>>,
+    /// The type name (e.g., "ScriptId")
+    pub name: Cow<'a, str>,
+}
+
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Type<'a> {
     Integer,
@@ -97,7 +99,7 @@ pub enum Type<'a> {
     Binary,
     Enum(Vec<Variant<'a>>),
     ArrayOf(Box<Type<'a>>),
-    Ref(Cow<'a, str>),
+    Ref(TypeRef<'a>),
 }
 
 impl Type<'_> {
@@ -114,7 +116,19 @@ impl Type<'_> {
                 "object" => Type::Object,
                 "any" => Type::Any,
                 "binary" => Type::Binary,
-                _ => Type::Ref(Cow::Borrowed(ty)),
+                _ => {
+                    if let Some((module, name)) = ty.split_once('.') {
+                        Type::Ref(TypeRef {
+                            module: Some(Cow::Borrowed(module)),
+                            name: Cow::Borrowed(name),
+                        })
+                    } else {
+                        Type::Ref(TypeRef {
+                            module: None,
+                            name: Cow::Borrowed(ty),
+                        })
+                    }
+                }
             }
         }
     }
@@ -132,10 +146,9 @@ impl Type<'_> {
     }
 }
 
-#[cfg_attr(feature = "serde0", derive(Serialize, Deserialize))]
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize)]
 pub struct Variant<'a> {
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Option::is_none"))]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<Cow<'a, str>>,
     pub name: Cow<'a, str>,
 }
@@ -156,18 +169,17 @@ impl<'a> Variant<'a> {
     }
 }
 
-#[cfg_attr(feature = "serde0", derive(Serialize, Deserialize))]
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize)]
 pub struct Param<'a> {
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Option::is_none"))]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<Cow<'a, str>>,
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "ser::is_false"))]
+    #[serde(skip_serializing_if = "super::ser::is_false")]
     pub experimental: bool,
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "ser::is_false"))]
+    #[serde(skip_serializing_if = "super::ser::is_false")]
     pub deprecated: bool,
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "ser::is_false"))]
+    #[serde(skip_serializing_if = "super::ser::is_false")]
     pub optional: bool,
-    #[cfg_attr(feature = "serde0", serde(flatten))]
+    #[serde(flatten)]
     pub r#type: Type<'a>,
     pub name: Cow<'a, str>,
     // RawType is the raw type.
@@ -176,50 +188,51 @@ pub struct Param<'a> {
     pub is_circular_dep: bool,
 }
 
-#[cfg_attr(feature = "serde0", derive(Serialize, Deserialize))]
-#[derive(Clone, Debug, PartialEq, Eq)]
-pub struct Command<'a> {
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Option::is_none"))]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize)]
+pub struct CommandMethod<'a> {
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<Cow<'a, str>>,
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "ser::is_false"))]
+    #[serde(skip_serializing_if = "super::ser::is_false")]
     pub experimental: bool,
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "ser::is_false"))]
+    #[serde(skip_serializing_if = "super::ser::is_false")]
     pub deprecated: bool,
     pub name: Cow<'a, str>,
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Option::is_none"))]
-    #[cfg_attr(feature = "serde0", serde(serialize_with = "ser::serialize_redirect"))]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(serialize_with = "super::ser::serialize_redirect")]
     pub redirect: Option<Redirect<'a>>,
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Vec::is_empty"))]
-    pub parameters: Vec<Param<'a>>,
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Vec::is_empty"))]
-    pub returns: Vec<&'a str>,
-    // RawType is the raw type.
+    /// The protocol method identifier, e.g. "Runtime.evaluate"
     pub raw_name: Cow<'a, str>,
-    // is_circular_dep indicates a type that causes circular dependencies.
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, Serialize)]
+pub struct Command<'a> {
+    pub method: CommandMethod<'a>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub params: Vec<Param<'a>>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub returns: Vec<&'a str>,
     pub is_circular_dep: bool,
 }
-#[cfg_attr(feature = "serde0", derive(Serialize, Deserialize))]
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize)]
 pub struct CommandResult<'a> {
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Option::is_none"))]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<Cow<'a, str>>,
     pub name: Cow<'a, str>,
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Vec::is_empty"))]
+    #[serde(skip_serializing_if = "Vec::is_empty")]
     pub parameters: Vec<Param<'a>>,
     // RawType is the raw type.
     pub raw_name: Cow<'a, str>,
 }
-#[cfg_attr(feature = "serde0", derive(Serialize, Deserialize))]
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize)]
 pub struct Event<'a> {
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Option::is_none"))]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<Cow<'a, str>>,
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "ser::is_false"))]
+    #[serde(skip_serializing_if = "super::ser::is_false")]
     pub experimental: bool,
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "ser::is_false"))]
+    #[serde(skip_serializing_if = "super::ser::is_false")]
     pub deprecated: bool,
     pub name: Cow<'a, str>,
-    #[cfg_attr(feature = "serde0", serde(skip_serializing_if = "Vec::is_empty"))]
+    #[serde(skip_serializing_if = "Vec::is_empty")]
     pub parameters: Vec<Param<'a>>,
     // RawType is the raw type.
     pub raw_name: Cow<'a, str>,
@@ -227,8 +240,7 @@ pub struct Event<'a> {
     pub is_circular_dep: bool,
 }
 
-#[cfg_attr(feature = "serde0", derive(Serialize, Deserialize))]
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize)]
 pub struct Redirect<'a> {
     pub description: Option<Cow<'a, str>>,
     pub module: Cow<'a, str>,
