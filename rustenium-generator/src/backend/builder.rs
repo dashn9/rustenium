@@ -38,7 +38,9 @@ impl Builder {
         }
     }
 
-    pub fn generate_impl(&self) -> TokenStream {
+    /// Generates `new()` constructor and `From<String>` impl.
+    /// Stays with the struct definition file.
+    pub fn generate_constructors(&self) -> TokenStream {
         let mut stream = TokenStream::default();
         if self.fields.is_empty() {
             return stream;
@@ -69,7 +71,7 @@ impl Builder {
             }
         }
 
-        // clippy allows up to 7 arguments: https://rust-lang.github.io/rust-clippy/master/#too_many_arguments
+        // clippy allows up to 7 arguments
         // But let's limit this to 4, because a builder will also be implemented
         if !mandatory_param_name.is_empty() && mandatory_param_name.len() <= 4 {
             stream.extend(quote! {
@@ -84,8 +86,7 @@ impl Builder {
             })
         }
 
-        // impl From<String> for types that only have a single mandatory field of type
-        // string
+        // impl From<String> for types that only have a single mandatory field of type string
         if mandatory_param_name.len() == 1 {
             let f = self.mandatory().next().unwrap();
             if !f.ty.is_vec && f.ty.ty.to_string() == "String" {
@@ -99,14 +100,23 @@ impl Builder {
             }
         }
 
-        // NOTE: we generate a builder for every type bc. struct initialization may be
-        // broken by ex/inlcuding deprecated or experimental types
-        // if self.fields.len() < 4 {
-        //     // don't create builder for structs with less than `4` fields
-        //     return stream;
-        // }
+        stream
+    }
 
+    /// Generates the builder struct, setters, build fn, and the `builder()` method.
+    /// Goes into a separate builder file.
+    pub fn generate_builder(&self) -> TokenStream {
+        if self.fields.is_empty() {
+            return TokenStream::default();
+        }
+
+        let name = &self.name;
         let builder = format_ident!("{}Builder", self.name);
+
+        let mut mandatory_param_name = vec![];
+        for field in self.mandatory() {
+            mandatory_param_name.push(&field.name_ident);
+        }
 
         let mut setters = TokenStream::default();
         let mut names = vec![];
@@ -140,7 +150,6 @@ impl Builder {
                     (format_ident!("{}s", s), field_name.clone())
                 };
 
-                // create from iterator
                 setters.extend(
                   quote! {
                      pub fn #single_setter_name(mut self, #single_setter_name: impl Into<#ty>) -> Self {
@@ -215,7 +224,7 @@ impl Builder {
             }
         };
 
-        stream.extend(quote! {
+        quote! {
                impl #name {
                     pub fn builder() -> #builder {
                         #builder::default()
@@ -231,8 +240,6 @@ impl Builder {
                     #setters
                     #build_fn
                }
-        });
-
-        stream
+        }
     }
 }

@@ -79,6 +79,16 @@ impl Default for Generator {
     }
 }
 
+/// The token streams generated for a single protocol module, one per output file.
+pub struct ModuleParts {
+    pub types: TokenStream,
+    pub commands: TokenStream,
+    pub command_builders: TokenStream,
+    pub type_builders: TokenStream,
+    pub results: TokenStream,
+    pub events: TokenStream,
+}
+
 impl Generator {
     /// Configures the output directory where generated Rust files will be
     /// written.
@@ -185,12 +195,43 @@ impl Generator {
 
             for module in &modules_to_process {
                 let mod_name = module.name.to_snake_case();
-                let module_code = self.generate_module(module);
-                let file_content = module_code.to_string();
+                let parts = self.generate_module_files(module);
 
-                let file_path = protocol_dir.join(format!("{}.rs", mod_name));
-                fs::write(&file_path, file_content)
-                    .unwrap_or_else(|e| panic!("Unable to write {}: {}", file_path.display(), e));
+                let module_dir = protocol_dir.join(&mod_name);
+                fs::create_dir_all(&module_dir)
+                    .unwrap_or_else(|e| panic!("Unable to create directory {}: {}", module_dir.display(), e));
+
+                // Write each part file, skipping empty ones
+                let mut sub_mods = Vec::new();
+                for (file_name, content) in [
+                    ("types", parts.types),
+                    ("commands", parts.commands),
+                    ("command_builders", parts.command_builders),
+                    ("type_builders", parts.type_builders),
+                    ("results", parts.results),
+                    ("events", parts.events),
+                ] {
+                    if !content.is_empty() {
+                        let file_path = module_dir.join(format!("{file_name}.rs"));
+                        fs::write(&file_path, content.to_string())
+                            .unwrap_or_else(|e| panic!("Unable to write {}: {}", file_path.display(), e));
+                        sub_mods.push(file_name);
+                    }
+                }
+
+                // Write module mod.rs with sub-module declarations
+                let sub_mod_decls: Vec<_> = sub_mods.iter().map(|name| {
+                    let mod_ident = format_ident!("{}", name);
+                    quote! {
+                        pub mod #mod_ident;
+                        pub use #mod_ident::*;
+                    }
+                }).collect();
+
+                let module_mod_content = quote! { #(#sub_mod_decls)* };
+                let module_mod_path = module_dir.join("mod.rs");
+                fs::write(&module_mod_path, module_mod_content.to_string())
+                    .unwrap_or_else(|e| panic!("Unable to write {}: {}", module_mod_path.display(), e));
 
                 module_names.push(mod_name);
                 filtered_modules.push(module);
@@ -245,11 +286,18 @@ impl Generator {
         Ok(())
     }
 
-    /// Generates all types are not circular for a single module
-    pub fn generate_module(&mut self, module: &Module) -> TokenStream {
-        let mut stream = self.serde_support.generate_serde_imports();
+    /// Generates the separate token streams for a module, one per output file.
+    pub fn generate_module_files(&mut self, module: &Module) -> ModuleParts {
+        let serde_imports = self.serde_support.generate_serde_imports();
         let with_deprecated = self.with_deprecated;
         let with_experimental = self.with_experimental;
+
+        let mut types_stream = TokenStream::default();
+        let mut commands_stream = TokenStream::default();
+        let mut command_builders_stream = TokenStream::default();
+        let mut type_builders_stream = TokenStream::default();
+        let mut events_stream = TokenStream::default();
+        let mut results_stream = TokenStream::default();
 
         let allowed = &self.allowed_deprecated_type;
         let datatypes: Vec<_> = module
@@ -262,8 +310,20 @@ impl Generator {
             .filter(|dt| with_experimental || !dt.is_experimental())
             .collect();
 
-        for ty in datatypes {
-            stream.extend(self.generate_type(module, ty));
+        for dt in datatypes {
+            let is_type = dt.is_type();
+            let is_command = dt.is_command();
+
+            let (def, builder_tokens) = self.generate_type(module, &dt);
+            if is_type {
+                types_stream.extend(def);
+                type_builders_stream.extend(builder_tokens);
+            } else if is_command {
+                commands_stream.extend(def);
+                command_builders_stream.extend(builder_tokens);
+            } else {
+                events_stream.extend(def);
+            }
         }
 
         // Generate CommandResult (FooReturns) structs
@@ -273,8 +333,6 @@ impl Generator {
                 .filter(|p| with_deprecated || !p.deprecated)
                 .filter(|p| with_experimental || !p.experimental);
 
-            // Use a temporary ModuleDatatype::Type wrapper just to satisfy generate_struct's signature
-            // We create a minimal TypeDef for the purpose
             let name = format_ident!("{}", returns_name);
             let serde_derives = self.serde_support.generate_derives();
             let derives = quote! { #[derive(Debug, Clone, PartialEq, Default)] };
@@ -287,7 +345,7 @@ impl Generator {
                         description: param.description.as_deref().map(Cow::Borrowed),
                         name: Cow::Owned(subenum_name(cr.name.as_ref(), param.name.as_ref())),
                     };
-                    stream.extend(self.generate_enum(&enum_ident, vars));
+                    results_stream.extend(self.generate_enum(&enum_ident, vars));
                 }
 
                 let field_name = format_ident!("{}", generate_field_name(param.name.as_ref()));
@@ -314,14 +372,14 @@ impl Generator {
             }
 
             if builder.fields.is_empty() {
-                stream.extend(quote! {
+                results_stream.extend(quote! {
                     #derives
                     #serde_derives
                     pub struct #name {}
                 });
             } else {
                 let struct_def = builder.generate_struct_def();
-                stream.extend(quote! {
+                results_stream.extend(quote! {
                     #derives
                     #serde_derives
                     #struct_def
@@ -329,14 +387,48 @@ impl Generator {
             }
         }
 
-        stream
+        // Append module-level Event enum to events stream
+        let module_event_enum = event::generate_module_event_enum(
+            module,
+            with_deprecated,
+            with_experimental,
+        );
+        events_stream.extend(module_event_enum);
+
+        // Prepend serde imports to non-empty streams
+        let wrap = |stream: TokenStream| -> TokenStream {
+            if stream.is_empty() {
+                stream
+            } else {
+                let imports = serde_imports.clone();
+                quote! { #imports #stream }
+            }
+        };
+
+        // Builder files need `use super::*;` to access sibling module types
+        let wrap_builder = |stream: TokenStream| -> TokenStream {
+            if stream.is_empty() {
+                stream
+            } else {
+                quote! { use super::*; #stream }
+            }
+        };
+
+        ModuleParts {
+            types: wrap(types_stream),
+            commands: wrap(commands_stream),
+            command_builders: wrap_builder(command_builders_stream),
+            type_builders: wrap_builder(type_builders_stream),
+            results: wrap(results_stream),
+            events: wrap(events_stream),
+        }
     }
 
-    /// Generates all rust types for a PDL `ModuleDatatype` (Command, Event,
-    /// Type)
-    fn generate_type(&mut self, module: &Module, dt: ModuleDatatype) -> TokenStream {
-        let stream = if let Some(vars) = dt.as_enum() {
-            self.generate_enum(&&Variant::from(&dt), vars)
+    /// Generated output for a single datatype (command, event, or type).
+    /// Returns `(definition, builder)` — the builder may be empty.
+    fn generate_type(&mut self, module: &Module, dt: &ModuleDatatype) -> (TokenStream, TokenStream) {
+        let (def, builder) = if let Some(vars) = dt.as_enum() {
+            (self.generate_enum(&&Variant::from(dt), vars), TokenStream::default())
         } else {
             let with_deprecated = self.with_deprecated;
             let with_experimental = self.with_experimental;
@@ -345,7 +437,7 @@ impl Generator {
                 .filter(|dt| with_deprecated || !dt.deprecated)
                 .filter(|dt| with_experimental || !dt.experimental);
 
-            let mut stream = self.generate_struct(module, &dt, dt.ident_name(), params);
+            let (mut stream, builder) = self.generate_struct(module, dt, dt.ident_name(), params);
             let identifier = dt.raw_name();
             let name = format_ident!("{}", dt.ident_name());
             stream.extend(quote! {
@@ -353,42 +445,12 @@ impl Generator {
                   pub const IDENTIFIER : &'static str = #identifier;
               }
             });
-            if !dt.is_type() {
-                stream.extend(quote! {
-                    impl chromiumoxide_types::Method for #name {
-
-                        fn identifier(&self) -> chromiumoxide_types::MethodId {
-                            Self::IDENTIFIER.into()
-                        }
-                    }
-
-                    impl chromiumoxide_types::MethodType for #name {
-
-                        fn method_id() -> chromiumoxide_types::MethodId where Self: Sized {
-                            Self::IDENTIFIER.into()
-                        }
-                    }
-                });
-            }
-
-            if let ModuleDatatype::Command(_cmd) = dt {
-                // impl `Command` trait
-                let response = format_ident!("{}Returns", dt.name().to_upper_camel_case());
-                stream.extend(quote! {
-                    impl chromiumoxide_types::Command for #name {
-                        type Response = #response;
-                    }
-                });
-            }
-            stream
+            (stream, builder)
         };
         if dt.is_deprecated() {
-            quote! {
-                #[deprecated]
-                #stream
-            }
+            (quote! { #[deprecated] #def }, builder)
         } else {
-            stream
+            (def, builder)
         }
     }
 
@@ -428,14 +490,15 @@ impl Generator {
     }
 
     /// Generates the struct definitions including enum definitions inner
-    /// parameter enums
+    /// parameter enums.
+    /// Returns `(definition, builder)`.
     fn generate_struct<'a, T>(
         &mut self,
         module: &Module,
         dt: &ModuleDatatype,
         struct_ident: String,
         params: T,
-    ) -> TokenStream
+    ) -> (TokenStream, TokenStream)
     where
         T: Iterator<Item = &'a Param<'a>> + 'a,
     {
@@ -580,10 +643,18 @@ impl Generator {
             });
 
             if dt.is_command() || dt.is_type() {
-                stream.extend(builder.generate_impl());
+                stream.extend(builder.generate_constructors());
             }
+
+            let builder_tokens = if dt.is_command() || dt.is_type() {
+                builder.generate_builder()
+            } else {
+                TokenStream::default()
+            };
+
+            return (stream, builder_tokens);
         }
-        stream
+        (stream, TokenStream::default())
     }
 
     /// Generate enum type with `as_str` and `FromStr` methods
