@@ -2,299 +2,141 @@ use heck::{ToSnakeCase, ToUpperCamelCase};
 use proc_macro2::{Ident, TokenStream};
 use quote::{format_ident, quote};
 
-use crate::backend::base_types::{Event, Module};
+use crate::backend::base_types::Module;
 
-pub struct EventType<'a> {
-    pub module: &'a Module<'a>,
-    pub inner: &'a Event<'a>,
-}
+/// Builds a protocol-level Event enum for a single protocol's mod.rs.
+///
+/// Generates:
+/// ```ignore
+/// pub enum Event {
+///     Dom(dom::EventDomContentLoaded),
+///     Network(network::EventRequestWillBeSent),
+///     ...
+///     Other(serde_json::Value),
+/// }
+/// ```
+pub fn generate_protocol_event_enum(
+    modules: &[&Module],
+    with_deprecated: bool,
+    with_experimental: bool,
+) -> TokenStream {
+    let mut variants = TokenStream::default();
+    let mut var_idents = Vec::new();
+    let mut mod_idents = Vec::new();
+    let mut ty_idents = Vec::new();
 
-impl<'a> EventType<'a> {
-    fn ty_ident(&self) -> Ident {
-        format_ident!("Event{}", self.inner.name.to_upper_camel_case())
-    }
+    for module in modules {
+        let mod_name = format_ident!("{}", module.name.to_snake_case());
+        for event in module
+            .events
+            .iter()
+            .filter(|ev| with_deprecated || !ev.deprecated)
+            .filter(|ev| with_experimental || !ev.experimental)
+        {
+            let var_ident = format_ident!(
+                "{}{}",
+                module.name.to_upper_camel_case(),
+                event.name.to_upper_camel_case()
+            );
+            let ty_ident = format_ident!("Event{}", event.name.to_upper_camel_case());
 
-    fn var_ident(&self) -> Ident {
-        format_ident!(
-            "{}{}",
-            self.module.name.to_upper_camel_case(),
-            self.inner.name.to_upper_camel_case()
-        )
-    }
-}
-
-pub struct EventBuilder<'a> {
-    events: Vec<EventType<'a>>,
-}
-
-impl<'a> EventBuilder<'a> {
-    pub fn new(events: Vec<EventType<'a>>) -> Self {
-        Self { events }
-    }
-
-    pub fn build(self) -> TokenStream {
-        let mut variants_stream = TokenStream::default();
-        let mut var_idents = Vec::new();
-        let mut deserialize_from_method = TokenStream::default();
-        let mut conversion_impls = TokenStream::default();
-        let mut event_trait_impls = TokenStream::default();
-        let mut consume_event_macro_exprs = TokenStream::default();
-        let mut event_as_boxed_results = TokenStream::default();
-
-        for event in &self.events {
-            let var_ident = event.var_ident();
-
-            let ty_ident = event.ty_ident();
-
-            let deprecated = if event.inner.deprecated {
-                quote! {[deprecated]}
+            let deprecated = if event.deprecated {
+                quote! { #[deprecated] }
             } else {
                 TokenStream::default()
             };
 
-            let domain_mod = format_ident!("{}", event.module.name.to_snake_case());
-
-            // let ty_ident = if event.needs_box {
-            //     quote! {Box<#ty_qualifier>}
-            // } else {
-            //     ty_qualifier.clone()
-            // };
-
-            variants_stream.extend(quote! {
+            variants.extend(quote! {
                 #deprecated
-                #var_ident(#ty_ident),
+                #var_ident(#mod_name::#ty_ident),
             });
 
-            let (variant_match, into_event, consume_event_macro_expr, event_as_boxed_result) =
-                // if event.needs_box {
-                //     (
-                //         quote! {
-                //             CdpEvent::#var_ident(val) => Ok(*val),
-                //         },
-                //         quote! {
-                //             CdpEvent::#var_ident(Box::new(el))
-                //         },
-                //         quote! {
-                //             CdpEvent::#var_ident(event) => {$builtin(*event);}
-                //         },
-                //         quote! {
-                //             CdpEvent::#var_ident(event) => Ok(Box::new(*event)),
-                //         },
-                //     )
-                // } else {
-                    (
-                        quote! {
-                            CdpEvent::#var_ident(val) => Ok(val),
-                        },
-                        quote! {
-                            CdpEvent::#var_ident(el)
-                        },
-                        quote! {
-                            CdpEvent::#var_ident(event) => {$builtin(event);}
-                        },
-                        quote! {
-                            CdpEvent::#var_ident(event) => Ok(Box::new(event)),
-                        },
-                    );
-                // };
-
-            event_as_boxed_results.extend(event_as_boxed_result);
-
-            consume_event_macro_exprs.extend(consume_event_macro_expr);
-
             var_idents.push(var_ident);
+            mod_idents.push(mod_name.clone());
+            ty_idents.push(ty_ident);
+        }
+    }
+
+    if var_idents.is_empty() {
+        return TokenStream::default();
+    }
+
+    quote! {
+        #[derive(Debug, Clone, PartialEq)]
+        pub enum Event {
+            #variants
+            Other(serde_json::Value),
         }
 
-        let event_impl = quote! {
-            #[derive(Debug, PartialEq, Clone)]
-            pub struct CdpEventMessage {
-                /// Name of the method
-                pub method: chromiumoxide_types::MethodId,
-                /// The chromium session Id
-                pub session_id: Option<String>,
-                /// Json params
-                pub params: CdpEvent,
-            }
-            impl chromiumoxide_types::Method for CdpEventMessage {
-                fn identifier(&self) -> chromiumoxide_types::MethodId {
-                   match &self.params {
-                        #(CdpEvent::#var_idents(inner) => inner.identifier(),)*
-                        _=> self.method.clone()
-                    }
-                }
-            }
-            impl chromiumoxide_types::EventMessage for CdpEventMessage {
-                fn session_id(&self) -> Option<&str> {
-                    self.session_id.as_deref()
-                }
+        impl Event {
+            pub fn other(other: serde_json::Value) -> Self {
+                Event::Other(other)
             }
 
-            #[derive(Debug, Clone, PartialEq)]
-            pub enum CdpEvent {
-                #variants_stream
-                Other(serde_json::Value)
-            }
-
-            impl CdpEvent {
-
-                pub fn other(other: serde_json::Value) -> Self {
-                    CdpEvent::Other(other)
-                }
-
-                /// Serializes the event as Json
-                pub fn into_json(self) -> serde_json::Result<serde_json::Value> {
-                    match self {
-                        #(CdpEvent::#var_idents(inner) => serde_json::to_value(inner),)*
-                         CdpEvent::Other(val) => Ok(val)
-                    }
-                }
-
-                pub fn into_event(self) -> ::std::result::Result<Box<dyn super::Event>, serde_json::Value> {
-                    match self {
-                        #event_as_boxed_results
-                        CdpEvent::Other(other) => Err(other)
-                    }
-                }
-
-           }
-           // #event_json serde.generate_event_json_support
-        };
-
-        let deserialize_impl = quote! {
-            use std::fmt;
-            use serde::de::{self, Deserializer, MapAccess, Visitor};
-            impl<'de> Deserialize<'de> for CdpEventMessage {
-                fn deserialize<D>(deserializer: D) -> Result<Self, <D as Deserializer<'de>>::Error>
-                where
-                    D: Deserializer<'de>,
-                {
-                    enum Field {
-                        Method,
-                        Session,
-                        Params,
-                    }
-
-                    impl<'de> Deserialize<'de> for Field {
-                        fn deserialize<D>(deserializer: D) -> Result<Field, D::Error>
-                        where
-                            D: Deserializer<'de>,
-                        {
-                            struct FieldVisitor;
-
-                            impl<'de> Visitor<'de> for FieldVisitor {
-                                type Value = Field;
-
-                                fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-                                    formatter.write_str("`method` or `sessionId` or `params`")
-                                }
-
-                                fn visit_str<E>(self, value: &str) -> Result<Field, E>
-                                where
-                                    E: de::Error,
-                                {
-                                    match value {
-                                        "method" => Ok(Field::Method),
-                                        "sessionId" => Ok(Field::Session),
-                                        "params" => Ok(Field::Params),
-                                        _ => Err(de::Error::unknown_field(value, FIELDS)),
-                                    }
-                                }
-                            }
-
-                            deserializer.deserialize_identifier(FieldVisitor)
-                        }
-                    }
-
-                    struct MessageVisitor;
-
-                    impl<'de> Visitor<'de> for MessageVisitor {
-                        type Value = CdpEventMessage;
-
-                        fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-                            formatter.write_str("struct CdpEventMessage")
-                        }
-
-                        fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-                        where
-                            A: MapAccess<'de>,
-                        {
-                            let mut method = None;
-                            let mut session_id = None;
-                            let mut params = None;
-                            while let Some(key) = map.next_key()? {
-                                match key {
-                                    Field::Method => {
-                                        if method.is_some() {
-                                            return Err(de::Error::duplicate_field("method"));
-                                        }
-                                        method = Some(map.next_value::<String>()?);
-                                    }
-                                    Field::Session => {
-                                        if session_id.is_some() {
-                                            return Err(de::Error::duplicate_field("sessionId"));
-                                        }
-                                        session_id = Some(map.next_value::<String>()?);
-                                    }
-                                    Field::Params => {
-                                        if params.is_some() {
-                                            return Err(de::Error::duplicate_field("params"));
-                                        }
-                                        params = Some(match method.as_ref().ok_or_else(|| de::Error::missing_field("params"))
-                                        ?.as_str() {
-                                            #deserialize_from_method
-                                            _=>CdpEvent::Other(map.next_value::<serde_json::Value>()?)
-                                        });
-                                    }
-                                }
-                            }
-
-                            let method = method.ok_or_else(|| de::Error::missing_field("method"))?;
-                            let params = params.ok_or_else(|| de::Error::missing_field("params"))?;
-                            Ok(CdpEventMessage {
-                                method: ::std::borrow::Cow::Owned(method),
-                                session_id,
-                                params
-                            })
-                        }
-                    }
-                    const FIELDS: &[&str] = &["method", "sessionId", "params"];
-                    deserializer.deserialize_struct("CdpEventMessage", FIELDS, MessageVisitor)
+            pub fn into_json(self) -> serde_json::Result<serde_json::Value> {
+                match self {
+                    #(Event::#var_idents(inner) => serde_json::to_value(inner),)*
+                    Event::Other(val) => Ok(val),
                 }
             }
+        }
+    }
+}
 
-            impl std::convert::TryInto<chromiumoxide_types::CdpJsonEventMessage> for CdpEventMessage {
-                type Error = serde_json::Error;
+/// Builds the top-level Event enum that wraps protocol-level Event enums.
+///
+/// Generates:
+/// ```ignore
+/// pub enum Event {
+///     JsProtocol(js_protocol::Event),
+///     BrowserProtocol(browser_protocol::Event),
+///     Other(serde_json::Value),
+/// }
+/// ```
+pub fn generate_top_event_enum(protocol_names: &[String]) -> TokenStream {
+    let mut variants = TokenStream::default();
+    let mut var_idents = Vec::new();
+    let mut mod_idents = Vec::new();
 
-                fn try_into(self) -> Result<chromiumoxide_types::CdpJsonEventMessage, Self::Error> {
-                    use chromiumoxide_types::Method;
-                    Ok(chromiumoxide_types::CdpJsonEventMessage {
-                        method: self.identifier(),
-                        session_id: self.session_id,
-                        params: self.params.into_json()?
-                    })
-                }
-           }
+    for name in protocol_names {
+        let mod_name = format_ident!("{}", name.to_snake_case());
+        let var_name = format_ident!("{}", name.to_upper_camel_case());
+        variants.extend(quote! {
+            #var_name(#mod_name::Event),
+        });
+        var_idents.push(var_name);
+        mod_idents.push(mod_name);
+    }
 
-        };
+    if var_idents.is_empty() {
+        return TokenStream::default();
+    }
 
-        quote! {
-            #event_impl
-            #deserialize_impl
-            #conversion_impls
-            #event_trait_impls
+    quote! {
+        #[derive(Debug, Clone, PartialEq)]
+        pub enum Event {
+            #variants
+            Other(serde_json::Value),
+        }
 
-            #[macro_export]
-            #[doc(hidden)]
-            macro_rules! consume_event {
-                (match $ev:ident  { $builtin:expr, $custom: expr  }) => {
-                    {
-                        match $ev {
-                           #consume_event_macro_exprs
-                           CdpEvent::Other(json) => {$custom(json);}
-                        }
-                    }
-                };
+        impl Event {
+            pub fn other(other: serde_json::Value) -> Self {
+                Event::Other(other)
             }
+
+            pub fn into_json(self) -> serde_json::Result<serde_json::Value> {
+                match self {
+                    #(Event::#var_idents(inner) => inner.into_json(),)*
+                    Event::Other(val) => Ok(val),
+                }
+            }
+        }
+
+        #[derive(Debug, PartialEq, Clone)]
+        pub struct EventMessage {
+            pub method: String,
+            pub session_id: Option<String>,
+            pub params: Event,
         }
     }
 }

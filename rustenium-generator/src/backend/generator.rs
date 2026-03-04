@@ -1,5 +1,5 @@
 use std::borrow::Cow;
-use std::collections::{HashMap, HashSet, VecDeque};
+use std::collections::HashSet;
 use std::fs;
 use std::io::{self, Error, ErrorKind};
 use std::ops::Deref;
@@ -11,7 +11,7 @@ use quote::{format_ident, quote};
 
 use crate::backend::base_types::{Module, Param, Protocol, Type, Variant};
 use crate::backend::builder::Builder;
-use crate::backend::event::{EventBuilder, EventType};
+use crate::backend::event;
 use crate::backend::types::{FieldDefinition, FieldType, ModuleDatatype};
 
 /// Compile `.protocol` files into Rust files during a Cargo build.
@@ -44,7 +44,7 @@ use crate::backend::types::{FieldDefinition, FieldType, ModuleDatatype};
 ///   Ok(())
 /// }
 /// ```
-pub fn compile_protocols(protocols: &Vec<Protocol>) -> io::Result<()> {
+pub fn compile_protocols(protocols: &[Protocol]) -> io::Result<()> {
     Generator::default().compile_protocols(protocols)
 }
 
@@ -147,7 +147,7 @@ impl Generator {
     ///   Ok(())
     /// }
     /// ```
-    pub fn compile_protocols(&mut self, protocols: &Vec<Protocol>) -> io::Result<()> {
+    pub fn compile_protocols(&mut self, protocols: &[Protocol]) -> io::Result<()> {
         let target_base: PathBuf = self.out_dir.clone().map(Ok).unwrap_or_else(|| {
             std::env::var_os("OUT_DIR")
                 .ok_or_else(|| {
@@ -156,90 +156,179 @@ impl Generator {
                 .map(Into::into)
         })?;
 
-        let mut target = target_base.clone();
-        let mut modules = TokenStream::default();
+        fs::create_dir_all(&target_base)
+            .unwrap_or_else(|e| panic!("Unable to create directory {}: {}", target_base.display(), e));
 
-        for (idx, protocol) in protocols.iter().enumerate() {
-            let types = self.generate_types(&protocol.modules);
+        let mut protocol_names = Vec::new();
+
+        for protocol in protocols.iter() {
             let version = format!("{}.{}", protocol.version.major, protocol.version.minor);
-            if let Some(name) = protocol.name {
-                target = target_base.join(name);
+
+            let protocol_name = protocol.name.unwrap_or("unknown");
+            let protocol_snake = protocol_name.to_snake_case();
+            protocol_names.push(protocol_snake.clone());
+
+            let protocol_dir = target_base.join(&protocol_snake);
+            fs::create_dir_all(&protocol_dir)
+                .unwrap_or_else(|e| panic!("Unable to create directory {}: {}", protocol_dir.display(), e));
+
+            let mut module_names = Vec::new();
+            let mut filtered_modules: Vec<&Module> = Vec::new();
+
+            let with_deprecated = self.with_deprecated;
+            let with_experimental = self.with_experimental;
+            let modules_to_process: Vec<_> = protocol.modules
+                .iter()
+                .filter(|d| with_deprecated || !d.deprecated)
+                .filter(|d| with_experimental || !d.experimental)
+                .collect();
+
+            for module in &modules_to_process {
+                let mod_name = module.name.to_snake_case();
+                let module_code = self.generate_module(module);
+                let file_content = module_code.to_string();
+
+                let file_path = protocol_dir.join(format!("{}.rs", mod_name));
+                fs::write(&file_path, file_content)
+                    .unwrap_or_else(|e| panic!("Unable to write {}: {}", file_path.display(), e));
+
+                module_names.push(mod_name);
+                filtered_modules.push(module);
             }
-            fs::create_dir(&target).unwrap_or_else(|e| panic!("Unable to create directory {}: {}", target.display(), e));
-            let module = quote! {
-                #[allow(clippy::wrong_self_convention)]
-                pub mod s #idx{
-                    /// The version of this protocol definition
-                    pub const VERSION : &str = #version;
-                    #types
-                }
+
+            // Generate protocol-level Event enum
+            let protocol_event_enum = event::generate_protocol_event_enum(
+                &filtered_modules,
+                self.with_deprecated,
+                self.with_experimental,
+            );
+
+            // Write protocol mod.rs
+            let mod_decls: Vec<_> = module_names.iter().map(|name| {
+                let mod_ident = format_ident!("{}", name);
+                quote! { pub mod #mod_ident; }
+            }).collect();
+
+            let protocol_mod_content = quote! {
+                #(#mod_decls)*
+
+                /// The version of this protocol definition
+                pub const VERSION: &str = #version;
+
+                #protocol_event_enum
             };
 
-            modules.extend(module);
+            let protocol_mod_path = protocol_dir.join("mod.rs");
+            fs::write(&protocol_mod_path, protocol_mod_content.to_string())
+                .unwrap_or_else(|e| panic!("Unable to write {}: {}", protocol_mod_path.display(), e));
         }
 
-        let mod_name = self.target_mod.as_deref().unwrap_or("cdp");
-        let events = self.generate_event_enums(&protocols);
-        let imports = self.serde_support.generate_serde_import_deserialize();
+        // Write top-level mod.rs
+        let top_event_enum = event::generate_top_event_enum(&protocol_names);
 
-        let output = target.join(format!("{mod_name}.rs"));
+        let top_mod_decls: Vec<_> = protocol_names.iter().map(|name| {
+            let mod_ident = format_ident!("{}", name);
+            quote! { pub mod #mod_ident; }
+        }).collect();
 
-        fmt(target);
+        let top_mod_content = quote! {
+            #(#top_mod_decls)*
+
+            #top_event_enum
+        };
+
+        let top_mod_path = target_base.join("mod.rs");
+        fs::write(&top_mod_path, top_mod_content.to_string())
+            .unwrap_or_else(|e| panic!("Unable to write {}: {}", top_mod_path.display(), e));
+
+        fmt(&target_base);
         Ok(())
-    }
-
-    /// Generate the types for the modules.
-    fn generate_types(&mut self, modules: &[Module]) -> TokenStream {
-        let mut modules_stream = TokenStream::default();
-        let with_deprecated = self.with_deprecated;
-        let with_experimental = self.with_experimental;
-        for module in modules
-            .iter()
-            .filter(|d| with_deprecated || !d.deprecated)
-            .filter(|d| with_experimental || !d.experimental)
-        {
-            let domain_mod = self.generate_module(module);
-            let mod_name = format_ident!("{}", module.name.to_snake_case());
-
-            let mut desc = if let Some(desc) = module.description.as_ref() {
-                quote! {
-                    #[doc = #desc]
-                }
-            } else {
-                TokenStream::default()
-            };
-
-            if module.deprecated {
-                desc.extend(quote! {#[deprecated]})
-            }
-
-            modules_stream.extend(quote! {
-                #desc
-                pub mod #mod_name {
-                    #domain_mod
-                }
-            });
-        }
-        modules_stream
     }
 
     /// Generates all types are not circular for a single module
     pub fn generate_module(&mut self, module: &Module) -> TokenStream {
         let mut stream = self.serde_support.generate_serde_imports();
-        let allowed_deprecated_type = self.allowed_deprecated_type.clone();
         let with_deprecated = self.with_deprecated;
         let with_experimental = self.with_experimental;
-        stream.extend(
-            module
-                .into_iter()
-                .filter(|dt| {
-                    with_deprecated
-                        || !dt.is_deprecated()
-                        || allowed_deprecated_type.contains(dt.name())
-                })
-                .filter(|dt| with_experimental || !dt.is_experimental())
-                .map(|ty| self.generate_type(module, ty)),
-        );
+
+        let allowed = &self.allowed_deprecated_type;
+        let datatypes: Vec<_> = module
+            .into_iter()
+            .filter(|dt| {
+                with_deprecated
+                    || !dt.is_deprecated()
+                    || allowed.contains(dt.name())
+            })
+            .filter(|dt| with_experimental || !dt.is_experimental())
+            .collect();
+
+        for ty in datatypes {
+            stream.extend(self.generate_type(module, ty));
+        }
+
+        // Generate CommandResult (FooReturns) structs
+        for cr in &module.command_results {
+            let returns_name = format!("{}Returns", cr.name.to_upper_camel_case());
+            let params = cr.parameters.iter()
+                .filter(|p| with_deprecated || !p.deprecated)
+                .filter(|p| with_experimental || !p.experimental);
+
+            // Use a temporary ModuleDatatype::Type wrapper just to satisfy generate_struct's signature
+            // We create a minimal TypeDef for the purpose
+            let name = format_ident!("{}", returns_name);
+            let serde_derives = self.serde_support.generate_derives();
+            let derives = quote! { #[derive(Debug, Clone, PartialEq, Default)] };
+
+            let mut builder = Builder::new(name.clone());
+
+            for param in params {
+                if let Type::Enum(vars) = &param.r#type {
+                    let enum_ident = Variant {
+                        description: param.description.as_deref().map(Cow::Borrowed),
+                        name: Cow::Owned(subenum_name(cr.name.as_ref(), param.name.as_ref())),
+                    };
+                    stream.extend(self.generate_enum(&enum_ident, vars));
+                }
+
+                let field_name = format_ident!("{}", generate_field_name(param.name.as_ref()));
+                let ty = self.generate_field_type(module, cr.name.as_ref(), param.name.as_ref(), &param.r#type);
+
+                let is_enum = if let Type::Ref(ref_name) = &param.r#type {
+                    self.enums.contains(ref_name.as_ref())
+                        || self.enums.contains(&format!("{}.{}", module.name, ref_name.as_ref()))
+                } else {
+                    param.r#type.is_enum()
+                };
+
+                let field = FieldDefinition {
+                    name: param.name.to_string(),
+                    name_ident: field_name,
+                    ty,
+                    optional: param.optional,
+                    deprecated: param.deprecated,
+                    is_enum,
+                    serde_skip: false,
+                };
+
+                builder.fields.push((field.generate_meta(&self.serde_support, param), field));
+            }
+
+            if builder.fields.is_empty() {
+                stream.extend(quote! {
+                    #derives
+                    #serde_derives
+                    pub struct #name {}
+                });
+            } else {
+                let struct_def = builder.generate_struct_def();
+                stream.extend(quote! {
+                    #derives
+                    #serde_derives
+                    #struct_def
+                });
+            }
+        }
+
         stream
     }
 
@@ -282,23 +371,7 @@ impl Generator {
                 });
             }
 
-            if let ModuleDatatype::Command(cmd) = dt {
-                let returns_name = format!("{}Returns", cmd.name.to_upper_camel_case());
-                let with_deprecated = self.with_deprecated;
-                let with_experimental = self.with_experimental;
-
-                // stream.extend(
-                //     self.generate_struct(
-                //         module,
-                //         &dt,
-                //         returns_name,
-                //         cmd.returns
-                //             .iter()
-                //             .filter(|p| with_deprecated || !p.is_deprecated())
-                //             .filter(|p| with_experimental || !p.is_experimental()),
-                //     ),
-                // );
-
+            if let ModuleDatatype::Command(_cmd) = dt {
                 // impl `Command` trait
                 let response = format_ident!("{}Returns", dt.name().to_upper_camel_case());
                 stream.extend(quote! {
@@ -385,7 +458,7 @@ impl Generator {
 
             let field_name = format_ident!("{}", generate_field_name(param.name.as_ref()));
 
-            let (ty) =
+            let ty =
                 self.generate_field_type(module, dt.name(), param.name.as_ref(), &param.r#type);
 
             // check if the type of the param points to an enum
@@ -635,45 +708,14 @@ impl Generator {
     /// In order to resolve cross protocol references a module check is necessary.
     /// If the referenced module is defined in another protocol than the `module`'s
     /// protocol, we need to move up an additional level (`super::super`)
-    fn projected_type(&self, module: &Module, name: &str) -> TokenStream {
+    fn projected_type(&self, _module: &Module, name: &str) -> TokenStream {
         let mut iter = name.rsplitn(2, '.');
         let ty_name = iter.next().unwrap();
-        let path = iter.collect::<String>();
+        let _path = iter.collect::<String>();
         let ident = format_ident!("{}", ty_name.to_upper_camel_case());
         quote! {
             #ident
         }
-    }
-
-    fn generate_event_enums(&self, protocols: &[Protocol]) -> TokenStream {
-        let mut events = Vec::new();
-        for module in protocols.iter().flat_map(|p| {
-            p.modules
-                .iter()
-                .filter(|d| self.with_deprecated || !d.deprecated)
-                .filter(|d| self.with_experimental || !d.experimental)
-        }) {
-            for event in module
-                .into_iter()
-                .filter_map(|d| {
-                    if let ModuleDatatype::Event(ev) = d {
-                        Some(ev)
-                    } else {
-                        None
-                    }
-                })
-                .filter(|ev| self.with_deprecated || !ev.deprecated)
-                .filter(|ev| self.with_experimental || !ev.experimental)
-            {
-                let ev_name = format!("Event{}", event.name.to_upper_camel_case());
-
-                events.push(EventType {
-                    module,
-                    inner: event,
-                });
-            }
-        }
-        EventBuilder::new(events).build()
     }
 }
 
@@ -874,32 +916,44 @@ impl SerdeSupport {
     }
 }
 
-pub fn fmt(out_dir: impl AsRef<Path>) {
+/// Recursively format all `.rs` files under the given directory with rustfmt.
+pub fn fmt(out_dir: &Path) {
     use std::io::Write;
     use std::process::Command;
-    let out_dir = out_dir.as_ref();
-    let dir = std::fs::read_dir(out_dir).unwrap();
 
-    for entry in dir {
-        let file = entry.unwrap().file_name().into_string().unwrap();
-        if !file.ends_with(".rs") {
-            continue;
+    let entries = match fs::read_dir(out_dir) {
+        Ok(entries) => entries,
+        Err(e) => {
+            eprintln!("error reading directory {}: {e:?}", out_dir.display());
+            return;
         }
-        let result = Command::new("rustfmt")
-            .arg("--emit")
-            .arg("files")
-            .arg("--edition")
-            .arg("2018")
-            .arg(out_dir.join(file))
-            .output();
+    };
 
-        match result {
-            Err(e) => {
-                eprintln!("error running rustfmt: {e:?}");
-            }
-            Ok(output) => {
-                if !output.status.success() {
-                    io::stderr().write_all(&output.stderr).unwrap();
+    for entry in entries {
+        let entry = match entry {
+            Ok(e) => e,
+            Err(_) => continue,
+        };
+        let path = entry.path();
+        if path.is_dir() {
+            fmt(&path);
+        } else if path.extension().and_then(|e| e.to_str()) == Some("rs") {
+            let result = Command::new("rustfmt")
+                .arg("--emit")
+                .arg("files")
+                .arg("--edition")
+                .arg("2021")
+                .arg(&path)
+                .output();
+
+            match result {
+                Err(e) => {
+                    eprintln!("error running rustfmt on {}: {e:?}", path.display());
+                }
+                Ok(output) => {
+                    if !output.status.success() {
+                        io::stderr().write_all(&output.stderr).unwrap();
+                    }
                 }
             }
         }
