@@ -32,7 +32,7 @@ macro_rules! group_enum {
                 type Error = $name;
 
                 #[allow(unreachable_patterns)]
-                fn try_from(e: $name) -> Result<Self, Self::Error> {
+                fn try_from(e: $name) -> Result<Self, <$ty as TryFrom<$name>>::Error> {
                     match e {
                         $name::$variant(inner) => Ok(inner),
                         other => Err(other),
@@ -59,7 +59,7 @@ macro_rules! group_enum {
                 type Error = $name;
 
                 #[allow(unreachable_patterns)]
-                fn try_from(e: $name) -> Result<Self, Self::Error> {
+                fn try_from(e: $name) -> Result<Self, <$ty as TryFrom<$name>>::Error> {
                     match e {
                         $name::$variant(inner) => Ok(inner),
                         other => Err(other),

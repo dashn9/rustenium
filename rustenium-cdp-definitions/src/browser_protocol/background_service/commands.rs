@@ -1,0 +1,116 @@
+use serde::{Deserialize, Serialize};
+#[doc = "Enables event updates for the service.\n[startObserving](https://chromedevtools.github.io/devtools-protocol/tot/BackgroundService/#method-startObserving)"]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct StartObservingParams {
+    #[serde(rename = "service")]
+    pub service: super::types::ServiceName,
+}
+impl StartObservingParams {
+    pub fn new(service: impl Into<super::types::ServiceName>) -> Self {
+        Self {
+            service: service.into(),
+        }
+    }
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum StartObservingMethod {
+    #[serde(rename = "BackgroundService.startObserving")]
+    StartObserving,
+}
+impl StartObservingMethod {
+    pub const IDENTIFIER: &'static str = "BackgroundService.startObserving";
+}
+#[doc = "Enables event updates for the service.\n[startObserving](https://chromedevtools.github.io/devtools-protocol/tot/BackgroundService/#method-startObserving)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct StartObserving {
+    pub method: StartObservingMethod,
+    pub params: StartObservingParams,
+}
+#[doc = "Disables event updates for the service.\n[stopObserving](https://chromedevtools.github.io/devtools-protocol/tot/BackgroundService/#method-stopObserving)"]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct StopObservingParams {
+    #[serde(rename = "service")]
+    pub service: super::types::ServiceName,
+}
+impl StopObservingParams {
+    pub fn new(service: impl Into<super::types::ServiceName>) -> Self {
+        Self {
+            service: service.into(),
+        }
+    }
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum StopObservingMethod {
+    #[serde(rename = "BackgroundService.stopObserving")]
+    StopObserving,
+}
+impl StopObservingMethod {
+    pub const IDENTIFIER: &'static str = "BackgroundService.stopObserving";
+}
+#[doc = "Disables event updates for the service.\n[stopObserving](https://chromedevtools.github.io/devtools-protocol/tot/BackgroundService/#method-stopObserving)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct StopObserving {
+    pub method: StopObservingMethod,
+    pub params: StopObservingParams,
+}
+#[doc = "Set the recording state for the service.\n[setRecording](https://chromedevtools.github.io/devtools-protocol/tot/BackgroundService/#method-setRecording)"]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SetRecordingParams {
+    #[serde(rename = "shouldRecord")]
+    pub should_record: bool,
+    #[serde(rename = "service")]
+    pub service: super::types::ServiceName,
+}
+impl SetRecordingParams {
+    pub fn new(
+        should_record: impl Into<bool>,
+        service: impl Into<super::types::ServiceName>,
+    ) -> Self {
+        Self {
+            should_record: should_record.into(),
+            service: service.into(),
+        }
+    }
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum SetRecordingMethod {
+    #[serde(rename = "BackgroundService.setRecording")]
+    SetRecording,
+}
+impl SetRecordingMethod {
+    pub const IDENTIFIER: &'static str = "BackgroundService.setRecording";
+}
+#[doc = "Set the recording state for the service.\n[setRecording](https://chromedevtools.github.io/devtools-protocol/tot/BackgroundService/#method-setRecording)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct SetRecording {
+    pub method: SetRecordingMethod,
+    pub params: SetRecordingParams,
+}
+#[doc = "Clears all stored data for the service.\n[clearEvents](https://chromedevtools.github.io/devtools-protocol/tot/BackgroundService/#method-clearEvents)"]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ClearEventsParams {
+    #[serde(rename = "service")]
+    pub service: super::types::ServiceName,
+}
+impl ClearEventsParams {
+    pub fn new(service: impl Into<super::types::ServiceName>) -> Self {
+        Self {
+            service: service.into(),
+        }
+    }
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum ClearEventsMethod {
+    #[serde(rename = "BackgroundService.clearEvents")]
+    ClearEvents,
+}
+impl ClearEventsMethod {
+    pub const IDENTIFIER: &'static str = "BackgroundService.clearEvents";
+}
+#[doc = "Clears all stored data for the service.\n[clearEvents](https://chromedevtools.github.io/devtools-protocol/tot/BackgroundService/#method-clearEvents)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct ClearEvents {
+    pub method: ClearEventsMethod,
+    pub params: ClearEventsParams,
+}
+group_enum ! (Command { StartObserving (StartObserving) , StopObserving (StopObserving) , SetRecording (SetRecording) , ClearEvents (ClearEvents) });

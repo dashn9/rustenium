@@ -1,0 +1,149 @@
+use serde::{Deserialize, Serialize};
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ClearParams {
+    #[serde(rename = "storageId")]
+    pub storage_id: super::types::StorageId,
+}
+impl ClearParams {
+    pub fn new(storage_id: impl Into<super::types::StorageId>) -> Self {
+        Self {
+            storage_id: storage_id.into(),
+        }
+    }
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum ClearMethod {
+    #[serde(rename = "DOMStorage.clear")]
+    Clear,
+}
+impl ClearMethod {
+    pub const IDENTIFIER: &'static str = "DOMStorage.clear";
+}
+#[derive(Debug, Clone, PartialEq)]
+pub struct Clear {
+    pub method: ClearMethod,
+    pub params: ClearParams,
+}
+#[doc = "Disables storage tracking, prevents storage events from being sent to the client.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/DOMStorage/#method-disable)"]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct DisableParams {}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum DisableMethod {
+    #[serde(rename = "DOMStorage.disable")]
+    Disable,
+}
+impl DisableMethod {
+    pub const IDENTIFIER: &'static str = "DOMStorage.disable";
+}
+#[doc = "Disables storage tracking, prevents storage events from being sent to the client.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/DOMStorage/#method-disable)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct Disable {
+    pub method: DisableMethod,
+    pub params: DisableParams,
+}
+#[doc = "Enables storage tracking, storage events will now be delivered to the client.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/DOMStorage/#method-enable)"]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct EnableParams {}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum EnableMethod {
+    #[serde(rename = "DOMStorage.enable")]
+    Enable,
+}
+impl EnableMethod {
+    pub const IDENTIFIER: &'static str = "DOMStorage.enable";
+}
+#[doc = "Enables storage tracking, storage events will now be delivered to the client.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/DOMStorage/#method-enable)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct Enable {
+    pub method: EnableMethod,
+    pub params: EnableParams,
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct GetDomStorageItemsParams {
+    #[serde(rename = "storageId")]
+    pub storage_id: super::types::StorageId,
+}
+impl GetDomStorageItemsParams {
+    pub fn new(storage_id: impl Into<super::types::StorageId>) -> Self {
+        Self {
+            storage_id: storage_id.into(),
+        }
+    }
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum GetDomStorageItemsMethod {
+    #[serde(rename = "DOMStorage.getDOMStorageItems")]
+    GetDomStorageItems,
+}
+impl GetDomStorageItemsMethod {
+    pub const IDENTIFIER: &'static str = "DOMStorage.getDOMStorageItems";
+}
+#[derive(Debug, Clone, PartialEq)]
+pub struct GetDomStorageItems {
+    pub method: GetDomStorageItemsMethod,
+    pub params: GetDomStorageItemsParams,
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct RemoveDomStorageItemParams {
+    #[serde(rename = "storageId")]
+    pub storage_id: super::types::StorageId,
+    #[serde(rename = "key")]
+    pub key: String,
+}
+impl RemoveDomStorageItemParams {
+    pub fn new(storage_id: impl Into<super::types::StorageId>, key: impl Into<String>) -> Self {
+        Self {
+            storage_id: storage_id.into(),
+            key: key.into(),
+        }
+    }
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum RemoveDomStorageItemMethod {
+    #[serde(rename = "DOMStorage.removeDOMStorageItem")]
+    RemoveDomStorageItem,
+}
+impl RemoveDomStorageItemMethod {
+    pub const IDENTIFIER: &'static str = "DOMStorage.removeDOMStorageItem";
+}
+#[derive(Debug, Clone, PartialEq)]
+pub struct RemoveDomStorageItem {
+    pub method: RemoveDomStorageItemMethod,
+    pub params: RemoveDomStorageItemParams,
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SetDomStorageItemParams {
+    #[serde(rename = "storageId")]
+    pub storage_id: super::types::StorageId,
+    #[serde(rename = "key")]
+    pub key: String,
+    #[serde(rename = "value")]
+    pub value: String,
+}
+impl SetDomStorageItemParams {
+    pub fn new(
+        storage_id: impl Into<super::types::StorageId>,
+        key: impl Into<String>,
+        value: impl Into<String>,
+    ) -> Self {
+        Self {
+            storage_id: storage_id.into(),
+            key: key.into(),
+            value: value.into(),
+        }
+    }
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum SetDomStorageItemMethod {
+    #[serde(rename = "DOMStorage.setDOMStorageItem")]
+    SetDomStorageItem,
+}
+impl SetDomStorageItemMethod {
+    pub const IDENTIFIER: &'static str = "DOMStorage.setDOMStorageItem";
+}
+#[derive(Debug, Clone, PartialEq)]
+pub struct SetDomStorageItem {
+    pub method: SetDomStorageItemMethod,
+    pub params: SetDomStorageItemParams,
+}
+group_enum ! (Command { Clear (Clear) , Disable (Disable) , Enable (Enable) , GetDomStorageItems (GetDomStorageItems) , RemoveDomStorageItem (RemoveDomStorageItem) , SetDomStorageItem (SetDomStorageItem) });

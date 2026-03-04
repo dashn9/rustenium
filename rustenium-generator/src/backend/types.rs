@@ -1,4 +1,4 @@
-use crate::backend::{base_types::{Command, Event, Item, Module, Param, Type, TypeDef, Variant}, generator::SerdeSupport};
+use crate::backend::base_types::{Command, Event, Item, Module, Param, Type, TypeDef, Variant};
 use heck::ToUpperCamelCase;
 use proc_macro2::{Ident, TokenStream};
 use quote::{quote, ToTokens};
@@ -268,7 +268,7 @@ pub struct FieldDefinition {
 
 impl FieldDefinition {
     /// Generate meta attributes: desc, serde
-    pub fn generate_meta(&self, serde_support: &SerdeSupport, param: &Param) -> TokenStream {
+    pub fn generate_meta(&self, param: &Param) -> TokenStream {
         let mut desc = if let Some(desc) = param.description.as_deref() {
             quote! {
                 #[doc = #desc]
@@ -286,20 +286,19 @@ impl FieldDefinition {
         if self.serde_skip {
             serde_attr.extend(quote! {#[serde(skip)]})
         } else {
-            // add accurate rename attribute
             let name = &self.name;
             serde_attr.extend(quote! {
                 #[serde(rename = #name)]
-
             });
             if self.optional {
-                serde_attr.extend(serde_support.generate_opt_field_attr());
+                serde_attr.extend(quote! {
+                    #[serde(skip_serializing_if = "Option::is_none")]
+                    #[serde(default)]
+                });
             } else if let Type::ArrayOf(_) = &param.r#type {
-                serde_attr.extend(serde_support.generate_vec_field_attr());
-            }
-
-            if self.is_enum {
-                serde_attr.extend(SerdeSupport::generate_enum_de_with(self.optional));
+                serde_attr.extend(quote! {
+                    #[serde(skip_serializing_if = "Vec::is_empty")]
+                });
             }
         }
 

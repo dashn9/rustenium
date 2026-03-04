@@ -2,15 +2,14 @@ use std::{fs, path::Path};
 
 use parser::parse_pdl;
 
-use crate::{backend::generator::compile_protocols, frontend::cdp::resolver::resolve_pdl};
+use crate::frontend::cdp::resolver::resolve_pdl;
 
 mod dep;
 mod error;
 pub mod parser;
 pub mod resolver;
-pub(crate) mod ser;
 
-pub fn pdl_to_cdp(pdl_locations: &[&Path]) {
+pub fn pdl_to_cdp(pdl_locations: &[&Path], out_dir: &Path) {
     let inputs: Vec<(String, Option<&str>)> = pdl_locations
         .iter()
         .map(|pdl_location| {
@@ -33,5 +32,8 @@ pub fn pdl_to_cdp(pdl_locations: &[&Path]) {
             protocol
         })
         .collect();
-    compile_protocols(&protocols).unwrap();
+
+    let mut generator = crate::backend::generator::Generator::default();
+    generator.out_dir(out_dir);
+    generator.compile_protocols(&protocols).unwrap();
 }
