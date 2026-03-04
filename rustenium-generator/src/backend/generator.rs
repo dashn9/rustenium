@@ -148,7 +148,7 @@ impl Generator {
     /// }
     /// ```
     pub fn compile_protocols(&mut self, protocols: &Vec<Protocol>) -> io::Result<()> {
-        let target: PathBuf = self.out_dir.clone().map(Ok).unwrap_or_else(|| {
+        let target_base: PathBuf = self.out_dir.clone().map(Ok).unwrap_or_else(|| {
             std::env::var_os("OUT_DIR")
                 .ok_or_else(|| {
                     Error::new(ErrorKind::Other, "OUT_DIR environment variable is not set")
@@ -156,11 +156,16 @@ impl Generator {
                 .map(Into::into)
         })?;
 
+        let mut target = target_base.clone();
         let mut modules = TokenStream::default();
 
         for (idx, protocol) in protocols.iter().enumerate() {
             let types = self.generate_types(&protocol.modules);
             let version = format!("{}.{}", protocol.version.major, protocol.version.minor);
+            if let Some(name) = protocol.name {
+                target = target_base.join(name);
+            }
+            fs::create_dir(&target).unwrap_or_else(|e| panic!("Unable to create directory {}: {}", target.display(), e));
             let module = quote! {
                 #[allow(clippy::wrong_self_convention)]
                 pub mod s #idx{

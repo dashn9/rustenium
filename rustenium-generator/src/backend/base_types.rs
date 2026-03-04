@@ -8,6 +8,7 @@ use crate::backend::types::ModuleDatatype;
 #[cfg_attr(feature = "serde0", derive(Serialize, Deserialize))]
 #[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct Protocol<'a> {
+    pub name: Option<&'a str>,
     #[cfg_attr(feature = "serde0", serde(skip_serializing))]
     pub description: Option<Cow<'a, str>>,
     pub version: Version,
