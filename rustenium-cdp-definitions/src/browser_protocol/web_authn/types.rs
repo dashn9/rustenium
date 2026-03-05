@@ -223,4 +223,4 @@ impl Credential {
 impl Credential {
     pub const IDENTIFIER: &'static str = "WebAuthn.Credential";
 }
-group_enum ! (Type { AuthenticatorId (AuthenticatorId) , AuthenticatorProtocol (AuthenticatorProtocol) , Ctap2Version (Ctap2Version) , AuthenticatorTransport (AuthenticatorTransport) , VirtualAuthenticatorOptions (VirtualAuthenticatorOptions) , Credential (Credential) });
+group_enum ! (WebAuthnTypes { AuthenticatorId (AuthenticatorId) , AuthenticatorProtocol (AuthenticatorProtocol) , Ctap2Version (Ctap2Version) , AuthenticatorTransport (AuthenticatorTransport) , VirtualAuthenticatorOptions (VirtualAuthenticatorOptions) , Credential (Credential) });

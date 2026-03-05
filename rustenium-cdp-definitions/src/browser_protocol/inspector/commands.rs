@@ -33,4 +33,4 @@ pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
 }
-group_enum ! (Command { Disable (Disable) , Enable (Enable) });
+group_enum ! (InspectorCommands { Disable (Disable) , Enable (Enable) });

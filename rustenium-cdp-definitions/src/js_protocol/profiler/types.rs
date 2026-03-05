@@ -199,4 +199,4 @@ impl ScriptCoverage {
 impl ScriptCoverage {
     pub const IDENTIFIER: &'static str = "Profiler.ScriptCoverage";
 }
-group_enum ! (Type { ProfileNode (ProfileNode) , Profile (Profile) , PositionTickInfo (PositionTickInfo) , CoverageRange (CoverageRange) , FunctionCoverage (FunctionCoverage) , ScriptCoverage (ScriptCoverage) });
+group_enum ! (ProfilerTypes { ProfileNode (ProfileNode) , Profile (Profile) , PositionTickInfo (PositionTickInfo) , CoverageRange (CoverageRange) , FunctionCoverage (FunctionCoverage) , ScriptCoverage (ScriptCoverage) });

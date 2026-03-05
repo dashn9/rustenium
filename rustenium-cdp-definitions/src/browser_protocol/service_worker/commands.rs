@@ -328,4 +328,4 @@ pub struct UpdateRegistration {
     pub method: UpdateRegistrationMethod,
     pub params: UpdateRegistrationParams,
 }
-group_enum ! (Command { DeliverPushMessage (DeliverPushMessage) , Disable (Disable) , DispatchSyncEvent (DispatchSyncEvent) , DispatchPeriodicSyncEvent (DispatchPeriodicSyncEvent) , Enable (Enable) , SetForceUpdateOnPageLoad (SetForceUpdateOnPageLoad) , SkipWaiting (SkipWaiting) , StartWorker (StartWorker) , StopAllWorkers (StopAllWorkers) , StopWorker (StopWorker) , Unregister (Unregister) , UpdateRegistration (UpdateRegistration) });
+group_enum ! (ServiceWorkerCommands { DeliverPushMessage (DeliverPushMessage) , Disable (Disable) , DispatchSyncEvent (DispatchSyncEvent) , DispatchPeriodicSyncEvent (DispatchPeriodicSyncEvent) , Enable (Enable) , SetForceUpdateOnPageLoad (SetForceUpdateOnPageLoad) , SkipWaiting (SkipWaiting) , StartWorker (StartWorker) , StopAllWorkers (StopAllWorkers) , StopWorker (StopWorker) , Unregister (Unregister) , UpdateRegistration (UpdateRegistration) });

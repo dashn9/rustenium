@@ -70,4 +70,4 @@ pub struct AuthRequired {
 impl AuthRequired {
     pub const IDENTIFIER: &'static str = "Fetch.authRequired";
 }
-group_enum ! (Event { RequestPaused (RequestPaused) , AuthRequired (AuthRequired) });
+group_enum ! (FetchEvents { RequestPaused (RequestPaused) , AuthRequired (AuthRequired) });

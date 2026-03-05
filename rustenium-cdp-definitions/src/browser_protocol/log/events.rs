@@ -9,4 +9,4 @@ pub struct EntryAdded {
 impl EntryAdded {
     pub const IDENTIFIER: &'static str = "Log.entryAdded";
 }
-group_enum ! (Event { EntryAdded (EntryAdded) });
+group_enum ! (LogEvents { EntryAdded (EntryAdded) });

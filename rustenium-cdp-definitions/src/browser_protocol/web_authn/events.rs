@@ -43,4 +43,4 @@ pub struct CredentialAsserted {
 impl CredentialAsserted {
     pub const IDENTIFIER: &'static str = "WebAuthn.credentialAsserted";
 }
-group_enum ! (Event { CredentialAdded (CredentialAdded) , CredentialDeleted (CredentialDeleted) , CredentialUpdated (CredentialUpdated) , CredentialAsserted (CredentialAsserted) });
+group_enum ! (WebAuthnEvents { CredentialAdded (CredentialAdded) , CredentialDeleted (CredentialDeleted) , CredentialUpdated (CredentialUpdated) , CredentialAsserted (CredentialAsserted) });

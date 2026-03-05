@@ -22,4 +22,4 @@ pub struct LayerTreeDidChange {
 impl LayerTreeDidChange {
     pub const IDENTIFIER: &'static str = "LayerTree.layerTreeDidChange";
 }
-group_enum ! (Event { LayerPainted (LayerPainted) , LayerTreeDidChange (LayerTreeDidChange) });
+group_enum ! (LayerTreeEvents { LayerPainted (LayerPainted) , LayerTreeDidChange (LayerTreeDidChange) });

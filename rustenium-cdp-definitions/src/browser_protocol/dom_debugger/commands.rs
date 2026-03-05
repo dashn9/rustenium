@@ -278,4 +278,4 @@ pub struct SetXhrBreakpoint {
     pub method: SetXhrBreakpointMethod,
     pub params: SetXhrBreakpointParams,
 }
-group_enum ! (Command { GetEventListeners (GetEventListeners) , RemoveDomBreakpoint (RemoveDomBreakpoint) , RemoveEventListenerBreakpoint (RemoveEventListenerBreakpoint) , RemoveXhrBreakpoint (RemoveXhrBreakpoint) , SetBreakOnCspViolation (SetBreakOnCspViolation) , SetDomBreakpoint (SetDomBreakpoint) , SetEventListenerBreakpoint (SetEventListenerBreakpoint) , SetXhrBreakpoint (SetXhrBreakpoint) });
+group_enum ! (DomDebuggerCommands { GetEventListeners (GetEventListeners) , RemoveDomBreakpoint (RemoveDomBreakpoint) , RemoveEventListenerBreakpoint (RemoveEventListenerBreakpoint) , RemoveXhrBreakpoint (RemoveXhrBreakpoint) , SetBreakOnCspViolation (SetBreakOnCspViolation) , SetDomBreakpoint (SetDomBreakpoint) , SetEventListenerBreakpoint (SetEventListenerBreakpoint) , SetXhrBreakpoint (SetXhrBreakpoint) });

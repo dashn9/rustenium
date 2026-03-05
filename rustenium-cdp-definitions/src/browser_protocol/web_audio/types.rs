@@ -265,4 +265,4 @@ pub struct AudioParam {
 impl AudioParam {
     pub const IDENTIFIER: &'static str = "WebAudio.AudioParam";
 }
-group_enum ! (Type { GraphObjectId (GraphObjectId) , ContextType (ContextType) , ContextState (ContextState) , NodeType (NodeType) , ChannelCountMode (ChannelCountMode) , ChannelInterpretation (ChannelInterpretation) , ParamType (ParamType) , AutomationRate (AutomationRate) , ContextRealtimeData (ContextRealtimeData) , BaseAudioContext (BaseAudioContext) , AudioListener (AudioListener) , AudioNode (AudioNode) , AudioParam (AudioParam) });
+group_enum ! (WebAudioTypes { GraphObjectId (GraphObjectId) , ContextType (ContextType) , ContextState (ContextState) , NodeType (NodeType) , ChannelCountMode (ChannelCountMode) , ChannelInterpretation (ChannelInterpretation) , ParamType (ParamType) , AutomationRate (AutomationRate) , ContextRealtimeData (ContextRealtimeData) , BaseAudioContext (BaseAudioContext) , AudioListener (AudioListener) , AudioNode (AudioNode) , AudioParam (AudioParam) });

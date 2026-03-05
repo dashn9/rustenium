@@ -171,4 +171,4 @@ pub struct TakePreciseCoverage {
     pub method: TakePreciseCoverageMethod,
     pub params: TakePreciseCoverageParams,
 }
-group_enum ! (Command { Disable (Disable) , Enable (Enable) , GetBestEffortCoverage (GetBestEffortCoverage) , SetSamplingInterval (SetSamplingInterval) , Start (Start) , StartPreciseCoverage (StartPreciseCoverage) , Stop (Stop) , StopPreciseCoverage (StopPreciseCoverage) , TakePreciseCoverage (TakePreciseCoverage) });
+group_enum ! (ProfilerCommands { Disable (Disable) , Enable (Enable) , GetBestEffortCoverage (GetBestEffortCoverage) , SetSamplingInterval (SetSamplingInterval) , Start (Start) , StartPreciseCoverage (StartPreciseCoverage) , Stop (Stop) , StopPreciseCoverage (StopPreciseCoverage) , TakePreciseCoverage (TakePreciseCoverage) });

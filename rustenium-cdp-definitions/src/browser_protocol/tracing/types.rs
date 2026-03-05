@@ -112,4 +112,4 @@ pub enum TracingBackend {
     #[serde(rename = "system")]
     System,
 }
-group_enum ! (Type { MemoryDumpConfig (MemoryDumpConfig) , TraceConfig (TraceConfig) , StreamFormat (StreamFormat) , StreamCompression (StreamCompression) , MemoryDumpLevelOfDetail (MemoryDumpLevelOfDetail) , TracingBackend (TracingBackend) });
+group_enum ! (TracingTypes { MemoryDumpConfig (MemoryDumpConfig) , TraceConfig (TraceConfig) , StreamFormat (StreamFormat) , StreamCompression (StreamCompression) , MemoryDumpLevelOfDetail (MemoryDumpLevelOfDetail) , TracingBackend (TracingBackend) });

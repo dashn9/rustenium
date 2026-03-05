@@ -60,4 +60,4 @@ pub struct EventListener {
 impl EventListener {
     pub const IDENTIFIER: &'static str = "DOMDebugger.EventListener";
 }
-group_enum ! (Type { DomBreakpointType (DomBreakpointType) , CspViolationType (CspViolationType) , EventListener (EventListener) });
+group_enum ! (DomDebuggerTypes { DomBreakpointType (DomBreakpointType) , CspViolationType (CspViolationType) , EventListener (EventListener) });

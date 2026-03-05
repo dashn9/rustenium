@@ -163,4 +163,4 @@ impl AuthChallengeResponse {
 impl AuthChallengeResponse {
     pub const IDENTIFIER: &'static str = "Fetch.AuthChallengeResponse";
 }
-group_enum ! (Type { RequestId (RequestId) , RequestStage (RequestStage) , RequestPattern (RequestPattern) , HeaderEntry (HeaderEntry) , AuthChallenge (AuthChallenge) , AuthChallengeResponse (AuthChallengeResponse) });
+group_enum ! (FetchTypes { RequestId (RequestId) , RequestStage (RequestStage) , RequestPattern (RequestPattern) , HeaderEntry (HeaderEntry) , AuthChallenge (AuthChallenge) , AuthChallengeResponse (AuthChallengeResponse) });

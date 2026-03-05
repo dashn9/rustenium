@@ -52,4 +52,4 @@ pub enum DownloadProgressState {
 impl DownloadProgress {
     pub const IDENTIFIER: &'static str = "Browser.downloadProgress";
 }
-group_enum ! (Event { DownloadWillBegin (DownloadWillBegin) , DownloadProgress (DownloadProgress) });
+group_enum ! (BrowserEvents { DownloadWillBegin (DownloadWillBegin) , DownloadProgress (DownloadProgress) });

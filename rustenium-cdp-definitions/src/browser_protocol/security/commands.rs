@@ -61,4 +61,4 @@ pub struct SetIgnoreCertificateErrors {
     pub method: SetIgnoreCertificateErrorsMethod,
     pub params: SetIgnoreCertificateErrorsParams,
 }
-group_enum ! (Command { Disable (Disable) , Enable (Enable) , SetIgnoreCertificateErrors (SetIgnoreCertificateErrors) });
+group_enum ! (SecurityCommands { Disable (Disable) , Enable (Enable) , SetIgnoreCertificateErrors (SetIgnoreCertificateErrors) });

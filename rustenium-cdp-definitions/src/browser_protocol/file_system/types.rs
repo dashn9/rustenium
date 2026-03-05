@@ -88,4 +88,4 @@ impl BucketFileSystemLocator {
 impl BucketFileSystemLocator {
     pub const IDENTIFIER: &'static str = "FileSystem.BucketFileSystemLocator";
 }
-group_enum ! (Type { File (File) , Directory (Directory) , BucketFileSystemLocator (BucketFileSystemLocator) });
+group_enum ! (FileSystemTypes { File (File) , Directory (Directory) , BucketFileSystemLocator (BucketFileSystemLocator) });

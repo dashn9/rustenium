@@ -269,4 +269,4 @@ pub struct SetStorageItems {
     pub method: SetStorageItemsMethod,
     pub params: SetStorageItemsParams,
 }
-group_enum ! (Command { TriggerAction (TriggerAction) , LoadUnpacked (LoadUnpacked) , GetExtensions (GetExtensions) , Uninstall (Uninstall) , GetStorageItems (GetStorageItems) , RemoveStorageItems (RemoveStorageItems) , ClearStorageItems (ClearStorageItems) , SetStorageItems (SetStorageItems) });
+group_enum ! (ExtensionsCommands { TriggerAction (TriggerAction) , LoadUnpacked (LoadUnpacked) , GetExtensions (GetExtensions) , Uninstall (Uninstall) , GetStorageItems (GetStorageItems) , RemoveStorageItems (RemoveStorageItems) , ClearStorageItems (ClearStorageItems) , SetStorageItems (SetStorageItems) });

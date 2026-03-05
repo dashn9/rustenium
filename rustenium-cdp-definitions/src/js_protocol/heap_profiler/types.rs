@@ -116,4 +116,4 @@ impl SamplingHeapProfile {
 impl SamplingHeapProfile {
     pub const IDENTIFIER: &'static str = "HeapProfiler.SamplingHeapProfile";
 }
-group_enum ! (Type { HeapSnapshotObjectId (HeapSnapshotObjectId) , SamplingHeapProfileNode (SamplingHeapProfileNode) , SamplingHeapProfileSample (SamplingHeapProfileSample) , SamplingHeapProfile (SamplingHeapProfile) });
+group_enum ! (HeapProfilerTypes { HeapSnapshotObjectId (HeapSnapshotObjectId) , SamplingHeapProfileNode (SamplingHeapProfileNode) , SamplingHeapProfileSample (SamplingHeapProfileSample) , SamplingHeapProfile (SamplingHeapProfile) });

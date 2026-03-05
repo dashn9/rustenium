@@ -54,4 +54,4 @@ pub struct InspectModeCanceled {}
 impl InspectModeCanceled {
     pub const IDENTIFIER: &'static str = "Overlay.inspectModeCanceled";
 }
-group_enum ! (Event { InspectNodeRequested (InspectNodeRequested) , NodeHighlightRequested (NodeHighlightRequested) , ScreenshotRequested (ScreenshotRequested) , InspectPanelShowRequested (InspectPanelShowRequested) , InspectedElementWindowRestored (InspectedElementWindowRestored) , InspectModeCanceled (InspectModeCanceled) });
+group_enum ! (OverlayEvents { InspectNodeRequested (InspectNodeRequested) , NodeHighlightRequested (NodeHighlightRequested) , ScreenshotRequested (ScreenshotRequested) , InspectPanelShowRequested (InspectPanelShowRequested) , InspectedElementWindowRestored (InspectedElementWindowRestored) , InspectModeCanceled (InspectModeCanceled) });

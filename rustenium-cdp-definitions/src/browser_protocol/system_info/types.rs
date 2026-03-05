@@ -212,4 +212,4 @@ impl ProcessInfo {
 impl ProcessInfo {
     pub const IDENTIFIER: &'static str = "SystemInfo.ProcessInfo";
 }
-group_enum ! (Type { GpuDevice (GpuDevice) , Size (Size) , VideoDecodeAcceleratorCapability (VideoDecodeAcceleratorCapability) , VideoEncodeAcceleratorCapability (VideoEncodeAcceleratorCapability) , SubsamplingFormat (SubsamplingFormat) , ImageType (ImageType) , GpuInfo (GpuInfo) , ProcessInfo (ProcessInfo) });
+group_enum ! (SystemInfoTypes { GpuDevice (GpuDevice) , Size (Size) , VideoDecodeAcceleratorCapability (VideoDecodeAcceleratorCapability) , VideoEncodeAcceleratorCapability (VideoEncodeAcceleratorCapability) , SubsamplingFormat (SubsamplingFormat) , ImageType (ImageType) , GpuInfo (GpuInfo) , ProcessInfo (ProcessInfo) });

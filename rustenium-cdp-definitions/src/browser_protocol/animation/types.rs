@@ -184,4 +184,4 @@ impl KeyframeStyle {
 impl KeyframeStyle {
     pub const IDENTIFIER: &'static str = "Animation.KeyframeStyle";
 }
-group_enum ! (Type { Animation (Animation) , ViewOrScrollTimeline (ViewOrScrollTimeline) , AnimationEffect (AnimationEffect) , KeyframesRule (KeyframesRule) , KeyframeStyle (KeyframeStyle) });
+group_enum ! (AnimationTypes { Animation (Animation) , ViewOrScrollTimeline (ViewOrScrollTimeline) , AnimationEffect (AnimationEffect) , KeyframesRule (KeyframesRule) , KeyframeStyle (KeyframeStyle) });

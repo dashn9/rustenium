@@ -43,4 +43,4 @@ pub struct DomStorageItemsCleared {
 impl DomStorageItemsCleared {
     pub const IDENTIFIER: &'static str = "DOMStorage.domStorageItemsCleared";
 }
-group_enum ! (Event { DomStorageItemAdded (DomStorageItemAdded) , DomStorageItemRemoved (DomStorageItemRemoved) , DomStorageItemUpdated (DomStorageItemUpdated) , DomStorageItemsCleared (DomStorageItemsCleared) });
+group_enum ! (DomStorageEvents { DomStorageItemAdded (DomStorageItemAdded) , DomStorageItemRemoved (DomStorageItemRemoved) , DomStorageItemUpdated (DomStorageItemUpdated) , DomStorageItemsCleared (DomStorageItemsCleared) });

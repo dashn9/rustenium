@@ -467,4 +467,4 @@ impl AxNode {
 impl AxNode {
     pub const IDENTIFIER: &'static str = "Accessibility.AXNode";
 }
-group_enum ! (Type { AxNodeId (AxNodeId) , AxValueType (AxValueType) , AxValueSourceType (AxValueSourceType) , AxValueNativeSourceType (AxValueNativeSourceType) , AxValueSource (AxValueSource) , AxRelatedNode (AxRelatedNode) , AxProperty (AxProperty) , AxValue (AxValue) , AxPropertyName (AxPropertyName) , AxNode (AxNode) });
+group_enum ! (AccessibilityTypes { AxNodeId (AxNodeId) , AxValueType (AxValueType) , AxValueSourceType (AxValueSourceType) , AxValueNativeSourceType (AxValueNativeSourceType) , AxValueSource (AxValueSource) , AxRelatedNode (AxRelatedNode) , AxProperty (AxProperty) , AxValue (AxValue) , AxPropertyName (AxPropertyName) , AxNode (AxNode) });

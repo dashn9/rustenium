@@ -26,4 +26,4 @@ pub struct GetDirectory {
     pub method: GetDirectoryMethod,
     pub params: GetDirectoryParams,
 }
-group_enum ! (Command { GetDirectory (GetDirectory) });
+group_enum ! (FileSystemCommands { GetDirectory (GetDirectory) });

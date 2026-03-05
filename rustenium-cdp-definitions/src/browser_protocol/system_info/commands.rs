@@ -65,4 +65,4 @@ pub struct GetProcessInfo {
     pub method: GetProcessInfoMethod,
     pub params: GetProcessInfoParams,
 }
-group_enum ! (Command { GetInfo (GetInfo) , GetFeatureState (GetFeatureState) , GetProcessInfo (GetProcessInfo) });
+group_enum ! (SystemInfoCommands { GetInfo (GetInfo) , GetFeatureState (GetFeatureState) , GetProcessInfo (GetProcessInfo) });

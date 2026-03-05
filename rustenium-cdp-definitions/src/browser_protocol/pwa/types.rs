@@ -54,4 +54,4 @@ pub enum DisplayMode {
     #[serde(rename = "browser")]
     Browser,
 }
-group_enum ! (Type { FileHandlerAccept (FileHandlerAccept) , FileHandler (FileHandler) , DisplayMode (DisplayMode) });
+group_enum ! (PwaTypes { FileHandlerAccept (FileHandlerAccept) , FileHandler (FileHandler) , DisplayMode (DisplayMode) });

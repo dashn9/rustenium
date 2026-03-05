@@ -179,4 +179,4 @@ pub struct RequestEntries {
     pub method: RequestEntriesMethod,
     pub params: RequestEntriesParams,
 }
-group_enum ! (Command { DeleteCache (DeleteCache) , DeleteEntry (DeleteEntry) , RequestCacheNames (RequestCacheNames) , RequestCachedResponse (RequestCachedResponse) , RequestEntries (RequestEntries) });
+group_enum ! (CacheStorageCommands { DeleteCache (DeleteCache) , DeleteEntry (DeleteEntry) , RequestCacheNames (RequestCacheNames) , RequestCachedResponse (RequestCachedResponse) , RequestEntries (RequestEntries) });

@@ -178,4 +178,4 @@ impl Player {
 impl Player {
     pub const IDENTIFIER: &'static str = "Media.Player";
 }
-group_enum ! (Type { PlayerId (PlayerId) , Timestamp (Timestamp) , PlayerMessage (PlayerMessage) , PlayerProperty (PlayerProperty) , PlayerEvent (PlayerEvent) , PlayerErrorSourceLocation (PlayerErrorSourceLocation) , PlayerError (PlayerError) , Player (Player) });
+group_enum ! (MediaTypes { PlayerId (PlayerId) , Timestamp (Timestamp) , PlayerMessage (PlayerMessage) , PlayerProperty (PlayerProperty) , PlayerEvent (PlayerEvent) , PlayerErrorSourceLocation (PlayerErrorSourceLocation) , PlayerError (PlayerError) , Player (Player) });

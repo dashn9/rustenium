@@ -146,4 +146,4 @@ pub struct SetDomStorageItem {
     pub method: SetDomStorageItemMethod,
     pub params: SetDomStorageItemParams,
 }
-group_enum ! (Command { Clear (Clear) , Disable (Disable) , Enable (Enable) , GetDomStorageItems (GetDomStorageItems) , RemoveDomStorageItem (RemoveDomStorageItem) , SetDomStorageItem (SetDomStorageItem) });
+group_enum ! (DomStorageCommands { Clear (Clear) , Disable (Disable) , Enable (Enable) , GetDomStorageItems (GetDomStorageItems) , RemoveDomStorageItem (RemoveDomStorageItem) , SetDomStorageItem (SetDomStorageItem) });

@@ -163,4 +163,4 @@ pub struct CharacteristicProperties {
 impl CharacteristicProperties {
     pub const IDENTIFIER: &'static str = "BluetoothEmulation.CharacteristicProperties";
 }
-group_enum ! (Type { CentralState (CentralState) , GattOperationType (GattOperationType) , CharacteristicWriteType (CharacteristicWriteType) , CharacteristicOperationType (CharacteristicOperationType) , DescriptorOperationType (DescriptorOperationType) , ManufacturerData (ManufacturerData) , ScanRecord (ScanRecord) , ScanEntry (ScanEntry) , CharacteristicProperties (CharacteristicProperties) });
+group_enum ! (BluetoothEmulationTypes { CentralState (CentralState) , GattOperationType (GattOperationType) , CharacteristicWriteType (CharacteristicWriteType) , CharacteristicOperationType (CharacteristicOperationType) , DescriptorOperationType (DescriptorOperationType) , ManufacturerData (ManufacturerData) , ScanRecord (ScanRecord) , ScanEntry (ScanEntry) , CharacteristicProperties (CharacteristicProperties) });

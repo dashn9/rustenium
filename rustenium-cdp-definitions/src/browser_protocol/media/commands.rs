@@ -33,4 +33,4 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
-group_enum ! (Command { Enable (Enable) , Disable (Disable) });
+group_enum ! (MediaCommands { Enable (Enable) , Disable (Disable) });

@@ -82,4 +82,4 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
-group_enum ! (Command { SetInstrumentationBreakpoint (SetInstrumentationBreakpoint) , RemoveInstrumentationBreakpoint (RemoveInstrumentationBreakpoint) , Disable (Disable) });
+group_enum ! (EventBreakpointsCommands { SetInstrumentationBreakpoint (SetInstrumentationBreakpoint) , RemoveInstrumentationBreakpoint (RemoveInstrumentationBreakpoint) , Disable (Disable) });

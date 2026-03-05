@@ -5,4 +5,4 @@ pub struct VirtualTimeBudgetExpired {}
 impl VirtualTimeBudgetExpired {
     pub const IDENTIFIER: &'static str = "Emulation.virtualTimeBudgetExpired";
 }
-group_enum ! (Event { VirtualTimeBudgetExpired (VirtualTimeBudgetExpired) });
+group_enum ! (EmulationEvents { VirtualTimeBudgetExpired (VirtualTimeBudgetExpired) });

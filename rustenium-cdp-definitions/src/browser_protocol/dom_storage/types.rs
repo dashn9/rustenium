@@ -70,4 +70,4 @@ impl Item {
 impl Item {
     pub const IDENTIFIER: &'static str = "DOMStorage.Item";
 }
-group_enum ! (Type { SerializedStorageKey (SerializedStorageKey) , StorageId (StorageId) , Item (Item) });
+group_enum ! (DomStorageTypes { SerializedStorageKey (SerializedStorageKey) , StorageId (StorageId) , Item (Item) });

@@ -25,4 +25,4 @@ pub struct WorkerVersionUpdated {
 impl WorkerVersionUpdated {
     pub const IDENTIFIER: &'static str = "ServiceWorker.workerVersionUpdated";
 }
-group_enum ! (Event { WorkerErrorReported (WorkerErrorReported) , WorkerRegistrationUpdated (WorkerRegistrationUpdated) , WorkerVersionUpdated (WorkerVersionUpdated) });
+group_enum ! (ServiceWorkerEvents { WorkerErrorReported (WorkerErrorReported) , WorkerRegistrationUpdated (WorkerRegistrationUpdated) , WorkerVersionUpdated (WorkerVersionUpdated) });

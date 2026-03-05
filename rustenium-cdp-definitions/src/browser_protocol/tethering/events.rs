@@ -12,4 +12,4 @@ pub struct Accepted {
 impl Accepted {
     pub const IDENTIFIER: &'static str = "Tethering.accepted";
 }
-group_enum ! (Event { Accepted (Accepted) });
+group_enum ! (TetheringEvents { Accepted (Accepted) });

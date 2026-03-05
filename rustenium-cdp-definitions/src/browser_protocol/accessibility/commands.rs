@@ -231,4 +231,4 @@ pub struct QueryAxTree {
     pub method: QueryAxTreeMethod,
     pub params: QueryAxTreeParams,
 }
-group_enum ! (Command { Disable (Disable) , Enable (Enable) , GetPartialAxTree (GetPartialAxTree) , GetFullAxTree (GetFullAxTree) , GetRootAxNode (GetRootAxNode) , GetAxNodeAndAncestors (GetAxNodeAndAncestors) , GetChildAxNodes (GetChildAxNodes) , QueryAxTree (QueryAxTree) });
+group_enum ! (AccessibilityCommands { Disable (Disable) , Enable (Enable) , GetPartialAxTree (GetPartialAxTree) , GetFullAxTree (GetFullAxTree) , GetRootAxNode (GetRootAxNode) , GetAxNodeAndAncestors (GetAxNodeAndAncestors) , GetChildAxNodes (GetChildAxNodes) , QueryAxTree (QueryAxTree) });

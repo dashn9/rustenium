@@ -338,4 +338,4 @@ pub struct TakeResponseBodyAsStream {
     pub method: TakeResponseBodyAsStreamMethod,
     pub params: TakeResponseBodyAsStreamParams,
 }
-group_enum ! (Command { Disable (Disable) , Enable (Enable) , FailRequest (FailRequest) , FulfillRequest (FulfillRequest) , ContinueRequest (ContinueRequest) , ContinueWithAuth (ContinueWithAuth) , ContinueResponse (ContinueResponse) , GetResponseBody (GetResponseBody) , TakeResponseBodyAsStream (TakeResponseBodyAsStream) });
+group_enum ! (FetchCommands { Disable (Disable) , Enable (Enable) , FailRequest (FailRequest) , FulfillRequest (FulfillRequest) , ContinueRequest (ContinueRequest) , ContinueWithAuth (ContinueWithAuth) , ContinueResponse (ContinueResponse) , GetResponseBody (GetResponseBody) , TakeResponseBodyAsStream (TakeResponseBodyAsStream) });

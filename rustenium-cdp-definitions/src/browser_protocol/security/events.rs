@@ -9,4 +9,4 @@ pub struct VisibleSecurityStateChanged {
 impl VisibleSecurityStateChanged {
     pub const IDENTIFIER: &'static str = "Security.visibleSecurityStateChanged";
 }
-group_enum ! (Event { VisibleSecurityStateChanged (VisibleSecurityStateChanged) });
+group_enum ! (SecurityEvents { VisibleSecurityStateChanged (VisibleSecurityStateChanged) });

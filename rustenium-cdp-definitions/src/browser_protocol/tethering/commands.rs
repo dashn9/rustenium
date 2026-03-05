@@ -51,4 +51,4 @@ pub struct Unbind {
     pub method: UnbindMethod,
     pub params: UnbindParams,
 }
-group_enum ! (Command { Bind (Bind) , Unbind (Unbind) });
+group_enum ! (TetheringCommands { Bind (Bind) , Unbind (Unbind) });

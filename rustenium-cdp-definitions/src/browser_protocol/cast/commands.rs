@@ -166,4 +166,4 @@ pub struct StopCasting {
     pub method: StopCastingMethod,
     pub params: StopCastingParams,
 }
-group_enum ! (Command { Enable (Enable) , Disable (Disable) , SetSinkToUse (SetSinkToUse) , StartDesktopMirroring (StartDesktopMirroring) , StartTabMirroring (StartTabMirroring) , StopCasting (StopCasting) });
+group_enum ! (CastCommands { Enable (Enable) , Disable (Disable) , SetSinkToUse (SetSinkToUse) , StartDesktopMirroring (StartDesktopMirroring) , StartTabMirroring (StartTabMirroring) , StopCasting (StopCasting) });

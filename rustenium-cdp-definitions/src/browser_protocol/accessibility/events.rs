@@ -20,4 +20,4 @@ pub struct NodesUpdated {
 impl NodesUpdated {
     pub const IDENTIFIER: &'static str = "Accessibility.nodesUpdated";
 }
-group_enum ! (Event { LoadComplete (LoadComplete) , NodesUpdated (NodesUpdated) });
+group_enum ! (AccessibilityEvents { LoadComplete (LoadComplete) , NodesUpdated (NodesUpdated) });

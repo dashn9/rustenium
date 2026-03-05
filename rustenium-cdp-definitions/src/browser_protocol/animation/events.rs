@@ -39,4 +39,4 @@ pub struct AnimationUpdated {
 impl AnimationUpdated {
     pub const IDENTIFIER: &'static str = "Animation.animationUpdated";
 }
-group_enum ! (Event { AnimationCanceled (AnimationCanceled) , AnimationCreated (AnimationCreated) , AnimationStarted (AnimationStarted) , AnimationUpdated (AnimationUpdated) });
+group_enum ! (AnimationEvents { AnimationCanceled (AnimationCanceled) , AnimationCreated (AnimationCreated) , AnimationStarted (AnimationStarted) , AnimationUpdated (AnimationUpdated) });

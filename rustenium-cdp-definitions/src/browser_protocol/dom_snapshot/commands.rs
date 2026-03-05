@@ -86,4 +86,4 @@ pub struct CaptureSnapshot {
     pub method: CaptureSnapshotMethod,
     pub params: CaptureSnapshotParams,
 }
-group_enum ! (Command { Disable (Disable) , Enable (Enable) , CaptureSnapshot (CaptureSnapshot) });
+group_enum ! (DomSnapshotCommands { Disable (Disable) , Enable (Enable) , CaptureSnapshot (CaptureSnapshot) });

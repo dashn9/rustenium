@@ -399,4 +399,4 @@ pub struct RequestDatabaseNames {
     pub method: RequestDatabaseNamesMethod,
     pub params: RequestDatabaseNamesParams,
 }
-group_enum ! (Command { ClearObjectStore (ClearObjectStore) , DeleteDatabase (DeleteDatabase) , DeleteObjectStoreEntries (DeleteObjectStoreEntries) , Disable (Disable) , Enable (Enable) , RequestData (RequestData) , GetMetadata (GetMetadata) , RequestDatabase (RequestDatabase) , RequestDatabaseNames (RequestDatabaseNames) });
+group_enum ! (IndexedDbCommands { ClearObjectStore (ClearObjectStore) , DeleteDatabase (DeleteDatabase) , DeleteObjectStoreEntries (DeleteObjectStoreEntries) , Disable (Disable) , Enable (Enable) , RequestData (RequestData) , GetMetadata (GetMetadata) , RequestDatabase (RequestDatabase) , RequestDatabaseNames (RequestDatabaseNames) });

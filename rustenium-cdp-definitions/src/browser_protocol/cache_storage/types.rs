@@ -155,4 +155,4 @@ impl CachedResponse {
 impl CachedResponse {
     pub const IDENTIFIER: &'static str = "CacheStorage.CachedResponse";
 }
-group_enum ! (Type { CacheId (CacheId) , CachedResponseType (CachedResponseType) , DataEntry (DataEntry) , Cache (Cache) , Header (Header) , CachedResponse (CachedResponse) });
+group_enum ! (CacheStorageTypes { CacheId (CacheId) , CachedResponseType (CachedResponseType) , DataEntry (DataEntry) , Cache (Cache) , Header (Header) , CachedResponse (CachedResponse) });

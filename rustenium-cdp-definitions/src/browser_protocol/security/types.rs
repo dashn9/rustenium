@@ -212,4 +212,4 @@ pub enum CertificateErrorAction {
     #[serde(rename = "cancel")]
     Cancel,
 }
-group_enum ! (Type { CertificateId (CertificateId) , MixedContentType (MixedContentType) , SecurityState (SecurityState) , CertificateSecurityState (CertificateSecurityState) , SafetyTipStatus (SafetyTipStatus) , SafetyTipInfo (SafetyTipInfo) , VisibleSecurityState (VisibleSecurityState) , SecurityStateExplanation (SecurityStateExplanation) , CertificateErrorAction (CertificateErrorAction) });
+group_enum ! (SecurityTypes { CertificateId (CertificateId) , MixedContentType (MixedContentType) , SecurityState (SecurityState) , CertificateSecurityState (CertificateSecurityState) , SafetyTipStatus (SafetyTipStatus) , SafetyTipInfo (SafetyTipInfo) , VisibleSecurityState (VisibleSecurityState) , SecurityStateExplanation (SecurityStateExplanation) , CertificateErrorAction (CertificateErrorAction) });

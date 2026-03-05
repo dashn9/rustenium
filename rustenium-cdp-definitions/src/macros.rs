@@ -54,3 +54,26 @@ macro_rules! group_enum {
         )*
     };
 }
+
+/// Generates transitive `From` and `TryFrom` impls.
+/// `impl_from!(LeafType => IntermediateEnum => TargetEnum, ...);`
+macro_rules! impl_from {
+    ($( $from:ty => $via:ty => $to:ty ),* $(,)?) => {
+        $(
+            impl From<$from> for $to {
+                fn from(v: $from) -> Self {
+                    Self::from(<$via>::from(v))
+                }
+            }
+
+            impl TryFrom<$to> for $from {
+                type Error = $to;
+
+                fn try_from(e: $to) -> Result<Self, <$from as TryFrom<$to>>::Error> {
+                    let inner = <$via>::try_from(e)?;
+                    Self::try_from(inner).map_err(<$to>::from)
+                }
+            }
+        )*
+    };
+}

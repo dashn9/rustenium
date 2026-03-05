@@ -31,4 +31,4 @@ pub enum ScreenshotParamsFormat {
 impl ScreenshotParams {
     pub const IDENTIFIER: &'static str = "HeadlessExperimental.ScreenshotParams";
 }
-group_enum ! (Type { ScreenshotParams (ScreenshotParams) });
+group_enum ! (HeadlessExperimentalTypes { ScreenshotParams (ScreenshotParams) });

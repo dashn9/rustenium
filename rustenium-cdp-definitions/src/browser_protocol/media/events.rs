@@ -56,4 +56,4 @@ pub struct PlayerCreated {
 impl PlayerCreated {
     pub const IDENTIFIER: &'static str = "Media.playerCreated";
 }
-group_enum ! (Event { PlayerPropertiesChanged (PlayerPropertiesChanged) , PlayerEventsAdded (PlayerEventsAdded) , PlayerMessagesLogged (PlayerMessagesLogged) , PlayerErrorsRaised (PlayerErrorsRaised) , PlayerCreated (PlayerCreated) });
+group_enum ! (MediaEvents { PlayerPropertiesChanged (PlayerPropertiesChanged) , PlayerEventsAdded (PlayerEventsAdded) , PlayerMessagesLogged (PlayerMessagesLogged) , PlayerErrorsRaised (PlayerErrorsRaised) , PlayerCreated (PlayerCreated) });

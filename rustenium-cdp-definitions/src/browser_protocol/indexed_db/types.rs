@@ -252,4 +252,4 @@ impl KeyPath {
 impl KeyPath {
     pub const IDENTIFIER: &'static str = "IndexedDB.KeyPath";
 }
-group_enum ! (Type { DatabaseWithObjectStores (DatabaseWithObjectStores) , ObjectStore (ObjectStore) , ObjectStoreIndex (ObjectStoreIndex) , Key (Key) , KeyRange (KeyRange) , DataEntry (DataEntry) , KeyPath (KeyPath) });
+group_enum ! (IndexedDbTypes { DatabaseWithObjectStores (DatabaseWithObjectStores) , ObjectStore (ObjectStore) , ObjectStoreIndex (ObjectStoreIndex) , Key (Key) , KeyRange (KeyRange) , DataEntry (DataEntry) , KeyPath (KeyPath) });

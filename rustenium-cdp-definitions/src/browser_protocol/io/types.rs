@@ -28,4 +28,4 @@ impl From<String> for StreamHandle {
 impl StreamHandle {
     pub const IDENTIFIER: &'static str = "IO.StreamHandle";
 }
-group_enum ! (Type { StreamHandle (StreamHandle) });
+group_enum ! (IoTypes { StreamHandle (StreamHandle) });

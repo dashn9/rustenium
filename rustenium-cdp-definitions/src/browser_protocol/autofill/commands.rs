@@ -106,4 +106,4 @@ pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
 }
-group_enum ! (Command { Trigger (Trigger) , SetAddresses (SetAddresses) , Disable (Disable) , Enable (Enable) });
+group_enum ! (AutofillCommands { Trigger (Trigger) , SetAddresses (SetAddresses) , Disable (Disable) , Enable (Enable) });

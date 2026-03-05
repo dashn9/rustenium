@@ -18,4 +18,4 @@ pub struct IssueUpdated {
 impl IssueUpdated {
     pub const IDENTIFIER: &'static str = "Cast.issueUpdated";
 }
-group_enum ! (Event { SinksUpdated (SinksUpdated) , IssueUpdated (IssueUpdated) });
+group_enum ! (CastEvents { SinksUpdated (SinksUpdated) , IssueUpdated (IssueUpdated) });

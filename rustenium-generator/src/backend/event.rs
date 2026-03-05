@@ -1,17 +1,7 @@
 use proc_macro2::{Ident, TokenStream};
 use quote::quote;
 
-/// The `group_enum!` macro definition, emitted into the generated output's `macros.rs`.
-///
-/// Written as a raw string because `quote!` cannot produce `$` tokens for macro_rules patterns.
-///
-/// Provides two forms:
-/// - **Closed**: `group_enum!(EnumName { Var1(Type1), Var2(Type2) });`
-/// - **Open**: `group_enum!(EnumName { Var1(Type1), Var2(Type2) } + other);`
-///   adds an `Other(serde_json::Value)` catch-all variant.
-///
-/// Both forms auto-generate `From<Inner> for Enum` (upward) and
-/// `TryFrom<Enum> for Inner` (downward) for every variant.
+/// The `group_enum!` macro and `impl_from!` macro, emitted into the generated output's `macros.rs`.
 pub const GROUP_ENUM_MACRO: &str = r#"
 macro_rules! group_enum {
     ($name:ident { $( $variant:ident($ty:ty) ),* $(,)? } + other) => {
@@ -69,12 +59,32 @@ macro_rules! group_enum {
         )*
     };
 }
+
+/// Generates transitive `From` and `TryFrom` impls.
+/// `impl_from!(LeafType => IntermediateEnum => TargetEnum, ...);`
+macro_rules! impl_from {
+    ($( $from:ty => $via:ty => $to:ty ),* $(,)?) => {
+        $(
+            impl From<$from> for $to {
+                fn from(v: $from) -> Self {
+                    Self::from(<$via>::from(v))
+                }
+            }
+
+            impl TryFrom<$to> for $from {
+                type Error = $to;
+
+                fn try_from(e: $to) -> Result<Self, <$from as TryFrom<$to>>::Error> {
+                    let inner = <$via>::try_from(e)?;
+                    Self::try_from(inner).map_err(<$to>::from)
+                }
+            }
+        )*
+    };
+}
 "#;
 
 /// Generate a closed `group_enum!` invocation (no catch-all variant).
-///
-/// Used at module level for Type, Command, and Event groups.
-/// Returns empty TokenStream if `entries` is empty.
 pub fn group_enum_closed(enum_name: &Ident, entries: &[(Ident, TokenStream)]) -> TokenStream {
     if entries.is_empty() {
         return TokenStream::default();
@@ -91,9 +101,6 @@ pub fn group_enum_closed(enum_name: &Ident, entries: &[(Ident, TokenStream)]) ->
 }
 
 /// Generate an open `group_enum!` invocation (with `Other(serde_json::Value)` catch-all).
-///
-/// Used at protocol and top level for Event groups.
-/// Returns empty TokenStream if `entries` is empty.
 pub fn group_enum_open(enum_name: &Ident, entries: &[(Ident, TokenStream)]) -> TokenStream {
     if entries.is_empty() {
         return TokenStream::default();
@@ -106,5 +113,22 @@ pub fn group_enum_open(enum_name: &Ident, entries: &[(Ident, TokenStream)]) -> T
 
     quote! {
         group_enum!(#enum_name { #(#variants),* } + other);
+    }
+}
+
+/// Generate an `impl_from!` invocation for transitive From/TryFrom.
+/// Each entry is `(from, via, to)`.
+pub fn impl_from_transitive(entries: &[(TokenStream, TokenStream, TokenStream)]) -> TokenStream {
+    if entries.is_empty() {
+        return TokenStream::default();
+    }
+
+    let stmts: Vec<_> = entries
+        .iter()
+        .map(|(from, via, to)| quote! { #from => #via => #to })
+        .collect();
+
+    quote! {
+        impl_from!(#(#stmts),*);
     }
 }

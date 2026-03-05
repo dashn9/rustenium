@@ -253,4 +253,4 @@ impl PaintProfile {
 impl PaintProfile {
     pub const IDENTIFIER: &'static str = "LayerTree.PaintProfile";
 }
-group_enum ! (Type { LayerId (LayerId) , SnapshotId (SnapshotId) , ScrollRect (ScrollRect) , StickyPositionConstraint (StickyPositionConstraint) , PictureTile (PictureTile) , Layer (Layer) , PaintProfile (PaintProfile) });
+group_enum ! (LayerTreeTypes { LayerId (LayerId) , SnapshotId (SnapshotId) , ScrollRect (ScrollRect) , StickyPositionConstraint (StickyPositionConstraint) , PictureTile (PictureTile) , Layer (Layer) , PaintProfile (PaintProfile) });

@@ -91,4 +91,4 @@ pub struct CancelPrompt {
     pub method: CancelPromptMethod,
     pub params: CancelPromptParams,
 }
-group_enum ! (Command { Enable (Enable) , Disable (Disable) , SelectPrompt (SelectPrompt) , CancelPrompt (CancelPrompt) });
+group_enum ! (DeviceAccessCommands { Enable (Enable) , Disable (Disable) , SelectPrompt (SelectPrompt) , CancelPrompt (CancelPrompt) });

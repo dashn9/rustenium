@@ -130,4 +130,4 @@ pub struct CheckFormsIssues {
     pub method: CheckFormsIssuesMethod,
     pub params: CheckFormsIssuesParams,
 }
-group_enum ! (Command { GetEncodedResponse (GetEncodedResponse) , Disable (Disable) , Enable (Enable) , CheckContrast (CheckContrast) , CheckFormsIssues (CheckFormsIssues) });
+group_enum ! (AuditsCommands { GetEncodedResponse (GetEncodedResponse) , Disable (Disable) , Enable (Enable) , CheckContrast (CheckContrast) , CheckFormsIssues (CheckFormsIssues) });

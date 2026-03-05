@@ -28,4 +28,4 @@ pub struct DialogClosed {
 impl DialogClosed {
     pub const IDENTIFIER: &'static str = "FedCm.dialogClosed";
 }
-group_enum ! (Event { DialogShown (DialogShown) , DialogClosed (DialogClosed) });
+group_enum ! (FedCmEvents { DialogShown (DialogShown) , DialogClosed (DialogClosed) });

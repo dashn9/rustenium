@@ -23,4 +23,4 @@ impl Sink {
 impl Sink {
     pub const IDENTIFIER: &'static str = "Cast.Sink";
 }
-group_enum ! (Type { Sink (Sink) });
+group_enum ! (CastTypes { Sink (Sink) });

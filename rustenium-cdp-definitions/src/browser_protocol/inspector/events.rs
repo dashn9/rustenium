@@ -27,4 +27,4 @@ pub struct WorkerScriptLoaded {}
 impl WorkerScriptLoaded {
     pub const IDENTIFIER: &'static str = "Inspector.workerScriptLoaded";
 }
-group_enum ! (Event { Detached (Detached) , TargetCrashed (TargetCrashed) , TargetReloadedAfterCrash (TargetReloadedAfterCrash) , WorkerScriptLoaded (WorkerScriptLoaded) });
+group_enum ! (InspectorEvents { Detached (Detached) , TargetCrashed (TargetCrashed) , TargetReloadedAfterCrash (TargetReloadedAfterCrash) , WorkerScriptLoaded (WorkerScriptLoaded) });

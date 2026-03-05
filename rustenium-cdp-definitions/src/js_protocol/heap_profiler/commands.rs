@@ -277,4 +277,4 @@ pub struct TakeHeapSnapshot {
     pub method: TakeHeapSnapshotMethod,
     pub params: TakeHeapSnapshotParams,
 }
-group_enum ! (Command { AddInspectedHeapObject (AddInspectedHeapObject) , CollectGarbage (CollectGarbage) , Disable (Disable) , Enable (Enable) , GetHeapObjectId (GetHeapObjectId) , GetObjectByHeapObjectId (GetObjectByHeapObjectId) , GetSamplingProfile (GetSamplingProfile) , StartSampling (StartSampling) , StartTrackingHeapObjects (StartTrackingHeapObjects) , StopSampling (StopSampling) , StopTrackingHeapObjects (StopTrackingHeapObjects) , TakeHeapSnapshot (TakeHeapSnapshot) });
+group_enum ! (HeapProfilerCommands { AddInspectedHeapObject (AddInspectedHeapObject) , CollectGarbage (CollectGarbage) , Disable (Disable) , Enable (Enable) , GetHeapObjectId (GetHeapObjectId) , GetObjectByHeapObjectId (GetObjectByHeapObjectId) , GetSamplingProfile (GetSamplingProfile) , StartSampling (StartSampling) , StartTrackingHeapObjects (StartTrackingHeapObjects) , StopSampling (StopSampling) , StopTrackingHeapObjects (StopTrackingHeapObjects) , TakeHeapSnapshot (TakeHeapSnapshot) });

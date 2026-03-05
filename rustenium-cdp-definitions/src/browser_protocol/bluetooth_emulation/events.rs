@@ -44,4 +44,4 @@ pub struct DescriptorOperationReceived {
 impl DescriptorOperationReceived {
     pub const IDENTIFIER: &'static str = "BluetoothEmulation.descriptorOperationReceived";
 }
-group_enum ! (Event { GattOperationReceived (GattOperationReceived) , CharacteristicOperationReceived (CharacteristicOperationReceived) , DescriptorOperationReceived (DescriptorOperationReceived) });
+group_enum ! (BluetoothEmulationEvents { GattOperationReceived (GattOperationReceived) , CharacteristicOperationReceived (CharacteristicOperationReceived) , DescriptorOperationReceived (DescriptorOperationReceived) });

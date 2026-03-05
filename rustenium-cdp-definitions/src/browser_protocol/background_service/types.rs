@@ -65,4 +65,4 @@ pub struct BackgroundServiceEvent {
 impl BackgroundServiceEvent {
     pub const IDENTIFIER: &'static str = "BackgroundService.BackgroundServiceEvent";
 }
-group_enum ! (Type { ServiceName (ServiceName) , EventMetadata (EventMetadata) , BackgroundServiceEvent (BackgroundServiceEvent) });
+group_enum ! (BackgroundServiceTypes { ServiceName (ServiceName) , EventMetadata (EventMetadata) , BackgroundServiceEvent (BackgroundServiceEvent) });

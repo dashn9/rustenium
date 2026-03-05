@@ -169,4 +169,4 @@ impl DragData {
 impl DragData {
     pub const IDENTIFIER: &'static str = "Input.DragData";
 }
-group_enum ! (Type { TouchPoint (TouchPoint) , GestureSourceType (GestureSourceType) , MouseButton (MouseButton) , TimeSinceEpoch (TimeSinceEpoch) , DragDataItem (DragDataItem) , DragData (DragData) });
+group_enum ! (InputTypes { TouchPoint (TouchPoint) , GestureSourceType (GestureSourceType) , MouseButton (MouseButton) , TimeSinceEpoch (TimeSinceEpoch) , DragDataItem (DragDataItem) , DragData (DragData) });

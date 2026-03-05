@@ -392,4 +392,4 @@ impl ResolvedBreakpoint {
 impl ResolvedBreakpoint {
     pub const IDENTIFIER: &'static str = "Debugger.ResolvedBreakpoint";
 }
-group_enum ! (Type { BreakpointId (BreakpointId) , CallFrameId (CallFrameId) , Location (Location) , ScriptPosition (ScriptPosition) , LocationRange (LocationRange) , CallFrame (CallFrame) , Scope (Scope) , SearchMatch (SearchMatch) , BreakLocation (BreakLocation) , WasmDisassemblyChunk (WasmDisassemblyChunk) , ScriptLanguage (ScriptLanguage) , DebugSymbols (DebugSymbols) , ResolvedBreakpoint (ResolvedBreakpoint) });
+group_enum ! (DebuggerTypes { BreakpointId (BreakpointId) , CallFrameId (CallFrameId) , Location (Location) , ScriptPosition (ScriptPosition) , LocationRange (LocationRange) , CallFrame (CallFrame) , Scope (Scope) , SearchMatch (SearchMatch) , BreakLocation (BreakLocation) , WasmDisassemblyChunk (WasmDisassemblyChunk) , ScriptLanguage (ScriptLanguage) , DebugSymbols (DebugSymbols) , ResolvedBreakpoint (ResolvedBreakpoint) });

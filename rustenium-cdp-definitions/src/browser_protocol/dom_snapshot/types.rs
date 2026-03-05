@@ -632,4 +632,4 @@ impl TextBoxSnapshot {
 impl TextBoxSnapshot {
     pub const IDENTIFIER: &'static str = "DOMSnapshot.TextBoxSnapshot";
 }
-group_enum ! (Type { DomNode (DomNode) , InlineTextBox (InlineTextBox) , LayoutTreeNode (LayoutTreeNode) , ComputedStyle (ComputedStyle) , NameValue (NameValue) , StringIndex (StringIndex) , ArrayOfStrings (ArrayOfStrings) , RareStringData (RareStringData) , RareBooleanData (RareBooleanData) , RareIntegerData (RareIntegerData) , Rectangle (Rectangle) , DocumentSnapshot (DocumentSnapshot) , NodeTreeSnapshot (NodeTreeSnapshot) , LayoutTreeSnapshot (LayoutTreeSnapshot) , TextBoxSnapshot (TextBoxSnapshot) });
+group_enum ! (DomSnapshotTypes { DomNode (DomNode) , InlineTextBox (InlineTextBox) , LayoutTreeNode (LayoutTreeNode) , ComputedStyle (ComputedStyle) , NameValue (NameValue) , StringIndex (StringIndex) , ArrayOfStrings (ArrayOfStrings) , RareStringData (RareStringData) , RareBooleanData (RareBooleanData) , RareIntegerData (RareIntegerData) , Rectangle (Rectangle) , DocumentSnapshot (DocumentSnapshot) , NodeTreeSnapshot (NodeTreeSnapshot) , LayoutTreeSnapshot (LayoutTreeSnapshot) , TextBoxSnapshot (TextBoxSnapshot) });

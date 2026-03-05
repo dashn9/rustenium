@@ -19,4 +19,4 @@ pub struct BackgroundServiceEventReceived {
 impl BackgroundServiceEventReceived {
     pub const IDENTIFIER: &'static str = "BackgroundService.backgroundServiceEventReceived";
 }
-group_enum ! (Event { RecordingStateChanged (RecordingStateChanged) , BackgroundServiceEventReceived (BackgroundServiceEventReceived) });
+group_enum ! (BackgroundServiceEvents { RecordingStateChanged (RecordingStateChanged) , BackgroundServiceEventReceived (BackgroundServiceEventReceived) });

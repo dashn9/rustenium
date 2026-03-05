@@ -52,4 +52,4 @@ pub struct SetDeviceOrientationOverride {
     pub method: SetDeviceOrientationOverrideMethod,
     pub params: SetDeviceOrientationOverrideParams,
 }
-group_enum ! (Command { ClearDeviceOrientationOverride (ClearDeviceOrientationOverride) , SetDeviceOrientationOverride (SetDeviceOrientationOverride) });
+group_enum ! (DeviceOrientationCommands { ClearDeviceOrientationOverride (ClearDeviceOrientationOverride) , SetDeviceOrientationOverride (SetDeviceOrientationOverride) });

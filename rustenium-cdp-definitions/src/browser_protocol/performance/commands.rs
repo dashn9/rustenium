@@ -66,4 +66,4 @@ pub struct GetMetrics {
     pub method: GetMetricsMethod,
     pub params: GetMetricsParams,
 }
-group_enum ! (Command { Disable (Disable) , Enable (Enable) , GetMetrics (GetMetrics) });
+group_enum ! (PerformanceCommands { Disable (Disable) , Enable (Enable) , GetMetrics (GetMetrics) });

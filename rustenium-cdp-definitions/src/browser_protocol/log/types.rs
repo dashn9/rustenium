@@ -160,4 +160,4 @@ impl ViolationSetting {
 impl ViolationSetting {
     pub const IDENTIFIER: &'static str = "Log.ViolationSetting";
 }
-group_enum ! (Type { LogEntry (LogEntry) , ViolationSetting (ViolationSetting) });
+group_enum ! (LogTypes { LogEntry (LogEntry) , ViolationSetting (ViolationSetting) });

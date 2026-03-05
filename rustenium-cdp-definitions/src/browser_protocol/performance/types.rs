@@ -20,4 +20,4 @@ impl Metric {
 impl Metric {
     pub const IDENTIFIER: &'static str = "Performance.Metric";
 }
-group_enum ! (Type { Metric (Metric) });
+group_enum ! (PerformanceTypes { Metric (Metric) });

@@ -171,4 +171,4 @@ pub struct Start {
     pub method: StartMethod,
     pub params: StartParams,
 }
-group_enum ! (Command { End (End) , GetCategories (GetCategories) , GetTrackEventDescriptor (GetTrackEventDescriptor) , RecordClockSyncMarker (RecordClockSyncMarker) , RequestMemoryDump (RequestMemoryDump) , Start (Start) });
+group_enum ! (TracingCommands { End (End) , GetCategories (GetCategories) , GetTrackEventDescriptor (GetTrackEventDescriptor) , RecordClockSyncMarker (RecordClockSyncMarker) , RequestMemoryDump (RequestMemoryDump) , Start (Start) });

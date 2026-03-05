@@ -181,4 +181,4 @@ pub struct ResetCooldown {
     pub method: ResetCooldownMethod,
     pub params: ResetCooldownParams,
 }
-group_enum ! (Command { Enable (Enable) , Disable (Disable) , SelectAccount (SelectAccount) , ClickDialogButton (ClickDialogButton) , OpenUrl (OpenUrl) , DismissDialog (DismissDialog) , ResetCooldown (ResetCooldown) });
+group_enum ! (FedCmCommands { Enable (Enable) , Disable (Disable) , SelectAccount (SelectAccount) , ClickDialogButton (ClickDialogButton) , OpenUrl (OpenUrl) , DismissDialog (DismissDialog) , ResetCooldown (ResetCooldown) });

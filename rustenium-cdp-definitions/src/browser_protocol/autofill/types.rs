@@ -124,4 +124,4 @@ pub struct FilledField {
 impl FilledField {
     pub const IDENTIFIER: &'static str = "Autofill.FilledField";
 }
-group_enum ! (Type { CreditCard (CreditCard) , AddressField (AddressField) , AddressFields (AddressFields) , Address (Address) , AddressUi (AddressUi) , FillingStrategy (FillingStrategy) , FilledField (FilledField) });
+group_enum ! (AutofillTypes { CreditCard (CreditCard) , AddressField (AddressField) , AddressFields (AddressFields) , Address (Address) , AddressUi (AddressUi) , FillingStrategy (FillingStrategy) , FilledField (FilledField) });

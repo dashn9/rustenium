@@ -106,4 +106,4 @@ impl DomCounter {
 impl DomCounter {
     pub const IDENTIFIER: &'static str = "Memory.DOMCounter";
 }
-group_enum ! (Type { PressureLevel (PressureLevel) , SamplingProfileNode (SamplingProfileNode) , SamplingProfile (SamplingProfile) , Module (Module) , DomCounter (DomCounter) });
+group_enum ! (MemoryTypes { PressureLevel (PressureLevel) , SamplingProfileNode (SamplingProfileNode) , SamplingProfile (SamplingProfile) , Module (Module) , DomCounter (DomCounter) });

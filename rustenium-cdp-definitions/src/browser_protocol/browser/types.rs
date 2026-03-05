@@ -308,4 +308,4 @@ pub enum PrivacySandboxApi {
     #[serde(rename = "TrustedKeyValue")]
     TrustedKeyValue,
 }
-group_enum ! (Type { BrowserContextId (BrowserContextId) , WindowId (WindowId) , WindowState (WindowState) , Bounds (Bounds) , PermissionType (PermissionType) , PermissionSetting (PermissionSetting) , PermissionDescriptor (PermissionDescriptor) , BrowserCommandId (BrowserCommandId) , Bucket (Bucket) , Histogram (Histogram) , PrivacySandboxApi (PrivacySandboxApi) });
+group_enum ! (BrowserTypes { BrowserContextId (BrowserContextId) , WindowId (WindowId) , WindowState (WindowState) , Bounds (Bounds) , PermissionType (PermissionType) , PermissionSetting (PermissionSetting) , PermissionDescriptor (PermissionDescriptor) , BrowserCommandId (BrowserCommandId) , Bucket (Bucket) , Histogram (Histogram) , PrivacySandboxApi (PrivacySandboxApi) });

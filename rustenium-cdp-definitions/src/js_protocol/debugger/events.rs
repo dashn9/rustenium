@@ -242,4 +242,4 @@ pub struct ScriptParsed {
 impl ScriptParsed {
     pub const IDENTIFIER: &'static str = "Debugger.scriptParsed";
 }
-group_enum ! (Event { Paused (Paused) , Resumed (Resumed) , ScriptFailedToParse (ScriptFailedToParse) , ScriptParsed (ScriptParsed) });
+group_enum ! (DebuggerEvents { Paused (Paused) , Resumed (Resumed) , ScriptFailedToParse (ScriptFailedToParse) , ScriptParsed (ScriptParsed) });

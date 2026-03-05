@@ -7,4 +7,4 @@ pub struct IssueAdded {
 impl IssueAdded {
     pub const IDENTIFIER: &'static str = "Audits.issueAdded";
 }
-group_enum ! (Event { IssueAdded (IssueAdded) });
+group_enum ! (AuditsEvents { IssueAdded (IssueAdded) });

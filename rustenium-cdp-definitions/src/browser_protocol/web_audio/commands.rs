@@ -60,4 +60,4 @@ pub struct GetRealtimeData {
     pub method: GetRealtimeDataMethod,
     pub params: GetRealtimeDataParams,
 }
-group_enum ! (Command { Enable (Enable) , Disable (Disable) , GetRealtimeData (GetRealtimeData) });
+group_enum ! (WebAudioCommands { Enable (Enable) , Disable (Disable) , GetRealtimeData (GetRealtimeData) });

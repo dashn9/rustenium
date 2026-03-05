@@ -37,4 +37,4 @@ pub struct BeginFrame {
     pub method: BeginFrameMethod,
     pub params: BeginFrameParams,
 }
-group_enum ! (Command { BeginFrame (BeginFrame) });
+group_enum ! (HeadlessExperimentalCommands { BeginFrame (BeginFrame) });

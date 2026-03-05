@@ -245,4 +245,4 @@ pub struct ChangeAppUserSettings {
     pub method: ChangeAppUserSettingsMethod,
     pub params: ChangeAppUserSettingsParams,
 }
-group_enum ! (Command { GetOsAppState (GetOsAppState) , Install (Install) , Uninstall (Uninstall) , Launch (Launch) , LaunchFilesInApp (LaunchFilesInApp) , OpenCurrentPageInApp (OpenCurrentPageInApp) , ChangeAppUserSettings (ChangeAppUserSettings) });
+group_enum ! (PwaCommands { GetOsAppState (GetOsAppState) , Install (Install) , Uninstall (Uninstall) , Launch (Launch) , LaunchFilesInApp (LaunchFilesInApp) , OpenCurrentPageInApp (OpenCurrentPageInApp) , ChangeAppUserSettings (ChangeAppUserSettings) });

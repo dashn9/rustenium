@@ -55,4 +55,4 @@ pub struct TracingComplete {
 impl TracingComplete {
     pub const IDENTIFIER: &'static str = "Tracing.tracingComplete";
 }
-group_enum ! (Event { BufferUsage (BufferUsage) , DataCollected (DataCollected) , TracingComplete (TracingComplete) });
+group_enum ! (TracingEvents { BufferUsage (BufferUsage) , DataCollected (DataCollected) , TracingComplete (TracingComplete) });

@@ -26,4 +26,4 @@ pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
 }
-group_enum ! (Command { Enable (Enable) });
+group_enum ! (PerformanceTimelineCommands { Enable (Enable) });

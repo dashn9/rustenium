@@ -262,4 +262,4 @@ pub struct SnapshotCommandLog {
     pub method: SnapshotCommandLogMethod,
     pub params: SnapshotCommandLogParams,
 }
-group_enum ! (Command { CompositingReasons (CompositingReasons) , Disable (Disable) , Enable (Enable) , LoadSnapshot (LoadSnapshot) , MakeSnapshot (MakeSnapshot) , ProfileSnapshot (ProfileSnapshot) , ReleaseSnapshot (ReleaseSnapshot) , ReplaySnapshot (ReplaySnapshot) , SnapshotCommandLog (SnapshotCommandLog) });
+group_enum ! (LayerTreeCommands { CompositingReasons (CompositingReasons) , Disable (Disable) , Enable (Enable) , LoadSnapshot (LoadSnapshot) , MakeSnapshot (MakeSnapshot) , ProfileSnapshot (ProfileSnapshot) , ReleaseSnapshot (ReleaseSnapshot) , ReplaySnapshot (ReplaySnapshot) , SnapshotCommandLog (SnapshotCommandLog) });

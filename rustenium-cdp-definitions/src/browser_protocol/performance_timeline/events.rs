@@ -8,4 +8,4 @@ pub struct TimelineEventAdded {
 impl TimelineEventAdded {
     pub const IDENTIFIER: &'static str = "PerformanceTimeline.timelineEventAdded";
 }
-group_enum ! (Event { TimelineEventAdded (TimelineEventAdded) });
+group_enum ! (PerformanceTimelineEvents { TimelineEventAdded (TimelineEventAdded) });

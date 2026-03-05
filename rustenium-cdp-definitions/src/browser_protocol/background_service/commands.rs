@@ -113,4 +113,4 @@ pub struct ClearEvents {
     pub method: ClearEventsMethod,
     pub params: ClearEventsParams,
 }
-group_enum ! (Command { StartObserving (StartObserving) , StopObserving (StopObserving) , SetRecording (SetRecording) , ClearEvents (ClearEvents) });
+group_enum ! (BackgroundServiceCommands { StartObserving (StartObserving) , StopObserving (StopObserving) , SetRecording (SetRecording) , ClearEvents (ClearEvents) });

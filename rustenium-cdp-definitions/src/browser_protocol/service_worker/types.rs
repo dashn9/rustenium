@@ -142,4 +142,4 @@ pub struct ServiceWorkerErrorMessage {
 impl ServiceWorkerErrorMessage {
     pub const IDENTIFIER: &'static str = "ServiceWorker.ServiceWorkerErrorMessage";
 }
-group_enum ! (Type { RegistrationId (RegistrationId) , ServiceWorkerRegistration (ServiceWorkerRegistration) , ServiceWorkerVersionRunningStatus (ServiceWorkerVersionRunningStatus) , ServiceWorkerVersionStatus (ServiceWorkerVersionStatus) , ServiceWorkerVersion (ServiceWorkerVersion) , ServiceWorkerErrorMessage (ServiceWorkerErrorMessage) });
+group_enum ! (ServiceWorkerTypes { RegistrationId (RegistrationId) , ServiceWorkerRegistration (ServiceWorkerRegistration) , ServiceWorkerVersionRunningStatus (ServiceWorkerVersionRunningStatus) , ServiceWorkerVersionStatus (ServiceWorkerVersionStatus) , ServiceWorkerVersion (ServiceWorkerVersion) , ServiceWorkerErrorMessage (ServiceWorkerErrorMessage) });

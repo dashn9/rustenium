@@ -44,9 +44,9 @@ pub struct ModuleParts {
     pub type_builders: TokenStream,
     pub results: TokenStream,
     pub events: TokenStream,
-    pub has_type_group: bool,
-    pub has_command_group: bool,
-    pub has_event_group: bool,
+    pub type_leaves: Vec<Ident>,
+    pub command_leaves: Vec<Ident>,
+    pub event_leaves: Vec<Ident>,
 }
 
 impl Generator {
@@ -78,7 +78,8 @@ impl Generator {
             }
         }
 
-        let mut protocol_infos: Vec<(String, bool, bool, bool)> = Vec::new();
+        // (proto_snake, proto_camel, modules: Vec<(mod_name, mcamel, type_leaves, cmd_leaves, evt_leaves)>)
+        let mut protocol_infos: Vec<(String, String, Vec<(String, String, Vec<Ident>, Vec<Ident>, Vec<Ident>)>)> = Vec::new();
 
         for protocol in protocols.iter() {
             let version = format!("{}.{}", protocol.version.major, protocol.version.minor);
@@ -88,7 +89,7 @@ impl Generator {
             fs::create_dir_all(&protocol_dir)
                 .unwrap_or_else(|e| panic!("Unable to create directory {}: {}", protocol_dir.display(), e));
 
-            let mut module_infos: Vec<(String, bool, bool, bool)> = Vec::new();
+            let mut module_infos: Vec<(String, String, Vec<Ident>, Vec<Ident>, Vec<Ident>)> = Vec::new();
 
             let with_deprecated = self.with_deprecated;
             let with_experimental = self.with_experimental;
@@ -132,41 +133,68 @@ impl Generator {
                 fs::write(&module_mod_path, module_mod_content.to_string())
                     .unwrap_or_else(|e| panic!("Unable to write {}: {}", module_mod_path.display(), e));
 
-                module_infos.push((mod_name, parts.has_type_group, parts.has_command_group, parts.has_event_group));
+                module_infos.push((mod_name, module.name.to_upper_camel_case(), parts.type_leaves, parts.command_leaves, parts.event_leaves));
             }
 
             let type_entries: Vec<_> = module_infos.iter()
-                .filter(|(_, has, _, _)| *has)
-                .map(|(name, _, _, _)| {
+                .filter(|(_, _, tl, _, _)| !tl.is_empty())
+                .map(|(name, mcamel, _, _, _)| {
                     let mod_id = format_ident!("{}", name);
-                    let var_id = format_ident!("{}", name.to_upper_camel_case());
-                    (var_id, quote!(#mod_id::types::Type))
+                    let var_id = format_ident!("{}", mcamel);
+                    let enum_id = format_ident!("{}Types", mcamel);
+                    (var_id, quote!(#mod_id::types::#enum_id))
                 })
                 .collect();
 
             let cmd_entries: Vec<_> = module_infos.iter()
-                .filter(|(_, _, has, _)| *has)
-                .map(|(name, _, _, _)| {
+                .filter(|(_, _, _, cl, _)| !cl.is_empty())
+                .map(|(name, mcamel, _, _, _)| {
                     let mod_id = format_ident!("{}", name);
-                    let var_id = format_ident!("{}", name.to_upper_camel_case());
-                    (var_id, quote!(#mod_id::commands::Command))
+                    let var_id = format_ident!("{}", mcamel);
+                    let enum_id = format_ident!("{}Commands", mcamel);
+                    (var_id, quote!(#mod_id::commands::#enum_id))
                 })
                 .collect();
 
             let evt_entries: Vec<_> = module_infos.iter()
-                .filter(|(_, _, _, has)| *has)
-                .map(|(name, _, _, _)| {
+                .filter(|(_, _, _, _, el)| !el.is_empty())
+                .map(|(name, mcamel, _, _, _)| {
                     let mod_id = format_ident!("{}", name);
-                    let var_id = format_ident!("{}", name.to_upper_camel_case());
-                    (var_id, quote!(#mod_id::events::Event))
+                    let var_id = format_ident!("{}", mcamel);
+                    let enum_id = format_ident!("{}Events", mcamel);
+                    (var_id, quote!(#mod_id::events::#enum_id))
                 })
                 .collect();
 
-            let protocol_type_group = event::group_enum_closed(&format_ident!("Type"), &type_entries);
-            let protocol_cmd_group = event::group_enum_closed(&format_ident!("Command"), &cmd_entries);
-            let protocol_evt_group = event::group_enum_open(&format_ident!("Event"), &evt_entries);
+            let protocol_camel = protocol.name.unwrap_or("unknown").to_upper_camel_case();
 
-            let mod_decls: Vec<_> = module_infos.iter().map(|(name, _, _, _)| {
+            // Build transitive entries: leaf => protocol_enum via module_enum
+            let mut proto_transitive: Vec<(TokenStream, TokenStream, TokenStream)> = Vec::new();
+            let proto_type_name = format_ident!("{}Types", protocol_camel);
+            let proto_cmd_name = format_ident!("{}Commands", protocol_camel);
+            let proto_evt_name = format_ident!("{}Events", protocol_camel);
+            for (mod_name, mcamel, type_leaves, cmd_leaves, evt_leaves) in &module_infos {
+                let mod_id = format_ident!("{}", mod_name);
+                for leaf in type_leaves {
+                    let me = format_ident!("{}Types", mcamel);
+                    proto_transitive.push((quote!(#mod_id::types::#leaf), quote!(#mod_id::types::#me), quote!(#proto_type_name)));
+                }
+                for leaf in cmd_leaves {
+                    let me = format_ident!("{}Commands", mcamel);
+                    proto_transitive.push((quote!(#mod_id::commands::#leaf), quote!(#mod_id::commands::#me), quote!(#proto_cmd_name)));
+                }
+                for leaf in evt_leaves {
+                    let me = format_ident!("{}Events", mcamel);
+                    proto_transitive.push((quote!(#mod_id::events::#leaf), quote!(#mod_id::events::#me), quote!(#proto_evt_name)));
+                }
+            }
+
+            let protocol_type_group = event::group_enum_closed(&proto_type_name, &type_entries);
+            let protocol_cmd_group = event::group_enum_closed(&proto_cmd_name, &cmd_entries);
+            let protocol_evt_group = event::group_enum_open(&proto_evt_name, &evt_entries);
+            let protocol_transitive = event::impl_from_transitive(&proto_transitive);
+
+            let mod_decls: Vec<_> = module_infos.iter().map(|(name, _, _, _, _)| {
                 let mod_ident = format_ident!("{}", name);
                 quote! { pub mod #mod_ident; }
             }).collect();
@@ -179,50 +207,90 @@ impl Generator {
                 #protocol_type_group
                 #protocol_cmd_group
                 #protocol_evt_group
+                #protocol_transitive
             };
 
             let protocol_mod_path = protocol_dir.join("mod.rs");
             fs::write(&protocol_mod_path, protocol_mod_content.to_string())
                 .unwrap_or_else(|e| panic!("Unable to write {}: {}", protocol_mod_path.display(), e));
 
-            protocol_infos.push((
-                protocol_snake,
-                !type_entries.is_empty(),
-                !cmd_entries.is_empty(),
-                !evt_entries.is_empty(),
-            ));
+            protocol_infos.push((protocol_snake, protocol_camel, module_infos));
         }
 
+        let has_types = |modules: &Vec<(String, String, Vec<Ident>, Vec<Ident>, Vec<Ident>)>| modules.iter().any(|(_, _, tl, _, _)| !tl.is_empty());
+        let has_cmds = |modules: &Vec<(String, String, Vec<Ident>, Vec<Ident>, Vec<Ident>)>| modules.iter().any(|(_, _, _, cl, _)| !cl.is_empty());
+        let has_evts = |modules: &Vec<(String, String, Vec<Ident>, Vec<Ident>, Vec<Ident>)>| modules.iter().any(|(_, _, _, _, el)| !el.is_empty());
+
         let top_type_entries: Vec<_> = protocol_infos.iter()
-            .filter(|(_, has, _, _)| *has)
-            .map(|(name, _, _, _)| {
+            .filter(|(_, _, modules)| has_types(modules))
+            .map(|(name, pcamel, _)| {
                 let mod_id = format_ident!("{}", name);
-                let var_id = format_ident!("{}", name.to_upper_camel_case());
-                (var_id, quote!(#mod_id::Type))
+                let var_id = format_ident!("{}", pcamel);
+                let enum_id = format_ident!("{}Types", pcamel);
+                (var_id, quote!(#mod_id::#enum_id))
             })
             .collect();
 
         let top_cmd_entries: Vec<_> = protocol_infos.iter()
-            .filter(|(_, _, has, _)| *has)
-            .map(|(name, _, _, _)| {
+            .filter(|(_, _, modules)| has_cmds(modules))
+            .map(|(name, pcamel, _)| {
                 let mod_id = format_ident!("{}", name);
-                let var_id = format_ident!("{}", name.to_upper_camel_case());
-                (var_id, quote!(#mod_id::Command))
+                let var_id = format_ident!("{}", pcamel);
+                let enum_id = format_ident!("{}Commands", pcamel);
+                (var_id, quote!(#mod_id::#enum_id))
             })
             .collect();
 
         let top_evt_entries: Vec<_> = protocol_infos.iter()
-            .filter(|(_, _, _, has)| *has)
-            .map(|(name, _, _, _)| {
+            .filter(|(_, _, modules)| has_evts(modules))
+            .map(|(name, pcamel, _)| {
                 let mod_id = format_ident!("{}", name);
-                let var_id = format_ident!("{}", name.to_upper_camel_case());
-                (var_id, quote!(#mod_id::Event))
+                let var_id = format_ident!("{}", pcamel);
+                let enum_id = format_ident!("{}Events", pcamel);
+                (var_id, quote!(#mod_id::#enum_id))
             })
             .collect();
+
+        // Build top-level transitive entries
+        let mut top_transitive: Vec<(TokenStream, TokenStream, TokenStream)> = Vec::new();
+        for (proto_name, pcamel, modules) in &protocol_infos {
+            let proto_id = format_ident!("{}", proto_name);
+            let proto_type_enum = format_ident!("{}Types", pcamel);
+            let proto_cmd_enum = format_ident!("{}Commands", pcamel);
+            let proto_evt_enum = format_ident!("{}Events", pcamel);
+
+            for (mod_name, mcamel, type_leaves, cmd_leaves, evt_leaves) in modules {
+                let mod_id = format_ident!("{}", mod_name);
+
+                // module group enum -> top (via protocol enum)
+                if !type_leaves.is_empty() {
+                    let me = format_ident!("{}Types", mcamel);
+                    top_transitive.push((quote!(#proto_id::#mod_id::types::#me), quote!(#proto_id::#proto_type_enum), quote!(Type)));
+                    for leaf in type_leaves {
+                        top_transitive.push((quote!(#proto_id::#mod_id::types::#leaf), quote!(#proto_id::#proto_type_enum), quote!(Type)));
+                    }
+                }
+                if !cmd_leaves.is_empty() {
+                    let me = format_ident!("{}Commands", mcamel);
+                    top_transitive.push((quote!(#proto_id::#mod_id::commands::#me), quote!(#proto_id::#proto_cmd_enum), quote!(Command)));
+                    for leaf in cmd_leaves {
+                        top_transitive.push((quote!(#proto_id::#mod_id::commands::#leaf), quote!(#proto_id::#proto_cmd_enum), quote!(Command)));
+                    }
+                }
+                if !evt_leaves.is_empty() {
+                    let me = format_ident!("{}Events", mcamel);
+                    top_transitive.push((quote!(#proto_id::#mod_id::events::#me), quote!(#proto_id::#proto_evt_enum), quote!(Event)));
+                    for leaf in evt_leaves {
+                        top_transitive.push((quote!(#proto_id::#mod_id::events::#leaf), quote!(#proto_id::#proto_evt_enum), quote!(Event)));
+                    }
+                }
+            }
+        }
 
         let top_type_group = event::group_enum_closed(&format_ident!("Type"), &top_type_entries);
         let top_cmd_group = event::group_enum_closed(&format_ident!("Command"), &top_cmd_entries);
         let top_evt_group = event::group_enum_open(&format_ident!("Event"), &top_evt_entries);
+        let top_transitive_impls = event::impl_from_transitive(&top_transitive);
 
         let event_message = if !top_evt_entries.is_empty() {
             quote! {
@@ -237,7 +305,7 @@ impl Generator {
             TokenStream::default()
         };
 
-        let top_mod_decls: Vec<_> = protocol_infos.iter().map(|(name, _, _, _)| {
+        let top_mod_decls: Vec<_> = protocol_infos.iter().map(|(name, _, _)| {
             let mod_ident = format_ident!("{}", name);
             quote! { pub mod #mod_ident; }
         }).collect();
@@ -280,6 +348,7 @@ impl Generator {
             #top_type_group
             #top_cmd_group
             #top_evt_group
+            #top_transitive_impls
 
             #event_message
         };
@@ -403,14 +472,16 @@ impl Generator {
         let cmd_entries: Vec<_> = command_idents.iter().map(|(v, t)| (v.clone(), quote!(#t))).collect();
         let evt_entries: Vec<_> = event_idents.iter().map(|(v, t)| (v.clone(), quote!(#t))).collect();
 
+        let module_camel = module.name.to_upper_camel_case();
+
         if !type_entries.is_empty() {
-            types_stream.extend(event::group_enum_closed(&format_ident!("Type"), &type_entries));
+            types_stream.extend(event::group_enum_closed(&format_ident!("{}Types", module_camel), &type_entries));
         }
         if !cmd_entries.is_empty() {
-            commands_stream.extend(event::group_enum_closed(&format_ident!("Command"), &cmd_entries));
+            commands_stream.extend(event::group_enum_closed(&format_ident!("{}Commands", module_camel), &cmd_entries));
         }
         if !evt_entries.is_empty() {
-            events_stream.extend(event::group_enum_closed(&format_ident!("Event"), &evt_entries));
+            events_stream.extend(event::group_enum_closed(&format_ident!("{}Events", module_camel), &evt_entries));
         }
 
         let serde_import = quote! { use serde::{Serialize, Deserialize}; };
@@ -435,9 +506,9 @@ impl Generator {
             type_builders: wrap_builder(type_builders_stream, "types"),
             results: wrap(results_stream),
             events: wrap(events_stream),
-            has_type_group: !type_idents.is_empty(),
-            has_command_group: !command_idents.is_empty(),
-            has_event_group: !event_idents.is_empty(),
+            type_leaves: type_idents.into_iter().map(|(_, t)| t).collect(),
+            command_leaves: command_idents.into_iter().map(|(_, t)| t).collect(),
+            event_leaves: event_idents.into_iter().map(|(_, t)| t).collect(),
         }
     }
 

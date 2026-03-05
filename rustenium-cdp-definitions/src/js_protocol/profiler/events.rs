@@ -51,4 +51,4 @@ pub struct PreciseCoverageDeltaUpdate {
 impl PreciseCoverageDeltaUpdate {
     pub const IDENTIFIER: &'static str = "Profiler.preciseCoverageDeltaUpdate";
 }
-group_enum ! (Event { ConsoleProfileFinished (ConsoleProfileFinished) , ConsoleProfileStarted (ConsoleProfileStarted) , PreciseCoverageDeltaUpdate (PreciseCoverageDeltaUpdate) });
+group_enum ! (ProfilerEvents { ConsoleProfileFinished (ConsoleProfileFinished) , ConsoleProfileStarted (ConsoleProfileStarted) , PreciseCoverageDeltaUpdate (PreciseCoverageDeltaUpdate) });

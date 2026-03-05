@@ -97,4 +97,4 @@ pub struct ResolveBlob {
     pub method: ResolveBlobMethod,
     pub params: ResolveBlobParams,
 }
-group_enum ! (Command { Close (Close) , Read (Read) , ResolveBlob (ResolveBlob) });
+group_enum ! (IoCommands { Close (Close) , Read (Read) , ResolveBlob (ResolveBlob) });

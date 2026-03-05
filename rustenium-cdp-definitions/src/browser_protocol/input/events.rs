@@ -8,4 +8,4 @@ pub struct DragIntercepted {
 impl DragIntercepted {
     pub const IDENTIFIER: &'static str = "Input.dragIntercepted";
 }
-group_enum ! (Event { DragIntercepted (DragIntercepted) });
+group_enum ! (InputEvents { DragIntercepted (DragIntercepted) });

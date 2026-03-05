@@ -13,4 +13,4 @@ pub struct Metrics {
 impl Metrics {
     pub const IDENTIFIER: &'static str = "Performance.metrics";
 }
-group_enum ! (Event { Metrics (Metrics) });
+group_enum ! (PerformanceEvents { Metrics (Metrics) });

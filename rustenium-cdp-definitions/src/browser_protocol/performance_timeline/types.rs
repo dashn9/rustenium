@@ -150,4 +150,4 @@ impl TimelineEvent {
 impl TimelineEvent {
     pub const IDENTIFIER: &'static str = "PerformanceTimeline.TimelineEvent";
 }
-group_enum ! (Type { LargestContentfulPaint (LargestContentfulPaint) , LayoutShiftAttribution (LayoutShiftAttribution) , LayoutShift (LayoutShift) , TimelineEvent (TimelineEvent) });
+group_enum ! (PerformanceTimelineTypes { LargestContentfulPaint (LargestContentfulPaint) , LayoutShiftAttribution (LayoutShiftAttribution) , LayoutShift (LayoutShift) , TimelineEvent (TimelineEvent) });

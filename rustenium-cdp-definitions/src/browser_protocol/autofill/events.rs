@@ -13,4 +13,4 @@ pub struct AddressFormFilled {
 impl AddressFormFilled {
     pub const IDENTIFIER: &'static str = "Autofill.addressFormFilled";
 }
-group_enum ! (Event { AddressFormFilled (AddressFormFilled) });
+group_enum ! (AutofillEvents { AddressFormFilled (AddressFormFilled) });

@@ -87,4 +87,4 @@ impl PromptDevice {
 impl PromptDevice {
     pub const IDENTIFIER: &'static str = "DeviceAccess.PromptDevice";
 }
-group_enum ! (Type { RequestId (RequestId) , DeviceId (DeviceId) , PromptDevice (PromptDevice) });
+group_enum ! (DeviceAccessTypes { RequestId (RequestId) , DeviceId (DeviceId) , PromptDevice (PromptDevice) });
