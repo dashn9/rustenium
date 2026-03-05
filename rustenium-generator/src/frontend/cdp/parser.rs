@@ -32,7 +32,20 @@ enum ModuleProperty<'a> {
 fn add_module_property_to_module<'a>(mod_prop: ModuleProperty<'a>, module: &mut Module<'a>) {
     match mod_prop {
         ModuleProperty::Type(t) => module.types.push(t),
-        ModuleProperty::Command(c) => module.commands.push(c),
+        ModuleProperty::Command(c) => {
+            let name = c.method.name.clone();
+            module.commands.push(c);
+            // Ensure every command has a corresponding result entry
+            let result_name = Cow::Owned(format!("{}Result", name));
+            if !module.command_results.iter().any(|cr| cr.name == result_name) {
+                module.command_results.push(CommandResult {
+                    description: Some(Cow::Owned(format!("Result for {} command", name))),
+                    name: result_name,
+                    parameters: vec![],
+                    raw_name: Cow::Owned(String::new()),
+                });
+            }
+        }
         ModuleProperty::CommandResult(cr) => module.command_results.push(cr),
         ModuleProperty::Event(e) => module.events.push(e),
     }

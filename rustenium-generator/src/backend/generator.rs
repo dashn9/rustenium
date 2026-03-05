@@ -384,11 +384,6 @@ impl Generator {
         let mut command_idents: Vec<(Ident, Ident)> = Vec::new();
         let mut event_idents: Vec<(Ident, Ident)> = Vec::new();
 
-        // Collect result names so we can link commands to their results
-        let result_names: HashSet<String> = module.command_results.iter()
-            .map(|cr| cr.name.to_upper_camel_case())
-            .collect();
-
         let datatypes: Vec<_> = module
             .into_iter()
             .filter(|dt| with_deprecated || !dt.is_deprecated())
@@ -413,14 +408,7 @@ impl Generator {
 
                 // Link command to its result type
                 let def_ident = format_ident!("{}", camel_name);
-                let returns_name = format!("{}Result", camel_name);
-                let returns_ident = format_ident!("{}", returns_name);
-                if !result_names.contains(&returns_name) {
-                    results_stream.extend(quote! {
-                        #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-                        pub struct #returns_ident {}
-                    });
-                }
+                let returns_ident = format_ident!("{}Result", camel_name);
                 commands_stream.extend(quote! {
                     impl super::super::super::CommandResult for #def_ident {
                         type Result = super::results::#returns_ident;
