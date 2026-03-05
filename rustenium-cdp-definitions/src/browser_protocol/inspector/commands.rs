@@ -16,6 +16,9 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
+impl super::super::super::CommandResult for Disable {
+    type Result = super::results::DisableResult;
+}
 #[doc = "Enables inspector domain notifications.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Inspector/#method-enable)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct EnableParams {}
@@ -32,5 +35,8 @@ impl EnableMethod {
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl super::super::super::CommandResult for Enable {
+    type Result = super::results::EnableResult;
 }
 group_enum ! (InspectorCommands { Disable (Disable) , Enable (Enable) });

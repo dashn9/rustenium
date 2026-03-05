@@ -21,6 +21,9 @@ pub struct GetStorageKey {
     pub method: GetStorageKeyMethod,
     pub params: GetStorageKeyParams,
 }
+impl super::super::super::CommandResult for GetStorageKey {
+    type Result = super::results::GetStorageKeyResult;
+}
 #[doc = "Clears storage for origin.\n[clearDataForOrigin](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-clearDataForOrigin)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClearDataForOriginParams {
@@ -52,6 +55,9 @@ impl ClearDataForOriginMethod {
 pub struct ClearDataForOrigin {
     pub method: ClearDataForOriginMethod,
     pub params: ClearDataForOriginParams,
+}
+impl super::super::super::CommandResult for ClearDataForOrigin {
+    type Result = super::results::ClearDataForOriginResult;
 }
 #[doc = "Clears storage for storage key.\n[clearDataForStorageKey](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-clearDataForStorageKey)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -85,6 +91,9 @@ pub struct ClearDataForStorageKey {
     pub method: ClearDataForStorageKeyMethod,
     pub params: ClearDataForStorageKeyParams,
 }
+impl super::super::super::CommandResult for ClearDataForStorageKey {
+    type Result = super::results::ClearDataForStorageKeyResult;
+}
 #[doc = "Returns all browser cookies.\n[getCookies](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-getCookies)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct GetCookiesParams {
@@ -107,6 +116,9 @@ impl GetCookiesMethod {
 pub struct GetCookies {
     pub method: GetCookiesMethod,
     pub params: GetCookiesParams,
+}
+impl super::super::super::CommandResult for GetCookies {
+    type Result = super::results::GetCookiesResult;
 }
 #[doc = "Sets given cookies.\n[setCookies](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-setCookies)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -143,6 +155,9 @@ pub struct SetCookies {
     pub method: SetCookiesMethod,
     pub params: SetCookiesParams,
 }
+impl super::super::super::CommandResult for SetCookies {
+    type Result = super::results::SetCookiesResult;
+}
 #[doc = "Clears cookies.\n[clearCookies](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-clearCookies)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ClearCookiesParams {
@@ -165,6 +180,9 @@ impl ClearCookiesMethod {
 pub struct ClearCookies {
     pub method: ClearCookiesMethod,
     pub params: ClearCookiesParams,
+}
+impl super::super::super::CommandResult for ClearCookies {
+    type Result = super::results::ClearCookiesResult;
 }
 #[doc = "Returns usage and quota in bytes.\n[getUsageAndQuota](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-getUsageAndQuota)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -198,6 +216,9 @@ impl GetUsageAndQuotaMethod {
 pub struct GetUsageAndQuota {
     pub method: GetUsageAndQuotaMethod,
     pub params: GetUsageAndQuotaParams,
+}
+impl super::super::super::CommandResult for GetUsageAndQuota {
+    type Result = super::results::GetUsageAndQuotaResult;
 }
 #[doc = "Override quota for the specified origin\n[overrideQuotaForOrigin](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-overrideQuotaForOrigin)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -238,6 +259,9 @@ pub struct OverrideQuotaForOrigin {
     pub method: OverrideQuotaForOriginMethod,
     pub params: OverrideQuotaForOriginParams,
 }
+impl super::super::super::CommandResult for OverrideQuotaForOrigin {
+    type Result = super::results::OverrideQuotaForOriginResult;
+}
 #[doc = "Registers origin to be notified when an update occurs to its cache storage list.\n[trackCacheStorageForOrigin](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-trackCacheStorageForOrigin)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TrackCacheStorageForOriginParams {
@@ -270,6 +294,9 @@ impl TrackCacheStorageForOriginMethod {
 pub struct TrackCacheStorageForOrigin {
     pub method: TrackCacheStorageForOriginMethod,
     pub params: TrackCacheStorageForOriginParams,
+}
+impl super::super::super::CommandResult for TrackCacheStorageForOrigin {
+    type Result = super::results::TrackCacheStorageForOriginResult;
 }
 #[doc = "Registers storage key to be notified when an update occurs to its cache storage list.\n[trackCacheStorageForStorageKey](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-trackCacheStorageForStorageKey)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -304,6 +331,9 @@ pub struct TrackCacheStorageForStorageKey {
     pub method: TrackCacheStorageForStorageKeyMethod,
     pub params: TrackCacheStorageForStorageKeyParams,
 }
+impl super::super::super::CommandResult for TrackCacheStorageForStorageKey {
+    type Result = super::results::TrackCacheStorageForStorageKeyResult;
+}
 #[doc = "Registers origin to be notified when an update occurs to its IndexedDB.\n[trackIndexedDBForOrigin](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-trackIndexedDBForOrigin)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TrackIndexedDbForOriginParams {
@@ -336,6 +366,9 @@ impl TrackIndexedDbForOriginMethod {
 pub struct TrackIndexedDbForOrigin {
     pub method: TrackIndexedDbForOriginMethod,
     pub params: TrackIndexedDbForOriginParams,
+}
+impl super::super::super::CommandResult for TrackIndexedDbForOrigin {
+    type Result = super::results::TrackIndexedDbForOriginResult;
 }
 #[doc = "Registers storage key to be notified when an update occurs to its IndexedDB.\n[trackIndexedDBForStorageKey](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-trackIndexedDBForStorageKey)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -370,6 +403,9 @@ pub struct TrackIndexedDbForStorageKey {
     pub method: TrackIndexedDbForStorageKeyMethod,
     pub params: TrackIndexedDbForStorageKeyParams,
 }
+impl super::super::super::CommandResult for TrackIndexedDbForStorageKey {
+    type Result = super::results::TrackIndexedDbForStorageKeyResult;
+}
 #[doc = "Unregisters origin from receiving notifications for cache storage.\n[untrackCacheStorageForOrigin](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-untrackCacheStorageForOrigin)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UntrackCacheStorageForOriginParams {
@@ -402,6 +438,9 @@ impl UntrackCacheStorageForOriginMethod {
 pub struct UntrackCacheStorageForOrigin {
     pub method: UntrackCacheStorageForOriginMethod,
     pub params: UntrackCacheStorageForOriginParams,
+}
+impl super::super::super::CommandResult for UntrackCacheStorageForOrigin {
+    type Result = super::results::UntrackCacheStorageForOriginResult;
 }
 #[doc = "Unregisters storage key from receiving notifications for cache storage.\n[untrackCacheStorageForStorageKey](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-untrackCacheStorageForStorageKey)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -436,6 +475,9 @@ pub struct UntrackCacheStorageForStorageKey {
     pub method: UntrackCacheStorageForStorageKeyMethod,
     pub params: UntrackCacheStorageForStorageKeyParams,
 }
+impl super::super::super::CommandResult for UntrackCacheStorageForStorageKey {
+    type Result = super::results::UntrackCacheStorageForStorageKeyResult;
+}
 #[doc = "Unregisters origin from receiving notifications for IndexedDB.\n[untrackIndexedDBForOrigin](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-untrackIndexedDBForOrigin)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UntrackIndexedDbForOriginParams {
@@ -468,6 +510,9 @@ impl UntrackIndexedDbForOriginMethod {
 pub struct UntrackIndexedDbForOrigin {
     pub method: UntrackIndexedDbForOriginMethod,
     pub params: UntrackIndexedDbForOriginParams,
+}
+impl super::super::super::CommandResult for UntrackIndexedDbForOrigin {
+    type Result = super::results::UntrackIndexedDbForOriginResult;
 }
 #[doc = "Unregisters storage key from receiving notifications for IndexedDB.\n[untrackIndexedDBForStorageKey](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-untrackIndexedDBForStorageKey)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -502,6 +547,9 @@ pub struct UntrackIndexedDbForStorageKey {
     pub method: UntrackIndexedDbForStorageKeyMethod,
     pub params: UntrackIndexedDbForStorageKeyParams,
 }
+impl super::super::super::CommandResult for UntrackIndexedDbForStorageKey {
+    type Result = super::results::UntrackIndexedDbForStorageKeyResult;
+}
 #[doc = "Returns the number of stored Trust Tokens per issuer for the\ncurrent browsing context.\n[getTrustTokens](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-getTrustTokens)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct GetTrustTokensParams {}
@@ -518,6 +566,9 @@ impl GetTrustTokensMethod {
 pub struct GetTrustTokens {
     pub method: GetTrustTokensMethod,
     pub params: GetTrustTokensParams,
+}
+impl super::super::super::CommandResult for GetTrustTokens {
+    type Result = super::results::GetTrustTokensResult;
 }
 #[doc = "Removes all Trust Tokens issued by the provided issuerOrigin.\nLeaves other stored data, including the issuer's Redemption Records, intact.\n[clearTrustTokens](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-clearTrustTokens)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -551,6 +602,9 @@ pub struct ClearTrustTokens {
     pub method: ClearTrustTokensMethod,
     pub params: ClearTrustTokensParams,
 }
+impl super::super::super::CommandResult for ClearTrustTokens {
+    type Result = super::results::ClearTrustTokensResult;
+}
 #[doc = "Gets details for a named interest group.\n[getInterestGroupDetails](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-getInterestGroupDetails)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetInterestGroupDetailsParams {
@@ -581,6 +635,9 @@ pub struct GetInterestGroupDetails {
     pub method: GetInterestGroupDetailsMethod,
     pub params: GetInterestGroupDetailsParams,
 }
+impl super::super::super::CommandResult for GetInterestGroupDetails {
+    type Result = super::results::GetInterestGroupDetailsResult;
+}
 #[doc = "Enables/Disables issuing of interestGroupAccessed events.\n[setInterestGroupTracking](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-setInterestGroupTracking)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetInterestGroupTrackingParams {
@@ -608,6 +665,9 @@ pub struct SetInterestGroupTracking {
     pub method: SetInterestGroupTrackingMethod,
     pub params: SetInterestGroupTrackingParams,
 }
+impl super::super::super::CommandResult for SetInterestGroupTracking {
+    type Result = super::results::SetInterestGroupTrackingResult;
+}
 #[doc = "Enables/Disables issuing of interestGroupAuctionEventOccurred and\ninterestGroupAuctionNetworkRequestCreated.\n[setInterestGroupAuctionTracking](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-setInterestGroupAuctionTracking)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetInterestGroupAuctionTrackingParams {
@@ -634,6 +694,9 @@ impl SetInterestGroupAuctionTrackingMethod {
 pub struct SetInterestGroupAuctionTracking {
     pub method: SetInterestGroupAuctionTrackingMethod,
     pub params: SetInterestGroupAuctionTrackingParams,
+}
+impl super::super::super::CommandResult for SetInterestGroupAuctionTracking {
+    type Result = super::results::SetInterestGroupAuctionTrackingResult;
 }
 #[doc = "Gets metadata for an origin's shared storage.\n[getSharedStorageMetadata](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-getSharedStorageMetadata)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -667,6 +730,9 @@ pub struct GetSharedStorageMetadata {
     pub method: GetSharedStorageMetadataMethod,
     pub params: GetSharedStorageMetadataParams,
 }
+impl super::super::super::CommandResult for GetSharedStorageMetadata {
+    type Result = super::results::GetSharedStorageMetadataResult;
+}
 #[doc = "Gets the entries in an given origin's shared storage.\n[getSharedStorageEntries](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-getSharedStorageEntries)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetSharedStorageEntriesParams {
@@ -698,6 +764,9 @@ impl GetSharedStorageEntriesMethod {
 pub struct GetSharedStorageEntries {
     pub method: GetSharedStorageEntriesMethod,
     pub params: GetSharedStorageEntriesParams,
+}
+impl super::super::super::CommandResult for GetSharedStorageEntries {
+    type Result = super::results::GetSharedStorageEntriesResult;
 }
 #[doc = "Sets entry with `key` and `value` for a given origin's shared storage.\n[setSharedStorageEntry](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-setSharedStorageEntry)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -742,6 +811,9 @@ pub struct SetSharedStorageEntry {
     pub method: SetSharedStorageEntryMethod,
     pub params: SetSharedStorageEntryParams,
 }
+impl super::super::super::CommandResult for SetSharedStorageEntry {
+    type Result = super::results::SetSharedStorageEntryResult;
+}
 #[doc = "Deletes entry for `key` (if it exists) for a given origin's shared storage.\n[deleteSharedStorageEntry](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-deleteSharedStorageEntry)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeleteSharedStorageEntryParams {
@@ -771,6 +843,9 @@ impl DeleteSharedStorageEntryMethod {
 pub struct DeleteSharedStorageEntry {
     pub method: DeleteSharedStorageEntryMethod,
     pub params: DeleteSharedStorageEntryParams,
+}
+impl super::super::super::CommandResult for DeleteSharedStorageEntry {
+    type Result = super::results::DeleteSharedStorageEntryResult;
 }
 #[doc = "Clears all entries for a given origin's shared storage.\n[clearSharedStorageEntries](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-clearSharedStorageEntries)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -804,6 +879,9 @@ pub struct ClearSharedStorageEntries {
     pub method: ClearSharedStorageEntriesMethod,
     pub params: ClearSharedStorageEntriesParams,
 }
+impl super::super::super::CommandResult for ClearSharedStorageEntries {
+    type Result = super::results::ClearSharedStorageEntriesResult;
+}
 #[doc = "Resets the budget for `ownerOrigin` by clearing all budget withdrawals.\n[resetSharedStorageBudget](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-resetSharedStorageBudget)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResetSharedStorageBudgetParams {
@@ -836,6 +914,9 @@ pub struct ResetSharedStorageBudget {
     pub method: ResetSharedStorageBudgetMethod,
     pub params: ResetSharedStorageBudgetParams,
 }
+impl super::super::super::CommandResult for ResetSharedStorageBudget {
+    type Result = super::results::ResetSharedStorageBudgetResult;
+}
 #[doc = "Enables/disables issuing of sharedStorageAccessed events.\n[setSharedStorageTracking](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-setSharedStorageTracking)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetSharedStorageTrackingParams {
@@ -862,6 +943,9 @@ impl SetSharedStorageTrackingMethod {
 pub struct SetSharedStorageTracking {
     pub method: SetSharedStorageTrackingMethod,
     pub params: SetSharedStorageTrackingParams,
+}
+impl super::super::super::CommandResult for SetSharedStorageTracking {
+    type Result = super::results::SetSharedStorageTrackingResult;
 }
 #[doc = "Set tracking for a storage key's buckets.\n[setStorageBucketTracking](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-setStorageBucketTracking)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -893,6 +977,9 @@ pub struct SetStorageBucketTracking {
     pub method: SetStorageBucketTrackingMethod,
     pub params: SetStorageBucketTrackingParams,
 }
+impl super::super::super::CommandResult for SetStorageBucketTracking {
+    type Result = super::results::SetStorageBucketTrackingResult;
+}
 #[doc = "Deletes the Storage Bucket with the given storage key and bucket name.\n[deleteStorageBucket](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-deleteStorageBucket)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeleteStorageBucketParams {
@@ -920,6 +1007,9 @@ pub struct DeleteStorageBucket {
     pub method: DeleteStorageBucketMethod,
     pub params: DeleteStorageBucketParams,
 }
+impl super::super::super::CommandResult for DeleteStorageBucket {
+    type Result = super::results::DeleteStorageBucketResult;
+}
 #[doc = "Deletes state for sites identified as potential bounce trackers, immediately.\n[runBounceTrackingMitigations](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-runBounceTrackingMitigations)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct RunBounceTrackingMitigationsParams {}
@@ -936,6 +1026,9 @@ impl RunBounceTrackingMitigationsMethod {
 pub struct RunBounceTrackingMitigations {
     pub method: RunBounceTrackingMitigationsMethod,
     pub params: RunBounceTrackingMitigationsParams,
+}
+impl super::super::super::CommandResult for RunBounceTrackingMitigations {
+    type Result = super::results::RunBounceTrackingMitigationsResult;
 }
 #[doc = "https://wicg.github.io/attribution-reporting-api/\n[setAttributionReportingLocalTestingMode](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-setAttributionReportingLocalTestingMode)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -965,6 +1058,9 @@ pub struct SetAttributionReportingLocalTestingMode {
     pub method: SetAttributionReportingLocalTestingModeMethod,
     pub params: SetAttributionReportingLocalTestingModeParams,
 }
+impl super::super::super::CommandResult for SetAttributionReportingLocalTestingMode {
+    type Result = super::results::SetAttributionReportingLocalTestingModeResult;
+}
 #[doc = "Enables/disables issuing of Attribution Reporting events.\n[setAttributionReportingTracking](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-setAttributionReportingTracking)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetAttributionReportingTrackingParams {
@@ -992,6 +1088,9 @@ pub struct SetAttributionReportingTracking {
     pub method: SetAttributionReportingTrackingMethod,
     pub params: SetAttributionReportingTrackingParams,
 }
+impl super::super::super::CommandResult for SetAttributionReportingTracking {
+    type Result = super::results::SetAttributionReportingTrackingResult;
+}
 #[doc = "Sends all pending Attribution Reports immediately, regardless of their\nscheduled report time.\n[sendPendingAttributionReports](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-sendPendingAttributionReports)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SendPendingAttributionReportsParams {}
@@ -1009,6 +1108,9 @@ pub struct SendPendingAttributionReports {
     pub method: SendPendingAttributionReportsMethod,
     pub params: SendPendingAttributionReportsParams,
 }
+impl super::super::super::CommandResult for SendPendingAttributionReports {
+    type Result = super::results::SendPendingAttributionReportsResult;
+}
 #[doc = "Returns the effective Related Website Sets in use by this profile for the browser\nsession. The effective Related Website Sets will not change during a browser session.\n[getRelatedWebsiteSets](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-getRelatedWebsiteSets)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct GetRelatedWebsiteSetsParams {}
@@ -1025,6 +1127,9 @@ impl GetRelatedWebsiteSetsMethod {
 pub struct GetRelatedWebsiteSets {
     pub method: GetRelatedWebsiteSetsMethod,
     pub params: GetRelatedWebsiteSetsParams,
+}
+impl super::super::super::CommandResult for GetRelatedWebsiteSets {
+    type Result = super::results::GetRelatedWebsiteSetsResult;
 }
 #[doc = "Returns the list of URLs from a page and its embedded resources that match\nexisting grace period URL pattern rules.\nhttps://developers.google.com/privacy-sandbox/cookies/temporary-exceptions/grace-period\n[getAffectedUrlsForThirdPartyCookieMetadata](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-getAffectedUrlsForThirdPartyCookieMetadata)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1058,6 +1163,9 @@ impl GetAffectedUrlsForThirdPartyCookieMetadataMethod {
 pub struct GetAffectedUrlsForThirdPartyCookieMetadata {
     pub method: GetAffectedUrlsForThirdPartyCookieMetadataMethod,
     pub params: GetAffectedUrlsForThirdPartyCookieMetadataParams,
+}
+impl super::super::super::CommandResult for GetAffectedUrlsForThirdPartyCookieMetadata {
+    type Result = super::results::GetAffectedUrlsForThirdPartyCookieMetadataResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetProtectedAudienceKAnonymityParams {
@@ -1094,5 +1202,8 @@ impl SetProtectedAudienceKAnonymityMethod {
 pub struct SetProtectedAudienceKAnonymity {
     pub method: SetProtectedAudienceKAnonymityMethod,
     pub params: SetProtectedAudienceKAnonymityParams,
+}
+impl super::super::super::CommandResult for SetProtectedAudienceKAnonymity {
+    type Result = super::results::SetProtectedAudienceKAnonymityResult;
 }
 group_enum ! (StorageCommands { GetStorageKey (GetStorageKey) , ClearDataForOrigin (ClearDataForOrigin) , ClearDataForStorageKey (ClearDataForStorageKey) , GetCookies (GetCookies) , SetCookies (SetCookies) , ClearCookies (ClearCookies) , GetUsageAndQuota (GetUsageAndQuota) , OverrideQuotaForOrigin (OverrideQuotaForOrigin) , TrackCacheStorageForOrigin (TrackCacheStorageForOrigin) , TrackCacheStorageForStorageKey (TrackCacheStorageForStorageKey) , TrackIndexedDbForOrigin (TrackIndexedDbForOrigin) , TrackIndexedDbForStorageKey (TrackIndexedDbForStorageKey) , UntrackCacheStorageForOrigin (UntrackCacheStorageForOrigin) , UntrackCacheStorageForStorageKey (UntrackCacheStorageForStorageKey) , UntrackIndexedDbForOrigin (UntrackIndexedDbForOrigin) , UntrackIndexedDbForStorageKey (UntrackIndexedDbForStorageKey) , GetTrustTokens (GetTrustTokens) , ClearTrustTokens (ClearTrustTokens) , GetInterestGroupDetails (GetInterestGroupDetails) , SetInterestGroupTracking (SetInterestGroupTracking) , SetInterestGroupAuctionTracking (SetInterestGroupAuctionTracking) , GetSharedStorageMetadata (GetSharedStorageMetadata) , GetSharedStorageEntries (GetSharedStorageEntries) , SetSharedStorageEntry (SetSharedStorageEntry) , DeleteSharedStorageEntry (DeleteSharedStorageEntry) , ClearSharedStorageEntries (ClearSharedStorageEntries) , ResetSharedStorageBudget (ResetSharedStorageBudget) , SetSharedStorageTracking (SetSharedStorageTracking) , SetStorageBucketTracking (SetStorageBucketTracking) , DeleteStorageBucket (DeleteStorageBucket) , RunBounceTrackingMitigations (RunBounceTrackingMitigations) , SetAttributionReportingLocalTestingMode (SetAttributionReportingLocalTestingMode) , SetAttributionReportingTracking (SetAttributionReportingTracking) , SendPendingAttributionReports (SendPendingAttributionReports) , GetRelatedWebsiteSets (GetRelatedWebsiteSets) , GetAffectedUrlsForThirdPartyCookieMetadata (GetAffectedUrlsForThirdPartyCookieMetadata) , SetProtectedAudienceKAnonymity (SetProtectedAudienceKAnonymity) });

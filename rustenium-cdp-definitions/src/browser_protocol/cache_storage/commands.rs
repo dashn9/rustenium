@@ -27,6 +27,9 @@ pub struct DeleteCache {
     pub method: DeleteCacheMethod,
     pub params: DeleteCacheParams,
 }
+impl super::super::super::CommandResult for DeleteCache {
+    type Result = super::results::DeleteCacheResult;
+}
 #[doc = "Deletes a cache entry.\n[deleteEntry](https://chromedevtools.github.io/devtools-protocol/tot/CacheStorage/#method-deleteEntry)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeleteEntryParams {
@@ -58,6 +61,9 @@ impl DeleteEntryMethod {
 pub struct DeleteEntry {
     pub method: DeleteEntryMethod,
     pub params: DeleteEntryParams,
+}
+impl super::super::super::CommandResult for DeleteEntry {
+    type Result = super::results::DeleteEntryResult;
 }
 #[doc = "Requests cache names.\n[requestCacheNames](https://chromedevtools.github.io/devtools-protocol/tot/CacheStorage/#method-requestCacheNames)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -91,6 +97,9 @@ impl RequestCacheNamesMethod {
 pub struct RequestCacheNames {
     pub method: RequestCacheNamesMethod,
     pub params: RequestCacheNamesParams,
+}
+impl super::super::super::CommandResult for RequestCacheNames {
+    type Result = super::results::RequestCacheNamesResult;
 }
 #[doc = "Fetches cache entry.\n[requestCachedResponse](https://chromedevtools.github.io/devtools-protocol/tot/CacheStorage/#method-requestCachedResponse)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -132,6 +141,9 @@ impl RequestCachedResponseMethod {
 pub struct RequestCachedResponse {
     pub method: RequestCachedResponseMethod,
     pub params: RequestCachedResponseParams,
+}
+impl super::super::super::CommandResult for RequestCachedResponse {
+    type Result = super::results::RequestCachedResponseResult;
 }
 #[doc = "Requests data from cache.\n[requestEntries](https://chromedevtools.github.io/devtools-protocol/tot/CacheStorage/#method-requestEntries)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -178,5 +190,8 @@ impl RequestEntriesMethod {
 pub struct RequestEntries {
     pub method: RequestEntriesMethod,
     pub params: RequestEntriesParams,
+}
+impl super::super::super::CommandResult for RequestEntries {
+    type Result = super::results::RequestEntriesResult;
 }
 group_enum ! (CacheStorageCommands { DeleteCache (DeleteCache) , DeleteEntry (DeleteEntry) , RequestCacheNames (RequestCacheNames) , RequestCachedResponse (RequestCachedResponse) , RequestEntries (RequestEntries) });

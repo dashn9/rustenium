@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct BeginFrameReturns {
+pub struct BeginFrameResult {
     #[doc = "Whether the BeginFrame resulted in damage and, thus, a new frame was committed to the\ndisplay. Reported for diagnostic uses, may be removed in the future."]
     #[serde(rename = "hasDamage")]
     pub has_damage: bool,

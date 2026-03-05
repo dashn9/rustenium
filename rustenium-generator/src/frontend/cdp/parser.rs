@@ -242,7 +242,7 @@ pub fn parse_pdl<'a>(input: &'a str) -> Result<Protocol<'a>, Error> {
                             "Return object for {} command",
                             command_name
                         ))),
-                        name: Cow::Owned(format!("{}Returns", command_name)),
+                        name: Cow::Owned(format!("{}Result", command_name)),
                         parameters: vec![],
                         raw_name: Cow::Owned(String::new()),
                     }))

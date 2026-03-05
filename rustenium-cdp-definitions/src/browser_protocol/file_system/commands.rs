@@ -26,4 +26,7 @@ pub struct GetDirectory {
     pub method: GetDirectoryMethod,
     pub params: GetDirectoryParams,
 }
+impl super::super::super::CommandResult for GetDirectory {
+    type Result = super::results::GetDirectoryResult;
+}
 group_enum ! (FileSystemCommands { GetDirectory (GetDirectory) });

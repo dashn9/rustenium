@@ -16,6 +16,9 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
+impl super::super::super::CommandResult for Disable {
+    type Result = super::results::DisableResult;
+}
 #[doc = "Enables DOM snapshot agent for the given page.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/DOMSnapshot/#method-enable)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct EnableParams {}
@@ -32,6 +35,9 @@ impl EnableMethod {
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl super::super::super::CommandResult for Enable {
+    type Result = super::results::EnableResult;
 }
 #[doc = "Returns a document snapshot, including the full DOM tree of the root node (including iframes,\ntemplate contents, and imported documents) in a flattened array, as well as layout and\nwhite-listed computed style information for the nodes. Shadow DOM in the returned DOM tree is\nflattened.\n[captureSnapshot](https://chromedevtools.github.io/devtools-protocol/tot/DOMSnapshot/#method-captureSnapshot)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -85,5 +91,8 @@ impl CaptureSnapshotMethod {
 pub struct CaptureSnapshot {
     pub method: CaptureSnapshotMethod,
     pub params: CaptureSnapshotParams,
+}
+impl super::super::super::CommandResult for CaptureSnapshot {
+    type Result = super::results::CaptureSnapshotResult;
 }
 group_enum ! (DomSnapshotCommands { Disable (Disable) , Enable (Enable) , CaptureSnapshot (CaptureSnapshot) });

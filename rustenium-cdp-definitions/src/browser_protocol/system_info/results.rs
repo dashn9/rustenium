@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct GetInfoReturns {
+pub struct GetInfoResult {
     #[doc = "Information about the GPUs on the system."]
     #[serde(rename = "gpu")]
     pub gpu: super::types::GpuInfo,
@@ -15,12 +15,12 @@ pub struct GetInfoReturns {
     pub command_line: String,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct GetFeatureStateReturns {
+pub struct GetFeatureStateResult {
     #[serde(rename = "featureEnabled")]
     pub feature_enabled: bool,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct GetProcessInfoReturns {
+pub struct GetProcessInfoResult {
     #[doc = "An array of process info blocks."]
     #[serde(rename = "processInfo")]
     #[serde(skip_serializing_if = "Vec::is_empty")]

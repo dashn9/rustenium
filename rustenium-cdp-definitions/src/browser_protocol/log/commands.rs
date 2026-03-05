@@ -16,6 +16,9 @@ pub struct Clear {
     pub method: ClearMethod,
     pub params: ClearParams,
 }
+impl super::super::super::CommandResult for Clear {
+    type Result = super::results::ClearResult;
+}
 #[doc = "Disables log domain, prevents further log entries from being reported to the client.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Log/#method-disable)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct DisableParams {}
@@ -33,6 +36,9 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
+impl super::super::super::CommandResult for Disable {
+    type Result = super::results::DisableResult;
+}
 #[doc = "Enables log domain, sends the entries collected so far to the client by means of the\n`entryAdded` notification.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Log/#method-enable)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct EnableParams {}
@@ -49,6 +55,9 @@ impl EnableMethod {
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl super::super::super::CommandResult for Enable {
+    type Result = super::results::EnableResult;
 }
 #[doc = "start violation reporting.\n[startViolationsReport](https://chromedevtools.github.io/devtools-protocol/tot/Log/#method-startViolationsReport)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -77,6 +86,9 @@ pub struct StartViolationsReport {
     pub method: StartViolationsReportMethod,
     pub params: StartViolationsReportParams,
 }
+impl super::super::super::CommandResult for StartViolationsReport {
+    type Result = super::results::StartViolationsReportResult;
+}
 #[doc = "Stop violation reporting.\n[stopViolationsReport](https://chromedevtools.github.io/devtools-protocol/tot/Log/#method-stopViolationsReport)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct StopViolationsReportParams {}
@@ -93,5 +105,8 @@ impl StopViolationsReportMethod {
 pub struct StopViolationsReport {
     pub method: StopViolationsReportMethod,
     pub params: StopViolationsReportParams,
+}
+impl super::super::super::CommandResult for StopViolationsReport {
+    type Result = super::results::StopViolationsReportResult;
 }
 group_enum ! (LogCommands { Clear (Clear) , Disable (Disable) , Enable (Enable) , StartViolationsReport (StartViolationsReport) , StopViolationsReport (StopViolationsReport) });

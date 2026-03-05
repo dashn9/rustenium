@@ -16,6 +16,9 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
+impl super::super::super::CommandResult for Disable {
+    type Result = super::results::DisableResult;
+}
 #[doc = "Enables issuing of requestPaused events. A request will be paused until client\ncalls one of failRequest, fulfillRequest or continueRequest/continueWithAuth.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Fetch/#method-enable)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct EnableParams {
@@ -43,6 +46,9 @@ impl EnableMethod {
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl super::super::super::CommandResult for Enable {
+    type Result = super::results::EnableResult;
 }
 #[doc = "Causes the request to fail with specified reason.\n[failRequest](https://chromedevtools.github.io/devtools-protocol/tot/Fetch/#method-failRequest)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -78,6 +84,9 @@ impl FailRequestMethod {
 pub struct FailRequest {
     pub method: FailRequestMethod,
     pub params: FailRequestParams,
+}
+impl super::super::super::CommandResult for FailRequest {
+    type Result = super::results::FailRequestResult;
 }
 #[doc = "Provides response to the request.\n[fulfillRequest](https://chromedevtools.github.io/devtools-protocol/tot/Fetch/#method-fulfillRequest)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -138,6 +147,9 @@ pub struct FulfillRequest {
     pub method: FulfillRequestMethod,
     pub params: FulfillRequestParams,
 }
+impl super::super::super::CommandResult for FulfillRequest {
+    type Result = super::results::FulfillRequestResult;
+}
 #[doc = "Continues the request, optionally modifying some of its parameters.\n[continueRequest](https://chromedevtools.github.io/devtools-protocol/tot/Fetch/#method-continueRequest)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ContinueRequestParams {
@@ -196,6 +208,9 @@ pub struct ContinueRequest {
     pub method: ContinueRequestMethod,
     pub params: ContinueRequestParams,
 }
+impl super::super::super::CommandResult for ContinueRequest {
+    type Result = super::results::ContinueRequestResult;
+}
 #[doc = "Continues a request supplying authChallengeResponse following authRequired event.\n[continueWithAuth](https://chromedevtools.github.io/devtools-protocol/tot/Fetch/#method-continueWithAuth)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ContinueWithAuthParams {
@@ -230,6 +245,9 @@ impl ContinueWithAuthMethod {
 pub struct ContinueWithAuth {
     pub method: ContinueWithAuthMethod,
     pub params: ContinueWithAuthParams,
+}
+impl super::super::super::CommandResult for ContinueWithAuth {
+    type Result = super::results::ContinueWithAuthResult;
 }
 #[doc = "Continues loading of the paused response, optionally modifying the\nresponse headers. If either responseCode or headers are modified, all of them\nmust be present.\n[continueResponse](https://chromedevtools.github.io/devtools-protocol/tot/Fetch/#method-continueResponse)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -283,6 +301,9 @@ pub struct ContinueResponse {
     pub method: ContinueResponseMethod,
     pub params: ContinueResponseParams,
 }
+impl super::super::super::CommandResult for ContinueResponse {
+    type Result = super::results::ContinueResponseResult;
+}
 #[doc = "Causes the body of the response to be received from the server and\nreturned as a single string. May only be issued for a request that\nis paused in the Response stage and is mutually exclusive with\ntakeResponseBodyForInterceptionAsStream. Calling other methods that\naffect the request or disabling fetch domain before body is received\nresults in an undefined behavior.\nNote that the response body is not available for redirects. Requests\npaused in the _redirect received_ state may be differentiated by\n`responseCode` and presence of `location` response header, see\ncomments to `requestPaused` for details.\n[getResponseBody](https://chromedevtools.github.io/devtools-protocol/tot/Fetch/#method-getResponseBody)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetResponseBodyParams {
@@ -311,6 +332,9 @@ pub struct GetResponseBody {
     pub method: GetResponseBodyMethod,
     pub params: GetResponseBodyParams,
 }
+impl super::super::super::CommandResult for GetResponseBody {
+    type Result = super::results::GetResponseBodyResult;
+}
 #[doc = "Returns a handle to the stream representing the response body.\nThe request must be paused in the HeadersReceived stage.\nNote that after this command the request can't be continued\nas is -- client either needs to cancel it or to provide the\nresponse body.\nThe stream only supports sequential read, IO.read will fail if the position\nis specified.\nThis method is mutually exclusive with getResponseBody.\nCalling other methods that affect the request or disabling fetch\ndomain before body is received results in an undefined behavior.\n[takeResponseBodyAsStream](https://chromedevtools.github.io/devtools-protocol/tot/Fetch/#method-takeResponseBodyAsStream)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TakeResponseBodyAsStreamParams {
@@ -337,5 +361,8 @@ impl TakeResponseBodyAsStreamMethod {
 pub struct TakeResponseBodyAsStream {
     pub method: TakeResponseBodyAsStreamMethod,
     pub params: TakeResponseBodyAsStreamParams,
+}
+impl super::super::super::CommandResult for TakeResponseBodyAsStream {
+    type Result = super::results::TakeResponseBodyAsStreamResult;
 }
 group_enum ! (FetchCommands { Disable (Disable) , Enable (Enable) , FailRequest (FailRequest) , FulfillRequest (FulfillRequest) , ContinueRequest (ContinueRequest) , ContinueWithAuth (ContinueWithAuth) , ContinueResponse (ContinueResponse) , GetResponseBody (GetResponseBody) , TakeResponseBodyAsStream (TakeResponseBodyAsStream) });

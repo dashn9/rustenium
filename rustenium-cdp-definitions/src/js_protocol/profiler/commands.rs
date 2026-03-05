@@ -14,6 +14,9 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
+impl super::super::super::CommandResult for Disable {
+    type Result = super::results::DisableResult;
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct EnableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -28,6 +31,9 @@ impl EnableMethod {
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl super::super::super::CommandResult for Enable {
+    type Result = super::results::EnableResult;
 }
 #[doc = "Collect coverage data for the current isolate. The coverage data may be incomplete due to\ngarbage collection.\n[getBestEffortCoverage](https://chromedevtools.github.io/devtools-protocol/tot/Profiler/#method-getBestEffortCoverage)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -45,6 +51,9 @@ impl GetBestEffortCoverageMethod {
 pub struct GetBestEffortCoverage {
     pub method: GetBestEffortCoverageMethod,
     pub params: GetBestEffortCoverageParams,
+}
+impl super::super::super::CommandResult for GetBestEffortCoverage {
+    type Result = super::results::GetBestEffortCoverageResult;
 }
 #[doc = "Changes CPU profiler sampling interval. Must be called before CPU profiles recording started.\n[setSamplingInterval](https://chromedevtools.github.io/devtools-protocol/tot/Profiler/#method-setSamplingInterval)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -74,6 +83,9 @@ pub struct SetSamplingInterval {
     pub method: SetSamplingIntervalMethod,
     pub params: SetSamplingIntervalParams,
 }
+impl super::super::super::CommandResult for SetSamplingInterval {
+    type Result = super::results::SetSamplingIntervalResult;
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct StartParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -88,6 +100,9 @@ impl StartMethod {
 pub struct Start {
     pub method: StartMethod,
     pub params: StartParams,
+}
+impl super::super::super::CommandResult for Start {
+    type Result = super::results::StartResult;
 }
 #[doc = "Enable precise code coverage. Coverage data for JavaScript executed before enabling precise code\ncoverage may be incomplete. Enabling prevents running optimized code and resets execution\ncounters.\n[startPreciseCoverage](https://chromedevtools.github.io/devtools-protocol/tot/Profiler/#method-startPreciseCoverage)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -122,6 +137,9 @@ pub struct StartPreciseCoverage {
     pub method: StartPreciseCoverageMethod,
     pub params: StartPreciseCoverageParams,
 }
+impl super::super::super::CommandResult for StartPreciseCoverage {
+    type Result = super::results::StartPreciseCoverageResult;
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct StopParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -136,6 +154,9 @@ impl StopMethod {
 pub struct Stop {
     pub method: StopMethod,
     pub params: StopParams,
+}
+impl super::super::super::CommandResult for Stop {
+    type Result = super::results::StopResult;
 }
 #[doc = "Disable precise code coverage. Disabling releases unnecessary execution count records and allows\nexecuting optimized code.\n[stopPreciseCoverage](https://chromedevtools.github.io/devtools-protocol/tot/Profiler/#method-stopPreciseCoverage)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -154,6 +175,9 @@ pub struct StopPreciseCoverage {
     pub method: StopPreciseCoverageMethod,
     pub params: StopPreciseCoverageParams,
 }
+impl super::super::super::CommandResult for StopPreciseCoverage {
+    type Result = super::results::StopPreciseCoverageResult;
+}
 #[doc = "Collect coverage data for the current isolate, and resets execution counters. Precise code\ncoverage needs to have started.\n[takePreciseCoverage](https://chromedevtools.github.io/devtools-protocol/tot/Profiler/#method-takePreciseCoverage)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct TakePreciseCoverageParams {}
@@ -170,5 +194,8 @@ impl TakePreciseCoverageMethod {
 pub struct TakePreciseCoverage {
     pub method: TakePreciseCoverageMethod,
     pub params: TakePreciseCoverageParams,
+}
+impl super::super::super::CommandResult for TakePreciseCoverage {
+    type Result = super::results::TakePreciseCoverageResult;
 }
 group_enum ! (ProfilerCommands { Disable (Disable) , Enable (Enable) , GetBestEffortCoverage (GetBestEffortCoverage) , SetSamplingInterval (SetSamplingInterval) , Start (Start) , StartPreciseCoverage (StartPreciseCoverage) , Stop (Stop) , StopPreciseCoverage (StopPreciseCoverage) , TakePreciseCoverage (TakePreciseCoverage) });

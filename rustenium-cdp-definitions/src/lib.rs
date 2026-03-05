@@ -25,6 +25,12 @@ impl From<String> for Binary {
         Self(expr)
     }
 }
+pub trait CommandResult {
+    type Result: serde::de::DeserializeOwned + std::fmt::Debug;
+    fn result_from_value(result: serde_json::Value) -> serde_json::Result<Self::Result> {
+        serde_json::from_value(result)
+    }
+}
 group_enum ! (Type { JsProtocol (js_protocol :: JsProtocolTypes) , BrowserProtocol (browser_protocol :: BrowserProtocolTypes) });
 group_enum ! (Command { JsProtocol (js_protocol :: JsProtocolCommands) , BrowserProtocol (browser_protocol :: BrowserProtocolCommands) });
 group_enum ! (Event { JsProtocol (js_protocol :: JsProtocolEvents) , BrowserProtocol (browser_protocol :: BrowserProtocolEvents) } + other);

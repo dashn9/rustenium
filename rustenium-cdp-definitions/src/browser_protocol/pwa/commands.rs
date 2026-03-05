@@ -32,6 +32,9 @@ pub struct GetOsAppState {
     pub method: GetOsAppStateMethod,
     pub params: GetOsAppStateParams,
 }
+impl super::super::super::CommandResult for GetOsAppState {
+    type Result = super::results::GetOsAppStateResult;
+}
 #[doc = "Installs the given manifest identity, optionally using the given installUrlOrBundleUrl\n\nIWA-specific install description:\nmanifestId corresponds to isolated-app:// + web_package::SignedWebBundleId\n\nFile installation mode:\nThe installUrlOrBundleUrl can be either file:// or http(s):// pointing\nto a signed web bundle (.swbn). In this case SignedWebBundleId must correspond to\nThe .swbn file's signing key.\n\nDev proxy installation mode:\ninstallUrlOrBundleUrl must be http(s):// that serves dev mode IWA.\nweb_package::SignedWebBundleId must be of type dev proxy.\n\nThe advantage of dev proxy mode is that all changes to IWA\nautomatically will be reflected in the running app without\nreinstallation.\n\nTo generate bundle id for proxy mode:\n1. Generate 32 random bytes.\n2. Add a specific suffix at the end following the documentation\nhttps://github.com/WICG/isolated-web-apps/blob/main/Scheme.md#suffix\n3. Encode the entire sequence using Base32 without padding.\n\nIf Chrome is not in IWA dev\nmode, the installation will fail, regardless of the state of the allowlist.\n[install](https://chromedevtools.github.io/devtools-protocol/tot/PWA/#method-install)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InstallParams {
@@ -70,6 +73,9 @@ pub struct Install {
     pub method: InstallMethod,
     pub params: InstallParams,
 }
+impl super::super::super::CommandResult for Install {
+    type Result = super::results::InstallResult;
+}
 #[doc = "Uninstalls the given manifest_id and closes any opened app windows.\n[uninstall](https://chromedevtools.github.io/devtools-protocol/tot/PWA/#method-uninstall)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UninstallParams {
@@ -101,6 +107,9 @@ impl UninstallMethod {
 pub struct Uninstall {
     pub method: UninstallMethod,
     pub params: UninstallParams,
+}
+impl super::super::super::CommandResult for Uninstall {
+    type Result = super::results::UninstallResult;
 }
 #[doc = "Launches the installed web app, or an url in the same web app instead of the\ndefault start url if it is provided. Returns a page Target.TargetID which\ncan be used to attach to via Target.attachToTarget or similar APIs.\n[launch](https://chromedevtools.github.io/devtools-protocol/tot/PWA/#method-launch)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -139,6 +148,9 @@ pub struct Launch {
     pub method: LaunchMethod,
     pub params: LaunchParams,
 }
+impl super::super::super::CommandResult for Launch {
+    type Result = super::results::LaunchResult;
+}
 #[doc = "Opens one or more local files from an installed web app identified by its\nmanifestId. The web app needs to have file handlers registered to process\nthe files. The API returns one or more page Target.TargetIDs which can be\nused to attach to via Target.attachToTarget or similar APIs.\nIf some files in the parameters cannot be handled by the web app, they will\nbe ignored. If none of the files can be handled, this API returns an error.\nIf no files are provided as the parameter, this API also returns an error.\n\nAccording to the definition of the file handlers in the manifest file, one\nTarget.TargetID may represent a page handling one or more files. The order\nof the returned Target.TargetIDs is not guaranteed.\n\nTODO(crbug.com/339454034): Check the existences of the input files.\n[launchFilesInApp](https://chromedevtools.github.io/devtools-protocol/tot/PWA/#method-launchFilesInApp)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LaunchFilesInAppParams {
@@ -169,6 +181,9 @@ impl LaunchFilesInAppMethod {
 pub struct LaunchFilesInApp {
     pub method: LaunchFilesInAppMethod,
     pub params: LaunchFilesInAppParams,
+}
+impl super::super::super::CommandResult for LaunchFilesInApp {
+    type Result = super::results::LaunchFilesInAppResult;
 }
 #[doc = "Opens the current page in its web app identified by the manifest id, needs\nto be called on a page target. This function returns immediately without\nwaiting for the app to finish loading.\n[openCurrentPageInApp](https://chromedevtools.github.io/devtools-protocol/tot/PWA/#method-openCurrentPageInApp)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -201,6 +216,9 @@ impl OpenCurrentPageInAppMethod {
 pub struct OpenCurrentPageInApp {
     pub method: OpenCurrentPageInAppMethod,
     pub params: OpenCurrentPageInAppParams,
+}
+impl super::super::super::CommandResult for OpenCurrentPageInApp {
+    type Result = super::results::OpenCurrentPageInAppResult;
 }
 #[doc = "Changes user settings of the web app identified by its manifestId. If the\napp was not installed, this command returns an error. Unset parameters will\nbe ignored; unrecognized values will cause an error.\n\nUnlike the ones defined in the manifest files of the web apps, these\nsettings are provided by the browser and controlled by the users, they\nimpact the way the browser handling the web apps.\n\nSee the comment of each parameter.\n[changeAppUserSettings](https://chromedevtools.github.io/devtools-protocol/tot/PWA/#method-changeAppUserSettings)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -244,5 +262,8 @@ impl ChangeAppUserSettingsMethod {
 pub struct ChangeAppUserSettings {
     pub method: ChangeAppUserSettingsMethod,
     pub params: ChangeAppUserSettingsParams,
+}
+impl super::super::super::CommandResult for ChangeAppUserSettings {
+    type Result = super::results::ChangeAppUserSettingsResult;
 }
 group_enum ! (PwaCommands { GetOsAppState (GetOsAppState) , Install (Install) , Uninstall (Uninstall) , Launch (Launch) , LaunchFilesInApp (LaunchFilesInApp) , OpenCurrentPageInApp (OpenCurrentPageInApp) , ChangeAppUserSettings (ChangeAppUserSettings) });

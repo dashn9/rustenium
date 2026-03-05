@@ -49,6 +49,9 @@ pub struct ClearObjectStore {
     pub method: ClearObjectStoreMethod,
     pub params: ClearObjectStoreParams,
 }
+impl super::super::super::CommandResult for ClearObjectStore {
+    type Result = super::results::ClearObjectStoreResult;
+}
 #[doc = "Deletes a database.\n[deleteDatabase](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-deleteDatabase)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeleteDatabaseParams {
@@ -99,6 +102,9 @@ impl DeleteDatabaseMethod {
 pub struct DeleteDatabase {
     pub method: DeleteDatabaseMethod,
     pub params: DeleteDatabaseParams,
+}
+impl super::super::super::CommandResult for DeleteDatabase {
+    type Result = super::results::DeleteDatabaseResult;
 }
 #[doc = "Delete a range of entries from an object store\n[deleteObjectStoreEntries](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-deleteObjectStoreEntries)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -156,6 +162,9 @@ pub struct DeleteObjectStoreEntries {
     pub method: DeleteObjectStoreEntriesMethod,
     pub params: DeleteObjectStoreEntriesParams,
 }
+impl super::super::super::CommandResult for DeleteObjectStoreEntries {
+    type Result = super::results::DeleteObjectStoreEntriesResult;
+}
 #[doc = "Disables events from backend.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-disable)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct DisableParams {}
@@ -173,6 +182,9 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
+impl super::super::super::CommandResult for Disable {
+    type Result = super::results::DisableResult;
+}
 #[doc = "Enables events from backend.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-enable)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct EnableParams {}
@@ -189,6 +201,9 @@ impl EnableMethod {
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl super::super::super::CommandResult for Enable {
+    type Result = super::results::EnableResult;
 }
 #[doc = "Requests data from object store or index.\n[requestData](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-requestData)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -265,6 +280,9 @@ pub struct RequestData {
     pub method: RequestDataMethod,
     pub params: RequestDataParams,
 }
+impl super::super::super::CommandResult for RequestData {
+    type Result = super::results::RequestDataResult;
+}
 #[doc = "Gets metadata of an object store.\n[getMetadata](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-getMetadata)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetMetadataParams {
@@ -314,6 +332,9 @@ impl GetMetadataMethod {
 pub struct GetMetadata {
     pub method: GetMetadataMethod,
     pub params: GetMetadataParams,
+}
+impl super::super::super::CommandResult for GetMetadata {
+    type Result = super::results::GetMetadataResult;
 }
 #[doc = "Requests database with given name in given frame.\n[requestDatabase](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-requestDatabase)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -366,6 +387,9 @@ pub struct RequestDatabase {
     pub method: RequestDatabaseMethod,
     pub params: RequestDatabaseParams,
 }
+impl super::super::super::CommandResult for RequestDatabase {
+    type Result = super::results::RequestDatabaseResult;
+}
 #[doc = "Requests database names for given security origin.\n[requestDatabaseNames](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-requestDatabaseNames)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct RequestDatabaseNamesParams {
@@ -398,5 +422,8 @@ impl RequestDatabaseNamesMethod {
 pub struct RequestDatabaseNames {
     pub method: RequestDatabaseNamesMethod,
     pub params: RequestDatabaseNamesParams,
+}
+impl super::super::super::CommandResult for RequestDatabaseNames {
+    type Result = super::results::RequestDatabaseNamesResult;
 }
 group_enum ! (IndexedDbCommands { ClearObjectStore (ClearObjectStore) , DeleteDatabase (DeleteDatabase) , DeleteObjectStoreEntries (DeleteObjectStoreEntries) , Disable (Disable) , Enable (Enable) , RequestData (RequestData) , GetMetadata (GetMetadata) , RequestDatabase (RequestDatabase) , RequestDatabaseNames (RequestDatabaseNames) });

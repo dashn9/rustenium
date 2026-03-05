@@ -52,6 +52,9 @@ pub struct SetPermission {
     pub method: SetPermissionMethod,
     pub params: SetPermissionParams,
 }
+impl super::super::super::CommandResult for SetPermission {
+    type Result = super::results::SetPermissionResult;
+}
 #[doc = "Reset all permission management for all origins.\n[resetPermissions](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-resetPermissions)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ResetPermissionsParams {
@@ -74,6 +77,9 @@ impl ResetPermissionsMethod {
 pub struct ResetPermissions {
     pub method: ResetPermissionsMethod,
     pub params: ResetPermissionsParams,
+}
+impl super::super::super::CommandResult for ResetPermissions {
+    type Result = super::results::ResetPermissionsResult;
 }
 #[doc = "Set the behavior when downloading a file.\n[setDownloadBehavior](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-setDownloadBehavior)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -133,6 +139,9 @@ pub struct SetDownloadBehavior {
     pub method: SetDownloadBehaviorMethod,
     pub params: SetDownloadBehaviorParams,
 }
+impl super::super::super::CommandResult for SetDownloadBehavior {
+    type Result = super::results::SetDownloadBehaviorResult;
+}
 #[doc = "Cancel a download if in progress\n[cancelDownload](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-cancelDownload)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CancelDownloadParams {
@@ -172,6 +181,9 @@ pub struct CancelDownload {
     pub method: CancelDownloadMethod,
     pub params: CancelDownloadParams,
 }
+impl super::super::super::CommandResult for CancelDownload {
+    type Result = super::results::CancelDownloadResult;
+}
 #[doc = "Close browser gracefully.\n[close](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-close)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct CloseParams {}
@@ -188,6 +200,9 @@ impl CloseMethod {
 pub struct Close {
     pub method: CloseMethod,
     pub params: CloseParams,
+}
+impl super::super::super::CommandResult for Close {
+    type Result = super::results::CloseResult;
 }
 #[doc = "Crashes browser on the main thread.\n[crash](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-crash)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -206,6 +221,9 @@ pub struct Crash {
     pub method: CrashMethod,
     pub params: CrashParams,
 }
+impl super::super::super::CommandResult for Crash {
+    type Result = super::results::CrashResult;
+}
 #[doc = "Crashes GPU process.\n[crashGpuProcess](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-crashGpuProcess)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct CrashGpuProcessParams {}
@@ -222,6 +240,9 @@ impl CrashGpuProcessMethod {
 pub struct CrashGpuProcess {
     pub method: CrashGpuProcessMethod,
     pub params: CrashGpuProcessParams,
+}
+impl super::super::super::CommandResult for CrashGpuProcess {
+    type Result = super::results::CrashGpuProcessResult;
 }
 #[doc = "Returns version information.\n[getVersion](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-getVersion)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -240,6 +261,9 @@ pub struct GetVersion {
     pub method: GetVersionMethod,
     pub params: GetVersionParams,
 }
+impl super::super::super::CommandResult for GetVersion {
+    type Result = super::results::GetVersionResult;
+}
 #[doc = "Returns the command line switches for the browser process if, and only if\n--enable-automation is on the commandline.\n[getBrowserCommandLine](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-getBrowserCommandLine)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct GetBrowserCommandLineParams {}
@@ -256,6 +280,9 @@ impl GetBrowserCommandLineMethod {
 pub struct GetBrowserCommandLine {
     pub method: GetBrowserCommandLineMethod,
     pub params: GetBrowserCommandLineParams,
+}
+impl super::super::super::CommandResult for GetBrowserCommandLine {
+    type Result = super::results::GetBrowserCommandLineResult;
 }
 #[doc = "Get Chrome histograms.\n[getHistograms](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-getHistograms)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -284,6 +311,9 @@ impl GetHistogramsMethod {
 pub struct GetHistograms {
     pub method: GetHistogramsMethod,
     pub params: GetHistogramsParams,
+}
+impl super::super::super::CommandResult for GetHistograms {
+    type Result = super::results::GetHistogramsResult;
 }
 #[doc = "Get a Chrome histogram by name.\n[getHistogram](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-getHistogram)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -324,6 +354,9 @@ pub struct GetHistogram {
     pub method: GetHistogramMethod,
     pub params: GetHistogramParams,
 }
+impl super::super::super::CommandResult for GetHistogram {
+    type Result = super::results::GetHistogramResult;
+}
 #[doc = "Get position and size of the browser window.\n[getWindowBounds](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-getWindowBounds)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetWindowBoundsParams {
@@ -352,6 +385,9 @@ pub struct GetWindowBounds {
     pub method: GetWindowBoundsMethod,
     pub params: GetWindowBoundsParams,
 }
+impl super::super::super::CommandResult for GetWindowBounds {
+    type Result = super::results::GetWindowBoundsResult;
+}
 #[doc = "Get the browser window that contains the devtools target.\n[getWindowForTarget](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-getWindowForTarget)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct GetWindowForTargetParams {
@@ -374,6 +410,9 @@ impl GetWindowForTargetMethod {
 pub struct GetWindowForTarget {
     pub method: GetWindowForTargetMethod,
     pub params: GetWindowForTargetParams,
+}
+impl super::super::super::CommandResult for GetWindowForTarget {
+    type Result = super::results::GetWindowForTargetResult;
 }
 #[doc = "Set position and/or size of the browser window.\n[setWindowBounds](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-setWindowBounds)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -409,6 +448,9 @@ impl SetWindowBoundsMethod {
 pub struct SetWindowBounds {
     pub method: SetWindowBoundsMethod,
     pub params: SetWindowBoundsParams,
+}
+impl super::super::super::CommandResult for SetWindowBounds {
+    type Result = super::results::SetWindowBoundsResult;
 }
 #[doc = "Set size of the browser contents resizing browser window as necessary.\n[setContentsSize](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-setContentsSize)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -450,6 +492,9 @@ pub struct SetContentsSize {
     pub method: SetContentsSizeMethod,
     pub params: SetContentsSizeParams,
 }
+impl super::super::super::CommandResult for SetContentsSize {
+    type Result = super::results::SetContentsSizeResult;
+}
 #[doc = "Set dock tile details, platform-specific.\n[setDockTile](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-setDockTile)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetDockTileParams {
@@ -477,6 +522,9 @@ pub struct SetDockTile {
     pub method: SetDockTileMethod,
     pub params: SetDockTileParams,
 }
+impl super::super::super::CommandResult for SetDockTile {
+    type Result = super::results::SetDockTileResult;
+}
 #[doc = "Invoke custom browser commands used by telemetry.\n[executeBrowserCommand](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-executeBrowserCommand)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ExecuteBrowserCommandParams {
@@ -503,6 +551,9 @@ impl ExecuteBrowserCommandMethod {
 pub struct ExecuteBrowserCommand {
     pub method: ExecuteBrowserCommandMethod,
     pub params: ExecuteBrowserCommandParams,
+}
+impl super::super::super::CommandResult for ExecuteBrowserCommand {
+    type Result = super::results::ExecuteBrowserCommandResult;
 }
 #[doc = "Allows a site to use privacy sandbox features that require enrollment\nwithout the site actually being enrolled. Only supported on page targets.\n[addPrivacySandboxEnrollmentOverride](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-addPrivacySandboxEnrollmentOverride)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -533,6 +584,9 @@ impl AddPrivacySandboxEnrollmentOverrideMethod {
 pub struct AddPrivacySandboxEnrollmentOverride {
     pub method: AddPrivacySandboxEnrollmentOverrideMethod,
     pub params: AddPrivacySandboxEnrollmentOverrideParams,
+}
+impl super::super::super::CommandResult for AddPrivacySandboxEnrollmentOverride {
+    type Result = super::results::AddPrivacySandboxEnrollmentOverrideResult;
 }
 #[doc = "Configures encryption keys used with a given privacy sandbox API to talk\nto a trusted coordinator.  Since this is intended for test automation only,\ncoordinatorOrigin must be a .test domain. No existing coordinator\nconfiguration for the origin may exist.\n[addPrivacySandboxCoordinatorKeyConfig](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-addPrivacySandboxCoordinatorKeyConfig)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -576,5 +630,8 @@ impl AddPrivacySandboxCoordinatorKeyConfigMethod {
 pub struct AddPrivacySandboxCoordinatorKeyConfig {
     pub method: AddPrivacySandboxCoordinatorKeyConfigMethod,
     pub params: AddPrivacySandboxCoordinatorKeyConfigParams,
+}
+impl super::super::super::CommandResult for AddPrivacySandboxCoordinatorKeyConfig {
+    type Result = super::results::AddPrivacySandboxCoordinatorKeyConfigResult;
 }
 group_enum ! (BrowserCommands { SetPermission (SetPermission) , ResetPermissions (ResetPermissions) , SetDownloadBehavior (SetDownloadBehavior) , CancelDownload (CancelDownload) , Close (Close) , Crash (Crash) , CrashGpuProcess (CrashGpuProcess) , GetVersion (GetVersion) , GetBrowserCommandLine (GetBrowserCommandLine) , GetHistograms (GetHistograms) , GetHistogram (GetHistogram) , GetWindowBounds (GetWindowBounds) , GetWindowForTarget (GetWindowForTarget) , SetWindowBounds (SetWindowBounds) , SetContentsSize (SetContentsSize) , SetDockTile (SetDockTile) , ExecuteBrowserCommand (ExecuteBrowserCommand) , AddPrivacySandboxEnrollmentOverride (AddPrivacySandboxEnrollmentOverride) , AddPrivacySandboxCoordinatorKeyConfig (AddPrivacySandboxCoordinatorKeyConfig) });

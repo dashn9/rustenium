@@ -31,6 +31,9 @@ pub struct TriggerAction {
     pub method: TriggerActionMethod,
     pub params: TriggerActionParams,
 }
+impl super::super::super::CommandResult for TriggerAction {
+    type Result = super::results::TriggerActionResult;
+}
 #[doc = "Installs an unpacked extension from the filesystem similar to\n--load-extension CLI flags. Returns extension ID once the extension\nhas been installed. Available if the client is connected using the\n--remote-debugging-pipe flag and the --enable-unsafe-extension-debugging\nflag is set.\n[loadUnpacked](https://chromedevtools.github.io/devtools-protocol/tot/Extensions/#method-loadUnpacked)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LoadUnpackedParams {
@@ -70,6 +73,9 @@ pub struct LoadUnpacked {
     pub method: LoadUnpackedMethod,
     pub params: LoadUnpackedParams,
 }
+impl super::super::super::CommandResult for LoadUnpacked {
+    type Result = super::results::LoadUnpackedResult;
+}
 #[doc = "Gets a list of all unpacked extensions.\nAvailable if the client is connected using the --remote-debugging-pipe flag\nand the --enable-unsafe-extension-debugging flag is set.\n[getExtensions](https://chromedevtools.github.io/devtools-protocol/tot/Extensions/#method-getExtensions)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct GetExtensionsParams {}
@@ -86,6 +92,9 @@ impl GetExtensionsMethod {
 pub struct GetExtensions {
     pub method: GetExtensionsMethod,
     pub params: GetExtensionsParams,
+}
+impl super::super::super::CommandResult for GetExtensions {
+    type Result = super::results::GetExtensionsResult;
 }
 #[doc = "Uninstalls an unpacked extension (others not supported) from the profile.\nAvailable if the client is connected using the --remote-debugging-pipe flag\nand the --enable-unsafe-extension-debugging.\n[uninstall](https://chromedevtools.github.io/devtools-protocol/tot/Extensions/#method-uninstall)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -117,6 +126,9 @@ impl UninstallMethod {
 pub struct Uninstall {
     pub method: UninstallMethod,
     pub params: UninstallParams,
+}
+impl super::super::super::CommandResult for Uninstall {
+    type Result = super::results::UninstallResult;
 }
 #[doc = "Gets data from extension storage in the given `storageArea`. If `keys` is\nspecified, these are used to filter the result.\n[getStorageItems](https://chromedevtools.github.io/devtools-protocol/tot/Extensions/#method-getStorageItems)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -155,6 +167,9 @@ impl GetStorageItemsMethod {
 pub struct GetStorageItems {
     pub method: GetStorageItemsMethod,
     pub params: GetStorageItemsParams,
+}
+impl super::super::super::CommandResult for GetStorageItems {
+    type Result = super::results::GetStorageItemsResult;
 }
 #[doc = "Removes `keys` from extension storage in the given `storageArea`.\n[removeStorageItems](https://chromedevtools.github.io/devtools-protocol/tot/Extensions/#method-removeStorageItems)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -197,6 +212,9 @@ pub struct RemoveStorageItems {
     pub method: RemoveStorageItemsMethod,
     pub params: RemoveStorageItemsParams,
 }
+impl super::super::super::CommandResult for RemoveStorageItems {
+    type Result = super::results::RemoveStorageItemsResult;
+}
 #[doc = "Clears extension storage in the given `storageArea`.\n[clearStorageItems](https://chromedevtools.github.io/devtools-protocol/tot/Extensions/#method-clearStorageItems)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClearStorageItemsParams {
@@ -228,6 +246,9 @@ impl ClearStorageItemsMethod {
 pub struct ClearStorageItems {
     pub method: ClearStorageItemsMethod,
     pub params: ClearStorageItemsParams,
+}
+impl super::super::super::CommandResult for ClearStorageItems {
+    type Result = super::results::ClearStorageItemsResult;
 }
 #[doc = "Sets `values` in extension storage in the given `storageArea`. The provided `values`\nwill be merged with existing values in the storage area.\n[setStorageItems](https://chromedevtools.github.io/devtools-protocol/tot/Extensions/#method-setStorageItems)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -268,5 +289,8 @@ impl SetStorageItemsMethod {
 pub struct SetStorageItems {
     pub method: SetStorageItemsMethod,
     pub params: SetStorageItemsParams,
+}
+impl super::super::super::CommandResult for SetStorageItems {
+    type Result = super::results::SetStorageItemsResult;
 }
 group_enum ! (ExtensionsCommands { TriggerAction (TriggerAction) , LoadUnpacked (LoadUnpacked) , GetExtensions (GetExtensions) , Uninstall (Uninstall) , GetStorageItems (GetStorageItems) , RemoveStorageItems (RemoveStorageItems) , ClearStorageItems (ClearStorageItems) , SetStorageItems (SetStorageItems) });

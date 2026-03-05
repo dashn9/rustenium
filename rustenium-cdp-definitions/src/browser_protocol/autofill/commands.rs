@@ -45,6 +45,9 @@ pub struct Trigger {
     pub method: TriggerMethod,
     pub params: TriggerParams,
 }
+impl super::super::super::CommandResult for Trigger {
+    type Result = super::results::TriggerResult;
+}
 #[doc = "Set addresses so that developers can verify their forms implementation.\n[setAddresses](https://chromedevtools.github.io/devtools-protocol/tot/Autofill/#method-setAddresses)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetAddressesParams {
@@ -72,6 +75,9 @@ pub struct SetAddresses {
     pub method: SetAddressesMethod,
     pub params: SetAddressesParams,
 }
+impl super::super::super::CommandResult for SetAddresses {
+    type Result = super::results::SetAddressesResult;
+}
 #[doc = "Disables autofill domain notifications.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Autofill/#method-disable)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct DisableParams {}
@@ -89,6 +95,9 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
+impl super::super::super::CommandResult for Disable {
+    type Result = super::results::DisableResult;
+}
 #[doc = "Enables autofill domain notifications.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Autofill/#method-enable)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct EnableParams {}
@@ -105,5 +114,8 @@ impl EnableMethod {
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl super::super::super::CommandResult for Enable {
+    type Result = super::results::EnableResult;
 }
 group_enum ! (AutofillCommands { Trigger (Trigger) , SetAddresses (SetAddresses) , Disable (Disable) , Enable (Enable) });

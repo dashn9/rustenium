@@ -1,12 +1,46 @@
 use serde::{Deserialize, Serialize};
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ContinueToLocationResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct DisableResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct PauseResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct RemoveBreakpointResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ResumeResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetAsyncCallStackDepthResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetBlackboxExecutionContextsResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetBlackboxPatternsResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetBlackboxedRangesResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetBreakpointsActiveResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetPauseOnExceptionsResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetReturnValueResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetSkipAllPausesResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetVariableValueResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct StepIntoResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct StepOutResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct StepOverResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct EnableReturns {
+pub struct EnableResult {
     #[doc = "Unique identifier of the debugger."]
     #[serde(rename = "debuggerId")]
     pub debugger_id: super::super::runtime::types::UniqueDebuggerId,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct EvaluateOnCallFrameReturns {
+pub struct EvaluateOnCallFrameResult {
     #[doc = "Object wrapper for the evaluation result."]
     #[serde(rename = "result")]
     pub result: super::super::runtime::types::RemoteObject,
@@ -17,14 +51,14 @@ pub struct EvaluateOnCallFrameReturns {
     pub exception_details: Option<super::super::runtime::types::ExceptionDetails>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct GetPossibleBreakpointsReturns {
+pub struct GetPossibleBreakpointsResult {
     #[doc = "List of the possible breakpoint locations."]
     #[serde(rename = "locations")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub locations: Vec<super::types::BreakLocation>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct GetScriptSourceReturns {
+pub struct GetScriptSourceResult {
     #[doc = "Script source (empty in case of Wasm bytecode)."]
     #[serde(rename = "scriptSource")]
     pub script_source: String,
@@ -35,7 +69,7 @@ pub struct GetScriptSourceReturns {
     pub bytecode: Option<super::super::super::Binary>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct DisassembleWasmModuleReturns {
+pub struct DisassembleWasmModuleResult {
     #[doc = "For large modules, return a stream from which additional chunks of\ndisassembly can be read successively."]
     #[serde(rename = "streamId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -53,33 +87,33 @@ pub struct DisassembleWasmModuleReturns {
     pub chunk: super::types::WasmDisassemblyChunk,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct NextWasmDisassemblyChunkReturns {
+pub struct NextWasmDisassemblyChunkResult {
     #[doc = "The next chunk of disassembly."]
     #[serde(rename = "chunk")]
     pub chunk: super::types::WasmDisassemblyChunk,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct GetWasmBytecodeReturns {
+pub struct GetWasmBytecodeResult {
     #[doc = "Script source."]
     #[serde(rename = "bytecode")]
     pub bytecode: super::super::super::Binary,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct GetStackTraceReturns {
+pub struct GetStackTraceResult {
     #[serde(rename = "stackTrace")]
     pub stack_trace: super::super::runtime::types::StackTrace,
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct RestartFrameReturns {}
+pub struct RestartFrameResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct SearchInContentReturns {
+pub struct SearchInContentResult {
     #[doc = "List of search matches."]
     #[serde(rename = "result")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub result: Vec<super::types::SearchMatch>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct SetBreakpointReturns {
+pub struct SetBreakpointResult {
     #[doc = "Id of the created breakpoint for further reference."]
     #[serde(rename = "breakpointId")]
     pub breakpoint_id: super::types::BreakpointId,
@@ -88,13 +122,13 @@ pub struct SetBreakpointReturns {
     pub actual_location: super::types::Location,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct SetInstrumentationBreakpointReturns {
+pub struct SetInstrumentationBreakpointResult {
     #[doc = "Id of the created breakpoint for further reference."]
     #[serde(rename = "breakpointId")]
     pub breakpoint_id: super::types::BreakpointId,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct SetBreakpointByUrlReturns {
+pub struct SetBreakpointByUrlResult {
     #[doc = "Id of the created breakpoint for further reference."]
     #[serde(rename = "breakpointId")]
     pub breakpoint_id: super::types::BreakpointId,
@@ -104,14 +138,14 @@ pub struct SetBreakpointByUrlReturns {
     pub locations: Vec<super::types::Location>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct SetBreakpointOnFunctionCallReturns {
+pub struct SetBreakpointOnFunctionCallResult {
     #[doc = "Id of the created breakpoint for further reference."]
     #[serde(rename = "breakpointId")]
     pub breakpoint_id: super::types::BreakpointId,
 }
 #[doc = "Whether the operation was successful or not. Only `Ok` denotes a\nsuccessful live edit while the other enum variants denote why\nthe live edit failed."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
-pub enum SetScriptSourceReturnsStatus {
+pub enum SetScriptSourceResultStatus {
     #[serde(rename = "Ok")]
     Ok,
     #[serde(rename = "CompileError")]
@@ -124,10 +158,10 @@ pub enum SetScriptSourceReturnsStatus {
     BlockedByTopLevelEsModuleChange,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct SetScriptSourceReturns {
+pub struct SetScriptSourceResult {
     #[doc = "Whether the operation was successful or not. Only `Ok` denotes a\nsuccessful live edit while the other enum variants denote why\nthe live edit failed."]
     #[serde(rename = "status")]
-    pub status: SetScriptSourceReturnsStatus,
+    pub status: SetScriptSourceResultStatus,
     #[doc = "Exception details if any. Only present when `status` is `CompileError`."]
     #[serde(rename = "exceptionDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]

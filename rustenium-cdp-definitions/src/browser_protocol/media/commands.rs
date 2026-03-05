@@ -16,6 +16,9 @@ pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
 }
+impl super::super::super::CommandResult for Enable {
+    type Result = super::results::EnableResult;
+}
 #[doc = "Disables the Media domain.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Media/#method-disable)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct DisableParams {}
@@ -32,5 +35,8 @@ impl DisableMethod {
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
+}
+impl super::super::super::CommandResult for Disable {
+    type Result = super::results::DisableResult;
 }
 group_enum ! (MediaCommands { Enable (Enable) , Disable (Disable) });

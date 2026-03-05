@@ -345,6 +345,14 @@ impl Generator {
                 }
             }
 
+            pub trait CommandResult {
+                type Result: serde::de::DeserializeOwned + std::fmt::Debug;
+
+                fn result_from_value(result: serde_json::Value) -> serde_json::Result<Self::Result> {
+                    serde_json::from_value(result)
+                }
+            }
+
             #top_type_group
             #top_cmd_group
             #top_evt_group
@@ -376,6 +384,11 @@ impl Generator {
         let mut command_idents: Vec<(Ident, Ident)> = Vec::new();
         let mut event_idents: Vec<(Ident, Ident)> = Vec::new();
 
+        // Collect result names so we can link commands to their results
+        let result_names: HashSet<String> = module.command_results.iter()
+            .map(|cr| cr.name.to_upper_camel_case())
+            .collect();
+
         let datatypes: Vec<_> = module
             .into_iter()
             .filter(|dt| with_deprecated || !dt.is_deprecated())
@@ -397,6 +410,23 @@ impl Generator {
             } else if is_command {
                 commands_stream.extend(def);
                 command_builders_stream.extend(builder_tokens);
+
+                // Link command to its result type
+                let def_ident = format_ident!("{}", camel_name);
+                let returns_name = format!("{}Result", camel_name);
+                let returns_ident = format_ident!("{}", returns_name);
+                if !result_names.contains(&returns_name) {
+                    results_stream.extend(quote! {
+                        #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+                        pub struct #returns_ident {}
+                    });
+                }
+                commands_stream.extend(quote! {
+                    impl super::super::super::CommandResult for #def_ident {
+                        type Result = super::results::#returns_ident;
+                    }
+                });
+
                 let ident = format_ident!("{}", camel_name);
                 command_idents.push((ident.clone(), ident));
             } else {

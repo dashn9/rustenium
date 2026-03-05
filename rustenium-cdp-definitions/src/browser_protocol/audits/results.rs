@@ -1,6 +1,12 @@
 use serde::{Deserialize, Serialize};
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct DisableResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct EnableResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct CheckContrastResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct GetEncodedResponseReturns {
+pub struct GetEncodedResponseResult {
     #[doc = "The encoded body as a base64 string. Omitted if sizeOnly is true."]
     #[serde(rename = "body")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -14,7 +20,7 @@ pub struct GetEncodedResponseReturns {
     pub encoded_size: i64,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct CheckFormsIssuesReturns {
+pub struct CheckFormsIssuesResult {
     #[serde(rename = "formIssues")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub form_issues: Vec<super::types::GenericIssueDetails>,

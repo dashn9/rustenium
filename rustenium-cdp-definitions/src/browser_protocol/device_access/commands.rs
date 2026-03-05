@@ -16,6 +16,9 @@ pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
 }
+impl super::super::super::CommandResult for Enable {
+    type Result = super::results::EnableResult;
+}
 #[doc = "Disable events in this domain.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/DeviceAccess/#method-disable)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct DisableParams {}
@@ -32,6 +35,9 @@ impl DisableMethod {
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
+}
+impl super::super::super::CommandResult for Disable {
+    type Result = super::results::DisableResult;
 }
 #[doc = "Select a device in response to a DeviceAccess.deviceRequestPrompted event.\n[selectPrompt](https://chromedevtools.github.io/devtools-protocol/tot/DeviceAccess/#method-selectPrompt)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -66,6 +72,9 @@ pub struct SelectPrompt {
     pub method: SelectPromptMethod,
     pub params: SelectPromptParams,
 }
+impl super::super::super::CommandResult for SelectPrompt {
+    type Result = super::results::SelectPromptResult;
+}
 #[doc = "Cancel a prompt in response to a DeviceAccess.deviceRequestPrompted event.\n[cancelPrompt](https://chromedevtools.github.io/devtools-protocol/tot/DeviceAccess/#method-cancelPrompt)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CancelPromptParams {
@@ -90,5 +99,8 @@ impl CancelPromptMethod {
 pub struct CancelPrompt {
     pub method: CancelPromptMethod,
     pub params: CancelPromptParams,
+}
+impl super::super::super::CommandResult for CancelPrompt {
+    type Result = super::results::CancelPromptResult;
 }
 group_enum ! (DeviceAccessCommands { Enable (Enable) , Disable (Disable) , SelectPrompt (SelectPrompt) , CancelPrompt (CancelPrompt) });

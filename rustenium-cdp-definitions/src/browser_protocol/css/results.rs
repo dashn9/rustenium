@@ -1,25 +1,43 @@
 use serde::{Deserialize, Serialize};
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct DisableResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct EnableResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ForcePseudoStateResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ForceStartingStyleResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct TrackComputedStyleUpdatesForNodeResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct TrackComputedStyleUpdatesResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetEffectivePropertyValueForNodeResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct StartRuleUsageTrackingResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetLocalFontsEnabledResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct AddRuleReturns {
+pub struct AddRuleResult {
     #[doc = "The newly created rule."]
     #[serde(rename = "rule")]
     pub rule: super::types::CssRule,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct CollectClassNamesReturns {
+pub struct CollectClassNamesResult {
     #[doc = "Class name list."]
     #[serde(rename = "classNames")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub class_names: Vec<String>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct CreateStyleSheetReturns {
+pub struct CreateStyleSheetResult {
     #[doc = "Identifier of the created \"via-inspector\" stylesheet."]
     #[serde(rename = "styleSheetId")]
     pub style_sheet_id: super::super::dom::types::StyleSheetId,
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct GetBackgroundColorsReturns {
+pub struct GetBackgroundColorsResult {
     #[doc = "The range of background colors behind this element, if it contains any visible text. If no\nvisible text is present, this will be undefined. In the case of a flat background color,\nthis will consist of simply that color. In the case of a gradient, this will consist of each\nof the color stops. For anything more complicated, this will be an empty array. Images will\nbe ignored (as if the image had failed to load)."]
     #[serde(rename = "backgroundColors")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -37,7 +55,7 @@ pub struct GetBackgroundColorsReturns {
     pub computed_font_weight: Option<String>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct GetComputedStyleForNodeReturns {
+pub struct GetComputedStyleForNodeResult {
     #[doc = "Computed style for the specified DOM node."]
     #[serde(rename = "computedStyle")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
@@ -47,19 +65,19 @@ pub struct GetComputedStyleForNodeReturns {
     pub extra_fields: super::types::ComputedStyleExtraFields,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct ResolveValuesReturns {
+pub struct ResolveValuesResult {
     #[serde(rename = "results")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub results: Vec<String>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct GetLonghandPropertiesReturns {
+pub struct GetLonghandPropertiesResult {
     #[serde(rename = "longhandProperties")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub longhand_properties: Vec<super::types::CssProperty>,
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct GetInlineStylesForNodeReturns {
+pub struct GetInlineStylesForNodeResult {
     #[doc = "Inline style for the specified DOM node."]
     #[serde(rename = "inlineStyle")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -72,7 +90,7 @@ pub struct GetInlineStylesForNodeReturns {
     pub attributes_style: Option<super::types::CssStyle>,
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct GetAnimatedStylesForNodeReturns {
+pub struct GetAnimatedStylesForNodeResult {
     #[doc = "Styles coming from animations."]
     #[serde(rename = "animationStyles")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -90,7 +108,7 @@ pub struct GetAnimatedStylesForNodeReturns {
     pub inherited: Option<Vec<super::types::InheritedAnimatedStyleEntry>>,
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct GetMatchedStylesForNodeReturns {
+pub struct GetMatchedStylesForNodeResult {
     #[doc = "Inline style for the specified DOM node."]
     #[serde(rename = "inlineStyle")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -163,91 +181,91 @@ pub struct GetMatchedStylesForNodeReturns {
     pub css_function_rules: Option<Vec<super::types::CssFunctionRule>>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct GetEnvironmentVariablesReturns {
+pub struct GetEnvironmentVariablesResult {
     #[serde(rename = "environmentVariables")]
     pub environment_variables: serde_json::Value,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct GetMediaQueriesReturns {
+pub struct GetMediaQueriesResult {
     #[serde(rename = "medias")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub medias: Vec<super::types::CssMedia>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct GetPlatformFontsForNodeReturns {
+pub struct GetPlatformFontsForNodeResult {
     #[doc = "Usage statistics for every employed platform font."]
     #[serde(rename = "fonts")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub fonts: Vec<super::types::PlatformFontUsage>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct GetStyleSheetTextReturns {
+pub struct GetStyleSheetTextResult {
     #[doc = "The stylesheet text."]
     #[serde(rename = "text")]
     pub text: String,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct GetLayersForNodeReturns {
+pub struct GetLayersForNodeResult {
     #[serde(rename = "rootLayer")]
     pub root_layer: super::types::CssLayerData,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct GetLocationForSelectorReturns {
+pub struct GetLocationForSelectorResult {
     #[serde(rename = "ranges")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub ranges: Vec<super::types::SourceRange>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct TakeComputedStyleUpdatesReturns {
+pub struct TakeComputedStyleUpdatesResult {
     #[doc = "The list of node Ids that have their tracked computed styles updated."]
     #[serde(rename = "nodeIds")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub node_ids: Vec<super::super::dom::types::NodeId>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct SetPropertyRulePropertyNameReturns {
+pub struct SetPropertyRulePropertyNameResult {
     #[doc = "The resulting key text after modification."]
     #[serde(rename = "propertyName")]
     pub property_name: super::types::Value,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct SetKeyframeKeyReturns {
+pub struct SetKeyframeKeyResult {
     #[doc = "The resulting key text after modification."]
     #[serde(rename = "keyText")]
     pub key_text: super::types::Value,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct SetMediaTextReturns {
+pub struct SetMediaTextResult {
     #[doc = "The resulting CSS media rule after modification."]
     #[serde(rename = "media")]
     pub media: super::types::CssMedia,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct SetContainerQueryTextReturns {
+pub struct SetContainerQueryTextResult {
     #[doc = "The resulting CSS container query rule after modification."]
     #[serde(rename = "containerQuery")]
     pub container_query: super::types::CssContainerQuery,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct SetSupportsTextReturns {
+pub struct SetSupportsTextResult {
     #[doc = "The resulting CSS Supports rule after modification."]
     #[serde(rename = "supports")]
     pub supports: super::types::CssSupports,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct SetScopeTextReturns {
+pub struct SetScopeTextResult {
     #[doc = "The resulting CSS Scope rule after modification."]
     #[serde(rename = "scope")]
     pub scope: super::types::CssScope,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct SetRuleSelectorReturns {
+pub struct SetRuleSelectorResult {
     #[doc = "The resulting selector list after modification."]
     #[serde(rename = "selectorList")]
     pub selector_list: super::types::SelectorList,
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetStyleSheetTextReturns {
+pub struct SetStyleSheetTextResult {
     #[doc = "URL of source map associated with script (if any)."]
     #[serde(rename = "sourceMapURL")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -255,20 +273,20 @@ pub struct SetStyleSheetTextReturns {
     pub source_map_url: Option<String>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct SetStyleTextsReturns {
+pub struct SetStyleTextsResult {
     #[doc = "The resulting styles after modification."]
     #[serde(rename = "styles")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub styles: Vec<super::types::CssStyle>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct StopRuleUsageTrackingReturns {
+pub struct StopRuleUsageTrackingResult {
     #[serde(rename = "ruleUsage")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub rule_usage: Vec<super::types::RuleUsage>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct TakeCoverageDeltaReturns {
+pub struct TakeCoverageDeltaResult {
     #[serde(rename = "coverage")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub coverage: Vec<super::types::RuleUsage>,

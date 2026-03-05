@@ -16,6 +16,9 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
+impl super::super::super::CommandResult for Disable {
+    type Result = super::results::DisableResult;
+}
 #[doc = "Enables the accessibility domain which causes `AXNodeId`s to remain consistent between method calls.\nThis turns on accessibility for the page, which can impact performance until accessibility is disabled.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Accessibility/#method-enable)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct EnableParams {}
@@ -32,6 +35,9 @@ impl EnableMethod {
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl super::super::super::CommandResult for Enable {
+    type Result = super::results::EnableResult;
 }
 #[doc = "Fetches the accessibility node and partial accessibility tree for this DOM node, if it exists.\n[getPartialAXTree](https://chromedevtools.github.io/devtools-protocol/tot/Accessibility/#method-getPartialAXTree)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -71,6 +77,9 @@ pub struct GetPartialAxTree {
     pub method: GetPartialAxTreeMethod,
     pub params: GetPartialAxTreeParams,
 }
+impl super::super::super::CommandResult for GetPartialAxTree {
+    type Result = super::results::GetPartialAxTreeResult;
+}
 #[doc = "Fetches the entire accessibility tree for the root Document\n[getFullAXTree](https://chromedevtools.github.io/devtools-protocol/tot/Accessibility/#method-getFullAXTree)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct GetFullAxTreeParams {
@@ -99,6 +108,9 @@ pub struct GetFullAxTree {
     pub method: GetFullAxTreeMethod,
     pub params: GetFullAxTreeParams,
 }
+impl super::super::super::CommandResult for GetFullAxTree {
+    type Result = super::results::GetFullAxTreeResult;
+}
 #[doc = "Fetches the root node.\nRequires `enable()` to have been called previously.\n[getRootAXNode](https://chromedevtools.github.io/devtools-protocol/tot/Accessibility/#method-getRootAXNode)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct GetRootAxNodeParams {
@@ -121,6 +133,9 @@ impl GetRootAxNodeMethod {
 pub struct GetRootAxNode {
     pub method: GetRootAxNodeMethod,
     pub params: GetRootAxNodeParams,
+}
+impl super::super::super::CommandResult for GetRootAxNode {
+    type Result = super::results::GetRootAxNodeResult;
 }
 #[doc = "Fetches a node and all ancestors up to and including the root.\nRequires `enable()` to have been called previously.\n[getAXNodeAndAncestors](https://chromedevtools.github.io/devtools-protocol/tot/Accessibility/#method-getAXNodeAndAncestors)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -155,6 +170,9 @@ pub struct GetAxNodeAndAncestors {
     pub method: GetAxNodeAndAncestorsMethod,
     pub params: GetAxNodeAndAncestorsParams,
 }
+impl super::super::super::CommandResult for GetAxNodeAndAncestors {
+    type Result = super::results::GetAxNodeAndAncestorsResult;
+}
 #[doc = "Fetches a particular accessibility node by AXNodeId.\nRequires `enable()` to have been called previously.\n[getChildAXNodes](https://chromedevtools.github.io/devtools-protocol/tot/Accessibility/#method-getChildAXNodes)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetChildAxNodesParams {
@@ -187,6 +205,9 @@ impl GetChildAxNodesMethod {
 pub struct GetChildAxNodes {
     pub method: GetChildAxNodesMethod,
     pub params: GetChildAxNodesParams,
+}
+impl super::super::super::CommandResult for GetChildAxNodes {
+    type Result = super::results::GetChildAxNodesResult;
 }
 #[doc = "Query a DOM node's accessibility subtree for accessible name and role.\nThis command computes the name and role for all nodes in the subtree, including those that are\nignored for accessibility, and returns those that match the specified name and role. If no DOM\nnode is specified, or the DOM node does not exist, the command returns an error. If neither\n`accessibleName` or `role` is specified, it returns all the accessibility nodes in the subtree.\n[queryAXTree](https://chromedevtools.github.io/devtools-protocol/tot/Accessibility/#method-queryAXTree)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -230,5 +251,8 @@ impl QueryAxTreeMethod {
 pub struct QueryAxTree {
     pub method: QueryAxTreeMethod,
     pub params: QueryAxTreeParams,
+}
+impl super::super::super::CommandResult for QueryAxTree {
+    type Result = super::results::QueryAxTreeResult;
 }
 group_enum ! (AccessibilityCommands { Disable (Disable) , Enable (Enable) , GetPartialAxTree (GetPartialAxTree) , GetFullAxTree (GetFullAxTree) , GetRootAxNode (GetRootAxNode) , GetAxNodeAndAncestors (GetAxNodeAndAncestors) , GetChildAxNodes (GetChildAxNodes) , QueryAxTree (QueryAxTree) });

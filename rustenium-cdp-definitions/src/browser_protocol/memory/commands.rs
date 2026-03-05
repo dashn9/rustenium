@@ -16,6 +16,9 @@ pub struct GetDomCounters {
     pub method: GetDomCountersMethod,
     pub params: GetDomCountersParams,
 }
+impl super::super::super::CommandResult for GetDomCounters {
+    type Result = super::results::GetDomCountersResult;
+}
 #[doc = "Retruns DOM object counters after preparing renderer for leak detection.\n[getDOMCountersForLeakDetection](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-getDOMCountersForLeakDetection)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct GetDomCountersForLeakDetectionParams {}
@@ -32,6 +35,9 @@ impl GetDomCountersForLeakDetectionMethod {
 pub struct GetDomCountersForLeakDetection {
     pub method: GetDomCountersForLeakDetectionMethod,
     pub params: GetDomCountersForLeakDetectionParams,
+}
+impl super::super::super::CommandResult for GetDomCountersForLeakDetection {
+    type Result = super::results::GetDomCountersForLeakDetectionResult;
 }
 #[doc = "Prepares for leak detection by terminating workers, stopping spellcheckers,\ndropping non-essential internal caches, running garbage collections, etc.\n[prepareForLeakDetection](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-prepareForLeakDetection)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -50,6 +56,9 @@ pub struct PrepareForLeakDetection {
     pub method: PrepareForLeakDetectionMethod,
     pub params: PrepareForLeakDetectionParams,
 }
+impl super::super::super::CommandResult for PrepareForLeakDetection {
+    type Result = super::results::PrepareForLeakDetectionResult;
+}
 #[doc = "Simulate OomIntervention by purging V8 memory.\n[forciblyPurgeJavaScriptMemory](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-forciblyPurgeJavaScriptMemory)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ForciblyPurgeJavaScriptMemoryParams {}
@@ -66,6 +75,9 @@ impl ForciblyPurgeJavaScriptMemoryMethod {
 pub struct ForciblyPurgeJavaScriptMemory {
     pub method: ForciblyPurgeJavaScriptMemoryMethod,
     pub params: ForciblyPurgeJavaScriptMemoryParams,
+}
+impl super::super::super::CommandResult for ForciblyPurgeJavaScriptMemory {
+    type Result = super::results::ForciblyPurgeJavaScriptMemoryResult;
 }
 #[doc = "Enable/disable suppressing memory pressure notifications in all processes.\n[setPressureNotificationsSuppressed](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-setPressureNotificationsSuppressed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -95,6 +107,9 @@ pub struct SetPressureNotificationsSuppressed {
     pub method: SetPressureNotificationsSuppressedMethod,
     pub params: SetPressureNotificationsSuppressedParams,
 }
+impl super::super::super::CommandResult for SetPressureNotificationsSuppressed {
+    type Result = super::results::SetPressureNotificationsSuppressedResult;
+}
 #[doc = "Simulate a memory pressure notification in all processes.\n[simulatePressureNotification](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-simulatePressureNotification)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SimulatePressureNotificationParams {
@@ -122,6 +137,9 @@ impl SimulatePressureNotificationMethod {
 pub struct SimulatePressureNotification {
     pub method: SimulatePressureNotificationMethod,
     pub params: SimulatePressureNotificationParams,
+}
+impl super::super::super::CommandResult for SimulatePressureNotification {
+    type Result = super::results::SimulatePressureNotificationResult;
 }
 #[doc = "Start collecting native memory profile.\n[startSampling](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-startSampling)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -151,6 +169,9 @@ pub struct StartSampling {
     pub method: StartSamplingMethod,
     pub params: StartSamplingParams,
 }
+impl super::super::super::CommandResult for StartSampling {
+    type Result = super::results::StartSamplingResult;
+}
 #[doc = "Stop collecting native memory profile.\n[stopSampling](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-stopSampling)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct StopSamplingParams {}
@@ -167,6 +188,9 @@ impl StopSamplingMethod {
 pub struct StopSampling {
     pub method: StopSamplingMethod,
     pub params: StopSamplingParams,
+}
+impl super::super::super::CommandResult for StopSampling {
+    type Result = super::results::StopSamplingResult;
 }
 #[doc = "Retrieve native memory allocations profile\ncollected since renderer process startup.\n[getAllTimeSamplingProfile](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-getAllTimeSamplingProfile)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -185,6 +209,9 @@ pub struct GetAllTimeSamplingProfile {
     pub method: GetAllTimeSamplingProfileMethod,
     pub params: GetAllTimeSamplingProfileParams,
 }
+impl super::super::super::CommandResult for GetAllTimeSamplingProfile {
+    type Result = super::results::GetAllTimeSamplingProfileResult;
+}
 #[doc = "Retrieve native memory allocations profile\ncollected since browser process startup.\n[getBrowserSamplingProfile](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-getBrowserSamplingProfile)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct GetBrowserSamplingProfileParams {}
@@ -202,6 +229,9 @@ pub struct GetBrowserSamplingProfile {
     pub method: GetBrowserSamplingProfileMethod,
     pub params: GetBrowserSamplingProfileParams,
 }
+impl super::super::super::CommandResult for GetBrowserSamplingProfile {
+    type Result = super::results::GetBrowserSamplingProfileResult;
+}
 #[doc = "Retrieve native memory allocations profile collected since last\n`startSampling` call.\n[getSamplingProfile](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-getSamplingProfile)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct GetSamplingProfileParams {}
@@ -218,5 +248,8 @@ impl GetSamplingProfileMethod {
 pub struct GetSamplingProfile {
     pub method: GetSamplingProfileMethod,
     pub params: GetSamplingProfileParams,
+}
+impl super::super::super::CommandResult for GetSamplingProfile {
+    type Result = super::results::GetSamplingProfileResult;
 }
 group_enum ! (MemoryCommands { GetDomCounters (GetDomCounters) , GetDomCountersForLeakDetection (GetDomCountersForLeakDetection) , PrepareForLeakDetection (PrepareForLeakDetection) , ForciblyPurgeJavaScriptMemory (ForciblyPurgeJavaScriptMemory) , SetPressureNotificationsSuppressed (SetPressureNotificationsSuppressed) , SimulatePressureNotification (SimulatePressureNotification) , StartSampling (StartSampling) , StopSampling (StopSampling) , GetAllTimeSamplingProfile (GetAllTimeSamplingProfile) , GetBrowserSamplingProfile (GetBrowserSamplingProfile) , GetSamplingProfile (GetSamplingProfile) });

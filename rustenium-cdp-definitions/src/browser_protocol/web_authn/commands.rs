@@ -22,6 +22,9 @@ pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
 }
+impl super::super::super::CommandResult for Enable {
+    type Result = super::results::EnableResult;
+}
 #[doc = "Disable the WebAuthn domain.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-disable)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct DisableParams {}
@@ -38,6 +41,9 @@ impl DisableMethod {
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
+}
+impl super::super::super::CommandResult for Disable {
+    type Result = super::results::DisableResult;
 }
 #[doc = "Creates and adds a virtual authenticator.\n[addVirtualAuthenticator](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-addVirtualAuthenticator)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -65,6 +71,9 @@ impl AddVirtualAuthenticatorMethod {
 pub struct AddVirtualAuthenticator {
     pub method: AddVirtualAuthenticatorMethod,
     pub params: AddVirtualAuthenticatorParams,
+}
+impl super::super::super::CommandResult for AddVirtualAuthenticator {
+    type Result = super::results::AddVirtualAuthenticatorResult;
 }
 #[doc = "Resets parameters isBogusSignature, isBadUV, isBadUP to false if they are not present.\n[setResponseOverrideBits](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-setResponseOverrideBits)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -111,6 +120,9 @@ pub struct SetResponseOverrideBits {
     pub method: SetResponseOverrideBitsMethod,
     pub params: SetResponseOverrideBitsParams,
 }
+impl super::super::super::CommandResult for SetResponseOverrideBits {
+    type Result = super::results::SetResponseOverrideBitsResult;
+}
 #[doc = "Removes the given authenticator.\n[removeVirtualAuthenticator](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-removeVirtualAuthenticator)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RemoveVirtualAuthenticatorParams {
@@ -137,6 +149,9 @@ impl RemoveVirtualAuthenticatorMethod {
 pub struct RemoveVirtualAuthenticator {
     pub method: RemoveVirtualAuthenticatorMethod,
     pub params: RemoveVirtualAuthenticatorParams,
+}
+impl super::super::super::CommandResult for RemoveVirtualAuthenticator {
+    type Result = super::results::RemoveVirtualAuthenticatorResult;
 }
 #[doc = "Adds the credential to the specified authenticator.\n[addCredential](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-addCredential)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -171,6 +186,9 @@ pub struct AddCredential {
     pub method: AddCredentialMethod,
     pub params: AddCredentialParams,
 }
+impl super::super::super::CommandResult for AddCredential {
+    type Result = super::results::AddCredentialResult;
+}
 #[doc = "Returns a single credential stored in the given virtual authenticator that\nmatches the credential ID.\n[getCredential](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-getCredential)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetCredentialParams {
@@ -204,6 +222,9 @@ pub struct GetCredential {
     pub method: GetCredentialMethod,
     pub params: GetCredentialParams,
 }
+impl super::super::super::CommandResult for GetCredential {
+    type Result = super::results::GetCredentialResult;
+}
 #[doc = "Returns all the credentials stored in the given virtual authenticator.\n[getCredentials](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-getCredentials)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetCredentialsParams {
@@ -230,6 +251,9 @@ impl GetCredentialsMethod {
 pub struct GetCredentials {
     pub method: GetCredentialsMethod,
     pub params: GetCredentialsParams,
+}
+impl super::super::super::CommandResult for GetCredentials {
+    type Result = super::results::GetCredentialsResult;
 }
 #[doc = "Removes a credential from the authenticator.\n[removeCredential](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-removeCredential)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -264,6 +288,9 @@ pub struct RemoveCredential {
     pub method: RemoveCredentialMethod,
     pub params: RemoveCredentialParams,
 }
+impl super::super::super::CommandResult for RemoveCredential {
+    type Result = super::results::RemoveCredentialResult;
+}
 #[doc = "Clears all the credentials from the specified device.\n[clearCredentials](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-clearCredentials)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClearCredentialsParams {
@@ -290,6 +317,9 @@ impl ClearCredentialsMethod {
 pub struct ClearCredentials {
     pub method: ClearCredentialsMethod,
     pub params: ClearCredentialsParams,
+}
+impl super::super::super::CommandResult for ClearCredentials {
+    type Result = super::results::ClearCredentialsResult;
 }
 #[doc = "Sets whether User Verification succeeds or fails for an authenticator.\nThe default is true.\n[setUserVerified](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-setUserVerified)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -324,6 +354,9 @@ pub struct SetUserVerified {
     pub method: SetUserVerifiedMethod,
     pub params: SetUserVerifiedParams,
 }
+impl super::super::super::CommandResult for SetUserVerified {
+    type Result = super::results::SetUserVerifiedResult;
+}
 #[doc = "Sets whether tests of user presence will succeed immediately (if true) or fail to resolve (if false) for an authenticator.\nThe default is true.\n[setAutomaticPresenceSimulation](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-setAutomaticPresenceSimulation)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetAutomaticPresenceSimulationParams {
@@ -356,6 +389,9 @@ impl SetAutomaticPresenceSimulationMethod {
 pub struct SetAutomaticPresenceSimulation {
     pub method: SetAutomaticPresenceSimulationMethod,
     pub params: SetAutomaticPresenceSimulationParams,
+}
+impl super::super::super::CommandResult for SetAutomaticPresenceSimulation {
+    type Result = super::results::SetAutomaticPresenceSimulationResult;
 }
 #[doc = "Allows setting credential properties.\nhttps://w3c.github.io/webauthn/#sctn-automation-set-credential-properties\n[setCredentialProperties](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-setCredentialProperties)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -399,5 +435,8 @@ impl SetCredentialPropertiesMethod {
 pub struct SetCredentialProperties {
     pub method: SetCredentialPropertiesMethod,
     pub params: SetCredentialPropertiesParams,
+}
+impl super::super::super::CommandResult for SetCredentialProperties {
+    type Result = super::results::SetCredentialPropertiesResult;
 }
 group_enum ! (WebAuthnCommands { Enable (Enable) , Disable (Disable) , AddVirtualAuthenticator (AddVirtualAuthenticator) , SetResponseOverrideBits (SetResponseOverrideBits) , RemoveVirtualAuthenticator (RemoveVirtualAuthenticator) , AddCredential (AddCredential) , GetCredential (GetCredential) , GetCredentials (GetCredentials) , RemoveCredential (RemoveCredential) , ClearCredentials (ClearCredentials) , SetUserVerified (SetUserVerified) , SetAutomaticPresenceSimulation (SetAutomaticPresenceSimulation) , SetCredentialProperties (SetCredentialProperties) });

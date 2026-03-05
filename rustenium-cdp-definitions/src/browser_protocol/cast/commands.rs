@@ -21,6 +21,9 @@ pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
 }
+impl super::super::super::CommandResult for Enable {
+    type Result = super::results::EnableResult;
+}
 #[doc = "Stops observing for sinks and issues.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Cast/#method-disable)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct DisableParams {}
@@ -37,6 +40,9 @@ impl DisableMethod {
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
+}
+impl super::super::super::CommandResult for Disable {
+    type Result = super::results::DisableResult;
 }
 #[doc = "Sets a sink to be used when the web page requests the browser to choose a\nsink via Presentation API, Remote Playback API, or Cast SDK.\n[setSinkToUse](https://chromedevtools.github.io/devtools-protocol/tot/Cast/#method-setSinkToUse)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -70,6 +76,9 @@ pub struct SetSinkToUse {
     pub method: SetSinkToUseMethod,
     pub params: SetSinkToUseParams,
 }
+impl super::super::super::CommandResult for SetSinkToUse {
+    type Result = super::results::SetSinkToUseResult;
+}
 #[doc = "Starts mirroring the desktop to the sink.\n[startDesktopMirroring](https://chromedevtools.github.io/devtools-protocol/tot/Cast/#method-startDesktopMirroring)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StartDesktopMirroringParams {
@@ -101,6 +110,9 @@ impl StartDesktopMirroringMethod {
 pub struct StartDesktopMirroring {
     pub method: StartDesktopMirroringMethod,
     pub params: StartDesktopMirroringParams,
+}
+impl super::super::super::CommandResult for StartDesktopMirroring {
+    type Result = super::results::StartDesktopMirroringResult;
 }
 #[doc = "Starts mirroring the tab to the sink.\n[startTabMirroring](https://chromedevtools.github.io/devtools-protocol/tot/Cast/#method-startTabMirroring)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -134,6 +146,9 @@ pub struct StartTabMirroring {
     pub method: StartTabMirroringMethod,
     pub params: StartTabMirroringParams,
 }
+impl super::super::super::CommandResult for StartTabMirroring {
+    type Result = super::results::StartTabMirroringResult;
+}
 #[doc = "Stops the active Cast session on the sink.\n[stopCasting](https://chromedevtools.github.io/devtools-protocol/tot/Cast/#method-stopCasting)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StopCastingParams {
@@ -165,5 +180,8 @@ impl StopCastingMethod {
 pub struct StopCasting {
     pub method: StopCastingMethod,
     pub params: StopCastingParams,
+}
+impl super::super::super::CommandResult for StopCasting {
+    type Result = super::results::StopCastingResult;
 }
 group_enum ! (CastCommands { Enable (Enable) , Disable (Disable) , SetSinkToUse (SetSinkToUse) , StartDesktopMirroring (StartDesktopMirroring) , StartTabMirroring (StartTabMirroring) , StopCasting (StopCasting) });

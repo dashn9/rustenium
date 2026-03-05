@@ -45,6 +45,9 @@ pub struct AddRule {
     pub method: AddRuleMethod,
     pub params: AddRuleParams,
 }
+impl super::super::super::CommandResult for AddRule {
+    type Result = super::results::AddRuleResult;
+}
 #[doc = "Returns all class names from specified stylesheet.\n[collectClassNames](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-collectClassNames)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CollectClassNamesParams {
@@ -71,6 +74,9 @@ impl CollectClassNamesMethod {
 pub struct CollectClassNames {
     pub method: CollectClassNamesMethod,
     pub params: CollectClassNamesParams,
+}
+impl super::super::super::CommandResult for CollectClassNames {
+    type Result = super::results::CollectClassNamesResult;
 }
 #[doc = "Creates a new special \"via-inspector\" stylesheet in the frame with given `frameId`.\n[createStyleSheet](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-createStyleSheet)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -106,6 +112,9 @@ pub struct CreateStyleSheet {
     pub method: CreateStyleSheetMethod,
     pub params: CreateStyleSheetParams,
 }
+impl super::super::super::CommandResult for CreateStyleSheet {
+    type Result = super::results::CreateStyleSheetResult;
+}
 #[doc = "Disables the CSS agent for the given page.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-disable)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct DisableParams {}
@@ -123,6 +132,9 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
+impl super::super::super::CommandResult for Disable {
+    type Result = super::results::DisableResult;
+}
 #[doc = "Enables the CSS agent for the given page. Clients should not assume that the CSS agent has been\nenabled until the result of this command is received.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-enable)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct EnableParams {}
@@ -139,6 +151,9 @@ impl EnableMethod {
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl super::super::super::CommandResult for Enable {
+    type Result = super::results::EnableResult;
 }
 #[doc = "Ensures that the given node will have specified pseudo-classes whenever its style is computed by\nthe browser.\n[forcePseudoState](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-forcePseudoState)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -176,6 +191,9 @@ pub struct ForcePseudoState {
     pub method: ForcePseudoStateMethod,
     pub params: ForcePseudoStateParams,
 }
+impl super::super::super::CommandResult for ForcePseudoState {
+    type Result = super::results::ForcePseudoStateResult;
+}
 #[doc = "Ensures that the given node is in its starting-style state.\n[forceStartingStyle](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-forceStartingStyle)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ForceStartingStyleParams {
@@ -211,6 +229,9 @@ pub struct ForceStartingStyle {
     pub method: ForceStartingStyleMethod,
     pub params: ForceStartingStyleParams,
 }
+impl super::super::super::CommandResult for ForceStartingStyle {
+    type Result = super::results::ForceStartingStyleResult;
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetBackgroundColorsParams {
     #[doc = "Id of the node to get background colors for."]
@@ -236,6 +257,9 @@ impl GetBackgroundColorsMethod {
 pub struct GetBackgroundColors {
     pub method: GetBackgroundColorsMethod,
     pub params: GetBackgroundColorsParams,
+}
+impl super::super::super::CommandResult for GetBackgroundColors {
+    type Result = super::results::GetBackgroundColorsResult;
 }
 #[doc = "Returns the computed style for a DOM node identified by `nodeId`.\n[getComputedStyleForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getComputedStyleForNode)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -263,6 +287,9 @@ impl GetComputedStyleForNodeMethod {
 pub struct GetComputedStyleForNode {
     pub method: GetComputedStyleForNodeMethod,
     pub params: GetComputedStyleForNodeParams,
+}
+impl super::super::super::CommandResult for GetComputedStyleForNode {
+    type Result = super::results::GetComputedStyleForNodeResult;
 }
 #[doc = "Resolve the specified values in the context of the provided element.\nFor example, a value of '1em' is evaluated according to the computed\n'font-size' of the element and a value 'calc(1px + 2px)' will be\nresolved to '3px'.\nIf the `propertyName` was specified the `values` are resolved as if\nthey were property's declaration. If a value cannot be parsed according\nto the provided property syntax, the value is parsed using combined\nsyntax as if null `propertyName` was provided. If the value cannot be\nresolved even then, return the provided value without any changes.\nNote: this function currently does not resolve CSS random() function,\nit returns unmodified random() function parts.`\n[resolveValues](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-resolveValues)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -315,6 +342,9 @@ pub struct ResolveValues {
     pub method: ResolveValuesMethod,
     pub params: ResolveValuesParams,
 }
+impl super::super::super::CommandResult for ResolveValues {
+    type Result = super::results::ResolveValuesResult;
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetLonghandPropertiesParams {
     #[serde(rename = "shorthandName")]
@@ -343,6 +373,9 @@ pub struct GetLonghandProperties {
     pub method: GetLonghandPropertiesMethod,
     pub params: GetLonghandPropertiesParams,
 }
+impl super::super::super::CommandResult for GetLonghandProperties {
+    type Result = super::results::GetLonghandPropertiesResult;
+}
 #[doc = "Returns the styles defined inline (explicitly in the \"style\" attribute and implicitly, using DOM\nattributes) for a DOM node identified by `nodeId`.\n[getInlineStylesForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getInlineStylesForNode)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetInlineStylesForNodeParams {
@@ -369,6 +402,9 @@ impl GetInlineStylesForNodeMethod {
 pub struct GetInlineStylesForNode {
     pub method: GetInlineStylesForNodeMethod,
     pub params: GetInlineStylesForNodeParams,
+}
+impl super::super::super::CommandResult for GetInlineStylesForNode {
+    type Result = super::results::GetInlineStylesForNodeResult;
 }
 #[doc = "Returns the styles coming from animations & transitions\nincluding the animation & transition styles coming from inheritance chain.\n[getAnimatedStylesForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getAnimatedStylesForNode)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -397,6 +433,9 @@ pub struct GetAnimatedStylesForNode {
     pub method: GetAnimatedStylesForNodeMethod,
     pub params: GetAnimatedStylesForNodeParams,
 }
+impl super::super::super::CommandResult for GetAnimatedStylesForNode {
+    type Result = super::results::GetAnimatedStylesForNodeResult;
+}
 #[doc = "Returns requested styles for a DOM node identified by `nodeId`.\n[getMatchedStylesForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getMatchedStylesForNode)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetMatchedStylesForNodeParams {
@@ -424,6 +463,9 @@ pub struct GetMatchedStylesForNode {
     pub method: GetMatchedStylesForNodeMethod,
     pub params: GetMatchedStylesForNodeParams,
 }
+impl super::super::super::CommandResult for GetMatchedStylesForNode {
+    type Result = super::results::GetMatchedStylesForNodeResult;
+}
 #[doc = "Returns the values of the default UA-defined environment variables used in env()\n[getEnvironmentVariables](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getEnvironmentVariables)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct GetEnvironmentVariablesParams {}
@@ -441,6 +483,9 @@ pub struct GetEnvironmentVariables {
     pub method: GetEnvironmentVariablesMethod,
     pub params: GetEnvironmentVariablesParams,
 }
+impl super::super::super::CommandResult for GetEnvironmentVariables {
+    type Result = super::results::GetEnvironmentVariablesResult;
+}
 #[doc = "Returns all media queries parsed by the rendering engine.\n[getMediaQueries](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getMediaQueries)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct GetMediaQueriesParams {}
@@ -457,6 +502,9 @@ impl GetMediaQueriesMethod {
 pub struct GetMediaQueries {
     pub method: GetMediaQueriesMethod,
     pub params: GetMediaQueriesParams,
+}
+impl super::super::super::CommandResult for GetMediaQueries {
+    type Result = super::results::GetMediaQueriesResult;
 }
 #[doc = "Requests information about platform fonts which we used to render child TextNodes in the given\nnode.\n[getPlatformFontsForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getPlatformFontsForNode)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -485,6 +533,9 @@ pub struct GetPlatformFontsForNode {
     pub method: GetPlatformFontsForNodeMethod,
     pub params: GetPlatformFontsForNodeParams,
 }
+impl super::super::super::CommandResult for GetPlatformFontsForNode {
+    type Result = super::results::GetPlatformFontsForNodeResult;
+}
 #[doc = "Returns the current textual content for a stylesheet.\n[getStyleSheetText](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getStyleSheetText)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetStyleSheetTextParams {
@@ -512,6 +563,9 @@ pub struct GetStyleSheetText {
     pub method: GetStyleSheetTextMethod,
     pub params: GetStyleSheetTextParams,
 }
+impl super::super::super::CommandResult for GetStyleSheetText {
+    type Result = super::results::GetStyleSheetTextResult;
+}
 #[doc = "Returns all layers parsed by the rendering engine for the tree scope of a node.\nGiven a DOM element identified by nodeId, getLayersForNode returns the root\nlayer for the nearest ancestor document or shadow root. The layer root contains\nthe full layer tree for the tree scope and their ordering.\n[getLayersForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getLayersForNode)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetLayersForNodeParams {
@@ -538,6 +592,9 @@ impl GetLayersForNodeMethod {
 pub struct GetLayersForNode {
     pub method: GetLayersForNodeMethod,
     pub params: GetLayersForNodeParams,
+}
+impl super::super::super::CommandResult for GetLayersForNode {
+    type Result = super::results::GetLayersForNodeResult;
 }
 #[doc = "Given a CSS selector text and a style sheet ID, getLocationForSelector\nreturns an array of locations of the CSS selector in the style sheet.\n[getLocationForSelector](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getLocationForSelector)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -572,6 +629,9 @@ pub struct GetLocationForSelector {
     pub method: GetLocationForSelectorMethod,
     pub params: GetLocationForSelectorParams,
 }
+impl super::super::super::CommandResult for GetLocationForSelector {
+    type Result = super::results::GetLocationForSelectorResult;
+}
 #[doc = "Starts tracking the given node for the computed style updates\nand whenever the computed style is updated for node, it queues\na `computedStyleUpdated` event with throttling.\nThere can only be 1 node tracked for computed style updates\nso passing a new node id removes tracking from the previous node.\nPass `undefined` to disable tracking.\n[trackComputedStyleUpdatesForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-trackComputedStyleUpdatesForNode)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct TrackComputedStyleUpdatesForNodeParams {
@@ -593,6 +653,9 @@ impl TrackComputedStyleUpdatesForNodeMethod {
 pub struct TrackComputedStyleUpdatesForNode {
     pub method: TrackComputedStyleUpdatesForNodeMethod,
     pub params: TrackComputedStyleUpdatesForNodeParams,
+}
+impl super::super::super::CommandResult for TrackComputedStyleUpdatesForNode {
+    type Result = super::results::TrackComputedStyleUpdatesForNodeResult;
 }
 #[doc = "Starts tracking the given computed styles for updates. The specified array of properties\nreplaces the one previously specified. Pass empty array to disable tracking.\nUse takeComputedStyleUpdates to retrieve the list of nodes that had properties modified.\nThe changes to computed style properties are only tracked for nodes pushed to the front-end\nby the DOM agent. If no changes to the tracked properties occur after the node has been pushed\nto the front-end, no updates will be issued for the node.\n[trackComputedStyleUpdates](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-trackComputedStyleUpdates)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -622,6 +685,9 @@ pub struct TrackComputedStyleUpdates {
     pub method: TrackComputedStyleUpdatesMethod,
     pub params: TrackComputedStyleUpdatesParams,
 }
+impl super::super::super::CommandResult for TrackComputedStyleUpdates {
+    type Result = super::results::TrackComputedStyleUpdatesResult;
+}
 #[doc = "Polls the next batch of computed style updates.\n[takeComputedStyleUpdates](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-takeComputedStyleUpdates)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct TakeComputedStyleUpdatesParams {}
@@ -638,6 +704,9 @@ impl TakeComputedStyleUpdatesMethod {
 pub struct TakeComputedStyleUpdates {
     pub method: TakeComputedStyleUpdatesMethod,
     pub params: TakeComputedStyleUpdatesParams,
+}
+impl super::super::super::CommandResult for TakeComputedStyleUpdates {
+    type Result = super::results::TakeComputedStyleUpdatesResult;
 }
 #[doc = "Find a rule with the given active property for the given node and set the new value for this\nproperty\n[setEffectivePropertyValueForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setEffectivePropertyValueForNode)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -677,6 +746,9 @@ pub struct SetEffectivePropertyValueForNode {
     pub method: SetEffectivePropertyValueForNodeMethod,
     pub params: SetEffectivePropertyValueForNodeParams,
 }
+impl super::super::super::CommandResult for SetEffectivePropertyValueForNode {
+    type Result = super::results::SetEffectivePropertyValueForNodeResult;
+}
 #[doc = "Modifies the property rule property name.\n[setPropertyRulePropertyName](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setPropertyRulePropertyName)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetPropertyRulePropertyNameParams {
@@ -713,6 +785,9 @@ impl SetPropertyRulePropertyNameMethod {
 pub struct SetPropertyRulePropertyName {
     pub method: SetPropertyRulePropertyNameMethod,
     pub params: SetPropertyRulePropertyNameParams,
+}
+impl super::super::super::CommandResult for SetPropertyRulePropertyName {
+    type Result = super::results::SetPropertyRulePropertyNameResult;
 }
 #[doc = "Modifies the keyframe rule key text.\n[setKeyframeKey](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setKeyframeKey)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -751,6 +826,9 @@ pub struct SetKeyframeKey {
     pub method: SetKeyframeKeyMethod,
     pub params: SetKeyframeKeyParams,
 }
+impl super::super::super::CommandResult for SetKeyframeKey {
+    type Result = super::results::SetKeyframeKeyResult;
+}
 #[doc = "Modifies the rule selector.\n[setMediaText](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setMediaText)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetMediaTextParams {
@@ -787,6 +865,9 @@ impl SetMediaTextMethod {
 pub struct SetMediaText {
     pub method: SetMediaTextMethod,
     pub params: SetMediaTextParams,
+}
+impl super::super::super::CommandResult for SetMediaText {
+    type Result = super::results::SetMediaTextResult;
 }
 #[doc = "Modifies the expression of a container query.\n[setContainerQueryText](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setContainerQueryText)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -825,6 +906,9 @@ pub struct SetContainerQueryText {
     pub method: SetContainerQueryTextMethod,
     pub params: SetContainerQueryTextParams,
 }
+impl super::super::super::CommandResult for SetContainerQueryText {
+    type Result = super::results::SetContainerQueryTextResult;
+}
 #[doc = "Modifies the expression of a supports at-rule.\n[setSupportsText](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setSupportsText)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetSupportsTextParams {
@@ -861,6 +945,9 @@ impl SetSupportsTextMethod {
 pub struct SetSupportsText {
     pub method: SetSupportsTextMethod,
     pub params: SetSupportsTextParams,
+}
+impl super::super::super::CommandResult for SetSupportsText {
+    type Result = super::results::SetSupportsTextResult;
 }
 #[doc = "Modifies the expression of a scope at-rule.\n[setScopeText](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setScopeText)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -899,6 +986,9 @@ pub struct SetScopeText {
     pub method: SetScopeTextMethod,
     pub params: SetScopeTextParams,
 }
+impl super::super::super::CommandResult for SetScopeText {
+    type Result = super::results::SetScopeTextResult;
+}
 #[doc = "Modifies the rule selector.\n[setRuleSelector](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setRuleSelector)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetRuleSelectorParams {
@@ -936,6 +1026,9 @@ pub struct SetRuleSelector {
     pub method: SetRuleSelectorMethod,
     pub params: SetRuleSelectorParams,
 }
+impl super::super::super::CommandResult for SetRuleSelector {
+    type Result = super::results::SetRuleSelectorResult;
+}
 #[doc = "Sets the new stylesheet text.\n[setStyleSheetText](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setStyleSheetText)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetStyleSheetTextParams {
@@ -968,6 +1061,9 @@ impl SetStyleSheetTextMethod {
 pub struct SetStyleSheetText {
     pub method: SetStyleSheetTextMethod,
     pub params: SetStyleSheetTextParams,
+}
+impl super::super::super::CommandResult for SetStyleSheetText {
+    type Result = super::results::SetStyleSheetTextResult;
 }
 #[doc = "Applies specified style edits one after another in the given order.\n[setStyleTexts](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setStyleTexts)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1003,6 +1099,9 @@ pub struct SetStyleTexts {
     pub method: SetStyleTextsMethod,
     pub params: SetStyleTextsParams,
 }
+impl super::super::super::CommandResult for SetStyleTexts {
+    type Result = super::results::SetStyleTextsResult;
+}
 #[doc = "Enables the selector recording.\n[startRuleUsageTracking](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-startRuleUsageTracking)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct StartRuleUsageTrackingParams {}
@@ -1019,6 +1118,9 @@ impl StartRuleUsageTrackingMethod {
 pub struct StartRuleUsageTracking {
     pub method: StartRuleUsageTrackingMethod,
     pub params: StartRuleUsageTrackingParams,
+}
+impl super::super::super::CommandResult for StartRuleUsageTracking {
+    type Result = super::results::StartRuleUsageTrackingResult;
 }
 #[doc = "Stop tracking rule usage and return the list of rules that were used since last call to\n`takeCoverageDelta` (or since start of coverage instrumentation).\n[stopRuleUsageTracking](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-stopRuleUsageTracking)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -1037,6 +1139,9 @@ pub struct StopRuleUsageTracking {
     pub method: StopRuleUsageTrackingMethod,
     pub params: StopRuleUsageTrackingParams,
 }
+impl super::super::super::CommandResult for StopRuleUsageTracking {
+    type Result = super::results::StopRuleUsageTrackingResult;
+}
 #[doc = "Obtain list of rules that became used since last call to this method (or since start of coverage\ninstrumentation).\n[takeCoverageDelta](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-takeCoverageDelta)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct TakeCoverageDeltaParams {}
@@ -1053,6 +1158,9 @@ impl TakeCoverageDeltaMethod {
 pub struct TakeCoverageDelta {
     pub method: TakeCoverageDeltaMethod,
     pub params: TakeCoverageDeltaParams,
+}
+impl super::super::super::CommandResult for TakeCoverageDelta {
+    type Result = super::results::TakeCoverageDeltaResult;
 }
 #[doc = "Enables/disables rendering of local CSS fonts (enabled by default).\n[setLocalFontsEnabled](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setLocalFontsEnabled)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1081,5 +1189,8 @@ impl SetLocalFontsEnabledMethod {
 pub struct SetLocalFontsEnabled {
     pub method: SetLocalFontsEnabledMethod,
     pub params: SetLocalFontsEnabledParams,
+}
+impl super::super::super::CommandResult for SetLocalFontsEnabled {
+    type Result = super::results::SetLocalFontsEnabledResult;
 }
 group_enum ! (CssCommands { AddRule (AddRule) , CollectClassNames (CollectClassNames) , CreateStyleSheet (CreateStyleSheet) , Disable (Disable) , Enable (Enable) , ForcePseudoState (ForcePseudoState) , ForceStartingStyle (ForceStartingStyle) , GetBackgroundColors (GetBackgroundColors) , GetComputedStyleForNode (GetComputedStyleForNode) , ResolveValues (ResolveValues) , GetLonghandProperties (GetLonghandProperties) , GetInlineStylesForNode (GetInlineStylesForNode) , GetAnimatedStylesForNode (GetAnimatedStylesForNode) , GetMatchedStylesForNode (GetMatchedStylesForNode) , GetEnvironmentVariables (GetEnvironmentVariables) , GetMediaQueries (GetMediaQueries) , GetPlatformFontsForNode (GetPlatformFontsForNode) , GetStyleSheetText (GetStyleSheetText) , GetLayersForNode (GetLayersForNode) , GetLocationForSelector (GetLocationForSelector) , TrackComputedStyleUpdatesForNode (TrackComputedStyleUpdatesForNode) , TrackComputedStyleUpdates (TrackComputedStyleUpdates) , TakeComputedStyleUpdates (TakeComputedStyleUpdates) , SetEffectivePropertyValueForNode (SetEffectivePropertyValueForNode) , SetPropertyRulePropertyName (SetPropertyRulePropertyName) , SetKeyframeKey (SetKeyframeKey) , SetMediaText (SetMediaText) , SetContainerQueryText (SetContainerQueryText) , SetSupportsText (SetSupportsText) , SetScopeText (SetScopeText) , SetRuleSelector (SetRuleSelector) , SetStyleSheetText (SetStyleSheetText) , SetStyleTexts (SetStyleTexts) , StartRuleUsageTracking (StartRuleUsageTracking) , StopRuleUsageTracking (StopRuleUsageTracking) , TakeCoverageDelta (TakeCoverageDelta) , SetLocalFontsEnabled (SetLocalFontsEnabled) });

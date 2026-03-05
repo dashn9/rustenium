@@ -16,6 +16,9 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
+impl super::super::super::CommandResult for Disable {
+    type Result = super::results::DisableResult;
+}
 #[doc = "Enable collecting and reporting metrics.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Performance/#method-enable)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct EnableParams {
@@ -49,6 +52,9 @@ pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
 }
+impl super::super::super::CommandResult for Enable {
+    type Result = super::results::EnableResult;
+}
 #[doc = "Retrieve current values of run-time metrics.\n[getMetrics](https://chromedevtools.github.io/devtools-protocol/tot/Performance/#method-getMetrics)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct GetMetricsParams {}
@@ -65,5 +71,8 @@ impl GetMetricsMethod {
 pub struct GetMetrics {
     pub method: GetMetricsMethod,
     pub params: GetMetricsParams,
+}
+impl super::super::super::CommandResult for GetMetrics {
+    type Result = super::results::GetMetricsResult;
 }
 group_enum ! (PerformanceCommands { Disable (Disable) , Enable (Enable) , GetMetrics (GetMetrics) });

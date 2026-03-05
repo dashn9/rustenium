@@ -1,6 +1,10 @@
 use serde::{Deserialize, Serialize};
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct DisableResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct EnableResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct GetSnapshotReturns {
+pub struct GetSnapshotResult {
     #[doc = "The nodes in the DOM tree. The DOMNode at index 0 corresponds to the root document."]
     #[serde(rename = "domNodes")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
@@ -15,7 +19,7 @@ pub struct GetSnapshotReturns {
     pub computed_styles: Vec<super::types::ComputedStyle>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct CaptureSnapshotReturns {
+pub struct CaptureSnapshotResult {
     #[doc = "The nodes in the DOM tree. The DOMNode at index 0 corresponds to the root document."]
     #[serde(rename = "documents")]
     #[serde(skip_serializing_if = "Vec::is_empty")]

@@ -27,6 +27,9 @@ pub struct Close {
     pub method: CloseMethod,
     pub params: CloseParams,
 }
+impl super::super::super::CommandResult for Close {
+    type Result = super::results::CloseResult;
+}
 #[doc = "Read a chunk of the stream\n[read](https://chromedevtools.github.io/devtools-protocol/tot/IO/#method-read)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ReadParams {
@@ -67,6 +70,9 @@ pub struct Read {
     pub method: ReadMethod,
     pub params: ReadParams,
 }
+impl super::super::super::CommandResult for Read {
+    type Result = super::results::ReadResult;
+}
 #[doc = "Return UUID of Blob object specified by a remote object id.\n[resolveBlob](https://chromedevtools.github.io/devtools-protocol/tot/IO/#method-resolveBlob)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResolveBlobParams {
@@ -96,5 +102,8 @@ impl ResolveBlobMethod {
 pub struct ResolveBlob {
     pub method: ResolveBlobMethod,
     pub params: ResolveBlobParams,
+}
+impl super::super::super::CommandResult for ResolveBlob {
+    type Result = super::results::ResolveBlobResult;
 }
 group_enum ! (IoCommands { Close (Close) , Read (Read) , ResolveBlob (ResolveBlob) });

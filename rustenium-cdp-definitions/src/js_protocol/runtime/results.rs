@@ -1,6 +1,30 @@
 use serde::{Deserialize, Serialize};
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct DisableResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct DiscardConsoleEntriesResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct EnableResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ReleaseObjectResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ReleaseObjectGroupResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct RunIfWaitingForDebuggerResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetAsyncCallStackDepthResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetCustomObjectFormatterEnabledResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetMaxCallStackSizeToCaptureResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct TerminateExecutionResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct AddBindingResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct RemoveBindingResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct AwaitPromiseReturns {
+pub struct AwaitPromiseResult {
     #[doc = "Promise result. Will contain rejected value if promise was rejected."]
     #[serde(rename = "result")]
     pub result: super::types::RemoteObject,
@@ -11,7 +35,7 @@ pub struct AwaitPromiseReturns {
     pub exception_details: Option<super::types::ExceptionDetails>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct CallFunctionOnReturns {
+pub struct CallFunctionOnResult {
     #[doc = "Call result."]
     #[serde(rename = "result")]
     pub result: super::types::RemoteObject,
@@ -22,7 +46,7 @@ pub struct CallFunctionOnReturns {
     pub exception_details: Option<super::types::ExceptionDetails>,
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct CompileScriptReturns {
+pub struct CompileScriptResult {
     #[doc = "Id of the script."]
     #[serde(rename = "scriptId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -35,7 +59,7 @@ pub struct CompileScriptReturns {
     pub exception_details: Option<super::types::ExceptionDetails>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct EvaluateReturns {
+pub struct EvaluateResult {
     #[doc = "Evaluation result."]
     #[serde(rename = "result")]
     pub result: super::types::RemoteObject,
@@ -46,13 +70,13 @@ pub struct EvaluateReturns {
     pub exception_details: Option<super::types::ExceptionDetails>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct GetIsolateIdReturns {
+pub struct GetIsolateIdResult {
     #[doc = "The isolate id."]
     #[serde(rename = "id")]
     pub id: String,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct GetHeapUsageReturns {
+pub struct GetHeapUsageResult {
     #[doc = "Used JavaScript heap size in bytes."]
     #[serde(rename = "usedSize")]
     pub used_size: f64,
@@ -67,7 +91,7 @@ pub struct GetHeapUsageReturns {
     pub backing_storage_size: f64,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct GetPropertiesReturns {
+pub struct GetPropertiesResult {
     #[doc = "Object properties."]
     #[serde(rename = "result")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
@@ -89,19 +113,19 @@ pub struct GetPropertiesReturns {
     pub exception_details: Option<super::types::ExceptionDetails>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct GlobalLexicalScopeNamesReturns {
+pub struct GlobalLexicalScopeNamesResult {
     #[serde(rename = "names")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub names: Vec<String>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct QueryObjectsReturns {
+pub struct QueryObjectsResult {
     #[doc = "Array with objects."]
     #[serde(rename = "objects")]
     pub objects: super::types::RemoteObject,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct RunScriptReturns {
+pub struct RunScriptResult {
     #[doc = "Run result."]
     #[serde(rename = "result")]
     pub result: super::types::RemoteObject,
@@ -112,7 +136,7 @@ pub struct RunScriptReturns {
     pub exception_details: Option<super::types::ExceptionDetails>,
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct GetExceptionDetailsReturns {
+pub struct GetExceptionDetailsResult {
     #[serde(rename = "exceptionDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]

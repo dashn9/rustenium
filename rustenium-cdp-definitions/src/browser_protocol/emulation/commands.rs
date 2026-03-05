@@ -16,6 +16,9 @@ pub struct ClearDeviceMetricsOverride {
     pub method: ClearDeviceMetricsOverrideMethod,
     pub params: ClearDeviceMetricsOverrideParams,
 }
+impl super::super::super::CommandResult for ClearDeviceMetricsOverride {
+    type Result = super::results::ClearDeviceMetricsOverrideResult;
+}
 #[doc = "Clears the overridden Geolocation Position and Error.\n[clearGeolocationOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-clearGeolocationOverride)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ClearGeolocationOverrideParams {}
@@ -33,6 +36,9 @@ pub struct ClearGeolocationOverride {
     pub method: ClearGeolocationOverrideMethod,
     pub params: ClearGeolocationOverrideParams,
 }
+impl super::super::super::CommandResult for ClearGeolocationOverride {
+    type Result = super::results::ClearGeolocationOverrideResult;
+}
 #[doc = "Requests that page scale factor is reset to initial values.\n[resetPageScaleFactor](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-resetPageScaleFactor)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ResetPageScaleFactorParams {}
@@ -49,6 +55,9 @@ impl ResetPageScaleFactorMethod {
 pub struct ResetPageScaleFactor {
     pub method: ResetPageScaleFactorMethod,
     pub params: ResetPageScaleFactorParams,
+}
+impl super::super::super::CommandResult for ResetPageScaleFactor {
+    type Result = super::results::ResetPageScaleFactorResult;
 }
 #[doc = "Enables or disables simulating a focused and active page.\n[setFocusEmulationEnabled](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setFocusEmulationEnabled)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -78,6 +87,9 @@ pub struct SetFocusEmulationEnabled {
     pub method: SetFocusEmulationEnabledMethod,
     pub params: SetFocusEmulationEnabledParams,
 }
+impl super::super::super::CommandResult for SetFocusEmulationEnabled {
+    type Result = super::results::SetFocusEmulationEnabledResult;
+}
 #[doc = "Automatically render all web contents using a dark theme.\n[setAutoDarkModeOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setAutoDarkModeOverride)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetAutoDarkModeOverrideParams {
@@ -100,6 +112,9 @@ impl SetAutoDarkModeOverrideMethod {
 pub struct SetAutoDarkModeOverride {
     pub method: SetAutoDarkModeOverrideMethod,
     pub params: SetAutoDarkModeOverrideParams,
+}
+impl super::super::super::CommandResult for SetAutoDarkModeOverride {
+    type Result = super::results::SetAutoDarkModeOverrideResult;
 }
 #[doc = "Enables CPU throttling to emulate slow CPUs.\n[setCPUThrottlingRate](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setCPUThrottlingRate)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -127,6 +142,9 @@ pub struct SetCpuThrottlingRate {
     pub method: SetCpuThrottlingRateMethod,
     pub params: SetCpuThrottlingRateParams,
 }
+impl super::super::super::CommandResult for SetCpuThrottlingRate {
+    type Result = super::results::SetCpuThrottlingRateResult;
+}
 #[doc = "Sets or clears an override of the default background color of the frame. This override is used\nif the content does not specify one.\n[setDefaultBackgroundColorOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setDefaultBackgroundColorOverride)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetDefaultBackgroundColorOverrideParams {
@@ -149,6 +167,9 @@ impl SetDefaultBackgroundColorOverrideMethod {
 pub struct SetDefaultBackgroundColorOverride {
     pub method: SetDefaultBackgroundColorOverrideMethod,
     pub params: SetDefaultBackgroundColorOverrideParams,
+}
+impl super::super::super::CommandResult for SetDefaultBackgroundColorOverride {
+    type Result = super::results::SetDefaultBackgroundColorOverrideResult;
 }
 #[doc = "Overrides the values for env(safe-area-inset-*) and env(safe-area-max-inset-*). Unset values will cause the\nrespective variables to be undefined, even if previously overridden.\n[setSafeAreaInsetsOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setSafeAreaInsetsOverride)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -176,6 +197,9 @@ impl SetSafeAreaInsetsOverrideMethod {
 pub struct SetSafeAreaInsetsOverride {
     pub method: SetSafeAreaInsetsOverrideMethod,
     pub params: SetSafeAreaInsetsOverrideParams,
+}
+impl super::super::super::CommandResult for SetSafeAreaInsetsOverride {
+    type Result = super::results::SetSafeAreaInsetsOverrideResult;
 }
 #[doc = "Overrides the values of device screen dimensions (window.screen.width, window.screen.height,\nwindow.innerWidth, window.innerHeight, and \"device-width\"/\"device-height\"-related CSS media\nquery results).\n[setDeviceMetricsOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setDeviceMetricsOverride)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -286,6 +310,9 @@ pub struct SetDeviceMetricsOverride {
     pub method: SetDeviceMetricsOverrideMethod,
     pub params: SetDeviceMetricsOverrideParams,
 }
+impl super::super::super::CommandResult for SetDeviceMetricsOverride {
+    type Result = super::results::SetDeviceMetricsOverrideResult;
+}
 #[doc = "Start reporting the given posture value to the Device Posture API.\nThis override can also be set in setDeviceMetricsOverride().\n[setDevicePostureOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setDevicePostureOverride)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetDevicePostureOverrideParams {
@@ -313,6 +340,9 @@ pub struct SetDevicePostureOverride {
     pub method: SetDevicePostureOverrideMethod,
     pub params: SetDevicePostureOverrideParams,
 }
+impl super::super::super::CommandResult for SetDevicePostureOverride {
+    type Result = super::results::SetDevicePostureOverrideResult;
+}
 #[doc = "Clears a device posture override set with either setDeviceMetricsOverride()\nor setDevicePostureOverride() and starts using posture information from the\nplatform again.\nDoes nothing if no override is set.\n[clearDevicePostureOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-clearDevicePostureOverride)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ClearDevicePostureOverrideParams {}
@@ -329,6 +359,9 @@ impl ClearDevicePostureOverrideMethod {
 pub struct ClearDevicePostureOverride {
     pub method: ClearDevicePostureOverrideMethod,
     pub params: ClearDevicePostureOverrideParams,
+}
+impl super::super::super::CommandResult for ClearDevicePostureOverride {
+    type Result = super::results::ClearDevicePostureOverrideResult;
 }
 #[doc = "Start using the given display features to pupulate the Viewport Segments API.\nThis override can also be set in setDeviceMetricsOverride().\n[setDisplayFeaturesOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setDisplayFeaturesOverride)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -356,6 +389,9 @@ pub struct SetDisplayFeaturesOverride {
     pub method: SetDisplayFeaturesOverrideMethod,
     pub params: SetDisplayFeaturesOverrideParams,
 }
+impl super::super::super::CommandResult for SetDisplayFeaturesOverride {
+    type Result = super::results::SetDisplayFeaturesOverrideResult;
+}
 #[doc = "Clears the display features override set with either setDeviceMetricsOverride()\nor setDisplayFeaturesOverride() and starts using display features from the\nplatform again.\nDoes nothing if no override is set.\n[clearDisplayFeaturesOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-clearDisplayFeaturesOverride)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ClearDisplayFeaturesOverrideParams {}
@@ -372,6 +408,9 @@ impl ClearDisplayFeaturesOverrideMethod {
 pub struct ClearDisplayFeaturesOverride {
     pub method: ClearDisplayFeaturesOverrideMethod,
     pub params: ClearDisplayFeaturesOverrideParams,
+}
+impl super::super::super::CommandResult for ClearDisplayFeaturesOverride {
+    type Result = super::results::ClearDisplayFeaturesOverrideResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetScrollbarsHiddenParams {
@@ -399,6 +438,9 @@ pub struct SetScrollbarsHidden {
     pub method: SetScrollbarsHiddenMethod,
     pub params: SetScrollbarsHiddenParams,
 }
+impl super::super::super::CommandResult for SetScrollbarsHidden {
+    type Result = super::results::SetScrollbarsHiddenResult;
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetDocumentCookieDisabledParams {
     #[doc = "Whether document.coookie API should be disabled."]
@@ -424,6 +466,9 @@ impl SetDocumentCookieDisabledMethod {
 pub struct SetDocumentCookieDisabled {
     pub method: SetDocumentCookieDisabledMethod,
     pub params: SetDocumentCookieDisabledParams,
+}
+impl super::super::super::CommandResult for SetDocumentCookieDisabled {
+    type Result = super::results::SetDocumentCookieDisabledResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetEmitTouchEventsForMouseParams {
@@ -465,6 +510,9 @@ pub struct SetEmitTouchEventsForMouse {
     pub method: SetEmitTouchEventsForMouseMethod,
     pub params: SetEmitTouchEventsForMouseParams,
 }
+impl super::super::super::CommandResult for SetEmitTouchEventsForMouse {
+    type Result = super::results::SetEmitTouchEventsForMouseResult;
+}
 #[doc = "Emulates the given media type or media feature for CSS media queries.\n[setEmulatedMedia](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setEmulatedMedia)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetEmulatedMediaParams {
@@ -492,6 +540,9 @@ impl SetEmulatedMediaMethod {
 pub struct SetEmulatedMedia {
     pub method: SetEmulatedMediaMethod,
     pub params: SetEmulatedMediaParams,
+}
+impl super::super::super::CommandResult for SetEmulatedMedia {
+    type Result = super::results::SetEmulatedMediaResult;
 }
 #[doc = "Emulates the given vision deficiency.\n[setEmulatedVisionDeficiency](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setEmulatedVisionDeficiency)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -539,6 +590,9 @@ pub struct SetEmulatedVisionDeficiency {
     pub method: SetEmulatedVisionDeficiencyMethod,
     pub params: SetEmulatedVisionDeficiencyParams,
 }
+impl super::super::super::CommandResult for SetEmulatedVisionDeficiency {
+    type Result = super::results::SetEmulatedVisionDeficiencyResult;
+}
 #[doc = "Emulates the given OS text scale.\n[setEmulatedOSTextScale](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setEmulatedOSTextScale)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetEmulatedOsTextScaleParams {
@@ -560,6 +614,9 @@ impl SetEmulatedOsTextScaleMethod {
 pub struct SetEmulatedOsTextScale {
     pub method: SetEmulatedOsTextScaleMethod,
     pub params: SetEmulatedOsTextScaleParams,
+}
+impl super::super::super::CommandResult for SetEmulatedOsTextScale {
+    type Result = super::results::SetEmulatedOsTextScaleResult;
 }
 #[doc = "Overrides the Geolocation Position or Error. Omitting latitude, longitude or\naccuracy emulates position unavailable.\n[setGeolocationOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setGeolocationOverride)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -614,6 +671,9 @@ pub struct SetGeolocationOverride {
     pub method: SetGeolocationOverrideMethod,
     pub params: SetGeolocationOverrideParams,
 }
+impl super::super::super::CommandResult for SetGeolocationOverride {
+    type Result = super::results::SetGeolocationOverrideResult;
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetOverriddenSensorInformationParams {
     #[serde(rename = "type")]
@@ -638,6 +698,9 @@ impl GetOverriddenSensorInformationMethod {
 pub struct GetOverriddenSensorInformation {
     pub method: GetOverriddenSensorInformationMethod,
     pub params: GetOverriddenSensorInformationParams,
+}
+impl super::super::super::CommandResult for GetOverriddenSensorInformation {
+    type Result = super::results::GetOverriddenSensorInformationResult;
 }
 #[doc = "Overrides a platform sensor of a given type. If |enabled| is true, calls to\nSensor.start() will use a virtual sensor as backend rather than fetching\ndata from a real hardware sensor. Otherwise, existing virtual\nsensor-backend Sensor objects will fire an error event and new calls to\nSensor.start() will attempt to use a real sensor instead.\n[setSensorOverrideEnabled](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setSensorOverrideEnabled)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -674,6 +737,9 @@ pub struct SetSensorOverrideEnabled {
     pub method: SetSensorOverrideEnabledMethod,
     pub params: SetSensorOverrideEnabledParams,
 }
+impl super::super::super::CommandResult for SetSensorOverrideEnabled {
+    type Result = super::results::SetSensorOverrideEnabledResult;
+}
 #[doc = "Updates the sensor readings reported by a sensor type previously overridden\nby setSensorOverrideEnabled.\n[setSensorOverrideReadings](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setSensorOverrideReadings)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetSensorOverrideReadingsParams {
@@ -706,6 +772,9 @@ impl SetSensorOverrideReadingsMethod {
 pub struct SetSensorOverrideReadings {
     pub method: SetSensorOverrideReadingsMethod,
     pub params: SetSensorOverrideReadingsParams,
+}
+impl super::super::super::CommandResult for SetSensorOverrideReadings {
+    type Result = super::results::SetSensorOverrideReadingsResult;
 }
 #[doc = "Overrides a pressure source of a given type, as used by the Compute\nPressure API, so that updates to PressureObserver.observe() are provided\nvia setPressureStateOverride instead of being retrieved from\nplatform-provided telemetry data.\n[setPressureSourceOverrideEnabled](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setPressureSourceOverrideEnabled)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -742,6 +811,9 @@ pub struct SetPressureSourceOverrideEnabled {
     pub method: SetPressureSourceOverrideEnabledMethod,
     pub params: SetPressureSourceOverrideEnabledParams,
 }
+impl super::super::super::CommandResult for SetPressureSourceOverrideEnabled {
+    type Result = super::results::SetPressureSourceOverrideEnabledResult;
+}
 #[doc = "TODO: OBSOLETE: To remove when setPressureDataOverride is merged.\nProvides a given pressure state that will be processed and eventually be\ndelivered to PressureObserver users. |source| must have been previously\noverridden by setPressureSourceOverrideEnabled.\n[setPressureStateOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setPressureStateOverride)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetPressureStateOverrideParams {
@@ -774,6 +846,9 @@ impl SetPressureStateOverrideMethod {
 pub struct SetPressureStateOverride {
     pub method: SetPressureStateOverrideMethod,
     pub params: SetPressureStateOverrideParams,
+}
+impl super::super::super::CommandResult for SetPressureStateOverride {
+    type Result = super::results::SetPressureStateOverrideResult;
 }
 #[doc = "Provides a given pressure data set that will be processed and eventually be\ndelivered to PressureObserver users. |source| must have been previously\noverridden by setPressureSourceOverrideEnabled.\n[setPressureDataOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setPressureDataOverride)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -813,6 +888,9 @@ pub struct SetPressureDataOverride {
     pub method: SetPressureDataOverrideMethod,
     pub params: SetPressureDataOverrideParams,
 }
+impl super::super::super::CommandResult for SetPressureDataOverride {
+    type Result = super::results::SetPressureDataOverrideResult;
+}
 #[doc = "Overrides the Idle state.\n[setIdleOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setIdleOverride)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetIdleOverrideParams {
@@ -845,6 +923,9 @@ pub struct SetIdleOverride {
     pub method: SetIdleOverrideMethod,
     pub params: SetIdleOverrideParams,
 }
+impl super::super::super::CommandResult for SetIdleOverride {
+    type Result = super::results::SetIdleOverrideResult;
+}
 #[doc = "Clears Idle state overrides.\n[clearIdleOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-clearIdleOverride)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ClearIdleOverrideParams {}
@@ -861,6 +942,9 @@ impl ClearIdleOverrideMethod {
 pub struct ClearIdleOverride {
     pub method: ClearIdleOverrideMethod,
     pub params: ClearIdleOverrideParams,
+}
+impl super::super::super::CommandResult for ClearIdleOverride {
+    type Result = super::results::ClearIdleOverrideResult;
 }
 #[doc = "Sets a specified page scale factor.\n[setPageScaleFactor](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setPageScaleFactor)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -890,6 +974,9 @@ pub struct SetPageScaleFactor {
     pub method: SetPageScaleFactorMethod,
     pub params: SetPageScaleFactorParams,
 }
+impl super::super::super::CommandResult for SetPageScaleFactor {
+    type Result = super::results::SetPageScaleFactorResult;
+}
 #[doc = "Switches script execution in the page.\n[setScriptExecutionDisabled](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setScriptExecutionDisabled)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetScriptExecutionDisabledParams {
@@ -917,6 +1004,9 @@ impl SetScriptExecutionDisabledMethod {
 pub struct SetScriptExecutionDisabled {
     pub method: SetScriptExecutionDisabledMethod,
     pub params: SetScriptExecutionDisabledParams,
+}
+impl super::super::super::CommandResult for SetScriptExecutionDisabled {
+    type Result = super::results::SetScriptExecutionDisabledResult;
 }
 #[doc = "Enables touch on platforms which do not support them.\n[setTouchEmulationEnabled](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setTouchEmulationEnabled)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -951,6 +1041,9 @@ impl SetTouchEmulationEnabledMethod {
 pub struct SetTouchEmulationEnabled {
     pub method: SetTouchEmulationEnabledMethod,
     pub params: SetTouchEmulationEnabledParams,
+}
+impl super::super::super::CommandResult for SetTouchEmulationEnabled {
+    type Result = super::results::SetTouchEmulationEnabledResult;
 }
 #[doc = "Turns on virtual time for all frames (replacing real-time with a synthetic time source) and sets\nthe current virtual time policy.  Note this supersedes any previous time budget.\n[setVirtualTimePolicy](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setVirtualTimePolicy)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -997,6 +1090,9 @@ pub struct SetVirtualTimePolicy {
     pub method: SetVirtualTimePolicyMethod,
     pub params: SetVirtualTimePolicyParams,
 }
+impl super::super::super::CommandResult for SetVirtualTimePolicy {
+    type Result = super::results::SetVirtualTimePolicyResult;
+}
 #[doc = "Overrides default host system locale with the specified one.\n[setLocaleOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setLocaleOverride)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetLocaleOverrideParams {
@@ -1019,6 +1115,9 @@ impl SetLocaleOverrideMethod {
 pub struct SetLocaleOverride {
     pub method: SetLocaleOverrideMethod,
     pub params: SetLocaleOverrideParams,
+}
+impl super::super::super::CommandResult for SetLocaleOverride {
+    type Result = super::results::SetLocaleOverrideResult;
 }
 #[doc = "Overrides default host system timezone with the specified one.\n[setTimezoneOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setTimezoneOverride)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1053,6 +1152,9 @@ pub struct SetTimezoneOverride {
     pub method: SetTimezoneOverrideMethod,
     pub params: SetTimezoneOverrideParams,
 }
+impl super::super::super::CommandResult for SetTimezoneOverride {
+    type Result = super::results::SetTimezoneOverrideResult;
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetDisabledImageTypesParams {
     #[doc = "Image types to disable."]
@@ -1078,6 +1180,9 @@ pub struct SetDisabledImageTypes {
     pub method: SetDisabledImageTypesMethod,
     pub params: SetDisabledImageTypesParams,
 }
+impl super::super::super::CommandResult for SetDisabledImageTypes {
+    type Result = super::results::SetDisabledImageTypesResult;
+}
 #[doc = "Override the value of navigator.connection.saveData\n[setDataSaverOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setDataSaverOverride)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetDataSaverOverrideParams {
@@ -1100,6 +1205,9 @@ impl SetDataSaverOverrideMethod {
 pub struct SetDataSaverOverride {
     pub method: SetDataSaverOverrideMethod,
     pub params: SetDataSaverOverrideParams,
+}
+impl super::super::super::CommandResult for SetDataSaverOverride {
+    type Result = super::results::SetDataSaverOverrideResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetHardwareConcurrencyOverrideParams {
@@ -1126,6 +1234,9 @@ impl SetHardwareConcurrencyOverrideMethod {
 pub struct SetHardwareConcurrencyOverride {
     pub method: SetHardwareConcurrencyOverrideMethod,
     pub params: SetHardwareConcurrencyOverrideParams,
+}
+impl super::super::super::CommandResult for SetHardwareConcurrencyOverride {
+    type Result = super::results::SetHardwareConcurrencyOverrideResult;
 }
 #[doc = "Allows overriding user agent with the given string.\n`userAgentMetadata` must be set for Client Hint headers to be sent.\n[setUserAgentOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setUserAgentOverride)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1178,6 +1289,9 @@ pub struct SetUserAgentOverride {
     pub method: SetUserAgentOverrideMethod,
     pub params: SetUserAgentOverrideParams,
 }
+impl super::super::super::CommandResult for SetUserAgentOverride {
+    type Result = super::results::SetUserAgentOverrideResult;
+}
 #[doc = "Allows overriding the automation flag.\n[setAutomationOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setAutomationOverride)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetAutomationOverrideParams {
@@ -1205,6 +1319,9 @@ impl SetAutomationOverrideMethod {
 pub struct SetAutomationOverride {
     pub method: SetAutomationOverrideMethod,
     pub params: SetAutomationOverrideParams,
+}
+impl super::super::super::CommandResult for SetAutomationOverride {
+    type Result = super::results::SetAutomationOverrideResult;
 }
 #[doc = "Allows overriding the difference between the small and large viewport sizes, which determine the\nvalue of the `svh` and `lvh` unit, respectively. Only supported for top-level frames.\n[setSmallViewportHeightDifferenceOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setSmallViewportHeightDifferenceOverride)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1234,6 +1351,9 @@ pub struct SetSmallViewportHeightDifferenceOverride {
     pub method: SetSmallViewportHeightDifferenceOverrideMethod,
     pub params: SetSmallViewportHeightDifferenceOverrideParams,
 }
+impl super::super::super::CommandResult for SetSmallViewportHeightDifferenceOverride {
+    type Result = super::results::SetSmallViewportHeightDifferenceOverrideResult;
+}
 #[doc = "Returns device's screen configuration. In headful mode, the physical screens configuration is returned,\nwhereas in headless mode, a virtual headless screen configuration is provided instead.\n[getScreenInfos](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-getScreenInfos)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct GetScreenInfosParams {}
@@ -1250,6 +1370,9 @@ impl GetScreenInfosMethod {
 pub struct GetScreenInfos {
     pub method: GetScreenInfosMethod,
     pub params: GetScreenInfosParams,
+}
+impl super::super::super::CommandResult for GetScreenInfos {
+    type Result = super::results::GetScreenInfosResult;
 }
 #[doc = "Add a new screen to the device. Only supported in headless mode.\n[addScreen](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-addScreen)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1332,6 +1455,9 @@ pub struct AddScreen {
     pub method: AddScreenMethod,
     pub params: AddScreenParams,
 }
+impl super::super::super::CommandResult for AddScreen {
+    type Result = super::results::AddScreenResult;
+}
 #[doc = "Remove screen from the device. Only supported in headless mode.\n[removeScreen](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-removeScreen)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RemoveScreenParams {
@@ -1358,5 +1484,8 @@ impl RemoveScreenMethod {
 pub struct RemoveScreen {
     pub method: RemoveScreenMethod,
     pub params: RemoveScreenParams,
+}
+impl super::super::super::CommandResult for RemoveScreen {
+    type Result = super::results::RemoveScreenResult;
 }
 group_enum ! (EmulationCommands { ClearDeviceMetricsOverride (ClearDeviceMetricsOverride) , ClearGeolocationOverride (ClearGeolocationOverride) , ResetPageScaleFactor (ResetPageScaleFactor) , SetFocusEmulationEnabled (SetFocusEmulationEnabled) , SetAutoDarkModeOverride (SetAutoDarkModeOverride) , SetCpuThrottlingRate (SetCpuThrottlingRate) , SetDefaultBackgroundColorOverride (SetDefaultBackgroundColorOverride) , SetSafeAreaInsetsOverride (SetSafeAreaInsetsOverride) , SetDeviceMetricsOverride (SetDeviceMetricsOverride) , SetDevicePostureOverride (SetDevicePostureOverride) , ClearDevicePostureOverride (ClearDevicePostureOverride) , SetDisplayFeaturesOverride (SetDisplayFeaturesOverride) , ClearDisplayFeaturesOverride (ClearDisplayFeaturesOverride) , SetScrollbarsHidden (SetScrollbarsHidden) , SetDocumentCookieDisabled (SetDocumentCookieDisabled) , SetEmitTouchEventsForMouse (SetEmitTouchEventsForMouse) , SetEmulatedMedia (SetEmulatedMedia) , SetEmulatedVisionDeficiency (SetEmulatedVisionDeficiency) , SetEmulatedOsTextScale (SetEmulatedOsTextScale) , SetGeolocationOverride (SetGeolocationOverride) , GetOverriddenSensorInformation (GetOverriddenSensorInformation) , SetSensorOverrideEnabled (SetSensorOverrideEnabled) , SetSensorOverrideReadings (SetSensorOverrideReadings) , SetPressureSourceOverrideEnabled (SetPressureSourceOverrideEnabled) , SetPressureStateOverride (SetPressureStateOverride) , SetPressureDataOverride (SetPressureDataOverride) , SetIdleOverride (SetIdleOverride) , ClearIdleOverride (ClearIdleOverride) , SetPageScaleFactor (SetPageScaleFactor) , SetScriptExecutionDisabled (SetScriptExecutionDisabled) , SetTouchEmulationEnabled (SetTouchEmulationEnabled) , SetVirtualTimePolicy (SetVirtualTimePolicy) , SetLocaleOverride (SetLocaleOverride) , SetTimezoneOverride (SetTimezoneOverride) , SetDisabledImageTypes (SetDisabledImageTypes) , SetDataSaverOverride (SetDataSaverOverride) , SetHardwareConcurrencyOverride (SetHardwareConcurrencyOverride) , SetUserAgentOverride (SetUserAgentOverride) , SetAutomationOverride (SetAutomationOverride) , SetSmallViewportHeightDifferenceOverride (SetSmallViewportHeightDifferenceOverride) , GetScreenInfos (GetScreenInfos) , AddScreen (AddScreen) , RemoveScreen (RemoveScreen) });

@@ -39,6 +39,9 @@ pub struct ContinueToLocation {
     pub method: ContinueToLocationMethod,
     pub params: ContinueToLocationParams,
 }
+impl super::super::super::CommandResult for ContinueToLocation {
+    type Result = super::results::ContinueToLocationResult;
+}
 #[doc = "Disables debugger for given page.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-disable)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct DisableParams {}
@@ -55,6 +58,9 @@ impl DisableMethod {
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
+}
+impl super::super::super::CommandResult for Disable {
+    type Result = super::results::DisableResult;
 }
 #[doc = "Enables debugger for the given page. Clients should not assume that the debugging has been\nenabled until the result for this command is received.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-enable)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -78,6 +84,9 @@ impl EnableMethod {
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl super::super::super::CommandResult for Enable {
+    type Result = super::results::EnableResult;
 }
 #[doc = "Evaluates expression on a given call frame.\n[evaluateOnCallFrame](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-evaluateOnCallFrame)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -156,6 +165,9 @@ pub struct EvaluateOnCallFrame {
     pub method: EvaluateOnCallFrameMethod,
     pub params: EvaluateOnCallFrameParams,
 }
+impl super::super::super::CommandResult for EvaluateOnCallFrame {
+    type Result = super::results::EvaluateOnCallFrameResult;
+}
 #[doc = "Returns possible locations for breakpoint. scriptId in start and end range locations should be\nthe same.\n[getPossibleBreakpoints](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-getPossibleBreakpoints)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetPossibleBreakpointsParams {
@@ -196,6 +208,9 @@ pub struct GetPossibleBreakpoints {
     pub method: GetPossibleBreakpointsMethod,
     pub params: GetPossibleBreakpointsParams,
 }
+impl super::super::super::CommandResult for GetPossibleBreakpoints {
+    type Result = super::results::GetPossibleBreakpointsResult;
+}
 #[doc = "Returns source for the script with given id.\n[getScriptSource](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-getScriptSource)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetScriptSourceParams {
@@ -224,6 +239,9 @@ pub struct GetScriptSource {
     pub method: GetScriptSourceMethod,
     pub params: GetScriptSourceParams,
 }
+impl super::super::super::CommandResult for GetScriptSource {
+    type Result = super::results::GetScriptSourceResult;
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DisassembleWasmModuleParams {
     #[doc = "Id of the script to disassemble"]
@@ -249,6 +267,9 @@ impl DisassembleWasmModuleMethod {
 pub struct DisassembleWasmModule {
     pub method: DisassembleWasmModuleMethod,
     pub params: DisassembleWasmModuleParams,
+}
+impl super::super::super::CommandResult for DisassembleWasmModule {
+    type Result = super::results::DisassembleWasmModuleResult;
 }
 #[doc = "Disassemble the next chunk of lines for the module corresponding to the\nstream. If disassembly is complete, this API will invalidate the streamId\nand return an empty chunk. Any subsequent calls for the now invalid stream\nwill return errors.\n[nextWasmDisassemblyChunk](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-nextWasmDisassemblyChunk)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -282,6 +303,9 @@ pub struct NextWasmDisassemblyChunk {
     pub method: NextWasmDisassemblyChunkMethod,
     pub params: NextWasmDisassemblyChunkParams,
 }
+impl super::super::super::CommandResult for NextWasmDisassemblyChunk {
+    type Result = super::results::NextWasmDisassemblyChunkResult;
+}
 #[doc = "Returns stack trace with given `stackTraceId`.\n[getStackTrace](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-getStackTrace)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetStackTraceParams {
@@ -309,6 +333,9 @@ pub struct GetStackTrace {
     pub method: GetStackTraceMethod,
     pub params: GetStackTraceParams,
 }
+impl super::super::super::CommandResult for GetStackTrace {
+    type Result = super::results::GetStackTraceResult;
+}
 #[doc = "Stops on the next JavaScript statement.\n[pause](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-pause)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct PauseParams {}
@@ -325,6 +352,9 @@ impl PauseMethod {
 pub struct Pause {
     pub method: PauseMethod,
     pub params: PauseParams,
+}
+impl super::super::super::CommandResult for Pause {
+    type Result = super::results::PauseResult;
 }
 #[doc = "Removes JavaScript breakpoint.\n[removeBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-removeBreakpoint)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -352,6 +382,9 @@ impl RemoveBreakpointMethod {
 pub struct RemoveBreakpoint {
     pub method: RemoveBreakpointMethod,
     pub params: RemoveBreakpointParams,
+}
+impl super::super::super::CommandResult for RemoveBreakpoint {
+    type Result = super::results::RemoveBreakpointResult;
 }
 #[doc = "Restarts particular call frame from the beginning. The old, deprecated\nbehavior of `restartFrame` is to stay paused and allow further CDP commands\nafter a restart was scheduled. This can cause problems with restarting, so\nwe now continue execution immediatly after it has been scheduled until we\nreach the beginning of the restarted frame.\n\nTo stay back-wards compatible, `restartFrame` now expects a `mode`\nparameter to be present. If the `mode` parameter is missing, `restartFrame`\nerrors out.\n\nThe various return values are deprecated and `callFrames` is always empty.\nUse the call frames from the `Debugger#paused` events instead, that fires\nonce V8 pauses at the beginning of the restarted function.\n[restartFrame](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-restartFrame)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -394,6 +427,9 @@ pub struct RestartFrame {
     pub method: RestartFrameMethod,
     pub params: RestartFrameParams,
 }
+impl super::super::super::CommandResult for RestartFrame {
+    type Result = super::results::RestartFrameResult;
+}
 #[doc = "Resumes JavaScript execution.\n[resume](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-resume)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ResumeParams {
@@ -416,6 +452,9 @@ impl ResumeMethod {
 pub struct Resume {
     pub method: ResumeMethod,
     pub params: ResumeParams,
+}
+impl super::super::super::CommandResult for Resume {
+    type Result = super::results::ResumeResult;
 }
 #[doc = "Searches for given string in script content.\n[searchInContent](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-searchInContent)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -464,6 +503,9 @@ pub struct SearchInContent {
     pub method: SearchInContentMethod,
     pub params: SearchInContentParams,
 }
+impl super::super::super::CommandResult for SearchInContent {
+    type Result = super::results::SearchInContentResult;
+}
 #[doc = "Enables or disables async call stacks tracking.\n[setAsyncCallStackDepth](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setAsyncCallStackDepth)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetAsyncCallStackDepthParams {
@@ -492,6 +534,9 @@ pub struct SetAsyncCallStackDepth {
     pub method: SetAsyncCallStackDepthMethod,
     pub params: SetAsyncCallStackDepthParams,
 }
+impl super::super::super::CommandResult for SetAsyncCallStackDepth {
+    type Result = super::results::SetAsyncCallStackDepthResult;
+}
 #[doc = "Replace previous blackbox execution contexts with passed ones. Forces backend to skip\nstepping/pausing in scripts in these execution contexts. VM will try to leave blackboxed script by\nperforming 'step in' several times, finally resorting to 'step out' if unsuccessful.\n[setBlackboxExecutionContexts](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setBlackboxExecutionContexts)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetBlackboxExecutionContextsParams {
@@ -518,6 +563,9 @@ impl SetBlackboxExecutionContextsMethod {
 pub struct SetBlackboxExecutionContexts {
     pub method: SetBlackboxExecutionContextsMethod,
     pub params: SetBlackboxExecutionContextsParams,
+}
+impl super::super::super::CommandResult for SetBlackboxExecutionContexts {
+    type Result = super::results::SetBlackboxExecutionContextsResult;
 }
 #[doc = "Replace previous blackbox patterns with passed ones. Forces backend to skip stepping/pausing in\nscripts with url matching one of the patterns. VM will try to leave blackboxed script by\nperforming 'step in' several times, finally resorting to 'step out' if unsuccessful.\n[setBlackboxPatterns](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setBlackboxPatterns)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -554,6 +602,9 @@ pub struct SetBlackboxPatterns {
     pub method: SetBlackboxPatternsMethod,
     pub params: SetBlackboxPatternsParams,
 }
+impl super::super::super::CommandResult for SetBlackboxPatterns {
+    type Result = super::results::SetBlackboxPatternsResult;
+}
 #[doc = "Makes backend skip steps in the script in blackboxed ranges. VM will try leave blacklisted\nscripts by performing 'step in' several times, finally resorting to 'step out' if unsuccessful.\nPositions array contains positions where blackbox state is changed. First interval isn't\nblackboxed. Array should be sorted.\n[setBlackboxedRanges](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setBlackboxedRanges)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetBlackboxedRangesParams {
@@ -589,6 +640,9 @@ pub struct SetBlackboxedRanges {
     pub method: SetBlackboxedRangesMethod,
     pub params: SetBlackboxedRangesParams,
 }
+impl super::super::super::CommandResult for SetBlackboxedRanges {
+    type Result = super::results::SetBlackboxedRangesResult;
+}
 #[doc = "Sets JavaScript breakpoint at a given location.\n[setBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setBreakpoint)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetBreakpointParams {
@@ -622,6 +676,9 @@ impl SetBreakpointMethod {
 pub struct SetBreakpoint {
     pub method: SetBreakpointMethod,
     pub params: SetBreakpointParams,
+}
+impl super::super::super::CommandResult for SetBreakpoint {
+    type Result = super::results::SetBreakpointResult;
 }
 #[doc = "Sets instrumentation breakpoint.\n[setInstrumentationBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setInstrumentationBreakpoint)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -658,6 +715,9 @@ impl SetInstrumentationBreakpointMethod {
 pub struct SetInstrumentationBreakpoint {
     pub method: SetInstrumentationBreakpointMethod,
     pub params: SetInstrumentationBreakpointParams,
+}
+impl super::super::super::CommandResult for SetInstrumentationBreakpoint {
+    type Result = super::results::SetInstrumentationBreakpointResult;
 }
 #[doc = "Sets JavaScript breakpoint at given location specified either by URL or URL regex. Once this\ncommand is issued, all existing parsed scripts will have breakpoints resolved and returned in\n`locations` property. Further matching script parsing will result in subsequent\n`breakpointResolved` events issued. This logical breakpoint will survive page reloads.\n[setBreakpointByUrl](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setBreakpointByUrl)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -717,6 +777,9 @@ pub struct SetBreakpointByUrl {
     pub method: SetBreakpointByUrlMethod,
     pub params: SetBreakpointByUrlParams,
 }
+impl super::super::super::CommandResult for SetBreakpointByUrl {
+    type Result = super::results::SetBreakpointByUrlResult;
+}
 #[doc = "Sets JavaScript breakpoint before each call to the given function.\nIf another function was created from the same source as a given one,\ncalling it will also trigger the breakpoint.\n[setBreakpointOnFunctionCall](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setBreakpointOnFunctionCall)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetBreakpointOnFunctionCallParams {
@@ -751,6 +814,9 @@ pub struct SetBreakpointOnFunctionCall {
     pub method: SetBreakpointOnFunctionCallMethod,
     pub params: SetBreakpointOnFunctionCallParams,
 }
+impl super::super::super::CommandResult for SetBreakpointOnFunctionCall {
+    type Result = super::results::SetBreakpointOnFunctionCallResult;
+}
 #[doc = "Activates / deactivates all breakpoints on the page.\n[setBreakpointsActive](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setBreakpointsActive)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetBreakpointsActiveParams {
@@ -778,6 +844,9 @@ impl SetBreakpointsActiveMethod {
 pub struct SetBreakpointsActive {
     pub method: SetBreakpointsActiveMethod,
     pub params: SetBreakpointsActiveParams,
+}
+impl super::super::super::CommandResult for SetBreakpointsActive {
+    type Result = super::results::SetBreakpointsActiveResult;
 }
 #[doc = "Defines pause on exceptions state. Can be set to stop on all exceptions, uncaught exceptions,\nor caught exceptions, no exceptions. Initial pause on exceptions state is `none`.\n[setPauseOnExceptions](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setPauseOnExceptions)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -819,6 +888,9 @@ pub struct SetPauseOnExceptions {
     pub method: SetPauseOnExceptionsMethod,
     pub params: SetPauseOnExceptionsParams,
 }
+impl super::super::super::CommandResult for SetPauseOnExceptions {
+    type Result = super::results::SetPauseOnExceptionsResult;
+}
 #[doc = "Changes return value in top frame. Available only at return break position.\n[setReturnValue](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setReturnValue)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetReturnValueParams {
@@ -846,6 +918,9 @@ impl SetReturnValueMethod {
 pub struct SetReturnValue {
     pub method: SetReturnValueMethod,
     pub params: SetReturnValueParams,
+}
+impl super::super::super::CommandResult for SetReturnValue {
+    type Result = super::results::SetReturnValueResult;
 }
 #[doc = "Edits JavaScript source live.\n\nIn general, functions that are currently on the stack can not be edited with\na single exception: If the edited function is the top-most stack frame and\nthat is the only activation of that function on the stack. In this case\nthe live edit will be successful and a `Debugger.restartFrame` for the\ntop-most function is automatically triggered.\n[setScriptSource](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setScriptSource)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -894,6 +969,9 @@ pub struct SetScriptSource {
     pub method: SetScriptSourceMethod,
     pub params: SetScriptSourceParams,
 }
+impl super::super::super::CommandResult for SetScriptSource {
+    type Result = super::results::SetScriptSourceResult;
+}
 #[doc = "Makes page not interrupt on any pauses (breakpoint, exception, dom exception etc).\n[setSkipAllPauses](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setSkipAllPauses)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetSkipAllPausesParams {
@@ -919,6 +997,9 @@ impl SetSkipAllPausesMethod {
 pub struct SetSkipAllPauses {
     pub method: SetSkipAllPausesMethod,
     pub params: SetSkipAllPausesParams,
+}
+impl super::super::super::CommandResult for SetSkipAllPauses {
+    type Result = super::results::SetSkipAllPausesResult;
 }
 #[doc = "Changes value of variable in a callframe. Object-based scopes are not supported and must be\nmutated manually.\n[setVariableValue](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setVariableValue)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -965,6 +1046,9 @@ pub struct SetVariableValue {
     pub method: SetVariableValueMethod,
     pub params: SetVariableValueParams,
 }
+impl super::super::super::CommandResult for SetVariableValue {
+    type Result = super::results::SetVariableValueResult;
+}
 #[doc = "Steps into the function call.\n[stepInto](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-stepInto)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct StepIntoParams {
@@ -993,6 +1077,9 @@ pub struct StepInto {
     pub method: StepIntoMethod,
     pub params: StepIntoParams,
 }
+impl super::super::super::CommandResult for StepInto {
+    type Result = super::results::StepIntoResult;
+}
 #[doc = "Steps out of the function call.\n[stepOut](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-stepOut)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct StepOutParams {}
@@ -1009,6 +1096,9 @@ impl StepOutMethod {
 pub struct StepOut {
     pub method: StepOutMethod,
     pub params: StepOutParams,
+}
+impl super::super::super::CommandResult for StepOut {
+    type Result = super::results::StepOutResult;
 }
 #[doc = "Steps over the statement.\n[stepOver](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-stepOver)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -1032,5 +1122,8 @@ impl StepOverMethod {
 pub struct StepOver {
     pub method: StepOverMethod,
     pub params: StepOverParams,
+}
+impl super::super::super::CommandResult for StepOver {
+    type Result = super::results::StepOverResult;
 }
 group_enum ! (DebuggerCommands { ContinueToLocation (ContinueToLocation) , Disable (Disable) , Enable (Enable) , EvaluateOnCallFrame (EvaluateOnCallFrame) , GetPossibleBreakpoints (GetPossibleBreakpoints) , GetScriptSource (GetScriptSource) , DisassembleWasmModule (DisassembleWasmModule) , NextWasmDisassemblyChunk (NextWasmDisassemblyChunk) , GetStackTrace (GetStackTrace) , Pause (Pause) , RemoveBreakpoint (RemoveBreakpoint) , RestartFrame (RestartFrame) , Resume (Resume) , SearchInContent (SearchInContent) , SetAsyncCallStackDepth (SetAsyncCallStackDepth) , SetBlackboxExecutionContexts (SetBlackboxExecutionContexts) , SetBlackboxPatterns (SetBlackboxPatterns) , SetBlackboxedRanges (SetBlackboxedRanges) , SetBreakpoint (SetBreakpoint) , SetInstrumentationBreakpoint (SetInstrumentationBreakpoint) , SetBreakpointByUrl (SetBreakpointByUrl) , SetBreakpointOnFunctionCall (SetBreakpointOnFunctionCall) , SetBreakpointsActive (SetBreakpointsActive) , SetPauseOnExceptions (SetPauseOnExceptions) , SetReturnValue (SetReturnValue) , SetScriptSource (SetScriptSource) , SetSkipAllPauses (SetSkipAllPauses) , SetVariableValue (SetVariableValue) , StepInto (StepInto) , StepOut (StepOut) , StepOver (StepOver) });

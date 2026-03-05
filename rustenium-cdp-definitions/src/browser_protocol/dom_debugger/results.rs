@@ -1,6 +1,20 @@
 use serde::{Deserialize, Serialize};
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct RemoveDomBreakpointResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct RemoveEventListenerBreakpointResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct RemoveXhrBreakpointResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetBreakOnCspViolationResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetDomBreakpointResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetEventListenerBreakpointResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetXhrBreakpointResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct GetEventListenersReturns {
+pub struct GetEventListenersResult {
     #[doc = "Array of relevant listeners."]
     #[serde(rename = "listeners")]
     #[serde(skip_serializing_if = "Vec::is_empty")]

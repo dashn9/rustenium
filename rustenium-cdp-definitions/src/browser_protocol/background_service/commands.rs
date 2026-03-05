@@ -26,6 +26,9 @@ pub struct StartObserving {
     pub method: StartObservingMethod,
     pub params: StartObservingParams,
 }
+impl super::super::super::CommandResult for StartObserving {
+    type Result = super::results::StartObservingResult;
+}
 #[doc = "Disables event updates for the service.\n[stopObserving](https://chromedevtools.github.io/devtools-protocol/tot/BackgroundService/#method-stopObserving)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StopObservingParams {
@@ -52,6 +55,9 @@ impl StopObservingMethod {
 pub struct StopObserving {
     pub method: StopObservingMethod,
     pub params: StopObservingParams,
+}
+impl super::super::super::CommandResult for StopObserving {
+    type Result = super::results::StopObservingResult;
 }
 #[doc = "Set the recording state for the service.\n[setRecording](https://chromedevtools.github.io/devtools-protocol/tot/BackgroundService/#method-setRecording)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -86,6 +92,9 @@ pub struct SetRecording {
     pub method: SetRecordingMethod,
     pub params: SetRecordingParams,
 }
+impl super::super::super::CommandResult for SetRecording {
+    type Result = super::results::SetRecordingResult;
+}
 #[doc = "Clears all stored data for the service.\n[clearEvents](https://chromedevtools.github.io/devtools-protocol/tot/BackgroundService/#method-clearEvents)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClearEventsParams {
@@ -112,5 +121,8 @@ impl ClearEventsMethod {
 pub struct ClearEvents {
     pub method: ClearEventsMethod,
     pub params: ClearEventsParams,
+}
+impl super::super::super::CommandResult for ClearEvents {
+    type Result = super::results::ClearEventsResult;
 }
 group_enum ! (BackgroundServiceCommands { StartObserving (StartObserving) , StopObserving (StopObserving) , SetRecording (SetRecording) , ClearEvents (ClearEvents) });

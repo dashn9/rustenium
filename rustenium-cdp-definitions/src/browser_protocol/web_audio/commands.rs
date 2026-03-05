@@ -16,6 +16,9 @@ pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
 }
+impl super::super::super::CommandResult for Enable {
+    type Result = super::results::EnableResult;
+}
 #[doc = "Disables the WebAudio domain.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#method-disable)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct DisableParams {}
@@ -32,6 +35,9 @@ impl DisableMethod {
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
+}
+impl super::super::super::CommandResult for Disable {
+    type Result = super::results::DisableResult;
 }
 #[doc = "Fetch the realtime data from the registered contexts.\n[getRealtimeData](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#method-getRealtimeData)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -59,5 +65,8 @@ impl GetRealtimeDataMethod {
 pub struct GetRealtimeData {
     pub method: GetRealtimeDataMethod,
     pub params: GetRealtimeDataParams,
+}
+impl super::super::super::CommandResult for GetRealtimeData {
+    type Result = super::results::GetRealtimeDataResult;
 }
 group_enum ! (WebAudioCommands { Enable (Enable) , Disable (Disable) , GetRealtimeData (GetRealtimeData) });
