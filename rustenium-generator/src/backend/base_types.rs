@@ -2,7 +2,7 @@ use std::borrow::Cow;
 
 use crate::backend::types::ModuleDatatype;
 
-#[derive(Clone, Debug, Default, PartialEq, Eq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct Protocol<'a> {
     pub name: Option<&'a str>,
     pub description: Option<Cow<'a, str>>,
@@ -17,7 +17,7 @@ pub struct Version {
 }
 
 // Module(BiDi) & Domain(CDP) are use introspectively
-#[derive(Clone, Debug, Default, PartialEq, Eq)]
+#[derive(Clone, Debug, Default, PartialEq)]
 pub struct Module<'a> {
     pub description: Option<Cow<'a, str>>,
     pub experimental: bool,
@@ -30,7 +30,7 @@ pub struct Module<'a> {
     pub events: Vec<Event<'a>>,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct TypeDef<'a> {
     pub description: Option<Cow<'a, str>>,
     pub experimental: bool,
@@ -48,10 +48,12 @@ impl<'a> TypeDef<'a> {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq)]
 pub enum Item<'a> {
     Enum(Vec<Variant<'a>>),
     Properties(Vec<Param<'a>>),
+    /// Untagged type choice: `( TypeA // TypeB )` — each variant wraps a type ref.
+    TypeChoice(Vec<TypeRef<'a>>),
 }
 
 /// A structured reference to a type, possibly in another module.
@@ -66,6 +68,7 @@ pub struct TypeRef<'a> {
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Type<'a> {
     Integer,
+    UnsignedInteger,
     Number,
     Boolean,
     String,
@@ -75,6 +78,8 @@ pub enum Type<'a> {
     Enum(Vec<Variant<'a>>),
     ArrayOf(Box<Type<'a>>),
     Ref(TypeRef<'a>),
+    /// HashMap<String, serde_json::Value> with #[serde(flatten)]
+    Extensible,
 }
 
 impl Type<'_> {
@@ -117,7 +122,7 @@ impl Type<'_> {
     }
 
     pub fn is_integer(&self) -> bool {
-        matches!(self, Type::Integer)
+        matches!(self, Type::Integer | Type::UnsignedInteger)
     }
 }
 
@@ -143,7 +148,15 @@ impl<'a> Variant<'a> {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq)]
+pub enum Constraint {
+    Ge(f64),
+    Gt(f64),
+    Le(f64),
+    Lt(f64),
+}
+
+#[derive(Clone, Debug, PartialEq)]
 pub struct Param<'a> {
     pub description: Option<Cow<'a, str>>,
     pub experimental: bool,
@@ -153,6 +166,8 @@ pub struct Param<'a> {
     pub name: Cow<'a, str>,
     pub raw_name: Cow<'a, str>,
     pub is_circular_dep: bool,
+    pub default_value: Option<String>,
+    pub validation: Option<Vec<Constraint>>,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -165,7 +180,7 @@ pub struct CommandMethod<'a> {
     pub raw_name: Cow<'a, str>,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Command<'a> {
     pub method: CommandMethod<'a>,
     pub params: Vec<Param<'a>>,
@@ -173,7 +188,7 @@ pub struct Command<'a> {
     pub is_circular_dep: bool,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct CommandResult<'a> {
     pub description: Option<Cow<'a, str>>,
     pub name: Cow<'a, str>,
@@ -181,7 +196,7 @@ pub struct CommandResult<'a> {
     pub raw_name: Cow<'a, str>,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Event<'a> {
     pub description: Option<Cow<'a, str>>,
     pub experimental: bool,

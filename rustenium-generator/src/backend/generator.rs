@@ -72,22 +72,29 @@ impl Generator {
         // Build module_protocol_map
         self.module_protocol_map.clear();
         for protocol in protocols.iter() {
-            let protocol_snake = protocol.name.unwrap_or("unknown").to_snake_case();
+            let ps = protocol.name.unwrap_or("").to_snake_case();
             for module in &protocol.modules {
-                self.module_protocol_map.insert(module.name.to_string(), protocol_snake.clone());
+                self.module_protocol_map.insert(module.name.to_string(), ps.clone());
             }
         }
 
-        // (proto_snake, proto_camel, modules: Vec<(mod_name, mcamel, type_leaves, cmd_leaves, evt_leaves)>)
-        let mut protocol_infos: Vec<(String, String, Vec<(String, String, Vec<Ident>, Vec<Ident>, Vec<Ident>)>)> = Vec::new();
+        // (proto_snake, proto_camel, modules, protocol_mod_content)
+        let mut protocol_infos: Vec<(String, String, Vec<(String, String, Vec<Ident>, Vec<Ident>, Vec<Ident>)>, TokenStream)> = Vec::new();
+
+        let flat = protocols.len() == 1 && protocols[0].name.is_none();
 
         for protocol in protocols.iter() {
             let version = format!("{}.{}", protocol.version.major, protocol.version.minor);
-            let protocol_snake = protocol.name.unwrap_or("unknown").to_snake_case();
+            let protocol_snake = protocol.name.unwrap_or("").to_snake_case();
 
-            let protocol_dir = target_base.join(&protocol_snake);
-            fs::create_dir_all(&protocol_dir)
-                .unwrap_or_else(|e| panic!("Unable to create directory {}: {}", protocol_dir.display(), e));
+            let protocol_dir = if flat {
+                target_base.clone()
+            } else {
+                let dir = target_base.join(&protocol_snake);
+                fs::create_dir_all(&dir)
+                    .unwrap_or_else(|e| panic!("Unable to create directory {}: {}", dir.display(), e));
+                dir
+            };
 
             let mut module_infos: Vec<(String, String, Vec<Ident>, Vec<Ident>, Vec<Ident>)> = Vec::new();
 
@@ -210,155 +217,157 @@ impl Generator {
                 #protocol_transitive
             };
 
-            let protocol_mod_path = protocol_dir.join("mod.rs");
-            fs::write(&protocol_mod_path, protocol_mod_content.to_string())
-                .unwrap_or_else(|e| panic!("Unable to write {}: {}", protocol_mod_path.display(), e));
-
-            protocol_infos.push((protocol_snake, protocol_camel, module_infos));
-        }
-
-        let has_types = |modules: &Vec<(String, String, Vec<Ident>, Vec<Ident>, Vec<Ident>)>| modules.iter().any(|(_, _, tl, _, _)| !tl.is_empty());
-        let has_cmds = |modules: &Vec<(String, String, Vec<Ident>, Vec<Ident>, Vec<Ident>)>| modules.iter().any(|(_, _, _, cl, _)| !cl.is_empty());
-        let has_evts = |modules: &Vec<(String, String, Vec<Ident>, Vec<Ident>, Vec<Ident>)>| modules.iter().any(|(_, _, _, _, el)| !el.is_empty());
-
-        let top_type_entries: Vec<_> = protocol_infos.iter()
-            .filter(|(_, _, modules)| has_types(modules))
-            .map(|(name, pcamel, _)| {
-                let mod_id = format_ident!("{}", name);
-                let var_id = format_ident!("{}", pcamel);
-                let enum_id = format_ident!("{}Types", pcamel);
-                (var_id, quote!(#mod_id::#enum_id))
-            })
-            .collect();
-
-        let top_cmd_entries: Vec<_> = protocol_infos.iter()
-            .filter(|(_, _, modules)| has_cmds(modules))
-            .map(|(name, pcamel, _)| {
-                let mod_id = format_ident!("{}", name);
-                let var_id = format_ident!("{}", pcamel);
-                let enum_id = format_ident!("{}Commands", pcamel);
-                (var_id, quote!(#mod_id::#enum_id))
-            })
-            .collect();
-
-        let top_evt_entries: Vec<_> = protocol_infos.iter()
-            .filter(|(_, _, modules)| has_evts(modules))
-            .map(|(name, pcamel, _)| {
-                let mod_id = format_ident!("{}", name);
-                let var_id = format_ident!("{}", pcamel);
-                let enum_id = format_ident!("{}Events", pcamel);
-                (var_id, quote!(#mod_id::#enum_id))
-            })
-            .collect();
-
-        // Build top-level transitive entries
-        let mut top_transitive: Vec<(TokenStream, TokenStream, TokenStream)> = Vec::new();
-        for (proto_name, pcamel, modules) in &protocol_infos {
-            let proto_id = format_ident!("{}", proto_name);
-            let proto_type_enum = format_ident!("{}Types", pcamel);
-            let proto_cmd_enum = format_ident!("{}Commands", pcamel);
-            let proto_evt_enum = format_ident!("{}Events", pcamel);
-
-            for (mod_name, mcamel, type_leaves, cmd_leaves, evt_leaves) in modules {
-                let mod_id = format_ident!("{}", mod_name);
-
-                // module group enum -> top (via protocol enum)
-                if !type_leaves.is_empty() {
-                    let me = format_ident!("{}Types", mcamel);
-                    top_transitive.push((quote!(#proto_id::#mod_id::types::#me), quote!(#proto_id::#proto_type_enum), quote!(Type)));
-                    for leaf in type_leaves {
-                        top_transitive.push((quote!(#proto_id::#mod_id::types::#leaf), quote!(#proto_id::#proto_type_enum), quote!(Type)));
-                    }
-                }
-                if !cmd_leaves.is_empty() {
-                    let me = format_ident!("{}Commands", mcamel);
-                    top_transitive.push((quote!(#proto_id::#mod_id::commands::#me), quote!(#proto_id::#proto_cmd_enum), quote!(Command)));
-                    for leaf in cmd_leaves {
-                        top_transitive.push((quote!(#proto_id::#mod_id::commands::#leaf), quote!(#proto_id::#proto_cmd_enum), quote!(Command)));
-                    }
-                }
-                if !evt_leaves.is_empty() {
-                    let me = format_ident!("{}Events", mcamel);
-                    top_transitive.push((quote!(#proto_id::#mod_id::events::#me), quote!(#proto_id::#proto_evt_enum), quote!(Event)));
-                    for leaf in evt_leaves {
-                        top_transitive.push((quote!(#proto_id::#mod_id::events::#leaf), quote!(#proto_id::#proto_evt_enum), quote!(Event)));
-                    }
-                }
+            if !flat {
+                let protocol_mod_path = protocol_dir.join("mod.rs");
+                fs::write(&protocol_mod_path, protocol_mod_content.to_string())
+                    .unwrap_or_else(|e| panic!("Unable to write {}: {}", protocol_mod_path.display(), e));
             }
+
+            protocol_infos.push((protocol_snake, protocol_camel, module_infos, protocol_mod_content));
         }
 
-        let top_type_group = event::group_enum_closed(&format_ident!("Type"), &top_type_entries);
-        let top_cmd_group = event::group_enum_closed(&format_ident!("Command"), &top_cmd_entries);
-        let top_evt_group = event::group_enum_open(&format_ident!("Event"), &top_evt_entries);
-        let top_transitive_impls = event::impl_from_transitive(&top_transitive);
-
-        let event_message = if !top_evt_entries.is_empty() {
+        let top_mod_content = if flat {
+            // Single unnamed protocol: merge protocol content directly into lib.rs
+            let (_, _, _, proto_content) = &protocol_infos[0];
+            let serde_import = quote! { use serde::{Serialize, Deserialize}; };
             quote! {
-                #[derive(Debug, PartialEq, Clone)]
-                pub struct EventMessage {
-                    pub method: String,
-                    pub session_id: Option<String>,
-                    pub params: Event,
+                #serde_import
+
+                #[macro_use]
+                mod macros;
+
+                #[derive(Debug, Clone, PartialEq, Eq, Default, Serialize, Deserialize)]
+                pub struct Binary(String);
+
+                impl AsRef<str> for Binary { fn as_ref(&self) -> &str { self.0.as_str() } }
+                impl AsRef<[u8]> for Binary { fn as_ref(&self) -> &[u8] { self.0.as_bytes() } }
+                impl From<Binary> for String { fn from(b: Binary) -> String { b.0 } }
+                impl From<String> for Binary { fn from(expr: String) -> Self { Self(expr) } }
+
+                pub trait CommandResult {
+                    type Result: serde::de::DeserializeOwned + std::fmt::Debug;
+                    fn result_from_value(result: serde_json::Value) -> serde_json::Result<Self::Result> {
+                        serde_json::from_value(result)
+                    }
                 }
+
+                #proto_content
             }
         } else {
-            TokenStream::default()
-        };
+            let has_types = |modules: &Vec<(String, String, Vec<Ident>, Vec<Ident>, Vec<Ident>)>| modules.iter().any(|(_, _, tl, _, _)| !tl.is_empty());
+            let has_cmds = |modules: &Vec<(String, String, Vec<Ident>, Vec<Ident>, Vec<Ident>)>| modules.iter().any(|(_, _, _, cl, _)| !cl.is_empty());
+            let has_evts = |modules: &Vec<(String, String, Vec<Ident>, Vec<Ident>, Vec<Ident>)>| modules.iter().any(|(_, _, _, _, el)| !el.is_empty());
 
-        let top_mod_decls: Vec<_> = protocol_infos.iter().map(|(name, _, _)| {
-            let mod_ident = format_ident!("{}", name);
-            quote! { pub mod #mod_ident; }
-        }).collect();
+            let top_type_entries: Vec<_> = protocol_infos.iter()
+                .filter(|(_, _, modules, _)| has_types(modules))
+                .map(|(name, pcamel, _, _)| {
+                    let mod_id = format_ident!("{}", name);
+                    let var_id = format_ident!("{}", pcamel);
+                    let enum_id = format_ident!("{}Types", pcamel);
+                    (var_id, quote!(#mod_id::#enum_id))
+                })
+                .collect();
 
-        let top_mod_content = quote! {
-            use serde::{Serialize, Deserialize};
+            let top_cmd_entries: Vec<_> = protocol_infos.iter()
+                .filter(|(_, _, modules, _)| has_cmds(modules))
+                .map(|(name, pcamel, _, _)| {
+                    let mod_id = format_ident!("{}", name);
+                    let var_id = format_ident!("{}", pcamel);
+                    let enum_id = format_ident!("{}Commands", pcamel);
+                    (var_id, quote!(#mod_id::#enum_id))
+                })
+                .collect();
 
-            #[macro_use]
-            mod macros;
+            let top_evt_entries: Vec<_> = protocol_infos.iter()
+                .filter(|(_, _, modules, _)| has_evts(modules))
+                .map(|(name, pcamel, _, _)| {
+                    let mod_id = format_ident!("{}", name);
+                    let var_id = format_ident!("{}", pcamel);
+                    let enum_id = format_ident!("{}Events", pcamel);
+                    (var_id, quote!(#mod_id::#enum_id))
+                })
+                .collect();
 
-            #(#top_mod_decls)*
+            let mut top_transitive: Vec<(TokenStream, TokenStream, TokenStream)> = Vec::new();
+            for (proto_name, pcamel, modules, _) in &protocol_infos {
+                let proto_id = format_ident!("{}", proto_name);
+                let proto_type_enum = format_ident!("{}Types", pcamel);
+                let proto_cmd_enum = format_ident!("{}Commands", pcamel);
+                let proto_evt_enum = format_ident!("{}Events", pcamel);
 
-            #[derive(Debug, Clone, PartialEq, Eq, Default, Serialize, Deserialize)]
-            pub struct Binary(String);
-
-            impl AsRef<str> for Binary {
-                fn as_ref(&self) -> &str {
-                    self.0.as_str()
+                for (mod_name, mcamel, type_leaves, cmd_leaves, evt_leaves) in modules {
+                    let mod_id = format_ident!("{}", mod_name);
+                    if !type_leaves.is_empty() {
+                        let me = format_ident!("{}Types", mcamel);
+                        top_transitive.push((quote!(#proto_id::#mod_id::types::#me), quote!(#proto_id::#proto_type_enum), quote!(Type)));
+                        for leaf in type_leaves { top_transitive.push((quote!(#proto_id::#mod_id::types::#leaf), quote!(#proto_id::#proto_type_enum), quote!(Type))); }
+                    }
+                    if !cmd_leaves.is_empty() {
+                        let me = format_ident!("{}Commands", mcamel);
+                        top_transitive.push((quote!(#proto_id::#mod_id::commands::#me), quote!(#proto_id::#proto_cmd_enum), quote!(Command)));
+                        for leaf in cmd_leaves { top_transitive.push((quote!(#proto_id::#mod_id::commands::#leaf), quote!(#proto_id::#proto_cmd_enum), quote!(Command))); }
+                    }
+                    if !evt_leaves.is_empty() {
+                        let me = format_ident!("{}Events", mcamel);
+                        top_transitive.push((quote!(#proto_id::#mod_id::events::#me), quote!(#proto_id::#proto_evt_enum), quote!(Event)));
+                        for leaf in evt_leaves { top_transitive.push((quote!(#proto_id::#mod_id::events::#leaf), quote!(#proto_id::#proto_evt_enum), quote!(Event))); }
+                    }
                 }
             }
 
-            impl AsRef<[u8]> for Binary {
-                fn as_ref(&self) -> &[u8] {
-                    self.0.as_bytes()
+            let top_type_group = event::group_enum_closed(&format_ident!("Type"), &top_type_entries);
+            let top_cmd_group = event::group_enum_closed(&format_ident!("Command"), &top_cmd_entries);
+            let top_evt_group = event::group_enum_open(&format_ident!("Event"), &top_evt_entries);
+            let top_transitive_impls = event::impl_from_transitive(&top_transitive);
+
+            let event_message = if !top_evt_entries.is_empty() {
+                quote! {
+                    #[derive(Debug, PartialEq, Clone)]
+                    pub struct EventMessage {
+                        pub method: String,
+                        pub session_id: Option<String>,
+                        pub params: Event,
+                    }
                 }
-            }
+            } else {
+                TokenStream::default()
+            };
 
-            impl From<Binary> for String {
-                fn from(b: Binary) -> String {
-                    b.0
+            let top_mod_decls: Vec<_> = protocol_infos.iter().map(|(name, _, _, _)| {
+                let mod_ident = format_ident!("{}", name);
+                quote! { pub mod #mod_ident; }
+            }).collect();
+
+            quote! {
+                use serde::{Serialize, Deserialize};
+
+                #[macro_use]
+                mod macros;
+
+                #(#top_mod_decls)*
+
+                #[derive(Debug, Clone, PartialEq, Eq, Default, Serialize, Deserialize)]
+                pub struct Binary(String);
+
+                impl AsRef<str> for Binary { fn as_ref(&self) -> &str { self.0.as_str() } }
+                impl AsRef<[u8]> for Binary { fn as_ref(&self) -> &[u8] { self.0.as_bytes() } }
+                impl From<Binary> for String { fn from(b: Binary) -> String { b.0 } }
+                impl From<String> for Binary { fn from(expr: String) -> Self { Self(expr) } }
+
+                pub trait CommandResult {
+                    type Result: serde::de::DeserializeOwned + std::fmt::Debug;
+                    fn result_from_value(result: serde_json::Value) -> serde_json::Result<Self::Result> {
+                        serde_json::from_value(result)
+                    }
                 }
+
+                #top_type_group
+                #top_cmd_group
+                #top_evt_group
+                #top_transitive_impls
+
+                #event_message
             }
-
-            impl From<String> for Binary {
-                fn from(expr: String) -> Self {
-                    Self(expr)
-                }
-            }
-
-            pub trait CommandResult {
-                type Result: serde::de::DeserializeOwned + std::fmt::Debug;
-
-                fn result_from_value(result: serde_json::Value) -> serde_json::Result<Self::Result> {
-                    serde_json::from_value(result)
-                }
-            }
-
-            #top_type_group
-            #top_cmd_group
-            #top_evt_group
-            #top_transitive_impls
-
-            #event_message
         };
 
         let top_mod_path = target_base.join("lib.rs");
@@ -410,7 +419,7 @@ impl Generator {
                 let def_ident = format_ident!("{}", camel_name);
                 let returns_ident = format_ident!("{}Result", camel_name);
                 commands_stream.extend(quote! {
-                    impl super::super::super::CommandResult for #def_ident {
+                    impl crate::CommandResult for #def_ident {
                         type Result = super::results::#returns_ident;
                     }
                 });
@@ -433,6 +442,7 @@ impl Generator {
 
             let name = format_ident!("{}", returns_name);
             let mut builder = Builder::new(name.clone());
+            let mut default_fns = TokenStream::default();
 
             for param in params {
                 if let Type::Enum(vars) = &param.r#type {
@@ -444,7 +454,8 @@ impl Generator {
                 }
 
                 let field_name = format_ident!("{}", generate_field_name(param.name.as_ref()));
-                let ty = self.generate_field_type(module, cr.name.as_ref(), param.name.as_ref(), &param.r#type, current_protocol, false);
+                let mut ty = self.generate_field_type(module, cr.name.as_ref(), param.name.as_ref(), &param.r#type, current_protocol, false);
+                ty.needs_box = ty.needs_box || param.is_circular_dep;
 
                 let is_enum = if let Type::Ref(type_ref) = &param.r#type {
                     self.enums.contains(type_ref.name.as_ref())
@@ -463,7 +474,11 @@ impl Generator {
                     serde_skip: false,
                 };
 
-                builder.fields.push((field.generate_meta(param), field));
+                if let Some(default_fn) = field.generate_default_fn(param, &returns_name) {
+                    default_fns.extend(default_fn);
+                }
+
+                builder.fields.push((field.generate_meta(param, &returns_name), field));
             }
 
             if builder.fields.is_empty() {
@@ -481,6 +496,7 @@ impl Generator {
                 results_stream.extend(quote! {
                     #derives
                     #struct_def
+                    #default_fns
                 });
             }
         }
@@ -531,7 +547,9 @@ impl Generator {
     }
 
     fn generate_type(&mut self, module: &Module, dt: &ModuleDatatype, current_protocol: &str, local_same_file: bool) -> (TokenStream, TokenStream) {
-        let (def, builder) = if let Some(vars) = dt.as_enum() {
+        let (def, builder) = if let Some(type_refs) = dt.as_type_choice() {
+            (self.generate_type_choice_enum(module, dt, type_refs, current_protocol, local_same_file), TokenStream::default())
+        } else if let Some(vars) = dt.as_enum() {
             (self.generate_enum(&Variant::from(dt), vars), TokenStream::default())
         } else {
             let with_deprecated = self.with_deprecated;
@@ -622,6 +640,7 @@ impl Generator {
     {
         let name = format_ident!("{}", struct_ident);
         let mut enum_definitions = TokenStream::default();
+        let mut default_fns = TokenStream::default();
         let mut builder = Builder::new(name.clone());
 
         for param in params {
@@ -637,7 +656,8 @@ impl Generator {
             }
 
             let field_name = format_ident!("{}", generate_field_name(param.name.as_ref()));
-            let ty = self.generate_field_type(module, dt.name(), param.name.as_ref(), &param.r#type, current_protocol, local_same_file);
+            let mut ty = self.generate_field_type(module, dt.name(), param.name.as_ref(), &param.r#type, current_protocol, local_same_file);
+            ty.needs_box = ty.needs_box || param.is_circular_dep;
 
             let is_enum = if let Type::Ref(type_ref) = &param.r#type {
                 self.enums.contains(type_ref.name.as_ref())
@@ -656,7 +676,11 @@ impl Generator {
                 serde_skip: false,
             };
 
-            builder.fields.push((field.generate_meta(param), field));
+            if let Some(default_fn) = field.generate_default_fn(param, &struct_ident) {
+                default_fns.extend(default_fn);
+            }
+
+            builder.fields.push((field.generate_meta(param, &struct_ident), field));
         }
 
         let derives = if !builder.has_mandatory_types() {
@@ -743,6 +767,8 @@ impl Generator {
             stream.extend(quote! {
                 #struct_def
 
+                #default_fns
+
                 #enum_definitions
             });
 
@@ -786,6 +812,33 @@ impl Generator {
         }
     }
 
+    fn generate_type_choice_enum(
+        &self,
+        module: &Module,
+        dt: &ModuleDatatype,
+        type_refs: &[TypeRef],
+        current_protocol: &str,
+        local_same_file: bool,
+    ) -> TokenStream {
+        let enum_name = format_ident!("{}", dt.ident_name());
+        let desc = dt.type_description_tokens(module.name.as_ref());
+
+        let variants: Vec<TokenStream> = type_refs.iter().map(|tr| {
+            let variant_name = format_ident!("{}", tr.name.to_upper_camel_case());
+            let ty = self.projected_type(module, tr, current_protocol, local_same_file);
+            quote! { #variant_name(#ty) }
+        }).collect();
+
+        quote! {
+            #desc
+            #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+            #[serde(untagged)]
+            pub enum #enum_name {
+                #(#variants),*
+            }
+        }
+    }
+
     fn generate_field_type(
         &self,
         module: &Module,
@@ -797,11 +850,13 @@ impl Generator {
     ) -> FieldType {
         match ty {
             Type::Integer => FieldType::new(quote! { i64 }),
+            Type::UnsignedInteger => FieldType::new(quote! { u64 }),
             Type::Number => FieldType::new(quote! { f64 }),
             Type::Boolean => FieldType::new(quote! { bool }),
             Type::String => FieldType::new(quote! { String }),
             Type::Object | Type::Any => FieldType::new(quote! { serde_json::Value }),
-            Type::Binary => FieldType::new(quote! { super::super::super::Binary }),
+            Type::Extensible => FieldType::new(quote! { std::collections::HashMap<String, serde_json::Value> }),
+            Type::Binary => FieldType::new(quote! { crate::Binary }),
             Type::Enum(_) => {
                 let ty = format_ident!("{}", subenum_name(parent, param_name));
                 FieldType::new(quote! { #ty })
@@ -844,11 +899,14 @@ impl Generator {
             let ref_module = type_ref.module.as_ref().unwrap();
             let ref_module_snake = format_ident!("{}", ref_module.to_snake_case());
             let ref_protocol = self.module_protocol_map.get(ref_module.as_ref());
-            if ref_protocol.map(|p| p.as_str()) == Some(current_protocol) {
-                quote! { super::super::#ref_module_snake::types::#ident }
-            } else if let Some(ref_proto) = ref_protocol {
-                let proto_ident = format_ident!("{}", ref_proto);
-                quote! { super::super::super::#proto_ident::#ref_module_snake::types::#ident }
+            if let Some(ref_proto) = ref_protocol {
+                if ref_proto.is_empty() || ref_proto == current_protocol {
+                    // Same protocol or flat mode
+                    quote! { crate::#ref_module_snake::types::#ident }
+                } else {
+                    let proto_ident = format_ident!("{}", ref_proto);
+                    quote! { crate::#proto_ident::#ref_module_snake::types::#ident }
+                }
             } else {
                 quote! { super::types::#ident }
             }

@@ -1,0 +1,212 @@
+use serde::{Deserialize, Serialize};
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
+pub struct ClientWindow(String);
+impl ClientWindow {
+    pub fn new(val: impl Into<String>) -> Self {
+        ClientWindow(val.into())
+    }
+    pub fn inner(&self) -> &String {
+        &self.0
+    }
+}
+impl AsRef<str> for ClientWindow {
+    fn as_ref(&self) -> &str {
+        self.0.as_str()
+    }
+}
+impl From<ClientWindow> for String {
+    fn from(el: ClientWindow) -> String {
+        el.0
+    }
+}
+impl From<String> for ClientWindow {
+    fn from(expr: String) -> Self {
+        ClientWindow(expr)
+    }
+}
+impl ClientWindow {
+    pub const IDENTIFIER: &'static str = "browser.ClientWindow";
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ClientWindowInfo {
+    #[serde(rename = "active")]
+    pub active: bool,
+    #[serde(rename = "clientWindow")]
+    pub client_window: ClientWindow,
+    #[serde(rename = "height")]
+    pub height: u64,
+    #[serde(rename = "state")]
+    pub state: ClientWindowInfoState,
+    #[serde(rename = "width")]
+    pub width: u64,
+    #[serde(rename = "x")]
+    pub x: i64,
+    #[serde(rename = "y")]
+    pub y: i64,
+}
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum ClientWindowInfoState {
+    #[serde(rename = "fullscreen")]
+    Fullscreen,
+    #[serde(rename = "maximized")]
+    Maximized,
+    #[serde(rename = "minimized")]
+    Minimized,
+    #[serde(rename = "normal")]
+    Normal,
+}
+impl ClientWindowInfo {
+    pub const IDENTIFIER: &'static str = "browser.ClientWindowInfo";
+}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
+pub struct UserContext(String);
+impl UserContext {
+    pub fn new(val: impl Into<String>) -> Self {
+        UserContext(val.into())
+    }
+    pub fn inner(&self) -> &String {
+        &self.0
+    }
+}
+impl AsRef<str> for UserContext {
+    fn as_ref(&self) -> &str {
+        self.0.as_str()
+    }
+}
+impl From<UserContext> for String {
+    fn from(el: UserContext) -> String {
+        el.0
+    }
+}
+impl From<String> for UserContext {
+    fn from(expr: String) -> Self {
+        UserContext(expr)
+    }
+}
+impl UserContext {
+    pub const IDENTIFIER: &'static str = "browser.UserContext";
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct UserContextInfo {
+    #[serde(rename = "userContext")]
+    pub user_context: UserContext,
+}
+impl UserContextInfo {
+    pub fn new(user_context: impl Into<UserContext>) -> Self {
+        Self {
+            user_context: user_context.into(),
+        }
+    }
+}
+impl UserContextInfo {
+    pub const IDENTIFIER: &'static str = "browser.UserContextInfo";
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ClientWindowNamedState {
+    #[serde(rename = "state")]
+    pub state: ClientWindowNamedStateState,
+}
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum ClientWindowNamedStateState {
+    #[serde(rename = "fullscreen")]
+    Fullscreen,
+    #[serde(rename = "maximized")]
+    Maximized,
+    #[serde(rename = "minimized")]
+    Minimized,
+}
+impl ClientWindowNamedState {
+    pub fn new(state: impl Into<ClientWindowNamedStateState>) -> Self {
+        Self {
+            state: state.into(),
+        }
+    }
+}
+impl ClientWindowNamedState {
+    pub const IDENTIFIER: &'static str = "browser.ClientWindowNamedState";
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ClientWindowRectState {
+    #[serde(rename = "state")]
+    pub state: String,
+    #[serde(rename = "width")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
+    pub width: Option<u64>,
+    #[serde(rename = "height")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
+    pub height: Option<u64>,
+    #[serde(rename = "x")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
+    pub x: Option<i64>,
+    #[serde(rename = "y")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
+    pub y: Option<i64>,
+}
+impl ClientWindowRectState {
+    pub fn new(state: impl Into<String>) -> Self {
+        Self {
+            state: state.into(),
+            width: None,
+            height: None,
+            x: None,
+            y: None,
+        }
+    }
+}
+impl<T: Into<String>> From<T> for ClientWindowRectState {
+    fn from(url: T) -> Self {
+        ClientWindowRectState::new(url)
+    }
+}
+impl ClientWindowRectState {
+    pub const IDENTIFIER: &'static str = "browser.ClientWindowRectState";
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum DownloadBehavior {
+    DownloadBehaviorAllowed(DownloadBehaviorAllowed),
+    DownloadBehaviorDenied(DownloadBehaviorDenied),
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DownloadBehaviorAllowed {
+    #[serde(rename = "type")]
+    pub r#type: String,
+    #[serde(rename = "destinationFolder")]
+    pub destination_folder: String,
+}
+impl DownloadBehaviorAllowed {
+    pub fn new(r#type: impl Into<String>, destination_folder: impl Into<String>) -> Self {
+        Self {
+            r#type: r#type.into(),
+            destination_folder: destination_folder.into(),
+        }
+    }
+}
+impl DownloadBehaviorAllowed {
+    pub const IDENTIFIER: &'static str = "browser.DownloadBehaviorAllowed";
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DownloadBehaviorDenied {
+    #[serde(rename = "type")]
+    pub r#type: String,
+}
+impl DownloadBehaviorDenied {
+    pub fn new(r#type: impl Into<String>) -> Self {
+        Self {
+            r#type: r#type.into(),
+        }
+    }
+}
+impl<T: Into<String>> From<T> for DownloadBehaviorDenied {
+    fn from(url: T) -> Self {
+        DownloadBehaviorDenied::new(url)
+    }
+}
+impl DownloadBehaviorDenied {
+    pub const IDENTIFIER: &'static str = "browser.DownloadBehaviorDenied";
+}
+group_enum ! (BrowserTypes { ClientWindow (ClientWindow) , ClientWindowInfo (ClientWindowInfo) , UserContext (UserContext) , UserContextInfo (UserContextInfo) , ClientWindowNamedState (ClientWindowNamedState) , ClientWindowRectState (ClientWindowRectState) , DownloadBehavior (DownloadBehavior) , DownloadBehaviorAllowed (DownloadBehaviorAllowed) , DownloadBehaviorDenied (DownloadBehaviorDenied) });
