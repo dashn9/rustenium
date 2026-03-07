@@ -22,14 +22,14 @@ pub enum TriggerActionMethod {
     #[serde(rename = "Extensions.triggerAction")]
     TriggerAction,
 }
-impl TriggerActionMethod {
-    pub const IDENTIFIER: &'static str = "Extensions.triggerAction";
-}
 #[doc = "Runs an extension default action.\nAvailable if the client is connected using the --remote-debugging-pipe\nflag and the --enable-unsafe-extension-debugging flag is set.\n[triggerAction](https://chromedevtools.github.io/devtools-protocol/tot/Extensions/#method-triggerAction)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct TriggerAction {
     pub method: TriggerActionMethod,
     pub params: TriggerActionParams,
+}
+impl TriggerAction {
+    pub const IDENTIFIER: &'static str = "Extensions.triggerAction";
 }
 impl crate::CommandResult for TriggerAction {
     type Result = super::results::TriggerActionResult;
@@ -64,14 +64,14 @@ pub enum LoadUnpackedMethod {
     #[serde(rename = "Extensions.loadUnpacked")]
     LoadUnpacked,
 }
-impl LoadUnpackedMethod {
-    pub const IDENTIFIER: &'static str = "Extensions.loadUnpacked";
-}
 #[doc = "Installs an unpacked extension from the filesystem similar to\n--load-extension CLI flags. Returns extension ID once the extension\nhas been installed. Available if the client is connected using the\n--remote-debugging-pipe flag and the --enable-unsafe-extension-debugging\nflag is set.\n[loadUnpacked](https://chromedevtools.github.io/devtools-protocol/tot/Extensions/#method-loadUnpacked)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct LoadUnpacked {
     pub method: LoadUnpackedMethod,
     pub params: LoadUnpackedParams,
+}
+impl LoadUnpacked {
+    pub const IDENTIFIER: &'static str = "Extensions.loadUnpacked";
 }
 impl crate::CommandResult for LoadUnpacked {
     type Result = super::results::LoadUnpackedResult;
@@ -84,14 +84,14 @@ pub enum GetExtensionsMethod {
     #[serde(rename = "Extensions.getExtensions")]
     GetExtensions,
 }
-impl GetExtensionsMethod {
-    pub const IDENTIFIER: &'static str = "Extensions.getExtensions";
-}
 #[doc = "Gets a list of all unpacked extensions.\nAvailable if the client is connected using the --remote-debugging-pipe flag\nand the --enable-unsafe-extension-debugging flag is set.\n[getExtensions](https://chromedevtools.github.io/devtools-protocol/tot/Extensions/#method-getExtensions)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetExtensions {
     pub method: GetExtensionsMethod,
     pub params: GetExtensionsParams,
+}
+impl GetExtensions {
+    pub const IDENTIFIER: &'static str = "Extensions.getExtensions";
 }
 impl crate::CommandResult for GetExtensions {
     type Result = super::results::GetExtensionsResult;
@@ -118,14 +118,14 @@ pub enum UninstallMethod {
     #[serde(rename = "Extensions.uninstall")]
     Uninstall,
 }
-impl UninstallMethod {
-    pub const IDENTIFIER: &'static str = "Extensions.uninstall";
-}
 #[doc = "Uninstalls an unpacked extension (others not supported) from the profile.\nAvailable if the client is connected using the --remote-debugging-pipe flag\nand the --enable-unsafe-extension-debugging.\n[uninstall](https://chromedevtools.github.io/devtools-protocol/tot/Extensions/#method-uninstall)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Uninstall {
     pub method: UninstallMethod,
     pub params: UninstallParams,
+}
+impl Uninstall {
+    pub const IDENTIFIER: &'static str = "Extensions.uninstall";
 }
 impl crate::CommandResult for Uninstall {
     type Result = super::results::UninstallResult;
@@ -159,14 +159,14 @@ pub enum GetStorageItemsMethod {
     #[serde(rename = "Extensions.getStorageItems")]
     GetStorageItems,
 }
-impl GetStorageItemsMethod {
-    pub const IDENTIFIER: &'static str = "Extensions.getStorageItems";
-}
 #[doc = "Gets data from extension storage in the given `storageArea`. If `keys` is\nspecified, these are used to filter the result.\n[getStorageItems](https://chromedevtools.github.io/devtools-protocol/tot/Extensions/#method-getStorageItems)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetStorageItems {
     pub method: GetStorageItemsMethod,
     pub params: GetStorageItemsParams,
+}
+impl GetStorageItems {
+    pub const IDENTIFIER: &'static str = "Extensions.getStorageItems";
 }
 impl crate::CommandResult for GetStorageItems {
     type Result = super::results::GetStorageItemsResult;
@@ -203,14 +203,14 @@ pub enum RemoveStorageItemsMethod {
     #[serde(rename = "Extensions.removeStorageItems")]
     RemoveStorageItems,
 }
-impl RemoveStorageItemsMethod {
-    pub const IDENTIFIER: &'static str = "Extensions.removeStorageItems";
-}
 #[doc = "Removes `keys` from extension storage in the given `storageArea`.\n[removeStorageItems](https://chromedevtools.github.io/devtools-protocol/tot/Extensions/#method-removeStorageItems)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct RemoveStorageItems {
     pub method: RemoveStorageItemsMethod,
     pub params: RemoveStorageItemsParams,
+}
+impl RemoveStorageItems {
+    pub const IDENTIFIER: &'static str = "Extensions.removeStorageItems";
 }
 impl crate::CommandResult for RemoveStorageItems {
     type Result = super::results::RemoveStorageItemsResult;
@@ -238,14 +238,14 @@ pub enum ClearStorageItemsMethod {
     #[serde(rename = "Extensions.clearStorageItems")]
     ClearStorageItems,
 }
-impl ClearStorageItemsMethod {
-    pub const IDENTIFIER: &'static str = "Extensions.clearStorageItems";
-}
 #[doc = "Clears extension storage in the given `storageArea`.\n[clearStorageItems](https://chromedevtools.github.io/devtools-protocol/tot/Extensions/#method-clearStorageItems)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ClearStorageItems {
     pub method: ClearStorageItemsMethod,
     pub params: ClearStorageItemsParams,
+}
+impl ClearStorageItems {
+    pub const IDENTIFIER: &'static str = "Extensions.clearStorageItems";
 }
 impl crate::CommandResult for ClearStorageItems {
     type Result = super::results::ClearStorageItemsResult;
@@ -281,14 +281,14 @@ pub enum SetStorageItemsMethod {
     #[serde(rename = "Extensions.setStorageItems")]
     SetStorageItems,
 }
-impl SetStorageItemsMethod {
-    pub const IDENTIFIER: &'static str = "Extensions.setStorageItems";
-}
 #[doc = "Sets `values` in extension storage in the given `storageArea`. The provided `values`\nwill be merged with existing values in the storage area.\n[setStorageItems](https://chromedevtools.github.io/devtools-protocol/tot/Extensions/#method-setStorageItems)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetStorageItems {
     pub method: SetStorageItemsMethod,
     pub params: SetStorageItemsParams,
+}
+impl SetStorageItems {
+    pub const IDENTIFIER: &'static str = "Extensions.setStorageItems";
 }
 impl crate::CommandResult for SetStorageItems {
     type Result = super::results::SetStorageItemsResult;

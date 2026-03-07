@@ -7,14 +7,14 @@ pub enum ClearDeviceMetricsOverrideMethod {
     #[serde(rename = "Emulation.clearDeviceMetricsOverride")]
     ClearDeviceMetricsOverride,
 }
-impl ClearDeviceMetricsOverrideMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.clearDeviceMetricsOverride";
-}
 #[doc = "Clears the overridden device metrics.\n[clearDeviceMetricsOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-clearDeviceMetricsOverride)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ClearDeviceMetricsOverride {
     pub method: ClearDeviceMetricsOverrideMethod,
     pub params: ClearDeviceMetricsOverrideParams,
+}
+impl ClearDeviceMetricsOverride {
+    pub const IDENTIFIER: &'static str = "Emulation.clearDeviceMetricsOverride";
 }
 impl crate::CommandResult for ClearDeviceMetricsOverride {
     type Result = super::results::ClearDeviceMetricsOverrideResult;
@@ -27,14 +27,14 @@ pub enum ClearGeolocationOverrideMethod {
     #[serde(rename = "Emulation.clearGeolocationOverride")]
     ClearGeolocationOverride,
 }
-impl ClearGeolocationOverrideMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.clearGeolocationOverride";
-}
 #[doc = "Clears the overridden Geolocation Position and Error.\n[clearGeolocationOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-clearGeolocationOverride)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ClearGeolocationOverride {
     pub method: ClearGeolocationOverrideMethod,
     pub params: ClearGeolocationOverrideParams,
+}
+impl ClearGeolocationOverride {
+    pub const IDENTIFIER: &'static str = "Emulation.clearGeolocationOverride";
 }
 impl crate::CommandResult for ClearGeolocationOverride {
     type Result = super::results::ClearGeolocationOverrideResult;
@@ -47,14 +47,14 @@ pub enum ResetPageScaleFactorMethod {
     #[serde(rename = "Emulation.resetPageScaleFactor")]
     ResetPageScaleFactor,
 }
-impl ResetPageScaleFactorMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.resetPageScaleFactor";
-}
 #[doc = "Requests that page scale factor is reset to initial values.\n[resetPageScaleFactor](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-resetPageScaleFactor)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ResetPageScaleFactor {
     pub method: ResetPageScaleFactorMethod,
     pub params: ResetPageScaleFactorParams,
+}
+impl ResetPageScaleFactor {
+    pub const IDENTIFIER: &'static str = "Emulation.resetPageScaleFactor";
 }
 impl crate::CommandResult for ResetPageScaleFactor {
     type Result = super::results::ResetPageScaleFactorResult;
@@ -78,14 +78,14 @@ pub enum SetFocusEmulationEnabledMethod {
     #[serde(rename = "Emulation.setFocusEmulationEnabled")]
     SetFocusEmulationEnabled,
 }
-impl SetFocusEmulationEnabledMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setFocusEmulationEnabled";
-}
 #[doc = "Enables or disables simulating a focused and active page.\n[setFocusEmulationEnabled](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setFocusEmulationEnabled)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetFocusEmulationEnabled {
     pub method: SetFocusEmulationEnabledMethod,
     pub params: SetFocusEmulationEnabledParams,
+}
+impl SetFocusEmulationEnabled {
+    pub const IDENTIFIER: &'static str = "Emulation.setFocusEmulationEnabled";
 }
 impl crate::CommandResult for SetFocusEmulationEnabled {
     type Result = super::results::SetFocusEmulationEnabledResult;
@@ -104,14 +104,14 @@ pub enum SetAutoDarkModeOverrideMethod {
     #[serde(rename = "Emulation.setAutoDarkModeOverride")]
     SetAutoDarkModeOverride,
 }
-impl SetAutoDarkModeOverrideMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setAutoDarkModeOverride";
-}
 #[doc = "Automatically render all web contents using a dark theme.\n[setAutoDarkModeOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setAutoDarkModeOverride)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetAutoDarkModeOverride {
     pub method: SetAutoDarkModeOverrideMethod,
     pub params: SetAutoDarkModeOverrideParams,
+}
+impl SetAutoDarkModeOverride {
+    pub const IDENTIFIER: &'static str = "Emulation.setAutoDarkModeOverride";
 }
 impl crate::CommandResult for SetAutoDarkModeOverride {
     type Result = super::results::SetAutoDarkModeOverrideResult;
@@ -133,14 +133,14 @@ pub enum SetCpuThrottlingRateMethod {
     #[serde(rename = "Emulation.setCPUThrottlingRate")]
     SetCpuThrottlingRate,
 }
-impl SetCpuThrottlingRateMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setCPUThrottlingRate";
-}
 #[doc = "Enables CPU throttling to emulate slow CPUs.\n[setCPUThrottlingRate](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setCPUThrottlingRate)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetCpuThrottlingRate {
     pub method: SetCpuThrottlingRateMethod,
     pub params: SetCpuThrottlingRateParams,
+}
+impl SetCpuThrottlingRate {
+    pub const IDENTIFIER: &'static str = "Emulation.setCPUThrottlingRate";
 }
 impl crate::CommandResult for SetCpuThrottlingRate {
     type Result = super::results::SetCpuThrottlingRateResult;
@@ -159,14 +159,14 @@ pub enum SetDefaultBackgroundColorOverrideMethod {
     #[serde(rename = "Emulation.setDefaultBackgroundColorOverride")]
     SetDefaultBackgroundColorOverride,
 }
-impl SetDefaultBackgroundColorOverrideMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setDefaultBackgroundColorOverride";
-}
 #[doc = "Sets or clears an override of the default background color of the frame. This override is used\nif the content does not specify one.\n[setDefaultBackgroundColorOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setDefaultBackgroundColorOverride)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetDefaultBackgroundColorOverride {
     pub method: SetDefaultBackgroundColorOverrideMethod,
     pub params: SetDefaultBackgroundColorOverrideParams,
+}
+impl SetDefaultBackgroundColorOverride {
+    pub const IDENTIFIER: &'static str = "Emulation.setDefaultBackgroundColorOverride";
 }
 impl crate::CommandResult for SetDefaultBackgroundColorOverride {
     type Result = super::results::SetDefaultBackgroundColorOverrideResult;
@@ -189,14 +189,14 @@ pub enum SetSafeAreaInsetsOverrideMethod {
     #[serde(rename = "Emulation.setSafeAreaInsetsOverride")]
     SetSafeAreaInsetsOverride,
 }
-impl SetSafeAreaInsetsOverrideMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setSafeAreaInsetsOverride";
-}
 #[doc = "Overrides the values for env(safe-area-inset-*) and env(safe-area-max-inset-*). Unset values will cause the\nrespective variables to be undefined, even if previously overridden.\n[setSafeAreaInsetsOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setSafeAreaInsetsOverride)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetSafeAreaInsetsOverride {
     pub method: SetSafeAreaInsetsOverrideMethod,
     pub params: SetSafeAreaInsetsOverrideParams,
+}
+impl SetSafeAreaInsetsOverride {
+    pub const IDENTIFIER: &'static str = "Emulation.setSafeAreaInsetsOverride";
 }
 impl crate::CommandResult for SetSafeAreaInsetsOverride {
     type Result = super::results::SetSafeAreaInsetsOverrideResult;
@@ -301,14 +301,14 @@ pub enum SetDeviceMetricsOverrideMethod {
     #[serde(rename = "Emulation.setDeviceMetricsOverride")]
     SetDeviceMetricsOverride,
 }
-impl SetDeviceMetricsOverrideMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setDeviceMetricsOverride";
-}
 #[doc = "Overrides the values of device screen dimensions (window.screen.width, window.screen.height,\nwindow.innerWidth, window.innerHeight, and \"device-width\"/\"device-height\"-related CSS media\nquery results).\n[setDeviceMetricsOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setDeviceMetricsOverride)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetDeviceMetricsOverride {
     pub method: SetDeviceMetricsOverrideMethod,
     pub params: SetDeviceMetricsOverrideParams,
+}
+impl SetDeviceMetricsOverride {
+    pub const IDENTIFIER: &'static str = "Emulation.setDeviceMetricsOverride";
 }
 impl crate::CommandResult for SetDeviceMetricsOverride {
     type Result = super::results::SetDeviceMetricsOverrideResult;
@@ -331,14 +331,14 @@ pub enum SetDevicePostureOverrideMethod {
     #[serde(rename = "Emulation.setDevicePostureOverride")]
     SetDevicePostureOverride,
 }
-impl SetDevicePostureOverrideMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setDevicePostureOverride";
-}
 #[doc = "Start reporting the given posture value to the Device Posture API.\nThis override can also be set in setDeviceMetricsOverride().\n[setDevicePostureOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setDevicePostureOverride)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetDevicePostureOverride {
     pub method: SetDevicePostureOverrideMethod,
     pub params: SetDevicePostureOverrideParams,
+}
+impl SetDevicePostureOverride {
+    pub const IDENTIFIER: &'static str = "Emulation.setDevicePostureOverride";
 }
 impl crate::CommandResult for SetDevicePostureOverride {
     type Result = super::results::SetDevicePostureOverrideResult;
@@ -351,14 +351,14 @@ pub enum ClearDevicePostureOverrideMethod {
     #[serde(rename = "Emulation.clearDevicePostureOverride")]
     ClearDevicePostureOverride,
 }
-impl ClearDevicePostureOverrideMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.clearDevicePostureOverride";
-}
 #[doc = "Clears a device posture override set with either setDeviceMetricsOverride()\nor setDevicePostureOverride() and starts using posture information from the\nplatform again.\nDoes nothing if no override is set.\n[clearDevicePostureOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-clearDevicePostureOverride)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ClearDevicePostureOverride {
     pub method: ClearDevicePostureOverrideMethod,
     pub params: ClearDevicePostureOverrideParams,
+}
+impl ClearDevicePostureOverride {
+    pub const IDENTIFIER: &'static str = "Emulation.clearDevicePostureOverride";
 }
 impl crate::CommandResult for ClearDevicePostureOverride {
     type Result = super::results::ClearDevicePostureOverrideResult;
@@ -380,14 +380,14 @@ pub enum SetDisplayFeaturesOverrideMethod {
     #[serde(rename = "Emulation.setDisplayFeaturesOverride")]
     SetDisplayFeaturesOverride,
 }
-impl SetDisplayFeaturesOverrideMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setDisplayFeaturesOverride";
-}
 #[doc = "Start using the given display features to pupulate the Viewport Segments API.\nThis override can also be set in setDeviceMetricsOverride().\n[setDisplayFeaturesOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setDisplayFeaturesOverride)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetDisplayFeaturesOverride {
     pub method: SetDisplayFeaturesOverrideMethod,
     pub params: SetDisplayFeaturesOverrideParams,
+}
+impl SetDisplayFeaturesOverride {
+    pub const IDENTIFIER: &'static str = "Emulation.setDisplayFeaturesOverride";
 }
 impl crate::CommandResult for SetDisplayFeaturesOverride {
     type Result = super::results::SetDisplayFeaturesOverrideResult;
@@ -400,14 +400,14 @@ pub enum ClearDisplayFeaturesOverrideMethod {
     #[serde(rename = "Emulation.clearDisplayFeaturesOverride")]
     ClearDisplayFeaturesOverride,
 }
-impl ClearDisplayFeaturesOverrideMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.clearDisplayFeaturesOverride";
-}
 #[doc = "Clears the display features override set with either setDeviceMetricsOverride()\nor setDisplayFeaturesOverride() and starts using display features from the\nplatform again.\nDoes nothing if no override is set.\n[clearDisplayFeaturesOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-clearDisplayFeaturesOverride)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ClearDisplayFeaturesOverride {
     pub method: ClearDisplayFeaturesOverrideMethod,
     pub params: ClearDisplayFeaturesOverrideParams,
+}
+impl ClearDisplayFeaturesOverride {
+    pub const IDENTIFIER: &'static str = "Emulation.clearDisplayFeaturesOverride";
 }
 impl crate::CommandResult for ClearDisplayFeaturesOverride {
     type Result = super::results::ClearDisplayFeaturesOverrideResult;
@@ -430,13 +430,13 @@ pub enum SetScrollbarsHiddenMethod {
     #[serde(rename = "Emulation.setScrollbarsHidden")]
     SetScrollbarsHidden,
 }
-impl SetScrollbarsHiddenMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setScrollbarsHidden";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetScrollbarsHidden {
     pub method: SetScrollbarsHiddenMethod,
     pub params: SetScrollbarsHiddenParams,
+}
+impl SetScrollbarsHidden {
+    pub const IDENTIFIER: &'static str = "Emulation.setScrollbarsHidden";
 }
 impl crate::CommandResult for SetScrollbarsHidden {
     type Result = super::results::SetScrollbarsHiddenResult;
@@ -459,13 +459,13 @@ pub enum SetDocumentCookieDisabledMethod {
     #[serde(rename = "Emulation.setDocumentCookieDisabled")]
     SetDocumentCookieDisabled,
 }
-impl SetDocumentCookieDisabledMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setDocumentCookieDisabled";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetDocumentCookieDisabled {
     pub method: SetDocumentCookieDisabledMethod,
     pub params: SetDocumentCookieDisabledParams,
+}
+impl SetDocumentCookieDisabled {
+    pub const IDENTIFIER: &'static str = "Emulation.setDocumentCookieDisabled";
 }
 impl crate::CommandResult for SetDocumentCookieDisabled {
     type Result = super::results::SetDocumentCookieDisabledResult;
@@ -502,13 +502,13 @@ pub enum SetEmitTouchEventsForMouseMethod {
     #[serde(rename = "Emulation.setEmitTouchEventsForMouse")]
     SetEmitTouchEventsForMouse,
 }
-impl SetEmitTouchEventsForMouseMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setEmitTouchEventsForMouse";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetEmitTouchEventsForMouse {
     pub method: SetEmitTouchEventsForMouseMethod,
     pub params: SetEmitTouchEventsForMouseParams,
+}
+impl SetEmitTouchEventsForMouse {
+    pub const IDENTIFIER: &'static str = "Emulation.setEmitTouchEventsForMouse";
 }
 impl crate::CommandResult for SetEmitTouchEventsForMouse {
     type Result = super::results::SetEmitTouchEventsForMouseResult;
@@ -532,14 +532,14 @@ pub enum SetEmulatedMediaMethod {
     #[serde(rename = "Emulation.setEmulatedMedia")]
     SetEmulatedMedia,
 }
-impl SetEmulatedMediaMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setEmulatedMedia";
-}
 #[doc = "Emulates the given media type or media feature for CSS media queries.\n[setEmulatedMedia](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setEmulatedMedia)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetEmulatedMedia {
     pub method: SetEmulatedMediaMethod,
     pub params: SetEmulatedMediaParams,
+}
+impl SetEmulatedMedia {
+    pub const IDENTIFIER: &'static str = "Emulation.setEmulatedMedia";
 }
 impl crate::CommandResult for SetEmulatedMedia {
     type Result = super::results::SetEmulatedMediaResult;
@@ -581,14 +581,14 @@ pub enum SetEmulatedVisionDeficiencyMethod {
     #[serde(rename = "Emulation.setEmulatedVisionDeficiency")]
     SetEmulatedVisionDeficiency,
 }
-impl SetEmulatedVisionDeficiencyMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setEmulatedVisionDeficiency";
-}
 #[doc = "Emulates the given vision deficiency.\n[setEmulatedVisionDeficiency](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setEmulatedVisionDeficiency)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetEmulatedVisionDeficiency {
     pub method: SetEmulatedVisionDeficiencyMethod,
     pub params: SetEmulatedVisionDeficiencyParams,
+}
+impl SetEmulatedVisionDeficiency {
+    pub const IDENTIFIER: &'static str = "Emulation.setEmulatedVisionDeficiency";
 }
 impl crate::CommandResult for SetEmulatedVisionDeficiency {
     type Result = super::results::SetEmulatedVisionDeficiencyResult;
@@ -606,14 +606,14 @@ pub enum SetEmulatedOsTextScaleMethod {
     #[serde(rename = "Emulation.setEmulatedOSTextScale")]
     SetEmulatedOsTextScale,
 }
-impl SetEmulatedOsTextScaleMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setEmulatedOSTextScale";
-}
 #[doc = "Emulates the given OS text scale.\n[setEmulatedOSTextScale](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setEmulatedOSTextScale)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetEmulatedOsTextScale {
     pub method: SetEmulatedOsTextScaleMethod,
     pub params: SetEmulatedOsTextScaleParams,
+}
+impl SetEmulatedOsTextScale {
+    pub const IDENTIFIER: &'static str = "Emulation.setEmulatedOSTextScale";
 }
 impl crate::CommandResult for SetEmulatedOsTextScale {
     type Result = super::results::SetEmulatedOsTextScaleResult;
@@ -662,14 +662,14 @@ pub enum SetGeolocationOverrideMethod {
     #[serde(rename = "Emulation.setGeolocationOverride")]
     SetGeolocationOverride,
 }
-impl SetGeolocationOverrideMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setGeolocationOverride";
-}
 #[doc = "Overrides the Geolocation Position or Error. Omitting latitude, longitude or\naccuracy emulates position unavailable.\n[setGeolocationOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setGeolocationOverride)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetGeolocationOverride {
     pub method: SetGeolocationOverrideMethod,
     pub params: SetGeolocationOverrideParams,
+}
+impl SetGeolocationOverride {
+    pub const IDENTIFIER: &'static str = "Emulation.setGeolocationOverride";
 }
 impl crate::CommandResult for SetGeolocationOverride {
     type Result = super::results::SetGeolocationOverrideResult;
@@ -691,13 +691,13 @@ pub enum GetOverriddenSensorInformationMethod {
     #[serde(rename = "Emulation.getOverriddenSensorInformation")]
     GetOverriddenSensorInformation,
 }
-impl GetOverriddenSensorInformationMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.getOverriddenSensorInformation";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetOverriddenSensorInformation {
     pub method: GetOverriddenSensorInformationMethod,
     pub params: GetOverriddenSensorInformationParams,
+}
+impl GetOverriddenSensorInformation {
+    pub const IDENTIFIER: &'static str = "Emulation.getOverriddenSensorInformation";
 }
 impl crate::CommandResult for GetOverriddenSensorInformation {
     type Result = super::results::GetOverriddenSensorInformationResult;
@@ -728,14 +728,14 @@ pub enum SetSensorOverrideEnabledMethod {
     #[serde(rename = "Emulation.setSensorOverrideEnabled")]
     SetSensorOverrideEnabled,
 }
-impl SetSensorOverrideEnabledMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setSensorOverrideEnabled";
-}
 #[doc = "Overrides a platform sensor of a given type. If |enabled| is true, calls to\nSensor.start() will use a virtual sensor as backend rather than fetching\ndata from a real hardware sensor. Otherwise, existing virtual\nsensor-backend Sensor objects will fire an error event and new calls to\nSensor.start() will attempt to use a real sensor instead.\n[setSensorOverrideEnabled](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setSensorOverrideEnabled)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetSensorOverrideEnabled {
     pub method: SetSensorOverrideEnabledMethod,
     pub params: SetSensorOverrideEnabledParams,
+}
+impl SetSensorOverrideEnabled {
+    pub const IDENTIFIER: &'static str = "Emulation.setSensorOverrideEnabled";
 }
 impl crate::CommandResult for SetSensorOverrideEnabled {
     type Result = super::results::SetSensorOverrideEnabledResult;
@@ -764,14 +764,14 @@ pub enum SetSensorOverrideReadingsMethod {
     #[serde(rename = "Emulation.setSensorOverrideReadings")]
     SetSensorOverrideReadings,
 }
-impl SetSensorOverrideReadingsMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setSensorOverrideReadings";
-}
 #[doc = "Updates the sensor readings reported by a sensor type previously overridden\nby setSensorOverrideEnabled.\n[setSensorOverrideReadings](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setSensorOverrideReadings)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetSensorOverrideReadings {
     pub method: SetSensorOverrideReadingsMethod,
     pub params: SetSensorOverrideReadingsParams,
+}
+impl SetSensorOverrideReadings {
+    pub const IDENTIFIER: &'static str = "Emulation.setSensorOverrideReadings";
 }
 impl crate::CommandResult for SetSensorOverrideReadings {
     type Result = super::results::SetSensorOverrideReadingsResult;
@@ -802,14 +802,14 @@ pub enum SetPressureSourceOverrideEnabledMethod {
     #[serde(rename = "Emulation.setPressureSourceOverrideEnabled")]
     SetPressureSourceOverrideEnabled,
 }
-impl SetPressureSourceOverrideEnabledMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setPressureSourceOverrideEnabled";
-}
 #[doc = "Overrides a pressure source of a given type, as used by the Compute\nPressure API, so that updates to PressureObserver.observe() are provided\nvia setPressureStateOverride instead of being retrieved from\nplatform-provided telemetry data.\n[setPressureSourceOverrideEnabled](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setPressureSourceOverrideEnabled)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetPressureSourceOverrideEnabled {
     pub method: SetPressureSourceOverrideEnabledMethod,
     pub params: SetPressureSourceOverrideEnabledParams,
+}
+impl SetPressureSourceOverrideEnabled {
+    pub const IDENTIFIER: &'static str = "Emulation.setPressureSourceOverrideEnabled";
 }
 impl crate::CommandResult for SetPressureSourceOverrideEnabled {
     type Result = super::results::SetPressureSourceOverrideEnabledResult;
@@ -838,14 +838,14 @@ pub enum SetPressureStateOverrideMethod {
     #[serde(rename = "Emulation.setPressureStateOverride")]
     SetPressureStateOverride,
 }
-impl SetPressureStateOverrideMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setPressureStateOverride";
-}
 #[doc = "TODO: OBSOLETE: To remove when setPressureDataOverride is merged.\nProvides a given pressure state that will be processed and eventually be\ndelivered to PressureObserver users. |source| must have been previously\noverridden by setPressureSourceOverrideEnabled.\n[setPressureStateOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setPressureStateOverride)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetPressureStateOverride {
     pub method: SetPressureStateOverrideMethod,
     pub params: SetPressureStateOverrideParams,
+}
+impl SetPressureStateOverride {
+    pub const IDENTIFIER: &'static str = "Emulation.setPressureStateOverride";
 }
 impl crate::CommandResult for SetPressureStateOverride {
     type Result = super::results::SetPressureStateOverrideResult;
@@ -879,14 +879,14 @@ pub enum SetPressureDataOverrideMethod {
     #[serde(rename = "Emulation.setPressureDataOverride")]
     SetPressureDataOverride,
 }
-impl SetPressureDataOverrideMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setPressureDataOverride";
-}
 #[doc = "Provides a given pressure data set that will be processed and eventually be\ndelivered to PressureObserver users. |source| must have been previously\noverridden by setPressureSourceOverrideEnabled.\n[setPressureDataOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setPressureDataOverride)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetPressureDataOverride {
     pub method: SetPressureDataOverrideMethod,
     pub params: SetPressureDataOverrideParams,
+}
+impl SetPressureDataOverride {
+    pub const IDENTIFIER: &'static str = "Emulation.setPressureDataOverride";
 }
 impl crate::CommandResult for SetPressureDataOverride {
     type Result = super::results::SetPressureDataOverrideResult;
@@ -914,14 +914,14 @@ pub enum SetIdleOverrideMethod {
     #[serde(rename = "Emulation.setIdleOverride")]
     SetIdleOverride,
 }
-impl SetIdleOverrideMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setIdleOverride";
-}
 #[doc = "Overrides the Idle state.\n[setIdleOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setIdleOverride)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetIdleOverride {
     pub method: SetIdleOverrideMethod,
     pub params: SetIdleOverrideParams,
+}
+impl SetIdleOverride {
+    pub const IDENTIFIER: &'static str = "Emulation.setIdleOverride";
 }
 impl crate::CommandResult for SetIdleOverride {
     type Result = super::results::SetIdleOverrideResult;
@@ -934,14 +934,14 @@ pub enum ClearIdleOverrideMethod {
     #[serde(rename = "Emulation.clearIdleOverride")]
     ClearIdleOverride,
 }
-impl ClearIdleOverrideMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.clearIdleOverride";
-}
 #[doc = "Clears Idle state overrides.\n[clearIdleOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-clearIdleOverride)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ClearIdleOverride {
     pub method: ClearIdleOverrideMethod,
     pub params: ClearIdleOverrideParams,
+}
+impl ClearIdleOverride {
+    pub const IDENTIFIER: &'static str = "Emulation.clearIdleOverride";
 }
 impl crate::CommandResult for ClearIdleOverride {
     type Result = super::results::ClearIdleOverrideResult;
@@ -965,14 +965,14 @@ pub enum SetPageScaleFactorMethod {
     #[serde(rename = "Emulation.setPageScaleFactor")]
     SetPageScaleFactor,
 }
-impl SetPageScaleFactorMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setPageScaleFactor";
-}
 #[doc = "Sets a specified page scale factor.\n[setPageScaleFactor](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setPageScaleFactor)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetPageScaleFactor {
     pub method: SetPageScaleFactorMethod,
     pub params: SetPageScaleFactorParams,
+}
+impl SetPageScaleFactor {
+    pub const IDENTIFIER: &'static str = "Emulation.setPageScaleFactor";
 }
 impl crate::CommandResult for SetPageScaleFactor {
     type Result = super::results::SetPageScaleFactorResult;
@@ -996,14 +996,14 @@ pub enum SetScriptExecutionDisabledMethod {
     #[serde(rename = "Emulation.setScriptExecutionDisabled")]
     SetScriptExecutionDisabled,
 }
-impl SetScriptExecutionDisabledMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setScriptExecutionDisabled";
-}
 #[doc = "Switches script execution in the page.\n[setScriptExecutionDisabled](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setScriptExecutionDisabled)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetScriptExecutionDisabled {
     pub method: SetScriptExecutionDisabledMethod,
     pub params: SetScriptExecutionDisabledParams,
+}
+impl SetScriptExecutionDisabled {
+    pub const IDENTIFIER: &'static str = "Emulation.setScriptExecutionDisabled";
 }
 impl crate::CommandResult for SetScriptExecutionDisabled {
     type Result = super::results::SetScriptExecutionDisabledResult;
@@ -1033,14 +1033,14 @@ pub enum SetTouchEmulationEnabledMethod {
     #[serde(rename = "Emulation.setTouchEmulationEnabled")]
     SetTouchEmulationEnabled,
 }
-impl SetTouchEmulationEnabledMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setTouchEmulationEnabled";
-}
 #[doc = "Enables touch on platforms which do not support them.\n[setTouchEmulationEnabled](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setTouchEmulationEnabled)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetTouchEmulationEnabled {
     pub method: SetTouchEmulationEnabledMethod,
     pub params: SetTouchEmulationEnabledParams,
+}
+impl SetTouchEmulationEnabled {
+    pub const IDENTIFIER: &'static str = "Emulation.setTouchEmulationEnabled";
 }
 impl crate::CommandResult for SetTouchEmulationEnabled {
     type Result = super::results::SetTouchEmulationEnabledResult;
@@ -1081,14 +1081,14 @@ pub enum SetVirtualTimePolicyMethod {
     #[serde(rename = "Emulation.setVirtualTimePolicy")]
     SetVirtualTimePolicy,
 }
-impl SetVirtualTimePolicyMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setVirtualTimePolicy";
-}
 #[doc = "Turns on virtual time for all frames (replacing real-time with a synthetic time source) and sets\nthe current virtual time policy.  Note this supersedes any previous time budget.\n[setVirtualTimePolicy](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setVirtualTimePolicy)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetVirtualTimePolicy {
     pub method: SetVirtualTimePolicyMethod,
     pub params: SetVirtualTimePolicyParams,
+}
+impl SetVirtualTimePolicy {
+    pub const IDENTIFIER: &'static str = "Emulation.setVirtualTimePolicy";
 }
 impl crate::CommandResult for SetVirtualTimePolicy {
     type Result = super::results::SetVirtualTimePolicyResult;
@@ -1107,14 +1107,14 @@ pub enum SetLocaleOverrideMethod {
     #[serde(rename = "Emulation.setLocaleOverride")]
     SetLocaleOverride,
 }
-impl SetLocaleOverrideMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setLocaleOverride";
-}
 #[doc = "Overrides default host system locale with the specified one.\n[setLocaleOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setLocaleOverride)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetLocaleOverride {
     pub method: SetLocaleOverrideMethod,
     pub params: SetLocaleOverrideParams,
+}
+impl SetLocaleOverride {
+    pub const IDENTIFIER: &'static str = "Emulation.setLocaleOverride";
 }
 impl crate::CommandResult for SetLocaleOverride {
     type Result = super::results::SetLocaleOverrideResult;
@@ -1143,14 +1143,14 @@ pub enum SetTimezoneOverrideMethod {
     #[serde(rename = "Emulation.setTimezoneOverride")]
     SetTimezoneOverride,
 }
-impl SetTimezoneOverrideMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setTimezoneOverride";
-}
 #[doc = "Overrides default host system timezone with the specified one.\n[setTimezoneOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setTimezoneOverride)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetTimezoneOverride {
     pub method: SetTimezoneOverrideMethod,
     pub params: SetTimezoneOverrideParams,
+}
+impl SetTimezoneOverride {
+    pub const IDENTIFIER: &'static str = "Emulation.setTimezoneOverride";
 }
 impl crate::CommandResult for SetTimezoneOverride {
     type Result = super::results::SetTimezoneOverrideResult;
@@ -1172,13 +1172,13 @@ pub enum SetDisabledImageTypesMethod {
     #[serde(rename = "Emulation.setDisabledImageTypes")]
     SetDisabledImageTypes,
 }
-impl SetDisabledImageTypesMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setDisabledImageTypes";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetDisabledImageTypes {
     pub method: SetDisabledImageTypesMethod,
     pub params: SetDisabledImageTypesParams,
+}
+impl SetDisabledImageTypes {
+    pub const IDENTIFIER: &'static str = "Emulation.setDisabledImageTypes";
 }
 impl crate::CommandResult for SetDisabledImageTypes {
     type Result = super::results::SetDisabledImageTypesResult;
@@ -1197,14 +1197,14 @@ pub enum SetDataSaverOverrideMethod {
     #[serde(rename = "Emulation.setDataSaverOverride")]
     SetDataSaverOverride,
 }
-impl SetDataSaverOverrideMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setDataSaverOverride";
-}
 #[doc = "Override the value of navigator.connection.saveData\n[setDataSaverOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setDataSaverOverride)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetDataSaverOverride {
     pub method: SetDataSaverOverrideMethod,
     pub params: SetDataSaverOverrideParams,
+}
+impl SetDataSaverOverride {
+    pub const IDENTIFIER: &'static str = "Emulation.setDataSaverOverride";
 }
 impl crate::CommandResult for SetDataSaverOverride {
     type Result = super::results::SetDataSaverOverrideResult;
@@ -1227,13 +1227,13 @@ pub enum SetHardwareConcurrencyOverrideMethod {
     #[serde(rename = "Emulation.setHardwareConcurrencyOverride")]
     SetHardwareConcurrencyOverride,
 }
-impl SetHardwareConcurrencyOverrideMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setHardwareConcurrencyOverride";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetHardwareConcurrencyOverride {
     pub method: SetHardwareConcurrencyOverrideMethod,
     pub params: SetHardwareConcurrencyOverrideParams,
+}
+impl SetHardwareConcurrencyOverride {
+    pub const IDENTIFIER: &'static str = "Emulation.setHardwareConcurrencyOverride";
 }
 impl crate::CommandResult for SetHardwareConcurrencyOverride {
     type Result = super::results::SetHardwareConcurrencyOverrideResult;
@@ -1280,14 +1280,14 @@ pub enum SetUserAgentOverrideMethod {
     #[serde(rename = "Emulation.setUserAgentOverride")]
     SetUserAgentOverride,
 }
-impl SetUserAgentOverrideMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setUserAgentOverride";
-}
 #[doc = "Allows overriding user agent with the given string.\n`userAgentMetadata` must be set for Client Hint headers to be sent.\n[setUserAgentOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setUserAgentOverride)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetUserAgentOverride {
     pub method: SetUserAgentOverrideMethod,
     pub params: SetUserAgentOverrideParams,
+}
+impl SetUserAgentOverride {
+    pub const IDENTIFIER: &'static str = "Emulation.setUserAgentOverride";
 }
 impl crate::CommandResult for SetUserAgentOverride {
     type Result = super::results::SetUserAgentOverrideResult;
@@ -1311,14 +1311,14 @@ pub enum SetAutomationOverrideMethod {
     #[serde(rename = "Emulation.setAutomationOverride")]
     SetAutomationOverride,
 }
-impl SetAutomationOverrideMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setAutomationOverride";
-}
 #[doc = "Allows overriding the automation flag.\n[setAutomationOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setAutomationOverride)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetAutomationOverride {
     pub method: SetAutomationOverrideMethod,
     pub params: SetAutomationOverrideParams,
+}
+impl SetAutomationOverride {
+    pub const IDENTIFIER: &'static str = "Emulation.setAutomationOverride";
 }
 impl crate::CommandResult for SetAutomationOverride {
     type Result = super::results::SetAutomationOverrideResult;
@@ -1342,14 +1342,14 @@ pub enum SetSmallViewportHeightDifferenceOverrideMethod {
     #[serde(rename = "Emulation.setSmallViewportHeightDifferenceOverride")]
     SetSmallViewportHeightDifferenceOverride,
 }
-impl SetSmallViewportHeightDifferenceOverrideMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.setSmallViewportHeightDifferenceOverride";
-}
 #[doc = "Allows overriding the difference between the small and large viewport sizes, which determine the\nvalue of the `svh` and `lvh` unit, respectively. Only supported for top-level frames.\n[setSmallViewportHeightDifferenceOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setSmallViewportHeightDifferenceOverride)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetSmallViewportHeightDifferenceOverride {
     pub method: SetSmallViewportHeightDifferenceOverrideMethod,
     pub params: SetSmallViewportHeightDifferenceOverrideParams,
+}
+impl SetSmallViewportHeightDifferenceOverride {
+    pub const IDENTIFIER: &'static str = "Emulation.setSmallViewportHeightDifferenceOverride";
 }
 impl crate::CommandResult for SetSmallViewportHeightDifferenceOverride {
     type Result = super::results::SetSmallViewportHeightDifferenceOverrideResult;
@@ -1362,14 +1362,14 @@ pub enum GetScreenInfosMethod {
     #[serde(rename = "Emulation.getScreenInfos")]
     GetScreenInfos,
 }
-impl GetScreenInfosMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.getScreenInfos";
-}
 #[doc = "Returns device's screen configuration. In headful mode, the physical screens configuration is returned,\nwhereas in headless mode, a virtual headless screen configuration is provided instead.\n[getScreenInfos](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-getScreenInfos)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetScreenInfos {
     pub method: GetScreenInfosMethod,
     pub params: GetScreenInfosParams,
+}
+impl GetScreenInfos {
+    pub const IDENTIFIER: &'static str = "Emulation.getScreenInfos";
 }
 impl crate::CommandResult for GetScreenInfos {
     type Result = super::results::GetScreenInfosResult;
@@ -1446,14 +1446,14 @@ pub enum AddScreenMethod {
     #[serde(rename = "Emulation.addScreen")]
     AddScreen,
 }
-impl AddScreenMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.addScreen";
-}
 #[doc = "Add a new screen to the device. Only supported in headless mode.\n[addScreen](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-addScreen)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct AddScreen {
     pub method: AddScreenMethod,
     pub params: AddScreenParams,
+}
+impl AddScreen {
+    pub const IDENTIFIER: &'static str = "Emulation.addScreen";
 }
 impl crate::CommandResult for AddScreen {
     type Result = super::results::AddScreenResult;
@@ -1476,14 +1476,14 @@ pub enum RemoveScreenMethod {
     #[serde(rename = "Emulation.removeScreen")]
     RemoveScreen,
 }
-impl RemoveScreenMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.removeScreen";
-}
 #[doc = "Remove screen from the device. Only supported in headless mode.\n[removeScreen](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-removeScreen)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct RemoveScreen {
     pub method: RemoveScreenMethod,
     pub params: RemoveScreenParams,
+}
+impl RemoveScreen {
+    pub const IDENTIFIER: &'static str = "Emulation.removeScreen";
 }
 impl crate::CommandResult for RemoveScreen {
     type Result = super::results::RemoveScreenResult;

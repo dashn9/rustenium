@@ -26,13 +26,13 @@ pub enum DeliverPushMessageMethod {
     #[serde(rename = "ServiceWorker.deliverPushMessage")]
     DeliverPushMessage,
 }
-impl DeliverPushMessageMethod {
-    pub const IDENTIFIER: &'static str = "ServiceWorker.deliverPushMessage";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct DeliverPushMessage {
     pub method: DeliverPushMessageMethod,
     pub params: DeliverPushMessageParams,
+}
+impl DeliverPushMessage {
+    pub const IDENTIFIER: &'static str = "ServiceWorker.deliverPushMessage";
 }
 impl crate::CommandResult for DeliverPushMessage {
     type Result = super::results::DeliverPushMessageResult;
@@ -44,13 +44,13 @@ pub enum DisableMethod {
     #[serde(rename = "ServiceWorker.disable")]
     Disable,
 }
-impl DisableMethod {
-    pub const IDENTIFIER: &'static str = "ServiceWorker.disable";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
+}
+impl Disable {
+    pub const IDENTIFIER: &'static str = "ServiceWorker.disable";
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -86,13 +86,13 @@ pub enum DispatchSyncEventMethod {
     #[serde(rename = "ServiceWorker.dispatchSyncEvent")]
     DispatchSyncEvent,
 }
-impl DispatchSyncEventMethod {
-    pub const IDENTIFIER: &'static str = "ServiceWorker.dispatchSyncEvent";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct DispatchSyncEvent {
     pub method: DispatchSyncEventMethod,
     pub params: DispatchSyncEventParams,
+}
+impl DispatchSyncEvent {
+    pub const IDENTIFIER: &'static str = "ServiceWorker.dispatchSyncEvent";
 }
 impl crate::CommandResult for DispatchSyncEvent {
     type Result = super::results::DispatchSyncEventResult;
@@ -124,13 +124,13 @@ pub enum DispatchPeriodicSyncEventMethod {
     #[serde(rename = "ServiceWorker.dispatchPeriodicSyncEvent")]
     DispatchPeriodicSyncEvent,
 }
-impl DispatchPeriodicSyncEventMethod {
-    pub const IDENTIFIER: &'static str = "ServiceWorker.dispatchPeriodicSyncEvent";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct DispatchPeriodicSyncEvent {
     pub method: DispatchPeriodicSyncEventMethod,
     pub params: DispatchPeriodicSyncEventParams,
+}
+impl DispatchPeriodicSyncEvent {
+    pub const IDENTIFIER: &'static str = "ServiceWorker.dispatchPeriodicSyncEvent";
 }
 impl crate::CommandResult for DispatchPeriodicSyncEvent {
     type Result = super::results::DispatchPeriodicSyncEventResult;
@@ -142,13 +142,13 @@ pub enum EnableMethod {
     #[serde(rename = "ServiceWorker.enable")]
     Enable,
 }
-impl EnableMethod {
-    pub const IDENTIFIER: &'static str = "ServiceWorker.enable";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl Enable {
+    pub const IDENTIFIER: &'static str = "ServiceWorker.enable";
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -170,13 +170,13 @@ pub enum SetForceUpdateOnPageLoadMethod {
     #[serde(rename = "ServiceWorker.setForceUpdateOnPageLoad")]
     SetForceUpdateOnPageLoad,
 }
-impl SetForceUpdateOnPageLoadMethod {
-    pub const IDENTIFIER: &'static str = "ServiceWorker.setForceUpdateOnPageLoad";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetForceUpdateOnPageLoad {
     pub method: SetForceUpdateOnPageLoadMethod,
     pub params: SetForceUpdateOnPageLoadParams,
+}
+impl SetForceUpdateOnPageLoad {
+    pub const IDENTIFIER: &'static str = "ServiceWorker.setForceUpdateOnPageLoad";
 }
 impl crate::CommandResult for SetForceUpdateOnPageLoad {
     type Result = super::results::SetForceUpdateOnPageLoadResult;
@@ -203,13 +203,13 @@ pub enum SkipWaitingMethod {
     #[serde(rename = "ServiceWorker.skipWaiting")]
     SkipWaiting,
 }
-impl SkipWaitingMethod {
-    pub const IDENTIFIER: &'static str = "ServiceWorker.skipWaiting";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SkipWaiting {
     pub method: SkipWaitingMethod,
     pub params: SkipWaitingParams,
+}
+impl SkipWaiting {
+    pub const IDENTIFIER: &'static str = "ServiceWorker.skipWaiting";
 }
 impl crate::CommandResult for SkipWaiting {
     type Result = super::results::SkipWaitingResult;
@@ -236,13 +236,13 @@ pub enum StartWorkerMethod {
     #[serde(rename = "ServiceWorker.startWorker")]
     StartWorker,
 }
-impl StartWorkerMethod {
-    pub const IDENTIFIER: &'static str = "ServiceWorker.startWorker";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct StartWorker {
     pub method: StartWorkerMethod,
     pub params: StartWorkerParams,
+}
+impl StartWorker {
+    pub const IDENTIFIER: &'static str = "ServiceWorker.startWorker";
 }
 impl crate::CommandResult for StartWorker {
     type Result = super::results::StartWorkerResult;
@@ -254,13 +254,13 @@ pub enum StopAllWorkersMethod {
     #[serde(rename = "ServiceWorker.stopAllWorkers")]
     StopAllWorkers,
 }
-impl StopAllWorkersMethod {
-    pub const IDENTIFIER: &'static str = "ServiceWorker.stopAllWorkers";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct StopAllWorkers {
     pub method: StopAllWorkersMethod,
     pub params: StopAllWorkersParams,
+}
+impl StopAllWorkers {
+    pub const IDENTIFIER: &'static str = "ServiceWorker.stopAllWorkers";
 }
 impl crate::CommandResult for StopAllWorkers {
     type Result = super::results::StopAllWorkersResult;
@@ -287,13 +287,13 @@ pub enum StopWorkerMethod {
     #[serde(rename = "ServiceWorker.stopWorker")]
     StopWorker,
 }
-impl StopWorkerMethod {
-    pub const IDENTIFIER: &'static str = "ServiceWorker.stopWorker";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct StopWorker {
     pub method: StopWorkerMethod,
     pub params: StopWorkerParams,
+}
+impl StopWorker {
+    pub const IDENTIFIER: &'static str = "ServiceWorker.stopWorker";
 }
 impl crate::CommandResult for StopWorker {
     type Result = super::results::StopWorkerResult;
@@ -320,13 +320,13 @@ pub enum UnregisterMethod {
     #[serde(rename = "ServiceWorker.unregister")]
     Unregister,
 }
-impl UnregisterMethod {
-    pub const IDENTIFIER: &'static str = "ServiceWorker.unregister";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct Unregister {
     pub method: UnregisterMethod,
     pub params: UnregisterParams,
+}
+impl Unregister {
+    pub const IDENTIFIER: &'static str = "ServiceWorker.unregister";
 }
 impl crate::CommandResult for Unregister {
     type Result = super::results::UnregisterResult;
@@ -353,13 +353,13 @@ pub enum UpdateRegistrationMethod {
     #[serde(rename = "ServiceWorker.updateRegistration")]
     UpdateRegistration,
 }
-impl UpdateRegistrationMethod {
-    pub const IDENTIFIER: &'static str = "ServiceWorker.updateRegistration";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct UpdateRegistration {
     pub method: UpdateRegistrationMethod,
     pub params: UpdateRegistrationParams,
+}
+impl UpdateRegistration {
+    pub const IDENTIFIER: &'static str = "ServiceWorker.updateRegistration";
 }
 impl crate::CommandResult for UpdateRegistration {
     type Result = super::results::UpdateRegistrationResult;

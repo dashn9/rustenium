@@ -18,14 +18,14 @@ pub enum CloseMethod {
     #[serde(rename = "IO.close")]
     Close,
 }
-impl CloseMethod {
-    pub const IDENTIFIER: &'static str = "IO.close";
-}
 #[doc = "Close the stream, discard any temporary backing storage.\n[close](https://chromedevtools.github.io/devtools-protocol/tot/IO/#method-close)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Close {
     pub method: CloseMethod,
     pub params: CloseParams,
+}
+impl Close {
+    pub const IDENTIFIER: &'static str = "IO.close";
 }
 impl crate::CommandResult for Close {
     type Result = super::results::CloseResult;
@@ -61,14 +61,14 @@ pub enum ReadMethod {
     #[serde(rename = "IO.read")]
     Read,
 }
-impl ReadMethod {
-    pub const IDENTIFIER: &'static str = "IO.read";
-}
 #[doc = "Read a chunk of the stream\n[read](https://chromedevtools.github.io/devtools-protocol/tot/IO/#method-read)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Read {
     pub method: ReadMethod,
     pub params: ReadParams,
+}
+impl Read {
+    pub const IDENTIFIER: &'static str = "IO.read";
 }
 impl crate::CommandResult for Read {
     type Result = super::results::ReadResult;
@@ -92,14 +92,14 @@ pub enum ResolveBlobMethod {
     #[serde(rename = "IO.resolveBlob")]
     ResolveBlob,
 }
-impl ResolveBlobMethod {
-    pub const IDENTIFIER: &'static str = "IO.resolveBlob";
-}
 #[doc = "Return UUID of Blob object specified by a remote object id.\n[resolveBlob](https://chromedevtools.github.io/devtools-protocol/tot/IO/#method-resolveBlob)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ResolveBlob {
     pub method: ResolveBlobMethod,
     pub params: ResolveBlobParams,
+}
+impl ResolveBlob {
+    pub const IDENTIFIER: &'static str = "IO.resolveBlob";
 }
 impl crate::CommandResult for ResolveBlob {
     type Result = super::results::ResolveBlobResult;

@@ -16,13 +16,13 @@ pub enum ClearMethod {
     #[serde(rename = "DOMStorage.clear")]
     Clear,
 }
-impl ClearMethod {
-    pub const IDENTIFIER: &'static str = "DOMStorage.clear";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct Clear {
     pub method: ClearMethod,
     pub params: ClearParams,
+}
+impl Clear {
+    pub const IDENTIFIER: &'static str = "DOMStorage.clear";
 }
 impl crate::CommandResult for Clear {
     type Result = super::results::ClearResult;
@@ -35,14 +35,14 @@ pub enum DisableMethod {
     #[serde(rename = "DOMStorage.disable")]
     Disable,
 }
-impl DisableMethod {
-    pub const IDENTIFIER: &'static str = "DOMStorage.disable";
-}
 #[doc = "Disables storage tracking, prevents storage events from being sent to the client.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/DOMStorage/#method-disable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
+}
+impl Disable {
+    pub const IDENTIFIER: &'static str = "DOMStorage.disable";
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -55,14 +55,14 @@ pub enum EnableMethod {
     #[serde(rename = "DOMStorage.enable")]
     Enable,
 }
-impl EnableMethod {
-    pub const IDENTIFIER: &'static str = "DOMStorage.enable";
-}
 #[doc = "Enables storage tracking, storage events will now be delivered to the client.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/DOMStorage/#method-enable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl Enable {
+    pub const IDENTIFIER: &'static str = "DOMStorage.enable";
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -84,13 +84,13 @@ pub enum GetDomStorageItemsMethod {
     #[serde(rename = "DOMStorage.getDOMStorageItems")]
     GetDomStorageItems,
 }
-impl GetDomStorageItemsMethod {
-    pub const IDENTIFIER: &'static str = "DOMStorage.getDOMStorageItems";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetDomStorageItems {
     pub method: GetDomStorageItemsMethod,
     pub params: GetDomStorageItemsParams,
+}
+impl GetDomStorageItems {
+    pub const IDENTIFIER: &'static str = "DOMStorage.getDOMStorageItems";
 }
 impl crate::CommandResult for GetDomStorageItems {
     type Result = super::results::GetDomStorageItemsResult;
@@ -115,13 +115,13 @@ pub enum RemoveDomStorageItemMethod {
     #[serde(rename = "DOMStorage.removeDOMStorageItem")]
     RemoveDomStorageItem,
 }
-impl RemoveDomStorageItemMethod {
-    pub const IDENTIFIER: &'static str = "DOMStorage.removeDOMStorageItem";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct RemoveDomStorageItem {
     pub method: RemoveDomStorageItemMethod,
     pub params: RemoveDomStorageItemParams,
+}
+impl RemoveDomStorageItem {
+    pub const IDENTIFIER: &'static str = "DOMStorage.removeDOMStorageItem";
 }
 impl crate::CommandResult for RemoveDomStorageItem {
     type Result = super::results::RemoveDomStorageItemResult;
@@ -153,13 +153,13 @@ pub enum SetDomStorageItemMethod {
     #[serde(rename = "DOMStorage.setDOMStorageItem")]
     SetDomStorageItem,
 }
-impl SetDomStorageItemMethod {
-    pub const IDENTIFIER: &'static str = "DOMStorage.setDOMStorageItem";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetDomStorageItem {
     pub method: SetDomStorageItemMethod,
     pub params: SetDomStorageItemParams,
+}
+impl SetDomStorageItem {
+    pub const IDENTIFIER: &'static str = "DOMStorage.setDOMStorageItem";
 }
 impl crate::CommandResult for SetDomStorageItem {
     type Result = super::results::SetDomStorageItemResult;

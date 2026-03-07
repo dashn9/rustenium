@@ -26,6 +26,7 @@ impl From<String> for Extension {
 }
 impl Extension {
     pub const IDENTIFIER: &'static str = "webExtension.Extension";
+    pub const DOMAIN_DIRECTION: &'static str = "all";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -51,6 +52,7 @@ impl ExtensionPath {
 }
 impl ExtensionPath {
     pub const IDENTIFIER: &'static str = "webExtension.ExtensionPath";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ExtensionArchivePath {
@@ -69,6 +71,7 @@ impl ExtensionArchivePath {
 }
 impl ExtensionArchivePath {
     pub const IDENTIFIER: &'static str = "webExtension.ExtensionArchivePath";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ExtensionBase64Encoded {
@@ -87,5 +90,6 @@ impl ExtensionBase64Encoded {
 }
 impl ExtensionBase64Encoded {
     pub const IDENTIFIER: &'static str = "webExtension.ExtensionBase64Encoded";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 group_enum ! (WebExtensionTypes { Extension (Extension) , ExtensionData (ExtensionData) , ExtensionPath (ExtensionPath) , ExtensionArchivePath (ExtensionArchivePath) , ExtensionBase64Encoded (ExtensionBase64Encoded) });

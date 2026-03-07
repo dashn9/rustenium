@@ -7,14 +7,14 @@ pub enum ClearDeviceOrientationOverrideMethod {
     #[serde(rename = "DeviceOrientation.clearDeviceOrientationOverride")]
     ClearDeviceOrientationOverride,
 }
-impl ClearDeviceOrientationOverrideMethod {
-    pub const IDENTIFIER: &'static str = "DeviceOrientation.clearDeviceOrientationOverride";
-}
 #[doc = "Clears the overridden Device Orientation.\n[clearDeviceOrientationOverride](https://chromedevtools.github.io/devtools-protocol/tot/DeviceOrientation/#method-clearDeviceOrientationOverride)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ClearDeviceOrientationOverride {
     pub method: ClearDeviceOrientationOverrideMethod,
     pub params: ClearDeviceOrientationOverrideParams,
+}
+impl ClearDeviceOrientationOverride {
+    pub const IDENTIFIER: &'static str = "DeviceOrientation.clearDeviceOrientationOverride";
 }
 impl crate::CommandResult for ClearDeviceOrientationOverride {
     type Result = super::results::ClearDeviceOrientationOverrideResult;
@@ -46,14 +46,14 @@ pub enum SetDeviceOrientationOverrideMethod {
     #[serde(rename = "DeviceOrientation.setDeviceOrientationOverride")]
     SetDeviceOrientationOverride,
 }
-impl SetDeviceOrientationOverrideMethod {
-    pub const IDENTIFIER: &'static str = "DeviceOrientation.setDeviceOrientationOverride";
-}
 #[doc = "Overrides the Device Orientation.\n[setDeviceOrientationOverride](https://chromedevtools.github.io/devtools-protocol/tot/DeviceOrientation/#method-setDeviceOrientationOverride)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetDeviceOrientationOverride {
     pub method: SetDeviceOrientationOverrideMethod,
     pub params: SetDeviceOrientationOverrideParams,
+}
+impl SetDeviceOrientationOverride {
+    pub const IDENTIFIER: &'static str = "DeviceOrientation.setDeviceOrientationOverride";
 }
 impl crate::CommandResult for SetDeviceOrientationOverride {
     type Result = super::results::SetDeviceOrientationOverrideResult;

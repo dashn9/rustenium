@@ -40,14 +40,14 @@ pub enum ClearObjectStoreMethod {
     #[serde(rename = "IndexedDB.clearObjectStore")]
     ClearObjectStore,
 }
-impl ClearObjectStoreMethod {
-    pub const IDENTIFIER: &'static str = "IndexedDB.clearObjectStore";
-}
 #[doc = "Clears all entries from an object store.\n[clearObjectStore](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-clearObjectStore)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ClearObjectStore {
     pub method: ClearObjectStoreMethod,
     pub params: ClearObjectStoreParams,
+}
+impl ClearObjectStore {
+    pub const IDENTIFIER: &'static str = "IndexedDB.clearObjectStore";
 }
 impl crate::CommandResult for ClearObjectStore {
     type Result = super::results::ClearObjectStoreResult;
@@ -94,14 +94,14 @@ pub enum DeleteDatabaseMethod {
     #[serde(rename = "IndexedDB.deleteDatabase")]
     DeleteDatabase,
 }
-impl DeleteDatabaseMethod {
-    pub const IDENTIFIER: &'static str = "IndexedDB.deleteDatabase";
-}
 #[doc = "Deletes a database.\n[deleteDatabase](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-deleteDatabase)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct DeleteDatabase {
     pub method: DeleteDatabaseMethod,
     pub params: DeleteDatabaseParams,
+}
+impl DeleteDatabase {
+    pub const IDENTIFIER: &'static str = "IndexedDB.deleteDatabase";
 }
 impl crate::CommandResult for DeleteDatabase {
     type Result = super::results::DeleteDatabaseResult;
@@ -153,14 +153,14 @@ pub enum DeleteObjectStoreEntriesMethod {
     #[serde(rename = "IndexedDB.deleteObjectStoreEntries")]
     DeleteObjectStoreEntries,
 }
-impl DeleteObjectStoreEntriesMethod {
-    pub const IDENTIFIER: &'static str = "IndexedDB.deleteObjectStoreEntries";
-}
 #[doc = "Delete a range of entries from an object store\n[deleteObjectStoreEntries](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-deleteObjectStoreEntries)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct DeleteObjectStoreEntries {
     pub method: DeleteObjectStoreEntriesMethod,
     pub params: DeleteObjectStoreEntriesParams,
+}
+impl DeleteObjectStoreEntries {
+    pub const IDENTIFIER: &'static str = "IndexedDB.deleteObjectStoreEntries";
 }
 impl crate::CommandResult for DeleteObjectStoreEntries {
     type Result = super::results::DeleteObjectStoreEntriesResult;
@@ -173,14 +173,14 @@ pub enum DisableMethod {
     #[serde(rename = "IndexedDB.disable")]
     Disable,
 }
-impl DisableMethod {
-    pub const IDENTIFIER: &'static str = "IndexedDB.disable";
-}
 #[doc = "Disables events from backend.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-disable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
+}
+impl Disable {
+    pub const IDENTIFIER: &'static str = "IndexedDB.disable";
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -193,14 +193,14 @@ pub enum EnableMethod {
     #[serde(rename = "IndexedDB.enable")]
     Enable,
 }
-impl EnableMethod {
-    pub const IDENTIFIER: &'static str = "IndexedDB.enable";
-}
 #[doc = "Enables events from backend.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-enable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl Enable {
+    pub const IDENTIFIER: &'static str = "IndexedDB.enable";
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -271,14 +271,14 @@ pub enum RequestDataMethod {
     #[serde(rename = "IndexedDB.requestData")]
     RequestData,
 }
-impl RequestDataMethod {
-    pub const IDENTIFIER: &'static str = "IndexedDB.requestData";
-}
 #[doc = "Requests data from object store or index.\n[requestData](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-requestData)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct RequestData {
     pub method: RequestDataMethod,
     pub params: RequestDataParams,
+}
+impl RequestData {
+    pub const IDENTIFIER: &'static str = "IndexedDB.requestData";
 }
 impl crate::CommandResult for RequestData {
     type Result = super::results::RequestDataResult;
@@ -324,14 +324,14 @@ pub enum GetMetadataMethod {
     #[serde(rename = "IndexedDB.getMetadata")]
     GetMetadata,
 }
-impl GetMetadataMethod {
-    pub const IDENTIFIER: &'static str = "IndexedDB.getMetadata";
-}
 #[doc = "Gets metadata of an object store.\n[getMetadata](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-getMetadata)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetMetadata {
     pub method: GetMetadataMethod,
     pub params: GetMetadataParams,
+}
+impl GetMetadata {
+    pub const IDENTIFIER: &'static str = "IndexedDB.getMetadata";
 }
 impl crate::CommandResult for GetMetadata {
     type Result = super::results::GetMetadataResult;
@@ -378,14 +378,14 @@ pub enum RequestDatabaseMethod {
     #[serde(rename = "IndexedDB.requestDatabase")]
     RequestDatabase,
 }
-impl RequestDatabaseMethod {
-    pub const IDENTIFIER: &'static str = "IndexedDB.requestDatabase";
-}
 #[doc = "Requests database with given name in given frame.\n[requestDatabase](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-requestDatabase)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct RequestDatabase {
     pub method: RequestDatabaseMethod,
     pub params: RequestDatabaseParams,
+}
+impl RequestDatabase {
+    pub const IDENTIFIER: &'static str = "IndexedDB.requestDatabase";
 }
 impl crate::CommandResult for RequestDatabase {
     type Result = super::results::RequestDatabaseResult;
@@ -414,14 +414,14 @@ pub enum RequestDatabaseNamesMethod {
     #[serde(rename = "IndexedDB.requestDatabaseNames")]
     RequestDatabaseNames,
 }
-impl RequestDatabaseNamesMethod {
-    pub const IDENTIFIER: &'static str = "IndexedDB.requestDatabaseNames";
-}
 #[doc = "Requests database names for given security origin.\n[requestDatabaseNames](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-requestDatabaseNames)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct RequestDatabaseNames {
     pub method: RequestDatabaseNamesMethod,
     pub params: RequestDatabaseNamesParams,
+}
+impl RequestDatabaseNames {
+    pub const IDENTIFIER: &'static str = "IndexedDB.requestDatabaseNames";
 }
 impl crate::CommandResult for RequestDatabaseNames {
     type Result = super::results::RequestDatabaseNamesResult;

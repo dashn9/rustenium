@@ -31,7 +31,7 @@ pub fn parse_cddl(inputs: &[(&str, DomainDirection)]) -> Protocol<'static> {
         for (name, body) in split_rules(content) {
             if let Some(&idx) = seen.get(&name) {
                 // Seen in another file → mark as Both
-                rules[idx].origin = DomainDirection::Both;
+                rules[idx].origin = DomainDirection::All;
             } else {
                 seen.insert(name.clone(), rules.len());
                 rules.push(RawRule {

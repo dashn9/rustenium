@@ -23,14 +23,14 @@ pub enum SetInstrumentationBreakpointMethod {
     #[serde(rename = "EventBreakpoints.setInstrumentationBreakpoint")]
     SetInstrumentationBreakpoint,
 }
-impl SetInstrumentationBreakpointMethod {
-    pub const IDENTIFIER: &'static str = "EventBreakpoints.setInstrumentationBreakpoint";
-}
 #[doc = "Sets breakpoint on particular native event.\n[setInstrumentationBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/EventBreakpoints/#method-setInstrumentationBreakpoint)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetInstrumentationBreakpoint {
     pub method: SetInstrumentationBreakpointMethod,
     pub params: SetInstrumentationBreakpointParams,
+}
+impl SetInstrumentationBreakpoint {
+    pub const IDENTIFIER: &'static str = "EventBreakpoints.setInstrumentationBreakpoint";
 }
 impl crate::CommandResult for SetInstrumentationBreakpoint {
     type Result = super::results::SetInstrumentationBreakpointResult;
@@ -59,14 +59,14 @@ pub enum RemoveInstrumentationBreakpointMethod {
     #[serde(rename = "EventBreakpoints.removeInstrumentationBreakpoint")]
     RemoveInstrumentationBreakpoint,
 }
-impl RemoveInstrumentationBreakpointMethod {
-    pub const IDENTIFIER: &'static str = "EventBreakpoints.removeInstrumentationBreakpoint";
-}
 #[doc = "Removes breakpoint on particular native event.\n[removeInstrumentationBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/EventBreakpoints/#method-removeInstrumentationBreakpoint)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct RemoveInstrumentationBreakpoint {
     pub method: RemoveInstrumentationBreakpointMethod,
     pub params: RemoveInstrumentationBreakpointParams,
+}
+impl RemoveInstrumentationBreakpoint {
+    pub const IDENTIFIER: &'static str = "EventBreakpoints.removeInstrumentationBreakpoint";
 }
 impl crate::CommandResult for RemoveInstrumentationBreakpoint {
     type Result = super::results::RemoveInstrumentationBreakpointResult;
@@ -79,14 +79,14 @@ pub enum DisableMethod {
     #[serde(rename = "EventBreakpoints.disable")]
     Disable,
 }
-impl DisableMethod {
-    pub const IDENTIFIER: &'static str = "EventBreakpoints.disable";
-}
 #[doc = "Removes all breakpoints\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/EventBreakpoints/#method-disable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
+}
+impl Disable {
+    pub const IDENTIFIER: &'static str = "EventBreakpoints.disable";
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;

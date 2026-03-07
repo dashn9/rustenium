@@ -23,6 +23,7 @@ impl AuthCredentials {
 }
 impl AuthCredentials {
     pub const IDENTIFIER: &'static str = "network.AuthCredentials";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct BytesValue(serde_json::Value);
@@ -36,6 +37,7 @@ impl BytesValue {
 }
 impl BytesValue {
     pub const IDENTIFIER: &'static str = "network.BytesValue";
+    pub const DOMAIN_DIRECTION: &'static str = "all";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StringValue {
@@ -54,6 +56,7 @@ impl StringValue {
 }
 impl StringValue {
     pub const IDENTIFIER: &'static str = "network.StringValue";
+    pub const DOMAIN_DIRECTION: &'static str = "all";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Base64Value {
@@ -72,6 +75,7 @@ impl Base64Value {
 }
 impl Base64Value {
     pub const IDENTIFIER: &'static str = "network.Base64Value";
+    pub const DOMAIN_DIRECTION: &'static str = "all";
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
 pub struct Collector(String);
@@ -100,6 +104,7 @@ impl From<String> for Collector {
 }
 impl Collector {
     pub const IDENTIFIER: &'static str = "network.Collector";
+    pub const DOMAIN_DIRECTION: &'static str = "all";
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
 pub struct CollectorType(String);
@@ -128,6 +133,7 @@ impl From<String> for CollectorType {
 }
 impl CollectorType {
     pub const IDENTIFIER: &'static str = "network.CollectorType";
+    pub const DOMAIN_DIRECTION: &'static str = "all";
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum SameSite {
@@ -168,6 +174,7 @@ pub struct Cookie {
 }
 impl Cookie {
     pub const IDENTIFIER: &'static str = "network.Cookie";
+    pub const DOMAIN_DIRECTION: &'static str = "all";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CookieHeader {
@@ -186,6 +193,7 @@ impl CookieHeader {
 }
 impl CookieHeader {
     pub const IDENTIFIER: &'static str = "network.CookieHeader";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum DataType {
@@ -211,6 +219,7 @@ impl Header {
 }
 impl Header {
     pub const IDENTIFIER: &'static str = "network.Header";
+    pub const DOMAIN_DIRECTION: &'static str = "all";
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
 pub struct Intercept(String);
@@ -239,6 +248,7 @@ impl From<String> for Intercept {
 }
 impl Intercept {
     pub const IDENTIFIER: &'static str = "network.Intercept";
+    pub const DOMAIN_DIRECTION: &'static str = "all";
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
 pub struct Request(String);
@@ -267,6 +277,7 @@ impl From<String> for Request {
 }
 impl Request {
     pub const IDENTIFIER: &'static str = "network.Request";
+    pub const DOMAIN_DIRECTION: &'static str = "all";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetCookieHeader {
@@ -320,6 +331,7 @@ impl SetCookieHeader {
 }
 impl SetCookieHeader {
     pub const IDENTIFIER: &'static str = "network.SetCookieHeader";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -371,6 +383,7 @@ impl<T: Into<String>> From<T> for UrlPatternPattern {
 }
 impl UrlPatternPattern {
     pub const IDENTIFIER: &'static str = "network.UrlPatternPattern";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UrlPatternString {
@@ -389,6 +402,7 @@ impl UrlPatternString {
 }
 impl UrlPatternString {
     pub const IDENTIFIER: &'static str = "network.UrlPatternString";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum InterceptPhase {
@@ -416,6 +430,7 @@ impl ContinueWithAuthCredentials {
 }
 impl ContinueWithAuthCredentials {
     pub const IDENTIFIER: &'static str = "network.ContinueWithAuthCredentials";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ContinueWithAuthNoCredentials {
@@ -438,6 +453,7 @@ impl ContinueWithAuthNoCredentials {
 }
 impl ContinueWithAuthNoCredentials {
     pub const IDENTIFIER: &'static str = "network.ContinueWithAuthNoCredentials";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AuthChallenge {
@@ -456,6 +472,7 @@ impl AuthChallenge {
 }
 impl AuthChallenge {
     pub const IDENTIFIER: &'static str = "network.AuthChallenge";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BaseParameters {
@@ -500,6 +517,7 @@ impl BaseParameters {
 }
 impl BaseParameters {
     pub const IDENTIFIER: &'static str = "network.BaseParameters";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FetchTimingInfo {
@@ -532,6 +550,7 @@ pub struct FetchTimingInfo {
 }
 impl FetchTimingInfo {
     pub const IDENTIFIER: &'static str = "network.FetchTimingInfo";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct Initiator {
@@ -569,6 +588,7 @@ pub enum InitiatorType {
 }
 impl Initiator {
     pub const IDENTIFIER: &'static str = "network.Initiator";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RequestData {
@@ -601,6 +621,7 @@ pub struct RequestData {
 }
 impl RequestData {
     pub const IDENTIFIER: &'static str = "network.RequestData";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResponseContent {
@@ -614,6 +635,7 @@ impl ResponseContent {
 }
 impl ResponseContent {
     pub const IDENTIFIER: &'static str = "network.ResponseContent";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResponseData {
@@ -651,5 +673,6 @@ pub struct ResponseData {
 }
 impl ResponseData {
     pub const IDENTIFIER: &'static str = "network.ResponseData";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 group_enum ! (NetworkTypes { AuthCredentials (AuthCredentials) , BytesValue (BytesValue) , StringValue (StringValue) , Base64Value (Base64Value) , Collector (Collector) , CollectorType (CollectorType) , SameSite (SameSite) , Cookie (Cookie) , CookieHeader (CookieHeader) , DataType (DataType) , Header (Header) , Intercept (Intercept) , Request (Request) , SetCookieHeader (SetCookieHeader) , UrlPattern (UrlPattern) , UrlPatternPattern (UrlPatternPattern) , UrlPatternString (UrlPatternString) , InterceptPhase (InterceptPhase) , ContinueWithAuthCredentials (ContinueWithAuthCredentials) , ContinueWithAuthNoCredentials (ContinueWithAuthNoCredentials) , AuthChallenge (AuthChallenge) , BaseParameters (BaseParameters) , FetchTimingInfo (FetchTimingInfo) , Initiator (Initiator) , RequestData (RequestData) , ResponseContent (ResponseContent) , ResponseData (ResponseData) });

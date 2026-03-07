@@ -12,14 +12,14 @@ pub enum GetStorageKeyMethod {
     #[serde(rename = "Storage.getStorageKey")]
     GetStorageKey,
 }
-impl GetStorageKeyMethod {
-    pub const IDENTIFIER: &'static str = "Storage.getStorageKey";
-}
 #[doc = "Returns storage key for the given frame. If no frame ID is provided,\nthe storage key of the target executing this command is returned.\n[getStorageKey](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-getStorageKey)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetStorageKey {
     pub method: GetStorageKeyMethod,
     pub params: GetStorageKeyParams,
+}
+impl GetStorageKey {
+    pub const IDENTIFIER: &'static str = "Storage.getStorageKey";
 }
 impl crate::CommandResult for GetStorageKey {
     type Result = super::results::GetStorageKeyResult;
@@ -47,14 +47,14 @@ pub enum ClearDataForOriginMethod {
     #[serde(rename = "Storage.clearDataForOrigin")]
     ClearDataForOrigin,
 }
-impl ClearDataForOriginMethod {
-    pub const IDENTIFIER: &'static str = "Storage.clearDataForOrigin";
-}
 #[doc = "Clears storage for origin.\n[clearDataForOrigin](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-clearDataForOrigin)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ClearDataForOrigin {
     pub method: ClearDataForOriginMethod,
     pub params: ClearDataForOriginParams,
+}
+impl ClearDataForOrigin {
+    pub const IDENTIFIER: &'static str = "Storage.clearDataForOrigin";
 }
 impl crate::CommandResult for ClearDataForOrigin {
     type Result = super::results::ClearDataForOriginResult;
@@ -82,14 +82,14 @@ pub enum ClearDataForStorageKeyMethod {
     #[serde(rename = "Storage.clearDataForStorageKey")]
     ClearDataForStorageKey,
 }
-impl ClearDataForStorageKeyMethod {
-    pub const IDENTIFIER: &'static str = "Storage.clearDataForStorageKey";
-}
 #[doc = "Clears storage for storage key.\n[clearDataForStorageKey](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-clearDataForStorageKey)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ClearDataForStorageKey {
     pub method: ClearDataForStorageKeyMethod,
     pub params: ClearDataForStorageKeyParams,
+}
+impl ClearDataForStorageKey {
+    pub const IDENTIFIER: &'static str = "Storage.clearDataForStorageKey";
 }
 impl crate::CommandResult for ClearDataForStorageKey {
     type Result = super::results::ClearDataForStorageKeyResult;
@@ -108,14 +108,14 @@ pub enum GetCookiesMethod {
     #[serde(rename = "Storage.getCookies")]
     GetCookies,
 }
-impl GetCookiesMethod {
-    pub const IDENTIFIER: &'static str = "Storage.getCookies";
-}
 #[doc = "Returns all browser cookies.\n[getCookies](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-getCookies)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetCookies {
     pub method: GetCookiesMethod,
     pub params: GetCookiesParams,
+}
+impl GetCookies {
+    pub const IDENTIFIER: &'static str = "Storage.getCookies";
 }
 impl crate::CommandResult for GetCookies {
     type Result = super::results::GetCookiesResult;
@@ -146,14 +146,14 @@ pub enum SetCookiesMethod {
     #[serde(rename = "Storage.setCookies")]
     SetCookies,
 }
-impl SetCookiesMethod {
-    pub const IDENTIFIER: &'static str = "Storage.setCookies";
-}
 #[doc = "Sets given cookies.\n[setCookies](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-setCookies)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetCookies {
     pub method: SetCookiesMethod,
     pub params: SetCookiesParams,
+}
+impl SetCookies {
+    pub const IDENTIFIER: &'static str = "Storage.setCookies";
 }
 impl crate::CommandResult for SetCookies {
     type Result = super::results::SetCookiesResult;
@@ -172,14 +172,14 @@ pub enum ClearCookiesMethod {
     #[serde(rename = "Storage.clearCookies")]
     ClearCookies,
 }
-impl ClearCookiesMethod {
-    pub const IDENTIFIER: &'static str = "Storage.clearCookies";
-}
 #[doc = "Clears cookies.\n[clearCookies](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-clearCookies)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ClearCookies {
     pub method: ClearCookiesMethod,
     pub params: ClearCookiesParams,
+}
+impl ClearCookies {
+    pub const IDENTIFIER: &'static str = "Storage.clearCookies";
 }
 impl crate::CommandResult for ClearCookies {
     type Result = super::results::ClearCookiesResult;
@@ -208,14 +208,14 @@ pub enum GetUsageAndQuotaMethod {
     #[serde(rename = "Storage.getUsageAndQuota")]
     GetUsageAndQuota,
 }
-impl GetUsageAndQuotaMethod {
-    pub const IDENTIFIER: &'static str = "Storage.getUsageAndQuota";
-}
 #[doc = "Returns usage and quota in bytes.\n[getUsageAndQuota](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-getUsageAndQuota)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetUsageAndQuota {
     pub method: GetUsageAndQuotaMethod,
     pub params: GetUsageAndQuotaParams,
+}
+impl GetUsageAndQuota {
+    pub const IDENTIFIER: &'static str = "Storage.getUsageAndQuota";
 }
 impl crate::CommandResult for GetUsageAndQuota {
     type Result = super::results::GetUsageAndQuotaResult;
@@ -250,14 +250,14 @@ pub enum OverrideQuotaForOriginMethod {
     #[serde(rename = "Storage.overrideQuotaForOrigin")]
     OverrideQuotaForOrigin,
 }
-impl OverrideQuotaForOriginMethod {
-    pub const IDENTIFIER: &'static str = "Storage.overrideQuotaForOrigin";
-}
 #[doc = "Override quota for the specified origin\n[overrideQuotaForOrigin](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-overrideQuotaForOrigin)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct OverrideQuotaForOrigin {
     pub method: OverrideQuotaForOriginMethod,
     pub params: OverrideQuotaForOriginParams,
+}
+impl OverrideQuotaForOrigin {
+    pub const IDENTIFIER: &'static str = "Storage.overrideQuotaForOrigin";
 }
 impl crate::CommandResult for OverrideQuotaForOrigin {
     type Result = super::results::OverrideQuotaForOriginResult;
@@ -286,14 +286,14 @@ pub enum TrackCacheStorageForOriginMethod {
     #[serde(rename = "Storage.trackCacheStorageForOrigin")]
     TrackCacheStorageForOrigin,
 }
-impl TrackCacheStorageForOriginMethod {
-    pub const IDENTIFIER: &'static str = "Storage.trackCacheStorageForOrigin";
-}
 #[doc = "Registers origin to be notified when an update occurs to its cache storage list.\n[trackCacheStorageForOrigin](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-trackCacheStorageForOrigin)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct TrackCacheStorageForOrigin {
     pub method: TrackCacheStorageForOriginMethod,
     pub params: TrackCacheStorageForOriginParams,
+}
+impl TrackCacheStorageForOrigin {
+    pub const IDENTIFIER: &'static str = "Storage.trackCacheStorageForOrigin";
 }
 impl crate::CommandResult for TrackCacheStorageForOrigin {
     type Result = super::results::TrackCacheStorageForOriginResult;
@@ -322,14 +322,14 @@ pub enum TrackCacheStorageForStorageKeyMethod {
     #[serde(rename = "Storage.trackCacheStorageForStorageKey")]
     TrackCacheStorageForStorageKey,
 }
-impl TrackCacheStorageForStorageKeyMethod {
-    pub const IDENTIFIER: &'static str = "Storage.trackCacheStorageForStorageKey";
-}
 #[doc = "Registers storage key to be notified when an update occurs to its cache storage list.\n[trackCacheStorageForStorageKey](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-trackCacheStorageForStorageKey)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct TrackCacheStorageForStorageKey {
     pub method: TrackCacheStorageForStorageKeyMethod,
     pub params: TrackCacheStorageForStorageKeyParams,
+}
+impl TrackCacheStorageForStorageKey {
+    pub const IDENTIFIER: &'static str = "Storage.trackCacheStorageForStorageKey";
 }
 impl crate::CommandResult for TrackCacheStorageForStorageKey {
     type Result = super::results::TrackCacheStorageForStorageKeyResult;
@@ -358,14 +358,14 @@ pub enum TrackIndexedDbForOriginMethod {
     #[serde(rename = "Storage.trackIndexedDBForOrigin")]
     TrackIndexedDbForOrigin,
 }
-impl TrackIndexedDbForOriginMethod {
-    pub const IDENTIFIER: &'static str = "Storage.trackIndexedDBForOrigin";
-}
 #[doc = "Registers origin to be notified when an update occurs to its IndexedDB.\n[trackIndexedDBForOrigin](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-trackIndexedDBForOrigin)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct TrackIndexedDbForOrigin {
     pub method: TrackIndexedDbForOriginMethod,
     pub params: TrackIndexedDbForOriginParams,
+}
+impl TrackIndexedDbForOrigin {
+    pub const IDENTIFIER: &'static str = "Storage.trackIndexedDBForOrigin";
 }
 impl crate::CommandResult for TrackIndexedDbForOrigin {
     type Result = super::results::TrackIndexedDbForOriginResult;
@@ -394,14 +394,14 @@ pub enum TrackIndexedDbForStorageKeyMethod {
     #[serde(rename = "Storage.trackIndexedDBForStorageKey")]
     TrackIndexedDbForStorageKey,
 }
-impl TrackIndexedDbForStorageKeyMethod {
-    pub const IDENTIFIER: &'static str = "Storage.trackIndexedDBForStorageKey";
-}
 #[doc = "Registers storage key to be notified when an update occurs to its IndexedDB.\n[trackIndexedDBForStorageKey](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-trackIndexedDBForStorageKey)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct TrackIndexedDbForStorageKey {
     pub method: TrackIndexedDbForStorageKeyMethod,
     pub params: TrackIndexedDbForStorageKeyParams,
+}
+impl TrackIndexedDbForStorageKey {
+    pub const IDENTIFIER: &'static str = "Storage.trackIndexedDBForStorageKey";
 }
 impl crate::CommandResult for TrackIndexedDbForStorageKey {
     type Result = super::results::TrackIndexedDbForStorageKeyResult;
@@ -430,14 +430,14 @@ pub enum UntrackCacheStorageForOriginMethod {
     #[serde(rename = "Storage.untrackCacheStorageForOrigin")]
     UntrackCacheStorageForOrigin,
 }
-impl UntrackCacheStorageForOriginMethod {
-    pub const IDENTIFIER: &'static str = "Storage.untrackCacheStorageForOrigin";
-}
 #[doc = "Unregisters origin from receiving notifications for cache storage.\n[untrackCacheStorageForOrigin](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-untrackCacheStorageForOrigin)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct UntrackCacheStorageForOrigin {
     pub method: UntrackCacheStorageForOriginMethod,
     pub params: UntrackCacheStorageForOriginParams,
+}
+impl UntrackCacheStorageForOrigin {
+    pub const IDENTIFIER: &'static str = "Storage.untrackCacheStorageForOrigin";
 }
 impl crate::CommandResult for UntrackCacheStorageForOrigin {
     type Result = super::results::UntrackCacheStorageForOriginResult;
@@ -466,14 +466,14 @@ pub enum UntrackCacheStorageForStorageKeyMethod {
     #[serde(rename = "Storage.untrackCacheStorageForStorageKey")]
     UntrackCacheStorageForStorageKey,
 }
-impl UntrackCacheStorageForStorageKeyMethod {
-    pub const IDENTIFIER: &'static str = "Storage.untrackCacheStorageForStorageKey";
-}
 #[doc = "Unregisters storage key from receiving notifications for cache storage.\n[untrackCacheStorageForStorageKey](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-untrackCacheStorageForStorageKey)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct UntrackCacheStorageForStorageKey {
     pub method: UntrackCacheStorageForStorageKeyMethod,
     pub params: UntrackCacheStorageForStorageKeyParams,
+}
+impl UntrackCacheStorageForStorageKey {
+    pub const IDENTIFIER: &'static str = "Storage.untrackCacheStorageForStorageKey";
 }
 impl crate::CommandResult for UntrackCacheStorageForStorageKey {
     type Result = super::results::UntrackCacheStorageForStorageKeyResult;
@@ -502,14 +502,14 @@ pub enum UntrackIndexedDbForOriginMethod {
     #[serde(rename = "Storage.untrackIndexedDBForOrigin")]
     UntrackIndexedDbForOrigin,
 }
-impl UntrackIndexedDbForOriginMethod {
-    pub const IDENTIFIER: &'static str = "Storage.untrackIndexedDBForOrigin";
-}
 #[doc = "Unregisters origin from receiving notifications for IndexedDB.\n[untrackIndexedDBForOrigin](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-untrackIndexedDBForOrigin)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct UntrackIndexedDbForOrigin {
     pub method: UntrackIndexedDbForOriginMethod,
     pub params: UntrackIndexedDbForOriginParams,
+}
+impl UntrackIndexedDbForOrigin {
+    pub const IDENTIFIER: &'static str = "Storage.untrackIndexedDBForOrigin";
 }
 impl crate::CommandResult for UntrackIndexedDbForOrigin {
     type Result = super::results::UntrackIndexedDbForOriginResult;
@@ -538,14 +538,14 @@ pub enum UntrackIndexedDbForStorageKeyMethod {
     #[serde(rename = "Storage.untrackIndexedDBForStorageKey")]
     UntrackIndexedDbForStorageKey,
 }
-impl UntrackIndexedDbForStorageKeyMethod {
-    pub const IDENTIFIER: &'static str = "Storage.untrackIndexedDBForStorageKey";
-}
 #[doc = "Unregisters storage key from receiving notifications for IndexedDB.\n[untrackIndexedDBForStorageKey](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-untrackIndexedDBForStorageKey)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct UntrackIndexedDbForStorageKey {
     pub method: UntrackIndexedDbForStorageKeyMethod,
     pub params: UntrackIndexedDbForStorageKeyParams,
+}
+impl UntrackIndexedDbForStorageKey {
+    pub const IDENTIFIER: &'static str = "Storage.untrackIndexedDBForStorageKey";
 }
 impl crate::CommandResult for UntrackIndexedDbForStorageKey {
     type Result = super::results::UntrackIndexedDbForStorageKeyResult;
@@ -558,14 +558,14 @@ pub enum GetTrustTokensMethod {
     #[serde(rename = "Storage.getTrustTokens")]
     GetTrustTokens,
 }
-impl GetTrustTokensMethod {
-    pub const IDENTIFIER: &'static str = "Storage.getTrustTokens";
-}
 #[doc = "Returns the number of stored Trust Tokens per issuer for the\ncurrent browsing context.\n[getTrustTokens](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-getTrustTokens)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetTrustTokens {
     pub method: GetTrustTokensMethod,
     pub params: GetTrustTokensParams,
+}
+impl GetTrustTokens {
+    pub const IDENTIFIER: &'static str = "Storage.getTrustTokens";
 }
 impl crate::CommandResult for GetTrustTokens {
     type Result = super::results::GetTrustTokensResult;
@@ -593,14 +593,14 @@ pub enum ClearTrustTokensMethod {
     #[serde(rename = "Storage.clearTrustTokens")]
     ClearTrustTokens,
 }
-impl ClearTrustTokensMethod {
-    pub const IDENTIFIER: &'static str = "Storage.clearTrustTokens";
-}
 #[doc = "Removes all Trust Tokens issued by the provided issuerOrigin.\nLeaves other stored data, including the issuer's Redemption Records, intact.\n[clearTrustTokens](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-clearTrustTokens)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ClearTrustTokens {
     pub method: ClearTrustTokensMethod,
     pub params: ClearTrustTokensParams,
+}
+impl ClearTrustTokens {
+    pub const IDENTIFIER: &'static str = "Storage.clearTrustTokens";
 }
 impl crate::CommandResult for ClearTrustTokens {
     type Result = super::results::ClearTrustTokensResult;
@@ -626,14 +626,14 @@ pub enum GetInterestGroupDetailsMethod {
     #[serde(rename = "Storage.getInterestGroupDetails")]
     GetInterestGroupDetails,
 }
-impl GetInterestGroupDetailsMethod {
-    pub const IDENTIFIER: &'static str = "Storage.getInterestGroupDetails";
-}
 #[doc = "Gets details for a named interest group.\n[getInterestGroupDetails](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-getInterestGroupDetails)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetInterestGroupDetails {
     pub method: GetInterestGroupDetailsMethod,
     pub params: GetInterestGroupDetailsParams,
+}
+impl GetInterestGroupDetails {
+    pub const IDENTIFIER: &'static str = "Storage.getInterestGroupDetails";
 }
 impl crate::CommandResult for GetInterestGroupDetails {
     type Result = super::results::GetInterestGroupDetailsResult;
@@ -656,14 +656,14 @@ pub enum SetInterestGroupTrackingMethod {
     #[serde(rename = "Storage.setInterestGroupTracking")]
     SetInterestGroupTracking,
 }
-impl SetInterestGroupTrackingMethod {
-    pub const IDENTIFIER: &'static str = "Storage.setInterestGroupTracking";
-}
 #[doc = "Enables/Disables issuing of interestGroupAccessed events.\n[setInterestGroupTracking](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-setInterestGroupTracking)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetInterestGroupTracking {
     pub method: SetInterestGroupTrackingMethod,
     pub params: SetInterestGroupTrackingParams,
+}
+impl SetInterestGroupTracking {
+    pub const IDENTIFIER: &'static str = "Storage.setInterestGroupTracking";
 }
 impl crate::CommandResult for SetInterestGroupTracking {
     type Result = super::results::SetInterestGroupTrackingResult;
@@ -686,14 +686,14 @@ pub enum SetInterestGroupAuctionTrackingMethod {
     #[serde(rename = "Storage.setInterestGroupAuctionTracking")]
     SetInterestGroupAuctionTracking,
 }
-impl SetInterestGroupAuctionTrackingMethod {
-    pub const IDENTIFIER: &'static str = "Storage.setInterestGroupAuctionTracking";
-}
 #[doc = "Enables/Disables issuing of interestGroupAuctionEventOccurred and\ninterestGroupAuctionNetworkRequestCreated.\n[setInterestGroupAuctionTracking](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-setInterestGroupAuctionTracking)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetInterestGroupAuctionTracking {
     pub method: SetInterestGroupAuctionTrackingMethod,
     pub params: SetInterestGroupAuctionTrackingParams,
+}
+impl SetInterestGroupAuctionTracking {
+    pub const IDENTIFIER: &'static str = "Storage.setInterestGroupAuctionTracking";
 }
 impl crate::CommandResult for SetInterestGroupAuctionTracking {
     type Result = super::results::SetInterestGroupAuctionTrackingResult;
@@ -721,14 +721,14 @@ pub enum GetSharedStorageMetadataMethod {
     #[serde(rename = "Storage.getSharedStorageMetadata")]
     GetSharedStorageMetadata,
 }
-impl GetSharedStorageMetadataMethod {
-    pub const IDENTIFIER: &'static str = "Storage.getSharedStorageMetadata";
-}
 #[doc = "Gets metadata for an origin's shared storage.\n[getSharedStorageMetadata](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-getSharedStorageMetadata)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetSharedStorageMetadata {
     pub method: GetSharedStorageMetadataMethod,
     pub params: GetSharedStorageMetadataParams,
+}
+impl GetSharedStorageMetadata {
+    pub const IDENTIFIER: &'static str = "Storage.getSharedStorageMetadata";
 }
 impl crate::CommandResult for GetSharedStorageMetadata {
     type Result = super::results::GetSharedStorageMetadataResult;
@@ -756,14 +756,14 @@ pub enum GetSharedStorageEntriesMethod {
     #[serde(rename = "Storage.getSharedStorageEntries")]
     GetSharedStorageEntries,
 }
-impl GetSharedStorageEntriesMethod {
-    pub const IDENTIFIER: &'static str = "Storage.getSharedStorageEntries";
-}
 #[doc = "Gets the entries in an given origin's shared storage.\n[getSharedStorageEntries](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-getSharedStorageEntries)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetSharedStorageEntries {
     pub method: GetSharedStorageEntriesMethod,
     pub params: GetSharedStorageEntriesParams,
+}
+impl GetSharedStorageEntries {
+    pub const IDENTIFIER: &'static str = "Storage.getSharedStorageEntries";
 }
 impl crate::CommandResult for GetSharedStorageEntries {
     type Result = super::results::GetSharedStorageEntriesResult;
@@ -802,14 +802,14 @@ pub enum SetSharedStorageEntryMethod {
     #[serde(rename = "Storage.setSharedStorageEntry")]
     SetSharedStorageEntry,
 }
-impl SetSharedStorageEntryMethod {
-    pub const IDENTIFIER: &'static str = "Storage.setSharedStorageEntry";
-}
 #[doc = "Sets entry with `key` and `value` for a given origin's shared storage.\n[setSharedStorageEntry](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-setSharedStorageEntry)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetSharedStorageEntry {
     pub method: SetSharedStorageEntryMethod,
     pub params: SetSharedStorageEntryParams,
+}
+impl SetSharedStorageEntry {
+    pub const IDENTIFIER: &'static str = "Storage.setSharedStorageEntry";
 }
 impl crate::CommandResult for SetSharedStorageEntry {
     type Result = super::results::SetSharedStorageEntryResult;
@@ -835,14 +835,14 @@ pub enum DeleteSharedStorageEntryMethod {
     #[serde(rename = "Storage.deleteSharedStorageEntry")]
     DeleteSharedStorageEntry,
 }
-impl DeleteSharedStorageEntryMethod {
-    pub const IDENTIFIER: &'static str = "Storage.deleteSharedStorageEntry";
-}
 #[doc = "Deletes entry for `key` (if it exists) for a given origin's shared storage.\n[deleteSharedStorageEntry](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-deleteSharedStorageEntry)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct DeleteSharedStorageEntry {
     pub method: DeleteSharedStorageEntryMethod,
     pub params: DeleteSharedStorageEntryParams,
+}
+impl DeleteSharedStorageEntry {
+    pub const IDENTIFIER: &'static str = "Storage.deleteSharedStorageEntry";
 }
 impl crate::CommandResult for DeleteSharedStorageEntry {
     type Result = super::results::DeleteSharedStorageEntryResult;
@@ -870,14 +870,14 @@ pub enum ClearSharedStorageEntriesMethod {
     #[serde(rename = "Storage.clearSharedStorageEntries")]
     ClearSharedStorageEntries,
 }
-impl ClearSharedStorageEntriesMethod {
-    pub const IDENTIFIER: &'static str = "Storage.clearSharedStorageEntries";
-}
 #[doc = "Clears all entries for a given origin's shared storage.\n[clearSharedStorageEntries](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-clearSharedStorageEntries)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ClearSharedStorageEntries {
     pub method: ClearSharedStorageEntriesMethod,
     pub params: ClearSharedStorageEntriesParams,
+}
+impl ClearSharedStorageEntries {
+    pub const IDENTIFIER: &'static str = "Storage.clearSharedStorageEntries";
 }
 impl crate::CommandResult for ClearSharedStorageEntries {
     type Result = super::results::ClearSharedStorageEntriesResult;
@@ -905,14 +905,14 @@ pub enum ResetSharedStorageBudgetMethod {
     #[serde(rename = "Storage.resetSharedStorageBudget")]
     ResetSharedStorageBudget,
 }
-impl ResetSharedStorageBudgetMethod {
-    pub const IDENTIFIER: &'static str = "Storage.resetSharedStorageBudget";
-}
 #[doc = "Resets the budget for `ownerOrigin` by clearing all budget withdrawals.\n[resetSharedStorageBudget](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-resetSharedStorageBudget)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ResetSharedStorageBudget {
     pub method: ResetSharedStorageBudgetMethod,
     pub params: ResetSharedStorageBudgetParams,
+}
+impl ResetSharedStorageBudget {
+    pub const IDENTIFIER: &'static str = "Storage.resetSharedStorageBudget";
 }
 impl crate::CommandResult for ResetSharedStorageBudget {
     type Result = super::results::ResetSharedStorageBudgetResult;
@@ -935,14 +935,14 @@ pub enum SetSharedStorageTrackingMethod {
     #[serde(rename = "Storage.setSharedStorageTracking")]
     SetSharedStorageTracking,
 }
-impl SetSharedStorageTrackingMethod {
-    pub const IDENTIFIER: &'static str = "Storage.setSharedStorageTracking";
-}
 #[doc = "Enables/disables issuing of sharedStorageAccessed events.\n[setSharedStorageTracking](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-setSharedStorageTracking)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetSharedStorageTracking {
     pub method: SetSharedStorageTrackingMethod,
     pub params: SetSharedStorageTrackingParams,
+}
+impl SetSharedStorageTracking {
+    pub const IDENTIFIER: &'static str = "Storage.setSharedStorageTracking";
 }
 impl crate::CommandResult for SetSharedStorageTracking {
     type Result = super::results::SetSharedStorageTrackingResult;
@@ -968,14 +968,14 @@ pub enum SetStorageBucketTrackingMethod {
     #[serde(rename = "Storage.setStorageBucketTracking")]
     SetStorageBucketTracking,
 }
-impl SetStorageBucketTrackingMethod {
-    pub const IDENTIFIER: &'static str = "Storage.setStorageBucketTracking";
-}
 #[doc = "Set tracking for a storage key's buckets.\n[setStorageBucketTracking](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-setStorageBucketTracking)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetStorageBucketTracking {
     pub method: SetStorageBucketTrackingMethod,
     pub params: SetStorageBucketTrackingParams,
+}
+impl SetStorageBucketTracking {
+    pub const IDENTIFIER: &'static str = "Storage.setStorageBucketTracking";
 }
 impl crate::CommandResult for SetStorageBucketTracking {
     type Result = super::results::SetStorageBucketTrackingResult;
@@ -998,14 +998,14 @@ pub enum DeleteStorageBucketMethod {
     #[serde(rename = "Storage.deleteStorageBucket")]
     DeleteStorageBucket,
 }
-impl DeleteStorageBucketMethod {
-    pub const IDENTIFIER: &'static str = "Storage.deleteStorageBucket";
-}
 #[doc = "Deletes the Storage Bucket with the given storage key and bucket name.\n[deleteStorageBucket](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-deleteStorageBucket)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct DeleteStorageBucket {
     pub method: DeleteStorageBucketMethod,
     pub params: DeleteStorageBucketParams,
+}
+impl DeleteStorageBucket {
+    pub const IDENTIFIER: &'static str = "Storage.deleteStorageBucket";
 }
 impl crate::CommandResult for DeleteStorageBucket {
     type Result = super::results::DeleteStorageBucketResult;
@@ -1018,14 +1018,14 @@ pub enum RunBounceTrackingMitigationsMethod {
     #[serde(rename = "Storage.runBounceTrackingMitigations")]
     RunBounceTrackingMitigations,
 }
-impl RunBounceTrackingMitigationsMethod {
-    pub const IDENTIFIER: &'static str = "Storage.runBounceTrackingMitigations";
-}
 #[doc = "Deletes state for sites identified as potential bounce trackers, immediately.\n[runBounceTrackingMitigations](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-runBounceTrackingMitigations)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct RunBounceTrackingMitigations {
     pub method: RunBounceTrackingMitigationsMethod,
     pub params: RunBounceTrackingMitigationsParams,
+}
+impl RunBounceTrackingMitigations {
+    pub const IDENTIFIER: &'static str = "Storage.runBounceTrackingMitigations";
 }
 impl crate::CommandResult for RunBounceTrackingMitigations {
     type Result = super::results::RunBounceTrackingMitigationsResult;
@@ -1049,14 +1049,14 @@ pub enum SetAttributionReportingLocalTestingModeMethod {
     #[serde(rename = "Storage.setAttributionReportingLocalTestingMode")]
     SetAttributionReportingLocalTestingMode,
 }
-impl SetAttributionReportingLocalTestingModeMethod {
-    pub const IDENTIFIER: &'static str = "Storage.setAttributionReportingLocalTestingMode";
-}
 #[doc = "https://wicg.github.io/attribution-reporting-api/\n[setAttributionReportingLocalTestingMode](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-setAttributionReportingLocalTestingMode)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetAttributionReportingLocalTestingMode {
     pub method: SetAttributionReportingLocalTestingModeMethod,
     pub params: SetAttributionReportingLocalTestingModeParams,
+}
+impl SetAttributionReportingLocalTestingMode {
+    pub const IDENTIFIER: &'static str = "Storage.setAttributionReportingLocalTestingMode";
 }
 impl crate::CommandResult for SetAttributionReportingLocalTestingMode {
     type Result = super::results::SetAttributionReportingLocalTestingModeResult;
@@ -1079,14 +1079,14 @@ pub enum SetAttributionReportingTrackingMethod {
     #[serde(rename = "Storage.setAttributionReportingTracking")]
     SetAttributionReportingTracking,
 }
-impl SetAttributionReportingTrackingMethod {
-    pub const IDENTIFIER: &'static str = "Storage.setAttributionReportingTracking";
-}
 #[doc = "Enables/disables issuing of Attribution Reporting events.\n[setAttributionReportingTracking](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-setAttributionReportingTracking)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetAttributionReportingTracking {
     pub method: SetAttributionReportingTrackingMethod,
     pub params: SetAttributionReportingTrackingParams,
+}
+impl SetAttributionReportingTracking {
+    pub const IDENTIFIER: &'static str = "Storage.setAttributionReportingTracking";
 }
 impl crate::CommandResult for SetAttributionReportingTracking {
     type Result = super::results::SetAttributionReportingTrackingResult;
@@ -1099,14 +1099,14 @@ pub enum SendPendingAttributionReportsMethod {
     #[serde(rename = "Storage.sendPendingAttributionReports")]
     SendPendingAttributionReports,
 }
-impl SendPendingAttributionReportsMethod {
-    pub const IDENTIFIER: &'static str = "Storage.sendPendingAttributionReports";
-}
 #[doc = "Sends all pending Attribution Reports immediately, regardless of their\nscheduled report time.\n[sendPendingAttributionReports](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-sendPendingAttributionReports)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SendPendingAttributionReports {
     pub method: SendPendingAttributionReportsMethod,
     pub params: SendPendingAttributionReportsParams,
+}
+impl SendPendingAttributionReports {
+    pub const IDENTIFIER: &'static str = "Storage.sendPendingAttributionReports";
 }
 impl crate::CommandResult for SendPendingAttributionReports {
     type Result = super::results::SendPendingAttributionReportsResult;
@@ -1119,14 +1119,14 @@ pub enum GetRelatedWebsiteSetsMethod {
     #[serde(rename = "Storage.getRelatedWebsiteSets")]
     GetRelatedWebsiteSets,
 }
-impl GetRelatedWebsiteSetsMethod {
-    pub const IDENTIFIER: &'static str = "Storage.getRelatedWebsiteSets";
-}
 #[doc = "Returns the effective Related Website Sets in use by this profile for the browser\nsession. The effective Related Website Sets will not change during a browser session.\n[getRelatedWebsiteSets](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-getRelatedWebsiteSets)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetRelatedWebsiteSets {
     pub method: GetRelatedWebsiteSetsMethod,
     pub params: GetRelatedWebsiteSetsParams,
+}
+impl GetRelatedWebsiteSets {
+    pub const IDENTIFIER: &'static str = "Storage.getRelatedWebsiteSets";
 }
 impl crate::CommandResult for GetRelatedWebsiteSets {
     type Result = super::results::GetRelatedWebsiteSetsResult;
@@ -1155,14 +1155,14 @@ pub enum GetAffectedUrlsForThirdPartyCookieMetadataMethod {
     #[serde(rename = "Storage.getAffectedUrlsForThirdPartyCookieMetadata")]
     GetAffectedUrlsForThirdPartyCookieMetadata,
 }
-impl GetAffectedUrlsForThirdPartyCookieMetadataMethod {
-    pub const IDENTIFIER: &'static str = "Storage.getAffectedUrlsForThirdPartyCookieMetadata";
-}
 #[doc = "Returns the list of URLs from a page and its embedded resources that match\nexisting grace period URL pattern rules.\nhttps://developers.google.com/privacy-sandbox/cookies/temporary-exceptions/grace-period\n[getAffectedUrlsForThirdPartyCookieMetadata](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-getAffectedUrlsForThirdPartyCookieMetadata)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetAffectedUrlsForThirdPartyCookieMetadata {
     pub method: GetAffectedUrlsForThirdPartyCookieMetadataMethod,
     pub params: GetAffectedUrlsForThirdPartyCookieMetadataParams,
+}
+impl GetAffectedUrlsForThirdPartyCookieMetadata {
+    pub const IDENTIFIER: &'static str = "Storage.getAffectedUrlsForThirdPartyCookieMetadata";
 }
 impl crate::CommandResult for GetAffectedUrlsForThirdPartyCookieMetadata {
     type Result = super::results::GetAffectedUrlsForThirdPartyCookieMetadataResult;
@@ -1195,13 +1195,13 @@ pub enum SetProtectedAudienceKAnonymityMethod {
     #[serde(rename = "Storage.setProtectedAudienceKAnonymity")]
     SetProtectedAudienceKAnonymity,
 }
-impl SetProtectedAudienceKAnonymityMethod {
-    pub const IDENTIFIER: &'static str = "Storage.setProtectedAudienceKAnonymity";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetProtectedAudienceKAnonymity {
     pub method: SetProtectedAudienceKAnonymityMethod,
     pub params: SetProtectedAudienceKAnonymityParams,
+}
+impl SetProtectedAudienceKAnonymity {
+    pub const IDENTIFIER: &'static str = "Storage.setProtectedAudienceKAnonymity";
 }
 impl crate::CommandResult for SetProtectedAudienceKAnonymity {
     type Result = super::results::SetProtectedAudienceKAnonymityResult;

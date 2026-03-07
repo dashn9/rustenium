@@ -18,14 +18,14 @@ pub enum DeleteCacheMethod {
     #[serde(rename = "CacheStorage.deleteCache")]
     DeleteCache,
 }
-impl DeleteCacheMethod {
-    pub const IDENTIFIER: &'static str = "CacheStorage.deleteCache";
-}
 #[doc = "Deletes a cache.\n[deleteCache](https://chromedevtools.github.io/devtools-protocol/tot/CacheStorage/#method-deleteCache)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct DeleteCache {
     pub method: DeleteCacheMethod,
     pub params: DeleteCacheParams,
+}
+impl DeleteCache {
+    pub const IDENTIFIER: &'static str = "CacheStorage.deleteCache";
 }
 impl crate::CommandResult for DeleteCache {
     type Result = super::results::DeleteCacheResult;
@@ -53,14 +53,14 @@ pub enum DeleteEntryMethod {
     #[serde(rename = "CacheStorage.deleteEntry")]
     DeleteEntry,
 }
-impl DeleteEntryMethod {
-    pub const IDENTIFIER: &'static str = "CacheStorage.deleteEntry";
-}
 #[doc = "Deletes a cache entry.\n[deleteEntry](https://chromedevtools.github.io/devtools-protocol/tot/CacheStorage/#method-deleteEntry)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct DeleteEntry {
     pub method: DeleteEntryMethod,
     pub params: DeleteEntryParams,
+}
+impl DeleteEntry {
+    pub const IDENTIFIER: &'static str = "CacheStorage.deleteEntry";
 }
 impl crate::CommandResult for DeleteEntry {
     type Result = super::results::DeleteEntryResult;
@@ -89,14 +89,14 @@ pub enum RequestCacheNamesMethod {
     #[serde(rename = "CacheStorage.requestCacheNames")]
     RequestCacheNames,
 }
-impl RequestCacheNamesMethod {
-    pub const IDENTIFIER: &'static str = "CacheStorage.requestCacheNames";
-}
 #[doc = "Requests cache names.\n[requestCacheNames](https://chromedevtools.github.io/devtools-protocol/tot/CacheStorage/#method-requestCacheNames)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct RequestCacheNames {
     pub method: RequestCacheNamesMethod,
     pub params: RequestCacheNamesParams,
+}
+impl RequestCacheNames {
+    pub const IDENTIFIER: &'static str = "CacheStorage.requestCacheNames";
 }
 impl crate::CommandResult for RequestCacheNames {
     type Result = super::results::RequestCacheNamesResult;
@@ -133,14 +133,14 @@ pub enum RequestCachedResponseMethod {
     #[serde(rename = "CacheStorage.requestCachedResponse")]
     RequestCachedResponse,
 }
-impl RequestCachedResponseMethod {
-    pub const IDENTIFIER: &'static str = "CacheStorage.requestCachedResponse";
-}
 #[doc = "Fetches cache entry.\n[requestCachedResponse](https://chromedevtools.github.io/devtools-protocol/tot/CacheStorage/#method-requestCachedResponse)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct RequestCachedResponse {
     pub method: RequestCachedResponseMethod,
     pub params: RequestCachedResponseParams,
+}
+impl RequestCachedResponse {
+    pub const IDENTIFIER: &'static str = "CacheStorage.requestCachedResponse";
 }
 impl crate::CommandResult for RequestCachedResponse {
     type Result = super::results::RequestCachedResponseResult;
@@ -182,14 +182,14 @@ pub enum RequestEntriesMethod {
     #[serde(rename = "CacheStorage.requestEntries")]
     RequestEntries,
 }
-impl RequestEntriesMethod {
-    pub const IDENTIFIER: &'static str = "CacheStorage.requestEntries";
-}
 #[doc = "Requests data from cache.\n[requestEntries](https://chromedevtools.github.io/devtools-protocol/tot/CacheStorage/#method-requestEntries)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct RequestEntries {
     pub method: RequestEntriesMethod,
     pub params: RequestEntriesParams,
+}
+impl RequestEntries {
+    pub const IDENTIFIER: &'static str = "CacheStorage.requestEntries";
 }
 impl crate::CommandResult for RequestEntries {
     type Result = super::results::RequestEntriesResult;

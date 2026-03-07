@@ -21,13 +21,13 @@ pub enum DialogShownMethod {
     #[serde(rename = "FedCm.dialogShown")]
     DialogShown,
 }
-impl DialogShownMethod {
-    pub const IDENTIFIER: &'static str = "FedCm.dialogShown";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct DialogShown {
     pub method: DialogShownMethod,
     pub params: DialogShownParams,
+}
+impl DialogShown {
+    pub const IDENTIFIER: &'static str = "FedCm.dialogShown";
 }
 #[doc = "Triggered when a dialog is closed, either by user action, JS abort,\nor a command below.\n[dialogClosed](https://chromedevtools.github.io/devtools-protocol/tot/FedCm/#event-dialogClosed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -40,13 +40,13 @@ pub enum DialogClosedMethod {
     #[serde(rename = "FedCm.dialogClosed")]
     DialogClosed,
 }
-impl DialogClosedMethod {
-    pub const IDENTIFIER: &'static str = "FedCm.dialogClosed";
-}
 #[doc = "Triggered when a dialog is closed, either by user action, JS abort,\nor a command below.\n[dialogClosed](https://chromedevtools.github.io/devtools-protocol/tot/FedCm/#event-dialogClosed)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct DialogClosed {
     pub method: DialogClosedMethod,
     pub params: DialogClosedParams,
+}
+impl DialogClosed {
+    pub const IDENTIFIER: &'static str = "FedCm.dialogClosed";
 }
 group_enum ! (FedCmEvents { DialogShown (DialogShown) , DialogClosed (DialogClosed) });

@@ -7,14 +7,14 @@ pub enum EnableMethod {
     #[serde(rename = "DeviceAccess.enable")]
     Enable,
 }
-impl EnableMethod {
-    pub const IDENTIFIER: &'static str = "DeviceAccess.enable";
-}
 #[doc = "Enable events in this domain.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/DeviceAccess/#method-enable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl Enable {
+    pub const IDENTIFIER: &'static str = "DeviceAccess.enable";
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -27,14 +27,14 @@ pub enum DisableMethod {
     #[serde(rename = "DeviceAccess.disable")]
     Disable,
 }
-impl DisableMethod {
-    pub const IDENTIFIER: &'static str = "DeviceAccess.disable";
-}
 #[doc = "Disable events in this domain.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/DeviceAccess/#method-disable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
+}
+impl Disable {
+    pub const IDENTIFIER: &'static str = "DeviceAccess.disable";
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -63,14 +63,14 @@ pub enum SelectPromptMethod {
     #[serde(rename = "DeviceAccess.selectPrompt")]
     SelectPrompt,
 }
-impl SelectPromptMethod {
-    pub const IDENTIFIER: &'static str = "DeviceAccess.selectPrompt";
-}
 #[doc = "Select a device in response to a DeviceAccess.deviceRequestPrompted event.\n[selectPrompt](https://chromedevtools.github.io/devtools-protocol/tot/DeviceAccess/#method-selectPrompt)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SelectPrompt {
     pub method: SelectPromptMethod,
     pub params: SelectPromptParams,
+}
+impl SelectPrompt {
+    pub const IDENTIFIER: &'static str = "DeviceAccess.selectPrompt";
 }
 impl crate::CommandResult for SelectPrompt {
     type Result = super::results::SelectPromptResult;
@@ -91,14 +91,14 @@ pub enum CancelPromptMethod {
     #[serde(rename = "DeviceAccess.cancelPrompt")]
     CancelPrompt,
 }
-impl CancelPromptMethod {
-    pub const IDENTIFIER: &'static str = "DeviceAccess.cancelPrompt";
-}
 #[doc = "Cancel a prompt in response to a DeviceAccess.deviceRequestPrompted event.\n[cancelPrompt](https://chromedevtools.github.io/devtools-protocol/tot/DeviceAccess/#method-cancelPrompt)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct CancelPrompt {
     pub method: CancelPromptMethod,
     pub params: CancelPromptParams,
+}
+impl CancelPrompt {
+    pub const IDENTIFIER: &'static str = "DeviceAccess.cancelPrompt";
 }
 impl crate::CommandResult for CancelPrompt {
     type Result = super::results::CancelPromptResult;

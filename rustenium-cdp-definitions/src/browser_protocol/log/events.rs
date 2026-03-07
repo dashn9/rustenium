@@ -11,13 +11,13 @@ pub enum EntryAddedMethod {
     #[serde(rename = "Log.entryAdded")]
     EntryAdded,
 }
-impl EntryAddedMethod {
-    pub const IDENTIFIER: &'static str = "Log.entryAdded";
-}
 #[doc = "Issued when new message was logged.\n[entryAdded](https://chromedevtools.github.io/devtools-protocol/tot/Log/#event-entryAdded)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct EntryAdded {
     pub method: EntryAddedMethod,
     pub params: EntryAddedParams,
+}
+impl EntryAdded {
+    pub const IDENTIFIER: &'static str = "Log.entryAdded";
 }
 group_enum ! (LogEvents { EntryAdded (EntryAdded) });

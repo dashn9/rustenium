@@ -6,12 +6,13 @@ pub enum EntryAddedMethod {
     #[serde(rename = "log.entryAdded")]
     EntryAdded,
 }
-impl EntryAddedMethod {
-    pub const IDENTIFIER: &'static str = "log.entryAdded";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct EntryAdded {
     pub method: EntryAddedMethod,
     pub params: EntryAddedParams,
+}
+impl EntryAdded {
+    pub const IDENTIFIER: &'static str = "log.entryAdded";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 group_enum ! (LogEvents { EntryAdded (EntryAdded) });

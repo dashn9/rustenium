@@ -7,14 +7,14 @@ pub enum GetDomCountersMethod {
     #[serde(rename = "Memory.getDOMCounters")]
     GetDomCounters,
 }
-impl GetDomCountersMethod {
-    pub const IDENTIFIER: &'static str = "Memory.getDOMCounters";
-}
 #[doc = "Retruns current DOM object counters.\n[getDOMCounters](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-getDOMCounters)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetDomCounters {
     pub method: GetDomCountersMethod,
     pub params: GetDomCountersParams,
+}
+impl GetDomCounters {
+    pub const IDENTIFIER: &'static str = "Memory.getDOMCounters";
 }
 impl crate::CommandResult for GetDomCounters {
     type Result = super::results::GetDomCountersResult;
@@ -27,14 +27,14 @@ pub enum GetDomCountersForLeakDetectionMethod {
     #[serde(rename = "Memory.getDOMCountersForLeakDetection")]
     GetDomCountersForLeakDetection,
 }
-impl GetDomCountersForLeakDetectionMethod {
-    pub const IDENTIFIER: &'static str = "Memory.getDOMCountersForLeakDetection";
-}
 #[doc = "Retruns DOM object counters after preparing renderer for leak detection.\n[getDOMCountersForLeakDetection](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-getDOMCountersForLeakDetection)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetDomCountersForLeakDetection {
     pub method: GetDomCountersForLeakDetectionMethod,
     pub params: GetDomCountersForLeakDetectionParams,
+}
+impl GetDomCountersForLeakDetection {
+    pub const IDENTIFIER: &'static str = "Memory.getDOMCountersForLeakDetection";
 }
 impl crate::CommandResult for GetDomCountersForLeakDetection {
     type Result = super::results::GetDomCountersForLeakDetectionResult;
@@ -47,14 +47,14 @@ pub enum PrepareForLeakDetectionMethod {
     #[serde(rename = "Memory.prepareForLeakDetection")]
     PrepareForLeakDetection,
 }
-impl PrepareForLeakDetectionMethod {
-    pub const IDENTIFIER: &'static str = "Memory.prepareForLeakDetection";
-}
 #[doc = "Prepares for leak detection by terminating workers, stopping spellcheckers,\ndropping non-essential internal caches, running garbage collections, etc.\n[prepareForLeakDetection](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-prepareForLeakDetection)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct PrepareForLeakDetection {
     pub method: PrepareForLeakDetectionMethod,
     pub params: PrepareForLeakDetectionParams,
+}
+impl PrepareForLeakDetection {
+    pub const IDENTIFIER: &'static str = "Memory.prepareForLeakDetection";
 }
 impl crate::CommandResult for PrepareForLeakDetection {
     type Result = super::results::PrepareForLeakDetectionResult;
@@ -67,14 +67,14 @@ pub enum ForciblyPurgeJavaScriptMemoryMethod {
     #[serde(rename = "Memory.forciblyPurgeJavaScriptMemory")]
     ForciblyPurgeJavaScriptMemory,
 }
-impl ForciblyPurgeJavaScriptMemoryMethod {
-    pub const IDENTIFIER: &'static str = "Memory.forciblyPurgeJavaScriptMemory";
-}
 #[doc = "Simulate OomIntervention by purging V8 memory.\n[forciblyPurgeJavaScriptMemory](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-forciblyPurgeJavaScriptMemory)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ForciblyPurgeJavaScriptMemory {
     pub method: ForciblyPurgeJavaScriptMemoryMethod,
     pub params: ForciblyPurgeJavaScriptMemoryParams,
+}
+impl ForciblyPurgeJavaScriptMemory {
+    pub const IDENTIFIER: &'static str = "Memory.forciblyPurgeJavaScriptMemory";
 }
 impl crate::CommandResult for ForciblyPurgeJavaScriptMemory {
     type Result = super::results::ForciblyPurgeJavaScriptMemoryResult;
@@ -98,14 +98,14 @@ pub enum SetPressureNotificationsSuppressedMethod {
     #[serde(rename = "Memory.setPressureNotificationsSuppressed")]
     SetPressureNotificationsSuppressed,
 }
-impl SetPressureNotificationsSuppressedMethod {
-    pub const IDENTIFIER: &'static str = "Memory.setPressureNotificationsSuppressed";
-}
 #[doc = "Enable/disable suppressing memory pressure notifications in all processes.\n[setPressureNotificationsSuppressed](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-setPressureNotificationsSuppressed)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetPressureNotificationsSuppressed {
     pub method: SetPressureNotificationsSuppressedMethod,
     pub params: SetPressureNotificationsSuppressedParams,
+}
+impl SetPressureNotificationsSuppressed {
+    pub const IDENTIFIER: &'static str = "Memory.setPressureNotificationsSuppressed";
 }
 impl crate::CommandResult for SetPressureNotificationsSuppressed {
     type Result = super::results::SetPressureNotificationsSuppressedResult;
@@ -129,14 +129,14 @@ pub enum SimulatePressureNotificationMethod {
     #[serde(rename = "Memory.simulatePressureNotification")]
     SimulatePressureNotification,
 }
-impl SimulatePressureNotificationMethod {
-    pub const IDENTIFIER: &'static str = "Memory.simulatePressureNotification";
-}
 #[doc = "Simulate a memory pressure notification in all processes.\n[simulatePressureNotification](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-simulatePressureNotification)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SimulatePressureNotification {
     pub method: SimulatePressureNotificationMethod,
     pub params: SimulatePressureNotificationParams,
+}
+impl SimulatePressureNotification {
+    pub const IDENTIFIER: &'static str = "Memory.simulatePressureNotification";
 }
 impl crate::CommandResult for SimulatePressureNotification {
     type Result = super::results::SimulatePressureNotificationResult;
@@ -160,14 +160,14 @@ pub enum StartSamplingMethod {
     #[serde(rename = "Memory.startSampling")]
     StartSampling,
 }
-impl StartSamplingMethod {
-    pub const IDENTIFIER: &'static str = "Memory.startSampling";
-}
 #[doc = "Start collecting native memory profile.\n[startSampling](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-startSampling)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct StartSampling {
     pub method: StartSamplingMethod,
     pub params: StartSamplingParams,
+}
+impl StartSampling {
+    pub const IDENTIFIER: &'static str = "Memory.startSampling";
 }
 impl crate::CommandResult for StartSampling {
     type Result = super::results::StartSamplingResult;
@@ -180,14 +180,14 @@ pub enum StopSamplingMethod {
     #[serde(rename = "Memory.stopSampling")]
     StopSampling,
 }
-impl StopSamplingMethod {
-    pub const IDENTIFIER: &'static str = "Memory.stopSampling";
-}
 #[doc = "Stop collecting native memory profile.\n[stopSampling](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-stopSampling)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct StopSampling {
     pub method: StopSamplingMethod,
     pub params: StopSamplingParams,
+}
+impl StopSampling {
+    pub const IDENTIFIER: &'static str = "Memory.stopSampling";
 }
 impl crate::CommandResult for StopSampling {
     type Result = super::results::StopSamplingResult;
@@ -200,14 +200,14 @@ pub enum GetAllTimeSamplingProfileMethod {
     #[serde(rename = "Memory.getAllTimeSamplingProfile")]
     GetAllTimeSamplingProfile,
 }
-impl GetAllTimeSamplingProfileMethod {
-    pub const IDENTIFIER: &'static str = "Memory.getAllTimeSamplingProfile";
-}
 #[doc = "Retrieve native memory allocations profile\ncollected since renderer process startup.\n[getAllTimeSamplingProfile](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-getAllTimeSamplingProfile)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetAllTimeSamplingProfile {
     pub method: GetAllTimeSamplingProfileMethod,
     pub params: GetAllTimeSamplingProfileParams,
+}
+impl GetAllTimeSamplingProfile {
+    pub const IDENTIFIER: &'static str = "Memory.getAllTimeSamplingProfile";
 }
 impl crate::CommandResult for GetAllTimeSamplingProfile {
     type Result = super::results::GetAllTimeSamplingProfileResult;
@@ -220,14 +220,14 @@ pub enum GetBrowserSamplingProfileMethod {
     #[serde(rename = "Memory.getBrowserSamplingProfile")]
     GetBrowserSamplingProfile,
 }
-impl GetBrowserSamplingProfileMethod {
-    pub const IDENTIFIER: &'static str = "Memory.getBrowserSamplingProfile";
-}
 #[doc = "Retrieve native memory allocations profile\ncollected since browser process startup.\n[getBrowserSamplingProfile](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-getBrowserSamplingProfile)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetBrowserSamplingProfile {
     pub method: GetBrowserSamplingProfileMethod,
     pub params: GetBrowserSamplingProfileParams,
+}
+impl GetBrowserSamplingProfile {
+    pub const IDENTIFIER: &'static str = "Memory.getBrowserSamplingProfile";
 }
 impl crate::CommandResult for GetBrowserSamplingProfile {
     type Result = super::results::GetBrowserSamplingProfileResult;
@@ -240,14 +240,14 @@ pub enum GetSamplingProfileMethod {
     #[serde(rename = "Memory.getSamplingProfile")]
     GetSamplingProfile,
 }
-impl GetSamplingProfileMethod {
-    pub const IDENTIFIER: &'static str = "Memory.getSamplingProfile";
-}
 #[doc = "Retrieve native memory allocations profile collected since last\n`startSampling` call.\n[getSamplingProfile](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-getSamplingProfile)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetSamplingProfile {
     pub method: GetSamplingProfileMethod,
     pub params: GetSamplingProfileParams,
+}
+impl GetSamplingProfile {
+    pub const IDENTIFIER: &'static str = "Memory.getSamplingProfile";
 }
 impl crate::CommandResult for GetSamplingProfile {
     type Result = super::results::GetSamplingProfileResult;

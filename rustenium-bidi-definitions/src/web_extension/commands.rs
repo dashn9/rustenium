@@ -16,13 +16,14 @@ pub enum InstallMethod {
     #[serde(rename = "webExtension.install")]
     Install,
 }
-impl InstallMethod {
-    pub const IDENTIFIER: &'static str = "webExtension.install";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct Install {
     pub method: InstallMethod,
     pub params: InstallParams,
+}
+impl Install {
+    pub const IDENTIFIER: &'static str = "webExtension.install";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for Install {
     type Result = super::results::InstallResult;
@@ -44,13 +45,14 @@ pub enum UninstallMethod {
     #[serde(rename = "webExtension.uninstall")]
     Uninstall,
 }
-impl UninstallMethod {
-    pub const IDENTIFIER: &'static str = "webExtension.uninstall";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct Uninstall {
     pub method: UninstallMethod,
     pub params: UninstallParams,
+}
+impl Uninstall {
+    pub const IDENTIFIER: &'static str = "webExtension.uninstall";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for Uninstall {
     type Result = super::results::UninstallResult;

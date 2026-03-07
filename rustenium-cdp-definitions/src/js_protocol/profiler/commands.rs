@@ -6,13 +6,13 @@ pub enum DisableMethod {
     #[serde(rename = "Profiler.disable")]
     Disable,
 }
-impl DisableMethod {
-    pub const IDENTIFIER: &'static str = "Profiler.disable";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
+}
+impl Disable {
+    pub const IDENTIFIER: &'static str = "Profiler.disable";
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -24,13 +24,13 @@ pub enum EnableMethod {
     #[serde(rename = "Profiler.enable")]
     Enable,
 }
-impl EnableMethod {
-    pub const IDENTIFIER: &'static str = "Profiler.enable";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl Enable {
+    pub const IDENTIFIER: &'static str = "Profiler.enable";
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -43,14 +43,14 @@ pub enum GetBestEffortCoverageMethod {
     #[serde(rename = "Profiler.getBestEffortCoverage")]
     GetBestEffortCoverage,
 }
-impl GetBestEffortCoverageMethod {
-    pub const IDENTIFIER: &'static str = "Profiler.getBestEffortCoverage";
-}
 #[doc = "Collect coverage data for the current isolate. The coverage data may be incomplete due to\ngarbage collection.\n[getBestEffortCoverage](https://chromedevtools.github.io/devtools-protocol/tot/Profiler/#method-getBestEffortCoverage)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetBestEffortCoverage {
     pub method: GetBestEffortCoverageMethod,
     pub params: GetBestEffortCoverageParams,
+}
+impl GetBestEffortCoverage {
+    pub const IDENTIFIER: &'static str = "Profiler.getBestEffortCoverage";
 }
 impl crate::CommandResult for GetBestEffortCoverage {
     type Result = super::results::GetBestEffortCoverageResult;
@@ -74,14 +74,14 @@ pub enum SetSamplingIntervalMethod {
     #[serde(rename = "Profiler.setSamplingInterval")]
     SetSamplingInterval,
 }
-impl SetSamplingIntervalMethod {
-    pub const IDENTIFIER: &'static str = "Profiler.setSamplingInterval";
-}
 #[doc = "Changes CPU profiler sampling interval. Must be called before CPU profiles recording started.\n[setSamplingInterval](https://chromedevtools.github.io/devtools-protocol/tot/Profiler/#method-setSamplingInterval)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetSamplingInterval {
     pub method: SetSamplingIntervalMethod,
     pub params: SetSamplingIntervalParams,
+}
+impl SetSamplingInterval {
+    pub const IDENTIFIER: &'static str = "Profiler.setSamplingInterval";
 }
 impl crate::CommandResult for SetSamplingInterval {
     type Result = super::results::SetSamplingIntervalResult;
@@ -93,13 +93,13 @@ pub enum StartMethod {
     #[serde(rename = "Profiler.start")]
     Start,
 }
-impl StartMethod {
-    pub const IDENTIFIER: &'static str = "Profiler.start";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct Start {
     pub method: StartMethod,
     pub params: StartParams,
+}
+impl Start {
+    pub const IDENTIFIER: &'static str = "Profiler.start";
 }
 impl crate::CommandResult for Start {
     type Result = super::results::StartResult;
@@ -128,14 +128,14 @@ pub enum StartPreciseCoverageMethod {
     #[serde(rename = "Profiler.startPreciseCoverage")]
     StartPreciseCoverage,
 }
-impl StartPreciseCoverageMethod {
-    pub const IDENTIFIER: &'static str = "Profiler.startPreciseCoverage";
-}
 #[doc = "Enable precise code coverage. Coverage data for JavaScript executed before enabling precise code\ncoverage may be incomplete. Enabling prevents running optimized code and resets execution\ncounters.\n[startPreciseCoverage](https://chromedevtools.github.io/devtools-protocol/tot/Profiler/#method-startPreciseCoverage)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct StartPreciseCoverage {
     pub method: StartPreciseCoverageMethod,
     pub params: StartPreciseCoverageParams,
+}
+impl StartPreciseCoverage {
+    pub const IDENTIFIER: &'static str = "Profiler.startPreciseCoverage";
 }
 impl crate::CommandResult for StartPreciseCoverage {
     type Result = super::results::StartPreciseCoverageResult;
@@ -147,13 +147,13 @@ pub enum StopMethod {
     #[serde(rename = "Profiler.stop")]
     Stop,
 }
-impl StopMethod {
-    pub const IDENTIFIER: &'static str = "Profiler.stop";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct Stop {
     pub method: StopMethod,
     pub params: StopParams,
+}
+impl Stop {
+    pub const IDENTIFIER: &'static str = "Profiler.stop";
 }
 impl crate::CommandResult for Stop {
     type Result = super::results::StopResult;
@@ -166,14 +166,14 @@ pub enum StopPreciseCoverageMethod {
     #[serde(rename = "Profiler.stopPreciseCoverage")]
     StopPreciseCoverage,
 }
-impl StopPreciseCoverageMethod {
-    pub const IDENTIFIER: &'static str = "Profiler.stopPreciseCoverage";
-}
 #[doc = "Disable precise code coverage. Disabling releases unnecessary execution count records and allows\nexecuting optimized code.\n[stopPreciseCoverage](https://chromedevtools.github.io/devtools-protocol/tot/Profiler/#method-stopPreciseCoverage)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct StopPreciseCoverage {
     pub method: StopPreciseCoverageMethod,
     pub params: StopPreciseCoverageParams,
+}
+impl StopPreciseCoverage {
+    pub const IDENTIFIER: &'static str = "Profiler.stopPreciseCoverage";
 }
 impl crate::CommandResult for StopPreciseCoverage {
     type Result = super::results::StopPreciseCoverageResult;
@@ -186,14 +186,14 @@ pub enum TakePreciseCoverageMethod {
     #[serde(rename = "Profiler.takePreciseCoverage")]
     TakePreciseCoverage,
 }
-impl TakePreciseCoverageMethod {
-    pub const IDENTIFIER: &'static str = "Profiler.takePreciseCoverage";
-}
 #[doc = "Collect coverage data for the current isolate, and resets execution counters. Precise code\ncoverage needs to have started.\n[takePreciseCoverage](https://chromedevtools.github.io/devtools-protocol/tot/Profiler/#method-takePreciseCoverage)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct TakePreciseCoverage {
     pub method: TakePreciseCoverageMethod,
     pub params: TakePreciseCoverageParams,
+}
+impl TakePreciseCoverage {
+    pub const IDENTIFIER: &'static str = "Profiler.takePreciseCoverage";
 }
 impl crate::CommandResult for TakePreciseCoverage {
     type Result = super::results::TakePreciseCoverageResult;

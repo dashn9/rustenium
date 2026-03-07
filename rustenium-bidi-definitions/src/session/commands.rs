@@ -6,13 +6,14 @@ pub enum StatusMethod {
     #[serde(rename = "session.status")]
     Status,
 }
-impl StatusMethod {
-    pub const IDENTIFIER: &'static str = "session.status";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct Status {
     pub method: StatusMethod,
     pub params: StatusParams,
+}
+impl Status {
+    pub const IDENTIFIER: &'static str = "session.status";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for Status {
     type Result = super::results::StatusResult;
@@ -34,13 +35,14 @@ pub enum NewMethod {
     #[serde(rename = "session.new")]
     New,
 }
-impl NewMethod {
-    pub const IDENTIFIER: &'static str = "session.new";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct New {
     pub method: NewMethod,
     pub params: NewParams,
+}
+impl New {
+    pub const IDENTIFIER: &'static str = "session.new";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for New {
     type Result = super::results::NewResult;
@@ -52,13 +54,14 @@ pub enum EndMethod {
     #[serde(rename = "session.end")]
     End,
 }
-impl EndMethod {
-    pub const IDENTIFIER: &'static str = "session.end";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct End {
     pub method: EndMethod,
     pub params: EndParams,
+}
+impl End {
+    pub const IDENTIFIER: &'static str = "session.end";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for End {
     type Result = super::results::EndResult;
@@ -91,13 +94,14 @@ pub enum SubscribeMethod {
     #[serde(rename = "session.subscribe")]
     Subscribe,
 }
-impl SubscribeMethod {
-    pub const IDENTIFIER: &'static str = "session.subscribe";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct Subscribe {
     pub method: SubscribeMethod,
     pub params: SubscribeParams,
+}
+impl Subscribe {
+    pub const IDENTIFIER: &'static str = "session.subscribe";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for Subscribe {
     type Result = super::results::SubscribeResult;
@@ -109,13 +113,14 @@ pub enum UnsubscribeMethod {
     #[serde(rename = "session.unsubscribe")]
     Unsubscribe,
 }
-impl UnsubscribeMethod {
-    pub const IDENTIFIER: &'static str = "session.unsubscribe";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct Unsubscribe {
     pub method: UnsubscribeMethod,
     pub params: UnsubscribeParams,
+}
+impl Unsubscribe {
+    pub const IDENTIFIER: &'static str = "session.unsubscribe";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for Unsubscribe {
     type Result = super::results::UnsubscribeResult;

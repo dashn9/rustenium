@@ -15,13 +15,14 @@ pub enum GetCookiesMethod {
     #[serde(rename = "storage.getCookies")]
     GetCookies,
 }
-impl GetCookiesMethod {
-    pub const IDENTIFIER: &'static str = "storage.getCookies";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetCookies {
     pub method: GetCookiesMethod,
     pub params: GetCookiesParams,
+}
+impl GetCookies {
+    pub const IDENTIFIER: &'static str = "storage.getCookies";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for GetCookies {
     type Result = super::results::GetCookiesResult;
@@ -48,13 +49,14 @@ pub enum SetCookieMethod {
     #[serde(rename = "storage.setCookie")]
     SetCookie,
 }
-impl SetCookieMethod {
-    pub const IDENTIFIER: &'static str = "storage.setCookie";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetCookie {
     pub method: SetCookieMethod,
     pub params: SetCookieParams,
+}
+impl SetCookie {
+    pub const IDENTIFIER: &'static str = "storage.setCookie";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for SetCookie {
     type Result = super::results::SetCookieResult;
@@ -75,13 +77,14 @@ pub enum DeleteCookiesMethod {
     #[serde(rename = "storage.deleteCookies")]
     DeleteCookies,
 }
-impl DeleteCookiesMethod {
-    pub const IDENTIFIER: &'static str = "storage.deleteCookies";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct DeleteCookies {
     pub method: DeleteCookiesMethod,
     pub params: DeleteCookiesParams,
+}
+impl DeleteCookies {
+    pub const IDENTIFIER: &'static str = "storage.deleteCookies";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for DeleteCookies {
     type Result = super::results::DeleteCookiesResult;

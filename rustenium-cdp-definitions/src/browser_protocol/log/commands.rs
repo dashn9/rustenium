@@ -7,14 +7,14 @@ pub enum ClearMethod {
     #[serde(rename = "Log.clear")]
     Clear,
 }
-impl ClearMethod {
-    pub const IDENTIFIER: &'static str = "Log.clear";
-}
 #[doc = "Clears the log.\n[clear](https://chromedevtools.github.io/devtools-protocol/tot/Log/#method-clear)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Clear {
     pub method: ClearMethod,
     pub params: ClearParams,
+}
+impl Clear {
+    pub const IDENTIFIER: &'static str = "Log.clear";
 }
 impl crate::CommandResult for Clear {
     type Result = super::results::ClearResult;
@@ -27,14 +27,14 @@ pub enum DisableMethod {
     #[serde(rename = "Log.disable")]
     Disable,
 }
-impl DisableMethod {
-    pub const IDENTIFIER: &'static str = "Log.disable";
-}
 #[doc = "Disables log domain, prevents further log entries from being reported to the client.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Log/#method-disable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
+}
+impl Disable {
+    pub const IDENTIFIER: &'static str = "Log.disable";
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -47,14 +47,14 @@ pub enum EnableMethod {
     #[serde(rename = "Log.enable")]
     Enable,
 }
-impl EnableMethod {
-    pub const IDENTIFIER: &'static str = "Log.enable";
-}
 #[doc = "Enables log domain, sends the entries collected so far to the client by means of the\n`entryAdded` notification.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Log/#method-enable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl Enable {
+    pub const IDENTIFIER: &'static str = "Log.enable";
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -77,14 +77,14 @@ pub enum StartViolationsReportMethod {
     #[serde(rename = "Log.startViolationsReport")]
     StartViolationsReport,
 }
-impl StartViolationsReportMethod {
-    pub const IDENTIFIER: &'static str = "Log.startViolationsReport";
-}
 #[doc = "start violation reporting.\n[startViolationsReport](https://chromedevtools.github.io/devtools-protocol/tot/Log/#method-startViolationsReport)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct StartViolationsReport {
     pub method: StartViolationsReportMethod,
     pub params: StartViolationsReportParams,
+}
+impl StartViolationsReport {
+    pub const IDENTIFIER: &'static str = "Log.startViolationsReport";
 }
 impl crate::CommandResult for StartViolationsReport {
     type Result = super::results::StartViolationsReportResult;
@@ -97,14 +97,14 @@ pub enum StopViolationsReportMethod {
     #[serde(rename = "Log.stopViolationsReport")]
     StopViolationsReport,
 }
-impl StopViolationsReportMethod {
-    pub const IDENTIFIER: &'static str = "Log.stopViolationsReport";
-}
 #[doc = "Stop violation reporting.\n[stopViolationsReport](https://chromedevtools.github.io/devtools-protocol/tot/Log/#method-stopViolationsReport)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct StopViolationsReport {
     pub method: StopViolationsReportMethod,
     pub params: StopViolationsReportParams,
+}
+impl StopViolationsReport {
+    pub const IDENTIFIER: &'static str = "Log.stopViolationsReport";
 }
 impl crate::CommandResult for StopViolationsReport {
     type Result = super::results::StopViolationsReportResult;

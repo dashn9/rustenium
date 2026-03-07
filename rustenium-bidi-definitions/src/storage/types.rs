@@ -26,6 +26,7 @@ impl PartitionKey {
 }
 impl PartitionKey {
     pub const IDENTIFIER: &'static str = "storage.PartitionKey";
+    pub const DOMAIN_DIRECTION: &'static str = "all";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CookieFilter {
@@ -89,6 +90,7 @@ impl CookieFilter {
 }
 impl CookieFilter {
     pub const IDENTIFIER: &'static str = "storage.CookieFilter";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BrowsingContextPartitionDescriptor {
@@ -110,6 +112,7 @@ impl BrowsingContextPartitionDescriptor {
 }
 impl BrowsingContextPartitionDescriptor {
     pub const IDENTIFIER: &'static str = "storage.BrowsingContextPartitionDescriptor";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StorageKeyPartitionDescriptor {
@@ -142,6 +145,7 @@ impl StorageKeyPartitionDescriptor {
 }
 impl StorageKeyPartitionDescriptor {
     pub const IDENTIFIER: &'static str = "storage.StorageKeyPartitionDescriptor";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -203,5 +207,6 @@ impl PartialCookie {
 }
 impl PartialCookie {
     pub const IDENTIFIER: &'static str = "storage.PartialCookie";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 group_enum ! (StorageTypes { PartitionKey (PartitionKey) , CookieFilter (CookieFilter) , BrowsingContextPartitionDescriptor (BrowsingContextPartitionDescriptor) , StorageKeyPartitionDescriptor (StorageKeyPartitionDescriptor) , PartitionDescriptor (PartitionDescriptor) , PartialCookie (PartialCookie) });

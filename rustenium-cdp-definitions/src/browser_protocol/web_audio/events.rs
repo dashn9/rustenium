@@ -10,14 +10,14 @@ pub enum ContextCreatedMethod {
     #[serde(rename = "WebAudio.contextCreated")]
     ContextCreated,
 }
-impl ContextCreatedMethod {
-    pub const IDENTIFIER: &'static str = "WebAudio.contextCreated";
-}
 #[doc = "Notifies that a new BaseAudioContext has been created.\n[contextCreated](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-contextCreated)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ContextCreated {
     pub method: ContextCreatedMethod,
     pub params: ContextCreatedParams,
+}
+impl ContextCreated {
+    pub const IDENTIFIER: &'static str = "WebAudio.contextCreated";
 }
 #[doc = "Notifies that an existing BaseAudioContext will be destroyed.\n[contextWillBeDestroyed](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-contextWillBeDestroyed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -30,14 +30,14 @@ pub enum ContextWillBeDestroyedMethod {
     #[serde(rename = "WebAudio.contextWillBeDestroyed")]
     ContextWillBeDestroyed,
 }
-impl ContextWillBeDestroyedMethod {
-    pub const IDENTIFIER: &'static str = "WebAudio.contextWillBeDestroyed";
-}
 #[doc = "Notifies that an existing BaseAudioContext will be destroyed.\n[contextWillBeDestroyed](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-contextWillBeDestroyed)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ContextWillBeDestroyed {
     pub method: ContextWillBeDestroyedMethod,
     pub params: ContextWillBeDestroyedParams,
+}
+impl ContextWillBeDestroyed {
+    pub const IDENTIFIER: &'static str = "WebAudio.contextWillBeDestroyed";
 }
 #[doc = "Notifies that existing BaseAudioContext has changed some properties (id stays the same)..\n[contextChanged](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-contextChanged)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -50,14 +50,14 @@ pub enum ContextChangedMethod {
     #[serde(rename = "WebAudio.contextChanged")]
     ContextChanged,
 }
-impl ContextChangedMethod {
-    pub const IDENTIFIER: &'static str = "WebAudio.contextChanged";
-}
 #[doc = "Notifies that existing BaseAudioContext has changed some properties (id stays the same)..\n[contextChanged](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-contextChanged)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ContextChanged {
     pub method: ContextChangedMethod,
     pub params: ContextChangedParams,
+}
+impl ContextChanged {
+    pub const IDENTIFIER: &'static str = "WebAudio.contextChanged";
 }
 #[doc = "Notifies that the construction of an AudioListener has finished.\n[audioListenerCreated](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-audioListenerCreated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -70,14 +70,14 @@ pub enum AudioListenerCreatedMethod {
     #[serde(rename = "WebAudio.audioListenerCreated")]
     AudioListenerCreated,
 }
-impl AudioListenerCreatedMethod {
-    pub const IDENTIFIER: &'static str = "WebAudio.audioListenerCreated";
-}
 #[doc = "Notifies that the construction of an AudioListener has finished.\n[audioListenerCreated](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-audioListenerCreated)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct AudioListenerCreated {
     pub method: AudioListenerCreatedMethod,
     pub params: AudioListenerCreatedParams,
+}
+impl AudioListenerCreated {
+    pub const IDENTIFIER: &'static str = "WebAudio.audioListenerCreated";
 }
 #[doc = "Notifies that a new AudioListener has been created.\n[audioListenerWillBeDestroyed](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-audioListenerWillBeDestroyed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -92,14 +92,14 @@ pub enum AudioListenerWillBeDestroyedMethod {
     #[serde(rename = "WebAudio.audioListenerWillBeDestroyed")]
     AudioListenerWillBeDestroyed,
 }
-impl AudioListenerWillBeDestroyedMethod {
-    pub const IDENTIFIER: &'static str = "WebAudio.audioListenerWillBeDestroyed";
-}
 #[doc = "Notifies that a new AudioListener has been created.\n[audioListenerWillBeDestroyed](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-audioListenerWillBeDestroyed)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct AudioListenerWillBeDestroyed {
     pub method: AudioListenerWillBeDestroyedMethod,
     pub params: AudioListenerWillBeDestroyedParams,
+}
+impl AudioListenerWillBeDestroyed {
+    pub const IDENTIFIER: &'static str = "WebAudio.audioListenerWillBeDestroyed";
 }
 #[doc = "Notifies that a new AudioNode has been created.\n[audioNodeCreated](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-audioNodeCreated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -112,14 +112,14 @@ pub enum AudioNodeCreatedMethod {
     #[serde(rename = "WebAudio.audioNodeCreated")]
     AudioNodeCreated,
 }
-impl AudioNodeCreatedMethod {
-    pub const IDENTIFIER: &'static str = "WebAudio.audioNodeCreated";
-}
 #[doc = "Notifies that a new AudioNode has been created.\n[audioNodeCreated](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-audioNodeCreated)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct AudioNodeCreated {
     pub method: AudioNodeCreatedMethod,
     pub params: AudioNodeCreatedParams,
+}
+impl AudioNodeCreated {
+    pub const IDENTIFIER: &'static str = "WebAudio.audioNodeCreated";
 }
 #[doc = "Notifies that an existing AudioNode has been destroyed.\n[audioNodeWillBeDestroyed](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-audioNodeWillBeDestroyed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -134,14 +134,14 @@ pub enum AudioNodeWillBeDestroyedMethod {
     #[serde(rename = "WebAudio.audioNodeWillBeDestroyed")]
     AudioNodeWillBeDestroyed,
 }
-impl AudioNodeWillBeDestroyedMethod {
-    pub const IDENTIFIER: &'static str = "WebAudio.audioNodeWillBeDestroyed";
-}
 #[doc = "Notifies that an existing AudioNode has been destroyed.\n[audioNodeWillBeDestroyed](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-audioNodeWillBeDestroyed)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct AudioNodeWillBeDestroyed {
     pub method: AudioNodeWillBeDestroyedMethod,
     pub params: AudioNodeWillBeDestroyedParams,
+}
+impl AudioNodeWillBeDestroyed {
+    pub const IDENTIFIER: &'static str = "WebAudio.audioNodeWillBeDestroyed";
 }
 #[doc = "Notifies that a new AudioParam has been created.\n[audioParamCreated](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-audioParamCreated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -154,14 +154,14 @@ pub enum AudioParamCreatedMethod {
     #[serde(rename = "WebAudio.audioParamCreated")]
     AudioParamCreated,
 }
-impl AudioParamCreatedMethod {
-    pub const IDENTIFIER: &'static str = "WebAudio.audioParamCreated";
-}
 #[doc = "Notifies that a new AudioParam has been created.\n[audioParamCreated](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-audioParamCreated)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct AudioParamCreated {
     pub method: AudioParamCreatedMethod,
     pub params: AudioParamCreatedParams,
+}
+impl AudioParamCreated {
+    pub const IDENTIFIER: &'static str = "WebAudio.audioParamCreated";
 }
 #[doc = "Notifies that an existing AudioParam has been destroyed.\n[audioParamWillBeDestroyed](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-audioParamWillBeDestroyed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -178,14 +178,14 @@ pub enum AudioParamWillBeDestroyedMethod {
     #[serde(rename = "WebAudio.audioParamWillBeDestroyed")]
     AudioParamWillBeDestroyed,
 }
-impl AudioParamWillBeDestroyedMethod {
-    pub const IDENTIFIER: &'static str = "WebAudio.audioParamWillBeDestroyed";
-}
 #[doc = "Notifies that an existing AudioParam has been destroyed.\n[audioParamWillBeDestroyed](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-audioParamWillBeDestroyed)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct AudioParamWillBeDestroyed {
     pub method: AudioParamWillBeDestroyedMethod,
     pub params: AudioParamWillBeDestroyedParams,
+}
+impl AudioParamWillBeDestroyed {
+    pub const IDENTIFIER: &'static str = "WebAudio.audioParamWillBeDestroyed";
 }
 #[doc = "Notifies that two AudioNodes are connected.\n[nodesConnected](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-nodesConnected)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -210,14 +210,14 @@ pub enum NodesConnectedMethod {
     #[serde(rename = "WebAudio.nodesConnected")]
     NodesConnected,
 }
-impl NodesConnectedMethod {
-    pub const IDENTIFIER: &'static str = "WebAudio.nodesConnected";
-}
 #[doc = "Notifies that two AudioNodes are connected.\n[nodesConnected](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-nodesConnected)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct NodesConnected {
     pub method: NodesConnectedMethod,
     pub params: NodesConnectedParams,
+}
+impl NodesConnected {
+    pub const IDENTIFIER: &'static str = "WebAudio.nodesConnected";
 }
 #[doc = "Notifies that AudioNodes are disconnected. The destination can be null, and it means all the outgoing connections from the source are disconnected.\n[nodesDisconnected](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-nodesDisconnected)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -242,14 +242,14 @@ pub enum NodesDisconnectedMethod {
     #[serde(rename = "WebAudio.nodesDisconnected")]
     NodesDisconnected,
 }
-impl NodesDisconnectedMethod {
-    pub const IDENTIFIER: &'static str = "WebAudio.nodesDisconnected";
-}
 #[doc = "Notifies that AudioNodes are disconnected. The destination can be null, and it means all the outgoing connections from the source are disconnected.\n[nodesDisconnected](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-nodesDisconnected)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct NodesDisconnected {
     pub method: NodesDisconnectedMethod,
     pub params: NodesDisconnectedParams,
+}
+impl NodesDisconnected {
+    pub const IDENTIFIER: &'static str = "WebAudio.nodesDisconnected";
 }
 #[doc = "Notifies that an AudioNode is connected to an AudioParam.\n[nodeParamConnected](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-nodeParamConnected)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -270,14 +270,14 @@ pub enum NodeParamConnectedMethod {
     #[serde(rename = "WebAudio.nodeParamConnected")]
     NodeParamConnected,
 }
-impl NodeParamConnectedMethod {
-    pub const IDENTIFIER: &'static str = "WebAudio.nodeParamConnected";
-}
 #[doc = "Notifies that an AudioNode is connected to an AudioParam.\n[nodeParamConnected](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-nodeParamConnected)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct NodeParamConnected {
     pub method: NodeParamConnectedMethod,
     pub params: NodeParamConnectedParams,
+}
+impl NodeParamConnected {
+    pub const IDENTIFIER: &'static str = "WebAudio.nodeParamConnected";
 }
 #[doc = "Notifies that an AudioNode is disconnected to an AudioParam.\n[nodeParamDisconnected](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-nodeParamDisconnected)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -298,13 +298,13 @@ pub enum NodeParamDisconnectedMethod {
     #[serde(rename = "WebAudio.nodeParamDisconnected")]
     NodeParamDisconnected,
 }
-impl NodeParamDisconnectedMethod {
-    pub const IDENTIFIER: &'static str = "WebAudio.nodeParamDisconnected";
-}
 #[doc = "Notifies that an AudioNode is disconnected to an AudioParam.\n[nodeParamDisconnected](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-nodeParamDisconnected)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct NodeParamDisconnected {
     pub method: NodeParamDisconnectedMethod,
     pub params: NodeParamDisconnectedParams,
+}
+impl NodeParamDisconnected {
+    pub const IDENTIFIER: &'static str = "WebAudio.nodeParamDisconnected";
 }
 group_enum ! (WebAudioEvents { ContextCreated (ContextCreated) , ContextWillBeDestroyed (ContextWillBeDestroyed) , ContextChanged (ContextChanged) , AudioListenerCreated (AudioListenerCreated) , AudioListenerWillBeDestroyed (AudioListenerWillBeDestroyed) , AudioNodeCreated (AudioNodeCreated) , AudioNodeWillBeDestroyed (AudioNodeWillBeDestroyed) , AudioParamCreated (AudioParamCreated) , AudioParamWillBeDestroyed (AudioParamWillBeDestroyed) , NodesConnected (NodesConnected) , NodesDisconnected (NodesDisconnected) , NodeParamConnected (NodeParamConnected) , NodeParamDisconnected (NodeParamDisconnected) });

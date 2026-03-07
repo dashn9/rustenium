@@ -17,14 +17,14 @@ pub enum SetAcceptedEncodingsMethod {
     #[serde(rename = "Network.setAcceptedEncodings")]
     SetAcceptedEncodings,
 }
-impl SetAcceptedEncodingsMethod {
-    pub const IDENTIFIER: &'static str = "Network.setAcceptedEncodings";
-}
 #[doc = "Sets a list of content encodings that will be accepted. Empty list means no encoding is accepted.\n[setAcceptedEncodings](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-setAcceptedEncodings)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetAcceptedEncodings {
     pub method: SetAcceptedEncodingsMethod,
     pub params: SetAcceptedEncodingsParams,
+}
+impl SetAcceptedEncodings {
+    pub const IDENTIFIER: &'static str = "Network.setAcceptedEncodings";
 }
 impl crate::CommandResult for SetAcceptedEncodings {
     type Result = super::results::SetAcceptedEncodingsResult;
@@ -37,14 +37,14 @@ pub enum ClearAcceptedEncodingsOverrideMethod {
     #[serde(rename = "Network.clearAcceptedEncodingsOverride")]
     ClearAcceptedEncodingsOverride,
 }
-impl ClearAcceptedEncodingsOverrideMethod {
-    pub const IDENTIFIER: &'static str = "Network.clearAcceptedEncodingsOverride";
-}
 #[doc = "Clears accepted encodings set by setAcceptedEncodings\n[clearAcceptedEncodingsOverride](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-clearAcceptedEncodingsOverride)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ClearAcceptedEncodingsOverride {
     pub method: ClearAcceptedEncodingsOverrideMethod,
     pub params: ClearAcceptedEncodingsOverrideParams,
+}
+impl ClearAcceptedEncodingsOverride {
+    pub const IDENTIFIER: &'static str = "Network.clearAcceptedEncodingsOverride";
 }
 impl crate::CommandResult for ClearAcceptedEncodingsOverride {
     type Result = super::results::ClearAcceptedEncodingsOverrideResult;
@@ -57,14 +57,14 @@ pub enum ClearBrowserCacheMethod {
     #[serde(rename = "Network.clearBrowserCache")]
     ClearBrowserCache,
 }
-impl ClearBrowserCacheMethod {
-    pub const IDENTIFIER: &'static str = "Network.clearBrowserCache";
-}
 #[doc = "Clears browser cache.\n[clearBrowserCache](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-clearBrowserCache)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ClearBrowserCache {
     pub method: ClearBrowserCacheMethod,
     pub params: ClearBrowserCacheParams,
+}
+impl ClearBrowserCache {
+    pub const IDENTIFIER: &'static str = "Network.clearBrowserCache";
 }
 impl crate::CommandResult for ClearBrowserCache {
     type Result = super::results::ClearBrowserCacheResult;
@@ -77,14 +77,14 @@ pub enum ClearBrowserCookiesMethod {
     #[serde(rename = "Network.clearBrowserCookies")]
     ClearBrowserCookies,
 }
-impl ClearBrowserCookiesMethod {
-    pub const IDENTIFIER: &'static str = "Network.clearBrowserCookies";
-}
 #[doc = "Clears browser cookies.\n[clearBrowserCookies](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-clearBrowserCookies)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ClearBrowserCookies {
     pub method: ClearBrowserCookiesMethod,
     pub params: ClearBrowserCookiesParams,
+}
+impl ClearBrowserCookies {
+    pub const IDENTIFIER: &'static str = "Network.clearBrowserCookies";
 }
 impl crate::CommandResult for ClearBrowserCookies {
     type Result = super::results::ClearBrowserCookiesResult;
@@ -137,14 +137,14 @@ pub enum DeleteCookiesMethod {
     #[serde(rename = "Network.deleteCookies")]
     DeleteCookies,
 }
-impl DeleteCookiesMethod {
-    pub const IDENTIFIER: &'static str = "Network.deleteCookies";
-}
 #[doc = "Deletes browser cookies with matching name and url or domain/path/partitionKey pair.\n[deleteCookies](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-deleteCookies)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct DeleteCookies {
     pub method: DeleteCookiesMethod,
     pub params: DeleteCookiesParams,
+}
+impl DeleteCookies {
+    pub const IDENTIFIER: &'static str = "Network.deleteCookies";
 }
 impl crate::CommandResult for DeleteCookies {
     type Result = super::results::DeleteCookiesResult;
@@ -157,14 +157,14 @@ pub enum DisableMethod {
     #[serde(rename = "Network.disable")]
     Disable,
 }
-impl DisableMethod {
-    pub const IDENTIFIER: &'static str = "Network.disable";
-}
 #[doc = "Disables network tracking, prevents network events from being sent to the client.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-disable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
+}
+impl Disable {
+    pub const IDENTIFIER: &'static str = "Network.disable";
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -196,14 +196,14 @@ pub enum EmulateNetworkConditionsByRuleMethod {
     #[serde(rename = "Network.emulateNetworkConditionsByRule")]
     EmulateNetworkConditionsByRule,
 }
-impl EmulateNetworkConditionsByRuleMethod {
-    pub const IDENTIFIER: &'static str = "Network.emulateNetworkConditionsByRule";
-}
 #[doc = "Activates emulation of network conditions for individual requests using URL match patterns. Unlike the deprecated\nNetwork.emulateNetworkConditions this method does not affect `navigator` state. Use Network.overrideNetworkState to\nexplicitly modify `navigator` behavior.\n[emulateNetworkConditionsByRule](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-emulateNetworkConditionsByRule)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct EmulateNetworkConditionsByRule {
     pub method: EmulateNetworkConditionsByRuleMethod,
     pub params: EmulateNetworkConditionsByRuleParams,
+}
+impl EmulateNetworkConditionsByRule {
+    pub const IDENTIFIER: &'static str = "Network.emulateNetworkConditionsByRule";
 }
 impl crate::CommandResult for EmulateNetworkConditionsByRule {
     type Result = super::results::EmulateNetworkConditionsByRuleResult;
@@ -250,14 +250,14 @@ pub enum OverrideNetworkStateMethod {
     #[serde(rename = "Network.overrideNetworkState")]
     OverrideNetworkState,
 }
-impl OverrideNetworkStateMethod {
-    pub const IDENTIFIER: &'static str = "Network.overrideNetworkState";
-}
 #[doc = "Override the state of navigator.onLine and navigator.connection.\n[overrideNetworkState](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-overrideNetworkState)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct OverrideNetworkState {
     pub method: OverrideNetworkStateMethod,
     pub params: OverrideNetworkStateParams,
+}
+impl OverrideNetworkState {
+    pub const IDENTIFIER: &'static str = "Network.overrideNetworkState";
 }
 impl crate::CommandResult for OverrideNetworkState {
     type Result = super::results::OverrideNetworkStateResult;
@@ -296,14 +296,14 @@ pub enum EnableMethod {
     #[serde(rename = "Network.enable")]
     Enable,
 }
-impl EnableMethod {
-    pub const IDENTIFIER: &'static str = "Network.enable";
-}
 #[doc = "Enables network tracking, network events will now be delivered to the client.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-enable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl Enable {
+    pub const IDENTIFIER: &'static str = "Network.enable";
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -327,14 +327,14 @@ pub enum ConfigureDurableMessagesMethod {
     #[serde(rename = "Network.configureDurableMessages")]
     ConfigureDurableMessages,
 }
-impl ConfigureDurableMessagesMethod {
-    pub const IDENTIFIER: &'static str = "Network.configureDurableMessages";
-}
 #[doc = "Configures storing response bodies outside of renderer, so that these survive\na cross-process navigation.\nIf maxTotalBufferSize is not set, durable messages are disabled.\n[configureDurableMessages](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-configureDurableMessages)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ConfigureDurableMessages {
     pub method: ConfigureDurableMessagesMethod,
     pub params: ConfigureDurableMessagesParams,
+}
+impl ConfigureDurableMessages {
+    pub const IDENTIFIER: &'static str = "Network.configureDurableMessages";
 }
 impl crate::CommandResult for ConfigureDurableMessages {
     type Result = super::results::ConfigureDurableMessagesResult;
@@ -363,14 +363,14 @@ pub enum GetCertificateMethod {
     #[serde(rename = "Network.getCertificate")]
     GetCertificate,
 }
-impl GetCertificateMethod {
-    pub const IDENTIFIER: &'static str = "Network.getCertificate";
-}
 #[doc = "Returns the DER-encoded certificate.\n[getCertificate](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-getCertificate)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetCertificate {
     pub method: GetCertificateMethod,
     pub params: GetCertificateParams,
+}
+impl GetCertificate {
+    pub const IDENTIFIER: &'static str = "Network.getCertificate";
 }
 impl crate::CommandResult for GetCertificate {
     type Result = super::results::GetCertificateResult;
@@ -389,14 +389,14 @@ pub enum GetCookiesMethod {
     #[serde(rename = "Network.getCookies")]
     GetCookies,
 }
-impl GetCookiesMethod {
-    pub const IDENTIFIER: &'static str = "Network.getCookies";
-}
 #[doc = "Returns all browser cookies for the current URL. Depending on the backend support, will return\ndetailed cookie information in the `cookies` field.\n[getCookies](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-getCookies)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetCookies {
     pub method: GetCookiesMethod,
     pub params: GetCookiesParams,
+}
+impl GetCookies {
+    pub const IDENTIFIER: &'static str = "Network.getCookies";
 }
 impl crate::CommandResult for GetCookies {
     type Result = super::results::GetCookiesResult;
@@ -420,14 +420,14 @@ pub enum GetResponseBodyMethod {
     #[serde(rename = "Network.getResponseBody")]
     GetResponseBody,
 }
-impl GetResponseBodyMethod {
-    pub const IDENTIFIER: &'static str = "Network.getResponseBody";
-}
 #[doc = "Returns content served for the given request.\n[getResponseBody](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-getResponseBody)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetResponseBody {
     pub method: GetResponseBodyMethod,
     pub params: GetResponseBodyParams,
+}
+impl GetResponseBody {
+    pub const IDENTIFIER: &'static str = "Network.getResponseBody";
 }
 impl crate::CommandResult for GetResponseBody {
     type Result = super::results::GetResponseBodyResult;
@@ -451,14 +451,14 @@ pub enum GetRequestPostDataMethod {
     #[serde(rename = "Network.getRequestPostData")]
     GetRequestPostData,
 }
-impl GetRequestPostDataMethod {
-    pub const IDENTIFIER: &'static str = "Network.getRequestPostData";
-}
 #[doc = "Returns post data sent with the request. Returns an error when no data was sent with the request.\n[getRequestPostData](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-getRequestPostData)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetRequestPostData {
     pub method: GetRequestPostDataMethod,
     pub params: GetRequestPostDataParams,
+}
+impl GetRequestPostData {
+    pub const IDENTIFIER: &'static str = "Network.getRequestPostData";
 }
 impl crate::CommandResult for GetRequestPostData {
     type Result = super::results::GetRequestPostDataResult;
@@ -482,14 +482,14 @@ pub enum GetResponseBodyForInterceptionMethod {
     #[serde(rename = "Network.getResponseBodyForInterception")]
     GetResponseBodyForInterception,
 }
-impl GetResponseBodyForInterceptionMethod {
-    pub const IDENTIFIER: &'static str = "Network.getResponseBodyForInterception";
-}
 #[doc = "Returns content served for the given currently intercepted request.\n[getResponseBodyForInterception](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-getResponseBodyForInterception)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetResponseBodyForInterception {
     pub method: GetResponseBodyForInterceptionMethod,
     pub params: GetResponseBodyForInterceptionParams,
+}
+impl GetResponseBodyForInterception {
+    pub const IDENTIFIER: &'static str = "Network.getResponseBodyForInterception";
 }
 impl crate::CommandResult for GetResponseBodyForInterception {
     type Result = super::results::GetResponseBodyForInterceptionResult;
@@ -512,14 +512,14 @@ pub enum TakeResponseBodyForInterceptionAsStreamMethod {
     #[serde(rename = "Network.takeResponseBodyForInterceptionAsStream")]
     TakeResponseBodyForInterceptionAsStream,
 }
-impl TakeResponseBodyForInterceptionAsStreamMethod {
-    pub const IDENTIFIER: &'static str = "Network.takeResponseBodyForInterceptionAsStream";
-}
 #[doc = "Returns a handle to the stream representing the response body. Note that after this command,\nthe intercepted request can't be continued as is -- you either need to cancel it or to provide\nthe response body. The stream only supports sequential read, IO.read will fail if the position\nis specified.\n[takeResponseBodyForInterceptionAsStream](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-takeResponseBodyForInterceptionAsStream)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct TakeResponseBodyForInterceptionAsStream {
     pub method: TakeResponseBodyForInterceptionAsStreamMethod,
     pub params: TakeResponseBodyForInterceptionAsStreamParams,
+}
+impl TakeResponseBodyForInterceptionAsStream {
+    pub const IDENTIFIER: &'static str = "Network.takeResponseBodyForInterceptionAsStream";
 }
 impl crate::CommandResult for TakeResponseBodyForInterceptionAsStream {
     type Result = super::results::TakeResponseBodyForInterceptionAsStreamResult;
@@ -543,14 +543,14 @@ pub enum ReplayXhrMethod {
     #[serde(rename = "Network.replayXHR")]
     ReplayXhr,
 }
-impl ReplayXhrMethod {
-    pub const IDENTIFIER: &'static str = "Network.replayXHR";
-}
 #[doc = "This method sends a new XMLHttpRequest which is identical to the original one. The following\nparameters should be identical: method, url, async, request body, extra headers, withCredentials\nattribute, user, password.\n[replayXHR](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-replayXHR)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ReplayXhr {
     pub method: ReplayXhrMethod,
     pub params: ReplayXhrParams,
+}
+impl ReplayXhr {
+    pub const IDENTIFIER: &'static str = "Network.replayXHR";
 }
 impl crate::CommandResult for ReplayXhr {
     type Result = super::results::ReplayXhrResult;
@@ -590,14 +590,14 @@ pub enum SearchInResponseBodyMethod {
     #[serde(rename = "Network.searchInResponseBody")]
     SearchInResponseBody,
 }
-impl SearchInResponseBodyMethod {
-    pub const IDENTIFIER: &'static str = "Network.searchInResponseBody";
-}
 #[doc = "Searches for given string in response content.\n[searchInResponseBody](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-searchInResponseBody)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SearchInResponseBody {
     pub method: SearchInResponseBodyMethod,
     pub params: SearchInResponseBodyParams,
+}
+impl SearchInResponseBody {
+    pub const IDENTIFIER: &'static str = "Network.searchInResponseBody";
 }
 impl crate::CommandResult for SearchInResponseBody {
     type Result = super::results::SearchInResponseBodyResult;
@@ -616,14 +616,14 @@ pub enum SetBlockedUrLsMethod {
     #[serde(rename = "Network.setBlockedURLs")]
     SetBlockedUrLs,
 }
-impl SetBlockedUrLsMethod {
-    pub const IDENTIFIER: &'static str = "Network.setBlockedURLs";
-}
 #[doc = "Blocks URLs from loading.\n[setBlockedURLs](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-setBlockedURLs)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetBlockedUrLs {
     pub method: SetBlockedUrLsMethod,
     pub params: SetBlockedUrLsParams,
+}
+impl SetBlockedUrLs {
+    pub const IDENTIFIER: &'static str = "Network.setBlockedURLs";
 }
 impl crate::CommandResult for SetBlockedUrLs {
     type Result = super::results::SetBlockedUrLsResult;
@@ -647,14 +647,14 @@ pub enum SetBypassServiceWorkerMethod {
     #[serde(rename = "Network.setBypassServiceWorker")]
     SetBypassServiceWorker,
 }
-impl SetBypassServiceWorkerMethod {
-    pub const IDENTIFIER: &'static str = "Network.setBypassServiceWorker";
-}
 #[doc = "Toggles ignoring of service worker for each request.\n[setBypassServiceWorker](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-setBypassServiceWorker)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetBypassServiceWorker {
     pub method: SetBypassServiceWorkerMethod,
     pub params: SetBypassServiceWorkerParams,
+}
+impl SetBypassServiceWorker {
+    pub const IDENTIFIER: &'static str = "Network.setBypassServiceWorker";
 }
 impl crate::CommandResult for SetBypassServiceWorker {
     type Result = super::results::SetBypassServiceWorkerResult;
@@ -678,14 +678,14 @@ pub enum SetCacheDisabledMethod {
     #[serde(rename = "Network.setCacheDisabled")]
     SetCacheDisabled,
 }
-impl SetCacheDisabledMethod {
-    pub const IDENTIFIER: &'static str = "Network.setCacheDisabled";
-}
 #[doc = "Toggles ignoring cache for each request. If `true`, cache will not be used.\n[setCacheDisabled](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-setCacheDisabled)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetCacheDisabled {
     pub method: SetCacheDisabledMethod,
     pub params: SetCacheDisabledParams,
+}
+impl SetCacheDisabled {
+    pub const IDENTIFIER: &'static str = "Network.setCacheDisabled";
 }
 impl crate::CommandResult for SetCacheDisabled {
     type Result = super::results::SetCacheDisabledResult;
@@ -779,14 +779,14 @@ pub enum SetCookieMethod {
     #[serde(rename = "Network.setCookie")]
     SetCookie,
 }
-impl SetCookieMethod {
-    pub const IDENTIFIER: &'static str = "Network.setCookie";
-}
 #[doc = "Sets a cookie with the given cookie data; may overwrite equivalent cookies if they exist.\n[setCookie](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-setCookie)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetCookie {
     pub method: SetCookieMethod,
     pub params: SetCookieParams,
+}
+impl SetCookie {
+    pub const IDENTIFIER: &'static str = "Network.setCookie";
 }
 impl crate::CommandResult for SetCookie {
     type Result = super::results::SetCookieResult;
@@ -809,14 +809,14 @@ pub enum SetCookiesMethod {
     #[serde(rename = "Network.setCookies")]
     SetCookies,
 }
-impl SetCookiesMethod {
-    pub const IDENTIFIER: &'static str = "Network.setCookies";
-}
 #[doc = "Sets given cookies.\n[setCookies](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-setCookies)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetCookies {
     pub method: SetCookiesMethod,
     pub params: SetCookiesParams,
+}
+impl SetCookies {
+    pub const IDENTIFIER: &'static str = "Network.setCookies";
 }
 impl crate::CommandResult for SetCookies {
     type Result = super::results::SetCookiesResult;
@@ -840,14 +840,14 @@ pub enum SetExtraHttpHeadersMethod {
     #[serde(rename = "Network.setExtraHTTPHeaders")]
     SetExtraHttpHeaders,
 }
-impl SetExtraHttpHeadersMethod {
-    pub const IDENTIFIER: &'static str = "Network.setExtraHTTPHeaders";
-}
 #[doc = "Specifies whether to always send extra HTTP headers with the requests from this page.\n[setExtraHTTPHeaders](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-setExtraHTTPHeaders)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetExtraHttpHeaders {
     pub method: SetExtraHttpHeadersMethod,
     pub params: SetExtraHttpHeadersParams,
+}
+impl SetExtraHttpHeaders {
+    pub const IDENTIFIER: &'static str = "Network.setExtraHTTPHeaders";
 }
 impl crate::CommandResult for SetExtraHttpHeaders {
     type Result = super::results::SetExtraHttpHeadersResult;
@@ -871,14 +871,14 @@ pub enum SetAttachDebugStackMethod {
     #[serde(rename = "Network.setAttachDebugStack")]
     SetAttachDebugStack,
 }
-impl SetAttachDebugStackMethod {
-    pub const IDENTIFIER: &'static str = "Network.setAttachDebugStack";
-}
 #[doc = "Specifies whether to attach a page script stack id in requests\n[setAttachDebugStack](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-setAttachDebugStack)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetAttachDebugStack {
     pub method: SetAttachDebugStackMethod,
     pub params: SetAttachDebugStackParams,
+}
+impl SetAttachDebugStack {
+    pub const IDENTIFIER: &'static str = "Network.setAttachDebugStack";
 }
 impl crate::CommandResult for SetAttachDebugStack {
     type Result = super::results::SetAttachDebugStackResult;
@@ -925,14 +925,14 @@ pub enum SetUserAgentOverrideMethod {
     #[serde(rename = "Network.setUserAgentOverride")]
     SetUserAgentOverride,
 }
-impl SetUserAgentOverrideMethod {
-    pub const IDENTIFIER: &'static str = "Network.setUserAgentOverride";
-}
 #[doc = "Allows overriding user agent with the given string.\n[setUserAgentOverride](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-setUserAgentOverride)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetUserAgentOverride {
     pub method: SetUserAgentOverrideMethod,
     pub params: SetUserAgentOverrideParams,
+}
+impl SetUserAgentOverride {
+    pub const IDENTIFIER: &'static str = "Network.setUserAgentOverride";
 }
 impl crate::CommandResult for SetUserAgentOverride {
     type Result = super::results::SetUserAgentOverrideResult;
@@ -956,14 +956,14 @@ pub enum StreamResourceContentMethod {
     #[serde(rename = "Network.streamResourceContent")]
     StreamResourceContent,
 }
-impl StreamResourceContentMethod {
-    pub const IDENTIFIER: &'static str = "Network.streamResourceContent";
-}
 #[doc = "Enables streaming of the response for the given requestId.\nIf enabled, the dataReceived event contains the data that was received during streaming.\n[streamResourceContent](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-streamResourceContent)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct StreamResourceContent {
     pub method: StreamResourceContentMethod,
     pub params: StreamResourceContentParams,
+}
+impl StreamResourceContent {
+    pub const IDENTIFIER: &'static str = "Network.streamResourceContent";
 }
 impl crate::CommandResult for StreamResourceContent {
     type Result = super::results::StreamResourceContentResult;
@@ -982,14 +982,14 @@ pub enum GetSecurityIsolationStatusMethod {
     #[serde(rename = "Network.getSecurityIsolationStatus")]
     GetSecurityIsolationStatus,
 }
-impl GetSecurityIsolationStatusMethod {
-    pub const IDENTIFIER: &'static str = "Network.getSecurityIsolationStatus";
-}
 #[doc = "Returns information about the COEP/COOP isolation status.\n[getSecurityIsolationStatus](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-getSecurityIsolationStatus)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetSecurityIsolationStatus {
     pub method: GetSecurityIsolationStatusMethod,
     pub params: GetSecurityIsolationStatusParams,
+}
+impl GetSecurityIsolationStatus {
+    pub const IDENTIFIER: &'static str = "Network.getSecurityIsolationStatus";
 }
 impl crate::CommandResult for GetSecurityIsolationStatus {
     type Result = super::results::GetSecurityIsolationStatusResult;
@@ -1013,14 +1013,14 @@ pub enum EnableReportingApiMethod {
     #[serde(rename = "Network.enableReportingApi")]
     EnableReportingApi,
 }
-impl EnableReportingApiMethod {
-    pub const IDENTIFIER: &'static str = "Network.enableReportingApi";
-}
 #[doc = "Enables tracking for the Reporting API, events generated by the Reporting API will now be delivered to the client.\nEnabling triggers 'reportingApiReportAdded' for all existing reports.\n[enableReportingApi](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-enableReportingApi)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct EnableReportingApi {
     pub method: EnableReportingApiMethod,
     pub params: EnableReportingApiParams,
+}
+impl EnableReportingApi {
+    pub const IDENTIFIER: &'static str = "Network.enableReportingApi";
 }
 impl crate::CommandResult for EnableReportingApi {
     type Result = super::results::EnableReportingApiResult;
@@ -1044,14 +1044,14 @@ pub enum EnableDeviceBoundSessionsMethod {
     #[serde(rename = "Network.enableDeviceBoundSessions")]
     EnableDeviceBoundSessions,
 }
-impl EnableDeviceBoundSessionsMethod {
-    pub const IDENTIFIER: &'static str = "Network.enableDeviceBoundSessions";
-}
 #[doc = "Sets up tracking device bound sessions and fetching of initial set of sessions.\n[enableDeviceBoundSessions](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-enableDeviceBoundSessions)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct EnableDeviceBoundSessions {
     pub method: EnableDeviceBoundSessionsMethod,
     pub params: EnableDeviceBoundSessionsParams,
+}
+impl EnableDeviceBoundSessions {
+    pub const IDENTIFIER: &'static str = "Network.enableDeviceBoundSessions";
 }
 impl crate::CommandResult for EnableDeviceBoundSessions {
     type Result = super::results::EnableDeviceBoundSessionsResult;
@@ -1080,14 +1080,14 @@ pub enum FetchSchemefulSiteMethod {
     #[serde(rename = "Network.fetchSchemefulSite")]
     FetchSchemefulSite,
 }
-impl FetchSchemefulSiteMethod {
-    pub const IDENTIFIER: &'static str = "Network.fetchSchemefulSite";
-}
 #[doc = "Fetches the schemeful site for a specific origin.\n[fetchSchemefulSite](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-fetchSchemefulSite)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct FetchSchemefulSite {
     pub method: FetchSchemefulSiteMethod,
     pub params: FetchSchemefulSiteParams,
+}
+impl FetchSchemefulSite {
+    pub const IDENTIFIER: &'static str = "Network.fetchSchemefulSite";
 }
 impl crate::CommandResult for FetchSchemefulSite {
     type Result = super::results::FetchSchemefulSiteResult;
@@ -1124,14 +1124,14 @@ pub enum LoadNetworkResourceMethod {
     #[serde(rename = "Network.loadNetworkResource")]
     LoadNetworkResource,
 }
-impl LoadNetworkResourceMethod {
-    pub const IDENTIFIER: &'static str = "Network.loadNetworkResource";
-}
 #[doc = "Fetches the resource and returns the content.\n[loadNetworkResource](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-loadNetworkResource)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct LoadNetworkResource {
     pub method: LoadNetworkResourceMethod,
     pub params: LoadNetworkResourceParams,
+}
+impl LoadNetworkResource {
+    pub const IDENTIFIER: &'static str = "Network.loadNetworkResource";
 }
 impl crate::CommandResult for LoadNetworkResource {
     type Result = super::results::LoadNetworkResourceResult;
@@ -1167,14 +1167,14 @@ pub enum SetCookieControlsMethod {
     #[serde(rename = "Network.setCookieControls")]
     SetCookieControls,
 }
-impl SetCookieControlsMethod {
-    pub const IDENTIFIER: &'static str = "Network.setCookieControls";
-}
 #[doc = "Sets Controls for third-party cookie access\nPage reload is required before the new cookie behavior will be observed\n[setCookieControls](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-setCookieControls)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetCookieControls {
     pub method: SetCookieControlsMethod,
     pub params: SetCookieControlsParams,
+}
+impl SetCookieControls {
+    pub const IDENTIFIER: &'static str = "Network.setCookieControls";
 }
 impl crate::CommandResult for SetCookieControls {
     type Result = super::results::SetCookieControlsResult;

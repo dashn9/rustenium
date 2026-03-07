@@ -40,14 +40,14 @@ pub enum AddScriptToEvaluateOnNewDocumentMethod {
     #[serde(rename = "Page.addScriptToEvaluateOnNewDocument")]
     AddScriptToEvaluateOnNewDocument,
 }
-impl AddScriptToEvaluateOnNewDocumentMethod {
-    pub const IDENTIFIER: &'static str = "Page.addScriptToEvaluateOnNewDocument";
-}
 #[doc = "Evaluates given script in every frame upon creation (before loading frame's scripts).\n[addScriptToEvaluateOnNewDocument](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-addScriptToEvaluateOnNewDocument)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct AddScriptToEvaluateOnNewDocument {
     pub method: AddScriptToEvaluateOnNewDocumentMethod,
     pub params: AddScriptToEvaluateOnNewDocumentParams,
+}
+impl AddScriptToEvaluateOnNewDocument {
+    pub const IDENTIFIER: &'static str = "Page.addScriptToEvaluateOnNewDocument";
 }
 impl crate::CommandResult for AddScriptToEvaluateOnNewDocument {
     type Result = super::results::AddScriptToEvaluateOnNewDocumentResult;
@@ -60,14 +60,14 @@ pub enum BringToFrontMethod {
     #[serde(rename = "Page.bringToFront")]
     BringToFront,
 }
-impl BringToFrontMethod {
-    pub const IDENTIFIER: &'static str = "Page.bringToFront";
-}
 #[doc = "Brings page to front (activates tab).\n[bringToFront](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-bringToFront)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct BringToFront {
     pub method: BringToFrontMethod,
     pub params: BringToFrontParams,
+}
+impl BringToFront {
+    pub const IDENTIFIER: &'static str = "Page.bringToFront";
 }
 impl crate::CommandResult for BringToFront {
     type Result = super::results::BringToFrontResult;
@@ -121,14 +121,14 @@ pub enum CaptureScreenshotMethod {
     #[serde(rename = "Page.captureScreenshot")]
     CaptureScreenshot,
 }
-impl CaptureScreenshotMethod {
-    pub const IDENTIFIER: &'static str = "Page.captureScreenshot";
-}
 #[doc = "Capture page screenshot.\n[captureScreenshot](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-captureScreenshot)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct CaptureScreenshot {
     pub method: CaptureScreenshotMethod,
     pub params: CaptureScreenshotParams,
+}
+impl CaptureScreenshot {
+    pub const IDENTIFIER: &'static str = "Page.captureScreenshot";
 }
 impl crate::CommandResult for CaptureScreenshot {
     type Result = super::results::CaptureScreenshotResult;
@@ -153,14 +153,14 @@ pub enum CaptureSnapshotMethod {
     #[serde(rename = "Page.captureSnapshot")]
     CaptureSnapshot,
 }
-impl CaptureSnapshotMethod {
-    pub const IDENTIFIER: &'static str = "Page.captureSnapshot";
-}
 #[doc = "Returns a snapshot of the page as a string. For MHTML format, the serialization includes\niframes, shadow DOM, external resources, and element-inline styles.\n[captureSnapshot](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-captureSnapshot)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct CaptureSnapshot {
     pub method: CaptureSnapshotMethod,
     pub params: CaptureSnapshotParams,
+}
+impl CaptureSnapshot {
+    pub const IDENTIFIER: &'static str = "Page.captureSnapshot";
 }
 impl crate::CommandResult for CaptureSnapshot {
     type Result = super::results::CaptureSnapshotResult;
@@ -196,14 +196,14 @@ pub enum CreateIsolatedWorldMethod {
     #[serde(rename = "Page.createIsolatedWorld")]
     CreateIsolatedWorld,
 }
-impl CreateIsolatedWorldMethod {
-    pub const IDENTIFIER: &'static str = "Page.createIsolatedWorld";
-}
 #[doc = "Creates an isolated world for the given frame.\n[createIsolatedWorld](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-createIsolatedWorld)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct CreateIsolatedWorld {
     pub method: CreateIsolatedWorldMethod,
     pub params: CreateIsolatedWorldParams,
+}
+impl CreateIsolatedWorld {
+    pub const IDENTIFIER: &'static str = "Page.createIsolatedWorld";
 }
 impl crate::CommandResult for CreateIsolatedWorld {
     type Result = super::results::CreateIsolatedWorldResult;
@@ -216,14 +216,14 @@ pub enum DisableMethod {
     #[serde(rename = "Page.disable")]
     Disable,
 }
-impl DisableMethod {
-    pub const IDENTIFIER: &'static str = "Page.disable";
-}
 #[doc = "Disables page domain notifications.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-disable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
+}
+impl Disable {
+    pub const IDENTIFIER: &'static str = "Page.disable";
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -242,14 +242,14 @@ pub enum EnableMethod {
     #[serde(rename = "Page.enable")]
     Enable,
 }
-impl EnableMethod {
-    pub const IDENTIFIER: &'static str = "Page.enable";
-}
 #[doc = "Enables page domain notifications.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-enable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl Enable {
+    pub const IDENTIFIER: &'static str = "Page.enable";
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -267,14 +267,14 @@ pub enum GetAppManifestMethod {
     #[serde(rename = "Page.getAppManifest")]
     GetAppManifest,
 }
-impl GetAppManifestMethod {
-    pub const IDENTIFIER: &'static str = "Page.getAppManifest";
-}
 #[doc = "Gets the processed manifest for this current document.\nThis API always waits for the manifest to be loaded.\nIf manifestId is provided, and it does not match the manifest of the\ncurrent document, this API errors out.\nIf there is not a loaded page, this API errors out immediately.\n[getAppManifest](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getAppManifest)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetAppManifest {
     pub method: GetAppManifestMethod,
     pub params: GetAppManifestParams,
+}
+impl GetAppManifest {
+    pub const IDENTIFIER: &'static str = "Page.getAppManifest";
 }
 impl crate::CommandResult for GetAppManifest {
     type Result = super::results::GetAppManifestResult;
@@ -286,13 +286,13 @@ pub enum GetInstallabilityErrorsMethod {
     #[serde(rename = "Page.getInstallabilityErrors")]
     GetInstallabilityErrors,
 }
-impl GetInstallabilityErrorsMethod {
-    pub const IDENTIFIER: &'static str = "Page.getInstallabilityErrors";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetInstallabilityErrors {
     pub method: GetInstallabilityErrorsMethod,
     pub params: GetInstallabilityErrorsParams,
+}
+impl GetInstallabilityErrors {
+    pub const IDENTIFIER: &'static str = "Page.getInstallabilityErrors";
 }
 impl crate::CommandResult for GetInstallabilityErrors {
     type Result = super::results::GetInstallabilityErrorsResult;
@@ -305,14 +305,14 @@ pub enum GetAppIdMethod {
     #[serde(rename = "Page.getAppId")]
     GetAppId,
 }
-impl GetAppIdMethod {
-    pub const IDENTIFIER: &'static str = "Page.getAppId";
-}
 #[doc = "Returns the unique (PWA) app id.\nOnly returns values if the feature flag 'WebAppEnableManifestId' is enabled\n[getAppId](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getAppId)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetAppId {
     pub method: GetAppIdMethod,
     pub params: GetAppIdParams,
+}
+impl GetAppId {
+    pub const IDENTIFIER: &'static str = "Page.getAppId";
 }
 impl crate::CommandResult for GetAppId {
     type Result = super::results::GetAppIdResult;
@@ -334,13 +334,13 @@ pub enum GetAdScriptAncestryMethod {
     #[serde(rename = "Page.getAdScriptAncestry")]
     GetAdScriptAncestry,
 }
-impl GetAdScriptAncestryMethod {
-    pub const IDENTIFIER: &'static str = "Page.getAdScriptAncestry";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetAdScriptAncestry {
     pub method: GetAdScriptAncestryMethod,
     pub params: GetAdScriptAncestryParams,
+}
+impl GetAdScriptAncestry {
+    pub const IDENTIFIER: &'static str = "Page.getAdScriptAncestry";
 }
 impl crate::CommandResult for GetAdScriptAncestry {
     type Result = super::results::GetAdScriptAncestryResult;
@@ -353,14 +353,14 @@ pub enum GetFrameTreeMethod {
     #[serde(rename = "Page.getFrameTree")]
     GetFrameTree,
 }
-impl GetFrameTreeMethod {
-    pub const IDENTIFIER: &'static str = "Page.getFrameTree";
-}
 #[doc = "Returns present frame tree structure.\n[getFrameTree](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getFrameTree)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetFrameTree {
     pub method: GetFrameTreeMethod,
     pub params: GetFrameTreeParams,
+}
+impl GetFrameTree {
+    pub const IDENTIFIER: &'static str = "Page.getFrameTree";
 }
 impl crate::CommandResult for GetFrameTree {
     type Result = super::results::GetFrameTreeResult;
@@ -373,14 +373,14 @@ pub enum GetLayoutMetricsMethod {
     #[serde(rename = "Page.getLayoutMetrics")]
     GetLayoutMetrics,
 }
-impl GetLayoutMetricsMethod {
-    pub const IDENTIFIER: &'static str = "Page.getLayoutMetrics";
-}
 #[doc = "Returns metrics relating to the layouting of the page, such as viewport bounds/scale.\n[getLayoutMetrics](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getLayoutMetrics)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetLayoutMetrics {
     pub method: GetLayoutMetricsMethod,
     pub params: GetLayoutMetricsParams,
+}
+impl GetLayoutMetrics {
+    pub const IDENTIFIER: &'static str = "Page.getLayoutMetrics";
 }
 impl crate::CommandResult for GetLayoutMetrics {
     type Result = super::results::GetLayoutMetricsResult;
@@ -393,14 +393,14 @@ pub enum GetNavigationHistoryMethod {
     #[serde(rename = "Page.getNavigationHistory")]
     GetNavigationHistory,
 }
-impl GetNavigationHistoryMethod {
-    pub const IDENTIFIER: &'static str = "Page.getNavigationHistory";
-}
 #[doc = "Returns navigation history for the current page.\n[getNavigationHistory](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getNavigationHistory)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetNavigationHistory {
     pub method: GetNavigationHistoryMethod,
     pub params: GetNavigationHistoryParams,
+}
+impl GetNavigationHistory {
+    pub const IDENTIFIER: &'static str = "Page.getNavigationHistory";
 }
 impl crate::CommandResult for GetNavigationHistory {
     type Result = super::results::GetNavigationHistoryResult;
@@ -413,14 +413,14 @@ pub enum ResetNavigationHistoryMethod {
     #[serde(rename = "Page.resetNavigationHistory")]
     ResetNavigationHistory,
 }
-impl ResetNavigationHistoryMethod {
-    pub const IDENTIFIER: &'static str = "Page.resetNavigationHistory";
-}
 #[doc = "Resets navigation history for the current page.\n[resetNavigationHistory](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-resetNavigationHistory)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ResetNavigationHistory {
     pub method: ResetNavigationHistoryMethod,
     pub params: ResetNavigationHistoryParams,
+}
+impl ResetNavigationHistory {
+    pub const IDENTIFIER: &'static str = "Page.resetNavigationHistory";
 }
 impl crate::CommandResult for ResetNavigationHistory {
     type Result = super::results::ResetNavigationHistoryResult;
@@ -448,14 +448,14 @@ pub enum GetResourceContentMethod {
     #[serde(rename = "Page.getResourceContent")]
     GetResourceContent,
 }
-impl GetResourceContentMethod {
-    pub const IDENTIFIER: &'static str = "Page.getResourceContent";
-}
 #[doc = "Returns content of the given resource.\n[getResourceContent](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getResourceContent)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetResourceContent {
     pub method: GetResourceContentMethod,
     pub params: GetResourceContentParams,
+}
+impl GetResourceContent {
+    pub const IDENTIFIER: &'static str = "Page.getResourceContent";
 }
 impl crate::CommandResult for GetResourceContent {
     type Result = super::results::GetResourceContentResult;
@@ -468,14 +468,14 @@ pub enum GetResourceTreeMethod {
     #[serde(rename = "Page.getResourceTree")]
     GetResourceTree,
 }
-impl GetResourceTreeMethod {
-    pub const IDENTIFIER: &'static str = "Page.getResourceTree";
-}
 #[doc = "Returns present frame / resource tree structure.\n[getResourceTree](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getResourceTree)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetResourceTree {
     pub method: GetResourceTreeMethod,
     pub params: GetResourceTreeParams,
+}
+impl GetResourceTree {
+    pub const IDENTIFIER: &'static str = "Page.getResourceTree";
 }
 impl crate::CommandResult for GetResourceTree {
     type Result = super::results::GetResourceTreeResult;
@@ -505,14 +505,14 @@ pub enum HandleJavaScriptDialogMethod {
     #[serde(rename = "Page.handleJavaScriptDialog")]
     HandleJavaScriptDialog,
 }
-impl HandleJavaScriptDialogMethod {
-    pub const IDENTIFIER: &'static str = "Page.handleJavaScriptDialog";
-}
 #[doc = "Accepts or dismisses a JavaScript initiated dialog (alert, confirm, prompt, or onbeforeunload).\n[handleJavaScriptDialog](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-handleJavaScriptDialog)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct HandleJavaScriptDialog {
     pub method: HandleJavaScriptDialogMethod,
     pub params: HandleJavaScriptDialogParams,
+}
+impl HandleJavaScriptDialog {
+    pub const IDENTIFIER: &'static str = "Page.handleJavaScriptDialog";
 }
 impl crate::CommandResult for HandleJavaScriptDialog {
     type Result = super::results::HandleJavaScriptDialogResult;
@@ -565,14 +565,14 @@ pub enum NavigateMethod {
     #[serde(rename = "Page.navigate")]
     Navigate,
 }
-impl NavigateMethod {
-    pub const IDENTIFIER: &'static str = "Page.navigate";
-}
 #[doc = "Navigates current page to the given URL.\n[navigate](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-navigate)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Navigate {
     pub method: NavigateMethod,
     pub params: NavigateParams,
+}
+impl Navigate {
+    pub const IDENTIFIER: &'static str = "Page.navigate";
 }
 impl crate::CommandResult for Navigate {
     type Result = super::results::NavigateResult;
@@ -596,14 +596,14 @@ pub enum NavigateToHistoryEntryMethod {
     #[serde(rename = "Page.navigateToHistoryEntry")]
     NavigateToHistoryEntry,
 }
-impl NavigateToHistoryEntryMethod {
-    pub const IDENTIFIER: &'static str = "Page.navigateToHistoryEntry";
-}
 #[doc = "Navigates current page to the given history entry.\n[navigateToHistoryEntry](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-navigateToHistoryEntry)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct NavigateToHistoryEntry {
     pub method: NavigateToHistoryEntryMethod,
     pub params: NavigateToHistoryEntryParams,
+}
+impl NavigateToHistoryEntry {
+    pub const IDENTIFIER: &'static str = "Page.navigateToHistoryEntry";
 }
 impl crate::CommandResult for NavigateToHistoryEntry {
     type Result = super::results::NavigateToHistoryEntryResult;
@@ -710,14 +710,14 @@ pub enum PrintToPdfMethod {
     #[serde(rename = "Page.printToPDF")]
     PrintToPdf,
 }
-impl PrintToPdfMethod {
-    pub const IDENTIFIER: &'static str = "Page.printToPDF";
-}
 #[doc = "Print page as PDF.\n[printToPDF](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-printToPDF)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct PrintToPdf {
     pub method: PrintToPdfMethod,
     pub params: PrintToPdfParams,
+}
+impl PrintToPdf {
+    pub const IDENTIFIER: &'static str = "Page.printToPDF";
 }
 impl crate::CommandResult for PrintToPdf {
     type Result = super::results::PrintToPdfResult;
@@ -746,14 +746,14 @@ pub enum ReloadMethod {
     #[serde(rename = "Page.reload")]
     Reload,
 }
-impl ReloadMethod {
-    pub const IDENTIFIER: &'static str = "Page.reload";
-}
 #[doc = "Reloads given page optionally ignoring the cache.\n[reload](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-reload)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Reload {
     pub method: ReloadMethod,
     pub params: ReloadParams,
+}
+impl Reload {
+    pub const IDENTIFIER: &'static str = "Page.reload";
 }
 impl crate::CommandResult for Reload {
     type Result = super::results::ReloadResult;
@@ -776,14 +776,14 @@ pub enum RemoveScriptToEvaluateOnNewDocumentMethod {
     #[serde(rename = "Page.removeScriptToEvaluateOnNewDocument")]
     RemoveScriptToEvaluateOnNewDocument,
 }
-impl RemoveScriptToEvaluateOnNewDocumentMethod {
-    pub const IDENTIFIER: &'static str = "Page.removeScriptToEvaluateOnNewDocument";
-}
 #[doc = "Removes given script from the list.\n[removeScriptToEvaluateOnNewDocument](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-removeScriptToEvaluateOnNewDocument)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct RemoveScriptToEvaluateOnNewDocument {
     pub method: RemoveScriptToEvaluateOnNewDocumentMethod,
     pub params: RemoveScriptToEvaluateOnNewDocumentParams,
+}
+impl RemoveScriptToEvaluateOnNewDocument {
+    pub const IDENTIFIER: &'static str = "Page.removeScriptToEvaluateOnNewDocument";
 }
 impl crate::CommandResult for RemoveScriptToEvaluateOnNewDocument {
     type Result = super::results::RemoveScriptToEvaluateOnNewDocumentResult;
@@ -807,14 +807,14 @@ pub enum ScreencastFrameAckMethod {
     #[serde(rename = "Page.screencastFrameAck")]
     ScreencastFrameAck,
 }
-impl ScreencastFrameAckMethod {
-    pub const IDENTIFIER: &'static str = "Page.screencastFrameAck";
-}
 #[doc = "Acknowledges that a screencast frame has been received by the frontend.\n[screencastFrameAck](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-screencastFrameAck)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ScreencastFrameAck {
     pub method: ScreencastFrameAckMethod,
     pub params: ScreencastFrameAckParams,
+}
+impl ScreencastFrameAck {
+    pub const IDENTIFIER: &'static str = "Page.screencastFrameAck";
 }
 impl crate::CommandResult for ScreencastFrameAck {
     type Result = super::results::ScreencastFrameAckResult;
@@ -862,14 +862,14 @@ pub enum SearchInResourceMethod {
     #[serde(rename = "Page.searchInResource")]
     SearchInResource,
 }
-impl SearchInResourceMethod {
-    pub const IDENTIFIER: &'static str = "Page.searchInResource";
-}
 #[doc = "Searches for given string in resource content.\n[searchInResource](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-searchInResource)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SearchInResource {
     pub method: SearchInResourceMethod,
     pub params: SearchInResourceParams,
+}
+impl SearchInResource {
+    pub const IDENTIFIER: &'static str = "Page.searchInResource";
 }
 impl crate::CommandResult for SearchInResource {
     type Result = super::results::SearchInResourceResult;
@@ -893,14 +893,14 @@ pub enum SetAdBlockingEnabledMethod {
     #[serde(rename = "Page.setAdBlockingEnabled")]
     SetAdBlockingEnabled,
 }
-impl SetAdBlockingEnabledMethod {
-    pub const IDENTIFIER: &'static str = "Page.setAdBlockingEnabled";
-}
 #[doc = "Enable Chrome's experimental ad filter on all sites.\n[setAdBlockingEnabled](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setAdBlockingEnabled)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetAdBlockingEnabled {
     pub method: SetAdBlockingEnabledMethod,
     pub params: SetAdBlockingEnabledParams,
+}
+impl SetAdBlockingEnabled {
+    pub const IDENTIFIER: &'static str = "Page.setAdBlockingEnabled";
 }
 impl crate::CommandResult for SetAdBlockingEnabled {
     type Result = super::results::SetAdBlockingEnabledResult;
@@ -924,14 +924,14 @@ pub enum SetBypassCspMethod {
     #[serde(rename = "Page.setBypassCSP")]
     SetBypassCsp,
 }
-impl SetBypassCspMethod {
-    pub const IDENTIFIER: &'static str = "Page.setBypassCSP";
-}
 #[doc = "Enable page Content Security Policy by-passing.\n[setBypassCSP](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setBypassCSP)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetBypassCsp {
     pub method: SetBypassCspMethod,
     pub params: SetBypassCspParams,
+}
+impl SetBypassCsp {
+    pub const IDENTIFIER: &'static str = "Page.setBypassCSP";
 }
 impl crate::CommandResult for SetBypassCsp {
     type Result = super::results::SetBypassCspResult;
@@ -954,14 +954,14 @@ pub enum GetPermissionsPolicyStateMethod {
     #[serde(rename = "Page.getPermissionsPolicyState")]
     GetPermissionsPolicyState,
 }
-impl GetPermissionsPolicyStateMethod {
-    pub const IDENTIFIER: &'static str = "Page.getPermissionsPolicyState";
-}
 #[doc = "Get Permissions Policy state on given frame.\n[getPermissionsPolicyState](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getPermissionsPolicyState)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetPermissionsPolicyState {
     pub method: GetPermissionsPolicyStateMethod,
     pub params: GetPermissionsPolicyStateParams,
+}
+impl GetPermissionsPolicyState {
+    pub const IDENTIFIER: &'static str = "Page.getPermissionsPolicyState";
 }
 impl crate::CommandResult for GetPermissionsPolicyState {
     type Result = super::results::GetPermissionsPolicyStateResult;
@@ -984,14 +984,14 @@ pub enum GetOriginTrialsMethod {
     #[serde(rename = "Page.getOriginTrials")]
     GetOriginTrials,
 }
-impl GetOriginTrialsMethod {
-    pub const IDENTIFIER: &'static str = "Page.getOriginTrials";
-}
 #[doc = "Get Origin Trials on given frame.\n[getOriginTrials](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getOriginTrials)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetOriginTrials {
     pub method: GetOriginTrialsMethod,
     pub params: GetOriginTrialsParams,
+}
+impl GetOriginTrials {
+    pub const IDENTIFIER: &'static str = "Page.getOriginTrials";
 }
 impl crate::CommandResult for GetOriginTrials {
     type Result = super::results::GetOriginTrialsResult;
@@ -1021,14 +1021,14 @@ pub enum SetFontFamiliesMethod {
     #[serde(rename = "Page.setFontFamilies")]
     SetFontFamilies,
 }
-impl SetFontFamiliesMethod {
-    pub const IDENTIFIER: &'static str = "Page.setFontFamilies";
-}
 #[doc = "Set generic font families.\n[setFontFamilies](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setFontFamilies)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetFontFamilies {
     pub method: SetFontFamiliesMethod,
     pub params: SetFontFamiliesParams,
+}
+impl SetFontFamilies {
+    pub const IDENTIFIER: &'static str = "Page.setFontFamilies";
 }
 impl crate::CommandResult for SetFontFamilies {
     type Result = super::results::SetFontFamiliesResult;
@@ -1052,14 +1052,14 @@ pub enum SetFontSizesMethod {
     #[serde(rename = "Page.setFontSizes")]
     SetFontSizes,
 }
-impl SetFontSizesMethod {
-    pub const IDENTIFIER: &'static str = "Page.setFontSizes";
-}
 #[doc = "Set default font sizes.\n[setFontSizes](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setFontSizes)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetFontSizes {
     pub method: SetFontSizesMethod,
     pub params: SetFontSizesParams,
+}
+impl SetFontSizes {
+    pub const IDENTIFIER: &'static str = "Page.setFontSizes";
 }
 impl crate::CommandResult for SetFontSizes {
     type Result = super::results::SetFontSizesResult;
@@ -1087,14 +1087,14 @@ pub enum SetDocumentContentMethod {
     #[serde(rename = "Page.setDocumentContent")]
     SetDocumentContent,
 }
-impl SetDocumentContentMethod {
-    pub const IDENTIFIER: &'static str = "Page.setDocumentContent";
-}
 #[doc = "Sets given markup as the document's HTML.\n[setDocumentContent](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setDocumentContent)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetDocumentContent {
     pub method: SetDocumentContentMethod,
     pub params: SetDocumentContentParams,
+}
+impl SetDocumentContent {
+    pub const IDENTIFIER: &'static str = "Page.setDocumentContent";
 }
 impl crate::CommandResult for SetDocumentContent {
     type Result = super::results::SetDocumentContentResult;
@@ -1118,14 +1118,14 @@ pub enum SetLifecycleEventsEnabledMethod {
     #[serde(rename = "Page.setLifecycleEventsEnabled")]
     SetLifecycleEventsEnabled,
 }
-impl SetLifecycleEventsEnabledMethod {
-    pub const IDENTIFIER: &'static str = "Page.setLifecycleEventsEnabled";
-}
 #[doc = "Controls whether page will emit lifecycle events.\n[setLifecycleEventsEnabled](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setLifecycleEventsEnabled)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetLifecycleEventsEnabled {
     pub method: SetLifecycleEventsEnabledMethod,
     pub params: SetLifecycleEventsEnabledParams,
+}
+impl SetLifecycleEventsEnabled {
+    pub const IDENTIFIER: &'static str = "Page.setLifecycleEventsEnabled";
 }
 impl crate::CommandResult for SetLifecycleEventsEnabled {
     type Result = super::results::SetLifecycleEventsEnabledResult;
@@ -1172,14 +1172,14 @@ pub enum StartScreencastMethod {
     #[serde(rename = "Page.startScreencast")]
     StartScreencast,
 }
-impl StartScreencastMethod {
-    pub const IDENTIFIER: &'static str = "Page.startScreencast";
-}
 #[doc = "Starts sending each frame using the `screencastFrame` event.\n[startScreencast](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-startScreencast)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct StartScreencast {
     pub method: StartScreencastMethod,
     pub params: StartScreencastParams,
+}
+impl StartScreencast {
+    pub const IDENTIFIER: &'static str = "Page.startScreencast";
 }
 impl crate::CommandResult for StartScreencast {
     type Result = super::results::StartScreencastResult;
@@ -1192,14 +1192,14 @@ pub enum StopLoadingMethod {
     #[serde(rename = "Page.stopLoading")]
     StopLoading,
 }
-impl StopLoadingMethod {
-    pub const IDENTIFIER: &'static str = "Page.stopLoading";
-}
 #[doc = "Force the page stop all navigations and pending resource fetches.\n[stopLoading](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-stopLoading)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct StopLoading {
     pub method: StopLoadingMethod,
     pub params: StopLoadingParams,
+}
+impl StopLoading {
+    pub const IDENTIFIER: &'static str = "Page.stopLoading";
 }
 impl crate::CommandResult for StopLoading {
     type Result = super::results::StopLoadingResult;
@@ -1212,14 +1212,14 @@ pub enum CrashMethod {
     #[serde(rename = "Page.crash")]
     Crash,
 }
-impl CrashMethod {
-    pub const IDENTIFIER: &'static str = "Page.crash";
-}
 #[doc = "Crashes renderer on the IO thread, generates minidumps.\n[crash](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-crash)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Crash {
     pub method: CrashMethod,
     pub params: CrashParams,
+}
+impl Crash {
+    pub const IDENTIFIER: &'static str = "Page.crash";
 }
 impl crate::CommandResult for Crash {
     type Result = super::results::CrashResult;
@@ -1232,14 +1232,14 @@ pub enum CloseMethod {
     #[serde(rename = "Page.close")]
     Close,
 }
-impl CloseMethod {
-    pub const IDENTIFIER: &'static str = "Page.close";
-}
 #[doc = "Tries to close page, running its beforeunload hooks, if any.\n[close](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-close)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Close {
     pub method: CloseMethod,
     pub params: CloseParams,
+}
+impl Close {
+    pub const IDENTIFIER: &'static str = "Page.close";
 }
 impl crate::CommandResult for Close {
     type Result = super::results::CloseResult;
@@ -1271,14 +1271,14 @@ pub enum SetWebLifecycleStateMethod {
     #[serde(rename = "Page.setWebLifecycleState")]
     SetWebLifecycleState,
 }
-impl SetWebLifecycleStateMethod {
-    pub const IDENTIFIER: &'static str = "Page.setWebLifecycleState";
-}
 #[doc = "Tries to update the web lifecycle state of the page.\nIt will transition the page to the given state according to:\nhttps://github.com/WICG/web-lifecycle/\n[setWebLifecycleState](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setWebLifecycleState)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetWebLifecycleState {
     pub method: SetWebLifecycleStateMethod,
     pub params: SetWebLifecycleStateParams,
+}
+impl SetWebLifecycleState {
+    pub const IDENTIFIER: &'static str = "Page.setWebLifecycleState";
 }
 impl crate::CommandResult for SetWebLifecycleState {
     type Result = super::results::SetWebLifecycleStateResult;
@@ -1291,14 +1291,14 @@ pub enum StopScreencastMethod {
     #[serde(rename = "Page.stopScreencast")]
     StopScreencast,
 }
-impl StopScreencastMethod {
-    pub const IDENTIFIER: &'static str = "Page.stopScreencast";
-}
 #[doc = "Stops sending each frame in the `screencastFrame`.\n[stopScreencast](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-stopScreencast)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct StopScreencast {
     pub method: StopScreencastMethod,
     pub params: StopScreencastParams,
+}
+impl StopScreencast {
+    pub const IDENTIFIER: &'static str = "Page.stopScreencast";
 }
 impl crate::CommandResult for StopScreencast {
     type Result = super::results::StopScreencastResult;
@@ -1320,14 +1320,14 @@ pub enum ProduceCompilationCacheMethod {
     #[serde(rename = "Page.produceCompilationCache")]
     ProduceCompilationCache,
 }
-impl ProduceCompilationCacheMethod {
-    pub const IDENTIFIER: &'static str = "Page.produceCompilationCache";
-}
 #[doc = "Requests backend to produce compilation cache for the specified scripts.\n`scripts` are appended to the list of scripts for which the cache\nwould be produced. The list may be reset during page navigation.\nWhen script with a matching URL is encountered, the cache is optionally\nproduced upon backend discretion, based on internal heuristics.\nSee also: `Page.compilationCacheProduced`.\n[produceCompilationCache](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-produceCompilationCache)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ProduceCompilationCache {
     pub method: ProduceCompilationCacheMethod,
     pub params: ProduceCompilationCacheParams,
+}
+impl ProduceCompilationCache {
+    pub const IDENTIFIER: &'static str = "Page.produceCompilationCache";
 }
 impl crate::CommandResult for ProduceCompilationCache {
     type Result = super::results::ProduceCompilationCacheResult;
@@ -1354,14 +1354,14 @@ pub enum AddCompilationCacheMethod {
     #[serde(rename = "Page.addCompilationCache")]
     AddCompilationCache,
 }
-impl AddCompilationCacheMethod {
-    pub const IDENTIFIER: &'static str = "Page.addCompilationCache";
-}
 #[doc = "Seeds compilation cache for given url. Compilation cache does not survive\ncross-process navigation.\n[addCompilationCache](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-addCompilationCache)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct AddCompilationCache {
     pub method: AddCompilationCacheMethod,
     pub params: AddCompilationCacheParams,
+}
+impl AddCompilationCache {
+    pub const IDENTIFIER: &'static str = "Page.addCompilationCache";
 }
 impl crate::CommandResult for AddCompilationCache {
     type Result = super::results::AddCompilationCacheResult;
@@ -1374,14 +1374,14 @@ pub enum ClearCompilationCacheMethod {
     #[serde(rename = "Page.clearCompilationCache")]
     ClearCompilationCache,
 }
-impl ClearCompilationCacheMethod {
-    pub const IDENTIFIER: &'static str = "Page.clearCompilationCache";
-}
 #[doc = "Clears seeded compilation cache.\n[clearCompilationCache](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-clearCompilationCache)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ClearCompilationCache {
     pub method: ClearCompilationCacheMethod,
     pub params: ClearCompilationCacheParams,
+}
+impl ClearCompilationCache {
+    pub const IDENTIFIER: &'static str = "Page.clearCompilationCache";
 }
 impl crate::CommandResult for ClearCompilationCache {
     type Result = super::results::ClearCompilationCacheResult;
@@ -1415,14 +1415,14 @@ pub enum SetSpcTransactionModeMethod {
     #[serde(rename = "Page.setSPCTransactionMode")]
     SetSpcTransactionMode,
 }
-impl SetSpcTransactionModeMethod {
-    pub const IDENTIFIER: &'static str = "Page.setSPCTransactionMode";
-}
 #[doc = "Sets the Secure Payment Confirmation transaction mode.\nhttps://w3c.github.io/secure-payment-confirmation/#sctn-automation-set-spc-transaction-mode\n[setSPCTransactionMode](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setSPCTransactionMode)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetSpcTransactionMode {
     pub method: SetSpcTransactionModeMethod,
     pub params: SetSpcTransactionModeParams,
+}
+impl SetSpcTransactionMode {
+    pub const IDENTIFIER: &'static str = "Page.setSPCTransactionMode";
 }
 impl crate::CommandResult for SetSpcTransactionMode {
     type Result = super::results::SetSpcTransactionModeResult;
@@ -1452,14 +1452,14 @@ pub enum SetRphRegistrationModeMethod {
     #[serde(rename = "Page.setRPHRegistrationMode")]
     SetRphRegistrationMode,
 }
-impl SetRphRegistrationModeMethod {
-    pub const IDENTIFIER: &'static str = "Page.setRPHRegistrationMode";
-}
 #[doc = "Extensions for Custom Handlers API:\nhttps://html.spec.whatwg.org/multipage/system-state.html#rph-automation\n[setRPHRegistrationMode](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setRPHRegistrationMode)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetRphRegistrationMode {
     pub method: SetRphRegistrationModeMethod,
     pub params: SetRphRegistrationModeParams,
+}
+impl SetRphRegistrationMode {
+    pub const IDENTIFIER: &'static str = "Page.setRPHRegistrationMode";
 }
 impl crate::CommandResult for SetRphRegistrationMode {
     type Result = super::results::SetRphRegistrationModeResult;
@@ -1494,14 +1494,14 @@ pub enum GenerateTestReportMethod {
     #[serde(rename = "Page.generateTestReport")]
     GenerateTestReport,
 }
-impl GenerateTestReportMethod {
-    pub const IDENTIFIER: &'static str = "Page.generateTestReport";
-}
 #[doc = "Generates a report for testing.\n[generateTestReport](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-generateTestReport)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GenerateTestReport {
     pub method: GenerateTestReportMethod,
     pub params: GenerateTestReportParams,
+}
+impl GenerateTestReport {
+    pub const IDENTIFIER: &'static str = "Page.generateTestReport";
 }
 impl crate::CommandResult for GenerateTestReport {
     type Result = super::results::GenerateTestReportResult;
@@ -1514,14 +1514,14 @@ pub enum WaitForDebuggerMethod {
     #[serde(rename = "Page.waitForDebugger")]
     WaitForDebugger,
 }
-impl WaitForDebuggerMethod {
-    pub const IDENTIFIER: &'static str = "Page.waitForDebugger";
-}
 #[doc = "Pauses page execution. Can be resumed using generic Runtime.runIfWaitingForDebugger.\n[waitForDebugger](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-waitForDebugger)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct WaitForDebugger {
     pub method: WaitForDebuggerMethod,
     pub params: WaitForDebuggerParams,
+}
+impl WaitForDebugger {
+    pub const IDENTIFIER: &'static str = "Page.waitForDebugger";
 }
 impl crate::CommandResult for WaitForDebugger {
     type Result = super::results::WaitForDebuggerResult;
@@ -1550,14 +1550,14 @@ pub enum SetInterceptFileChooserDialogMethod {
     #[serde(rename = "Page.setInterceptFileChooserDialog")]
     SetInterceptFileChooserDialog,
 }
-impl SetInterceptFileChooserDialogMethod {
-    pub const IDENTIFIER: &'static str = "Page.setInterceptFileChooserDialog";
-}
 #[doc = "Intercept file chooser requests and transfer control to protocol clients.\nWhen file chooser interception is enabled, native file chooser dialog is not shown.\nInstead, a protocol event `Page.fileChooserOpened` is emitted.\n[setInterceptFileChooserDialog](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setInterceptFileChooserDialog)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetInterceptFileChooserDialog {
     pub method: SetInterceptFileChooserDialogMethod,
     pub params: SetInterceptFileChooserDialogParams,
+}
+impl SetInterceptFileChooserDialog {
+    pub const IDENTIFIER: &'static str = "Page.setInterceptFileChooserDialog";
 }
 impl crate::CommandResult for SetInterceptFileChooserDialog {
     type Result = super::results::SetInterceptFileChooserDialogResult;
@@ -1580,14 +1580,14 @@ pub enum SetPrerenderingAllowedMethod {
     #[serde(rename = "Page.setPrerenderingAllowed")]
     SetPrerenderingAllowed,
 }
-impl SetPrerenderingAllowedMethod {
-    pub const IDENTIFIER: &'static str = "Page.setPrerenderingAllowed";
-}
 #[doc = "Enable/disable prerendering manually.\n\nThis command is a short-term solution for https://crbug.com/1440085.\nSee https://docs.google.com/document/d/12HVmFxYj5Jc-eJr5OmWsa2bqTJsbgGLKI6ZIyx0_wpA\nfor more details.\n\nTODO(https://crbug.com/1440085): Remove this once Puppeteer supports tab targets.\n[setPrerenderingAllowed](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setPrerenderingAllowed)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetPrerenderingAllowed {
     pub method: SetPrerenderingAllowedMethod,
     pub params: SetPrerenderingAllowedParams,
+}
+impl SetPrerenderingAllowed {
+    pub const IDENTIFIER: &'static str = "Page.setPrerenderingAllowed";
 }
 impl crate::CommandResult for SetPrerenderingAllowed {
     type Result = super::results::SetPrerenderingAllowedResult;
@@ -1606,14 +1606,14 @@ pub enum GetAnnotatedPageContentMethod {
     #[serde(rename = "Page.getAnnotatedPageContent")]
     GetAnnotatedPageContent,
 }
-impl GetAnnotatedPageContentMethod {
-    pub const IDENTIFIER: &'static str = "Page.getAnnotatedPageContent";
-}
 #[doc = "Get the annotated page content for the main frame.\nThis is an experimental command that is subject to change.\n[getAnnotatedPageContent](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getAnnotatedPageContent)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetAnnotatedPageContent {
     pub method: GetAnnotatedPageContentMethod,
     pub params: GetAnnotatedPageContentParams,
+}
+impl GetAnnotatedPageContent {
+    pub const IDENTIFIER: &'static str = "Page.getAnnotatedPageContent";
 }
 impl crate::CommandResult for GetAnnotatedPageContent {
     type Result = super::results::GetAnnotatedPageContentResult;

@@ -10,13 +10,13 @@ pub enum TimelineEventAddedMethod {
     #[serde(rename = "PerformanceTimeline.timelineEventAdded")]
     TimelineEventAdded,
 }
-impl TimelineEventAddedMethod {
-    pub const IDENTIFIER: &'static str = "PerformanceTimeline.timelineEventAdded";
-}
 #[doc = "Sent when a performance timeline event is added. See reportPerformanceTimeline method.\n[timelineEventAdded](https://chromedevtools.github.io/devtools-protocol/tot/PerformanceTimeline/#event-timelineEventAdded)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct TimelineEventAdded {
     pub method: TimelineEventAddedMethod,
     pub params: TimelineEventAddedParams,
+}
+impl TimelineEventAdded {
+    pub const IDENTIFIER: &'static str = "PerformanceTimeline.timelineEventAdded";
 }
 group_enum ! (PerformanceTimelineEvents { TimelineEventAdded (TimelineEventAdded) });

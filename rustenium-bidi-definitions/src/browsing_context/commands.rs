@@ -16,13 +16,14 @@ pub enum ActivateMethod {
     #[serde(rename = "browsingContext.activate")]
     Activate,
 }
-impl ActivateMethod {
-    pub const IDENTIFIER: &'static str = "browsingContext.activate";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct Activate {
     pub method: ActivateMethod,
     pub params: ActivateParams,
+}
+impl Activate {
+    pub const IDENTIFIER: &'static str = "browsingContext.activate";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for Activate {
     type Result = super::results::ActivateResult;
@@ -66,13 +67,14 @@ pub enum CaptureScreenshotMethod {
     #[serde(rename = "browsingContext.captureScreenshot")]
     CaptureScreenshot,
 }
-impl CaptureScreenshotMethod {
-    pub const IDENTIFIER: &'static str = "browsingContext.captureScreenshot";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct CaptureScreenshot {
     pub method: CaptureScreenshotMethod,
     pub params: CaptureScreenshotParams,
+}
+impl CaptureScreenshot {
+    pub const IDENTIFIER: &'static str = "browsingContext.captureScreenshot";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for CaptureScreenshot {
     type Result = super::results::CaptureScreenshotResult;
@@ -102,13 +104,14 @@ pub enum CloseMethod {
     #[serde(rename = "browsingContext.close")]
     Close,
 }
-impl CloseMethod {
-    pub const IDENTIFIER: &'static str = "browsingContext.close";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct Close {
     pub method: CloseMethod,
     pub params: CloseParams,
+}
+impl Close {
+    pub const IDENTIFIER: &'static str = "browsingContext.close";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for Close {
     type Result = super::results::CloseResult;
@@ -148,13 +151,14 @@ pub enum CreateMethod {
     #[serde(rename = "browsingContext.create")]
     Create,
 }
-impl CreateMethod {
-    pub const IDENTIFIER: &'static str = "browsingContext.create";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct Create {
     pub method: CreateMethod,
     pub params: CreateParams,
+}
+impl Create {
+    pub const IDENTIFIER: &'static str = "browsingContext.create";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for Create {
     type Result = super::results::CreateResult;
@@ -175,13 +179,14 @@ pub enum GetTreeMethod {
     #[serde(rename = "browsingContext.getTree")]
     GetTree,
 }
-impl GetTreeMethod {
-    pub const IDENTIFIER: &'static str = "browsingContext.getTree";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetTree {
     pub method: GetTreeMethod,
     pub params: GetTreeParams,
+}
+impl GetTree {
+    pub const IDENTIFIER: &'static str = "browsingContext.getTree";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for GetTree {
     type Result = super::results::GetTreeResult;
@@ -213,13 +218,14 @@ pub enum HandleUserPromptMethod {
     #[serde(rename = "browsingContext.handleUserPrompt")]
     HandleUserPrompt,
 }
-impl HandleUserPromptMethod {
-    pub const IDENTIFIER: &'static str = "browsingContext.handleUserPrompt";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct HandleUserPrompt {
     pub method: HandleUserPromptMethod,
     pub params: HandleUserPromptParams,
+}
+impl HandleUserPrompt {
+    pub const IDENTIFIER: &'static str = "browsingContext.handleUserPrompt";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for HandleUserPrompt {
     type Result = super::results::HandleUserPromptResult;
@@ -263,13 +269,14 @@ pub enum LocateNodesMethod {
     #[serde(rename = "browsingContext.locateNodes")]
     LocateNodes,
 }
-impl LocateNodesMethod {
-    pub const IDENTIFIER: &'static str = "browsingContext.locateNodes";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct LocateNodes {
     pub method: LocateNodesMethod,
     pub params: LocateNodesParams,
+}
+impl LocateNodes {
+    pub const IDENTIFIER: &'static str = "browsingContext.locateNodes";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for LocateNodes {
     type Result = super::results::LocateNodesResult;
@@ -299,13 +306,14 @@ pub enum NavigateMethod {
     #[serde(rename = "browsingContext.navigate")]
     Navigate,
 }
-impl NavigateMethod {
-    pub const IDENTIFIER: &'static str = "browsingContext.navigate";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct Navigate {
     pub method: NavigateMethod,
     pub params: NavigateParams,
+}
+impl Navigate {
+    pub const IDENTIFIER: &'static str = "browsingContext.navigate";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for Navigate {
     type Result = super::results::NavigateResult;
@@ -378,13 +386,14 @@ pub enum PrintMethod {
     #[serde(rename = "browsingContext.print")]
     Print,
 }
-impl PrintMethod {
-    pub const IDENTIFIER: &'static str = "browsingContext.print";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct Print {
     pub method: PrintMethod,
     pub params: PrintParams,
+}
+impl Print {
+    pub const IDENTIFIER: &'static str = "browsingContext.print";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for Print {
     type Result = super::results::PrintResult;
@@ -416,13 +425,14 @@ pub enum ReloadMethod {
     #[serde(rename = "browsingContext.reload")]
     Reload,
 }
-impl ReloadMethod {
-    pub const IDENTIFIER: &'static str = "browsingContext.reload";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct Reload {
     pub method: ReloadMethod,
     pub params: ReloadParams,
+}
+impl Reload {
+    pub const IDENTIFIER: &'static str = "browsingContext.reload";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for Reload {
     type Result = super::results::ReloadResult;
@@ -452,13 +462,14 @@ pub enum SetViewportMethod {
     #[serde(rename = "browsingContext.setViewport")]
     SetViewport,
 }
-impl SetViewportMethod {
-    pub const IDENTIFIER: &'static str = "browsingContext.setViewport";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetViewport {
     pub method: SetViewportMethod,
     pub params: SetViewportParams,
+}
+impl SetViewport {
+    pub const IDENTIFIER: &'static str = "browsingContext.setViewport";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for SetViewport {
     type Result = super::results::SetViewportResult;
@@ -483,13 +494,14 @@ pub enum TraverseHistoryMethod {
     #[serde(rename = "browsingContext.traverseHistory")]
     TraverseHistory,
 }
-impl TraverseHistoryMethod {
-    pub const IDENTIFIER: &'static str = "browsingContext.traverseHistory";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct TraverseHistory {
     pub method: TraverseHistoryMethod,
     pub params: TraverseHistoryParams,
+}
+impl TraverseHistory {
+    pub const IDENTIFIER: &'static str = "browsingContext.traverseHistory";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for TraverseHistory {
     type Result = super::results::TraverseHistoryResult;

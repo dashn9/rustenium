@@ -7,14 +7,14 @@ pub enum DisableMethod {
     #[serde(rename = "Performance.disable")]
     Disable,
 }
-impl DisableMethod {
-    pub const IDENTIFIER: &'static str = "Performance.disable";
-}
 #[doc = "Disable collecting and reporting metrics.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Performance/#method-disable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
+}
+impl Disable {
+    pub const IDENTIFIER: &'static str = "Performance.disable";
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -43,14 +43,14 @@ pub enum EnableMethod {
     #[serde(rename = "Performance.enable")]
     Enable,
 }
-impl EnableMethod {
-    pub const IDENTIFIER: &'static str = "Performance.enable";
-}
 #[doc = "Enable collecting and reporting metrics.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Performance/#method-enable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl Enable {
+    pub const IDENTIFIER: &'static str = "Performance.enable";
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -63,14 +63,14 @@ pub enum GetMetricsMethod {
     #[serde(rename = "Performance.getMetrics")]
     GetMetrics,
 }
-impl GetMetricsMethod {
-    pub const IDENTIFIER: &'static str = "Performance.getMetrics";
-}
 #[doc = "Retrieve current values of run-time metrics.\n[getMetrics](https://chromedevtools.github.io/devtools-protocol/tot/Performance/#method-getMetrics)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetMetrics {
     pub method: GetMetricsMethod,
     pub params: GetMetricsParams,
+}
+impl GetMetrics {
+    pub const IDENTIFIER: &'static str = "Performance.getMetrics";
 }
 impl crate::CommandResult for GetMetrics {
     type Result = super::results::GetMetricsResult;

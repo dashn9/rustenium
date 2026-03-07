@@ -41,13 +41,14 @@ pub enum AddPreloadScriptMethod {
     #[serde(rename = "script.addPreloadScript")]
     AddPreloadScript,
 }
-impl AddPreloadScriptMethod {
-    pub const IDENTIFIER: &'static str = "script.addPreloadScript";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct AddPreloadScript {
     pub method: AddPreloadScriptMethod,
     pub params: AddPreloadScriptParams,
+}
+impl AddPreloadScript {
+    pub const IDENTIFIER: &'static str = "script.addPreloadScript";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for AddPreloadScript {
     type Result = super::results::AddPreloadScriptResult;
@@ -76,13 +77,14 @@ pub enum DisownMethod {
     #[serde(rename = "script.disown")]
     Disown,
 }
-impl DisownMethod {
-    pub const IDENTIFIER: &'static str = "script.disown";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct Disown {
     pub method: DisownMethod,
     pub params: DisownParams,
+}
+impl Disown {
+    pub const IDENTIFIER: &'static str = "script.disown";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for Disown {
     type Result = super::results::DisownResult;
@@ -142,13 +144,14 @@ pub enum CallFunctionMethod {
     #[serde(rename = "script.callFunction")]
     CallFunction,
 }
-impl CallFunctionMethod {
-    pub const IDENTIFIER: &'static str = "script.callFunction";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct CallFunction {
     pub method: CallFunctionMethod,
     pub params: CallFunctionParams,
+}
+impl CallFunction {
+    pub const IDENTIFIER: &'static str = "script.callFunction";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for CallFunction {
     type Result = super::results::CallFunctionResult;
@@ -198,13 +201,14 @@ pub enum EvaluateMethod {
     #[serde(rename = "script.evaluate")]
     Evaluate,
 }
-impl EvaluateMethod {
-    pub const IDENTIFIER: &'static str = "script.evaluate";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct Evaluate {
     pub method: EvaluateMethod,
     pub params: EvaluateParams,
+}
+impl Evaluate {
+    pub const IDENTIFIER: &'static str = "script.evaluate";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for Evaluate {
     type Result = super::results::EvaluateResult;
@@ -225,13 +229,14 @@ pub enum GetRealmsMethod {
     #[serde(rename = "script.getRealms")]
     GetRealms,
 }
-impl GetRealmsMethod {
-    pub const IDENTIFIER: &'static str = "script.getRealms";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetRealms {
     pub method: GetRealmsMethod,
     pub params: GetRealmsParams,
+}
+impl GetRealms {
+    pub const IDENTIFIER: &'static str = "script.getRealms";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for GetRealms {
     type Result = super::results::GetRealmsResult;
@@ -253,13 +258,14 @@ pub enum RemovePreloadScriptMethod {
     #[serde(rename = "script.removePreloadScript")]
     RemovePreloadScript,
 }
-impl RemovePreloadScriptMethod {
-    pub const IDENTIFIER: &'static str = "script.removePreloadScript";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct RemovePreloadScript {
     pub method: RemovePreloadScriptMethod,
     pub params: RemovePreloadScriptParams,
+}
+impl RemovePreloadScript {
+    pub const IDENTIFIER: &'static str = "script.removePreloadScript";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for RemovePreloadScript {
     type Result = super::results::RemovePreloadScriptResult;

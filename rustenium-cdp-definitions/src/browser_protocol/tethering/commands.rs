@@ -16,14 +16,14 @@ pub enum BindMethod {
     #[serde(rename = "Tethering.bind")]
     Bind,
 }
-impl BindMethod {
-    pub const IDENTIFIER: &'static str = "Tethering.bind";
-}
 #[doc = "Request browser port binding.\n[bind](https://chromedevtools.github.io/devtools-protocol/tot/Tethering/#method-bind)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Bind {
     pub method: BindMethod,
     pub params: BindParams,
+}
+impl Bind {
+    pub const IDENTIFIER: &'static str = "Tethering.bind";
 }
 impl crate::CommandResult for Bind {
     type Result = super::results::BindResult;
@@ -45,14 +45,14 @@ pub enum UnbindMethod {
     #[serde(rename = "Tethering.unbind")]
     Unbind,
 }
-impl UnbindMethod {
-    pub const IDENTIFIER: &'static str = "Tethering.unbind";
-}
 #[doc = "Request browser port unbinding.\n[unbind](https://chromedevtools.github.io/devtools-protocol/tot/Tethering/#method-unbind)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Unbind {
     pub method: UnbindMethod,
     pub params: UnbindParams,
+}
+impl Unbind {
+    pub const IDENTIFIER: &'static str = "Tethering.unbind";
 }
 impl crate::CommandResult for Unbind {
     type Result = super::results::UnbindResult;

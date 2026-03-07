@@ -17,14 +17,14 @@ pub enum EnableMethod {
     #[serde(rename = "PerformanceTimeline.enable")]
     Enable,
 }
-impl EnableMethod {
-    pub const IDENTIFIER: &'static str = "PerformanceTimeline.enable";
-}
 #[doc = "Previously buffered events would be reported before method returns.\nSee also: timelineEventAdded\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/PerformanceTimeline/#method-enable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl Enable {
+    pub const IDENTIFIER: &'static str = "PerformanceTimeline.enable";
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;

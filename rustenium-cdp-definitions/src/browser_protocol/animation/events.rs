@@ -11,14 +11,14 @@ pub enum AnimationCanceledMethod {
     #[serde(rename = "Animation.animationCanceled")]
     AnimationCanceled,
 }
-impl AnimationCanceledMethod {
-    pub const IDENTIFIER: &'static str = "Animation.animationCanceled";
-}
 #[doc = "Event for when an animation has been cancelled.\n[animationCanceled](https://chromedevtools.github.io/devtools-protocol/tot/Animation/#event-animationCanceled)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct AnimationCanceled {
     pub method: AnimationCanceledMethod,
     pub params: AnimationCanceledParams,
+}
+impl AnimationCanceled {
+    pub const IDENTIFIER: &'static str = "Animation.animationCanceled";
 }
 #[doc = "Event for each animation that has been created.\n[animationCreated](https://chromedevtools.github.io/devtools-protocol/tot/Animation/#event-animationCreated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -32,14 +32,14 @@ pub enum AnimationCreatedMethod {
     #[serde(rename = "Animation.animationCreated")]
     AnimationCreated,
 }
-impl AnimationCreatedMethod {
-    pub const IDENTIFIER: &'static str = "Animation.animationCreated";
-}
 #[doc = "Event for each animation that has been created.\n[animationCreated](https://chromedevtools.github.io/devtools-protocol/tot/Animation/#event-animationCreated)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct AnimationCreated {
     pub method: AnimationCreatedMethod,
     pub params: AnimationCreatedParams,
+}
+impl AnimationCreated {
+    pub const IDENTIFIER: &'static str = "Animation.animationCreated";
 }
 #[doc = "Event for animation that has been started.\n[animationStarted](https://chromedevtools.github.io/devtools-protocol/tot/Animation/#event-animationStarted)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -53,14 +53,14 @@ pub enum AnimationStartedMethod {
     #[serde(rename = "Animation.animationStarted")]
     AnimationStarted,
 }
-impl AnimationStartedMethod {
-    pub const IDENTIFIER: &'static str = "Animation.animationStarted";
-}
 #[doc = "Event for animation that has been started.\n[animationStarted](https://chromedevtools.github.io/devtools-protocol/tot/Animation/#event-animationStarted)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct AnimationStarted {
     pub method: AnimationStartedMethod,
     pub params: AnimationStartedParams,
+}
+impl AnimationStarted {
+    pub const IDENTIFIER: &'static str = "Animation.animationStarted";
 }
 #[doc = "Event for animation that has been updated.\n[animationUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Animation/#event-animationUpdated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -74,13 +74,13 @@ pub enum AnimationUpdatedMethod {
     #[serde(rename = "Animation.animationUpdated")]
     AnimationUpdated,
 }
-impl AnimationUpdatedMethod {
-    pub const IDENTIFIER: &'static str = "Animation.animationUpdated";
-}
 #[doc = "Event for animation that has been updated.\n[animationUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Animation/#event-animationUpdated)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct AnimationUpdated {
     pub method: AnimationUpdatedMethod,
     pub params: AnimationUpdatedParams,
+}
+impl AnimationUpdated {
+    pub const IDENTIFIER: &'static str = "Animation.animationUpdated";
 }
 group_enum ! (AnimationEvents { AnimationCanceled (AnimationCanceled) , AnimationCreated (AnimationCreated) , AnimationStarted (AnimationStarted) , AnimationUpdated (AnimationUpdated) });

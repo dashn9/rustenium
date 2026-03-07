@@ -12,13 +12,13 @@ pub enum EnableMethod {
     #[serde(rename = "FedCm.enable")]
     Enable,
 }
-impl EnableMethod {
-    pub const IDENTIFIER: &'static str = "FedCm.enable";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl Enable {
+    pub const IDENTIFIER: &'static str = "FedCm.enable";
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -30,13 +30,13 @@ pub enum DisableMethod {
     #[serde(rename = "FedCm.disable")]
     Disable,
 }
-impl DisableMethod {
-    pub const IDENTIFIER: &'static str = "FedCm.disable";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
+}
+impl Disable {
+    pub const IDENTIFIER: &'static str = "FedCm.disable";
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -61,13 +61,13 @@ pub enum SelectAccountMethod {
     #[serde(rename = "FedCm.selectAccount")]
     SelectAccount,
 }
-impl SelectAccountMethod {
-    pub const IDENTIFIER: &'static str = "FedCm.selectAccount";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SelectAccount {
     pub method: SelectAccountMethod,
     pub params: SelectAccountParams,
+}
+impl SelectAccount {
+    pub const IDENTIFIER: &'static str = "FedCm.selectAccount";
 }
 impl crate::CommandResult for SelectAccount {
     type Result = super::results::SelectAccountResult;
@@ -95,13 +95,13 @@ pub enum ClickDialogButtonMethod {
     #[serde(rename = "FedCm.clickDialogButton")]
     ClickDialogButton,
 }
-impl ClickDialogButtonMethod {
-    pub const IDENTIFIER: &'static str = "FedCm.clickDialogButton";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct ClickDialogButton {
     pub method: ClickDialogButtonMethod,
     pub params: ClickDialogButtonParams,
+}
+impl ClickDialogButton {
+    pub const IDENTIFIER: &'static str = "FedCm.clickDialogButton";
 }
 impl crate::CommandResult for ClickDialogButton {
     type Result = super::results::ClickDialogButtonResult;
@@ -133,13 +133,13 @@ pub enum OpenUrlMethod {
     #[serde(rename = "FedCm.openUrl")]
     OpenUrl,
 }
-impl OpenUrlMethod {
-    pub const IDENTIFIER: &'static str = "FedCm.openUrl";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct OpenUrl {
     pub method: OpenUrlMethod,
     pub params: OpenUrlParams,
+}
+impl OpenUrl {
+    pub const IDENTIFIER: &'static str = "FedCm.openUrl";
 }
 impl crate::CommandResult for OpenUrl {
     type Result = super::results::OpenUrlResult;
@@ -171,13 +171,13 @@ pub enum DismissDialogMethod {
     #[serde(rename = "FedCm.dismissDialog")]
     DismissDialog,
 }
-impl DismissDialogMethod {
-    pub const IDENTIFIER: &'static str = "FedCm.dismissDialog";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct DismissDialog {
     pub method: DismissDialogMethod,
     pub params: DismissDialogParams,
+}
+impl DismissDialog {
+    pub const IDENTIFIER: &'static str = "FedCm.dismissDialog";
 }
 impl crate::CommandResult for DismissDialog {
     type Result = super::results::DismissDialogResult;
@@ -190,14 +190,14 @@ pub enum ResetCooldownMethod {
     #[serde(rename = "FedCm.resetCooldown")]
     ResetCooldown,
 }
-impl ResetCooldownMethod {
-    pub const IDENTIFIER: &'static str = "FedCm.resetCooldown";
-}
 #[doc = "Resets the cooldown time, if any, to allow the next FedCM call to show\na dialog even if one was recently dismissed by the user.\n[resetCooldown](https://chromedevtools.github.io/devtools-protocol/tot/FedCm/#method-resetCooldown)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ResetCooldown {
     pub method: ResetCooldownMethod,
     pub params: ResetCooldownParams,
+}
+impl ResetCooldown {
+    pub const IDENTIFIER: &'static str = "FedCm.resetCooldown";
 }
 impl crate::CommandResult for ResetCooldown {
     type Result = super::results::ResetCooldownResult;

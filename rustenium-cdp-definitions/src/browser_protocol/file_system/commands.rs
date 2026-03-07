@@ -18,13 +18,13 @@ pub enum GetDirectoryMethod {
     #[serde(rename = "FileSystem.getDirectory")]
     GetDirectory,
 }
-impl GetDirectoryMethod {
-    pub const IDENTIFIER: &'static str = "FileSystem.getDirectory";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetDirectory {
     pub method: GetDirectoryMethod,
     pub params: GetDirectoryParams,
+}
+impl GetDirectory {
+    pub const IDENTIFIER: &'static str = "FileSystem.getDirectory";
 }
 impl crate::CommandResult for GetDirectory {
     type Result = super::results::GetDirectoryResult;

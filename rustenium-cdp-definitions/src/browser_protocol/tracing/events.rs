@@ -22,13 +22,13 @@ pub enum BufferUsageMethod {
     #[serde(rename = "Tracing.bufferUsage")]
     BufferUsage,
 }
-impl BufferUsageMethod {
-    pub const IDENTIFIER: &'static str = "Tracing.bufferUsage";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct BufferUsage {
     pub method: BufferUsageMethod,
     pub params: BufferUsageParams,
+}
+impl BufferUsage {
+    pub const IDENTIFIER: &'static str = "Tracing.bufferUsage";
 }
 #[doc = "Contains a bucket of collected trace events. When tracing is stopped collected events will be\nsent as a sequence of dataCollected events followed by tracingComplete event.\n[dataCollected](https://chromedevtools.github.io/devtools-protocol/tot/Tracing/#event-dataCollected)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -42,14 +42,14 @@ pub enum DataCollectedMethod {
     #[serde(rename = "Tracing.dataCollected")]
     DataCollected,
 }
-impl DataCollectedMethod {
-    pub const IDENTIFIER: &'static str = "Tracing.dataCollected";
-}
 #[doc = "Contains a bucket of collected trace events. When tracing is stopped collected events will be\nsent as a sequence of dataCollected events followed by tracingComplete event.\n[dataCollected](https://chromedevtools.github.io/devtools-protocol/tot/Tracing/#event-dataCollected)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct DataCollected {
     pub method: DataCollectedMethod,
     pub params: DataCollectedParams,
+}
+impl DataCollected {
+    pub const IDENTIFIER: &'static str = "Tracing.dataCollected";
 }
 #[doc = "Signals that tracing is stopped and there is no trace buffers pending flush, all data were\ndelivered via dataCollected events.\n[tracingComplete](https://chromedevtools.github.io/devtools-protocol/tot/Tracing/#event-tracingComplete)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -78,13 +78,13 @@ pub enum TracingCompleteMethod {
     #[serde(rename = "Tracing.tracingComplete")]
     TracingComplete,
 }
-impl TracingCompleteMethod {
-    pub const IDENTIFIER: &'static str = "Tracing.tracingComplete";
-}
 #[doc = "Signals that tracing is stopped and there is no trace buffers pending flush, all data were\ndelivered via dataCollected events.\n[tracingComplete](https://chromedevtools.github.io/devtools-protocol/tot/Tracing/#event-tracingComplete)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct TracingComplete {
     pub method: TracingCompleteMethod,
     pub params: TracingCompleteParams,
+}
+impl TracingComplete {
+    pub const IDENTIFIER: &'static str = "Tracing.tracingComplete";
 }
 group_enum ! (TracingEvents { BufferUsage (BufferUsage) , DataCollected (DataCollected) , TracingComplete (TracingComplete) });

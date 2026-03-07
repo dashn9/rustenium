@@ -30,14 +30,14 @@ pub enum GetEventListenersMethod {
     #[serde(rename = "DOMDebugger.getEventListeners")]
     GetEventListeners,
 }
-impl GetEventListenersMethod {
-    pub const IDENTIFIER: &'static str = "DOMDebugger.getEventListeners";
-}
 #[doc = "Returns event listeners of the given object.\n[getEventListeners](https://chromedevtools.github.io/devtools-protocol/tot/DOMDebugger/#method-getEventListeners)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetEventListeners {
     pub method: GetEventListenersMethod,
     pub params: GetEventListenersParams,
+}
+impl GetEventListeners {
+    pub const IDENTIFIER: &'static str = "DOMDebugger.getEventListeners";
 }
 impl crate::CommandResult for GetEventListeners {
     type Result = super::results::GetEventListenersResult;
@@ -68,14 +68,14 @@ pub enum RemoveDomBreakpointMethod {
     #[serde(rename = "DOMDebugger.removeDOMBreakpoint")]
     RemoveDomBreakpoint,
 }
-impl RemoveDomBreakpointMethod {
-    pub const IDENTIFIER: &'static str = "DOMDebugger.removeDOMBreakpoint";
-}
 #[doc = "Removes DOM breakpoint that was set using `setDOMBreakpoint`.\n[removeDOMBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/DOMDebugger/#method-removeDOMBreakpoint)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct RemoveDomBreakpoint {
     pub method: RemoveDomBreakpointMethod,
     pub params: RemoveDomBreakpointParams,
+}
+impl RemoveDomBreakpoint {
+    pub const IDENTIFIER: &'static str = "DOMDebugger.removeDOMBreakpoint";
 }
 impl crate::CommandResult for RemoveDomBreakpoint {
     type Result = super::results::RemoveDomBreakpointResult;
@@ -110,14 +110,14 @@ pub enum RemoveEventListenerBreakpointMethod {
     #[serde(rename = "DOMDebugger.removeEventListenerBreakpoint")]
     RemoveEventListenerBreakpoint,
 }
-impl RemoveEventListenerBreakpointMethod {
-    pub const IDENTIFIER: &'static str = "DOMDebugger.removeEventListenerBreakpoint";
-}
 #[doc = "Removes breakpoint on particular DOM event.\n[removeEventListenerBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/DOMDebugger/#method-removeEventListenerBreakpoint)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct RemoveEventListenerBreakpoint {
     pub method: RemoveEventListenerBreakpointMethod,
     pub params: RemoveEventListenerBreakpointParams,
+}
+impl RemoveEventListenerBreakpoint {
+    pub const IDENTIFIER: &'static str = "DOMDebugger.removeEventListenerBreakpoint";
 }
 impl crate::CommandResult for RemoveEventListenerBreakpoint {
     type Result = super::results::RemoveEventListenerBreakpointResult;
@@ -144,14 +144,14 @@ pub enum RemoveXhrBreakpointMethod {
     #[serde(rename = "DOMDebugger.removeXHRBreakpoint")]
     RemoveXhrBreakpoint,
 }
-impl RemoveXhrBreakpointMethod {
-    pub const IDENTIFIER: &'static str = "DOMDebugger.removeXHRBreakpoint";
-}
 #[doc = "Removes breakpoint from XMLHttpRequest.\n[removeXHRBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/DOMDebugger/#method-removeXHRBreakpoint)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct RemoveXhrBreakpoint {
     pub method: RemoveXhrBreakpointMethod,
     pub params: RemoveXhrBreakpointParams,
+}
+impl RemoveXhrBreakpoint {
+    pub const IDENTIFIER: &'static str = "DOMDebugger.removeXHRBreakpoint";
 }
 impl crate::CommandResult for RemoveXhrBreakpoint {
     type Result = super::results::RemoveXhrBreakpointResult;
@@ -174,14 +174,14 @@ pub enum SetBreakOnCspViolationMethod {
     #[serde(rename = "DOMDebugger.setBreakOnCSPViolation")]
     SetBreakOnCspViolation,
 }
-impl SetBreakOnCspViolationMethod {
-    pub const IDENTIFIER: &'static str = "DOMDebugger.setBreakOnCSPViolation";
-}
 #[doc = "Sets breakpoint on particular CSP violations.\n[setBreakOnCSPViolation](https://chromedevtools.github.io/devtools-protocol/tot/DOMDebugger/#method-setBreakOnCSPViolation)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetBreakOnCspViolation {
     pub method: SetBreakOnCspViolationMethod,
     pub params: SetBreakOnCspViolationParams,
+}
+impl SetBreakOnCspViolation {
+    pub const IDENTIFIER: &'static str = "DOMDebugger.setBreakOnCSPViolation";
 }
 impl crate::CommandResult for SetBreakOnCspViolation {
     type Result = super::results::SetBreakOnCspViolationResult;
@@ -212,14 +212,14 @@ pub enum SetDomBreakpointMethod {
     #[serde(rename = "DOMDebugger.setDOMBreakpoint")]
     SetDomBreakpoint,
 }
-impl SetDomBreakpointMethod {
-    pub const IDENTIFIER: &'static str = "DOMDebugger.setDOMBreakpoint";
-}
 #[doc = "Sets breakpoint on particular operation with DOM.\n[setDOMBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/DOMDebugger/#method-setDOMBreakpoint)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetDomBreakpoint {
     pub method: SetDomBreakpointMethod,
     pub params: SetDomBreakpointParams,
+}
+impl SetDomBreakpoint {
+    pub const IDENTIFIER: &'static str = "DOMDebugger.setDOMBreakpoint";
 }
 impl crate::CommandResult for SetDomBreakpoint {
     type Result = super::results::SetDomBreakpointResult;
@@ -254,14 +254,14 @@ pub enum SetEventListenerBreakpointMethod {
     #[serde(rename = "DOMDebugger.setEventListenerBreakpoint")]
     SetEventListenerBreakpoint,
 }
-impl SetEventListenerBreakpointMethod {
-    pub const IDENTIFIER: &'static str = "DOMDebugger.setEventListenerBreakpoint";
-}
 #[doc = "Sets breakpoint on particular DOM event.\n[setEventListenerBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/DOMDebugger/#method-setEventListenerBreakpoint)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetEventListenerBreakpoint {
     pub method: SetEventListenerBreakpointMethod,
     pub params: SetEventListenerBreakpointParams,
+}
+impl SetEventListenerBreakpoint {
+    pub const IDENTIFIER: &'static str = "DOMDebugger.setEventListenerBreakpoint";
 }
 impl crate::CommandResult for SetEventListenerBreakpoint {
     type Result = super::results::SetEventListenerBreakpointResult;
@@ -288,14 +288,14 @@ pub enum SetXhrBreakpointMethod {
     #[serde(rename = "DOMDebugger.setXHRBreakpoint")]
     SetXhrBreakpoint,
 }
-impl SetXhrBreakpointMethod {
-    pub const IDENTIFIER: &'static str = "DOMDebugger.setXHRBreakpoint";
-}
 #[doc = "Sets breakpoint on XMLHttpRequest.\n[setXHRBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/DOMDebugger/#method-setXHRBreakpoint)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetXhrBreakpoint {
     pub method: SetXhrBreakpointMethod,
     pub params: SetXhrBreakpointParams,
+}
+impl SetXhrBreakpoint {
+    pub const IDENTIFIER: &'static str = "DOMDebugger.setXHRBreakpoint";
 }
 impl crate::CommandResult for SetXhrBreakpoint {
     type Result = super::results::SetXhrBreakpointResult;

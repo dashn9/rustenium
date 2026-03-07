@@ -54,6 +54,7 @@ impl GeolocationCoordinates {
 }
 impl GeolocationCoordinates {
     pub const IDENTIFIER: &'static str = "emulation.GeolocationCoordinates";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GeolocationPositionError {
@@ -74,6 +75,7 @@ impl<T: Into<String>> From<T> for GeolocationPositionError {
 }
 impl GeolocationPositionError {
     pub const IDENTIFIER: &'static str = "emulation.GeolocationPositionError";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NetworkConditions(NetworkConditionsOffline);
@@ -87,6 +89,7 @@ impl NetworkConditions {
 }
 impl NetworkConditions {
     pub const IDENTIFIER: &'static str = "emulation.NetworkConditions";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NetworkConditionsOffline {
@@ -107,6 +110,7 @@ impl<T: Into<String>> From<T> for NetworkConditionsOffline {
 }
 impl NetworkConditionsOffline {
     pub const IDENTIFIER: &'static str = "emulation.NetworkConditionsOffline";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum ScreenOrientationNatural {
@@ -146,5 +150,6 @@ impl ScreenOrientation {
 }
 impl ScreenOrientation {
     pub const IDENTIFIER: &'static str = "emulation.ScreenOrientation";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 group_enum ! (EmulationTypes { ForcedColorsModeTheme (ForcedColorsModeTheme) , GeolocationCoordinates (GeolocationCoordinates) , GeolocationPositionError (GeolocationPositionError) , NetworkConditions (NetworkConditions) , NetworkConditionsOffline (NetworkConditionsOffline) , ScreenOrientationNatural (ScreenOrientationNatural) , ScreenOrientationType (ScreenOrientationType) , ScreenOrientation (ScreenOrientation) });

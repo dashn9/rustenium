@@ -15,13 +15,13 @@ pub enum MetricsMethod {
     #[serde(rename = "Performance.metrics")]
     Metrics,
 }
-impl MetricsMethod {
-    pub const IDENTIFIER: &'static str = "Performance.metrics";
-}
 #[doc = "Current values of the metrics.\n[metrics](https://chromedevtools.github.io/devtools-protocol/tot/Performance/#event-metrics)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Metrics {
     pub method: MetricsMethod,
     pub params: MetricsParams,
+}
+impl Metrics {
+    pub const IDENTIFIER: &'static str = "Performance.metrics";
 }
 group_enum ! (PerformanceEvents { Metrics (Metrics) });

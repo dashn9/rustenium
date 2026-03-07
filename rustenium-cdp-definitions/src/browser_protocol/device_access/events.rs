@@ -13,13 +13,13 @@ pub enum DeviceRequestPromptedMethod {
     #[serde(rename = "DeviceAccess.deviceRequestPrompted")]
     DeviceRequestPrompted,
 }
-impl DeviceRequestPromptedMethod {
-    pub const IDENTIFIER: &'static str = "DeviceAccess.deviceRequestPrompted";
-}
 #[doc = "A device request opened a user prompt to select a device. Respond with the\nselectPrompt or cancelPrompt command.\n[deviceRequestPrompted](https://chromedevtools.github.io/devtools-protocol/tot/DeviceAccess/#event-deviceRequestPrompted)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct DeviceRequestPrompted {
     pub method: DeviceRequestPromptedMethod,
     pub params: DeviceRequestPromptedParams,
+}
+impl DeviceRequestPrompted {
+    pub const IDENTIFIER: &'static str = "DeviceAccess.deviceRequestPrompted";
 }
 group_enum ! (DeviceAccessEvents { DeviceRequestPrompted (DeviceRequestPrompted) });

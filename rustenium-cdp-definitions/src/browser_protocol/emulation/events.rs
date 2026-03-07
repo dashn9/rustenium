@@ -7,13 +7,13 @@ pub enum VirtualTimeBudgetExpiredMethod {
     #[serde(rename = "Emulation.virtualTimeBudgetExpired")]
     VirtualTimeBudgetExpired,
 }
-impl VirtualTimeBudgetExpiredMethod {
-    pub const IDENTIFIER: &'static str = "Emulation.virtualTimeBudgetExpired";
-}
 #[doc = "Notification sent after the virtual time budget for the current VirtualTimePolicy has run out.\n[virtualTimeBudgetExpired](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#event-virtualTimeBudgetExpired)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct VirtualTimeBudgetExpired {
     pub method: VirtualTimeBudgetExpiredMethod,
     pub params: VirtualTimeBudgetExpiredParams,
+}
+impl VirtualTimeBudgetExpired {
+    pub const IDENTIFIER: &'static str = "Emulation.virtualTimeBudgetExpired";
 }
 group_enum ! (EmulationEvents { VirtualTimeBudgetExpired (VirtualTimeBudgetExpired) });

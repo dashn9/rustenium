@@ -28,14 +28,14 @@ pub enum BeginFrameMethod {
     #[serde(rename = "HeadlessExperimental.beginFrame")]
     BeginFrame,
 }
-impl BeginFrameMethod {
-    pub const IDENTIFIER: &'static str = "HeadlessExperimental.beginFrame";
-}
 #[doc = "Sends a BeginFrame to the target and returns when the frame was completed. Optionally captures a\nscreenshot from the resulting frame. Requires that the target was created with enabled\nBeginFrameControl. Designed for use with --run-all-compositor-stages-before-draw, see also\nhttps://goo.gle/chrome-headless-rendering for more background.\n[beginFrame](https://chromedevtools.github.io/devtools-protocol/tot/HeadlessExperimental/#method-beginFrame)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct BeginFrame {
     pub method: BeginFrameMethod,
     pub params: BeginFrameParams,
+}
+impl BeginFrame {
+    pub const IDENTIFIER: &'static str = "HeadlessExperimental.beginFrame";
 }
 impl crate::CommandResult for BeginFrame {
     type Result = super::results::BeginFrameResult;

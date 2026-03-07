@@ -30,14 +30,14 @@ pub enum AwaitPromiseMethod {
     #[serde(rename = "Runtime.awaitPromise")]
     AwaitPromise,
 }
-impl AwaitPromiseMethod {
-    pub const IDENTIFIER: &'static str = "Runtime.awaitPromise";
-}
 #[doc = "Add handler to promise with given promise object id.\n[awaitPromise](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-awaitPromise)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct AwaitPromise {
     pub method: AwaitPromiseMethod,
     pub params: AwaitPromiseParams,
+}
+impl AwaitPromise {
+    pub const IDENTIFIER: &'static str = "Runtime.awaitPromise";
 }
 impl crate::CommandResult for AwaitPromise {
     type Result = super::results::AwaitPromiseResult;
@@ -138,14 +138,14 @@ pub enum CallFunctionOnMethod {
     #[serde(rename = "Runtime.callFunctionOn")]
     CallFunctionOn,
 }
-impl CallFunctionOnMethod {
-    pub const IDENTIFIER: &'static str = "Runtime.callFunctionOn";
-}
 #[doc = "Calls function with given declaration on the given object. Object group of the result is\ninherited from the target object.\n[callFunctionOn](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-callFunctionOn)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct CallFunctionOn {
     pub method: CallFunctionOnMethod,
     pub params: CallFunctionOnParams,
+}
+impl CallFunctionOn {
+    pub const IDENTIFIER: &'static str = "Runtime.callFunctionOn";
 }
 impl crate::CommandResult for CallFunctionOn {
     type Result = super::results::CallFunctionOnResult;
@@ -187,14 +187,14 @@ pub enum CompileScriptMethod {
     #[serde(rename = "Runtime.compileScript")]
     CompileScript,
 }
-impl CompileScriptMethod {
-    pub const IDENTIFIER: &'static str = "Runtime.compileScript";
-}
 #[doc = "Compiles expression.\n[compileScript](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-compileScript)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct CompileScript {
     pub method: CompileScriptMethod,
     pub params: CompileScriptParams,
+}
+impl CompileScript {
+    pub const IDENTIFIER: &'static str = "Runtime.compileScript";
 }
 impl crate::CommandResult for CompileScript {
     type Result = super::results::CompileScriptResult;
@@ -207,14 +207,14 @@ pub enum DisableMethod {
     #[serde(rename = "Runtime.disable")]
     Disable,
 }
-impl DisableMethod {
-    pub const IDENTIFIER: &'static str = "Runtime.disable";
-}
 #[doc = "Disables reporting of execution contexts creation.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-disable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
+}
+impl Disable {
+    pub const IDENTIFIER: &'static str = "Runtime.disable";
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -227,14 +227,14 @@ pub enum DiscardConsoleEntriesMethod {
     #[serde(rename = "Runtime.discardConsoleEntries")]
     DiscardConsoleEntries,
 }
-impl DiscardConsoleEntriesMethod {
-    pub const IDENTIFIER: &'static str = "Runtime.discardConsoleEntries";
-}
 #[doc = "Discards collected exceptions and console API calls.\n[discardConsoleEntries](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-discardConsoleEntries)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct DiscardConsoleEntries {
     pub method: DiscardConsoleEntriesMethod,
     pub params: DiscardConsoleEntriesParams,
+}
+impl DiscardConsoleEntries {
+    pub const IDENTIFIER: &'static str = "Runtime.discardConsoleEntries";
 }
 impl crate::CommandResult for DiscardConsoleEntries {
     type Result = super::results::DiscardConsoleEntriesResult;
@@ -247,14 +247,14 @@ pub enum EnableMethod {
     #[serde(rename = "Runtime.enable")]
     Enable,
 }
-impl EnableMethod {
-    pub const IDENTIFIER: &'static str = "Runtime.enable";
-}
 #[doc = "Enables reporting of execution contexts creation by means of `executionContextCreated` event.\nWhen the reporting gets enabled the event will be sent immediately for each existing execution\ncontext.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-enable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl Enable {
+    pub const IDENTIFIER: &'static str = "Runtime.enable";
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -373,14 +373,14 @@ pub enum EvaluateMethod {
     #[serde(rename = "Runtime.evaluate")]
     Evaluate,
 }
-impl EvaluateMethod {
-    pub const IDENTIFIER: &'static str = "Runtime.evaluate";
-}
 #[doc = "Evaluates expression on global object.\n[evaluate](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-evaluate)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Evaluate {
     pub method: EvaluateMethod,
     pub params: EvaluateParams,
+}
+impl Evaluate {
+    pub const IDENTIFIER: &'static str = "Runtime.evaluate";
 }
 impl crate::CommandResult for Evaluate {
     type Result = super::results::EvaluateResult;
@@ -393,14 +393,14 @@ pub enum GetIsolateIdMethod {
     #[serde(rename = "Runtime.getIsolateId")]
     GetIsolateId,
 }
-impl GetIsolateIdMethod {
-    pub const IDENTIFIER: &'static str = "Runtime.getIsolateId";
-}
 #[doc = "Returns the isolate id.\n[getIsolateId](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-getIsolateId)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetIsolateId {
     pub method: GetIsolateIdMethod,
     pub params: GetIsolateIdParams,
+}
+impl GetIsolateId {
+    pub const IDENTIFIER: &'static str = "Runtime.getIsolateId";
 }
 impl crate::CommandResult for GetIsolateId {
     type Result = super::results::GetIsolateIdResult;
@@ -413,14 +413,14 @@ pub enum GetHeapUsageMethod {
     #[serde(rename = "Runtime.getHeapUsage")]
     GetHeapUsage,
 }
-impl GetHeapUsageMethod {
-    pub const IDENTIFIER: &'static str = "Runtime.getHeapUsage";
-}
 #[doc = "Returns the JavaScript heap usage.\nIt is the total usage of the corresponding isolate not scoped to a particular Runtime.\n[getHeapUsage](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-getHeapUsage)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetHeapUsage {
     pub method: GetHeapUsageMethod,
     pub params: GetHeapUsageParams,
+}
+impl GetHeapUsage {
+    pub const IDENTIFIER: &'static str = "Runtime.getHeapUsage";
 }
 impl crate::CommandResult for GetHeapUsage {
     type Result = super::results::GetHeapUsageResult;
@@ -468,14 +468,14 @@ pub enum GetPropertiesMethod {
     #[serde(rename = "Runtime.getProperties")]
     GetProperties,
 }
-impl GetPropertiesMethod {
-    pub const IDENTIFIER: &'static str = "Runtime.getProperties";
-}
 #[doc = "Returns properties of a given object. Object group of the result is inherited from the target\nobject.\n[getProperties](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-getProperties)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetProperties {
     pub method: GetPropertiesMethod,
     pub params: GetPropertiesParams,
+}
+impl GetProperties {
+    pub const IDENTIFIER: &'static str = "Runtime.getProperties";
 }
 impl crate::CommandResult for GetProperties {
     type Result = super::results::GetPropertiesResult;
@@ -494,14 +494,14 @@ pub enum GlobalLexicalScopeNamesMethod {
     #[serde(rename = "Runtime.globalLexicalScopeNames")]
     GlobalLexicalScopeNames,
 }
-impl GlobalLexicalScopeNamesMethod {
-    pub const IDENTIFIER: &'static str = "Runtime.globalLexicalScopeNames";
-}
 #[doc = "Returns all let, const and class variables from global scope.\n[globalLexicalScopeNames](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-globalLexicalScopeNames)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GlobalLexicalScopeNames {
     pub method: GlobalLexicalScopeNamesMethod,
     pub params: GlobalLexicalScopeNamesParams,
+}
+impl GlobalLexicalScopeNames {
+    pub const IDENTIFIER: &'static str = "Runtime.globalLexicalScopeNames";
 }
 impl crate::CommandResult for GlobalLexicalScopeNames {
     type Result = super::results::GlobalLexicalScopeNamesResult;
@@ -530,13 +530,13 @@ pub enum QueryObjectsMethod {
     #[serde(rename = "Runtime.queryObjects")]
     QueryObjects,
 }
-impl QueryObjectsMethod {
-    pub const IDENTIFIER: &'static str = "Runtime.queryObjects";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct QueryObjects {
     pub method: QueryObjectsMethod,
     pub params: QueryObjectsParams,
+}
+impl QueryObjects {
+    pub const IDENTIFIER: &'static str = "Runtime.queryObjects";
 }
 impl crate::CommandResult for QueryObjects {
     type Result = super::results::QueryObjectsResult;
@@ -560,14 +560,14 @@ pub enum ReleaseObjectMethod {
     #[serde(rename = "Runtime.releaseObject")]
     ReleaseObject,
 }
-impl ReleaseObjectMethod {
-    pub const IDENTIFIER: &'static str = "Runtime.releaseObject";
-}
 #[doc = "Releases remote object with given id.\n[releaseObject](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-releaseObject)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ReleaseObject {
     pub method: ReleaseObjectMethod,
     pub params: ReleaseObjectParams,
+}
+impl ReleaseObject {
+    pub const IDENTIFIER: &'static str = "Runtime.releaseObject";
 }
 impl crate::CommandResult for ReleaseObject {
     type Result = super::results::ReleaseObjectResult;
@@ -596,14 +596,14 @@ pub enum ReleaseObjectGroupMethod {
     #[serde(rename = "Runtime.releaseObjectGroup")]
     ReleaseObjectGroup,
 }
-impl ReleaseObjectGroupMethod {
-    pub const IDENTIFIER: &'static str = "Runtime.releaseObjectGroup";
-}
 #[doc = "Releases all remote objects that belong to a given group.\n[releaseObjectGroup](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-releaseObjectGroup)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ReleaseObjectGroup {
     pub method: ReleaseObjectGroupMethod,
     pub params: ReleaseObjectGroupParams,
+}
+impl ReleaseObjectGroup {
+    pub const IDENTIFIER: &'static str = "Runtime.releaseObjectGroup";
 }
 impl crate::CommandResult for ReleaseObjectGroup {
     type Result = super::results::ReleaseObjectGroupResult;
@@ -616,14 +616,14 @@ pub enum RunIfWaitingForDebuggerMethod {
     #[serde(rename = "Runtime.runIfWaitingForDebugger")]
     RunIfWaitingForDebugger,
 }
-impl RunIfWaitingForDebuggerMethod {
-    pub const IDENTIFIER: &'static str = "Runtime.runIfWaitingForDebugger";
-}
 #[doc = "Tells inspected instance to run if it was waiting for debugger to attach.\n[runIfWaitingForDebugger](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-runIfWaitingForDebugger)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct RunIfWaitingForDebugger {
     pub method: RunIfWaitingForDebuggerMethod,
     pub params: RunIfWaitingForDebuggerParams,
+}
+impl RunIfWaitingForDebugger {
+    pub const IDENTIFIER: &'static str = "Runtime.runIfWaitingForDebugger";
 }
 impl crate::CommandResult for RunIfWaitingForDebugger {
     type Result = super::results::RunIfWaitingForDebuggerResult;
@@ -689,14 +689,14 @@ pub enum RunScriptMethod {
     #[serde(rename = "Runtime.runScript")]
     RunScript,
 }
-impl RunScriptMethod {
-    pub const IDENTIFIER: &'static str = "Runtime.runScript";
-}
 #[doc = "Runs script with given id in a given context.\n[runScript](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-runScript)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct RunScript {
     pub method: RunScriptMethod,
     pub params: RunScriptParams,
+}
+impl RunScript {
+    pub const IDENTIFIER: &'static str = "Runtime.runScript";
 }
 impl crate::CommandResult for RunScript {
     type Result = super::results::RunScriptResult;
@@ -720,14 +720,14 @@ pub enum SetAsyncCallStackDepthMethod {
     #[serde(rename = "Runtime.setAsyncCallStackDepth")]
     SetAsyncCallStackDepth,
 }
-impl SetAsyncCallStackDepthMethod {
-    pub const IDENTIFIER: &'static str = "Runtime.setAsyncCallStackDepth";
-}
 #[doc = "Enables or disables async call stacks tracking.\n[setAsyncCallStackDepth](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-setAsyncCallStackDepth)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetAsyncCallStackDepth {
     pub method: SetAsyncCallStackDepthMethod,
     pub params: SetAsyncCallStackDepthParams,
+}
+impl SetAsyncCallStackDepth {
+    pub const IDENTIFIER: &'static str = "Runtime.setAsyncCallStackDepth";
 }
 impl crate::CommandResult for SetAsyncCallStackDepth {
     type Result = super::results::SetAsyncCallStackDepthResult;
@@ -749,13 +749,13 @@ pub enum SetCustomObjectFormatterEnabledMethod {
     #[serde(rename = "Runtime.setCustomObjectFormatterEnabled")]
     SetCustomObjectFormatterEnabled,
 }
-impl SetCustomObjectFormatterEnabledMethod {
-    pub const IDENTIFIER: &'static str = "Runtime.setCustomObjectFormatterEnabled";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetCustomObjectFormatterEnabled {
     pub method: SetCustomObjectFormatterEnabledMethod,
     pub params: SetCustomObjectFormatterEnabledParams,
+}
+impl SetCustomObjectFormatterEnabled {
+    pub const IDENTIFIER: &'static str = "Runtime.setCustomObjectFormatterEnabled";
 }
 impl crate::CommandResult for SetCustomObjectFormatterEnabled {
     type Result = super::results::SetCustomObjectFormatterEnabledResult;
@@ -775,13 +775,13 @@ pub enum SetMaxCallStackSizeToCaptureMethod {
     #[serde(rename = "Runtime.setMaxCallStackSizeToCapture")]
     SetMaxCallStackSizeToCapture,
 }
-impl SetMaxCallStackSizeToCaptureMethod {
-    pub const IDENTIFIER: &'static str = "Runtime.setMaxCallStackSizeToCapture";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetMaxCallStackSizeToCapture {
     pub method: SetMaxCallStackSizeToCaptureMethod,
     pub params: SetMaxCallStackSizeToCaptureParams,
+}
+impl SetMaxCallStackSizeToCapture {
+    pub const IDENTIFIER: &'static str = "Runtime.setMaxCallStackSizeToCapture";
 }
 impl crate::CommandResult for SetMaxCallStackSizeToCapture {
     type Result = super::results::SetMaxCallStackSizeToCaptureResult;
@@ -794,14 +794,14 @@ pub enum TerminateExecutionMethod {
     #[serde(rename = "Runtime.terminateExecution")]
     TerminateExecution,
 }
-impl TerminateExecutionMethod {
-    pub const IDENTIFIER: &'static str = "Runtime.terminateExecution";
-}
 #[doc = "Terminate current or next JavaScript execution.\nWill cancel the termination when the outer-most script execution ends.\n[terminateExecution](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-terminateExecution)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct TerminateExecution {
     pub method: TerminateExecutionMethod,
     pub params: TerminateExecutionParams,
+}
+impl TerminateExecution {
+    pub const IDENTIFIER: &'static str = "Runtime.terminateExecution";
 }
 impl crate::CommandResult for TerminateExecution {
     type Result = super::results::TerminateExecutionResult;
@@ -835,14 +835,14 @@ pub enum AddBindingMethod {
     #[serde(rename = "Runtime.addBinding")]
     AddBinding,
 }
-impl AddBindingMethod {
-    pub const IDENTIFIER: &'static str = "Runtime.addBinding";
-}
 #[doc = "If executionContextId is empty, adds binding with the given name on the\nglobal objects of all inspected contexts, including those created later,\nbindings survive reloads.\nBinding function takes exactly one argument, this argument should be string,\nin case of any other input, function throws an exception.\nEach binding function call produces Runtime.bindingCalled notification.\n[addBinding](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-addBinding)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct AddBinding {
     pub method: AddBindingMethod,
     pub params: AddBindingParams,
+}
+impl AddBinding {
+    pub const IDENTIFIER: &'static str = "Runtime.addBinding";
 }
 impl crate::CommandResult for AddBinding {
     type Result = super::results::AddBindingResult;
@@ -868,14 +868,14 @@ pub enum RemoveBindingMethod {
     #[serde(rename = "Runtime.removeBinding")]
     RemoveBinding,
 }
-impl RemoveBindingMethod {
-    pub const IDENTIFIER: &'static str = "Runtime.removeBinding";
-}
 #[doc = "This method does not remove binding function from global object but\nunsubscribes current runtime agent from Runtime.bindingCalled notifications.\n[removeBinding](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-removeBinding)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct RemoveBinding {
     pub method: RemoveBindingMethod,
     pub params: RemoveBindingParams,
+}
+impl RemoveBinding {
+    pub const IDENTIFIER: &'static str = "Runtime.removeBinding";
 }
 impl crate::CommandResult for RemoveBinding {
     type Result = super::results::RemoveBindingResult;
@@ -899,14 +899,14 @@ pub enum GetExceptionDetailsMethod {
     #[serde(rename = "Runtime.getExceptionDetails")]
     GetExceptionDetails,
 }
-impl GetExceptionDetailsMethod {
-    pub const IDENTIFIER: &'static str = "Runtime.getExceptionDetails";
-}
 #[doc = "This method tries to lookup and populate exception details for a\nJavaScript Error object.\nNote that the stackTrace portion of the resulting exceptionDetails will\nonly be populated if the Runtime domain was enabled at the time when the\nError was thrown.\n[getExceptionDetails](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-getExceptionDetails)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetExceptionDetails {
     pub method: GetExceptionDetailsMethod,
     pub params: GetExceptionDetailsParams,
+}
+impl GetExceptionDetails {
+    pub const IDENTIFIER: &'static str = "Runtime.getExceptionDetails";
 }
 impl crate::CommandResult for GetExceptionDetails {
     type Result = super::results::GetExceptionDetailsResult;

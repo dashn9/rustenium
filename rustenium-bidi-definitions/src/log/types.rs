@@ -51,6 +51,7 @@ impl BaseLogEntry {
 }
 impl BaseLogEntry {
     pub const IDENTIFIER: &'static str = "log.BaseLogEntry";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GenericLogEntry {
@@ -90,6 +91,7 @@ impl GenericLogEntry {
 }
 impl GenericLogEntry {
     pub const IDENTIFIER: &'static str = "log.GenericLogEntry";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ConsoleLogEntry {
@@ -117,6 +119,7 @@ pub struct ConsoleLogEntry {
 }
 impl ConsoleLogEntry {
     pub const IDENTIFIER: &'static str = "log.ConsoleLogEntry";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct JavascriptLogEntry {
@@ -156,5 +159,6 @@ impl JavascriptLogEntry {
 }
 impl JavascriptLogEntry {
     pub const IDENTIFIER: &'static str = "log.JavascriptLogEntry";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 group_enum ! (LogTypes { Level (Level) , Entry (Entry) , BaseLogEntry (BaseLogEntry) , GenericLogEntry (GenericLogEntry) , ConsoleLogEntry (ConsoleLogEntry) , JavascriptLogEntry (JavascriptLogEntry) });

@@ -6,13 +6,14 @@ pub enum CloseMethod {
     #[serde(rename = "browser.close")]
     Close,
 }
-impl CloseMethod {
-    pub const IDENTIFIER: &'static str = "browser.close";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct Close {
     pub method: CloseMethod,
     pub params: CloseParams,
+}
+impl Close {
+    pub const IDENTIFIER: &'static str = "browser.close";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for Close {
     type Result = super::results::CloseResult;
@@ -37,13 +38,14 @@ pub enum CreateUserContextMethod {
     #[serde(rename = "browser.createUserContext")]
     CreateUserContext,
 }
-impl CreateUserContextMethod {
-    pub const IDENTIFIER: &'static str = "browser.createUserContext";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct CreateUserContext {
     pub method: CreateUserContextMethod,
     pub params: CreateUserContextParams,
+}
+impl CreateUserContext {
+    pub const IDENTIFIER: &'static str = "browser.createUserContext";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for CreateUserContext {
     type Result = super::results::CreateUserContextResult;
@@ -55,13 +57,14 @@ pub enum GetClientWindowsMethod {
     #[serde(rename = "browser.getClientWindows")]
     GetClientWindows,
 }
-impl GetClientWindowsMethod {
-    pub const IDENTIFIER: &'static str = "browser.getClientWindows";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetClientWindows {
     pub method: GetClientWindowsMethod,
     pub params: GetClientWindowsParams,
+}
+impl GetClientWindows {
+    pub const IDENTIFIER: &'static str = "browser.getClientWindows";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for GetClientWindows {
     type Result = super::results::GetClientWindowsResult;
@@ -73,13 +76,14 @@ pub enum GetUserContextsMethod {
     #[serde(rename = "browser.getUserContexts")]
     GetUserContexts,
 }
-impl GetUserContextsMethod {
-    pub const IDENTIFIER: &'static str = "browser.getUserContexts";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetUserContexts {
     pub method: GetUserContextsMethod,
     pub params: GetUserContextsParams,
+}
+impl GetUserContexts {
+    pub const IDENTIFIER: &'static str = "browser.getUserContexts";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for GetUserContexts {
     type Result = super::results::GetUserContextsResult;
@@ -101,13 +105,14 @@ pub enum RemoveUserContextMethod {
     #[serde(rename = "browser.removeUserContext")]
     RemoveUserContext,
 }
-impl RemoveUserContextMethod {
-    pub const IDENTIFIER: &'static str = "browser.removeUserContext";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct RemoveUserContext {
     pub method: RemoveUserContextMethod,
     pub params: RemoveUserContextParams,
+}
+impl RemoveUserContext {
+    pub const IDENTIFIER: &'static str = "browser.removeUserContext";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for RemoveUserContext {
     type Result = super::results::RemoveUserContextResult;
@@ -129,13 +134,14 @@ pub enum SetClientWindowStateMethod {
     #[serde(rename = "browser.setClientWindowState")]
     SetClientWindowState,
 }
-impl SetClientWindowStateMethod {
-    pub const IDENTIFIER: &'static str = "browser.setClientWindowState";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetClientWindowState {
     pub method: SetClientWindowStateMethod,
     pub params: SetClientWindowStateParams,
+}
+impl SetClientWindowState {
+    pub const IDENTIFIER: &'static str = "browser.setClientWindowState";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for SetClientWindowState {
     type Result = super::results::SetClientWindowStateResult;
@@ -156,13 +162,14 @@ pub enum SetDownloadBehaviorMethod {
     #[serde(rename = "browser.setDownloadBehavior")]
     SetDownloadBehavior,
 }
-impl SetDownloadBehaviorMethod {
-    pub const IDENTIFIER: &'static str = "browser.setDownloadBehavior";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetDownloadBehavior {
     pub method: SetDownloadBehaviorMethod,
     pub params: SetDownloadBehaviorParams,
+}
+impl SetDownloadBehavior {
+    pub const IDENTIFIER: &'static str = "browser.setDownloadBehavior";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for SetDownloadBehavior {
     type Result = super::results::SetDownloadBehaviorResult;

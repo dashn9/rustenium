@@ -13,14 +13,14 @@ pub enum EnableMethod {
     #[serde(rename = "WebAuthn.enable")]
     Enable,
 }
-impl EnableMethod {
-    pub const IDENTIFIER: &'static str = "WebAuthn.enable";
-}
 #[doc = "Enable the WebAuthn domain and start intercepting credential storage and\nretrieval with a virtual authenticator.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-enable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl Enable {
+    pub const IDENTIFIER: &'static str = "WebAuthn.enable";
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -33,14 +33,14 @@ pub enum DisableMethod {
     #[serde(rename = "WebAuthn.disable")]
     Disable,
 }
-impl DisableMethod {
-    pub const IDENTIFIER: &'static str = "WebAuthn.disable";
-}
 #[doc = "Disable the WebAuthn domain.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-disable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
+}
+impl Disable {
+    pub const IDENTIFIER: &'static str = "WebAuthn.disable";
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -63,14 +63,14 @@ pub enum AddVirtualAuthenticatorMethod {
     #[serde(rename = "WebAuthn.addVirtualAuthenticator")]
     AddVirtualAuthenticator,
 }
-impl AddVirtualAuthenticatorMethod {
-    pub const IDENTIFIER: &'static str = "WebAuthn.addVirtualAuthenticator";
-}
 #[doc = "Creates and adds a virtual authenticator.\n[addVirtualAuthenticator](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-addVirtualAuthenticator)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct AddVirtualAuthenticator {
     pub method: AddVirtualAuthenticatorMethod,
     pub params: AddVirtualAuthenticatorParams,
+}
+impl AddVirtualAuthenticator {
+    pub const IDENTIFIER: &'static str = "WebAuthn.addVirtualAuthenticator";
 }
 impl crate::CommandResult for AddVirtualAuthenticator {
     type Result = super::results::AddVirtualAuthenticatorResult;
@@ -111,14 +111,14 @@ pub enum SetResponseOverrideBitsMethod {
     #[serde(rename = "WebAuthn.setResponseOverrideBits")]
     SetResponseOverrideBits,
 }
-impl SetResponseOverrideBitsMethod {
-    pub const IDENTIFIER: &'static str = "WebAuthn.setResponseOverrideBits";
-}
 #[doc = "Resets parameters isBogusSignature, isBadUV, isBadUP to false if they are not present.\n[setResponseOverrideBits](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-setResponseOverrideBits)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetResponseOverrideBits {
     pub method: SetResponseOverrideBitsMethod,
     pub params: SetResponseOverrideBitsParams,
+}
+impl SetResponseOverrideBits {
+    pub const IDENTIFIER: &'static str = "WebAuthn.setResponseOverrideBits";
 }
 impl crate::CommandResult for SetResponseOverrideBits {
     type Result = super::results::SetResponseOverrideBitsResult;
@@ -141,14 +141,14 @@ pub enum RemoveVirtualAuthenticatorMethod {
     #[serde(rename = "WebAuthn.removeVirtualAuthenticator")]
     RemoveVirtualAuthenticator,
 }
-impl RemoveVirtualAuthenticatorMethod {
-    pub const IDENTIFIER: &'static str = "WebAuthn.removeVirtualAuthenticator";
-}
 #[doc = "Removes the given authenticator.\n[removeVirtualAuthenticator](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-removeVirtualAuthenticator)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct RemoveVirtualAuthenticator {
     pub method: RemoveVirtualAuthenticatorMethod,
     pub params: RemoveVirtualAuthenticatorParams,
+}
+impl RemoveVirtualAuthenticator {
+    pub const IDENTIFIER: &'static str = "WebAuthn.removeVirtualAuthenticator";
 }
 impl crate::CommandResult for RemoveVirtualAuthenticator {
     type Result = super::results::RemoveVirtualAuthenticatorResult;
@@ -177,14 +177,14 @@ pub enum AddCredentialMethod {
     #[serde(rename = "WebAuthn.addCredential")]
     AddCredential,
 }
-impl AddCredentialMethod {
-    pub const IDENTIFIER: &'static str = "WebAuthn.addCredential";
-}
 #[doc = "Adds the credential to the specified authenticator.\n[addCredential](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-addCredential)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct AddCredential {
     pub method: AddCredentialMethod,
     pub params: AddCredentialParams,
+}
+impl AddCredential {
+    pub const IDENTIFIER: &'static str = "WebAuthn.addCredential";
 }
 impl crate::CommandResult for AddCredential {
     type Result = super::results::AddCredentialResult;
@@ -213,14 +213,14 @@ pub enum GetCredentialMethod {
     #[serde(rename = "WebAuthn.getCredential")]
     GetCredential,
 }
-impl GetCredentialMethod {
-    pub const IDENTIFIER: &'static str = "WebAuthn.getCredential";
-}
 #[doc = "Returns a single credential stored in the given virtual authenticator that\nmatches the credential ID.\n[getCredential](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-getCredential)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetCredential {
     pub method: GetCredentialMethod,
     pub params: GetCredentialParams,
+}
+impl GetCredential {
+    pub const IDENTIFIER: &'static str = "WebAuthn.getCredential";
 }
 impl crate::CommandResult for GetCredential {
     type Result = super::results::GetCredentialResult;
@@ -243,14 +243,14 @@ pub enum GetCredentialsMethod {
     #[serde(rename = "WebAuthn.getCredentials")]
     GetCredentials,
 }
-impl GetCredentialsMethod {
-    pub const IDENTIFIER: &'static str = "WebAuthn.getCredentials";
-}
 #[doc = "Returns all the credentials stored in the given virtual authenticator.\n[getCredentials](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-getCredentials)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetCredentials {
     pub method: GetCredentialsMethod,
     pub params: GetCredentialsParams,
+}
+impl GetCredentials {
+    pub const IDENTIFIER: &'static str = "WebAuthn.getCredentials";
 }
 impl crate::CommandResult for GetCredentials {
     type Result = super::results::GetCredentialsResult;
@@ -279,14 +279,14 @@ pub enum RemoveCredentialMethod {
     #[serde(rename = "WebAuthn.removeCredential")]
     RemoveCredential,
 }
-impl RemoveCredentialMethod {
-    pub const IDENTIFIER: &'static str = "WebAuthn.removeCredential";
-}
 #[doc = "Removes a credential from the authenticator.\n[removeCredential](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-removeCredential)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct RemoveCredential {
     pub method: RemoveCredentialMethod,
     pub params: RemoveCredentialParams,
+}
+impl RemoveCredential {
+    pub const IDENTIFIER: &'static str = "WebAuthn.removeCredential";
 }
 impl crate::CommandResult for RemoveCredential {
     type Result = super::results::RemoveCredentialResult;
@@ -309,14 +309,14 @@ pub enum ClearCredentialsMethod {
     #[serde(rename = "WebAuthn.clearCredentials")]
     ClearCredentials,
 }
-impl ClearCredentialsMethod {
-    pub const IDENTIFIER: &'static str = "WebAuthn.clearCredentials";
-}
 #[doc = "Clears all the credentials from the specified device.\n[clearCredentials](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-clearCredentials)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ClearCredentials {
     pub method: ClearCredentialsMethod,
     pub params: ClearCredentialsParams,
+}
+impl ClearCredentials {
+    pub const IDENTIFIER: &'static str = "WebAuthn.clearCredentials";
 }
 impl crate::CommandResult for ClearCredentials {
     type Result = super::results::ClearCredentialsResult;
@@ -345,14 +345,14 @@ pub enum SetUserVerifiedMethod {
     #[serde(rename = "WebAuthn.setUserVerified")]
     SetUserVerified,
 }
-impl SetUserVerifiedMethod {
-    pub const IDENTIFIER: &'static str = "WebAuthn.setUserVerified";
-}
 #[doc = "Sets whether User Verification succeeds or fails for an authenticator.\nThe default is true.\n[setUserVerified](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-setUserVerified)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetUserVerified {
     pub method: SetUserVerifiedMethod,
     pub params: SetUserVerifiedParams,
+}
+impl SetUserVerified {
+    pub const IDENTIFIER: &'static str = "WebAuthn.setUserVerified";
 }
 impl crate::CommandResult for SetUserVerified {
     type Result = super::results::SetUserVerifiedResult;
@@ -381,14 +381,14 @@ pub enum SetAutomaticPresenceSimulationMethod {
     #[serde(rename = "WebAuthn.setAutomaticPresenceSimulation")]
     SetAutomaticPresenceSimulation,
 }
-impl SetAutomaticPresenceSimulationMethod {
-    pub const IDENTIFIER: &'static str = "WebAuthn.setAutomaticPresenceSimulation";
-}
 #[doc = "Sets whether tests of user presence will succeed immediately (if true) or fail to resolve (if false) for an authenticator.\nThe default is true.\n[setAutomaticPresenceSimulation](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-setAutomaticPresenceSimulation)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetAutomaticPresenceSimulation {
     pub method: SetAutomaticPresenceSimulationMethod,
     pub params: SetAutomaticPresenceSimulationParams,
+}
+impl SetAutomaticPresenceSimulation {
+    pub const IDENTIFIER: &'static str = "WebAuthn.setAutomaticPresenceSimulation";
 }
 impl crate::CommandResult for SetAutomaticPresenceSimulation {
     type Result = super::results::SetAutomaticPresenceSimulationResult;
@@ -427,14 +427,14 @@ pub enum SetCredentialPropertiesMethod {
     #[serde(rename = "WebAuthn.setCredentialProperties")]
     SetCredentialProperties,
 }
-impl SetCredentialPropertiesMethod {
-    pub const IDENTIFIER: &'static str = "WebAuthn.setCredentialProperties";
-}
 #[doc = "Allows setting credential properties.\nhttps://w3c.github.io/webauthn/#sctn-automation-set-credential-properties\n[setCredentialProperties](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-setCredentialProperties)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetCredentialProperties {
     pub method: SetCredentialPropertiesMethod,
     pub params: SetCredentialPropertiesParams,
+}
+impl SetCredentialProperties {
+    pub const IDENTIFIER: &'static str = "WebAuthn.setCredentialProperties";
 }
 impl crate::CommandResult for SetCredentialProperties {
     type Result = super::results::SetCredentialPropertiesResult;

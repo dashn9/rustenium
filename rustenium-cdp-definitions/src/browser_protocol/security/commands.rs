@@ -7,14 +7,14 @@ pub enum DisableMethod {
     #[serde(rename = "Security.disable")]
     Disable,
 }
-impl DisableMethod {
-    pub const IDENTIFIER: &'static str = "Security.disable";
-}
 #[doc = "Disables tracking security state changes.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Security/#method-disable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
+}
+impl Disable {
+    pub const IDENTIFIER: &'static str = "Security.disable";
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -27,14 +27,14 @@ pub enum EnableMethod {
     #[serde(rename = "Security.enable")]
     Enable,
 }
-impl EnableMethod {
-    pub const IDENTIFIER: &'static str = "Security.enable";
-}
 #[doc = "Enables tracking security state changes.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Security/#method-enable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl Enable {
+    pub const IDENTIFIER: &'static str = "Security.enable";
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -58,14 +58,14 @@ pub enum SetIgnoreCertificateErrorsMethod {
     #[serde(rename = "Security.setIgnoreCertificateErrors")]
     SetIgnoreCertificateErrors,
 }
-impl SetIgnoreCertificateErrorsMethod {
-    pub const IDENTIFIER: &'static str = "Security.setIgnoreCertificateErrors";
-}
 #[doc = "Enable/disable whether all certificate errors should be ignored.\n[setIgnoreCertificateErrors](https://chromedevtools.github.io/devtools-protocol/tot/Security/#method-setIgnoreCertificateErrors)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetIgnoreCertificateErrors {
     pub method: SetIgnoreCertificateErrorsMethod,
     pub params: SetIgnoreCertificateErrorsParams,
+}
+impl SetIgnoreCertificateErrors {
+    pub const IDENTIFIER: &'static str = "Security.setIgnoreCertificateErrors";
 }
 impl crate::CommandResult for SetIgnoreCertificateErrors {
     type Result = super::results::SetIgnoreCertificateErrorsResult;

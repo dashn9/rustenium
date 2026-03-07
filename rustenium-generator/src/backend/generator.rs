@@ -9,7 +9,7 @@ use heck::{ToSnakeCase, ToUpperCamelCase};
 use proc_macro2::{Ident, TokenStream};
 use quote::{format_ident, quote};
 
-use crate::backend::base_types::{Module, Param, Protocol, Type, TypeRef, Variant};
+use crate::backend::base_types::{DomainDirection, Module, Param, Protocol, Type, TypeRef, Variant};
 use crate::backend::builder::Builder;
 use crate::backend::event;
 use crate::backend::types::{FieldDefinition, FieldType, ModuleDatatype};
@@ -173,7 +173,7 @@ impl Generator {
                 })
                 .collect();
 
-            let protocol_camel = protocol.name.unwrap_or("unknown").to_upper_camel_case();
+            let protocol_camel = protocol.name.map(|n| n.to_upper_camel_case()).unwrap_or_default();
 
             // Build transitive entries: leaf => protocol_enum via module_enum
             let mut proto_transitive: Vec<(TokenStream, TokenStream, TokenStream)> = Vec::new();
@@ -560,6 +560,13 @@ impl Generator {
 
             let (mut stream, params_builder) = self.generate_struct(module, dt, dt.ident_name(), params, current_protocol, local_same_file);
 
+            let domain_direction_const = match dt.direction() {
+                Some(DomainDirection::Remote) => quote! { pub const DOMAIN_DIRECTION: &'static str = "remote"; },
+                Some(DomainDirection::Local) => quote! { pub const DOMAIN_DIRECTION: &'static str = "local"; },
+                Some(DomainDirection::All) => quote! { pub const DOMAIN_DIRECTION: &'static str = "all"; },
+                None => TokenStream::default(),
+            };
+
             if let Some(method_name) = dt.method_ident_name() {
                 let method_ident = format_ident!("{}", method_name);
                 let params_ident = format_ident!("{}", dt.ident_name());
@@ -576,15 +583,16 @@ impl Generator {
                         #variant_ident,
                     }
 
-                    impl #method_ident {
-                        pub const IDENTIFIER: &'static str = #identifier;
-                    }
-
                     #desc
                     #[derive(Debug, Clone, PartialEq)]
                     pub struct #def_ident {
                         pub method: #method_ident,
                         pub params: #params_ident,
+                    }
+
+                    impl #def_ident {
+                        pub const IDENTIFIER: &'static str = #identifier;
+                        #domain_direction_const
                     }
 
                 });
@@ -605,6 +613,7 @@ impl Generator {
 
                     impl #name {
                         pub const IDENTIFIER: &'static str = #identifier;
+                        #domain_direction_const
                     }
 
                 });

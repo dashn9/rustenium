@@ -15,13 +15,13 @@ pub enum AddressFormFilledMethod {
     #[serde(rename = "Autofill.addressFormFilled")]
     AddressFormFilled,
 }
-impl AddressFormFilledMethod {
-    pub const IDENTIFIER: &'static str = "Autofill.addressFormFilled";
-}
 #[doc = "Emitted when an address form is filled.\n[addressFormFilled](https://chromedevtools.github.io/devtools-protocol/tot/Autofill/#event-addressFormFilled)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct AddressFormFilled {
     pub method: AddressFormFilledMethod,
     pub params: AddressFormFilledParams,
+}
+impl AddressFormFilled {
+    pub const IDENTIFIER: &'static str = "Autofill.addressFormFilled";
 }
 group_enum ! (AutofillEvents { AddressFormFilled (AddressFormFilled) });

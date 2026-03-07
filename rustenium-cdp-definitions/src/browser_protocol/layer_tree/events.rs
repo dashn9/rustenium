@@ -13,13 +13,13 @@ pub enum LayerPaintedMethod {
     #[serde(rename = "LayerTree.layerPainted")]
     LayerPainted,
 }
-impl LayerPaintedMethod {
-    pub const IDENTIFIER: &'static str = "LayerTree.layerPainted";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct LayerPainted {
     pub method: LayerPaintedMethod,
     pub params: LayerPaintedParams,
+}
+impl LayerPainted {
+    pub const IDENTIFIER: &'static str = "LayerTree.layerPainted";
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct LayerTreeDidChangeParams {
@@ -34,12 +34,12 @@ pub enum LayerTreeDidChangeMethod {
     #[serde(rename = "LayerTree.layerTreeDidChange")]
     LayerTreeDidChange,
 }
-impl LayerTreeDidChangeMethod {
-    pub const IDENTIFIER: &'static str = "LayerTree.layerTreeDidChange";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct LayerTreeDidChange {
     pub method: LayerTreeDidChangeMethod,
     pub params: LayerTreeDidChangeParams,
+}
+impl LayerTreeDidChange {
+    pub const IDENTIFIER: &'static str = "LayerTree.layerTreeDidChange";
 }
 group_enum ! (LayerTreeEvents { LayerPainted (LayerPainted) , LayerTreeDidChange (LayerTreeDidChange) });

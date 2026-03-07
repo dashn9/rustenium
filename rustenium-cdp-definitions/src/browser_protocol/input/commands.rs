@@ -52,14 +52,14 @@ pub enum DispatchDragEventMethod {
     #[serde(rename = "Input.dispatchDragEvent")]
     DispatchDragEvent,
 }
-impl DispatchDragEventMethod {
-    pub const IDENTIFIER: &'static str = "Input.dispatchDragEvent";
-}
 #[doc = "Dispatches a drag event into the page.\n[dispatchDragEvent](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-dispatchDragEvent)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct DispatchDragEvent {
     pub method: DispatchDragEventMethod,
     pub params: DispatchDragEventParams,
+}
+impl DispatchDragEvent {
+    pub const IDENTIFIER: &'static str = "Input.dispatchDragEvent";
 }
 impl crate::CommandResult for DispatchDragEvent {
     type Result = super::results::DispatchDragEventResult;
@@ -179,14 +179,14 @@ pub enum DispatchKeyEventMethod {
     #[serde(rename = "Input.dispatchKeyEvent")]
     DispatchKeyEvent,
 }
-impl DispatchKeyEventMethod {
-    pub const IDENTIFIER: &'static str = "Input.dispatchKeyEvent";
-}
 #[doc = "Dispatches a key event to the page.\n[dispatchKeyEvent](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-dispatchKeyEvent)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct DispatchKeyEvent {
     pub method: DispatchKeyEventMethod,
     pub params: DispatchKeyEventParams,
+}
+impl DispatchKeyEvent {
+    pub const IDENTIFIER: &'static str = "Input.dispatchKeyEvent";
 }
 impl crate::CommandResult for DispatchKeyEvent {
     type Result = super::results::DispatchKeyEventResult;
@@ -213,14 +213,14 @@ pub enum InsertTextMethod {
     #[serde(rename = "Input.insertText")]
     InsertText,
 }
-impl InsertTextMethod {
-    pub const IDENTIFIER: &'static str = "Input.insertText";
-}
 #[doc = "This method emulates inserting text that doesn't come from a key press,\nfor example an emoji keyboard or an IME.\n[insertText](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-insertText)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct InsertText {
     pub method: InsertTextMethod,
     pub params: InsertTextParams,
+}
+impl InsertText {
+    pub const IDENTIFIER: &'static str = "Input.insertText";
 }
 impl crate::CommandResult for InsertText {
     type Result = super::results::InsertTextResult;
@@ -268,14 +268,14 @@ pub enum ImeSetCompositionMethod {
     #[serde(rename = "Input.imeSetComposition")]
     ImeSetComposition,
 }
-impl ImeSetCompositionMethod {
-    pub const IDENTIFIER: &'static str = "Input.imeSetComposition";
-}
 #[doc = "This method sets the current candidate text for IME.\nUse imeCommitComposition to commit the final text.\nUse imeSetComposition with empty string as text to cancel composition.\n[imeSetComposition](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-imeSetComposition)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ImeSetComposition {
     pub method: ImeSetCompositionMethod,
     pub params: ImeSetCompositionParams,
+}
+impl ImeSetComposition {
+    pub const IDENTIFIER: &'static str = "Input.imeSetComposition";
 }
 impl crate::CommandResult for ImeSetComposition {
     type Result = super::results::ImeSetCompositionResult;
@@ -409,14 +409,14 @@ pub enum DispatchMouseEventMethod {
     #[serde(rename = "Input.dispatchMouseEvent")]
     DispatchMouseEvent,
 }
-impl DispatchMouseEventMethod {
-    pub const IDENTIFIER: &'static str = "Input.dispatchMouseEvent";
-}
 #[doc = "Dispatches a mouse event to the page.\n[dispatchMouseEvent](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-dispatchMouseEvent)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct DispatchMouseEvent {
     pub method: DispatchMouseEventMethod,
     pub params: DispatchMouseEventParams,
+}
+impl DispatchMouseEvent {
+    pub const IDENTIFIER: &'static str = "Input.dispatchMouseEvent";
 }
 impl crate::CommandResult for DispatchMouseEvent {
     type Result = super::results::DispatchMouseEventResult;
@@ -472,14 +472,14 @@ pub enum DispatchTouchEventMethod {
     #[serde(rename = "Input.dispatchTouchEvent")]
     DispatchTouchEvent,
 }
-impl DispatchTouchEventMethod {
-    pub const IDENTIFIER: &'static str = "Input.dispatchTouchEvent";
-}
 #[doc = "Dispatches a touch event to the page.\n[dispatchTouchEvent](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-dispatchTouchEvent)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct DispatchTouchEvent {
     pub method: DispatchTouchEventMethod,
     pub params: DispatchTouchEventParams,
+}
+impl DispatchTouchEvent {
+    pub const IDENTIFIER: &'static str = "Input.dispatchTouchEvent";
 }
 impl crate::CommandResult for DispatchTouchEvent {
     type Result = super::results::DispatchTouchEventResult;
@@ -492,14 +492,14 @@ pub enum CancelDraggingMethod {
     #[serde(rename = "Input.cancelDragging")]
     CancelDragging,
 }
-impl CancelDraggingMethod {
-    pub const IDENTIFIER: &'static str = "Input.cancelDragging";
-}
 #[doc = "Cancels any active dragging in the page.\n[cancelDragging](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-cancelDragging)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct CancelDragging {
     pub method: CancelDraggingMethod,
     pub params: CancelDraggingParams,
+}
+impl CancelDragging {
+    pub const IDENTIFIER: &'static str = "Input.cancelDragging";
 }
 impl crate::CommandResult for CancelDragging {
     type Result = super::results::CancelDraggingResult;
@@ -582,14 +582,14 @@ pub enum EmulateTouchFromMouseEventMethod {
     #[serde(rename = "Input.emulateTouchFromMouseEvent")]
     EmulateTouchFromMouseEvent,
 }
-impl EmulateTouchFromMouseEventMethod {
-    pub const IDENTIFIER: &'static str = "Input.emulateTouchFromMouseEvent";
-}
 #[doc = "Emulates touch event from the mouse event parameters.\n[emulateTouchFromMouseEvent](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-emulateTouchFromMouseEvent)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct EmulateTouchFromMouseEvent {
     pub method: EmulateTouchFromMouseEventMethod,
     pub params: EmulateTouchFromMouseEventParams,
+}
+impl EmulateTouchFromMouseEvent {
+    pub const IDENTIFIER: &'static str = "Input.emulateTouchFromMouseEvent";
 }
 impl crate::CommandResult for EmulateTouchFromMouseEvent {
     type Result = super::results::EmulateTouchFromMouseEventResult;
@@ -613,14 +613,14 @@ pub enum SetIgnoreInputEventsMethod {
     #[serde(rename = "Input.setIgnoreInputEvents")]
     SetIgnoreInputEvents,
 }
-impl SetIgnoreInputEventsMethod {
-    pub const IDENTIFIER: &'static str = "Input.setIgnoreInputEvents";
-}
 #[doc = "Ignores input events (useful while auditing page).\n[setIgnoreInputEvents](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-setIgnoreInputEvents)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetIgnoreInputEvents {
     pub method: SetIgnoreInputEventsMethod,
     pub params: SetIgnoreInputEventsParams,
+}
+impl SetIgnoreInputEvents {
+    pub const IDENTIFIER: &'static str = "Input.setIgnoreInputEvents";
 }
 impl crate::CommandResult for SetIgnoreInputEvents {
     type Result = super::results::SetIgnoreInputEventsResult;
@@ -643,14 +643,14 @@ pub enum SetInterceptDragsMethod {
     #[serde(rename = "Input.setInterceptDrags")]
     SetInterceptDrags,
 }
-impl SetInterceptDragsMethod {
-    pub const IDENTIFIER: &'static str = "Input.setInterceptDrags";
-}
 #[doc = "Prevents default drag and drop behavior and instead emits `Input.dragIntercepted` events.\nDrag and drop behavior can be directly controlled via `Input.dispatchDragEvent`.\n[setInterceptDrags](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-setInterceptDrags)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetInterceptDrags {
     pub method: SetInterceptDragsMethod,
     pub params: SetInterceptDragsParams,
+}
+impl SetInterceptDrags {
+    pub const IDENTIFIER: &'static str = "Input.setInterceptDrags";
 }
 impl crate::CommandResult for SetInterceptDrags {
     type Result = super::results::SetInterceptDragsResult;
@@ -694,14 +694,14 @@ pub enum SynthesizePinchGestureMethod {
     #[serde(rename = "Input.synthesizePinchGesture")]
     SynthesizePinchGesture,
 }
-impl SynthesizePinchGestureMethod {
-    pub const IDENTIFIER: &'static str = "Input.synthesizePinchGesture";
-}
 #[doc = "Synthesizes a pinch gesture over a time period by issuing appropriate touch events.\n[synthesizePinchGesture](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-synthesizePinchGesture)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SynthesizePinchGesture {
     pub method: SynthesizePinchGestureMethod,
     pub params: SynthesizePinchGestureParams,
+}
+impl SynthesizePinchGesture {
+    pub const IDENTIFIER: &'static str = "Input.synthesizePinchGesture";
 }
 impl crate::CommandResult for SynthesizePinchGesture {
     type Result = super::results::SynthesizePinchGestureResult;
@@ -789,14 +789,14 @@ pub enum SynthesizeScrollGestureMethod {
     #[serde(rename = "Input.synthesizeScrollGesture")]
     SynthesizeScrollGesture,
 }
-impl SynthesizeScrollGestureMethod {
-    pub const IDENTIFIER: &'static str = "Input.synthesizeScrollGesture";
-}
 #[doc = "Synthesizes a scroll gesture over a time period by issuing appropriate touch events.\n[synthesizeScrollGesture](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-synthesizeScrollGesture)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SynthesizeScrollGesture {
     pub method: SynthesizeScrollGestureMethod,
     pub params: SynthesizeScrollGestureParams,
+}
+impl SynthesizeScrollGesture {
+    pub const IDENTIFIER: &'static str = "Input.synthesizeScrollGesture";
 }
 impl crate::CommandResult for SynthesizeScrollGesture {
     type Result = super::results::SynthesizeScrollGestureResult;
@@ -842,14 +842,14 @@ pub enum SynthesizeTapGestureMethod {
     #[serde(rename = "Input.synthesizeTapGesture")]
     SynthesizeTapGesture,
 }
-impl SynthesizeTapGestureMethod {
-    pub const IDENTIFIER: &'static str = "Input.synthesizeTapGesture";
-}
 #[doc = "Synthesizes a tap gesture over a time period by issuing appropriate touch events.\n[synthesizeTapGesture](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-synthesizeTapGesture)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SynthesizeTapGesture {
     pub method: SynthesizeTapGestureMethod,
     pub params: SynthesizeTapGestureParams,
+}
+impl SynthesizeTapGesture {
+    pub const IDENTIFIER: &'static str = "Input.synthesizeTapGesture";
 }
 impl crate::CommandResult for SynthesizeTapGesture {
     type Result = super::results::SynthesizeTapGestureResult;

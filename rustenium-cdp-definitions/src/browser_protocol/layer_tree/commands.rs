@@ -18,14 +18,14 @@ pub enum CompositingReasonsMethod {
     #[serde(rename = "LayerTree.compositingReasons")]
     CompositingReasons,
 }
-impl CompositingReasonsMethod {
-    pub const IDENTIFIER: &'static str = "LayerTree.compositingReasons";
-}
 #[doc = "Provides the reasons why the given layer was composited.\n[compositingReasons](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#method-compositingReasons)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct CompositingReasons {
     pub method: CompositingReasonsMethod,
     pub params: CompositingReasonsParams,
+}
+impl CompositingReasons {
+    pub const IDENTIFIER: &'static str = "LayerTree.compositingReasons";
 }
 impl crate::CommandResult for CompositingReasons {
     type Result = super::results::CompositingReasonsResult;
@@ -38,14 +38,14 @@ pub enum DisableMethod {
     #[serde(rename = "LayerTree.disable")]
     Disable,
 }
-impl DisableMethod {
-    pub const IDENTIFIER: &'static str = "LayerTree.disable";
-}
 #[doc = "Disables compositing tree inspection.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#method-disable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
+}
+impl Disable {
+    pub const IDENTIFIER: &'static str = "LayerTree.disable";
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -58,14 +58,14 @@ pub enum EnableMethod {
     #[serde(rename = "LayerTree.enable")]
     Enable,
 }
-impl EnableMethod {
-    pub const IDENTIFIER: &'static str = "LayerTree.enable";
-}
 #[doc = "Enables compositing tree inspection.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#method-enable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl Enable {
+    pub const IDENTIFIER: &'static str = "LayerTree.enable";
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -88,14 +88,14 @@ pub enum LoadSnapshotMethod {
     #[serde(rename = "LayerTree.loadSnapshot")]
     LoadSnapshot,
 }
-impl LoadSnapshotMethod {
-    pub const IDENTIFIER: &'static str = "LayerTree.loadSnapshot";
-}
 #[doc = "Returns the snapshot identifier.\n[loadSnapshot](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#method-loadSnapshot)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct LoadSnapshot {
     pub method: LoadSnapshotMethod,
     pub params: LoadSnapshotParams,
+}
+impl LoadSnapshot {
+    pub const IDENTIFIER: &'static str = "LayerTree.loadSnapshot";
 }
 impl crate::CommandResult for LoadSnapshot {
     type Result = super::results::LoadSnapshotResult;
@@ -119,14 +119,14 @@ pub enum MakeSnapshotMethod {
     #[serde(rename = "LayerTree.makeSnapshot")]
     MakeSnapshot,
 }
-impl MakeSnapshotMethod {
-    pub const IDENTIFIER: &'static str = "LayerTree.makeSnapshot";
-}
 #[doc = "Returns the layer snapshot identifier.\n[makeSnapshot](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#method-makeSnapshot)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct MakeSnapshot {
     pub method: MakeSnapshotMethod,
     pub params: MakeSnapshotParams,
+}
+impl MakeSnapshot {
+    pub const IDENTIFIER: &'static str = "LayerTree.makeSnapshot";
 }
 impl crate::CommandResult for MakeSnapshot {
     type Result = super::results::MakeSnapshotResult;
@@ -167,13 +167,13 @@ pub enum ProfileSnapshotMethod {
     #[serde(rename = "LayerTree.profileSnapshot")]
     ProfileSnapshot,
 }
-impl ProfileSnapshotMethod {
-    pub const IDENTIFIER: &'static str = "LayerTree.profileSnapshot";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct ProfileSnapshot {
     pub method: ProfileSnapshotMethod,
     pub params: ProfileSnapshotParams,
+}
+impl ProfileSnapshot {
+    pub const IDENTIFIER: &'static str = "LayerTree.profileSnapshot";
 }
 impl crate::CommandResult for ProfileSnapshot {
     type Result = super::results::ProfileSnapshotResult;
@@ -197,14 +197,14 @@ pub enum ReleaseSnapshotMethod {
     #[serde(rename = "LayerTree.releaseSnapshot")]
     ReleaseSnapshot,
 }
-impl ReleaseSnapshotMethod {
-    pub const IDENTIFIER: &'static str = "LayerTree.releaseSnapshot";
-}
 #[doc = "Releases layer snapshot captured by the back-end.\n[releaseSnapshot](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#method-releaseSnapshot)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ReleaseSnapshot {
     pub method: ReleaseSnapshotMethod,
     pub params: ReleaseSnapshotParams,
+}
+impl ReleaseSnapshot {
+    pub const IDENTIFIER: &'static str = "LayerTree.releaseSnapshot";
 }
 impl crate::CommandResult for ReleaseSnapshot {
     type Result = super::results::ReleaseSnapshotResult;
@@ -246,14 +246,14 @@ pub enum ReplaySnapshotMethod {
     #[serde(rename = "LayerTree.replaySnapshot")]
     ReplaySnapshot,
 }
-impl ReplaySnapshotMethod {
-    pub const IDENTIFIER: &'static str = "LayerTree.replaySnapshot";
-}
 #[doc = "Replays the layer snapshot and returns the resulting bitmap.\n[replaySnapshot](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#method-replaySnapshot)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ReplaySnapshot {
     pub method: ReplaySnapshotMethod,
     pub params: ReplaySnapshotParams,
+}
+impl ReplaySnapshot {
+    pub const IDENTIFIER: &'static str = "LayerTree.replaySnapshot";
 }
 impl crate::CommandResult for ReplaySnapshot {
     type Result = super::results::ReplaySnapshotResult;
@@ -277,14 +277,14 @@ pub enum SnapshotCommandLogMethod {
     #[serde(rename = "LayerTree.snapshotCommandLog")]
     SnapshotCommandLog,
 }
-impl SnapshotCommandLogMethod {
-    pub const IDENTIFIER: &'static str = "LayerTree.snapshotCommandLog";
-}
 #[doc = "Replays the layer snapshot and returns canvas log.\n[snapshotCommandLog](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#method-snapshotCommandLog)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SnapshotCommandLog {
     pub method: SnapshotCommandLogMethod,
     pub params: SnapshotCommandLogParams,
+}
+impl SnapshotCommandLog {
+    pub const IDENTIFIER: &'static str = "LayerTree.snapshotCommandLog";
 }
 impl crate::CommandResult for SnapshotCommandLog {
     type Result = super::results::SnapshotCommandLogResult;

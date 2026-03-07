@@ -7,14 +7,14 @@ pub enum DisableMethod {
     #[serde(rename = "Overlay.disable")]
     Disable,
 }
-impl DisableMethod {
-    pub const IDENTIFIER: &'static str = "Overlay.disable";
-}
 #[doc = "Disables domain notifications.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-disable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
+}
+impl Disable {
+    pub const IDENTIFIER: &'static str = "Overlay.disable";
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -27,14 +27,14 @@ pub enum EnableMethod {
     #[serde(rename = "Overlay.enable")]
     Enable,
 }
-impl EnableMethod {
-    pub const IDENTIFIER: &'static str = "Overlay.enable";
-}
 #[doc = "Enables domain notifications.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-enable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl Enable {
+    pub const IDENTIFIER: &'static str = "Overlay.enable";
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -82,14 +82,14 @@ pub enum GetHighlightObjectForTestMethod {
     #[serde(rename = "Overlay.getHighlightObjectForTest")]
     GetHighlightObjectForTest,
 }
-impl GetHighlightObjectForTestMethod {
-    pub const IDENTIFIER: &'static str = "Overlay.getHighlightObjectForTest";
-}
 #[doc = "For testing.\n[getHighlightObjectForTest](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-getHighlightObjectForTest)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetHighlightObjectForTest {
     pub method: GetHighlightObjectForTestMethod,
     pub params: GetHighlightObjectForTestParams,
+}
+impl GetHighlightObjectForTest {
+    pub const IDENTIFIER: &'static str = "Overlay.getHighlightObjectForTest";
 }
 impl crate::CommandResult for GetHighlightObjectForTest {
     type Result = super::results::GetHighlightObjectForTestResult;
@@ -112,14 +112,14 @@ pub enum GetGridHighlightObjectsForTestMethod {
     #[serde(rename = "Overlay.getGridHighlightObjectsForTest")]
     GetGridHighlightObjectsForTest,
 }
-impl GetGridHighlightObjectsForTestMethod {
-    pub const IDENTIFIER: &'static str = "Overlay.getGridHighlightObjectsForTest";
-}
 #[doc = "For Persistent Grid testing.\n[getGridHighlightObjectsForTest](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-getGridHighlightObjectsForTest)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetGridHighlightObjectsForTest {
     pub method: GetGridHighlightObjectsForTestMethod,
     pub params: GetGridHighlightObjectsForTestParams,
+}
+impl GetGridHighlightObjectsForTest {
+    pub const IDENTIFIER: &'static str = "Overlay.getGridHighlightObjectsForTest";
 }
 impl crate::CommandResult for GetGridHighlightObjectsForTest {
     type Result = super::results::GetGridHighlightObjectsForTestResult;
@@ -143,14 +143,14 @@ pub enum GetSourceOrderHighlightObjectForTestMethod {
     #[serde(rename = "Overlay.getSourceOrderHighlightObjectForTest")]
     GetSourceOrderHighlightObjectForTest,
 }
-impl GetSourceOrderHighlightObjectForTestMethod {
-    pub const IDENTIFIER: &'static str = "Overlay.getSourceOrderHighlightObjectForTest";
-}
 #[doc = "For Source Order Viewer testing.\n[getSourceOrderHighlightObjectForTest](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-getSourceOrderHighlightObjectForTest)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetSourceOrderHighlightObjectForTest {
     pub method: GetSourceOrderHighlightObjectForTestMethod,
     pub params: GetSourceOrderHighlightObjectForTestParams,
+}
+impl GetSourceOrderHighlightObjectForTest {
+    pub const IDENTIFIER: &'static str = "Overlay.getSourceOrderHighlightObjectForTest";
 }
 impl crate::CommandResult for GetSourceOrderHighlightObjectForTest {
     type Result = super::results::GetSourceOrderHighlightObjectForTestResult;
@@ -163,14 +163,14 @@ pub enum HideHighlightMethod {
     #[serde(rename = "Overlay.hideHighlight")]
     HideHighlight,
 }
-impl HideHighlightMethod {
-    pub const IDENTIFIER: &'static str = "Overlay.hideHighlight";
-}
 #[doc = "Hides any highlight.\n[hideHighlight](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-hideHighlight)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct HideHighlight {
     pub method: HideHighlightMethod,
     pub params: HideHighlightParams,
+}
+impl HideHighlight {
+    pub const IDENTIFIER: &'static str = "Overlay.hideHighlight";
 }
 impl crate::CommandResult for HideHighlight {
     type Result = super::results::HideHighlightResult;
@@ -218,14 +218,14 @@ pub enum HighlightNodeMethod {
     #[serde(rename = "Overlay.highlightNode")]
     HighlightNode,
 }
-impl HighlightNodeMethod {
-    pub const IDENTIFIER: &'static str = "Overlay.highlightNode";
-}
 #[doc = "Highlights DOM node with given id or with the given JavaScript object wrapper. Either nodeId or\nobjectId must be specified.\n[highlightNode](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-highlightNode)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct HighlightNode {
     pub method: HighlightNodeMethod,
     pub params: HighlightNodeParams,
+}
+impl HighlightNode {
+    pub const IDENTIFIER: &'static str = "Overlay.highlightNode";
 }
 impl crate::CommandResult for HighlightNode {
     type Result = super::results::HighlightNodeResult;
@@ -261,14 +261,14 @@ pub enum HighlightQuadMethod {
     #[serde(rename = "Overlay.highlightQuad")]
     HighlightQuad,
 }
-impl HighlightQuadMethod {
-    pub const IDENTIFIER: &'static str = "Overlay.highlightQuad";
-}
 #[doc = "Highlights given quad. Coordinates are absolute with respect to the main frame viewport.\n[highlightQuad](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-highlightQuad)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct HighlightQuad {
     pub method: HighlightQuadMethod,
     pub params: HighlightQuadParams,
+}
+impl HighlightQuad {
+    pub const IDENTIFIER: &'static str = "Overlay.highlightQuad";
 }
 impl crate::CommandResult for HighlightQuad {
     type Result = super::results::HighlightQuadResult;
@@ -321,14 +321,14 @@ pub enum HighlightRectMethod {
     #[serde(rename = "Overlay.highlightRect")]
     HighlightRect,
 }
-impl HighlightRectMethod {
-    pub const IDENTIFIER: &'static str = "Overlay.highlightRect";
-}
 #[doc = "Highlights given rectangle. Coordinates are absolute with respect to the main frame viewport.\nIssue: the method does not handle device pixel ratio (DPR) correctly.\nThe coordinates currently have to be adjusted by the client\nif DPR is not 1 (see crbug.com/437807128).\n[highlightRect](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-highlightRect)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct HighlightRect {
     pub method: HighlightRectMethod,
     pub params: HighlightRectParams,
+}
+impl HighlightRect {
+    pub const IDENTIFIER: &'static str = "Overlay.highlightRect";
 }
 impl crate::CommandResult for HighlightRect {
     type Result = super::results::HighlightRectResult;
@@ -370,14 +370,14 @@ pub enum HighlightSourceOrderMethod {
     #[serde(rename = "Overlay.highlightSourceOrder")]
     HighlightSourceOrder,
 }
-impl HighlightSourceOrderMethod {
-    pub const IDENTIFIER: &'static str = "Overlay.highlightSourceOrder";
-}
 #[doc = "Highlights the source order of the children of the DOM node with given id or with the given\nJavaScript object wrapper. Either nodeId or objectId must be specified.\n[highlightSourceOrder](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-highlightSourceOrder)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct HighlightSourceOrder {
     pub method: HighlightSourceOrderMethod,
     pub params: HighlightSourceOrderParams,
+}
+impl HighlightSourceOrder {
+    pub const IDENTIFIER: &'static str = "Overlay.highlightSourceOrder";
 }
 impl crate::CommandResult for HighlightSourceOrder {
     type Result = super::results::HighlightSourceOrderResult;
@@ -407,14 +407,14 @@ pub enum SetInspectModeMethod {
     #[serde(rename = "Overlay.setInspectMode")]
     SetInspectMode,
 }
-impl SetInspectModeMethod {
-    pub const IDENTIFIER: &'static str = "Overlay.setInspectMode";
-}
 #[doc = "Enters the 'inspect' mode. In this mode, elements that user is hovering over are highlighted.\nBackend then generates 'inspectNodeRequested' event upon element selection.\n[setInspectMode](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setInspectMode)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetInspectMode {
     pub method: SetInspectModeMethod,
     pub params: SetInspectModeParams,
+}
+impl SetInspectMode {
+    pub const IDENTIFIER: &'static str = "Overlay.setInspectMode";
 }
 impl crate::CommandResult for SetInspectMode {
     type Result = super::results::SetInspectModeResult;
@@ -436,14 +436,14 @@ pub enum SetShowAdHighlightsMethod {
     #[serde(rename = "Overlay.setShowAdHighlights")]
     SetShowAdHighlights,
 }
-impl SetShowAdHighlightsMethod {
-    pub const IDENTIFIER: &'static str = "Overlay.setShowAdHighlights";
-}
 #[doc = "Highlights owner element of all frames detected to be ads.\n[setShowAdHighlights](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowAdHighlights)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetShowAdHighlights {
     pub method: SetShowAdHighlightsMethod,
     pub params: SetShowAdHighlightsParams,
+}
+impl SetShowAdHighlights {
+    pub const IDENTIFIER: &'static str = "Overlay.setShowAdHighlights";
 }
 impl crate::CommandResult for SetShowAdHighlights {
     type Result = super::results::SetShowAdHighlightsResult;
@@ -461,13 +461,13 @@ pub enum SetPausedInDebuggerMessageMethod {
     #[serde(rename = "Overlay.setPausedInDebuggerMessage")]
     SetPausedInDebuggerMessage,
 }
-impl SetPausedInDebuggerMessageMethod {
-    pub const IDENTIFIER: &'static str = "Overlay.setPausedInDebuggerMessage";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetPausedInDebuggerMessage {
     pub method: SetPausedInDebuggerMessageMethod,
     pub params: SetPausedInDebuggerMessageParams,
+}
+impl SetPausedInDebuggerMessage {
+    pub const IDENTIFIER: &'static str = "Overlay.setPausedInDebuggerMessage";
 }
 impl crate::CommandResult for SetPausedInDebuggerMessage {
     type Result = super::results::SetPausedInDebuggerMessageResult;
@@ -489,14 +489,14 @@ pub enum SetShowDebugBordersMethod {
     #[serde(rename = "Overlay.setShowDebugBorders")]
     SetShowDebugBorders,
 }
-impl SetShowDebugBordersMethod {
-    pub const IDENTIFIER: &'static str = "Overlay.setShowDebugBorders";
-}
 #[doc = "Requests that backend shows debug borders on layers\n[setShowDebugBorders](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowDebugBorders)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetShowDebugBorders {
     pub method: SetShowDebugBordersMethod,
     pub params: SetShowDebugBordersParams,
+}
+impl SetShowDebugBorders {
+    pub const IDENTIFIER: &'static str = "Overlay.setShowDebugBorders";
 }
 impl crate::CommandResult for SetShowDebugBorders {
     type Result = super::results::SetShowDebugBordersResult;
@@ -518,14 +518,14 @@ pub enum SetShowFpsCounterMethod {
     #[serde(rename = "Overlay.setShowFPSCounter")]
     SetShowFpsCounter,
 }
-impl SetShowFpsCounterMethod {
-    pub const IDENTIFIER: &'static str = "Overlay.setShowFPSCounter";
-}
 #[doc = "Requests that backend shows the FPS counter\n[setShowFPSCounter](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowFPSCounter)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetShowFpsCounter {
     pub method: SetShowFpsCounterMethod,
     pub params: SetShowFpsCounterParams,
+}
+impl SetShowFpsCounter {
+    pub const IDENTIFIER: &'static str = "Overlay.setShowFPSCounter";
 }
 impl crate::CommandResult for SetShowFpsCounter {
     type Result = super::results::SetShowFpsCounterResult;
@@ -550,14 +550,14 @@ pub enum SetShowGridOverlaysMethod {
     #[serde(rename = "Overlay.setShowGridOverlays")]
     SetShowGridOverlays,
 }
-impl SetShowGridOverlaysMethod {
-    pub const IDENTIFIER: &'static str = "Overlay.setShowGridOverlays";
-}
 #[doc = "Highlight multiple elements with the CSS Grid overlay.\n[setShowGridOverlays](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowGridOverlays)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetShowGridOverlays {
     pub method: SetShowGridOverlaysMethod,
     pub params: SetShowGridOverlaysParams,
+}
+impl SetShowGridOverlays {
+    pub const IDENTIFIER: &'static str = "Overlay.setShowGridOverlays";
 }
 impl crate::CommandResult for SetShowGridOverlays {
     type Result = super::results::SetShowGridOverlaysResult;
@@ -581,13 +581,13 @@ pub enum SetShowFlexOverlaysMethod {
     #[serde(rename = "Overlay.setShowFlexOverlays")]
     SetShowFlexOverlays,
 }
-impl SetShowFlexOverlaysMethod {
-    pub const IDENTIFIER: &'static str = "Overlay.setShowFlexOverlays";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetShowFlexOverlays {
     pub method: SetShowFlexOverlaysMethod,
     pub params: SetShowFlexOverlaysParams,
+}
+impl SetShowFlexOverlays {
+    pub const IDENTIFIER: &'static str = "Overlay.setShowFlexOverlays";
 }
 impl crate::CommandResult for SetShowFlexOverlays {
     type Result = super::results::SetShowFlexOverlaysResult;
@@ -613,13 +613,13 @@ pub enum SetShowScrollSnapOverlaysMethod {
     #[serde(rename = "Overlay.setShowScrollSnapOverlays")]
     SetShowScrollSnapOverlays,
 }
-impl SetShowScrollSnapOverlaysMethod {
-    pub const IDENTIFIER: &'static str = "Overlay.setShowScrollSnapOverlays";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetShowScrollSnapOverlays {
     pub method: SetShowScrollSnapOverlaysMethod,
     pub params: SetShowScrollSnapOverlaysParams,
+}
+impl SetShowScrollSnapOverlays {
+    pub const IDENTIFIER: &'static str = "Overlay.setShowScrollSnapOverlays";
 }
 impl crate::CommandResult for SetShowScrollSnapOverlays {
     type Result = super::results::SetShowScrollSnapOverlaysResult;
@@ -645,13 +645,13 @@ pub enum SetShowContainerQueryOverlaysMethod {
     #[serde(rename = "Overlay.setShowContainerQueryOverlays")]
     SetShowContainerQueryOverlays,
 }
-impl SetShowContainerQueryOverlaysMethod {
-    pub const IDENTIFIER: &'static str = "Overlay.setShowContainerQueryOverlays";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetShowContainerQueryOverlays {
     pub method: SetShowContainerQueryOverlaysMethod,
     pub params: SetShowContainerQueryOverlaysParams,
+}
+impl SetShowContainerQueryOverlays {
+    pub const IDENTIFIER: &'static str = "Overlay.setShowContainerQueryOverlays";
 }
 impl crate::CommandResult for SetShowContainerQueryOverlays {
     type Result = super::results::SetShowContainerQueryOverlaysResult;
@@ -676,13 +676,13 @@ pub enum SetShowInspectedElementAnchorMethod {
     #[serde(rename = "Overlay.setShowInspectedElementAnchor")]
     SetShowInspectedElementAnchor,
 }
-impl SetShowInspectedElementAnchorMethod {
-    pub const IDENTIFIER: &'static str = "Overlay.setShowInspectedElementAnchor";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetShowInspectedElementAnchor {
     pub method: SetShowInspectedElementAnchorMethod,
     pub params: SetShowInspectedElementAnchorParams,
+}
+impl SetShowInspectedElementAnchor {
+    pub const IDENTIFIER: &'static str = "Overlay.setShowInspectedElementAnchor";
 }
 impl crate::CommandResult for SetShowInspectedElementAnchor {
     type Result = super::results::SetShowInspectedElementAnchorResult;
@@ -706,14 +706,14 @@ pub enum SetShowPaintRectsMethod {
     #[serde(rename = "Overlay.setShowPaintRects")]
     SetShowPaintRects,
 }
-impl SetShowPaintRectsMethod {
-    pub const IDENTIFIER: &'static str = "Overlay.setShowPaintRects";
-}
 #[doc = "Requests that backend shows paint rectangles\n[setShowPaintRects](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowPaintRects)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetShowPaintRects {
     pub method: SetShowPaintRectsMethod,
     pub params: SetShowPaintRectsParams,
+}
+impl SetShowPaintRects {
+    pub const IDENTIFIER: &'static str = "Overlay.setShowPaintRects";
 }
 impl crate::CommandResult for SetShowPaintRects {
     type Result = super::results::SetShowPaintRectsResult;
@@ -737,14 +737,14 @@ pub enum SetShowLayoutShiftRegionsMethod {
     #[serde(rename = "Overlay.setShowLayoutShiftRegions")]
     SetShowLayoutShiftRegions,
 }
-impl SetShowLayoutShiftRegionsMethod {
-    pub const IDENTIFIER: &'static str = "Overlay.setShowLayoutShiftRegions";
-}
 #[doc = "Requests that backend shows layout shift regions\n[setShowLayoutShiftRegions](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowLayoutShiftRegions)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetShowLayoutShiftRegions {
     pub method: SetShowLayoutShiftRegionsMethod,
     pub params: SetShowLayoutShiftRegionsParams,
+}
+impl SetShowLayoutShiftRegions {
+    pub const IDENTIFIER: &'static str = "Overlay.setShowLayoutShiftRegions";
 }
 impl crate::CommandResult for SetShowLayoutShiftRegions {
     type Result = super::results::SetShowLayoutShiftRegionsResult;
@@ -766,14 +766,14 @@ pub enum SetShowScrollBottleneckRectsMethod {
     #[serde(rename = "Overlay.setShowScrollBottleneckRects")]
     SetShowScrollBottleneckRects,
 }
-impl SetShowScrollBottleneckRectsMethod {
-    pub const IDENTIFIER: &'static str = "Overlay.setShowScrollBottleneckRects";
-}
 #[doc = "Requests that backend shows scroll bottleneck rects\n[setShowScrollBottleneckRects](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowScrollBottleneckRects)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetShowScrollBottleneckRects {
     pub method: SetShowScrollBottleneckRectsMethod,
     pub params: SetShowScrollBottleneckRectsParams,
+}
+impl SetShowScrollBottleneckRects {
+    pub const IDENTIFIER: &'static str = "Overlay.setShowScrollBottleneckRects";
 }
 impl crate::CommandResult for SetShowScrollBottleneckRects {
     type Result = super::results::SetShowScrollBottleneckRectsResult;
@@ -795,14 +795,14 @@ pub enum SetShowViewportSizeOnResizeMethod {
     #[serde(rename = "Overlay.setShowViewportSizeOnResize")]
     SetShowViewportSizeOnResize,
 }
-impl SetShowViewportSizeOnResizeMethod {
-    pub const IDENTIFIER: &'static str = "Overlay.setShowViewportSizeOnResize";
-}
 #[doc = "Paints viewport size upon main frame resize.\n[setShowViewportSizeOnResize](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowViewportSizeOnResize)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetShowViewportSizeOnResize {
     pub method: SetShowViewportSizeOnResizeMethod,
     pub params: SetShowViewportSizeOnResizeParams,
+}
+impl SetShowViewportSizeOnResize {
+    pub const IDENTIFIER: &'static str = "Overlay.setShowViewportSizeOnResize";
 }
 impl crate::CommandResult for SetShowViewportSizeOnResize {
     type Result = super::results::SetShowViewportSizeOnResizeResult;
@@ -821,14 +821,14 @@ pub enum SetShowHingeMethod {
     #[serde(rename = "Overlay.setShowHinge")]
     SetShowHinge,
 }
-impl SetShowHingeMethod {
-    pub const IDENTIFIER: &'static str = "Overlay.setShowHinge";
-}
 #[doc = "Add a dual screen device hinge\n[setShowHinge](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowHinge)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetShowHinge {
     pub method: SetShowHingeMethod,
     pub params: SetShowHingeParams,
+}
+impl SetShowHinge {
+    pub const IDENTIFIER: &'static str = "Overlay.setShowHinge";
 }
 impl crate::CommandResult for SetShowHinge {
     type Result = super::results::SetShowHingeResult;
@@ -855,14 +855,14 @@ pub enum SetShowIsolatedElementsMethod {
     #[serde(rename = "Overlay.setShowIsolatedElements")]
     SetShowIsolatedElements,
 }
-impl SetShowIsolatedElementsMethod {
-    pub const IDENTIFIER: &'static str = "Overlay.setShowIsolatedElements";
-}
 #[doc = "Show elements in isolation mode with overlays.\n[setShowIsolatedElements](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowIsolatedElements)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetShowIsolatedElements {
     pub method: SetShowIsolatedElementsMethod,
     pub params: SetShowIsolatedElementsParams,
+}
+impl SetShowIsolatedElements {
+    pub const IDENTIFIER: &'static str = "Overlay.setShowIsolatedElements";
 }
 impl crate::CommandResult for SetShowIsolatedElements {
     type Result = super::results::SetShowIsolatedElementsResult;
@@ -881,14 +881,14 @@ pub enum SetShowWindowControlsOverlayMethod {
     #[serde(rename = "Overlay.setShowWindowControlsOverlay")]
     SetShowWindowControlsOverlay,
 }
-impl SetShowWindowControlsOverlayMethod {
-    pub const IDENTIFIER: &'static str = "Overlay.setShowWindowControlsOverlay";
-}
 #[doc = "Show Window Controls Overlay for PWA\n[setShowWindowControlsOverlay](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowWindowControlsOverlay)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetShowWindowControlsOverlay {
     pub method: SetShowWindowControlsOverlayMethod,
     pub params: SetShowWindowControlsOverlayParams,
+}
+impl SetShowWindowControlsOverlay {
+    pub const IDENTIFIER: &'static str = "Overlay.setShowWindowControlsOverlay";
 }
 impl crate::CommandResult for SetShowWindowControlsOverlay {
     type Result = super::results::SetShowWindowControlsOverlayResult;

@@ -9,13 +9,13 @@ pub enum WorkerErrorReportedMethod {
     #[serde(rename = "ServiceWorker.workerErrorReported")]
     WorkerErrorReported,
 }
-impl WorkerErrorReportedMethod {
-    pub const IDENTIFIER: &'static str = "ServiceWorker.workerErrorReported";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct WorkerErrorReported {
     pub method: WorkerErrorReportedMethod,
     pub params: WorkerErrorReportedParams,
+}
+impl WorkerErrorReported {
+    pub const IDENTIFIER: &'static str = "ServiceWorker.workerErrorReported";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WorkerRegistrationUpdatedParams {
@@ -28,13 +28,13 @@ pub enum WorkerRegistrationUpdatedMethod {
     #[serde(rename = "ServiceWorker.workerRegistrationUpdated")]
     WorkerRegistrationUpdated,
 }
-impl WorkerRegistrationUpdatedMethod {
-    pub const IDENTIFIER: &'static str = "ServiceWorker.workerRegistrationUpdated";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct WorkerRegistrationUpdated {
     pub method: WorkerRegistrationUpdatedMethod,
     pub params: WorkerRegistrationUpdatedParams,
+}
+impl WorkerRegistrationUpdated {
+    pub const IDENTIFIER: &'static str = "ServiceWorker.workerRegistrationUpdated";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WorkerVersionUpdatedParams {
@@ -47,12 +47,12 @@ pub enum WorkerVersionUpdatedMethod {
     #[serde(rename = "ServiceWorker.workerVersionUpdated")]
     WorkerVersionUpdated,
 }
-impl WorkerVersionUpdatedMethod {
-    pub const IDENTIFIER: &'static str = "ServiceWorker.workerVersionUpdated";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct WorkerVersionUpdated {
     pub method: WorkerVersionUpdatedMethod,
     pub params: WorkerVersionUpdatedParams,
+}
+impl WorkerVersionUpdated {
+    pub const IDENTIFIER: &'static str = "ServiceWorker.workerVersionUpdated";
 }
 group_enum ! (ServiceWorkerEvents { WorkerErrorReported (WorkerErrorReported) , WorkerRegistrationUpdated (WorkerRegistrationUpdated) , WorkerVersionUpdated (WorkerVersionUpdated) });

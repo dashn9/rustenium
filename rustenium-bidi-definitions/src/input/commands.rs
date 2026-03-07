@@ -23,13 +23,14 @@ pub enum PerformActionsMethod {
     #[serde(rename = "input.performActions")]
     PerformActions,
 }
-impl PerformActionsMethod {
-    pub const IDENTIFIER: &'static str = "input.performActions";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct PerformActions {
     pub method: PerformActionsMethod,
     pub params: PerformActionsParams,
+}
+impl PerformActions {
+    pub const IDENTIFIER: &'static str = "input.performActions";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for PerformActions {
     type Result = super::results::PerformActionsResult;
@@ -51,13 +52,14 @@ pub enum ReleaseActionsMethod {
     #[serde(rename = "input.releaseActions")]
     ReleaseActions,
 }
-impl ReleaseActionsMethod {
-    pub const IDENTIFIER: &'static str = "input.releaseActions";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct ReleaseActions {
     pub method: ReleaseActionsMethod,
     pub params: ReleaseActionsParams,
+}
+impl ReleaseActions {
+    pub const IDENTIFIER: &'static str = "input.releaseActions";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for ReleaseActions {
     type Result = super::results::ReleaseActionsResult;
@@ -90,13 +92,14 @@ pub enum SetFilesMethod {
     #[serde(rename = "input.setFiles")]
     SetFiles,
 }
-impl SetFilesMethod {
-    pub const IDENTIFIER: &'static str = "input.setFiles";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetFiles {
     pub method: SetFilesMethod,
     pub params: SetFilesParams,
+}
+impl SetFiles {
+    pub const IDENTIFIER: &'static str = "input.setFiles";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for SetFiles {
     type Result = super::results::SetFilesResult;

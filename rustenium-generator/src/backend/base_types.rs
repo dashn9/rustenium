@@ -3,7 +3,7 @@ use std::borrow::Cow;
 use crate::backend::types::ModuleDatatype;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum DomainDirection { Remote, Local, Both }
+pub enum DomainDirection { Remote, Local, All }
 
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct Protocol<'a> {

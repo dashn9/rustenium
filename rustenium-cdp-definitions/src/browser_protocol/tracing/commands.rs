@@ -7,14 +7,14 @@ pub enum EndMethod {
     #[serde(rename = "Tracing.end")]
     End,
 }
-impl EndMethod {
-    pub const IDENTIFIER: &'static str = "Tracing.end";
-}
 #[doc = "Stop trace events collection.\n[end](https://chromedevtools.github.io/devtools-protocol/tot/Tracing/#method-end)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct End {
     pub method: EndMethod,
     pub params: EndParams,
+}
+impl End {
+    pub const IDENTIFIER: &'static str = "Tracing.end";
 }
 impl crate::CommandResult for End {
     type Result = super::results::EndResult;
@@ -27,14 +27,14 @@ pub enum GetCategoriesMethod {
     #[serde(rename = "Tracing.getCategories")]
     GetCategories,
 }
-impl GetCategoriesMethod {
-    pub const IDENTIFIER: &'static str = "Tracing.getCategories";
-}
 #[doc = "Gets supported tracing categories.\n[getCategories](https://chromedevtools.github.io/devtools-protocol/tot/Tracing/#method-getCategories)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetCategories {
     pub method: GetCategoriesMethod,
     pub params: GetCategoriesParams,
+}
+impl GetCategories {
+    pub const IDENTIFIER: &'static str = "Tracing.getCategories";
 }
 impl crate::CommandResult for GetCategories {
     type Result = super::results::GetCategoriesResult;
@@ -47,14 +47,14 @@ pub enum GetTrackEventDescriptorMethod {
     #[serde(rename = "Tracing.getTrackEventDescriptor")]
     GetTrackEventDescriptor,
 }
-impl GetTrackEventDescriptorMethod {
-    pub const IDENTIFIER: &'static str = "Tracing.getTrackEventDescriptor";
-}
 #[doc = "Return a descriptor for all available tracing categories.\n[getTrackEventDescriptor](https://chromedevtools.github.io/devtools-protocol/tot/Tracing/#method-getTrackEventDescriptor)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetTrackEventDescriptor {
     pub method: GetTrackEventDescriptorMethod,
     pub params: GetTrackEventDescriptorParams,
+}
+impl GetTrackEventDescriptor {
+    pub const IDENTIFIER: &'static str = "Tracing.getTrackEventDescriptor";
 }
 impl crate::CommandResult for GetTrackEventDescriptor {
     type Result = super::results::GetTrackEventDescriptorResult;
@@ -83,14 +83,14 @@ pub enum RecordClockSyncMarkerMethod {
     #[serde(rename = "Tracing.recordClockSyncMarker")]
     RecordClockSyncMarker,
 }
-impl RecordClockSyncMarkerMethod {
-    pub const IDENTIFIER: &'static str = "Tracing.recordClockSyncMarker";
-}
 #[doc = "Record a clock sync marker in the trace.\n[recordClockSyncMarker](https://chromedevtools.github.io/devtools-protocol/tot/Tracing/#method-recordClockSyncMarker)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct RecordClockSyncMarker {
     pub method: RecordClockSyncMarkerMethod,
     pub params: RecordClockSyncMarkerParams,
+}
+impl RecordClockSyncMarker {
+    pub const IDENTIFIER: &'static str = "Tracing.recordClockSyncMarker";
 }
 impl crate::CommandResult for RecordClockSyncMarker {
     type Result = super::results::RecordClockSyncMarkerResult;
@@ -114,14 +114,14 @@ pub enum RequestMemoryDumpMethod {
     #[serde(rename = "Tracing.requestMemoryDump")]
     RequestMemoryDump,
 }
-impl RequestMemoryDumpMethod {
-    pub const IDENTIFIER: &'static str = "Tracing.requestMemoryDump";
-}
 #[doc = "Request a global memory dump.\n[requestMemoryDump](https://chromedevtools.github.io/devtools-protocol/tot/Tracing/#method-requestMemoryDump)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct RequestMemoryDump {
     pub method: RequestMemoryDumpMethod,
     pub params: RequestMemoryDumpParams,
+}
+impl RequestMemoryDump {
+    pub const IDENTIFIER: &'static str = "Tracing.requestMemoryDump";
 }
 impl crate::CommandResult for RequestMemoryDump {
     type Result = super::results::RequestMemoryDumpResult;
@@ -177,14 +177,14 @@ pub enum StartMethod {
     #[serde(rename = "Tracing.start")]
     Start,
 }
-impl StartMethod {
-    pub const IDENTIFIER: &'static str = "Tracing.start";
-}
 #[doc = "Start trace events collection.\n[start](https://chromedevtools.github.io/devtools-protocol/tot/Tracing/#method-start)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Start {
     pub method: StartMethod,
     pub params: StartParams,
+}
+impl Start {
+    pub const IDENTIFIER: &'static str = "Tracing.start";
 }
 impl crate::CommandResult for Start {
     type Result = super::results::StartResult;

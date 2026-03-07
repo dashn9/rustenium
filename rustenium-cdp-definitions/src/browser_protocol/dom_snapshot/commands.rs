@@ -7,14 +7,14 @@ pub enum DisableMethod {
     #[serde(rename = "DOMSnapshot.disable")]
     Disable,
 }
-impl DisableMethod {
-    pub const IDENTIFIER: &'static str = "DOMSnapshot.disable";
-}
 #[doc = "Disables DOM snapshot agent for the given page.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/DOMSnapshot/#method-disable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
+}
+impl Disable {
+    pub const IDENTIFIER: &'static str = "DOMSnapshot.disable";
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -27,14 +27,14 @@ pub enum EnableMethod {
     #[serde(rename = "DOMSnapshot.enable")]
     Enable,
 }
-impl EnableMethod {
-    pub const IDENTIFIER: &'static str = "DOMSnapshot.enable";
-}
 #[doc = "Enables DOM snapshot agent for the given page.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/DOMSnapshot/#method-enable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl Enable {
+    pub const IDENTIFIER: &'static str = "DOMSnapshot.enable";
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -83,14 +83,14 @@ pub enum CaptureSnapshotMethod {
     #[serde(rename = "DOMSnapshot.captureSnapshot")]
     CaptureSnapshot,
 }
-impl CaptureSnapshotMethod {
-    pub const IDENTIFIER: &'static str = "DOMSnapshot.captureSnapshot";
-}
 #[doc = "Returns a document snapshot, including the full DOM tree of the root node (including iframes,\ntemplate contents, and imported documents) in a flattened array, as well as layout and\nwhite-listed computed style information for the nodes. Shadow DOM in the returned DOM tree is\nflattened.\n[captureSnapshot](https://chromedevtools.github.io/devtools-protocol/tot/DOMSnapshot/#method-captureSnapshot)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct CaptureSnapshot {
     pub method: CaptureSnapshotMethod,
     pub params: CaptureSnapshotParams,
+}
+impl CaptureSnapshot {
+    pub const IDENTIFIER: &'static str = "DOMSnapshot.captureSnapshot";
 }
 impl crate::CommandResult for CaptureSnapshot {
     type Result = super::results::CaptureSnapshotResult;

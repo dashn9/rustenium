@@ -7,14 +7,14 @@ pub enum GetInfoMethod {
     #[serde(rename = "SystemInfo.getInfo")]
     GetInfo,
 }
-impl GetInfoMethod {
-    pub const IDENTIFIER: &'static str = "SystemInfo.getInfo";
-}
 #[doc = "Returns information about the system.\n[getInfo](https://chromedevtools.github.io/devtools-protocol/tot/SystemInfo/#method-getInfo)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetInfo {
     pub method: GetInfoMethod,
     pub params: GetInfoParams,
+}
+impl GetInfo {
+    pub const IDENTIFIER: &'static str = "SystemInfo.getInfo";
 }
 impl crate::CommandResult for GetInfo {
     type Result = super::results::GetInfoResult;
@@ -42,14 +42,14 @@ pub enum GetFeatureStateMethod {
     #[serde(rename = "SystemInfo.getFeatureState")]
     GetFeatureState,
 }
-impl GetFeatureStateMethod {
-    pub const IDENTIFIER: &'static str = "SystemInfo.getFeatureState";
-}
 #[doc = "Returns information about the feature state.\n[getFeatureState](https://chromedevtools.github.io/devtools-protocol/tot/SystemInfo/#method-getFeatureState)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetFeatureState {
     pub method: GetFeatureStateMethod,
     pub params: GetFeatureStateParams,
+}
+impl GetFeatureState {
+    pub const IDENTIFIER: &'static str = "SystemInfo.getFeatureState";
 }
 impl crate::CommandResult for GetFeatureState {
     type Result = super::results::GetFeatureStateResult;
@@ -62,14 +62,14 @@ pub enum GetProcessInfoMethod {
     #[serde(rename = "SystemInfo.getProcessInfo")]
     GetProcessInfo,
 }
-impl GetProcessInfoMethod {
-    pub const IDENTIFIER: &'static str = "SystemInfo.getProcessInfo";
-}
 #[doc = "Returns information about all running processes.\n[getProcessInfo](https://chromedevtools.github.io/devtools-protocol/tot/SystemInfo/#method-getProcessInfo)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetProcessInfo {
     pub method: GetProcessInfoMethod,
     pub params: GetProcessInfoParams,
+}
+impl GetProcessInfo {
+    pub const IDENTIFIER: &'static str = "SystemInfo.getProcessInfo";
 }
 impl crate::CommandResult for GetProcessInfo {
     type Result = super::results::GetProcessInfoResult;

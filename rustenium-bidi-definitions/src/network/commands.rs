@@ -38,13 +38,14 @@ pub enum AddDataCollectorMethod {
     #[serde(rename = "network.addDataCollector")]
     AddDataCollector,
 }
-impl AddDataCollectorMethod {
-    pub const IDENTIFIER: &'static str = "network.addDataCollector";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct AddDataCollector {
     pub method: AddDataCollectorMethod,
     pub params: AddDataCollectorParams,
+}
+impl AddDataCollector {
+    pub const IDENTIFIER: &'static str = "network.addDataCollector";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for AddDataCollector {
     type Result = super::results::AddDataCollectorResult;
@@ -77,13 +78,14 @@ pub enum AddInterceptMethod {
     #[serde(rename = "network.addIntercept")]
     AddIntercept,
 }
-impl AddInterceptMethod {
-    pub const IDENTIFIER: &'static str = "network.addIntercept";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct AddIntercept {
     pub method: AddInterceptMethod,
     pub params: AddInterceptParams,
+}
+impl AddIntercept {
+    pub const IDENTIFIER: &'static str = "network.addIntercept";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for AddIntercept {
     type Result = super::results::AddInterceptResult;
@@ -130,13 +132,14 @@ pub enum ContinueRequestMethod {
     #[serde(rename = "network.continueRequest")]
     ContinueRequest,
 }
-impl ContinueRequestMethod {
-    pub const IDENTIFIER: &'static str = "network.continueRequest";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct ContinueRequest {
     pub method: ContinueRequestMethod,
     pub params: ContinueRequestParams,
+}
+impl ContinueRequest {
+    pub const IDENTIFIER: &'static str = "network.continueRequest";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for ContinueRequest {
     type Result = super::results::ContinueRequestResult;
@@ -183,13 +186,14 @@ pub enum ContinueResponseMethod {
     #[serde(rename = "network.continueResponse")]
     ContinueResponse,
 }
-impl ContinueResponseMethod {
-    pub const IDENTIFIER: &'static str = "network.continueResponse";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct ContinueResponse {
     pub method: ContinueResponseMethod,
     pub params: ContinueResponseParams,
+}
+impl ContinueResponse {
+    pub const IDENTIFIER: &'static str = "network.continueResponse";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for ContinueResponse {
     type Result = super::results::ContinueResponseResult;
@@ -211,13 +215,14 @@ pub enum ContinueWithAuthMethod {
     #[serde(rename = "network.continueWithAuth")]
     ContinueWithAuth,
 }
-impl ContinueWithAuthMethod {
-    pub const IDENTIFIER: &'static str = "network.continueWithAuth";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct ContinueWithAuth {
     pub method: ContinueWithAuthMethod,
     pub params: ContinueWithAuthParams,
+}
+impl ContinueWithAuth {
+    pub const IDENTIFIER: &'static str = "network.continueWithAuth";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for ContinueWithAuth {
     type Result = super::results::ContinueWithAuthResult;
@@ -249,13 +254,14 @@ pub enum DisownDataMethod {
     #[serde(rename = "network.disownData")]
     DisownData,
 }
-impl DisownDataMethod {
-    pub const IDENTIFIER: &'static str = "network.disownData";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct DisownData {
     pub method: DisownDataMethod,
     pub params: DisownDataParams,
+}
+impl DisownData {
+    pub const IDENTIFIER: &'static str = "network.disownData";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for DisownData {
     type Result = super::results::DisownDataResult;
@@ -277,13 +283,14 @@ pub enum FailRequestMethod {
     #[serde(rename = "network.failRequest")]
     FailRequest,
 }
-impl FailRequestMethod {
-    pub const IDENTIFIER: &'static str = "network.failRequest";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct FailRequest {
     pub method: FailRequestMethod,
     pub params: FailRequestParams,
+}
+impl FailRequest {
+    pub const IDENTIFIER: &'static str = "network.failRequest";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for FailRequest {
     type Result = super::results::FailRequestResult;
@@ -324,13 +331,14 @@ pub enum GetDataMethod {
     #[serde(rename = "network.getData")]
     GetData,
 }
-impl GetDataMethod {
-    pub const IDENTIFIER: &'static str = "network.getData";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetData {
     pub method: GetDataMethod,
     pub params: GetDataParams,
+}
+impl GetData {
+    pub const IDENTIFIER: &'static str = "network.getData";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for GetData {
     type Result = super::results::GetDataResult;
@@ -377,13 +385,14 @@ pub enum ProvideResponseMethod {
     #[serde(rename = "network.provideResponse")]
     ProvideResponse,
 }
-impl ProvideResponseMethod {
-    pub const IDENTIFIER: &'static str = "network.provideResponse";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct ProvideResponse {
     pub method: ProvideResponseMethod,
     pub params: ProvideResponseParams,
+}
+impl ProvideResponse {
+    pub const IDENTIFIER: &'static str = "network.provideResponse";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for ProvideResponse {
     type Result = super::results::ProvideResponseResult;
@@ -405,13 +414,14 @@ pub enum RemoveDataCollectorMethod {
     #[serde(rename = "network.removeDataCollector")]
     RemoveDataCollector,
 }
-impl RemoveDataCollectorMethod {
-    pub const IDENTIFIER: &'static str = "network.removeDataCollector";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct RemoveDataCollector {
     pub method: RemoveDataCollectorMethod,
     pub params: RemoveDataCollectorParams,
+}
+impl RemoveDataCollector {
+    pub const IDENTIFIER: &'static str = "network.removeDataCollector";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for RemoveDataCollector {
     type Result = super::results::RemoveDataCollectorResult;
@@ -433,13 +443,14 @@ pub enum RemoveInterceptMethod {
     #[serde(rename = "network.removeIntercept")]
     RemoveIntercept,
 }
-impl RemoveInterceptMethod {
-    pub const IDENTIFIER: &'static str = "network.removeIntercept";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct RemoveIntercept {
     pub method: RemoveInterceptMethod,
     pub params: RemoveInterceptParams,
+}
+impl RemoveIntercept {
+    pub const IDENTIFIER: &'static str = "network.removeIntercept";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for RemoveIntercept {
     type Result = super::results::RemoveInterceptResult;
@@ -473,13 +484,14 @@ pub enum SetCacheBehaviorMethod {
     #[serde(rename = "network.setCacheBehavior")]
     SetCacheBehavior,
 }
-impl SetCacheBehaviorMethod {
-    pub const IDENTIFIER: &'static str = "network.setCacheBehavior";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetCacheBehavior {
     pub method: SetCacheBehaviorMethod,
     pub params: SetCacheBehaviorParams,
+}
+impl SetCacheBehavior {
+    pub const IDENTIFIER: &'static str = "network.setCacheBehavior";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for SetCacheBehavior {
     type Result = super::results::SetCacheBehaviorResult;
@@ -512,13 +524,14 @@ pub enum SetExtraHeadersMethod {
     #[serde(rename = "network.setExtraHeaders")]
     SetExtraHeaders,
 }
-impl SetExtraHeadersMethod {
-    pub const IDENTIFIER: &'static str = "network.setExtraHeaders";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetExtraHeaders {
     pub method: SetExtraHeadersMethod,
     pub params: SetExtraHeadersParams,
+}
+impl SetExtraHeaders {
+    pub const IDENTIFIER: &'static str = "network.setExtraHeaders";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for SetExtraHeaders {
     type Result = super::results::SetExtraHeadersResult;

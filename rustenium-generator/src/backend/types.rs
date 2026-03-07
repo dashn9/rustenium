@@ -1,4 +1,4 @@
-use crate::backend::base_types::{Command, Constraint, Event, Item, Module, Param, Type, TypeDef, TypeRef, Variant};
+use crate::backend::base_types::{Command, Constraint, DomainDirection, Event, Item, Module, Param, Type, TypeDef, TypeRef, Variant};
 use heck::{ToSnakeCase, ToUpperCamelCase};
 use proc_macro2::{Ident, TokenStream};
 use quote::{quote, ToTokens};
@@ -195,6 +195,14 @@ impl<'a> ModuleDatatype<'a> {
             ModuleDatatype::Type(inner) => inner.deprecated,
             ModuleDatatype::Command(inner) => inner.method.deprecated,
             ModuleDatatype::Event(inner) => inner.deprecated,
+        }
+    }
+
+    pub fn direction(&self) -> Option<DomainDirection> {
+        match self {
+            ModuleDatatype::Type(inner) => inner.direction,
+            ModuleDatatype::Command(inner) => inner.direction,
+            ModuleDatatype::Event(inner) => inner.direction,
         }
     }
 }

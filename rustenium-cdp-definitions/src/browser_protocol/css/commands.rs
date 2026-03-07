@@ -36,14 +36,14 @@ pub enum AddRuleMethod {
     #[serde(rename = "CSS.addRule")]
     AddRule,
 }
-impl AddRuleMethod {
-    pub const IDENTIFIER: &'static str = "CSS.addRule";
-}
 #[doc = "Inserts a new rule with the given `ruleText` in a stylesheet with given `styleSheetId`, at the\nposition specified by `location`.\n[addRule](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-addRule)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct AddRule {
     pub method: AddRuleMethod,
     pub params: AddRuleParams,
+}
+impl AddRule {
+    pub const IDENTIFIER: &'static str = "CSS.addRule";
 }
 impl crate::CommandResult for AddRule {
     type Result = super::results::AddRuleResult;
@@ -68,14 +68,14 @@ pub enum CollectClassNamesMethod {
     #[serde(rename = "CSS.collectClassNames")]
     CollectClassNames,
 }
-impl CollectClassNamesMethod {
-    pub const IDENTIFIER: &'static str = "CSS.collectClassNames";
-}
 #[doc = "Returns all class names from specified stylesheet.\n[collectClassNames](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-collectClassNames)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct CollectClassNames {
     pub method: CollectClassNamesMethod,
     pub params: CollectClassNamesParams,
+}
+impl CollectClassNames {
+    pub const IDENTIFIER: &'static str = "CSS.collectClassNames";
 }
 impl crate::CommandResult for CollectClassNames {
     type Result = super::results::CollectClassNamesResult;
@@ -105,14 +105,14 @@ pub enum CreateStyleSheetMethod {
     #[serde(rename = "CSS.createStyleSheet")]
     CreateStyleSheet,
 }
-impl CreateStyleSheetMethod {
-    pub const IDENTIFIER: &'static str = "CSS.createStyleSheet";
-}
 #[doc = "Creates a new special \"via-inspector\" stylesheet in the frame with given `frameId`.\n[createStyleSheet](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-createStyleSheet)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct CreateStyleSheet {
     pub method: CreateStyleSheetMethod,
     pub params: CreateStyleSheetParams,
+}
+impl CreateStyleSheet {
+    pub const IDENTIFIER: &'static str = "CSS.createStyleSheet";
 }
 impl crate::CommandResult for CreateStyleSheet {
     type Result = super::results::CreateStyleSheetResult;
@@ -125,14 +125,14 @@ pub enum DisableMethod {
     #[serde(rename = "CSS.disable")]
     Disable,
 }
-impl DisableMethod {
-    pub const IDENTIFIER: &'static str = "CSS.disable";
-}
 #[doc = "Disables the CSS agent for the given page.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-disable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
+}
+impl Disable {
+    pub const IDENTIFIER: &'static str = "CSS.disable";
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -145,14 +145,14 @@ pub enum EnableMethod {
     #[serde(rename = "CSS.enable")]
     Enable,
 }
-impl EnableMethod {
-    pub const IDENTIFIER: &'static str = "CSS.enable";
-}
 #[doc = "Enables the CSS agent for the given page. Clients should not assume that the CSS agent has been\nenabled until the result of this command is received.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-enable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl Enable {
+    pub const IDENTIFIER: &'static str = "CSS.enable";
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -184,14 +184,14 @@ pub enum ForcePseudoStateMethod {
     #[serde(rename = "CSS.forcePseudoState")]
     ForcePseudoState,
 }
-impl ForcePseudoStateMethod {
-    pub const IDENTIFIER: &'static str = "CSS.forcePseudoState";
-}
 #[doc = "Ensures that the given node will have specified pseudo-classes whenever its style is computed by\nthe browser.\n[forcePseudoState](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-forcePseudoState)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ForcePseudoState {
     pub method: ForcePseudoStateMethod,
     pub params: ForcePseudoStateParams,
+}
+impl ForcePseudoState {
+    pub const IDENTIFIER: &'static str = "CSS.forcePseudoState";
 }
 impl crate::CommandResult for ForcePseudoState {
     type Result = super::results::ForcePseudoStateResult;
@@ -222,14 +222,14 @@ pub enum ForceStartingStyleMethod {
     #[serde(rename = "CSS.forceStartingStyle")]
     ForceStartingStyle,
 }
-impl ForceStartingStyleMethod {
-    pub const IDENTIFIER: &'static str = "CSS.forceStartingStyle";
-}
 #[doc = "Ensures that the given node is in its starting-style state.\n[forceStartingStyle](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-forceStartingStyle)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ForceStartingStyle {
     pub method: ForceStartingStyleMethod,
     pub params: ForceStartingStyleParams,
+}
+impl ForceStartingStyle {
+    pub const IDENTIFIER: &'static str = "CSS.forceStartingStyle";
 }
 impl crate::CommandResult for ForceStartingStyle {
     type Result = super::results::ForceStartingStyleResult;
@@ -252,13 +252,13 @@ pub enum GetBackgroundColorsMethod {
     #[serde(rename = "CSS.getBackgroundColors")]
     GetBackgroundColors,
 }
-impl GetBackgroundColorsMethod {
-    pub const IDENTIFIER: &'static str = "CSS.getBackgroundColors";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetBackgroundColors {
     pub method: GetBackgroundColorsMethod,
     pub params: GetBackgroundColorsParams,
+}
+impl GetBackgroundColors {
+    pub const IDENTIFIER: &'static str = "CSS.getBackgroundColors";
 }
 impl crate::CommandResult for GetBackgroundColors {
     type Result = super::results::GetBackgroundColorsResult;
@@ -281,14 +281,14 @@ pub enum GetComputedStyleForNodeMethod {
     #[serde(rename = "CSS.getComputedStyleForNode")]
     GetComputedStyleForNode,
 }
-impl GetComputedStyleForNodeMethod {
-    pub const IDENTIFIER: &'static str = "CSS.getComputedStyleForNode";
-}
 #[doc = "Returns the computed style for a DOM node identified by `nodeId`.\n[getComputedStyleForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getComputedStyleForNode)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetComputedStyleForNode {
     pub method: GetComputedStyleForNodeMethod,
     pub params: GetComputedStyleForNodeParams,
+}
+impl GetComputedStyleForNode {
+    pub const IDENTIFIER: &'static str = "CSS.getComputedStyleForNode";
 }
 impl crate::CommandResult for GetComputedStyleForNode {
     type Result = super::results::GetComputedStyleForNodeResult;
@@ -338,14 +338,14 @@ pub enum ResolveValuesMethod {
     #[serde(rename = "CSS.resolveValues")]
     ResolveValues,
 }
-impl ResolveValuesMethod {
-    pub const IDENTIFIER: &'static str = "CSS.resolveValues";
-}
 #[doc = "Resolve the specified values in the context of the provided element.\nFor example, a value of '1em' is evaluated according to the computed\n'font-size' of the element and a value 'calc(1px + 2px)' will be\nresolved to '3px'.\nIf the `propertyName` was specified the `values` are resolved as if\nthey were property's declaration. If a value cannot be parsed according\nto the provided property syntax, the value is parsed using combined\nsyntax as if null `propertyName` was provided. If the value cannot be\nresolved even then, return the provided value without any changes.\nNote: this function currently does not resolve CSS random() function,\nit returns unmodified random() function parts.`\n[resolveValues](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-resolveValues)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ResolveValues {
     pub method: ResolveValuesMethod,
     pub params: ResolveValuesParams,
+}
+impl ResolveValues {
+    pub const IDENTIFIER: &'static str = "CSS.resolveValues";
 }
 impl crate::CommandResult for ResolveValues {
     type Result = super::results::ResolveValuesResult;
@@ -370,13 +370,13 @@ pub enum GetLonghandPropertiesMethod {
     #[serde(rename = "CSS.getLonghandProperties")]
     GetLonghandProperties,
 }
-impl GetLonghandPropertiesMethod {
-    pub const IDENTIFIER: &'static str = "CSS.getLonghandProperties";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetLonghandProperties {
     pub method: GetLonghandPropertiesMethod,
     pub params: GetLonghandPropertiesParams,
+}
+impl GetLonghandProperties {
+    pub const IDENTIFIER: &'static str = "CSS.getLonghandProperties";
 }
 impl crate::CommandResult for GetLonghandProperties {
     type Result = super::results::GetLonghandPropertiesResult;
@@ -399,14 +399,14 @@ pub enum GetInlineStylesForNodeMethod {
     #[serde(rename = "CSS.getInlineStylesForNode")]
     GetInlineStylesForNode,
 }
-impl GetInlineStylesForNodeMethod {
-    pub const IDENTIFIER: &'static str = "CSS.getInlineStylesForNode";
-}
 #[doc = "Returns the styles defined inline (explicitly in the \"style\" attribute and implicitly, using DOM\nattributes) for a DOM node identified by `nodeId`.\n[getInlineStylesForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getInlineStylesForNode)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetInlineStylesForNode {
     pub method: GetInlineStylesForNodeMethod,
     pub params: GetInlineStylesForNodeParams,
+}
+impl GetInlineStylesForNode {
+    pub const IDENTIFIER: &'static str = "CSS.getInlineStylesForNode";
 }
 impl crate::CommandResult for GetInlineStylesForNode {
     type Result = super::results::GetInlineStylesForNodeResult;
@@ -429,14 +429,14 @@ pub enum GetAnimatedStylesForNodeMethod {
     #[serde(rename = "CSS.getAnimatedStylesForNode")]
     GetAnimatedStylesForNode,
 }
-impl GetAnimatedStylesForNodeMethod {
-    pub const IDENTIFIER: &'static str = "CSS.getAnimatedStylesForNode";
-}
 #[doc = "Returns the styles coming from animations & transitions\nincluding the animation & transition styles coming from inheritance chain.\n[getAnimatedStylesForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getAnimatedStylesForNode)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetAnimatedStylesForNode {
     pub method: GetAnimatedStylesForNodeMethod,
     pub params: GetAnimatedStylesForNodeParams,
+}
+impl GetAnimatedStylesForNode {
+    pub const IDENTIFIER: &'static str = "CSS.getAnimatedStylesForNode";
 }
 impl crate::CommandResult for GetAnimatedStylesForNode {
     type Result = super::results::GetAnimatedStylesForNodeResult;
@@ -459,14 +459,14 @@ pub enum GetMatchedStylesForNodeMethod {
     #[serde(rename = "CSS.getMatchedStylesForNode")]
     GetMatchedStylesForNode,
 }
-impl GetMatchedStylesForNodeMethod {
-    pub const IDENTIFIER: &'static str = "CSS.getMatchedStylesForNode";
-}
 #[doc = "Returns requested styles for a DOM node identified by `nodeId`.\n[getMatchedStylesForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getMatchedStylesForNode)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetMatchedStylesForNode {
     pub method: GetMatchedStylesForNodeMethod,
     pub params: GetMatchedStylesForNodeParams,
+}
+impl GetMatchedStylesForNode {
+    pub const IDENTIFIER: &'static str = "CSS.getMatchedStylesForNode";
 }
 impl crate::CommandResult for GetMatchedStylesForNode {
     type Result = super::results::GetMatchedStylesForNodeResult;
@@ -479,14 +479,14 @@ pub enum GetEnvironmentVariablesMethod {
     #[serde(rename = "CSS.getEnvironmentVariables")]
     GetEnvironmentVariables,
 }
-impl GetEnvironmentVariablesMethod {
-    pub const IDENTIFIER: &'static str = "CSS.getEnvironmentVariables";
-}
 #[doc = "Returns the values of the default UA-defined environment variables used in env()\n[getEnvironmentVariables](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getEnvironmentVariables)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetEnvironmentVariables {
     pub method: GetEnvironmentVariablesMethod,
     pub params: GetEnvironmentVariablesParams,
+}
+impl GetEnvironmentVariables {
+    pub const IDENTIFIER: &'static str = "CSS.getEnvironmentVariables";
 }
 impl crate::CommandResult for GetEnvironmentVariables {
     type Result = super::results::GetEnvironmentVariablesResult;
@@ -499,14 +499,14 @@ pub enum GetMediaQueriesMethod {
     #[serde(rename = "CSS.getMediaQueries")]
     GetMediaQueries,
 }
-impl GetMediaQueriesMethod {
-    pub const IDENTIFIER: &'static str = "CSS.getMediaQueries";
-}
 #[doc = "Returns all media queries parsed by the rendering engine.\n[getMediaQueries](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getMediaQueries)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetMediaQueries {
     pub method: GetMediaQueriesMethod,
     pub params: GetMediaQueriesParams,
+}
+impl GetMediaQueries {
+    pub const IDENTIFIER: &'static str = "CSS.getMediaQueries";
 }
 impl crate::CommandResult for GetMediaQueries {
     type Result = super::results::GetMediaQueriesResult;
@@ -529,14 +529,14 @@ pub enum GetPlatformFontsForNodeMethod {
     #[serde(rename = "CSS.getPlatformFontsForNode")]
     GetPlatformFontsForNode,
 }
-impl GetPlatformFontsForNodeMethod {
-    pub const IDENTIFIER: &'static str = "CSS.getPlatformFontsForNode";
-}
 #[doc = "Requests information about platform fonts which we used to render child TextNodes in the given\nnode.\n[getPlatformFontsForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getPlatformFontsForNode)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetPlatformFontsForNode {
     pub method: GetPlatformFontsForNodeMethod,
     pub params: GetPlatformFontsForNodeParams,
+}
+impl GetPlatformFontsForNode {
+    pub const IDENTIFIER: &'static str = "CSS.getPlatformFontsForNode";
 }
 impl crate::CommandResult for GetPlatformFontsForNode {
     type Result = super::results::GetPlatformFontsForNodeResult;
@@ -561,14 +561,14 @@ pub enum GetStyleSheetTextMethod {
     #[serde(rename = "CSS.getStyleSheetText")]
     GetStyleSheetText,
 }
-impl GetStyleSheetTextMethod {
-    pub const IDENTIFIER: &'static str = "CSS.getStyleSheetText";
-}
 #[doc = "Returns the current textual content for a stylesheet.\n[getStyleSheetText](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getStyleSheetText)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetStyleSheetText {
     pub method: GetStyleSheetTextMethod,
     pub params: GetStyleSheetTextParams,
+}
+impl GetStyleSheetText {
+    pub const IDENTIFIER: &'static str = "CSS.getStyleSheetText";
 }
 impl crate::CommandResult for GetStyleSheetText {
     type Result = super::results::GetStyleSheetTextResult;
@@ -591,14 +591,14 @@ pub enum GetLayersForNodeMethod {
     #[serde(rename = "CSS.getLayersForNode")]
     GetLayersForNode,
 }
-impl GetLayersForNodeMethod {
-    pub const IDENTIFIER: &'static str = "CSS.getLayersForNode";
-}
 #[doc = "Returns all layers parsed by the rendering engine for the tree scope of a node.\nGiven a DOM element identified by nodeId, getLayersForNode returns the root\nlayer for the nearest ancestor document or shadow root. The layer root contains\nthe full layer tree for the tree scope and their ordering.\n[getLayersForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getLayersForNode)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetLayersForNode {
     pub method: GetLayersForNodeMethod,
     pub params: GetLayersForNodeParams,
+}
+impl GetLayersForNode {
+    pub const IDENTIFIER: &'static str = "CSS.getLayersForNode";
 }
 impl crate::CommandResult for GetLayersForNode {
     type Result = super::results::GetLayersForNodeResult;
@@ -627,14 +627,14 @@ pub enum GetLocationForSelectorMethod {
     #[serde(rename = "CSS.getLocationForSelector")]
     GetLocationForSelector,
 }
-impl GetLocationForSelectorMethod {
-    pub const IDENTIFIER: &'static str = "CSS.getLocationForSelector";
-}
 #[doc = "Given a CSS selector text and a style sheet ID, getLocationForSelector\nreturns an array of locations of the CSS selector in the style sheet.\n[getLocationForSelector](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getLocationForSelector)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetLocationForSelector {
     pub method: GetLocationForSelectorMethod,
     pub params: GetLocationForSelectorParams,
+}
+impl GetLocationForSelector {
+    pub const IDENTIFIER: &'static str = "CSS.getLocationForSelector";
 }
 impl crate::CommandResult for GetLocationForSelector {
     type Result = super::results::GetLocationForSelectorResult;
@@ -652,14 +652,14 @@ pub enum TrackComputedStyleUpdatesForNodeMethod {
     #[serde(rename = "CSS.trackComputedStyleUpdatesForNode")]
     TrackComputedStyleUpdatesForNode,
 }
-impl TrackComputedStyleUpdatesForNodeMethod {
-    pub const IDENTIFIER: &'static str = "CSS.trackComputedStyleUpdatesForNode";
-}
 #[doc = "Starts tracking the given node for the computed style updates\nand whenever the computed style is updated for node, it queues\na `computedStyleUpdated` event with throttling.\nThere can only be 1 node tracked for computed style updates\nso passing a new node id removes tracking from the previous node.\nPass `undefined` to disable tracking.\n[trackComputedStyleUpdatesForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-trackComputedStyleUpdatesForNode)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct TrackComputedStyleUpdatesForNode {
     pub method: TrackComputedStyleUpdatesForNodeMethod,
     pub params: TrackComputedStyleUpdatesForNodeParams,
+}
+impl TrackComputedStyleUpdatesForNode {
+    pub const IDENTIFIER: &'static str = "CSS.trackComputedStyleUpdatesForNode";
 }
 impl crate::CommandResult for TrackComputedStyleUpdatesForNode {
     type Result = super::results::TrackComputedStyleUpdatesForNodeResult;
@@ -683,14 +683,14 @@ pub enum TrackComputedStyleUpdatesMethod {
     #[serde(rename = "CSS.trackComputedStyleUpdates")]
     TrackComputedStyleUpdates,
 }
-impl TrackComputedStyleUpdatesMethod {
-    pub const IDENTIFIER: &'static str = "CSS.trackComputedStyleUpdates";
-}
 #[doc = "Starts tracking the given computed styles for updates. The specified array of properties\nreplaces the one previously specified. Pass empty array to disable tracking.\nUse takeComputedStyleUpdates to retrieve the list of nodes that had properties modified.\nThe changes to computed style properties are only tracked for nodes pushed to the front-end\nby the DOM agent. If no changes to the tracked properties occur after the node has been pushed\nto the front-end, no updates will be issued for the node.\n[trackComputedStyleUpdates](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-trackComputedStyleUpdates)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct TrackComputedStyleUpdates {
     pub method: TrackComputedStyleUpdatesMethod,
     pub params: TrackComputedStyleUpdatesParams,
+}
+impl TrackComputedStyleUpdates {
+    pub const IDENTIFIER: &'static str = "CSS.trackComputedStyleUpdates";
 }
 impl crate::CommandResult for TrackComputedStyleUpdates {
     type Result = super::results::TrackComputedStyleUpdatesResult;
@@ -703,14 +703,14 @@ pub enum TakeComputedStyleUpdatesMethod {
     #[serde(rename = "CSS.takeComputedStyleUpdates")]
     TakeComputedStyleUpdates,
 }
-impl TakeComputedStyleUpdatesMethod {
-    pub const IDENTIFIER: &'static str = "CSS.takeComputedStyleUpdates";
-}
 #[doc = "Polls the next batch of computed style updates.\n[takeComputedStyleUpdates](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-takeComputedStyleUpdates)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct TakeComputedStyleUpdates {
     pub method: TakeComputedStyleUpdatesMethod,
     pub params: TakeComputedStyleUpdatesParams,
+}
+impl TakeComputedStyleUpdates {
+    pub const IDENTIFIER: &'static str = "CSS.takeComputedStyleUpdates";
 }
 impl crate::CommandResult for TakeComputedStyleUpdates {
     type Result = super::results::TakeComputedStyleUpdatesResult;
@@ -744,14 +744,14 @@ pub enum SetEffectivePropertyValueForNodeMethod {
     #[serde(rename = "CSS.setEffectivePropertyValueForNode")]
     SetEffectivePropertyValueForNode,
 }
-impl SetEffectivePropertyValueForNodeMethod {
-    pub const IDENTIFIER: &'static str = "CSS.setEffectivePropertyValueForNode";
-}
 #[doc = "Find a rule with the given active property for the given node and set the new value for this\nproperty\n[setEffectivePropertyValueForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setEffectivePropertyValueForNode)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetEffectivePropertyValueForNode {
     pub method: SetEffectivePropertyValueForNodeMethod,
     pub params: SetEffectivePropertyValueForNodeParams,
+}
+impl SetEffectivePropertyValueForNode {
+    pub const IDENTIFIER: &'static str = "CSS.setEffectivePropertyValueForNode";
 }
 impl crate::CommandResult for SetEffectivePropertyValueForNode {
     type Result = super::results::SetEffectivePropertyValueForNodeResult;
@@ -784,14 +784,14 @@ pub enum SetPropertyRulePropertyNameMethod {
     #[serde(rename = "CSS.setPropertyRulePropertyName")]
     SetPropertyRulePropertyName,
 }
-impl SetPropertyRulePropertyNameMethod {
-    pub const IDENTIFIER: &'static str = "CSS.setPropertyRulePropertyName";
-}
 #[doc = "Modifies the property rule property name.\n[setPropertyRulePropertyName](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setPropertyRulePropertyName)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetPropertyRulePropertyName {
     pub method: SetPropertyRulePropertyNameMethod,
     pub params: SetPropertyRulePropertyNameParams,
+}
+impl SetPropertyRulePropertyName {
+    pub const IDENTIFIER: &'static str = "CSS.setPropertyRulePropertyName";
 }
 impl crate::CommandResult for SetPropertyRulePropertyName {
     type Result = super::results::SetPropertyRulePropertyNameResult;
@@ -824,14 +824,14 @@ pub enum SetKeyframeKeyMethod {
     #[serde(rename = "CSS.setKeyframeKey")]
     SetKeyframeKey,
 }
-impl SetKeyframeKeyMethod {
-    pub const IDENTIFIER: &'static str = "CSS.setKeyframeKey";
-}
 #[doc = "Modifies the keyframe rule key text.\n[setKeyframeKey](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setKeyframeKey)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetKeyframeKey {
     pub method: SetKeyframeKeyMethod,
     pub params: SetKeyframeKeyParams,
+}
+impl SetKeyframeKey {
+    pub const IDENTIFIER: &'static str = "CSS.setKeyframeKey";
 }
 impl crate::CommandResult for SetKeyframeKey {
     type Result = super::results::SetKeyframeKeyResult;
@@ -864,14 +864,14 @@ pub enum SetMediaTextMethod {
     #[serde(rename = "CSS.setMediaText")]
     SetMediaText,
 }
-impl SetMediaTextMethod {
-    pub const IDENTIFIER: &'static str = "CSS.setMediaText";
-}
 #[doc = "Modifies the rule selector.\n[setMediaText](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setMediaText)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetMediaText {
     pub method: SetMediaTextMethod,
     pub params: SetMediaTextParams,
+}
+impl SetMediaText {
+    pub const IDENTIFIER: &'static str = "CSS.setMediaText";
 }
 impl crate::CommandResult for SetMediaText {
     type Result = super::results::SetMediaTextResult;
@@ -904,14 +904,14 @@ pub enum SetContainerQueryTextMethod {
     #[serde(rename = "CSS.setContainerQueryText")]
     SetContainerQueryText,
 }
-impl SetContainerQueryTextMethod {
-    pub const IDENTIFIER: &'static str = "CSS.setContainerQueryText";
-}
 #[doc = "Modifies the expression of a container query.\n[setContainerQueryText](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setContainerQueryText)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetContainerQueryText {
     pub method: SetContainerQueryTextMethod,
     pub params: SetContainerQueryTextParams,
+}
+impl SetContainerQueryText {
+    pub const IDENTIFIER: &'static str = "CSS.setContainerQueryText";
 }
 impl crate::CommandResult for SetContainerQueryText {
     type Result = super::results::SetContainerQueryTextResult;
@@ -944,14 +944,14 @@ pub enum SetSupportsTextMethod {
     #[serde(rename = "CSS.setSupportsText")]
     SetSupportsText,
 }
-impl SetSupportsTextMethod {
-    pub const IDENTIFIER: &'static str = "CSS.setSupportsText";
-}
 #[doc = "Modifies the expression of a supports at-rule.\n[setSupportsText](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setSupportsText)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetSupportsText {
     pub method: SetSupportsTextMethod,
     pub params: SetSupportsTextParams,
+}
+impl SetSupportsText {
+    pub const IDENTIFIER: &'static str = "CSS.setSupportsText";
 }
 impl crate::CommandResult for SetSupportsText {
     type Result = super::results::SetSupportsTextResult;
@@ -984,14 +984,14 @@ pub enum SetScopeTextMethod {
     #[serde(rename = "CSS.setScopeText")]
     SetScopeText,
 }
-impl SetScopeTextMethod {
-    pub const IDENTIFIER: &'static str = "CSS.setScopeText";
-}
 #[doc = "Modifies the expression of a scope at-rule.\n[setScopeText](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setScopeText)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetScopeText {
     pub method: SetScopeTextMethod,
     pub params: SetScopeTextParams,
+}
+impl SetScopeText {
+    pub const IDENTIFIER: &'static str = "CSS.setScopeText";
 }
 impl crate::CommandResult for SetScopeText {
     type Result = super::results::SetScopeTextResult;
@@ -1024,14 +1024,14 @@ pub enum SetRuleSelectorMethod {
     #[serde(rename = "CSS.setRuleSelector")]
     SetRuleSelector,
 }
-impl SetRuleSelectorMethod {
-    pub const IDENTIFIER: &'static str = "CSS.setRuleSelector";
-}
 #[doc = "Modifies the rule selector.\n[setRuleSelector](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setRuleSelector)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetRuleSelector {
     pub method: SetRuleSelectorMethod,
     pub params: SetRuleSelectorParams,
+}
+impl SetRuleSelector {
+    pub const IDENTIFIER: &'static str = "CSS.setRuleSelector";
 }
 impl crate::CommandResult for SetRuleSelector {
     type Result = super::results::SetRuleSelectorResult;
@@ -1060,14 +1060,14 @@ pub enum SetStyleSheetTextMethod {
     #[serde(rename = "CSS.setStyleSheetText")]
     SetStyleSheetText,
 }
-impl SetStyleSheetTextMethod {
-    pub const IDENTIFIER: &'static str = "CSS.setStyleSheetText";
-}
 #[doc = "Sets the new stylesheet text.\n[setStyleSheetText](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setStyleSheetText)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetStyleSheetText {
     pub method: SetStyleSheetTextMethod,
     pub params: SetStyleSheetTextParams,
+}
+impl SetStyleSheetText {
+    pub const IDENTIFIER: &'static str = "CSS.setStyleSheetText";
 }
 impl crate::CommandResult for SetStyleSheetText {
     type Result = super::results::SetStyleSheetTextResult;
@@ -1097,14 +1097,14 @@ pub enum SetStyleTextsMethod {
     #[serde(rename = "CSS.setStyleTexts")]
     SetStyleTexts,
 }
-impl SetStyleTextsMethod {
-    pub const IDENTIFIER: &'static str = "CSS.setStyleTexts";
-}
 #[doc = "Applies specified style edits one after another in the given order.\n[setStyleTexts](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setStyleTexts)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetStyleTexts {
     pub method: SetStyleTextsMethod,
     pub params: SetStyleTextsParams,
+}
+impl SetStyleTexts {
+    pub const IDENTIFIER: &'static str = "CSS.setStyleTexts";
 }
 impl crate::CommandResult for SetStyleTexts {
     type Result = super::results::SetStyleTextsResult;
@@ -1117,14 +1117,14 @@ pub enum StartRuleUsageTrackingMethod {
     #[serde(rename = "CSS.startRuleUsageTracking")]
     StartRuleUsageTracking,
 }
-impl StartRuleUsageTrackingMethod {
-    pub const IDENTIFIER: &'static str = "CSS.startRuleUsageTracking";
-}
 #[doc = "Enables the selector recording.\n[startRuleUsageTracking](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-startRuleUsageTracking)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct StartRuleUsageTracking {
     pub method: StartRuleUsageTrackingMethod,
     pub params: StartRuleUsageTrackingParams,
+}
+impl StartRuleUsageTracking {
+    pub const IDENTIFIER: &'static str = "CSS.startRuleUsageTracking";
 }
 impl crate::CommandResult for StartRuleUsageTracking {
     type Result = super::results::StartRuleUsageTrackingResult;
@@ -1137,14 +1137,14 @@ pub enum StopRuleUsageTrackingMethod {
     #[serde(rename = "CSS.stopRuleUsageTracking")]
     StopRuleUsageTracking,
 }
-impl StopRuleUsageTrackingMethod {
-    pub const IDENTIFIER: &'static str = "CSS.stopRuleUsageTracking";
-}
 #[doc = "Stop tracking rule usage and return the list of rules that were used since last call to\n`takeCoverageDelta` (or since start of coverage instrumentation).\n[stopRuleUsageTracking](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-stopRuleUsageTracking)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct StopRuleUsageTracking {
     pub method: StopRuleUsageTrackingMethod,
     pub params: StopRuleUsageTrackingParams,
+}
+impl StopRuleUsageTracking {
+    pub const IDENTIFIER: &'static str = "CSS.stopRuleUsageTracking";
 }
 impl crate::CommandResult for StopRuleUsageTracking {
     type Result = super::results::StopRuleUsageTrackingResult;
@@ -1157,14 +1157,14 @@ pub enum TakeCoverageDeltaMethod {
     #[serde(rename = "CSS.takeCoverageDelta")]
     TakeCoverageDelta,
 }
-impl TakeCoverageDeltaMethod {
-    pub const IDENTIFIER: &'static str = "CSS.takeCoverageDelta";
-}
 #[doc = "Obtain list of rules that became used since last call to this method (or since start of coverage\ninstrumentation).\n[takeCoverageDelta](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-takeCoverageDelta)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct TakeCoverageDelta {
     pub method: TakeCoverageDeltaMethod,
     pub params: TakeCoverageDeltaParams,
+}
+impl TakeCoverageDelta {
+    pub const IDENTIFIER: &'static str = "CSS.takeCoverageDelta";
 }
 impl crate::CommandResult for TakeCoverageDelta {
     type Result = super::results::TakeCoverageDeltaResult;
@@ -1188,14 +1188,14 @@ pub enum SetLocalFontsEnabledMethod {
     #[serde(rename = "CSS.setLocalFontsEnabled")]
     SetLocalFontsEnabled,
 }
-impl SetLocalFontsEnabledMethod {
-    pub const IDENTIFIER: &'static str = "CSS.setLocalFontsEnabled";
-}
 #[doc = "Enables/disables rendering of local CSS fonts (enabled by default).\n[setLocalFontsEnabled](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setLocalFontsEnabled)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetLocalFontsEnabled {
     pub method: SetLocalFontsEnabledMethod,
     pub params: SetLocalFontsEnabledParams,
+}
+impl SetLocalFontsEnabled {
+    pub const IDENTIFIER: &'static str = "CSS.setLocalFontsEnabled";
 }
 impl crate::CommandResult for SetLocalFontsEnabled {
     type Result = super::results::SetLocalFontsEnabledResult;

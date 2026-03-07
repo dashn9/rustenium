@@ -13,13 +13,13 @@ pub enum DomStorageItemAddedMethod {
     #[serde(rename = "DOMStorage.domStorageItemAdded")]
     DomStorageItemAdded,
 }
-impl DomStorageItemAddedMethod {
-    pub const IDENTIFIER: &'static str = "DOMStorage.domStorageItemAdded";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct DomStorageItemAdded {
     pub method: DomStorageItemAddedMethod,
     pub params: DomStorageItemAddedParams,
+}
+impl DomStorageItemAdded {
+    pub const IDENTIFIER: &'static str = "DOMStorage.domStorageItemAdded";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DomStorageItemRemovedParams {
@@ -33,13 +33,13 @@ pub enum DomStorageItemRemovedMethod {
     #[serde(rename = "DOMStorage.domStorageItemRemoved")]
     DomStorageItemRemoved,
 }
-impl DomStorageItemRemovedMethod {
-    pub const IDENTIFIER: &'static str = "DOMStorage.domStorageItemRemoved";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct DomStorageItemRemoved {
     pub method: DomStorageItemRemovedMethod,
     pub params: DomStorageItemRemovedParams,
+}
+impl DomStorageItemRemoved {
+    pub const IDENTIFIER: &'static str = "DOMStorage.domStorageItemRemoved";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DomStorageItemUpdatedParams {
@@ -57,13 +57,13 @@ pub enum DomStorageItemUpdatedMethod {
     #[serde(rename = "DOMStorage.domStorageItemUpdated")]
     DomStorageItemUpdated,
 }
-impl DomStorageItemUpdatedMethod {
-    pub const IDENTIFIER: &'static str = "DOMStorage.domStorageItemUpdated";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct DomStorageItemUpdated {
     pub method: DomStorageItemUpdatedMethod,
     pub params: DomStorageItemUpdatedParams,
+}
+impl DomStorageItemUpdated {
+    pub const IDENTIFIER: &'static str = "DOMStorage.domStorageItemUpdated";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DomStorageItemsClearedParams {
@@ -75,12 +75,12 @@ pub enum DomStorageItemsClearedMethod {
     #[serde(rename = "DOMStorage.domStorageItemsCleared")]
     DomStorageItemsCleared,
 }
-impl DomStorageItemsClearedMethod {
-    pub const IDENTIFIER: &'static str = "DOMStorage.domStorageItemsCleared";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct DomStorageItemsCleared {
     pub method: DomStorageItemsClearedMethod,
     pub params: DomStorageItemsClearedParams,
+}
+impl DomStorageItemsCleared {
+    pub const IDENTIFIER: &'static str = "DOMStorage.domStorageItemsCleared";
 }
 group_enum ! (DomStorageEvents { DomStorageItemAdded (DomStorageItemAdded) , DomStorageItemRemoved (DomStorageItemRemoved) , DomStorageItemUpdated (DomStorageItemUpdated) , DomStorageItemsCleared (DomStorageItemsCleared) });

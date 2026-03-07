@@ -27,13 +27,14 @@ pub enum ContextCreatedMethod {
     #[serde(rename = "browsingContext.contextCreated")]
     ContextCreated,
 }
-impl ContextCreatedMethod {
-    pub const IDENTIFIER: &'static str = "browsingContext.contextCreated";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct ContextCreated {
     pub method: ContextCreatedMethod,
     pub params: ContextCreatedParams,
+}
+impl ContextCreated {
+    pub const IDENTIFIER: &'static str = "browsingContext.contextCreated";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ContextDestroyedParams {
@@ -63,13 +64,14 @@ pub enum ContextDestroyedMethod {
     #[serde(rename = "browsingContext.contextDestroyed")]
     ContextDestroyed,
 }
-impl ContextDestroyedMethod {
-    pub const IDENTIFIER: &'static str = "browsingContext.contextDestroyed";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct ContextDestroyed {
     pub method: ContextDestroyedMethod,
     pub params: ContextDestroyedParams,
+}
+impl ContextDestroyed {
+    pub const IDENTIFIER: &'static str = "browsingContext.contextDestroyed";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NavigationStartedParams {
@@ -89,13 +91,14 @@ pub enum NavigationStartedMethod {
     #[serde(rename = "browsingContext.navigationStarted")]
     NavigationStarted,
 }
-impl NavigationStartedMethod {
-    pub const IDENTIFIER: &'static str = "browsingContext.navigationStarted";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct NavigationStarted {
     pub method: NavigationStartedMethod,
     pub params: NavigationStartedParams,
+}
+impl NavigationStarted {
+    pub const IDENTIFIER: &'static str = "browsingContext.navigationStarted";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FragmentNavigatedParams {
@@ -115,13 +118,14 @@ pub enum FragmentNavigatedMethod {
     #[serde(rename = "browsingContext.fragmentNavigated")]
     FragmentNavigated,
 }
-impl FragmentNavigatedMethod {
-    pub const IDENTIFIER: &'static str = "browsingContext.fragmentNavigated";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct FragmentNavigated {
     pub method: FragmentNavigatedMethod,
     pub params: FragmentNavigatedParams,
+}
+impl FragmentNavigated {
+    pub const IDENTIFIER: &'static str = "browsingContext.fragmentNavigated";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HistoryUpdatedParams {
@@ -137,13 +141,14 @@ pub enum HistoryUpdatedMethod {
     #[serde(rename = "browsingContext.historyUpdated")]
     HistoryUpdated,
 }
-impl HistoryUpdatedMethod {
-    pub const IDENTIFIER: &'static str = "browsingContext.historyUpdated";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct HistoryUpdated {
     pub method: HistoryUpdatedMethod,
     pub params: HistoryUpdatedParams,
+}
+impl HistoryUpdated {
+    pub const IDENTIFIER: &'static str = "browsingContext.historyUpdated";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DomContentLoadedParams {
@@ -163,13 +168,14 @@ pub enum DomContentLoadedMethod {
     #[serde(rename = "browsingContext.domContentLoaded")]
     DomContentLoaded,
 }
-impl DomContentLoadedMethod {
-    pub const IDENTIFIER: &'static str = "browsingContext.domContentLoaded";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct DomContentLoaded {
     pub method: DomContentLoadedMethod,
     pub params: DomContentLoadedParams,
+}
+impl DomContentLoaded {
+    pub const IDENTIFIER: &'static str = "browsingContext.domContentLoaded";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LoadParams {
@@ -189,13 +195,14 @@ pub enum LoadMethod {
     #[serde(rename = "browsingContext.load")]
     Load,
 }
-impl LoadMethod {
-    pub const IDENTIFIER: &'static str = "browsingContext.load";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct Load {
     pub method: LoadMethod,
     pub params: LoadParams,
+}
+impl Load {
+    pub const IDENTIFIER: &'static str = "browsingContext.load";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DownloadWillBeginParams {
@@ -217,13 +224,14 @@ pub enum DownloadWillBeginMethod {
     #[serde(rename = "browsingContext.downloadWillBegin")]
     DownloadWillBegin,
 }
-impl DownloadWillBeginMethod {
-    pub const IDENTIFIER: &'static str = "browsingContext.downloadWillBegin";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct DownloadWillBegin {
     pub method: DownloadWillBeginMethod,
     pub params: DownloadWillBeginParams,
+}
+impl DownloadWillBegin {
+    pub const IDENTIFIER: &'static str = "browsingContext.downloadWillBegin";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DownloadEndParams {
@@ -249,13 +257,14 @@ pub enum DownloadEndMethod {
     #[serde(rename = "browsingContext.downloadEnd")]
     DownloadEnd,
 }
-impl DownloadEndMethod {
-    pub const IDENTIFIER: &'static str = "browsingContext.downloadEnd";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct DownloadEnd {
     pub method: DownloadEndMethod,
     pub params: DownloadEndParams,
+}
+impl DownloadEnd {
+    pub const IDENTIFIER: &'static str = "browsingContext.downloadEnd";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NavigationAbortedParams {
@@ -275,13 +284,14 @@ pub enum NavigationAbortedMethod {
     #[serde(rename = "browsingContext.navigationAborted")]
     NavigationAborted,
 }
-impl NavigationAbortedMethod {
-    pub const IDENTIFIER: &'static str = "browsingContext.navigationAborted";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct NavigationAborted {
     pub method: NavigationAbortedMethod,
     pub params: NavigationAbortedParams,
+}
+impl NavigationAborted {
+    pub const IDENTIFIER: &'static str = "browsingContext.navigationAborted";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NavigationCommittedParams {
@@ -301,13 +311,14 @@ pub enum NavigationCommittedMethod {
     #[serde(rename = "browsingContext.navigationCommitted")]
     NavigationCommitted,
 }
-impl NavigationCommittedMethod {
-    pub const IDENTIFIER: &'static str = "browsingContext.navigationCommitted";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct NavigationCommitted {
     pub method: NavigationCommittedMethod,
     pub params: NavigationCommittedParams,
+}
+impl NavigationCommitted {
+    pub const IDENTIFIER: &'static str = "browsingContext.navigationCommitted";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NavigationFailedParams {
@@ -327,13 +338,14 @@ pub enum NavigationFailedMethod {
     #[serde(rename = "browsingContext.navigationFailed")]
     NavigationFailed,
 }
-impl NavigationFailedMethod {
-    pub const IDENTIFIER: &'static str = "browsingContext.navigationFailed";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct NavigationFailed {
     pub method: NavigationFailedMethod,
     pub params: NavigationFailedParams,
+}
+impl NavigationFailed {
+    pub const IDENTIFIER: &'static str = "browsingContext.navigationFailed";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UserPromptClosedParams {
@@ -353,13 +365,14 @@ pub enum UserPromptClosedMethod {
     #[serde(rename = "browsingContext.userPromptClosed")]
     UserPromptClosed,
 }
-impl UserPromptClosedMethod {
-    pub const IDENTIFIER: &'static str = "browsingContext.userPromptClosed";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct UserPromptClosed {
     pub method: UserPromptClosedMethod,
     pub params: UserPromptClosedParams,
+}
+impl UserPromptClosed {
+    pub const IDENTIFIER: &'static str = "browsingContext.userPromptClosed";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UserPromptOpenedParams {
@@ -381,12 +394,13 @@ pub enum UserPromptOpenedMethod {
     #[serde(rename = "browsingContext.userPromptOpened")]
     UserPromptOpened,
 }
-impl UserPromptOpenedMethod {
-    pub const IDENTIFIER: &'static str = "browsingContext.userPromptOpened";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct UserPromptOpened {
     pub method: UserPromptOpenedMethod,
     pub params: UserPromptOpenedParams,
+}
+impl UserPromptOpened {
+    pub const IDENTIFIER: &'static str = "browsingContext.userPromptOpened";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 group_enum ! (BrowsingContextEvents { ContextCreated (ContextCreated) , ContextDestroyed (ContextDestroyed) , NavigationStarted (NavigationStarted) , FragmentNavigated (FragmentNavigated) , HistoryUpdated (HistoryUpdated) , DomContentLoaded (DomContentLoaded) , Load (Load) , DownloadWillBegin (DownloadWillBegin) , DownloadEnd (DownloadEnd) , NavigationAborted (NavigationAborted) , NavigationCommitted (NavigationCommitted) , NavigationFailed (NavigationFailed) , UserPromptClosed (UserPromptClosed) , UserPromptOpened (UserPromptOpened) });

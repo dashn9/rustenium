@@ -9,13 +9,13 @@ pub enum AddHeapSnapshotChunkMethod {
     #[serde(rename = "HeapProfiler.addHeapSnapshotChunk")]
     AddHeapSnapshotChunk,
 }
-impl AddHeapSnapshotChunkMethod {
-    pub const IDENTIFIER: &'static str = "HeapProfiler.addHeapSnapshotChunk";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct AddHeapSnapshotChunk {
     pub method: AddHeapSnapshotChunkMethod,
     pub params: AddHeapSnapshotChunkParams,
+}
+impl AddHeapSnapshotChunk {
+    pub const IDENTIFIER: &'static str = "HeapProfiler.addHeapSnapshotChunk";
 }
 #[doc = "If heap objects tracking has been started then backend may send update for one or more fragments\n[heapStatsUpdate](https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler/#event-heapStatsUpdate)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -30,14 +30,14 @@ pub enum HeapStatsUpdateMethod {
     #[serde(rename = "HeapProfiler.heapStatsUpdate")]
     HeapStatsUpdate,
 }
-impl HeapStatsUpdateMethod {
-    pub const IDENTIFIER: &'static str = "HeapProfiler.heapStatsUpdate";
-}
 #[doc = "If heap objects tracking has been started then backend may send update for one or more fragments\n[heapStatsUpdate](https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler/#event-heapStatsUpdate)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct HeapStatsUpdate {
     pub method: HeapStatsUpdateMethod,
     pub params: HeapStatsUpdateParams,
+}
+impl HeapStatsUpdate {
+    pub const IDENTIFIER: &'static str = "HeapProfiler.heapStatsUpdate";
 }
 #[doc = "If heap objects tracking has been started then backend regularly sends a current value for last\nseen object id and corresponding timestamp. If the were changes in the heap since last event\nthen one or more heapStatsUpdate events will be sent before a new lastSeenObjectId event.\n[lastSeenObjectId](https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler/#event-lastSeenObjectId)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -52,14 +52,14 @@ pub enum LastSeenObjectIdMethod {
     #[serde(rename = "HeapProfiler.lastSeenObjectId")]
     LastSeenObjectId,
 }
-impl LastSeenObjectIdMethod {
-    pub const IDENTIFIER: &'static str = "HeapProfiler.lastSeenObjectId";
-}
 #[doc = "If heap objects tracking has been started then backend regularly sends a current value for last\nseen object id and corresponding timestamp. If the were changes in the heap since last event\nthen one or more heapStatsUpdate events will be sent before a new lastSeenObjectId event.\n[lastSeenObjectId](https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler/#event-lastSeenObjectId)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct LastSeenObjectId {
     pub method: LastSeenObjectIdMethod,
     pub params: LastSeenObjectIdParams,
+}
+impl LastSeenObjectId {
+    pub const IDENTIFIER: &'static str = "HeapProfiler.lastSeenObjectId";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ReportHeapSnapshotProgressParams {
@@ -77,13 +77,13 @@ pub enum ReportHeapSnapshotProgressMethod {
     #[serde(rename = "HeapProfiler.reportHeapSnapshotProgress")]
     ReportHeapSnapshotProgress,
 }
-impl ReportHeapSnapshotProgressMethod {
-    pub const IDENTIFIER: &'static str = "HeapProfiler.reportHeapSnapshotProgress";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct ReportHeapSnapshotProgress {
     pub method: ReportHeapSnapshotProgressMethod,
     pub params: ReportHeapSnapshotProgressParams,
+}
+impl ReportHeapSnapshotProgress {
+    pub const IDENTIFIER: &'static str = "HeapProfiler.reportHeapSnapshotProgress";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResetProfilesParams {}
@@ -92,12 +92,12 @@ pub enum ResetProfilesMethod {
     #[serde(rename = "HeapProfiler.resetProfiles")]
     ResetProfiles,
 }
-impl ResetProfilesMethod {
-    pub const IDENTIFIER: &'static str = "HeapProfiler.resetProfiles";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct ResetProfiles {
     pub method: ResetProfilesMethod,
     pub params: ResetProfilesParams,
+}
+impl ResetProfiles {
+    pub const IDENTIFIER: &'static str = "HeapProfiler.resetProfiles";
 }
 group_enum ! (HeapProfilerEvents { AddHeapSnapshotChunk (AddHeapSnapshotChunk) , HeapStatsUpdate (HeapStatsUpdate) , LastSeenObjectId (LastSeenObjectId) , ReportHeapSnapshotProgress (ReportHeapSnapshotProgress) , ResetProfiles (ResetProfiles) });

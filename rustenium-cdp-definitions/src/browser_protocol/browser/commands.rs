@@ -43,14 +43,14 @@ pub enum SetPermissionMethod {
     #[serde(rename = "Browser.setPermission")]
     SetPermission,
 }
-impl SetPermissionMethod {
-    pub const IDENTIFIER: &'static str = "Browser.setPermission";
-}
 #[doc = "Set permission settings for given embedding and embedded origins.\n[setPermission](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-setPermission)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetPermission {
     pub method: SetPermissionMethod,
     pub params: SetPermissionParams,
+}
+impl SetPermission {
+    pub const IDENTIFIER: &'static str = "Browser.setPermission";
 }
 impl crate::CommandResult for SetPermission {
     type Result = super::results::SetPermissionResult;
@@ -69,14 +69,14 @@ pub enum ResetPermissionsMethod {
     #[serde(rename = "Browser.resetPermissions")]
     ResetPermissions,
 }
-impl ResetPermissionsMethod {
-    pub const IDENTIFIER: &'static str = "Browser.resetPermissions";
-}
 #[doc = "Reset all permission management for all origins.\n[resetPermissions](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-resetPermissions)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ResetPermissions {
     pub method: ResetPermissionsMethod,
     pub params: ResetPermissionsParams,
+}
+impl ResetPermissions {
+    pub const IDENTIFIER: &'static str = "Browser.resetPermissions";
 }
 impl crate::CommandResult for ResetPermissions {
     type Result = super::results::ResetPermissionsResult;
@@ -130,14 +130,14 @@ pub enum SetDownloadBehaviorMethod {
     #[serde(rename = "Browser.setDownloadBehavior")]
     SetDownloadBehavior,
 }
-impl SetDownloadBehaviorMethod {
-    pub const IDENTIFIER: &'static str = "Browser.setDownloadBehavior";
-}
 #[doc = "Set the behavior when downloading a file.\n[setDownloadBehavior](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-setDownloadBehavior)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetDownloadBehavior {
     pub method: SetDownloadBehaviorMethod,
     pub params: SetDownloadBehaviorParams,
+}
+impl SetDownloadBehavior {
+    pub const IDENTIFIER: &'static str = "Browser.setDownloadBehavior";
 }
 impl crate::CommandResult for SetDownloadBehavior {
     type Result = super::results::SetDownloadBehaviorResult;
@@ -172,14 +172,14 @@ pub enum CancelDownloadMethod {
     #[serde(rename = "Browser.cancelDownload")]
     CancelDownload,
 }
-impl CancelDownloadMethod {
-    pub const IDENTIFIER: &'static str = "Browser.cancelDownload";
-}
 #[doc = "Cancel a download if in progress\n[cancelDownload](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-cancelDownload)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct CancelDownload {
     pub method: CancelDownloadMethod,
     pub params: CancelDownloadParams,
+}
+impl CancelDownload {
+    pub const IDENTIFIER: &'static str = "Browser.cancelDownload";
 }
 impl crate::CommandResult for CancelDownload {
     type Result = super::results::CancelDownloadResult;
@@ -192,14 +192,14 @@ pub enum CloseMethod {
     #[serde(rename = "Browser.close")]
     Close,
 }
-impl CloseMethod {
-    pub const IDENTIFIER: &'static str = "Browser.close";
-}
 #[doc = "Close browser gracefully.\n[close](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-close)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Close {
     pub method: CloseMethod,
     pub params: CloseParams,
+}
+impl Close {
+    pub const IDENTIFIER: &'static str = "Browser.close";
 }
 impl crate::CommandResult for Close {
     type Result = super::results::CloseResult;
@@ -212,14 +212,14 @@ pub enum CrashMethod {
     #[serde(rename = "Browser.crash")]
     Crash,
 }
-impl CrashMethod {
-    pub const IDENTIFIER: &'static str = "Browser.crash";
-}
 #[doc = "Crashes browser on the main thread.\n[crash](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-crash)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Crash {
     pub method: CrashMethod,
     pub params: CrashParams,
+}
+impl Crash {
+    pub const IDENTIFIER: &'static str = "Browser.crash";
 }
 impl crate::CommandResult for Crash {
     type Result = super::results::CrashResult;
@@ -232,14 +232,14 @@ pub enum CrashGpuProcessMethod {
     #[serde(rename = "Browser.crashGpuProcess")]
     CrashGpuProcess,
 }
-impl CrashGpuProcessMethod {
-    pub const IDENTIFIER: &'static str = "Browser.crashGpuProcess";
-}
 #[doc = "Crashes GPU process.\n[crashGpuProcess](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-crashGpuProcess)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct CrashGpuProcess {
     pub method: CrashGpuProcessMethod,
     pub params: CrashGpuProcessParams,
+}
+impl CrashGpuProcess {
+    pub const IDENTIFIER: &'static str = "Browser.crashGpuProcess";
 }
 impl crate::CommandResult for CrashGpuProcess {
     type Result = super::results::CrashGpuProcessResult;
@@ -252,14 +252,14 @@ pub enum GetVersionMethod {
     #[serde(rename = "Browser.getVersion")]
     GetVersion,
 }
-impl GetVersionMethod {
-    pub const IDENTIFIER: &'static str = "Browser.getVersion";
-}
 #[doc = "Returns version information.\n[getVersion](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-getVersion)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetVersion {
     pub method: GetVersionMethod,
     pub params: GetVersionParams,
+}
+impl GetVersion {
+    pub const IDENTIFIER: &'static str = "Browser.getVersion";
 }
 impl crate::CommandResult for GetVersion {
     type Result = super::results::GetVersionResult;
@@ -272,14 +272,14 @@ pub enum GetBrowserCommandLineMethod {
     #[serde(rename = "Browser.getBrowserCommandLine")]
     GetBrowserCommandLine,
 }
-impl GetBrowserCommandLineMethod {
-    pub const IDENTIFIER: &'static str = "Browser.getBrowserCommandLine";
-}
 #[doc = "Returns the command line switches for the browser process if, and only if\n--enable-automation is on the commandline.\n[getBrowserCommandLine](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-getBrowserCommandLine)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetBrowserCommandLine {
     pub method: GetBrowserCommandLineMethod,
     pub params: GetBrowserCommandLineParams,
+}
+impl GetBrowserCommandLine {
+    pub const IDENTIFIER: &'static str = "Browser.getBrowserCommandLine";
 }
 impl crate::CommandResult for GetBrowserCommandLine {
     type Result = super::results::GetBrowserCommandLineResult;
@@ -303,14 +303,14 @@ pub enum GetHistogramsMethod {
     #[serde(rename = "Browser.getHistograms")]
     GetHistograms,
 }
-impl GetHistogramsMethod {
-    pub const IDENTIFIER: &'static str = "Browser.getHistograms";
-}
 #[doc = "Get Chrome histograms.\n[getHistograms](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-getHistograms)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetHistograms {
     pub method: GetHistogramsMethod,
     pub params: GetHistogramsParams,
+}
+impl GetHistograms {
+    pub const IDENTIFIER: &'static str = "Browser.getHistograms";
 }
 impl crate::CommandResult for GetHistograms {
     type Result = super::results::GetHistogramsResult;
@@ -345,14 +345,14 @@ pub enum GetHistogramMethod {
     #[serde(rename = "Browser.getHistogram")]
     GetHistogram,
 }
-impl GetHistogramMethod {
-    pub const IDENTIFIER: &'static str = "Browser.getHistogram";
-}
 #[doc = "Get a Chrome histogram by name.\n[getHistogram](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-getHistogram)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetHistogram {
     pub method: GetHistogramMethod,
     pub params: GetHistogramParams,
+}
+impl GetHistogram {
+    pub const IDENTIFIER: &'static str = "Browser.getHistogram";
 }
 impl crate::CommandResult for GetHistogram {
     type Result = super::results::GetHistogramResult;
@@ -376,14 +376,14 @@ pub enum GetWindowBoundsMethod {
     #[serde(rename = "Browser.getWindowBounds")]
     GetWindowBounds,
 }
-impl GetWindowBoundsMethod {
-    pub const IDENTIFIER: &'static str = "Browser.getWindowBounds";
-}
 #[doc = "Get position and size of the browser window.\n[getWindowBounds](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-getWindowBounds)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetWindowBounds {
     pub method: GetWindowBoundsMethod,
     pub params: GetWindowBoundsParams,
+}
+impl GetWindowBounds {
+    pub const IDENTIFIER: &'static str = "Browser.getWindowBounds";
 }
 impl crate::CommandResult for GetWindowBounds {
     type Result = super::results::GetWindowBoundsResult;
@@ -402,14 +402,14 @@ pub enum GetWindowForTargetMethod {
     #[serde(rename = "Browser.getWindowForTarget")]
     GetWindowForTarget,
 }
-impl GetWindowForTargetMethod {
-    pub const IDENTIFIER: &'static str = "Browser.getWindowForTarget";
-}
 #[doc = "Get the browser window that contains the devtools target.\n[getWindowForTarget](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-getWindowForTarget)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetWindowForTarget {
     pub method: GetWindowForTargetMethod,
     pub params: GetWindowForTargetParams,
+}
+impl GetWindowForTarget {
+    pub const IDENTIFIER: &'static str = "Browser.getWindowForTarget";
 }
 impl crate::CommandResult for GetWindowForTarget {
     type Result = super::results::GetWindowForTargetResult;
@@ -440,14 +440,14 @@ pub enum SetWindowBoundsMethod {
     #[serde(rename = "Browser.setWindowBounds")]
     SetWindowBounds,
 }
-impl SetWindowBoundsMethod {
-    pub const IDENTIFIER: &'static str = "Browser.setWindowBounds";
-}
 #[doc = "Set position and/or size of the browser window.\n[setWindowBounds](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-setWindowBounds)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetWindowBounds {
     pub method: SetWindowBoundsMethod,
     pub params: SetWindowBoundsParams,
+}
+impl SetWindowBounds {
+    pub const IDENTIFIER: &'static str = "Browser.setWindowBounds";
 }
 impl crate::CommandResult for SetWindowBounds {
     type Result = super::results::SetWindowBoundsResult;
@@ -483,14 +483,14 @@ pub enum SetContentsSizeMethod {
     #[serde(rename = "Browser.setContentsSize")]
     SetContentsSize,
 }
-impl SetContentsSizeMethod {
-    pub const IDENTIFIER: &'static str = "Browser.setContentsSize";
-}
 #[doc = "Set size of the browser contents resizing browser window as necessary.\n[setContentsSize](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-setContentsSize)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetContentsSize {
     pub method: SetContentsSizeMethod,
     pub params: SetContentsSizeParams,
+}
+impl SetContentsSize {
+    pub const IDENTIFIER: &'static str = "Browser.setContentsSize";
 }
 impl crate::CommandResult for SetContentsSize {
     type Result = super::results::SetContentsSizeResult;
@@ -513,14 +513,14 @@ pub enum SetDockTileMethod {
     #[serde(rename = "Browser.setDockTile")]
     SetDockTile,
 }
-impl SetDockTileMethod {
-    pub const IDENTIFIER: &'static str = "Browser.setDockTile";
-}
 #[doc = "Set dock tile details, platform-specific.\n[setDockTile](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-setDockTile)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetDockTile {
     pub method: SetDockTileMethod,
     pub params: SetDockTileParams,
+}
+impl SetDockTile {
+    pub const IDENTIFIER: &'static str = "Browser.setDockTile";
 }
 impl crate::CommandResult for SetDockTile {
     type Result = super::results::SetDockTileResult;
@@ -543,14 +543,14 @@ pub enum ExecuteBrowserCommandMethod {
     #[serde(rename = "Browser.executeBrowserCommand")]
     ExecuteBrowserCommand,
 }
-impl ExecuteBrowserCommandMethod {
-    pub const IDENTIFIER: &'static str = "Browser.executeBrowserCommand";
-}
 #[doc = "Invoke custom browser commands used by telemetry.\n[executeBrowserCommand](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-executeBrowserCommand)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ExecuteBrowserCommand {
     pub method: ExecuteBrowserCommandMethod,
     pub params: ExecuteBrowserCommandParams,
+}
+impl ExecuteBrowserCommand {
+    pub const IDENTIFIER: &'static str = "Browser.executeBrowserCommand";
 }
 impl crate::CommandResult for ExecuteBrowserCommand {
     type Result = super::results::ExecuteBrowserCommandResult;
@@ -576,14 +576,14 @@ pub enum AddPrivacySandboxEnrollmentOverrideMethod {
     #[serde(rename = "Browser.addPrivacySandboxEnrollmentOverride")]
     AddPrivacySandboxEnrollmentOverride,
 }
-impl AddPrivacySandboxEnrollmentOverrideMethod {
-    pub const IDENTIFIER: &'static str = "Browser.addPrivacySandboxEnrollmentOverride";
-}
 #[doc = "Allows a site to use privacy sandbox features that require enrollment\nwithout the site actually being enrolled. Only supported on page targets.\n[addPrivacySandboxEnrollmentOverride](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-addPrivacySandboxEnrollmentOverride)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct AddPrivacySandboxEnrollmentOverride {
     pub method: AddPrivacySandboxEnrollmentOverrideMethod,
     pub params: AddPrivacySandboxEnrollmentOverrideParams,
+}
+impl AddPrivacySandboxEnrollmentOverride {
+    pub const IDENTIFIER: &'static str = "Browser.addPrivacySandboxEnrollmentOverride";
 }
 impl crate::CommandResult for AddPrivacySandboxEnrollmentOverride {
     type Result = super::results::AddPrivacySandboxEnrollmentOverrideResult;
@@ -622,14 +622,14 @@ pub enum AddPrivacySandboxCoordinatorKeyConfigMethod {
     #[serde(rename = "Browser.addPrivacySandboxCoordinatorKeyConfig")]
     AddPrivacySandboxCoordinatorKeyConfig,
 }
-impl AddPrivacySandboxCoordinatorKeyConfigMethod {
-    pub const IDENTIFIER: &'static str = "Browser.addPrivacySandboxCoordinatorKeyConfig";
-}
 #[doc = "Configures encryption keys used with a given privacy sandbox API to talk\nto a trusted coordinator.  Since this is intended for test automation only,\ncoordinatorOrigin must be a .test domain. No existing coordinator\nconfiguration for the origin may exist.\n[addPrivacySandboxCoordinatorKeyConfig](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-addPrivacySandboxCoordinatorKeyConfig)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct AddPrivacySandboxCoordinatorKeyConfig {
     pub method: AddPrivacySandboxCoordinatorKeyConfigMethod,
     pub params: AddPrivacySandboxCoordinatorKeyConfigParams,
+}
+impl AddPrivacySandboxCoordinatorKeyConfig {
+    pub const IDENTIFIER: &'static str = "Browser.addPrivacySandboxCoordinatorKeyConfig";
 }
 impl crate::CommandResult for AddPrivacySandboxCoordinatorKeyConfig {
     type Result = super::results::AddPrivacySandboxCoordinatorKeyConfigResult;

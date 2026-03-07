@@ -19,6 +19,7 @@ impl ElementOrigin {
 }
 impl ElementOrigin {
     pub const IDENTIFIER: &'static str = "input.ElementOrigin";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -53,6 +54,7 @@ impl NoneSourceActions {
 }
 impl NoneSourceActions {
     pub const IDENTIFIER: &'static str = "input.NoneSourceActions";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NoneSourceAction(PauseAction);
@@ -66,6 +68,7 @@ impl NoneSourceAction {
 }
 impl NoneSourceAction {
     pub const IDENTIFIER: &'static str = "input.NoneSourceAction";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct KeySourceActions {
@@ -92,6 +95,7 @@ impl KeySourceActions {
 }
 impl KeySourceActions {
     pub const IDENTIFIER: &'static str = "input.KeySourceActions";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -130,6 +134,7 @@ impl PointerSourceActions {
 }
 impl PointerSourceActions {
     pub const IDENTIFIER: &'static str = "input.PointerSourceActions";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum PointerType {
@@ -149,6 +154,7 @@ pub struct PointerParameters {
 }
 impl PointerParameters {
     pub const IDENTIFIER: &'static str = "input.PointerParameters";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -183,6 +189,7 @@ impl WheelSourceActions {
 }
 impl WheelSourceActions {
     pub const IDENTIFIER: &'static str = "input.WheelSourceActions";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -214,6 +221,7 @@ impl<T: Into<String>> From<T> for PauseAction {
 }
 impl PauseAction {
     pub const IDENTIFIER: &'static str = "input.PauseAction";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct KeyDownAction {
@@ -232,6 +240,7 @@ impl KeyDownAction {
 }
 impl KeyDownAction {
     pub const IDENTIFIER: &'static str = "input.KeyDownAction";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct KeyUpAction {
@@ -250,6 +259,7 @@ impl KeyUpAction {
 }
 impl KeyUpAction {
     pub const IDENTIFIER: &'static str = "input.KeyUpAction";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PointerUpAction {
@@ -268,6 +278,7 @@ impl PointerUpAction {
 }
 impl PointerUpAction {
     pub const IDENTIFIER: &'static str = "input.PointerUpAction";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PointerDownAction {
@@ -342,6 +353,7 @@ impl PointerDownAction {
 }
 impl PointerDownAction {
     pub const IDENTIFIER: &'static str = "input.PointerDownAction";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PointerMoveAction {
@@ -429,6 +441,7 @@ impl PointerMoveAction {
 }
 impl PointerMoveAction {
     pub const IDENTIFIER: &'static str = "input.PointerMoveAction";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WheelScrollAction {
@@ -453,6 +466,7 @@ pub struct WheelScrollAction {
 }
 impl WheelScrollAction {
     pub const IDENTIFIER: &'static str = "input.WheelScrollAction";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct PointerCommonProperties {
@@ -508,6 +522,7 @@ fn default_pointer_common_properties_azimuth_angle() -> Option<f64> {
 }
 impl PointerCommonProperties {
     pub const IDENTIFIER: &'static str = "input.PointerCommonProperties";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum Origin {

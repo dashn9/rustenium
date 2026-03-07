@@ -26,6 +26,7 @@ impl From<String> for BrowsingContext {
 }
 impl BrowsingContext {
     pub const IDENTIFIER: &'static str = "browsingContext.BrowsingContext";
+    pub const DOMAIN_DIRECTION: &'static str = "all";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -65,6 +66,7 @@ impl<T: Into<String>> From<T> for AccessibilityLocator {
 }
 impl AccessibilityLocator {
     pub const IDENTIFIER: &'static str = "browsingContext.AccessibilityLocator";
+    pub const DOMAIN_DIRECTION: &'static str = "all";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CssLocator {
@@ -83,6 +85,7 @@ impl CssLocator {
 }
 impl CssLocator {
     pub const IDENTIFIER: &'static str = "browsingContext.CssLocator";
+    pub const DOMAIN_DIRECTION: &'static str = "all";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ContextLocator {
@@ -101,6 +104,7 @@ impl ContextLocator {
 }
 impl ContextLocator {
     pub const IDENTIFIER: &'static str = "browsingContext.ContextLocator";
+    pub const DOMAIN_DIRECTION: &'static str = "all";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InnerTextLocator {
@@ -141,6 +145,7 @@ impl InnerTextLocator {
 }
 impl InnerTextLocator {
     pub const IDENTIFIER: &'static str = "browsingContext.InnerTextLocator";
+    pub const DOMAIN_DIRECTION: &'static str = "all";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct XPathLocator {
@@ -159,6 +164,7 @@ impl XPathLocator {
 }
 impl XPathLocator {
     pub const IDENTIFIER: &'static str = "browsingContext.XPathLocator";
+    pub const DOMAIN_DIRECTION: &'static str = "all";
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
 pub struct Navigation(String);
@@ -187,6 +193,7 @@ impl From<String> for Navigation {
 }
 impl Navigation {
     pub const IDENTIFIER: &'static str = "browsingContext.Navigation";
+    pub const DOMAIN_DIRECTION: &'static str = "all";
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum ReadinessState {
@@ -232,6 +239,7 @@ impl<T: Into<String>> From<T> for ImageFormat {
 }
 impl ImageFormat {
     pub const IDENTIFIER: &'static str = "browsingContext.ImageFormat";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -259,6 +267,7 @@ impl ElementClipRectangle {
 }
 impl ElementClipRectangle {
     pub const IDENTIFIER: &'static str = "browsingContext.ElementClipRectangle";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BoxClipRectangle {
@@ -275,6 +284,7 @@ pub struct BoxClipRectangle {
 }
 impl BoxClipRectangle {
     pub const IDENTIFIER: &'static str = "browsingContext.BoxClipRectangle";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum CreateType {
@@ -320,6 +330,7 @@ fn default_print_margin_parameters_top() -> Option<f64> {
 }
 impl PrintMarginParameters {
     pub const IDENTIFIER: &'static str = "browsingContext.PrintMarginParameters";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, serde_valid :: Validate)]
 pub struct PrintPageParameters {
@@ -342,6 +353,7 @@ fn default_print_page_parameters_width() -> Option<f64> {
 }
 impl PrintPageParameters {
     pub const IDENTIFIER: &'static str = "browsingContext.PrintPageParameters";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Viewport {
@@ -360,6 +372,7 @@ impl Viewport {
 }
 impl Viewport {
     pub const IDENTIFIER: &'static str = "browsingContext.Viewport";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InfoList(Vec<Info>);
@@ -373,6 +386,7 @@ impl InfoList {
 }
 impl InfoList {
     pub const IDENTIFIER: &'static str = "browsingContext.InfoList";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Info {
@@ -417,6 +431,7 @@ impl Info {
 }
 impl Info {
     pub const IDENTIFIER: &'static str = "browsingContext.Info";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BaseNavigationInfo {
@@ -447,6 +462,7 @@ impl BaseNavigationInfo {
 }
 impl BaseNavigationInfo {
     pub const IDENTIFIER: &'static str = "browsingContext.BaseNavigationInfo";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DownloadCanceledParams {
@@ -481,6 +497,7 @@ impl DownloadCanceledParams {
 }
 impl DownloadCanceledParams {
     pub const IDENTIFIER: &'static str = "browsingContext.DownloadCanceledParams";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DownloadCompleteParams {
@@ -520,5 +537,6 @@ impl DownloadCompleteParams {
 }
 impl DownloadCompleteParams {
     pub const IDENTIFIER: &'static str = "browsingContext.DownloadCompleteParams";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 group_enum ! (BrowsingContextTypes { BrowsingContext (BrowsingContext) , Locator (Locator) , AccessibilityLocator (AccessibilityLocator) , CssLocator (CssLocator) , ContextLocator (ContextLocator) , InnerTextLocator (InnerTextLocator) , XPathLocator (XPathLocator) , Navigation (Navigation) , ReadinessState (ReadinessState) , UserPromptType (UserPromptType) , ImageFormat (ImageFormat) , ClipRectangle (ClipRectangle) , ElementClipRectangle (ElementClipRectangle) , BoxClipRectangle (BoxClipRectangle) , CreateType (CreateType) , PrintMarginParameters (PrintMarginParameters) , PrintPageParameters (PrintPageParameters) , Viewport (Viewport) , InfoList (InfoList) , Info (Info) , BaseNavigationInfo (BaseNavigationInfo) , DownloadCanceledParams (DownloadCanceledParams) , DownloadCompleteParams (DownloadCompleteParams) });

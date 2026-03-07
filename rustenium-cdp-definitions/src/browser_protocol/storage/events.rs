@@ -20,14 +20,14 @@ pub enum CacheStorageContentUpdatedMethod {
     #[serde(rename = "Storage.cacheStorageContentUpdated")]
     CacheStorageContentUpdated,
 }
-impl CacheStorageContentUpdatedMethod {
-    pub const IDENTIFIER: &'static str = "Storage.cacheStorageContentUpdated";
-}
 #[doc = "A cache's contents have been modified.\n[cacheStorageContentUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-cacheStorageContentUpdated)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct CacheStorageContentUpdated {
     pub method: CacheStorageContentUpdatedMethod,
     pub params: CacheStorageContentUpdatedParams,
+}
+impl CacheStorageContentUpdated {
+    pub const IDENTIFIER: &'static str = "Storage.cacheStorageContentUpdated";
 }
 #[doc = "A cache has been added/deleted.\n[cacheStorageListUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-cacheStorageListUpdated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -47,14 +47,14 @@ pub enum CacheStorageListUpdatedMethod {
     #[serde(rename = "Storage.cacheStorageListUpdated")]
     CacheStorageListUpdated,
 }
-impl CacheStorageListUpdatedMethod {
-    pub const IDENTIFIER: &'static str = "Storage.cacheStorageListUpdated";
-}
 #[doc = "A cache has been added/deleted.\n[cacheStorageListUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-cacheStorageListUpdated)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct CacheStorageListUpdated {
     pub method: CacheStorageListUpdatedMethod,
     pub params: CacheStorageListUpdatedParams,
+}
+impl CacheStorageListUpdated {
+    pub const IDENTIFIER: &'static str = "Storage.cacheStorageListUpdated";
 }
 #[doc = "The origin's IndexedDB object store has been modified.\n[indexedDBContentUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-indexedDBContentUpdated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -80,14 +80,14 @@ pub enum IndexedDbContentUpdatedMethod {
     #[serde(rename = "Storage.indexedDBContentUpdated")]
     IndexedDbContentUpdated,
 }
-impl IndexedDbContentUpdatedMethod {
-    pub const IDENTIFIER: &'static str = "Storage.indexedDBContentUpdated";
-}
 #[doc = "The origin's IndexedDB object store has been modified.\n[indexedDBContentUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-indexedDBContentUpdated)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct IndexedDbContentUpdated {
     pub method: IndexedDbContentUpdatedMethod,
     pub params: IndexedDbContentUpdatedParams,
+}
+impl IndexedDbContentUpdated {
+    pub const IDENTIFIER: &'static str = "Storage.indexedDBContentUpdated";
 }
 #[doc = "The origin's IndexedDB database list has been modified.\n[indexedDBListUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-indexedDBListUpdated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -107,14 +107,14 @@ pub enum IndexedDbListUpdatedMethod {
     #[serde(rename = "Storage.indexedDBListUpdated")]
     IndexedDbListUpdated,
 }
-impl IndexedDbListUpdatedMethod {
-    pub const IDENTIFIER: &'static str = "Storage.indexedDBListUpdated";
-}
 #[doc = "The origin's IndexedDB database list has been modified.\n[indexedDBListUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-indexedDBListUpdated)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct IndexedDbListUpdated {
     pub method: IndexedDbListUpdatedMethod,
     pub params: IndexedDbListUpdatedParams,
+}
+impl IndexedDbListUpdated {
+    pub const IDENTIFIER: &'static str = "Storage.indexedDBListUpdated";
 }
 #[doc = "One of the interest groups was accessed. Note that these events are global\nto all targets sharing an interest group store.\n[interestGroupAccessed](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-interestGroupAccessed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -152,14 +152,14 @@ pub enum InterestGroupAccessedMethod {
     #[serde(rename = "Storage.interestGroupAccessed")]
     InterestGroupAccessed,
 }
-impl InterestGroupAccessedMethod {
-    pub const IDENTIFIER: &'static str = "Storage.interestGroupAccessed";
-}
 #[doc = "One of the interest groups was accessed. Note that these events are global\nto all targets sharing an interest group store.\n[interestGroupAccessed](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-interestGroupAccessed)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct InterestGroupAccessed {
     pub method: InterestGroupAccessedMethod,
     pub params: InterestGroupAccessedParams,
+}
+impl InterestGroupAccessed {
+    pub const IDENTIFIER: &'static str = "Storage.interestGroupAccessed";
 }
 #[doc = "An auction involving interest groups is taking place. These events are\ntarget-specific.\n[interestGroupAuctionEventOccurred](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-interestGroupAuctionEventOccurred)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -186,14 +186,14 @@ pub enum InterestGroupAuctionEventOccurredMethod {
     #[serde(rename = "Storage.interestGroupAuctionEventOccurred")]
     InterestGroupAuctionEventOccurred,
 }
-impl InterestGroupAuctionEventOccurredMethod {
-    pub const IDENTIFIER: &'static str = "Storage.interestGroupAuctionEventOccurred";
-}
 #[doc = "An auction involving interest groups is taking place. These events are\ntarget-specific.\n[interestGroupAuctionEventOccurred](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-interestGroupAuctionEventOccurred)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct InterestGroupAuctionEventOccurred {
     pub method: InterestGroupAuctionEventOccurredMethod,
     pub params: InterestGroupAuctionEventOccurredParams,
+}
+impl InterestGroupAuctionEventOccurred {
+    pub const IDENTIFIER: &'static str = "Storage.interestGroupAuctionEventOccurred";
 }
 #[doc = "Specifies which auctions a particular network fetch may be related to, and\nin what role. Note that it is not ordered with respect to\nNetwork.requestWillBeSent (but will happen before loadingFinished\nloadingFailed).\n[interestGroupAuctionNetworkRequestCreated](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-interestGroupAuctionNetworkRequestCreated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -212,14 +212,14 @@ pub enum InterestGroupAuctionNetworkRequestCreatedMethod {
     #[serde(rename = "Storage.interestGroupAuctionNetworkRequestCreated")]
     InterestGroupAuctionNetworkRequestCreated,
 }
-impl InterestGroupAuctionNetworkRequestCreatedMethod {
-    pub const IDENTIFIER: &'static str = "Storage.interestGroupAuctionNetworkRequestCreated";
-}
 #[doc = "Specifies which auctions a particular network fetch may be related to, and\nin what role. Note that it is not ordered with respect to\nNetwork.requestWillBeSent (but will happen before loadingFinished\nloadingFailed).\n[interestGroupAuctionNetworkRequestCreated](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-interestGroupAuctionNetworkRequestCreated)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct InterestGroupAuctionNetworkRequestCreated {
     pub method: InterestGroupAuctionNetworkRequestCreatedMethod,
     pub params: InterestGroupAuctionNetworkRequestCreatedParams,
+}
+impl InterestGroupAuctionNetworkRequestCreated {
+    pub const IDENTIFIER: &'static str = "Storage.interestGroupAuctionNetworkRequestCreated";
 }
 #[doc = "Shared storage was accessed by the associated page.\nThe following parameters are included in all events.\n[sharedStorageAccessed](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-sharedStorageAccessed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -251,14 +251,14 @@ pub enum SharedStorageAccessedMethod {
     #[serde(rename = "Storage.sharedStorageAccessed")]
     SharedStorageAccessed,
 }
-impl SharedStorageAccessedMethod {
-    pub const IDENTIFIER: &'static str = "Storage.sharedStorageAccessed";
-}
 #[doc = "Shared storage was accessed by the associated page.\nThe following parameters are included in all events.\n[sharedStorageAccessed](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-sharedStorageAccessed)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SharedStorageAccessed {
     pub method: SharedStorageAccessedMethod,
     pub params: SharedStorageAccessedParams,
+}
+impl SharedStorageAccessed {
+    pub const IDENTIFIER: &'static str = "Storage.sharedStorageAccessed";
 }
 #[doc = "A shared storage run or selectURL operation finished its execution.\nThe following parameters are included in all events.\n[sharedStorageWorkletOperationExecutionFinished](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-sharedStorageWorkletOperationExecutionFinished)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -290,14 +290,14 @@ pub enum SharedStorageWorkletOperationExecutionFinishedMethod {
     #[serde(rename = "Storage.sharedStorageWorkletOperationExecutionFinished")]
     SharedStorageWorkletOperationExecutionFinished,
 }
-impl SharedStorageWorkletOperationExecutionFinishedMethod {
-    pub const IDENTIFIER: &'static str = "Storage.sharedStorageWorkletOperationExecutionFinished";
-}
 #[doc = "A shared storage run or selectURL operation finished its execution.\nThe following parameters are included in all events.\n[sharedStorageWorkletOperationExecutionFinished](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-sharedStorageWorkletOperationExecutionFinished)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SharedStorageWorkletOperationExecutionFinished {
     pub method: SharedStorageWorkletOperationExecutionFinishedMethod,
     pub params: SharedStorageWorkletOperationExecutionFinishedParams,
+}
+impl SharedStorageWorkletOperationExecutionFinished {
+    pub const IDENTIFIER: &'static str = "Storage.sharedStorageWorkletOperationExecutionFinished";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StorageBucketCreatedOrUpdatedParams {
@@ -309,13 +309,13 @@ pub enum StorageBucketCreatedOrUpdatedMethod {
     #[serde(rename = "Storage.storageBucketCreatedOrUpdated")]
     StorageBucketCreatedOrUpdated,
 }
-impl StorageBucketCreatedOrUpdatedMethod {
-    pub const IDENTIFIER: &'static str = "Storage.storageBucketCreatedOrUpdated";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct StorageBucketCreatedOrUpdated {
     pub method: StorageBucketCreatedOrUpdatedMethod,
     pub params: StorageBucketCreatedOrUpdatedParams,
+}
+impl StorageBucketCreatedOrUpdated {
+    pub const IDENTIFIER: &'static str = "Storage.storageBucketCreatedOrUpdated";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StorageBucketDeletedParams {
@@ -327,13 +327,13 @@ pub enum StorageBucketDeletedMethod {
     #[serde(rename = "Storage.storageBucketDeleted")]
     StorageBucketDeleted,
 }
-impl StorageBucketDeletedMethod {
-    pub const IDENTIFIER: &'static str = "Storage.storageBucketDeleted";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct StorageBucketDeleted {
     pub method: StorageBucketDeletedMethod,
     pub params: StorageBucketDeletedParams,
+}
+impl StorageBucketDeleted {
+    pub const IDENTIFIER: &'static str = "Storage.storageBucketDeleted";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributionReportingSourceRegisteredParams {
@@ -347,13 +347,13 @@ pub enum AttributionReportingSourceRegisteredMethod {
     #[serde(rename = "Storage.attributionReportingSourceRegistered")]
     AttributionReportingSourceRegistered,
 }
-impl AttributionReportingSourceRegisteredMethod {
-    pub const IDENTIFIER: &'static str = "Storage.attributionReportingSourceRegistered";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct AttributionReportingSourceRegistered {
     pub method: AttributionReportingSourceRegisteredMethod,
     pub params: AttributionReportingSourceRegisteredParams,
+}
+impl AttributionReportingSourceRegistered {
+    pub const IDENTIFIER: &'static str = "Storage.attributionReportingSourceRegistered";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributionReportingTriggerRegisteredParams {
@@ -369,13 +369,13 @@ pub enum AttributionReportingTriggerRegisteredMethod {
     #[serde(rename = "Storage.attributionReportingTriggerRegistered")]
     AttributionReportingTriggerRegistered,
 }
-impl AttributionReportingTriggerRegisteredMethod {
-    pub const IDENTIFIER: &'static str = "Storage.attributionReportingTriggerRegistered";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct AttributionReportingTriggerRegistered {
     pub method: AttributionReportingTriggerRegisteredMethod,
     pub params: AttributionReportingTriggerRegisteredParams,
+}
+impl AttributionReportingTriggerRegistered {
+    pub const IDENTIFIER: &'static str = "Storage.attributionReportingTriggerRegistered";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributionReportingReportSentParams {
@@ -404,13 +404,13 @@ pub enum AttributionReportingReportSentMethod {
     #[serde(rename = "Storage.attributionReportingReportSent")]
     AttributionReportingReportSent,
 }
-impl AttributionReportingReportSentMethod {
-    pub const IDENTIFIER: &'static str = "Storage.attributionReportingReportSent";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct AttributionReportingReportSent {
     pub method: AttributionReportingReportSentMethod,
     pub params: AttributionReportingReportSentParams,
+}
+impl AttributionReportingReportSent {
+    pub const IDENTIFIER: &'static str = "Storage.attributionReportingReportSent";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributionReportingVerboseDebugReportSentParams {
@@ -438,12 +438,12 @@ pub enum AttributionReportingVerboseDebugReportSentMethod {
     #[serde(rename = "Storage.attributionReportingVerboseDebugReportSent")]
     AttributionReportingVerboseDebugReportSent,
 }
-impl AttributionReportingVerboseDebugReportSentMethod {
-    pub const IDENTIFIER: &'static str = "Storage.attributionReportingVerboseDebugReportSent";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct AttributionReportingVerboseDebugReportSent {
     pub method: AttributionReportingVerboseDebugReportSentMethod,
     pub params: AttributionReportingVerboseDebugReportSentParams,
+}
+impl AttributionReportingVerboseDebugReportSent {
+    pub const IDENTIFIER: &'static str = "Storage.attributionReportingVerboseDebugReportSent";
 }
 group_enum ! (StorageEvents { CacheStorageContentUpdated (CacheStorageContentUpdated) , CacheStorageListUpdated (CacheStorageListUpdated) , IndexedDbContentUpdated (IndexedDbContentUpdated) , IndexedDbListUpdated (IndexedDbListUpdated) , InterestGroupAccessed (InterestGroupAccessed) , InterestGroupAuctionEventOccurred (InterestGroupAuctionEventOccurred) , InterestGroupAuctionNetworkRequestCreated (InterestGroupAuctionNetworkRequestCreated) , SharedStorageAccessed (SharedStorageAccessed) , SharedStorageWorkletOperationExecutionFinished (SharedStorageWorkletOperationExecutionFinished) , StorageBucketCreatedOrUpdated (StorageBucketCreatedOrUpdated) , StorageBucketDeleted (StorageBucketDeleted) , AttributionReportingSourceRegistered (AttributionReportingSourceRegistered) , AttributionReportingTriggerRegistered (AttributionReportingTriggerRegistered) , AttributionReportingReportSent (AttributionReportingReportSent) , AttributionReportingVerboseDebugReportSent (AttributionReportingVerboseDebugReportSent) });

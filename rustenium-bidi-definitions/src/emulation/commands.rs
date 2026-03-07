@@ -19,13 +19,14 @@ pub enum SetForcedColorsModeThemeOverrideMethod {
     #[serde(rename = "emulation.setForcedColorsModeThemeOverride")]
     SetForcedColorsModeThemeOverride,
 }
-impl SetForcedColorsModeThemeOverrideMethod {
-    pub const IDENTIFIER: &'static str = "emulation.setForcedColorsModeThemeOverride";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetForcedColorsModeThemeOverride {
     pub method: SetForcedColorsModeThemeOverrideMethod,
     pub params: SetForcedColorsModeThemeOverrideParams,
+}
+impl SetForcedColorsModeThemeOverride {
+    pub const IDENTIFIER: &'static str = "emulation.setForcedColorsModeThemeOverride";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for SetForcedColorsModeThemeOverride {
     type Result = super::results::SetForcedColorsModeThemeOverrideResult;
@@ -62,13 +63,14 @@ pub enum SetGeolocationOverrideMethod {
     #[serde(rename = "emulation.setGeolocationOverride")]
     SetGeolocationOverride,
 }
-impl SetGeolocationOverrideMethod {
-    pub const IDENTIFIER: &'static str = "emulation.setGeolocationOverride";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetGeolocationOverride {
     pub method: SetGeolocationOverrideMethod,
     pub params: SetGeolocationOverrideParams,
+}
+impl SetGeolocationOverride {
+    pub const IDENTIFIER: &'static str = "emulation.setGeolocationOverride";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for SetGeolocationOverride {
     type Result = super::results::SetGeolocationOverrideResult;
@@ -93,13 +95,14 @@ pub enum SetLocaleOverrideMethod {
     #[serde(rename = "emulation.setLocaleOverride")]
     SetLocaleOverride,
 }
-impl SetLocaleOverrideMethod {
-    pub const IDENTIFIER: &'static str = "emulation.setLocaleOverride";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetLocaleOverride {
     pub method: SetLocaleOverrideMethod,
     pub params: SetLocaleOverrideParams,
+}
+impl SetLocaleOverride {
+    pub const IDENTIFIER: &'static str = "emulation.setLocaleOverride";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for SetLocaleOverride {
     type Result = super::results::SetLocaleOverrideResult;
@@ -124,13 +127,14 @@ pub enum SetNetworkConditionsMethod {
     #[serde(rename = "emulation.setNetworkConditions")]
     SetNetworkConditions,
 }
-impl SetNetworkConditionsMethod {
-    pub const IDENTIFIER: &'static str = "emulation.setNetworkConditions";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetNetworkConditions {
     pub method: SetNetworkConditionsMethod,
     pub params: SetNetworkConditionsParams,
+}
+impl SetNetworkConditions {
+    pub const IDENTIFIER: &'static str = "emulation.setNetworkConditions";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for SetNetworkConditions {
     type Result = super::results::SetNetworkConditionsResult;
@@ -155,13 +159,14 @@ pub enum SetScreenOrientationOverrideMethod {
     #[serde(rename = "emulation.setScreenOrientationOverride")]
     SetScreenOrientationOverride,
 }
-impl SetScreenOrientationOverrideMethod {
-    pub const IDENTIFIER: &'static str = "emulation.setScreenOrientationOverride";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetScreenOrientationOverride {
     pub method: SetScreenOrientationOverrideMethod,
     pub params: SetScreenOrientationOverrideParams,
+}
+impl SetScreenOrientationOverride {
+    pub const IDENTIFIER: &'static str = "emulation.setScreenOrientationOverride";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for SetScreenOrientationOverride {
     type Result = super::results::SetScreenOrientationOverrideResult;
@@ -186,13 +191,14 @@ pub enum SetUserAgentOverrideMethod {
     #[serde(rename = "emulation.setUserAgentOverride")]
     SetUserAgentOverride,
 }
-impl SetUserAgentOverrideMethod {
-    pub const IDENTIFIER: &'static str = "emulation.setUserAgentOverride";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetUserAgentOverride {
     pub method: SetUserAgentOverrideMethod,
     pub params: SetUserAgentOverrideParams,
+}
+impl SetUserAgentOverride {
+    pub const IDENTIFIER: &'static str = "emulation.setUserAgentOverride";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for SetUserAgentOverride {
     type Result = super::results::SetUserAgentOverrideResult;
@@ -217,13 +223,14 @@ pub enum SetScriptingEnabledMethod {
     #[serde(rename = "emulation.setScriptingEnabled")]
     SetScriptingEnabled,
 }
-impl SetScriptingEnabledMethod {
-    pub const IDENTIFIER: &'static str = "emulation.setScriptingEnabled";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetScriptingEnabled {
     pub method: SetScriptingEnabledMethod,
     pub params: SetScriptingEnabledParams,
+}
+impl SetScriptingEnabled {
+    pub const IDENTIFIER: &'static str = "emulation.setScriptingEnabled";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for SetScriptingEnabled {
     type Result = super::results::SetScriptingEnabledResult;
@@ -248,13 +255,14 @@ pub enum SetTimezoneOverrideMethod {
     #[serde(rename = "emulation.setTimezoneOverride")]
     SetTimezoneOverride,
 }
-impl SetTimezoneOverrideMethod {
-    pub const IDENTIFIER: &'static str = "emulation.setTimezoneOverride";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetTimezoneOverride {
     pub method: SetTimezoneOverrideMethod,
     pub params: SetTimezoneOverrideParams,
+}
+impl SetTimezoneOverride {
+    pub const IDENTIFIER: &'static str = "emulation.setTimezoneOverride";
+    pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
 impl crate::CommandResult for SetTimezoneOverride {
     type Result = super::results::SetTimezoneOverrideResult;

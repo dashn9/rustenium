@@ -29,13 +29,14 @@ pub enum AuthRequiredMethod {
     #[serde(rename = "network.authRequired")]
     AuthRequired,
 }
-impl AuthRequiredMethod {
-    pub const IDENTIFIER: &'static str = "network.authRequired";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct AuthRequired {
     pub method: AuthRequiredMethod,
     pub params: AuthRequiredParams,
+}
+impl AuthRequired {
+    pub const IDENTIFIER: &'static str = "network.authRequired";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AuthRequiredParametersParams {
@@ -69,13 +70,14 @@ pub enum AuthRequiredParametersMethod {
     #[serde(rename = "network.beforeRequestSent")]
     AuthRequiredParameters,
 }
-impl AuthRequiredParametersMethod {
-    pub const IDENTIFIER: &'static str = "network.beforeRequestSent";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct AuthRequiredParameters {
     pub method: AuthRequiredParametersMethod,
     pub params: AuthRequiredParametersParams,
+}
+impl AuthRequiredParameters {
+    pub const IDENTIFIER: &'static str = "network.beforeRequestSent";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BeforeRequestSentParametersParams {
@@ -107,13 +109,14 @@ pub enum BeforeRequestSentParametersMethod {
     #[serde(rename = "network.fetchError")]
     BeforeRequestSentParameters,
 }
-impl BeforeRequestSentParametersMethod {
-    pub const IDENTIFIER: &'static str = "network.fetchError";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct BeforeRequestSentParameters {
     pub method: BeforeRequestSentParametersMethod,
     pub params: BeforeRequestSentParametersParams,
+}
+impl BeforeRequestSentParameters {
+    pub const IDENTIFIER: &'static str = "network.fetchError";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FetchErrorParametersParams {
@@ -145,13 +148,14 @@ pub enum FetchErrorParametersMethod {
     #[serde(rename = "network.responseCompleted")]
     FetchErrorParameters,
 }
-impl FetchErrorParametersMethod {
-    pub const IDENTIFIER: &'static str = "network.responseCompleted";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct FetchErrorParameters {
     pub method: FetchErrorParametersMethod,
     pub params: FetchErrorParametersParams,
+}
+impl FetchErrorParameters {
+    pub const IDENTIFIER: &'static str = "network.responseCompleted";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResponseCompletedParametersParams {
@@ -183,12 +187,13 @@ pub enum ResponseCompletedParametersMethod {
     #[serde(rename = "network.responseStarted")]
     ResponseCompletedParameters,
 }
-impl ResponseCompletedParametersMethod {
-    pub const IDENTIFIER: &'static str = "network.responseStarted";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct ResponseCompletedParameters {
     pub method: ResponseCompletedParametersMethod,
     pub params: ResponseCompletedParametersParams,
+}
+impl ResponseCompletedParameters {
+    pub const IDENTIFIER: &'static str = "network.responseStarted";
+    pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 group_enum ! (NetworkEvents { AuthRequired (AuthRequired) , AuthRequiredParameters (AuthRequiredParameters) , BeforeRequestSentParameters (BeforeRequestSentParameters) , FetchErrorParameters (FetchErrorParameters) , ResponseCompletedParameters (ResponseCompletedParameters) });

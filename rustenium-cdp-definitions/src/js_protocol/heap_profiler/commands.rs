@@ -18,14 +18,14 @@ pub enum AddInspectedHeapObjectMethod {
     #[serde(rename = "HeapProfiler.addInspectedHeapObject")]
     AddInspectedHeapObject,
 }
-impl AddInspectedHeapObjectMethod {
-    pub const IDENTIFIER: &'static str = "HeapProfiler.addInspectedHeapObject";
-}
 #[doc = "Enables console to refer to the node with given id via $x (see Command Line API for more details\n$x functions).\n[addInspectedHeapObject](https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler/#method-addInspectedHeapObject)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct AddInspectedHeapObject {
     pub method: AddInspectedHeapObjectMethod,
     pub params: AddInspectedHeapObjectParams,
+}
+impl AddInspectedHeapObject {
+    pub const IDENTIFIER: &'static str = "HeapProfiler.addInspectedHeapObject";
 }
 impl crate::CommandResult for AddInspectedHeapObject {
     type Result = super::results::AddInspectedHeapObjectResult;
@@ -37,13 +37,13 @@ pub enum CollectGarbageMethod {
     #[serde(rename = "HeapProfiler.collectGarbage")]
     CollectGarbage,
 }
-impl CollectGarbageMethod {
-    pub const IDENTIFIER: &'static str = "HeapProfiler.collectGarbage";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct CollectGarbage {
     pub method: CollectGarbageMethod,
     pub params: CollectGarbageParams,
+}
+impl CollectGarbage {
+    pub const IDENTIFIER: &'static str = "HeapProfiler.collectGarbage";
 }
 impl crate::CommandResult for CollectGarbage {
     type Result = super::results::CollectGarbageResult;
@@ -55,13 +55,13 @@ pub enum DisableMethod {
     #[serde(rename = "HeapProfiler.disable")]
     Disable,
 }
-impl DisableMethod {
-    pub const IDENTIFIER: &'static str = "HeapProfiler.disable";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
+}
+impl Disable {
+    pub const IDENTIFIER: &'static str = "HeapProfiler.disable";
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -73,13 +73,13 @@ pub enum EnableMethod {
     #[serde(rename = "HeapProfiler.enable")]
     Enable,
 }
-impl EnableMethod {
-    pub const IDENTIFIER: &'static str = "HeapProfiler.enable";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl Enable {
+    pub const IDENTIFIER: &'static str = "HeapProfiler.enable";
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -102,13 +102,13 @@ pub enum GetHeapObjectIdMethod {
     #[serde(rename = "HeapProfiler.getHeapObjectId")]
     GetHeapObjectId,
 }
-impl GetHeapObjectIdMethod {
-    pub const IDENTIFIER: &'static str = "HeapProfiler.getHeapObjectId";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetHeapObjectId {
     pub method: GetHeapObjectIdMethod,
     pub params: GetHeapObjectIdParams,
+}
+impl GetHeapObjectId {
+    pub const IDENTIFIER: &'static str = "HeapProfiler.getHeapObjectId";
 }
 impl crate::CommandResult for GetHeapObjectId {
     type Result = super::results::GetHeapObjectIdResult;
@@ -136,13 +136,13 @@ pub enum GetObjectByHeapObjectIdMethod {
     #[serde(rename = "HeapProfiler.getObjectByHeapObjectId")]
     GetObjectByHeapObjectId,
 }
-impl GetObjectByHeapObjectIdMethod {
-    pub const IDENTIFIER: &'static str = "HeapProfiler.getObjectByHeapObjectId";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetObjectByHeapObjectId {
     pub method: GetObjectByHeapObjectIdMethod,
     pub params: GetObjectByHeapObjectIdParams,
+}
+impl GetObjectByHeapObjectId {
+    pub const IDENTIFIER: &'static str = "HeapProfiler.getObjectByHeapObjectId";
 }
 impl crate::CommandResult for GetObjectByHeapObjectId {
     type Result = super::results::GetObjectByHeapObjectIdResult;
@@ -154,13 +154,13 @@ pub enum GetSamplingProfileMethod {
     #[serde(rename = "HeapProfiler.getSamplingProfile")]
     GetSamplingProfile,
 }
-impl GetSamplingProfileMethod {
-    pub const IDENTIFIER: &'static str = "HeapProfiler.getSamplingProfile";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetSamplingProfile {
     pub method: GetSamplingProfileMethod,
     pub params: GetSamplingProfileParams,
+}
+impl GetSamplingProfile {
+    pub const IDENTIFIER: &'static str = "HeapProfiler.getSamplingProfile";
 }
 impl crate::CommandResult for GetSamplingProfile {
     type Result = super::results::GetSamplingProfileResult;
@@ -193,13 +193,13 @@ pub enum StartSamplingMethod {
     #[serde(rename = "HeapProfiler.startSampling")]
     StartSampling,
 }
-impl StartSamplingMethod {
-    pub const IDENTIFIER: &'static str = "HeapProfiler.startSampling";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct StartSampling {
     pub method: StartSamplingMethod,
     pub params: StartSamplingParams,
+}
+impl StartSampling {
+    pub const IDENTIFIER: &'static str = "HeapProfiler.startSampling";
 }
 impl crate::CommandResult for StartSampling {
     type Result = super::results::StartSamplingResult;
@@ -216,13 +216,13 @@ pub enum StartTrackingHeapObjectsMethod {
     #[serde(rename = "HeapProfiler.startTrackingHeapObjects")]
     StartTrackingHeapObjects,
 }
-impl StartTrackingHeapObjectsMethod {
-    pub const IDENTIFIER: &'static str = "HeapProfiler.startTrackingHeapObjects";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct StartTrackingHeapObjects {
     pub method: StartTrackingHeapObjectsMethod,
     pub params: StartTrackingHeapObjectsParams,
+}
+impl StartTrackingHeapObjects {
+    pub const IDENTIFIER: &'static str = "HeapProfiler.startTrackingHeapObjects";
 }
 impl crate::CommandResult for StartTrackingHeapObjects {
     type Result = super::results::StartTrackingHeapObjectsResult;
@@ -234,13 +234,13 @@ pub enum StopSamplingMethod {
     #[serde(rename = "HeapProfiler.stopSampling")]
     StopSampling,
 }
-impl StopSamplingMethod {
-    pub const IDENTIFIER: &'static str = "HeapProfiler.stopSampling";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct StopSampling {
     pub method: StopSamplingMethod,
     pub params: StopSamplingParams,
+}
+impl StopSampling {
+    pub const IDENTIFIER: &'static str = "HeapProfiler.stopSampling";
 }
 impl crate::CommandResult for StopSampling {
     type Result = super::results::StopSamplingResult;
@@ -268,13 +268,13 @@ pub enum StopTrackingHeapObjectsMethod {
     #[serde(rename = "HeapProfiler.stopTrackingHeapObjects")]
     StopTrackingHeapObjects,
 }
-impl StopTrackingHeapObjectsMethod {
-    pub const IDENTIFIER: &'static str = "HeapProfiler.stopTrackingHeapObjects";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct StopTrackingHeapObjects {
     pub method: StopTrackingHeapObjectsMethod,
     pub params: StopTrackingHeapObjectsParams,
+}
+impl StopTrackingHeapObjects {
+    pub const IDENTIFIER: &'static str = "HeapProfiler.stopTrackingHeapObjects";
 }
 impl crate::CommandResult for StopTrackingHeapObjects {
     type Result = super::results::StopTrackingHeapObjectsResult;
@@ -302,13 +302,13 @@ pub enum TakeHeapSnapshotMethod {
     #[serde(rename = "HeapProfiler.takeHeapSnapshot")]
     TakeHeapSnapshot,
 }
-impl TakeHeapSnapshotMethod {
-    pub const IDENTIFIER: &'static str = "HeapProfiler.takeHeapSnapshot";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct TakeHeapSnapshot {
     pub method: TakeHeapSnapshotMethod,
     pub params: TakeHeapSnapshotParams,
+}
+impl TakeHeapSnapshot {
+    pub const IDENTIFIER: &'static str = "HeapProfiler.takeHeapSnapshot";
 }
 impl crate::CommandResult for TakeHeapSnapshot {
     type Result = super::results::TakeHeapSnapshotResult;

@@ -9,12 +9,12 @@ pub enum IssueAddedMethod {
     #[serde(rename = "Audits.issueAdded")]
     IssueAdded,
 }
-impl IssueAddedMethod {
-    pub const IDENTIFIER: &'static str = "Audits.issueAdded";
-}
 #[derive(Debug, Clone, PartialEq)]
 pub struct IssueAdded {
     pub method: IssueAddedMethod,
     pub params: IssueAddedParams,
+}
+impl IssueAdded {
+    pub const IDENTIFIER: &'static str = "Audits.issueAdded";
 }
 group_enum ! (AuditsEvents { IssueAdded (IssueAdded) });

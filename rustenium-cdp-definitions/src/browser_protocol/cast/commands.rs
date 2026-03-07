@@ -12,14 +12,14 @@ pub enum EnableMethod {
     #[serde(rename = "Cast.enable")]
     Enable,
 }
-impl EnableMethod {
-    pub const IDENTIFIER: &'static str = "Cast.enable";
-}
 #[doc = "Starts observing for sinks that can be used for tab mirroring, and if set,\nsinks compatible with |presentationUrl| as well. When sinks are found, a\n|sinksUpdated| event is fired.\nAlso starts observing for issue messages. When an issue is added or removed,\nan |issueUpdated| event is fired.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Cast/#method-enable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl Enable {
+    pub const IDENTIFIER: &'static str = "Cast.enable";
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -32,14 +32,14 @@ pub enum DisableMethod {
     #[serde(rename = "Cast.disable")]
     Disable,
 }
-impl DisableMethod {
-    pub const IDENTIFIER: &'static str = "Cast.disable";
-}
 #[doc = "Stops observing for sinks and issues.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Cast/#method-disable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
+}
+impl Disable {
+    pub const IDENTIFIER: &'static str = "Cast.disable";
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -67,14 +67,14 @@ pub enum SetSinkToUseMethod {
     #[serde(rename = "Cast.setSinkToUse")]
     SetSinkToUse,
 }
-impl SetSinkToUseMethod {
-    pub const IDENTIFIER: &'static str = "Cast.setSinkToUse";
-}
 #[doc = "Sets a sink to be used when the web page requests the browser to choose a\nsink via Presentation API, Remote Playback API, or Cast SDK.\n[setSinkToUse](https://chromedevtools.github.io/devtools-protocol/tot/Cast/#method-setSinkToUse)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetSinkToUse {
     pub method: SetSinkToUseMethod,
     pub params: SetSinkToUseParams,
+}
+impl SetSinkToUse {
+    pub const IDENTIFIER: &'static str = "Cast.setSinkToUse";
 }
 impl crate::CommandResult for SetSinkToUse {
     type Result = super::results::SetSinkToUseResult;
@@ -102,14 +102,14 @@ pub enum StartDesktopMirroringMethod {
     #[serde(rename = "Cast.startDesktopMirroring")]
     StartDesktopMirroring,
 }
-impl StartDesktopMirroringMethod {
-    pub const IDENTIFIER: &'static str = "Cast.startDesktopMirroring";
-}
 #[doc = "Starts mirroring the desktop to the sink.\n[startDesktopMirroring](https://chromedevtools.github.io/devtools-protocol/tot/Cast/#method-startDesktopMirroring)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct StartDesktopMirroring {
     pub method: StartDesktopMirroringMethod,
     pub params: StartDesktopMirroringParams,
+}
+impl StartDesktopMirroring {
+    pub const IDENTIFIER: &'static str = "Cast.startDesktopMirroring";
 }
 impl crate::CommandResult for StartDesktopMirroring {
     type Result = super::results::StartDesktopMirroringResult;
@@ -137,14 +137,14 @@ pub enum StartTabMirroringMethod {
     #[serde(rename = "Cast.startTabMirroring")]
     StartTabMirroring,
 }
-impl StartTabMirroringMethod {
-    pub const IDENTIFIER: &'static str = "Cast.startTabMirroring";
-}
 #[doc = "Starts mirroring the tab to the sink.\n[startTabMirroring](https://chromedevtools.github.io/devtools-protocol/tot/Cast/#method-startTabMirroring)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct StartTabMirroring {
     pub method: StartTabMirroringMethod,
     pub params: StartTabMirroringParams,
+}
+impl StartTabMirroring {
+    pub const IDENTIFIER: &'static str = "Cast.startTabMirroring";
 }
 impl crate::CommandResult for StartTabMirroring {
     type Result = super::results::StartTabMirroringResult;
@@ -172,14 +172,14 @@ pub enum StopCastingMethod {
     #[serde(rename = "Cast.stopCasting")]
     StopCasting,
 }
-impl StopCastingMethod {
-    pub const IDENTIFIER: &'static str = "Cast.stopCasting";
-}
 #[doc = "Stops the active Cast session on the sink.\n[stopCasting](https://chromedevtools.github.io/devtools-protocol/tot/Cast/#method-stopCasting)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct StopCasting {
     pub method: StopCastingMethod,
     pub params: StopCastingParams,
+}
+impl StopCasting {
+    pub const IDENTIFIER: &'static str = "Cast.stopCasting";
 }
 impl crate::CommandResult for StopCasting {
     type Result = super::results::StopCastingResult;

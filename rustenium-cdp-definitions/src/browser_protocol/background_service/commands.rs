@@ -17,14 +17,14 @@ pub enum StartObservingMethod {
     #[serde(rename = "BackgroundService.startObserving")]
     StartObserving,
 }
-impl StartObservingMethod {
-    pub const IDENTIFIER: &'static str = "BackgroundService.startObserving";
-}
 #[doc = "Enables event updates for the service.\n[startObserving](https://chromedevtools.github.io/devtools-protocol/tot/BackgroundService/#method-startObserving)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct StartObserving {
     pub method: StartObservingMethod,
     pub params: StartObservingParams,
+}
+impl StartObserving {
+    pub const IDENTIFIER: &'static str = "BackgroundService.startObserving";
 }
 impl crate::CommandResult for StartObserving {
     type Result = super::results::StartObservingResult;
@@ -47,14 +47,14 @@ pub enum StopObservingMethod {
     #[serde(rename = "BackgroundService.stopObserving")]
     StopObserving,
 }
-impl StopObservingMethod {
-    pub const IDENTIFIER: &'static str = "BackgroundService.stopObserving";
-}
 #[doc = "Disables event updates for the service.\n[stopObserving](https://chromedevtools.github.io/devtools-protocol/tot/BackgroundService/#method-stopObserving)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct StopObserving {
     pub method: StopObservingMethod,
     pub params: StopObservingParams,
+}
+impl StopObserving {
+    pub const IDENTIFIER: &'static str = "BackgroundService.stopObserving";
 }
 impl crate::CommandResult for StopObserving {
     type Result = super::results::StopObservingResult;
@@ -83,14 +83,14 @@ pub enum SetRecordingMethod {
     #[serde(rename = "BackgroundService.setRecording")]
     SetRecording,
 }
-impl SetRecordingMethod {
-    pub const IDENTIFIER: &'static str = "BackgroundService.setRecording";
-}
 #[doc = "Set the recording state for the service.\n[setRecording](https://chromedevtools.github.io/devtools-protocol/tot/BackgroundService/#method-setRecording)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct SetRecording {
     pub method: SetRecordingMethod,
     pub params: SetRecordingParams,
+}
+impl SetRecording {
+    pub const IDENTIFIER: &'static str = "BackgroundService.setRecording";
 }
 impl crate::CommandResult for SetRecording {
     type Result = super::results::SetRecordingResult;
@@ -113,14 +113,14 @@ pub enum ClearEventsMethod {
     #[serde(rename = "BackgroundService.clearEvents")]
     ClearEvents,
 }
-impl ClearEventsMethod {
-    pub const IDENTIFIER: &'static str = "BackgroundService.clearEvents";
-}
 #[doc = "Clears all stored data for the service.\n[clearEvents](https://chromedevtools.github.io/devtools-protocol/tot/BackgroundService/#method-clearEvents)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ClearEvents {
     pub method: ClearEventsMethod,
     pub params: ClearEventsParams,
+}
+impl ClearEvents {
+    pub const IDENTIFIER: &'static str = "BackgroundService.clearEvents";
 }
 impl crate::CommandResult for ClearEvents {
     type Result = super::results::ClearEventsResult;

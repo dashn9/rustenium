@@ -7,14 +7,14 @@ pub enum DisableMethod {
     #[serde(rename = "Fetch.disable")]
     Disable,
 }
-impl DisableMethod {
-    pub const IDENTIFIER: &'static str = "Fetch.disable";
-}
 #[doc = "Disables the fetch domain.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Fetch/#method-disable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
+}
+impl Disable {
+    pub const IDENTIFIER: &'static str = "Fetch.disable";
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -38,14 +38,14 @@ pub enum EnableMethod {
     #[serde(rename = "Fetch.enable")]
     Enable,
 }
-impl EnableMethod {
-    pub const IDENTIFIER: &'static str = "Fetch.enable";
-}
 #[doc = "Enables issuing of requestPaused events. A request will be paused until client\ncalls one of failRequest, fulfillRequest or continueRequest/continueWithAuth.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Fetch/#method-enable)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
+}
+impl Enable {
+    pub const IDENTIFIER: &'static str = "Fetch.enable";
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -76,14 +76,14 @@ pub enum FailRequestMethod {
     #[serde(rename = "Fetch.failRequest")]
     FailRequest,
 }
-impl FailRequestMethod {
-    pub const IDENTIFIER: &'static str = "Fetch.failRequest";
-}
 #[doc = "Causes the request to fail with specified reason.\n[failRequest](https://chromedevtools.github.io/devtools-protocol/tot/Fetch/#method-failRequest)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct FailRequest {
     pub method: FailRequestMethod,
     pub params: FailRequestParams,
+}
+impl FailRequest {
+    pub const IDENTIFIER: &'static str = "Fetch.failRequest";
 }
 impl crate::CommandResult for FailRequest {
     type Result = super::results::FailRequestResult;
@@ -138,14 +138,14 @@ pub enum FulfillRequestMethod {
     #[serde(rename = "Fetch.fulfillRequest")]
     FulfillRequest,
 }
-impl FulfillRequestMethod {
-    pub const IDENTIFIER: &'static str = "Fetch.fulfillRequest";
-}
 #[doc = "Provides response to the request.\n[fulfillRequest](https://chromedevtools.github.io/devtools-protocol/tot/Fetch/#method-fulfillRequest)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct FulfillRequest {
     pub method: FulfillRequestMethod,
     pub params: FulfillRequestParams,
+}
+impl FulfillRequest {
+    pub const IDENTIFIER: &'static str = "Fetch.fulfillRequest";
 }
 impl crate::CommandResult for FulfillRequest {
     type Result = super::results::FulfillRequestResult;
@@ -199,14 +199,14 @@ pub enum ContinueRequestMethod {
     #[serde(rename = "Fetch.continueRequest")]
     ContinueRequest,
 }
-impl ContinueRequestMethod {
-    pub const IDENTIFIER: &'static str = "Fetch.continueRequest";
-}
 #[doc = "Continues the request, optionally modifying some of its parameters.\n[continueRequest](https://chromedevtools.github.io/devtools-protocol/tot/Fetch/#method-continueRequest)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ContinueRequest {
     pub method: ContinueRequestMethod,
     pub params: ContinueRequestParams,
+}
+impl ContinueRequest {
+    pub const IDENTIFIER: &'static str = "Fetch.continueRequest";
 }
 impl crate::CommandResult for ContinueRequest {
     type Result = super::results::ContinueRequestResult;
@@ -237,14 +237,14 @@ pub enum ContinueWithAuthMethod {
     #[serde(rename = "Fetch.continueWithAuth")]
     ContinueWithAuth,
 }
-impl ContinueWithAuthMethod {
-    pub const IDENTIFIER: &'static str = "Fetch.continueWithAuth";
-}
 #[doc = "Continues a request supplying authChallengeResponse following authRequired event.\n[continueWithAuth](https://chromedevtools.github.io/devtools-protocol/tot/Fetch/#method-continueWithAuth)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ContinueWithAuth {
     pub method: ContinueWithAuthMethod,
     pub params: ContinueWithAuthParams,
+}
+impl ContinueWithAuth {
+    pub const IDENTIFIER: &'static str = "Fetch.continueWithAuth";
 }
 impl crate::CommandResult for ContinueWithAuth {
     type Result = super::results::ContinueWithAuthResult;
@@ -292,14 +292,14 @@ pub enum ContinueResponseMethod {
     #[serde(rename = "Fetch.continueResponse")]
     ContinueResponse,
 }
-impl ContinueResponseMethod {
-    pub const IDENTIFIER: &'static str = "Fetch.continueResponse";
-}
 #[doc = "Continues loading of the paused response, optionally modifying the\nresponse headers. If either responseCode or headers are modified, all of them\nmust be present.\n[continueResponse](https://chromedevtools.github.io/devtools-protocol/tot/Fetch/#method-continueResponse)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct ContinueResponse {
     pub method: ContinueResponseMethod,
     pub params: ContinueResponseParams,
+}
+impl ContinueResponse {
+    pub const IDENTIFIER: &'static str = "Fetch.continueResponse";
 }
 impl crate::CommandResult for ContinueResponse {
     type Result = super::results::ContinueResponseResult;
@@ -323,14 +323,14 @@ pub enum GetResponseBodyMethod {
     #[serde(rename = "Fetch.getResponseBody")]
     GetResponseBody,
 }
-impl GetResponseBodyMethod {
-    pub const IDENTIFIER: &'static str = "Fetch.getResponseBody";
-}
 #[doc = "Causes the body of the response to be received from the server and\nreturned as a single string. May only be issued for a request that\nis paused in the Response stage and is mutually exclusive with\ntakeResponseBodyForInterceptionAsStream. Calling other methods that\naffect the request or disabling fetch domain before body is received\nresults in an undefined behavior.\nNote that the response body is not available for redirects. Requests\npaused in the _redirect received_ state may be differentiated by\n`responseCode` and presence of `location` response header, see\ncomments to `requestPaused` for details.\n[getResponseBody](https://chromedevtools.github.io/devtools-protocol/tot/Fetch/#method-getResponseBody)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct GetResponseBody {
     pub method: GetResponseBodyMethod,
     pub params: GetResponseBodyParams,
+}
+impl GetResponseBody {
+    pub const IDENTIFIER: &'static str = "Fetch.getResponseBody";
 }
 impl crate::CommandResult for GetResponseBody {
     type Result = super::results::GetResponseBodyResult;
@@ -353,14 +353,14 @@ pub enum TakeResponseBodyAsStreamMethod {
     #[serde(rename = "Fetch.takeResponseBodyAsStream")]
     TakeResponseBodyAsStream,
 }
-impl TakeResponseBodyAsStreamMethod {
-    pub const IDENTIFIER: &'static str = "Fetch.takeResponseBodyAsStream";
-}
 #[doc = "Returns a handle to the stream representing the response body.\nThe request must be paused in the HeadersReceived stage.\nNote that after this command the request can't be continued\nas is -- client either needs to cancel it or to provide the\nresponse body.\nThe stream only supports sequential read, IO.read will fail if the position\nis specified.\nThis method is mutually exclusive with getResponseBody.\nCalling other methods that affect the request or disabling fetch\ndomain before body is received results in an undefined behavior.\n[takeResponseBodyAsStream](https://chromedevtools.github.io/devtools-protocol/tot/Fetch/#method-takeResponseBodyAsStream)"]
 #[derive(Debug, Clone, PartialEq)]
 pub struct TakeResponseBodyAsStream {
     pub method: TakeResponseBodyAsStreamMethod,
     pub params: TakeResponseBodyAsStreamParams,
+}
+impl TakeResponseBodyAsStream {
+    pub const IDENTIFIER: &'static str = "Fetch.takeResponseBodyAsStream";
 }
 impl crate::CommandResult for TakeResponseBodyAsStream {
     type Result = super::results::TakeResponseBodyAsStreamResult;
