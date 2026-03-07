@@ -1,7 +1,7 @@
 use super::commands::*;
 impl Enable {
     pub fn builder() -> EnableBuilder {
-        EnableBuilder::default()
+        <EnableBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -24,7 +24,7 @@ impl EnableBuilder {
 }
 impl AddVirtualAuthenticator {
     pub fn builder() -> AddVirtualAuthenticatorBuilder {
-        AddVirtualAuthenticatorBuilder::default()
+        <AddVirtualAuthenticatorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -52,7 +52,7 @@ impl AddVirtualAuthenticatorBuilder {
 }
 impl SetResponseOverrideBits {
     pub fn builder() -> SetResponseOverrideBitsBuilder {
-        SetResponseOverrideBitsBuilder::default()
+        <SetResponseOverrideBitsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -101,7 +101,7 @@ impl SetResponseOverrideBitsBuilder {
 }
 impl RemoveVirtualAuthenticator {
     pub fn builder() -> RemoveVirtualAuthenticatorBuilder {
-        RemoveVirtualAuthenticatorBuilder::default()
+        <RemoveVirtualAuthenticatorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -132,7 +132,7 @@ impl RemoveVirtualAuthenticatorBuilder {
 }
 impl AddCredential {
     pub fn builder() -> AddCredentialBuilder {
-        AddCredentialBuilder::default()
+        <AddCredentialBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -171,13 +171,13 @@ impl AddCredentialBuilder {
 }
 impl GetCredential {
     pub fn builder() -> GetCredentialBuilder {
-        GetCredentialBuilder::default()
+        <GetCredentialBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetCredentialBuilder {
     authenticator_id: Option<super::types::AuthenticatorId>,
-    credential_id: Option<super::super::super::Binary>,
+    credential_id: Option<crate::Binary>,
 }
 impl GetCredentialBuilder {
     pub fn authenticator_id(
@@ -187,7 +187,7 @@ impl GetCredentialBuilder {
         self.authenticator_id = Some(authenticator_id.into());
         self
     }
-    pub fn credential_id(mut self, credential_id: impl Into<super::super::super::Binary>) -> Self {
+    pub fn credential_id(mut self, credential_id: impl Into<crate::Binary>) -> Self {
         self.credential_id = Some(credential_id.into());
         self
     }
@@ -210,7 +210,7 @@ impl GetCredentialBuilder {
 }
 impl GetCredentials {
     pub fn builder() -> GetCredentialsBuilder {
-        GetCredentialsBuilder::default()
+        <GetCredentialsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -241,13 +241,13 @@ impl GetCredentialsBuilder {
 }
 impl RemoveCredential {
     pub fn builder() -> RemoveCredentialBuilder {
-        RemoveCredentialBuilder::default()
+        <RemoveCredentialBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct RemoveCredentialBuilder {
     authenticator_id: Option<super::types::AuthenticatorId>,
-    credential_id: Option<super::super::super::Binary>,
+    credential_id: Option<crate::Binary>,
 }
 impl RemoveCredentialBuilder {
     pub fn authenticator_id(
@@ -257,7 +257,7 @@ impl RemoveCredentialBuilder {
         self.authenticator_id = Some(authenticator_id.into());
         self
     }
-    pub fn credential_id(mut self, credential_id: impl Into<super::super::super::Binary>) -> Self {
+    pub fn credential_id(mut self, credential_id: impl Into<crate::Binary>) -> Self {
         self.credential_id = Some(credential_id.into());
         self
     }
@@ -280,7 +280,7 @@ impl RemoveCredentialBuilder {
 }
 impl ClearCredentials {
     pub fn builder() -> ClearCredentialsBuilder {
-        ClearCredentialsBuilder::default()
+        <ClearCredentialsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -311,7 +311,7 @@ impl ClearCredentialsBuilder {
 }
 impl SetUserVerified {
     pub fn builder() -> SetUserVerifiedBuilder {
-        SetUserVerifiedBuilder::default()
+        <SetUserVerifiedBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -353,7 +353,7 @@ impl SetUserVerifiedBuilder {
 }
 impl SetAutomaticPresenceSimulation {
     pub fn builder() -> SetAutomaticPresenceSimulationBuilder {
-        SetAutomaticPresenceSimulationBuilder::default()
+        <SetAutomaticPresenceSimulationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -392,13 +392,13 @@ impl SetAutomaticPresenceSimulationBuilder {
 }
 impl SetCredentialProperties {
     pub fn builder() -> SetCredentialPropertiesBuilder {
-        SetCredentialPropertiesBuilder::default()
+        <SetCredentialPropertiesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct SetCredentialPropertiesBuilder {
     authenticator_id: Option<super::types::AuthenticatorId>,
-    credential_id: Option<super::super::super::Binary>,
+    credential_id: Option<crate::Binary>,
     backup_eligibility: Option<bool>,
     backup_state: Option<bool>,
 }
@@ -410,7 +410,7 @@ impl SetCredentialPropertiesBuilder {
         self.authenticator_id = Some(authenticator_id.into());
         self
     }
-    pub fn credential_id(mut self, credential_id: impl Into<super::super::super::Binary>) -> Self {
+    pub fn credential_id(mut self, credential_id: impl Into<crate::Binary>) -> Self {
         self.credential_id = Some(credential_id.into());
         self
     }

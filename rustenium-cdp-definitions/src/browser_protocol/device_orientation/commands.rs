@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 #[doc = "Clears the overridden Device Orientation.\n[clearDeviceOrientationOverride](https://chromedevtools.github.io/devtools-protocol/tot/DeviceOrientation/#method-clearDeviceOrientationOverride)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClearDeviceOrientationOverrideParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum ClearDeviceOrientationOverrideMethod {
@@ -16,7 +16,7 @@ pub struct ClearDeviceOrientationOverride {
     pub method: ClearDeviceOrientationOverrideMethod,
     pub params: ClearDeviceOrientationOverrideParams,
 }
-impl super::super::super::CommandResult for ClearDeviceOrientationOverride {
+impl crate::CommandResult for ClearDeviceOrientationOverride {
     type Result = super::results::ClearDeviceOrientationOverrideResult;
 }
 #[doc = "Overrides the Device Orientation.\n[setDeviceOrientationOverride](https://chromedevtools.github.io/devtools-protocol/tot/DeviceOrientation/#method-setDeviceOrientationOverride)"]
@@ -55,7 +55,7 @@ pub struct SetDeviceOrientationOverride {
     pub method: SetDeviceOrientationOverrideMethod,
     pub params: SetDeviceOrientationOverrideParams,
 }
-impl super::super::super::CommandResult for SetDeviceOrientationOverride {
+impl crate::CommandResult for SetDeviceOrientationOverride {
     type Result = super::results::SetDeviceOrientationOverrideResult;
 }
 group_enum ! (DeviceOrientationCommands { ClearDeviceOrientationOverride (ClearDeviceOrientationOverride) , SetDeviceOrientationOverride (SetDeviceOrientationOverride) });

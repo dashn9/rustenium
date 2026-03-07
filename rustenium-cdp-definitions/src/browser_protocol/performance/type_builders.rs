@@ -1,7 +1,7 @@
 use super::types::*;
 impl Metric {
     pub fn builder() -> MetricBuilder {
-        MetricBuilder::default()
+        <MetricBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

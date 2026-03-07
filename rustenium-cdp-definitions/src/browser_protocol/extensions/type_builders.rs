@@ -1,7 +1,7 @@
 use super::types::*;
 impl ExtensionInfo {
     pub fn builder() -> ExtensionInfoBuilder {
-        ExtensionInfoBuilder::default()
+        <ExtensionInfoBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

@@ -5,3 +5,7 @@ pub struct DisableResult {}
 pub struct EnableResult {}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetIgnoreCertificateErrorsResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct HandleCertificateErrorResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetOverrideCertificateErrorsResult {}

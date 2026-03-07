@@ -1,7 +1,7 @@
 use super::commands::*;
 impl SetPressureNotificationsSuppressed {
     pub fn builder() -> SetPressureNotificationsSuppressedBuilder {
-        SetPressureNotificationsSuppressedBuilder::default()
+        <SetPressureNotificationsSuppressedBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -26,7 +26,7 @@ impl SetPressureNotificationsSuppressedBuilder {
 }
 impl SimulatePressureNotification {
     pub fn builder() -> SimulatePressureNotificationBuilder {
-        SimulatePressureNotificationBuilder::default()
+        <SimulatePressureNotificationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -51,7 +51,7 @@ impl SimulatePressureNotificationBuilder {
 }
 impl StartSampling {
     pub fn builder() -> StartSamplingBuilder {
-        StartSamplingBuilder::default()
+        <StartSamplingBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

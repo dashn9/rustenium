@@ -1,7 +1,7 @@
 use super::types::*;
 impl StorageId {
     pub fn builder() -> StorageIdBuilder {
-        StorageIdBuilder::default()
+        <StorageIdBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

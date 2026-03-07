@@ -1,7 +1,7 @@
 use super::types::*;
 impl ServiceWorkerRegistration {
     pub fn builder() -> ServiceWorkerRegistrationBuilder {
-        ServiceWorkerRegistrationBuilder::default()
+        <ServiceWorkerRegistrationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -39,7 +39,7 @@ impl ServiceWorkerRegistrationBuilder {
 }
 impl ServiceWorkerVersion {
     pub fn builder() -> ServiceWorkerVersionBuilder {
-        ServiceWorkerVersionBuilder::default()
+        <ServiceWorkerVersionBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -51,8 +51,8 @@ pub struct ServiceWorkerVersionBuilder {
     status: Option<ServiceWorkerVersionStatus>,
     script_last_modified: Option<f64>,
     script_response_time: Option<f64>,
-    controlled_clients: Option<Vec<super::super::target::types::TargetId>>,
-    target_id: Option<super::super::target::types::TargetId>,
+    controlled_clients: Option<Vec<crate::browser_protocol::target::types::TargetId>>,
+    target_id: Option<crate::browser_protocol::target::types::TargetId>,
     router_rules: Option<String>,
 }
 impl ServiceWorkerVersionBuilder {
@@ -89,7 +89,7 @@ impl ServiceWorkerVersionBuilder {
     }
     pub fn controlled_client(
         mut self,
-        controlled_client: impl Into<super::super::target::types::TargetId>,
+        controlled_client: impl Into<crate::browser_protocol::target::types::TargetId>,
     ) -> Self {
         let v = self.controlled_clients.get_or_insert(Vec::new());
         v.push(controlled_client.into());
@@ -98,7 +98,7 @@ impl ServiceWorkerVersionBuilder {
     pub fn controlled_clients<I, S>(mut self, controlled_clients: I) -> Self
     where
         I: IntoIterator<Item = S>,
-        S: Into<super::super::target::types::TargetId>,
+        S: Into<crate::browser_protocol::target::types::TargetId>,
     {
         let v = self.controlled_clients.get_or_insert(Vec::new());
         for val in controlled_clients {
@@ -108,7 +108,7 @@ impl ServiceWorkerVersionBuilder {
     }
     pub fn target_id(
         mut self,
-        target_id: impl Into<super::super::target::types::TargetId>,
+        target_id: impl Into<crate::browser_protocol::target::types::TargetId>,
     ) -> Self {
         self.target_id = Some(target_id.into());
         self
@@ -144,7 +144,7 @@ impl ServiceWorkerVersionBuilder {
 }
 impl ServiceWorkerErrorMessage {
     pub fn builder() -> ServiceWorkerErrorMessageBuilder {
-        ServiceWorkerErrorMessageBuilder::default()
+        <ServiceWorkerErrorMessageBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

@@ -189,19 +189,19 @@ impl KeyRange {
 pub struct DataEntry {
     #[doc = "Key object."]
     #[serde(rename = "key")]
-    pub key: super::super::super::js_protocol::runtime::types::RemoteObject,
+    pub key: crate::js_protocol::runtime::types::RemoteObject,
     #[doc = "Primary key object."]
     #[serde(rename = "primaryKey")]
-    pub primary_key: super::super::super::js_protocol::runtime::types::RemoteObject,
+    pub primary_key: crate::js_protocol::runtime::types::RemoteObject,
     #[doc = "Value object."]
     #[serde(rename = "value")]
-    pub value: super::super::super::js_protocol::runtime::types::RemoteObject,
+    pub value: crate::js_protocol::runtime::types::RemoteObject,
 }
 impl DataEntry {
     pub fn new(
-        key: impl Into<super::super::super::js_protocol::runtime::types::RemoteObject>,
-        primary_key: impl Into<super::super::super::js_protocol::runtime::types::RemoteObject>,
-        value: impl Into<super::super::super::js_protocol::runtime::types::RemoteObject>,
+        key: impl Into<crate::js_protocol::runtime::types::RemoteObject>,
+        primary_key: impl Into<crate::js_protocol::runtime::types::RemoteObject>,
+        value: impl Into<crate::js_protocol::runtime::types::RemoteObject>,
     ) -> Self {
         Self {
             key: key.into(),

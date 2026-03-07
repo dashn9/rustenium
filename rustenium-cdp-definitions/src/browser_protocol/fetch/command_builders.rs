@@ -1,7 +1,7 @@
 use super::commands::*;
 impl Enable {
     pub fn builder() -> EnableBuilder {
-        EnableBuilder::default()
+        <EnableBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -42,13 +42,13 @@ impl EnableBuilder {
 }
 impl FailRequest {
     pub fn builder() -> FailRequestBuilder {
-        FailRequestBuilder::default()
+        <FailRequestBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct FailRequestBuilder {
     request_id: Option<super::types::RequestId>,
-    error_reason: Option<super::super::network::types::ErrorReason>,
+    error_reason: Option<crate::browser_protocol::network::types::ErrorReason>,
 }
 impl FailRequestBuilder {
     pub fn request_id(mut self, request_id: impl Into<super::types::RequestId>) -> Self {
@@ -57,7 +57,7 @@ impl FailRequestBuilder {
     }
     pub fn error_reason(
         mut self,
-        error_reason: impl Into<super::super::network::types::ErrorReason>,
+        error_reason: impl Into<crate::browser_protocol::network::types::ErrorReason>,
     ) -> Self {
         self.error_reason = Some(error_reason.into());
         self
@@ -78,7 +78,7 @@ impl FailRequestBuilder {
 }
 impl FulfillRequest {
     pub fn builder() -> FulfillRequestBuilder {
-        FulfillRequestBuilder::default()
+        <FulfillRequestBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -86,8 +86,8 @@ pub struct FulfillRequestBuilder {
     request_id: Option<super::types::RequestId>,
     response_code: Option<i64>,
     response_headers: Option<Vec<super::types::HeaderEntry>>,
-    binary_response_headers: Option<super::super::super::Binary>,
-    body: Option<super::super::super::Binary>,
+    binary_response_headers: Option<crate::Binary>,
+    body: Option<crate::Binary>,
     response_phrase: Option<String>,
 }
 impl FulfillRequestBuilder {
@@ -120,12 +120,12 @@ impl FulfillRequestBuilder {
     }
     pub fn binary_response_headers(
         mut self,
-        binary_response_headers: impl Into<super::super::super::Binary>,
+        binary_response_headers: impl Into<crate::Binary>,
     ) -> Self {
         self.binary_response_headers = Some(binary_response_headers.into());
         self
     }
-    pub fn body(mut self, body: impl Into<super::super::super::Binary>) -> Self {
+    pub fn body(mut self, body: impl Into<crate::Binary>) -> Self {
         self.body = Some(body.into());
         self
     }
@@ -153,7 +153,7 @@ impl FulfillRequestBuilder {
 }
 impl ContinueRequest {
     pub fn builder() -> ContinueRequestBuilder {
-        ContinueRequestBuilder::default()
+        <ContinueRequestBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -161,7 +161,7 @@ pub struct ContinueRequestBuilder {
     request_id: Option<super::types::RequestId>,
     url: Option<String>,
     method: Option<String>,
-    post_data: Option<super::super::super::Binary>,
+    post_data: Option<crate::Binary>,
     headers: Option<Vec<super::types::HeaderEntry>>,
     intercept_response: Option<bool>,
 }
@@ -178,7 +178,7 @@ impl ContinueRequestBuilder {
         self.method = Some(method.into());
         self
     }
-    pub fn post_data(mut self, post_data: impl Into<super::super::super::Binary>) -> Self {
+    pub fn post_data(mut self, post_data: impl Into<crate::Binary>) -> Self {
         self.post_data = Some(post_data.into());
         self
     }
@@ -220,7 +220,7 @@ impl ContinueRequestBuilder {
 }
 impl ContinueWithAuth {
     pub fn builder() -> ContinueWithAuthBuilder {
-        ContinueWithAuthBuilder::default()
+        <ContinueWithAuthBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -259,7 +259,7 @@ impl ContinueWithAuthBuilder {
 }
 impl ContinueResponse {
     pub fn builder() -> ContinueResponseBuilder {
-        ContinueResponseBuilder::default()
+        <ContinueResponseBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -268,7 +268,7 @@ pub struct ContinueResponseBuilder {
     response_code: Option<i64>,
     response_phrase: Option<String>,
     response_headers: Option<Vec<super::types::HeaderEntry>>,
-    binary_response_headers: Option<super::super::super::Binary>,
+    binary_response_headers: Option<crate::Binary>,
 }
 impl ContinueResponseBuilder {
     pub fn request_id(mut self, request_id: impl Into<super::types::RequestId>) -> Self {
@@ -304,7 +304,7 @@ impl ContinueResponseBuilder {
     }
     pub fn binary_response_headers(
         mut self,
-        binary_response_headers: impl Into<super::super::super::Binary>,
+        binary_response_headers: impl Into<crate::Binary>,
     ) -> Self {
         self.binary_response_headers = Some(binary_response_headers.into());
         self
@@ -326,7 +326,7 @@ impl ContinueResponseBuilder {
 }
 impl GetResponseBody {
     pub fn builder() -> GetResponseBodyBuilder {
-        GetResponseBodyBuilder::default()
+        <GetResponseBodyBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -351,7 +351,7 @@ impl GetResponseBodyBuilder {
 }
 impl TakeResponseBodyAsStream {
     pub fn builder() -> TakeResponseBodyAsStreamBuilder {
-        TakeResponseBodyAsStreamBuilder::default()
+        <TakeResponseBodyAsStreamBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

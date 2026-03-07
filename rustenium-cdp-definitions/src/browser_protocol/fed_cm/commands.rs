@@ -20,10 +20,10 @@ pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
 }
-impl super::super::super::CommandResult for Enable {
+impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
 }
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DisableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum DisableMethod {
@@ -38,7 +38,7 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
-impl super::super::super::CommandResult for Disable {
+impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -69,7 +69,7 @@ pub struct SelectAccount {
     pub method: SelectAccountMethod,
     pub params: SelectAccountParams,
 }
-impl super::super::super::CommandResult for SelectAccount {
+impl crate::CommandResult for SelectAccount {
     type Result = super::results::SelectAccountResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -103,7 +103,7 @@ pub struct ClickDialogButton {
     pub method: ClickDialogButtonMethod,
     pub params: ClickDialogButtonParams,
 }
-impl super::super::super::CommandResult for ClickDialogButton {
+impl crate::CommandResult for ClickDialogButton {
     type Result = super::results::ClickDialogButtonResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -141,7 +141,7 @@ pub struct OpenUrl {
     pub method: OpenUrlMethod,
     pub params: OpenUrlParams,
 }
-impl super::super::super::CommandResult for OpenUrl {
+impl crate::CommandResult for OpenUrl {
     type Result = super::results::OpenUrlResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -179,11 +179,11 @@ pub struct DismissDialog {
     pub method: DismissDialogMethod,
     pub params: DismissDialogParams,
 }
-impl super::super::super::CommandResult for DismissDialog {
+impl crate::CommandResult for DismissDialog {
     type Result = super::results::DismissDialogResult;
 }
 #[doc = "Resets the cooldown time, if any, to allow the next FedCM call to show\na dialog even if one was recently dismissed by the user.\n[resetCooldown](https://chromedevtools.github.io/devtools-protocol/tot/FedCm/#method-resetCooldown)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResetCooldownParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum ResetCooldownMethod {
@@ -199,7 +199,7 @@ pub struct ResetCooldown {
     pub method: ResetCooldownMethod,
     pub params: ResetCooldownParams,
 }
-impl super::super::super::CommandResult for ResetCooldown {
+impl crate::CommandResult for ResetCooldown {
     type Result = super::results::ResetCooldownResult;
 }
 group_enum ! (FedCmCommands { Enable (Enable) , Disable (Disable) , SelectAccount (SelectAccount) , ClickDialogButton (ClickDialogButton) , OpenUrl (OpenUrl) , DismissDialog (DismissDialog) , ResetCooldown (ResetCooldown) });

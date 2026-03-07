@@ -52,7 +52,7 @@ pub struct RequestPattern {
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub resource_type: Option<super::super::network::types::ResourceType>,
+    pub resource_type: Option<crate::browser_protocol::network::types::ResourceType>,
     #[doc = "Stage at which to begin intercepting requests. Default is Request."]
     #[serde(rename = "requestStage")]
     #[serde(skip_serializing_if = "Option::is_none")]

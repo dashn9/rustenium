@@ -61,7 +61,7 @@ pub struct DispatchDragEvent {
     pub method: DispatchDragEventMethod,
     pub params: DispatchDragEventParams,
 }
-impl super::super::super::CommandResult for DispatchDragEvent {
+impl crate::CommandResult for DispatchDragEvent {
     type Result = super::results::DispatchDragEventResult;
 }
 #[doc = "Dispatches a key event to the page.\n[dispatchKeyEvent](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-dispatchKeyEvent)"]
@@ -188,7 +188,7 @@ pub struct DispatchKeyEvent {
     pub method: DispatchKeyEventMethod,
     pub params: DispatchKeyEventParams,
 }
-impl super::super::super::CommandResult for DispatchKeyEvent {
+impl crate::CommandResult for DispatchKeyEvent {
     type Result = super::results::DispatchKeyEventResult;
 }
 #[doc = "This method emulates inserting text that doesn't come from a key press,\nfor example an emoji keyboard or an IME.\n[insertText](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-insertText)"]
@@ -222,7 +222,7 @@ pub struct InsertText {
     pub method: InsertTextMethod,
     pub params: InsertTextParams,
 }
-impl super::super::super::CommandResult for InsertText {
+impl crate::CommandResult for InsertText {
     type Result = super::results::InsertTextResult;
 }
 #[doc = "This method sets the current candidate text for IME.\nUse imeCommitComposition to commit the final text.\nUse imeSetComposition with empty string as text to cancel composition.\n[imeSetComposition](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-imeSetComposition)"]
@@ -277,7 +277,7 @@ pub struct ImeSetComposition {
     pub method: ImeSetCompositionMethod,
     pub params: ImeSetCompositionParams,
 }
-impl super::super::super::CommandResult for ImeSetComposition {
+impl crate::CommandResult for ImeSetComposition {
     type Result = super::results::ImeSetCompositionResult;
 }
 #[doc = "Dispatches a mouse event to the page.\n[dispatchMouseEvent](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-dispatchMouseEvent)"]
@@ -418,7 +418,7 @@ pub struct DispatchMouseEvent {
     pub method: DispatchMouseEventMethod,
     pub params: DispatchMouseEventParams,
 }
-impl super::super::super::CommandResult for DispatchMouseEvent {
+impl crate::CommandResult for DispatchMouseEvent {
     type Result = super::results::DispatchMouseEventResult;
 }
 #[doc = "Dispatches a touch event to the page.\n[dispatchTouchEvent](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-dispatchTouchEvent)"]
@@ -481,11 +481,11 @@ pub struct DispatchTouchEvent {
     pub method: DispatchTouchEventMethod,
     pub params: DispatchTouchEventParams,
 }
-impl super::super::super::CommandResult for DispatchTouchEvent {
+impl crate::CommandResult for DispatchTouchEvent {
     type Result = super::results::DispatchTouchEventResult;
 }
 #[doc = "Cancels any active dragging in the page.\n[cancelDragging](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-cancelDragging)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CancelDraggingParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum CancelDraggingMethod {
@@ -501,7 +501,7 @@ pub struct CancelDragging {
     pub method: CancelDraggingMethod,
     pub params: CancelDraggingParams,
 }
-impl super::super::super::CommandResult for CancelDragging {
+impl crate::CommandResult for CancelDragging {
     type Result = super::results::CancelDraggingResult;
 }
 #[doc = "Emulates touch event from the mouse event parameters.\n[emulateTouchFromMouseEvent](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-emulateTouchFromMouseEvent)"]
@@ -591,7 +591,7 @@ pub struct EmulateTouchFromMouseEvent {
     pub method: EmulateTouchFromMouseEventMethod,
     pub params: EmulateTouchFromMouseEventParams,
 }
-impl super::super::super::CommandResult for EmulateTouchFromMouseEvent {
+impl crate::CommandResult for EmulateTouchFromMouseEvent {
     type Result = super::results::EmulateTouchFromMouseEventResult;
 }
 #[doc = "Ignores input events (useful while auditing page).\n[setIgnoreInputEvents](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-setIgnoreInputEvents)"]
@@ -622,7 +622,7 @@ pub struct SetIgnoreInputEvents {
     pub method: SetIgnoreInputEventsMethod,
     pub params: SetIgnoreInputEventsParams,
 }
-impl super::super::super::CommandResult for SetIgnoreInputEvents {
+impl crate::CommandResult for SetIgnoreInputEvents {
     type Result = super::results::SetIgnoreInputEventsResult;
 }
 #[doc = "Prevents default drag and drop behavior and instead emits `Input.dragIntercepted` events.\nDrag and drop behavior can be directly controlled via `Input.dispatchDragEvent`.\n[setInterceptDrags](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-setInterceptDrags)"]
@@ -652,7 +652,7 @@ pub struct SetInterceptDrags {
     pub method: SetInterceptDragsMethod,
     pub params: SetInterceptDragsParams,
 }
-impl super::super::super::CommandResult for SetInterceptDrags {
+impl crate::CommandResult for SetInterceptDrags {
     type Result = super::results::SetInterceptDragsResult;
 }
 #[doc = "Synthesizes a pinch gesture over a time period by issuing appropriate touch events.\n[synthesizePinchGesture](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-synthesizePinchGesture)"]
@@ -703,7 +703,7 @@ pub struct SynthesizePinchGesture {
     pub method: SynthesizePinchGestureMethod,
     pub params: SynthesizePinchGestureParams,
 }
-impl super::super::super::CommandResult for SynthesizePinchGesture {
+impl crate::CommandResult for SynthesizePinchGesture {
     type Result = super::results::SynthesizePinchGestureResult;
 }
 #[doc = "Synthesizes a scroll gesture over a time period by issuing appropriate touch events.\n[synthesizeScrollGesture](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-synthesizeScrollGesture)"]
@@ -798,7 +798,7 @@ pub struct SynthesizeScrollGesture {
     pub method: SynthesizeScrollGestureMethod,
     pub params: SynthesizeScrollGestureParams,
 }
-impl super::super::super::CommandResult for SynthesizeScrollGesture {
+impl crate::CommandResult for SynthesizeScrollGesture {
     type Result = super::results::SynthesizeScrollGestureResult;
 }
 #[doc = "Synthesizes a tap gesture over a time period by issuing appropriate touch events.\n[synthesizeTapGesture](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-synthesizeTapGesture)"]
@@ -851,7 +851,7 @@ pub struct SynthesizeTapGesture {
     pub method: SynthesizeTapGestureMethod,
     pub params: SynthesizeTapGestureParams,
 }
-impl super::super::super::CommandResult for SynthesizeTapGesture {
+impl crate::CommandResult for SynthesizeTapGesture {
     type Result = super::results::SynthesizeTapGestureResult;
 }
 group_enum ! (InputCommands { DispatchDragEvent (DispatchDragEvent) , DispatchKeyEvent (DispatchKeyEvent) , InsertText (InsertText) , ImeSetComposition (ImeSetComposition) , DispatchMouseEvent (DispatchMouseEvent) , DispatchTouchEvent (DispatchTouchEvent) , CancelDragging (CancelDragging) , EmulateTouchFromMouseEvent (EmulateTouchFromMouseEvent) , SetIgnoreInputEvents (SetIgnoreInputEvents) , SetInterceptDrags (SetInterceptDrags) , SynthesizePinchGesture (SynthesizePinchGesture) , SynthesizeScrollGesture (SynthesizeScrollGesture) , SynthesizeTapGesture (SynthesizeTapGesture) });

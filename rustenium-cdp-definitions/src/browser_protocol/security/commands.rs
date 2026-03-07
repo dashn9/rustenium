@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 #[doc = "Disables tracking security state changes.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Security/#method-disable)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DisableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum DisableMethod {
@@ -16,11 +16,11 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
-impl super::super::super::CommandResult for Disable {
+impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
 }
 #[doc = "Enables tracking security state changes.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Security/#method-enable)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EnableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum EnableMethod {
@@ -36,7 +36,7 @@ pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
 }
-impl super::super::super::CommandResult for Enable {
+impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
 }
 #[doc = "Enable/disable whether all certificate errors should be ignored.\n[setIgnoreCertificateErrors](https://chromedevtools.github.io/devtools-protocol/tot/Security/#method-setIgnoreCertificateErrors)"]
@@ -67,7 +67,7 @@ pub struct SetIgnoreCertificateErrors {
     pub method: SetIgnoreCertificateErrorsMethod,
     pub params: SetIgnoreCertificateErrorsParams,
 }
-impl super::super::super::CommandResult for SetIgnoreCertificateErrors {
+impl crate::CommandResult for SetIgnoreCertificateErrors {
     type Result = super::results::SetIgnoreCertificateErrorsResult;
 }
 group_enum ! (SecurityCommands { Disable (Disable) , Enable (Enable) , SetIgnoreCertificateErrors (SetIgnoreCertificateErrors) });

@@ -1,7 +1,7 @@
 use super::types::*;
 impl PromptDevice {
     pub fn builder() -> PromptDeviceBuilder {
-        PromptDeviceBuilder::default()
+        <PromptDeviceBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

@@ -24,11 +24,11 @@ pub struct Clear {
     pub method: ClearMethod,
     pub params: ClearParams,
 }
-impl super::super::super::CommandResult for Clear {
+impl crate::CommandResult for Clear {
     type Result = super::results::ClearResult;
 }
 #[doc = "Disables storage tracking, prevents storage events from being sent to the client.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/DOMStorage/#method-disable)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DisableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum DisableMethod {
@@ -44,11 +44,11 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
-impl super::super::super::CommandResult for Disable {
+impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
 }
 #[doc = "Enables storage tracking, storage events will now be delivered to the client.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/DOMStorage/#method-enable)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EnableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum EnableMethod {
@@ -64,7 +64,7 @@ pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
 }
-impl super::super::super::CommandResult for Enable {
+impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -92,7 +92,7 @@ pub struct GetDomStorageItems {
     pub method: GetDomStorageItemsMethod,
     pub params: GetDomStorageItemsParams,
 }
-impl super::super::super::CommandResult for GetDomStorageItems {
+impl crate::CommandResult for GetDomStorageItems {
     type Result = super::results::GetDomStorageItemsResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -123,7 +123,7 @@ pub struct RemoveDomStorageItem {
     pub method: RemoveDomStorageItemMethod,
     pub params: RemoveDomStorageItemParams,
 }
-impl super::super::super::CommandResult for RemoveDomStorageItem {
+impl crate::CommandResult for RemoveDomStorageItem {
     type Result = super::results::RemoveDomStorageItemResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -161,7 +161,7 @@ pub struct SetDomStorageItem {
     pub method: SetDomStorageItemMethod,
     pub params: SetDomStorageItemParams,
 }
-impl super::super::super::CommandResult for SetDomStorageItem {
+impl crate::CommandResult for SetDomStorageItem {
     type Result = super::results::SetDomStorageItemResult;
 }
 group_enum ! (DomStorageCommands { Clear (Clear) , Disable (Disable) , Enable (Enable) , GetDomStorageItems (GetDomStorageItems) , RemoveDomStorageItem (RemoveDomStorageItem) , SetDomStorageItem (SetDomStorageItem) });

@@ -1,13 +1,13 @@
 use super::types::*;
 impl RequestPattern {
     pub fn builder() -> RequestPatternBuilder {
-        RequestPatternBuilder::default()
+        <RequestPatternBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct RequestPatternBuilder {
     url_pattern: Option<String>,
-    resource_type: Option<super::super::network::types::ResourceType>,
+    resource_type: Option<crate::browser_protocol::network::types::ResourceType>,
     request_stage: Option<RequestStage>,
 }
 impl RequestPatternBuilder {
@@ -17,7 +17,7 @@ impl RequestPatternBuilder {
     }
     pub fn resource_type(
         mut self,
-        resource_type: impl Into<super::super::network::types::ResourceType>,
+        resource_type: impl Into<crate::browser_protocol::network::types::ResourceType>,
     ) -> Self {
         self.resource_type = Some(resource_type.into());
         self
@@ -36,7 +36,7 @@ impl RequestPatternBuilder {
 }
 impl HeaderEntry {
     pub fn builder() -> HeaderEntryBuilder {
-        HeaderEntryBuilder::default()
+        <HeaderEntryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -66,7 +66,7 @@ impl HeaderEntryBuilder {
 }
 impl AuthChallenge {
     pub fn builder() -> AuthChallengeBuilder {
-        AuthChallengeBuilder::default()
+        <AuthChallengeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -110,7 +110,7 @@ impl AuthChallengeBuilder {
 }
 impl AuthChallengeResponse {
     pub fn builder() -> AuthChallengeResponseBuilder {
-        AuthChallengeResponseBuilder::default()
+        <AuthChallengeResponseBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

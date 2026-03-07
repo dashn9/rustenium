@@ -2,6 +2,8 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetPermissionResult {}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct GrantPermissionsResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ResetPermissionsResult {}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetDownloadBehaviorResult {}
@@ -13,18 +15,6 @@ pub struct CloseResult {}
 pub struct CrashResult {}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct CrashGpuProcessResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetWindowBoundsResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetContentsSizeResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetDockTileResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct ExecuteBrowserCommandResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct AddPrivacySandboxEnrollmentOverrideResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct AddPrivacySandboxCoordinatorKeyConfigResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetVersionResult {
     #[doc = "Protocol version."]
@@ -78,3 +68,15 @@ pub struct GetWindowForTargetResult {
     #[serde(rename = "bounds")]
     pub bounds: super::types::Bounds,
 }
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetWindowBoundsResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetContentsSizeResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetDockTileResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ExecuteBrowserCommandResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct AddPrivacySandboxEnrollmentOverrideResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct AddPrivacySandboxCoordinatorKeyConfigResult {}

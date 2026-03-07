@@ -1,7 +1,7 @@
 use super::types::*;
 impl TouchPoint {
     pub fn builder() -> TouchPointBuilder {
-        TouchPointBuilder::default()
+        <TouchPointBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -85,7 +85,7 @@ impl TouchPointBuilder {
 }
 impl DragDataItem {
     pub fn builder() -> DragDataItemBuilder {
-        DragDataItemBuilder::default()
+        <DragDataItemBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -127,7 +127,7 @@ impl DragDataItemBuilder {
 }
 impl DragData {
     pub fn builder() -> DragDataBuilder {
-        DragDataBuilder::default()
+        <DragDataBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

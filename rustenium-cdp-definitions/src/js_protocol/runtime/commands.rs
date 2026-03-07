@@ -39,7 +39,7 @@ pub struct AwaitPromise {
     pub method: AwaitPromiseMethod,
     pub params: AwaitPromiseParams,
 }
-impl super::super::super::CommandResult for AwaitPromise {
+impl crate::CommandResult for AwaitPromise {
     type Result = super::results::AwaitPromiseResult;
 }
 #[doc = "Calls function with given declaration on the given object. Object group of the result is\ninherited from the target object.\n[callFunctionOn](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-callFunctionOn)"]
@@ -147,7 +147,7 @@ pub struct CallFunctionOn {
     pub method: CallFunctionOnMethod,
     pub params: CallFunctionOnParams,
 }
-impl super::super::super::CommandResult for CallFunctionOn {
+impl crate::CommandResult for CallFunctionOn {
     type Result = super::results::CallFunctionOnResult;
 }
 #[doc = "Compiles expression.\n[compileScript](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-compileScript)"]
@@ -196,11 +196,11 @@ pub struct CompileScript {
     pub method: CompileScriptMethod,
     pub params: CompileScriptParams,
 }
-impl super::super::super::CommandResult for CompileScript {
+impl crate::CommandResult for CompileScript {
     type Result = super::results::CompileScriptResult;
 }
 #[doc = "Disables reporting of execution contexts creation.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-disable)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DisableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum DisableMethod {
@@ -216,11 +216,11 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
-impl super::super::super::CommandResult for Disable {
+impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
 }
 #[doc = "Discards collected exceptions and console API calls.\n[discardConsoleEntries](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-discardConsoleEntries)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DiscardConsoleEntriesParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum DiscardConsoleEntriesMethod {
@@ -236,11 +236,11 @@ pub struct DiscardConsoleEntries {
     pub method: DiscardConsoleEntriesMethod,
     pub params: DiscardConsoleEntriesParams,
 }
-impl super::super::super::CommandResult for DiscardConsoleEntries {
+impl crate::CommandResult for DiscardConsoleEntries {
     type Result = super::results::DiscardConsoleEntriesResult;
 }
 #[doc = "Enables reporting of execution contexts creation by means of `executionContextCreated` event.\nWhen the reporting gets enabled the event will be sent immediately for each existing execution\ncontext.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-enable)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EnableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum EnableMethod {
@@ -256,7 +256,7 @@ pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
 }
-impl super::super::super::CommandResult for Enable {
+impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
 }
 #[doc = "Evaluates expression on global object.\n[evaluate](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-evaluate)"]
@@ -382,11 +382,11 @@ pub struct Evaluate {
     pub method: EvaluateMethod,
     pub params: EvaluateParams,
 }
-impl super::super::super::CommandResult for Evaluate {
+impl crate::CommandResult for Evaluate {
     type Result = super::results::EvaluateResult;
 }
 #[doc = "Returns the isolate id.\n[getIsolateId](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-getIsolateId)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetIsolateIdParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum GetIsolateIdMethod {
@@ -402,11 +402,11 @@ pub struct GetIsolateId {
     pub method: GetIsolateIdMethod,
     pub params: GetIsolateIdParams,
 }
-impl super::super::super::CommandResult for GetIsolateId {
+impl crate::CommandResult for GetIsolateId {
     type Result = super::results::GetIsolateIdResult;
 }
 #[doc = "Returns the JavaScript heap usage.\nIt is the total usage of the corresponding isolate not scoped to a particular Runtime.\n[getHeapUsage](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-getHeapUsage)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetHeapUsageParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum GetHeapUsageMethod {
@@ -422,7 +422,7 @@ pub struct GetHeapUsage {
     pub method: GetHeapUsageMethod,
     pub params: GetHeapUsageParams,
 }
-impl super::super::super::CommandResult for GetHeapUsage {
+impl crate::CommandResult for GetHeapUsage {
     type Result = super::results::GetHeapUsageResult;
 }
 #[doc = "Returns properties of a given object. Object group of the result is inherited from the target\nobject.\n[getProperties](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-getProperties)"]
@@ -477,7 +477,7 @@ pub struct GetProperties {
     pub method: GetPropertiesMethod,
     pub params: GetPropertiesParams,
 }
-impl super::super::super::CommandResult for GetProperties {
+impl crate::CommandResult for GetProperties {
     type Result = super::results::GetPropertiesResult;
 }
 #[doc = "Returns all let, const and class variables from global scope.\n[globalLexicalScopeNames](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-globalLexicalScopeNames)"]
@@ -503,7 +503,7 @@ pub struct GlobalLexicalScopeNames {
     pub method: GlobalLexicalScopeNamesMethod,
     pub params: GlobalLexicalScopeNamesParams,
 }
-impl super::super::super::CommandResult for GlobalLexicalScopeNames {
+impl crate::CommandResult for GlobalLexicalScopeNames {
     type Result = super::results::GlobalLexicalScopeNamesResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -538,7 +538,7 @@ pub struct QueryObjects {
     pub method: QueryObjectsMethod,
     pub params: QueryObjectsParams,
 }
-impl super::super::super::CommandResult for QueryObjects {
+impl crate::CommandResult for QueryObjects {
     type Result = super::results::QueryObjectsResult;
 }
 #[doc = "Releases remote object with given id.\n[releaseObject](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-releaseObject)"]
@@ -569,7 +569,7 @@ pub struct ReleaseObject {
     pub method: ReleaseObjectMethod,
     pub params: ReleaseObjectParams,
 }
-impl super::super::super::CommandResult for ReleaseObject {
+impl crate::CommandResult for ReleaseObject {
     type Result = super::results::ReleaseObjectResult;
 }
 #[doc = "Releases all remote objects that belong to a given group.\n[releaseObjectGroup](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-releaseObjectGroup)"]
@@ -605,11 +605,11 @@ pub struct ReleaseObjectGroup {
     pub method: ReleaseObjectGroupMethod,
     pub params: ReleaseObjectGroupParams,
 }
-impl super::super::super::CommandResult for ReleaseObjectGroup {
+impl crate::CommandResult for ReleaseObjectGroup {
     type Result = super::results::ReleaseObjectGroupResult;
 }
 #[doc = "Tells inspected instance to run if it was waiting for debugger to attach.\n[runIfWaitingForDebugger](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-runIfWaitingForDebugger)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RunIfWaitingForDebuggerParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum RunIfWaitingForDebuggerMethod {
@@ -625,7 +625,7 @@ pub struct RunIfWaitingForDebugger {
     pub method: RunIfWaitingForDebuggerMethod,
     pub params: RunIfWaitingForDebuggerParams,
 }
-impl super::super::super::CommandResult for RunIfWaitingForDebugger {
+impl crate::CommandResult for RunIfWaitingForDebugger {
     type Result = super::results::RunIfWaitingForDebuggerResult;
 }
 #[doc = "Runs script with given id in a given context.\n[runScript](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-runScript)"]
@@ -698,7 +698,7 @@ pub struct RunScript {
     pub method: RunScriptMethod,
     pub params: RunScriptParams,
 }
-impl super::super::super::CommandResult for RunScript {
+impl crate::CommandResult for RunScript {
     type Result = super::results::RunScriptResult;
 }
 #[doc = "Enables or disables async call stacks tracking.\n[setAsyncCallStackDepth](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-setAsyncCallStackDepth)"]
@@ -729,7 +729,7 @@ pub struct SetAsyncCallStackDepth {
     pub method: SetAsyncCallStackDepthMethod,
     pub params: SetAsyncCallStackDepthParams,
 }
-impl super::super::super::CommandResult for SetAsyncCallStackDepth {
+impl crate::CommandResult for SetAsyncCallStackDepth {
     type Result = super::results::SetAsyncCallStackDepthResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -757,7 +757,7 @@ pub struct SetCustomObjectFormatterEnabled {
     pub method: SetCustomObjectFormatterEnabledMethod,
     pub params: SetCustomObjectFormatterEnabledParams,
 }
-impl super::super::super::CommandResult for SetCustomObjectFormatterEnabled {
+impl crate::CommandResult for SetCustomObjectFormatterEnabled {
     type Result = super::results::SetCustomObjectFormatterEnabledResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -783,11 +783,11 @@ pub struct SetMaxCallStackSizeToCapture {
     pub method: SetMaxCallStackSizeToCaptureMethod,
     pub params: SetMaxCallStackSizeToCaptureParams,
 }
-impl super::super::super::CommandResult for SetMaxCallStackSizeToCapture {
+impl crate::CommandResult for SetMaxCallStackSizeToCapture {
     type Result = super::results::SetMaxCallStackSizeToCaptureResult;
 }
 #[doc = "Terminate current or next JavaScript execution.\nWill cancel the termination when the outer-most script execution ends.\n[terminateExecution](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-terminateExecution)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TerminateExecutionParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum TerminateExecutionMethod {
@@ -803,7 +803,7 @@ pub struct TerminateExecution {
     pub method: TerminateExecutionMethod,
     pub params: TerminateExecutionParams,
 }
-impl super::super::super::CommandResult for TerminateExecution {
+impl crate::CommandResult for TerminateExecution {
     type Result = super::results::TerminateExecutionResult;
 }
 #[doc = "If executionContextId is empty, adds binding with the given name on the\nglobal objects of all inspected contexts, including those created later,\nbindings survive reloads.\nBinding function takes exactly one argument, this argument should be string,\nin case of any other input, function throws an exception.\nEach binding function call produces Runtime.bindingCalled notification.\n[addBinding](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-addBinding)"]
@@ -844,7 +844,7 @@ pub struct AddBinding {
     pub method: AddBindingMethod,
     pub params: AddBindingParams,
 }
-impl super::super::super::CommandResult for AddBinding {
+impl crate::CommandResult for AddBinding {
     type Result = super::results::AddBindingResult;
 }
 #[doc = "This method does not remove binding function from global object but\nunsubscribes current runtime agent from Runtime.bindingCalled notifications.\n[removeBinding](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-removeBinding)"]
@@ -877,7 +877,7 @@ pub struct RemoveBinding {
     pub method: RemoveBindingMethod,
     pub params: RemoveBindingParams,
 }
-impl super::super::super::CommandResult for RemoveBinding {
+impl crate::CommandResult for RemoveBinding {
     type Result = super::results::RemoveBindingResult;
 }
 #[doc = "This method tries to lookup and populate exception details for a\nJavaScript Error object.\nNote that the stackTrace portion of the resulting exceptionDetails will\nonly be populated if the Runtime domain was enabled at the time when the\nError was thrown.\n[getExceptionDetails](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-getExceptionDetails)"]
@@ -908,7 +908,7 @@ pub struct GetExceptionDetails {
     pub method: GetExceptionDetailsMethod,
     pub params: GetExceptionDetailsParams,
 }
-impl super::super::super::CommandResult for GetExceptionDetails {
+impl crate::CommandResult for GetExceptionDetails {
     type Result = super::results::GetExceptionDetailsResult;
 }
 group_enum ! (RuntimeCommands { AwaitPromise (AwaitPromise) , CallFunctionOn (CallFunctionOn) , CompileScript (CompileScript) , Disable (Disable) , DiscardConsoleEntries (DiscardConsoleEntries) , Enable (Enable) , Evaluate (Evaluate) , GetIsolateId (GetIsolateId) , GetHeapUsage (GetHeapUsage) , GetProperties (GetProperties) , GlobalLexicalScopeNames (GlobalLexicalScopeNames) , QueryObjects (QueryObjects) , ReleaseObject (ReleaseObject) , ReleaseObjectGroup (ReleaseObjectGroup) , RunIfWaitingForDebugger (RunIfWaitingForDebugger) , RunScript (RunScript) , SetAsyncCallStackDepth (SetAsyncCallStackDepth) , SetCustomObjectFormatterEnabled (SetCustomObjectFormatterEnabled) , SetMaxCallStackSizeToCapture (SetMaxCallStackSizeToCapture) , TerminateExecution (TerminateExecution) , AddBinding (AddBinding) , RemoveBinding (RemoveBinding) , GetExceptionDetails (GetExceptionDetails) });

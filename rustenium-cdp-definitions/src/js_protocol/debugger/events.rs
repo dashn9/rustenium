@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 #[doc = "Fired when the virtual machine stopped on breakpoint or exception or any other stop criteria.\n[paused](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#event-paused)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct Paused {
+pub struct PausedParams {
     #[doc = "Call stack the virtual machine stopped on."]
     #[serde(rename = "callFrames")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
@@ -23,12 +23,12 @@ pub struct Paused {
     #[serde(rename = "asyncStackTrace")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub async_stack_trace: Option<super::super::runtime::types::StackTrace>,
+    pub async_stack_trace: Option<crate::js_protocol::runtime::types::StackTrace>,
     #[doc = "Async stack trace, if any."]
     #[serde(rename = "asyncStackTraceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub async_stack_trace_id: Option<super::super::runtime::types::StackTraceId>,
+    pub async_stack_trace_id: Option<crate::js_protocol::runtime::types::StackTraceId>,
 }
 #[doc = "Pause reason."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -60,21 +60,43 @@ pub enum PausedReason {
     #[serde(rename = "step")]
     Step,
 }
-impl Paused {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum PausedMethod {
+    #[serde(rename = "Debugger.paused")]
+    Paused,
+}
+impl PausedMethod {
     pub const IDENTIFIER: &'static str = "Debugger.paused";
 }
+#[doc = "Fired when the virtual machine stopped on breakpoint or exception or any other stop criteria.\n[paused](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#event-paused)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct Paused {
+    pub method: PausedMethod,
+    pub params: PausedParams,
+}
 #[doc = "Fired when the virtual machine resumed execution.\n[resumed](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#event-resumed)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct Resumed {}
-impl Resumed {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ResumedParams {}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum ResumedMethod {
+    #[serde(rename = "Debugger.resumed")]
+    Resumed,
+}
+impl ResumedMethod {
     pub const IDENTIFIER: &'static str = "Debugger.resumed";
+}
+#[doc = "Fired when the virtual machine resumed execution.\n[resumed](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#event-resumed)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct Resumed {
+    pub method: ResumedMethod,
+    pub params: ResumedParams,
 }
 #[doc = "Fired when virtual machine fails to parse the script.\n[scriptFailedToParse](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#event-scriptFailedToParse)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct ScriptFailedToParse {
+pub struct ScriptFailedToParseParams {
     #[doc = "Identifier of the script parsed."]
     #[serde(rename = "scriptId")]
-    pub script_id: super::super::runtime::types::ScriptId,
+    pub script_id: crate::js_protocol::runtime::types::ScriptId,
     #[doc = "URL or name of the script parsed (if any)."]
     #[serde(rename = "url")]
     pub url: String,
@@ -92,7 +114,7 @@ pub struct ScriptFailedToParse {
     pub end_column: i64,
     #[doc = "Specifies script creation context."]
     #[serde(rename = "executionContextId")]
-    pub execution_context_id: super::super::runtime::types::ExecutionContextId,
+    pub execution_context_id: crate::js_protocol::runtime::types::ExecutionContextId,
     #[doc = "Content hash of the script, SHA-256."]
     #[serde(rename = "hash")]
     pub hash: String,
@@ -128,7 +150,7 @@ pub struct ScriptFailedToParse {
     #[serde(rename = "stackTrace")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub stack_trace: Option<super::super::runtime::types::StackTrace>,
+    pub stack_trace: Option<crate::js_protocol::runtime::types::StackTrace>,
     #[doc = "If the scriptLanguage is WebAssembly, the code section offset in the module."]
     #[serde(rename = "codeOffset")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -145,15 +167,26 @@ pub struct ScriptFailedToParse {
     #[serde(default)]
     pub embedder_name: Option<String>,
 }
-impl ScriptFailedToParse {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum ScriptFailedToParseMethod {
+    #[serde(rename = "Debugger.scriptFailedToParse")]
+    ScriptFailedToParse,
+}
+impl ScriptFailedToParseMethod {
     pub const IDENTIFIER: &'static str = "Debugger.scriptFailedToParse";
+}
+#[doc = "Fired when virtual machine fails to parse the script.\n[scriptFailedToParse](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#event-scriptFailedToParse)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct ScriptFailedToParse {
+    pub method: ScriptFailedToParseMethod,
+    pub params: ScriptFailedToParseParams,
 }
 #[doc = "Fired when virtual machine parses script. This event is also fired for all known and uncollected\nscripts upon enabling debugger.\n[scriptParsed](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#event-scriptParsed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct ScriptParsed {
+pub struct ScriptParsedParams {
     #[doc = "Identifier of the script parsed."]
     #[serde(rename = "scriptId")]
-    pub script_id: super::super::runtime::types::ScriptId,
+    pub script_id: crate::js_protocol::runtime::types::ScriptId,
     #[doc = "URL or name of the script parsed (if any)."]
     #[serde(rename = "url")]
     pub url: String,
@@ -171,7 +204,7 @@ pub struct ScriptParsed {
     pub end_column: i64,
     #[doc = "Specifies script creation context."]
     #[serde(rename = "executionContextId")]
-    pub execution_context_id: super::super::runtime::types::ExecutionContextId,
+    pub execution_context_id: crate::js_protocol::runtime::types::ExecutionContextId,
     #[doc = "Content hash of the script, SHA-256."]
     #[serde(rename = "hash")]
     pub hash: String,
@@ -212,7 +245,7 @@ pub struct ScriptParsed {
     #[serde(rename = "stackTrace")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub stack_trace: Option<super::super::runtime::types::StackTrace>,
+    pub stack_trace: Option<crate::js_protocol::runtime::types::StackTrace>,
     #[doc = "If the scriptLanguage is WebAssembly, the code section offset in the module."]
     #[serde(rename = "codeOffset")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -239,7 +272,18 @@ pub struct ScriptParsed {
     #[serde(default)]
     pub resolved_breakpoints: Option<Vec<super::types::ResolvedBreakpoint>>,
 }
-impl ScriptParsed {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum ScriptParsedMethod {
+    #[serde(rename = "Debugger.scriptParsed")]
+    ScriptParsed,
+}
+impl ScriptParsedMethod {
     pub const IDENTIFIER: &'static str = "Debugger.scriptParsed";
+}
+#[doc = "Fired when virtual machine parses script. This event is also fired for all known and uncollected\nscripts upon enabling debugger.\n[scriptParsed](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#event-scriptParsed)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct ScriptParsed {
+    pub method: ScriptParsedMethod,
+    pub params: ScriptParsedParams,
 }
 group_enum ! (DebuggerEvents { Paused (Paused) , Resumed (Resumed) , ScriptFailedToParse (ScriptFailedToParse) , ScriptParsed (ScriptParsed) });

@@ -110,11 +110,11 @@ pub struct ServiceWorkerVersion {
     #[serde(rename = "controlledClients")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub controlled_clients: Option<Vec<super::super::target::types::TargetId>>,
+    pub controlled_clients: Option<Vec<crate::browser_protocol::target::types::TargetId>>,
     #[serde(rename = "targetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub target_id: Option<super::super::target::types::TargetId>,
+    pub target_id: Option<crate::browser_protocol::target::types::TargetId>,
     #[serde(rename = "routerRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]

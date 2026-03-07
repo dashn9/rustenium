@@ -27,10 +27,10 @@ pub struct AddInspectedHeapObject {
     pub method: AddInspectedHeapObjectMethod,
     pub params: AddInspectedHeapObjectParams,
 }
-impl super::super::super::CommandResult for AddInspectedHeapObject {
+impl crate::CommandResult for AddInspectedHeapObject {
     type Result = super::results::AddInspectedHeapObjectResult;
 }
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CollectGarbageParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum CollectGarbageMethod {
@@ -45,10 +45,10 @@ pub struct CollectGarbage {
     pub method: CollectGarbageMethod,
     pub params: CollectGarbageParams,
 }
-impl super::super::super::CommandResult for CollectGarbage {
+impl crate::CommandResult for CollectGarbage {
     type Result = super::results::CollectGarbageResult;
 }
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DisableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum DisableMethod {
@@ -63,10 +63,10 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
-impl super::super::super::CommandResult for Disable {
+impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
 }
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EnableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum EnableMethod {
@@ -81,17 +81,17 @@ pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
 }
-impl super::super::super::CommandResult for Enable {
+impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetHeapObjectIdParams {
     #[doc = "Identifier of the object to get heap object id for."]
     #[serde(rename = "objectId")]
-    pub object_id: super::super::runtime::types::RemoteObjectId,
+    pub object_id: crate::js_protocol::runtime::types::RemoteObjectId,
 }
 impl GetHeapObjectIdParams {
-    pub fn new(object_id: impl Into<super::super::runtime::types::RemoteObjectId>) -> Self {
+    pub fn new(object_id: impl Into<crate::js_protocol::runtime::types::RemoteObjectId>) -> Self {
         Self {
             object_id: object_id.into(),
         }
@@ -110,7 +110,7 @@ pub struct GetHeapObjectId {
     pub method: GetHeapObjectIdMethod,
     pub params: GetHeapObjectIdParams,
 }
-impl super::super::super::CommandResult for GetHeapObjectId {
+impl crate::CommandResult for GetHeapObjectId {
     type Result = super::results::GetHeapObjectIdResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -144,10 +144,10 @@ pub struct GetObjectByHeapObjectId {
     pub method: GetObjectByHeapObjectIdMethod,
     pub params: GetObjectByHeapObjectIdParams,
 }
-impl super::super::super::CommandResult for GetObjectByHeapObjectId {
+impl crate::CommandResult for GetObjectByHeapObjectId {
     type Result = super::results::GetObjectByHeapObjectIdResult;
 }
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetSamplingProfileParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum GetSamplingProfileMethod {
@@ -162,7 +162,7 @@ pub struct GetSamplingProfile {
     pub method: GetSamplingProfileMethod,
     pub params: GetSamplingProfileParams,
 }
-impl super::super::super::CommandResult for GetSamplingProfile {
+impl crate::CommandResult for GetSamplingProfile {
     type Result = super::results::GetSamplingProfileResult;
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -201,7 +201,7 @@ pub struct StartSampling {
     pub method: StartSamplingMethod,
     pub params: StartSamplingParams,
 }
-impl super::super::super::CommandResult for StartSampling {
+impl crate::CommandResult for StartSampling {
     type Result = super::results::StartSamplingResult;
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -224,10 +224,10 @@ pub struct StartTrackingHeapObjects {
     pub method: StartTrackingHeapObjectsMethod,
     pub params: StartTrackingHeapObjectsParams,
 }
-impl super::super::super::CommandResult for StartTrackingHeapObjects {
+impl crate::CommandResult for StartTrackingHeapObjects {
     type Result = super::results::StartTrackingHeapObjectsResult;
 }
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StopSamplingParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum StopSamplingMethod {
@@ -242,7 +242,7 @@ pub struct StopSampling {
     pub method: StopSamplingMethod,
     pub params: StopSamplingParams,
 }
-impl super::super::super::CommandResult for StopSampling {
+impl crate::CommandResult for StopSampling {
     type Result = super::results::StopSamplingResult;
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -276,7 +276,7 @@ pub struct StopTrackingHeapObjects {
     pub method: StopTrackingHeapObjectsMethod,
     pub params: StopTrackingHeapObjectsParams,
 }
-impl super::super::super::CommandResult for StopTrackingHeapObjects {
+impl crate::CommandResult for StopTrackingHeapObjects {
     type Result = super::results::StopTrackingHeapObjectsResult;
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -310,7 +310,7 @@ pub struct TakeHeapSnapshot {
     pub method: TakeHeapSnapshotMethod,
     pub params: TakeHeapSnapshotParams,
 }
-impl super::super::super::CommandResult for TakeHeapSnapshot {
+impl crate::CommandResult for TakeHeapSnapshot {
     type Result = super::results::TakeHeapSnapshotResult;
 }
 group_enum ! (HeapProfilerCommands { AddInspectedHeapObject (AddInspectedHeapObject) , CollectGarbage (CollectGarbage) , Disable (Disable) , Enable (Enable) , GetHeapObjectId (GetHeapObjectId) , GetObjectByHeapObjectId (GetObjectByHeapObjectId) , GetSamplingProfile (GetSamplingProfile) , StartSampling (StartSampling) , StartTrackingHeapObjects (StartTrackingHeapObjects) , StopSampling (StopSampling) , StopTrackingHeapObjects (StopTrackingHeapObjects) , TakeHeapSnapshot (TakeHeapSnapshot) });

@@ -1,7 +1,7 @@
 use super::commands::*;
 impl Bind {
     pub fn builder() -> BindBuilder {
-        BindBuilder::default()
+        <BindBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -26,7 +26,7 @@ impl BindBuilder {
 }
 impl Unbind {
     pub fn builder() -> UnbindBuilder {
-        UnbindBuilder::default()
+        <UnbindBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

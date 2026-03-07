@@ -1,7 +1,7 @@
 use super::commands::*;
 impl DeleteCache {
     pub fn builder() -> DeleteCacheBuilder {
-        DeleteCacheBuilder::default()
+        <DeleteCacheBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -26,7 +26,7 @@ impl DeleteCacheBuilder {
 }
 impl DeleteEntry {
     pub fn builder() -> DeleteEntryBuilder {
-        DeleteEntryBuilder::default()
+        <DeleteEntryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -59,14 +59,14 @@ impl DeleteEntryBuilder {
 }
 impl RequestCacheNames {
     pub fn builder() -> RequestCacheNamesBuilder {
-        RequestCacheNamesBuilder::default()
+        <RequestCacheNamesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct RequestCacheNamesBuilder {
     security_origin: Option<String>,
     storage_key: Option<String>,
-    storage_bucket: Option<super::super::storage::types::StorageBucket>,
+    storage_bucket: Option<crate::browser_protocol::storage::types::StorageBucket>,
 }
 impl RequestCacheNamesBuilder {
     pub fn security_origin(mut self, security_origin: impl Into<String>) -> Self {
@@ -79,7 +79,7 @@ impl RequestCacheNamesBuilder {
     }
     pub fn storage_bucket(
         mut self,
-        storage_bucket: impl Into<super::super::storage::types::StorageBucket>,
+        storage_bucket: impl Into<crate::browser_protocol::storage::types::StorageBucket>,
     ) -> Self {
         self.storage_bucket = Some(storage_bucket.into());
         self
@@ -97,7 +97,7 @@ impl RequestCacheNamesBuilder {
 }
 impl RequestCachedResponse {
     pub fn builder() -> RequestCachedResponseBuilder {
-        RequestCachedResponseBuilder::default()
+        <RequestCachedResponseBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -150,7 +150,7 @@ impl RequestCachedResponseBuilder {
 }
 impl RequestEntries {
     pub fn builder() -> RequestEntriesBuilder {
-        RequestEntriesBuilder::default()
+        <RequestEntriesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

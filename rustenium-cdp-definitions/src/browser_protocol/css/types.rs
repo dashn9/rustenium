@@ -16,7 +16,7 @@ pub enum StyleSheetOrigin {
 pub struct PseudoElementMatches {
     #[doc = "Pseudo element type."]
     #[serde(rename = "pseudoType")]
-    pub pseudo_type: super::super::dom::types::PseudoType,
+    pub pseudo_type: crate::browser_protocol::dom::types::PseudoType,
     #[doc = "Pseudo element custom ident."]
     #[serde(rename = "pseudoIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -29,7 +29,7 @@ pub struct PseudoElementMatches {
 }
 impl PseudoElementMatches {
     pub fn new(
-        pseudo_type: impl Into<super::super::dom::types::PseudoType>,
+        pseudo_type: impl Into<crate::browser_protocol::dom::types::PseudoType>,
         matches: Vec<RuleMatch>,
     ) -> Self {
         Self {
@@ -230,10 +230,10 @@ impl SelectorList {
 pub struct CssStyleSheetHeader {
     #[doc = "The stylesheet identifier."]
     #[serde(rename = "styleSheetId")]
-    pub style_sheet_id: super::super::dom::types::StyleSheetId,
+    pub style_sheet_id: crate::browser_protocol::dom::types::StyleSheetId,
     #[doc = "Owner frame identifier."]
     #[serde(rename = "frameId")]
-    pub frame_id: super::super::page::types::FrameId,
+    pub frame_id: crate::browser_protocol::page::types::FrameId,
     #[doc = "Stylesheet resource URL. Empty if this is a constructed stylesheet created using\nnew CSSStyleSheet() (but non-empty if this is a constructed stylesheet imported\nas a CSS module script)."]
     #[serde(rename = "sourceURL")]
     pub source_url: String,
@@ -252,7 +252,7 @@ pub struct CssStyleSheetHeader {
     #[serde(rename = "ownerNode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub owner_node: Option<super::super::dom::types::BackendNodeId>,
+    pub owner_node: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     #[doc = "Denotes whether the stylesheet is disabled."]
     #[serde(rename = "disabled")]
     pub disabled: bool,
@@ -301,7 +301,7 @@ pub struct CssRule {
     #[serde(rename = "styleSheetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    pub style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     #[doc = "Rule selector data."]
     #[serde(rename = "selectorList")]
     pub selector_list: SelectorList,
@@ -320,7 +320,7 @@ pub struct CssRule {
     #[serde(rename = "originTreeScopeNodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub origin_tree_scope_node_id: Option<super::super::dom::types::BackendNodeId>,
+    pub origin_tree_scope_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     #[doc = "Media list array (for rules involving media queries). The array enumerates media queries\nstarting with the innermost one, going outwards."]
     #[serde(rename = "media")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -406,7 +406,7 @@ pub enum CssRuleType {
 pub struct RuleUsage {
     #[doc = "The css style sheet identifier (absent for user agent stylesheet and user-specified\nstylesheet rules) this rule came from."]
     #[serde(rename = "styleSheetId")]
-    pub style_sheet_id: super::super::dom::types::StyleSheetId,
+    pub style_sheet_id: crate::browser_protocol::dom::types::StyleSheetId,
     #[doc = "Offset of the start of the rule (including selector) from the beginning of the stylesheet."]
     #[serde(rename = "startOffset")]
     pub start_offset: f64,
@@ -419,7 +419,7 @@ pub struct RuleUsage {
 }
 impl RuleUsage {
     pub fn new(
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
         start_offset: impl Into<f64>,
         end_offset: impl Into<f64>,
         used: impl Into<bool>,
@@ -538,7 +538,7 @@ pub struct CssStyle {
     #[serde(rename = "styleSheetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    pub style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     #[doc = "CSS properties in the style."]
     #[serde(rename = "cssProperties")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
@@ -658,7 +658,7 @@ pub struct CssMedia {
     #[serde(rename = "styleSheetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    pub style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     #[doc = "Array of media queries."]
     #[serde(rename = "mediaList")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -766,7 +766,7 @@ pub struct CssContainerQuery {
     #[serde(rename = "styleSheetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    pub style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     #[doc = "Optional name for the container."]
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -776,12 +776,12 @@ pub struct CssContainerQuery {
     #[serde(rename = "physicalAxes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub physical_axes: Option<super::super::dom::types::PhysicalAxes>,
+    pub physical_axes: Option<crate::browser_protocol::dom::types::PhysicalAxes>,
     #[doc = "Optional logical axes queried for the container."]
     #[serde(rename = "logicalAxes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub logical_axes: Option<super::super::dom::types::LogicalAxes>,
+    pub logical_axes: Option<crate::browser_protocol::dom::types::LogicalAxes>,
     #[doc = "true if the query contains scroll-state() queries."]
     #[serde(rename = "queriesScrollState")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -833,7 +833,7 @@ pub struct CssSupports {
     #[serde(rename = "styleSheetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    pub style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
 }
 impl CssSupports {
     pub fn new(text: impl Into<String>, active: impl Into<bool>) -> Self {
@@ -863,7 +863,7 @@ pub struct CssScope {
     #[serde(rename = "styleSheetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    pub style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
 }
 impl CssScope {
     pub fn new(text: impl Into<String>) -> Self {
@@ -897,7 +897,7 @@ pub struct CssLayer {
     #[serde(rename = "styleSheetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    pub style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
 }
 impl CssLayer {
     pub fn new(text: impl Into<String>) -> Self {
@@ -928,7 +928,7 @@ pub struct CssStartingStyle {
     #[serde(rename = "styleSheetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    pub style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
 }
 impl CssStartingStyle {
     pub const IDENTIFIER: &'static str = "CSS.CSSStartingStyle";
@@ -1062,7 +1062,7 @@ pub struct CssTryRule {
     #[serde(rename = "styleSheetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    pub style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     #[doc = "Parent stylesheet's origin."]
     #[serde(rename = "origin")]
     pub origin: StyleSheetOrigin,
@@ -1092,7 +1092,7 @@ pub struct CssPositionTryRule {
     #[serde(rename = "styleSheetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    pub style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     #[doc = "Parent stylesheet's origin."]
     #[serde(rename = "origin")]
     pub origin: StyleSheetOrigin,
@@ -1194,7 +1194,7 @@ pub struct CssAtRule {
     #[serde(rename = "styleSheetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    pub style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     #[doc = "Parent stylesheet's origin."]
     #[serde(rename = "origin")]
     pub origin: StyleSheetOrigin,
@@ -1255,7 +1255,7 @@ pub struct CssPropertyRule {
     #[serde(rename = "styleSheetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    pub style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     #[doc = "Parent stylesheet's origin."]
     #[serde(rename = "origin")]
     pub origin: StyleSheetOrigin,
@@ -1371,7 +1371,7 @@ pub struct CssFunctionRule {
     #[serde(rename = "styleSheetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    pub style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     #[doc = "Parent stylesheet's origin."]
     #[serde(rename = "origin")]
     pub origin: StyleSheetOrigin,
@@ -1410,7 +1410,7 @@ pub struct CssKeyframeRule {
     #[serde(rename = "styleSheetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    pub style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     #[doc = "Parent stylesheet's origin."]
     #[serde(rename = "origin")]
     pub origin: StyleSheetOrigin,
@@ -1443,7 +1443,7 @@ impl CssKeyframeRule {
 pub struct StyleDeclarationEdit {
     #[doc = "The css style sheet identifier."]
     #[serde(rename = "styleSheetId")]
-    pub style_sheet_id: super::super::dom::types::StyleSheetId,
+    pub style_sheet_id: crate::browser_protocol::dom::types::StyleSheetId,
     #[doc = "The range of the style text in the enclosing stylesheet."]
     #[serde(rename = "range")]
     pub range: SourceRange,
@@ -1453,7 +1453,7 @@ pub struct StyleDeclarationEdit {
 }
 impl StyleDeclarationEdit {
     pub fn new(
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
         range: impl Into<SourceRange>,
         text: impl Into<String>,
     ) -> Self {

@@ -249,7 +249,7 @@ impl SharedStorageEntry {
 pub struct SharedStorageMetadata {
     #[doc = "Time when the origin's shared storage was last created."]
     #[serde(rename = "creationTime")]
-    pub creation_time: super::super::network::types::TimeSinceEpoch,
+    pub creation_time: crate::browser_protocol::network::types::TimeSinceEpoch,
     #[doc = "Number of key-value pairs stored in origin's shared storage."]
     #[serde(rename = "length")]
     pub length: i64,
@@ -262,7 +262,7 @@ pub struct SharedStorageMetadata {
 }
 impl SharedStorageMetadata {
     pub fn new(
-        creation_time: impl Into<super::super::network::types::TimeSinceEpoch>,
+        creation_time: impl Into<crate::browser_protocol::network::types::TimeSinceEpoch>,
         length: impl Into<i64>,
         remaining_budget: impl Into<f64>,
         bytes_used: impl Into<i64>,
@@ -429,7 +429,7 @@ pub struct SharedStorageAccessParams {
     #[serde(rename = "workletTargetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub worklet_target_id: Option<super::super::target::types::TargetId>,
+    pub worklet_target_id: Option<crate::browser_protocol::target::types::TargetId>,
     #[doc = "Name of the lock to be acquired, if present.\nOptionally present only for SharedStorageAccessMethods: batchUpdate,\nset, append, delete, and clear."]
     #[serde(rename = "withLock")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -484,7 +484,7 @@ pub struct StorageBucketInfo {
     #[serde(rename = "id")]
     pub id: String,
     #[serde(rename = "expiration")]
-    pub expiration: super::super::network::types::TimeSinceEpoch,
+    pub expiration: crate::browser_protocol::network::types::TimeSinceEpoch,
     #[doc = "Storage quota (bytes)."]
     #[serde(rename = "quota")]
     pub quota: f64,
@@ -807,7 +807,7 @@ impl AttributionReportingNamedBudgetDef {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributionReportingSourceRegistration {
     #[serde(rename = "time")]
-    pub time: super::super::network::types::TimeSinceEpoch,
+    pub time: crate::browser_protocol::network::types::TimeSinceEpoch,
     #[doc = "duration in seconds"]
     #[serde(rename = "expiry")]
     pub expiry: i64,

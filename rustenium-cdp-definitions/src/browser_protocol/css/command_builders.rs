@@ -1,20 +1,20 @@
 use super::commands::*;
 impl AddRule {
     pub fn builder() -> AddRuleBuilder {
-        AddRuleBuilder::default()
+        <AddRuleBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct AddRuleBuilder {
-    style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     rule_text: Option<String>,
     location: Option<super::types::SourceRange>,
-    node_for_property_syntax_validation: Option<super::super::dom::types::NodeId>,
+    node_for_property_syntax_validation: Option<crate::browser_protocol::dom::types::NodeId>,
 }
 impl AddRuleBuilder {
     pub fn style_sheet_id(
         mut self,
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
     ) -> Self {
         self.style_sheet_id = Some(style_sheet_id.into());
         self
@@ -29,7 +29,7 @@ impl AddRuleBuilder {
     }
     pub fn node_for_property_syntax_validation(
         mut self,
-        node_for_property_syntax_validation: impl Into<super::super::dom::types::NodeId>,
+        node_for_property_syntax_validation: impl Into<crate::browser_protocol::dom::types::NodeId>,
     ) -> Self {
         self.node_for_property_syntax_validation = Some(node_for_property_syntax_validation.into());
         self
@@ -54,17 +54,17 @@ impl AddRuleBuilder {
 }
 impl CollectClassNames {
     pub fn builder() -> CollectClassNamesBuilder {
-        CollectClassNamesBuilder::default()
+        <CollectClassNamesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct CollectClassNamesBuilder {
-    style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
 }
 impl CollectClassNamesBuilder {
     pub fn style_sheet_id(
         mut self,
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
     ) -> Self {
         self.style_sheet_id = Some(style_sheet_id.into());
         self
@@ -82,16 +82,19 @@ impl CollectClassNamesBuilder {
 }
 impl CreateStyleSheet {
     pub fn builder() -> CreateStyleSheetBuilder {
-        CreateStyleSheetBuilder::default()
+        <CreateStyleSheetBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct CreateStyleSheetBuilder {
-    frame_id: Option<super::super::page::types::FrameId>,
+    frame_id: Option<crate::browser_protocol::page::types::FrameId>,
     force: Option<bool>,
 }
 impl CreateStyleSheetBuilder {
-    pub fn frame_id(mut self, frame_id: impl Into<super::super::page::types::FrameId>) -> Self {
+    pub fn frame_id(
+        mut self,
+        frame_id: impl Into<crate::browser_protocol::page::types::FrameId>,
+    ) -> Self {
         self.frame_id = Some(frame_id.into());
         self
     }
@@ -113,16 +116,19 @@ impl CreateStyleSheetBuilder {
 }
 impl ForcePseudoState {
     pub fn builder() -> ForcePseudoStateBuilder {
-        ForcePseudoStateBuilder::default()
+        <ForcePseudoStateBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct ForcePseudoStateBuilder {
-    node_id: Option<super::super::dom::types::NodeId>,
+    node_id: Option<crate::browser_protocol::dom::types::NodeId>,
     forced_pseudo_classes: Option<Vec<String>>,
 }
 impl ForcePseudoStateBuilder {
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
@@ -161,16 +167,19 @@ impl ForcePseudoStateBuilder {
 }
 impl ForceStartingStyle {
     pub fn builder() -> ForceStartingStyleBuilder {
-        ForceStartingStyleBuilder::default()
+        <ForceStartingStyleBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct ForceStartingStyleBuilder {
-    node_id: Option<super::super::dom::types::NodeId>,
+    node_id: Option<crate::browser_protocol::dom::types::NodeId>,
     forced: Option<bool>,
 }
 impl ForceStartingStyleBuilder {
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
@@ -194,15 +203,18 @@ impl ForceStartingStyleBuilder {
 }
 impl GetBackgroundColors {
     pub fn builder() -> GetBackgroundColorsBuilder {
-        GetBackgroundColorsBuilder::default()
+        <GetBackgroundColorsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetBackgroundColorsBuilder {
-    node_id: Option<super::super::dom::types::NodeId>,
+    node_id: Option<crate::browser_protocol::dom::types::NodeId>,
 }
 impl GetBackgroundColorsBuilder {
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
@@ -219,15 +231,18 @@ impl GetBackgroundColorsBuilder {
 }
 impl GetComputedStyleForNode {
     pub fn builder() -> GetComputedStyleForNodeBuilder {
-        GetComputedStyleForNodeBuilder::default()
+        <GetComputedStyleForNodeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetComputedStyleForNodeBuilder {
-    node_id: Option<super::super::dom::types::NodeId>,
+    node_id: Option<crate::browser_protocol::dom::types::NodeId>,
 }
 impl GetComputedStyleForNodeBuilder {
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
@@ -244,15 +259,15 @@ impl GetComputedStyleForNodeBuilder {
 }
 impl ResolveValues {
     pub fn builder() -> ResolveValuesBuilder {
-        ResolveValuesBuilder::default()
+        <ResolveValuesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct ResolveValuesBuilder {
     values: Option<Vec<String>>,
-    node_id: Option<super::super::dom::types::NodeId>,
+    node_id: Option<crate::browser_protocol::dom::types::NodeId>,
     property_name: Option<String>,
-    pseudo_type: Option<super::super::dom::types::PseudoType>,
+    pseudo_type: Option<crate::browser_protocol::dom::types::PseudoType>,
     pseudo_identifier: Option<String>,
 }
 impl ResolveValuesBuilder {
@@ -272,7 +287,10 @@ impl ResolveValuesBuilder {
         }
         self
     }
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
@@ -282,7 +300,7 @@ impl ResolveValuesBuilder {
     }
     pub fn pseudo_type(
         mut self,
-        pseudo_type: impl Into<super::super::dom::types::PseudoType>,
+        pseudo_type: impl Into<crate::browser_protocol::dom::types::PseudoType>,
     ) -> Self {
         self.pseudo_type = Some(pseudo_type.into());
         self
@@ -310,7 +328,7 @@ impl ResolveValuesBuilder {
 }
 impl GetLonghandProperties {
     pub fn builder() -> GetLonghandPropertiesBuilder {
-        GetLonghandPropertiesBuilder::default()
+        <GetLonghandPropertiesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -343,15 +361,18 @@ impl GetLonghandPropertiesBuilder {
 }
 impl GetInlineStylesForNode {
     pub fn builder() -> GetInlineStylesForNodeBuilder {
-        GetInlineStylesForNodeBuilder::default()
+        <GetInlineStylesForNodeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetInlineStylesForNodeBuilder {
-    node_id: Option<super::super::dom::types::NodeId>,
+    node_id: Option<crate::browser_protocol::dom::types::NodeId>,
 }
 impl GetInlineStylesForNodeBuilder {
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
@@ -368,15 +389,18 @@ impl GetInlineStylesForNodeBuilder {
 }
 impl GetAnimatedStylesForNode {
     pub fn builder() -> GetAnimatedStylesForNodeBuilder {
-        GetAnimatedStylesForNodeBuilder::default()
+        <GetAnimatedStylesForNodeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetAnimatedStylesForNodeBuilder {
-    node_id: Option<super::super::dom::types::NodeId>,
+    node_id: Option<crate::browser_protocol::dom::types::NodeId>,
 }
 impl GetAnimatedStylesForNodeBuilder {
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
@@ -393,15 +417,18 @@ impl GetAnimatedStylesForNodeBuilder {
 }
 impl GetMatchedStylesForNode {
     pub fn builder() -> GetMatchedStylesForNodeBuilder {
-        GetMatchedStylesForNodeBuilder::default()
+        <GetMatchedStylesForNodeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetMatchedStylesForNodeBuilder {
-    node_id: Option<super::super::dom::types::NodeId>,
+    node_id: Option<crate::browser_protocol::dom::types::NodeId>,
 }
 impl GetMatchedStylesForNodeBuilder {
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
@@ -418,15 +445,18 @@ impl GetMatchedStylesForNodeBuilder {
 }
 impl GetPlatformFontsForNode {
     pub fn builder() -> GetPlatformFontsForNodeBuilder {
-        GetPlatformFontsForNodeBuilder::default()
+        <GetPlatformFontsForNodeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetPlatformFontsForNodeBuilder {
-    node_id: Option<super::super::dom::types::NodeId>,
+    node_id: Option<crate::browser_protocol::dom::types::NodeId>,
 }
 impl GetPlatformFontsForNodeBuilder {
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
@@ -443,17 +473,17 @@ impl GetPlatformFontsForNodeBuilder {
 }
 impl GetStyleSheetText {
     pub fn builder() -> GetStyleSheetTextBuilder {
-        GetStyleSheetTextBuilder::default()
+        <GetStyleSheetTextBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetStyleSheetTextBuilder {
-    style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
 }
 impl GetStyleSheetTextBuilder {
     pub fn style_sheet_id(
         mut self,
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
     ) -> Self {
         self.style_sheet_id = Some(style_sheet_id.into());
         self
@@ -471,15 +501,18 @@ impl GetStyleSheetTextBuilder {
 }
 impl GetLayersForNode {
     pub fn builder() -> GetLayersForNodeBuilder {
-        GetLayersForNodeBuilder::default()
+        <GetLayersForNodeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetLayersForNodeBuilder {
-    node_id: Option<super::super::dom::types::NodeId>,
+    node_id: Option<crate::browser_protocol::dom::types::NodeId>,
 }
 impl GetLayersForNodeBuilder {
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
@@ -496,18 +529,18 @@ impl GetLayersForNodeBuilder {
 }
 impl GetLocationForSelector {
     pub fn builder() -> GetLocationForSelectorBuilder {
-        GetLocationForSelectorBuilder::default()
+        <GetLocationForSelectorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetLocationForSelectorBuilder {
-    style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     selector_text: Option<String>,
 }
 impl GetLocationForSelectorBuilder {
     pub fn style_sheet_id(
         mut self,
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
     ) -> Self {
         self.style_sheet_id = Some(style_sheet_id.into());
         self
@@ -532,15 +565,18 @@ impl GetLocationForSelectorBuilder {
 }
 impl TrackComputedStyleUpdatesForNode {
     pub fn builder() -> TrackComputedStyleUpdatesForNodeBuilder {
-        TrackComputedStyleUpdatesForNodeBuilder::default()
+        <TrackComputedStyleUpdatesForNodeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct TrackComputedStyleUpdatesForNodeBuilder {
-    node_id: Option<super::super::dom::types::NodeId>,
+    node_id: Option<crate::browser_protocol::dom::types::NodeId>,
 }
 impl TrackComputedStyleUpdatesForNodeBuilder {
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
@@ -555,7 +591,7 @@ impl TrackComputedStyleUpdatesForNodeBuilder {
 }
 impl TrackComputedStyleUpdates {
     pub fn builder() -> TrackComputedStyleUpdatesBuilder {
-        TrackComputedStyleUpdatesBuilder::default()
+        <TrackComputedStyleUpdatesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -598,17 +634,20 @@ impl TrackComputedStyleUpdatesBuilder {
 }
 impl SetEffectivePropertyValueForNode {
     pub fn builder() -> SetEffectivePropertyValueForNodeBuilder {
-        SetEffectivePropertyValueForNodeBuilder::default()
+        <SetEffectivePropertyValueForNodeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct SetEffectivePropertyValueForNodeBuilder {
-    node_id: Option<super::super::dom::types::NodeId>,
+    node_id: Option<crate::browser_protocol::dom::types::NodeId>,
     property_name: Option<String>,
     value: Option<String>,
 }
 impl SetEffectivePropertyValueForNodeBuilder {
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
@@ -639,19 +678,19 @@ impl SetEffectivePropertyValueForNodeBuilder {
 }
 impl SetPropertyRulePropertyName {
     pub fn builder() -> SetPropertyRulePropertyNameBuilder {
-        SetPropertyRulePropertyNameBuilder::default()
+        <SetPropertyRulePropertyNameBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct SetPropertyRulePropertyNameBuilder {
-    style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     range: Option<super::types::SourceRange>,
     property_name: Option<String>,
 }
 impl SetPropertyRulePropertyNameBuilder {
     pub fn style_sheet_id(
         mut self,
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
     ) -> Self {
         self.style_sheet_id = Some(style_sheet_id.into());
         self
@@ -683,19 +722,19 @@ impl SetPropertyRulePropertyNameBuilder {
 }
 impl SetKeyframeKey {
     pub fn builder() -> SetKeyframeKeyBuilder {
-        SetKeyframeKeyBuilder::default()
+        <SetKeyframeKeyBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct SetKeyframeKeyBuilder {
-    style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     range: Option<super::types::SourceRange>,
     key_text: Option<String>,
 }
 impl SetKeyframeKeyBuilder {
     pub fn style_sheet_id(
         mut self,
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
     ) -> Self {
         self.style_sheet_id = Some(style_sheet_id.into());
         self
@@ -727,19 +766,19 @@ impl SetKeyframeKeyBuilder {
 }
 impl SetMediaText {
     pub fn builder() -> SetMediaTextBuilder {
-        SetMediaTextBuilder::default()
+        <SetMediaTextBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct SetMediaTextBuilder {
-    style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     range: Option<super::types::SourceRange>,
     text: Option<String>,
 }
 impl SetMediaTextBuilder {
     pub fn style_sheet_id(
         mut self,
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
     ) -> Self {
         self.style_sheet_id = Some(style_sheet_id.into());
         self
@@ -771,19 +810,19 @@ impl SetMediaTextBuilder {
 }
 impl SetContainerQueryText {
     pub fn builder() -> SetContainerQueryTextBuilder {
-        SetContainerQueryTextBuilder::default()
+        <SetContainerQueryTextBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct SetContainerQueryTextBuilder {
-    style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     range: Option<super::types::SourceRange>,
     text: Option<String>,
 }
 impl SetContainerQueryTextBuilder {
     pub fn style_sheet_id(
         mut self,
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
     ) -> Self {
         self.style_sheet_id = Some(style_sheet_id.into());
         self
@@ -815,19 +854,19 @@ impl SetContainerQueryTextBuilder {
 }
 impl SetSupportsText {
     pub fn builder() -> SetSupportsTextBuilder {
-        SetSupportsTextBuilder::default()
+        <SetSupportsTextBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct SetSupportsTextBuilder {
-    style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     range: Option<super::types::SourceRange>,
     text: Option<String>,
 }
 impl SetSupportsTextBuilder {
     pub fn style_sheet_id(
         mut self,
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
     ) -> Self {
         self.style_sheet_id = Some(style_sheet_id.into());
         self
@@ -859,19 +898,19 @@ impl SetSupportsTextBuilder {
 }
 impl SetScopeText {
     pub fn builder() -> SetScopeTextBuilder {
-        SetScopeTextBuilder::default()
+        <SetScopeTextBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct SetScopeTextBuilder {
-    style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     range: Option<super::types::SourceRange>,
     text: Option<String>,
 }
 impl SetScopeTextBuilder {
     pub fn style_sheet_id(
         mut self,
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
     ) -> Self {
         self.style_sheet_id = Some(style_sheet_id.into());
         self
@@ -903,19 +942,19 @@ impl SetScopeTextBuilder {
 }
 impl SetRuleSelector {
     pub fn builder() -> SetRuleSelectorBuilder {
-        SetRuleSelectorBuilder::default()
+        <SetRuleSelectorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct SetRuleSelectorBuilder {
-    style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     range: Option<super::types::SourceRange>,
     selector: Option<String>,
 }
 impl SetRuleSelectorBuilder {
     pub fn style_sheet_id(
         mut self,
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
     ) -> Self {
         self.style_sheet_id = Some(style_sheet_id.into());
         self
@@ -947,18 +986,18 @@ impl SetRuleSelectorBuilder {
 }
 impl SetStyleSheetText {
     pub fn builder() -> SetStyleSheetTextBuilder {
-        SetStyleSheetTextBuilder::default()
+        <SetStyleSheetTextBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct SetStyleSheetTextBuilder {
-    style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     text: Option<String>,
 }
 impl SetStyleSheetTextBuilder {
     pub fn style_sheet_id(
         mut self,
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
     ) -> Self {
         self.style_sheet_id = Some(style_sheet_id.into());
         self
@@ -983,13 +1022,13 @@ impl SetStyleSheetTextBuilder {
 }
 impl SetStyleTexts {
     pub fn builder() -> SetStyleTextsBuilder {
-        SetStyleTextsBuilder::default()
+        <SetStyleTextsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct SetStyleTextsBuilder {
     edits: Option<Vec<super::types::StyleDeclarationEdit>>,
-    node_for_property_syntax_validation: Option<super::super::dom::types::NodeId>,
+    node_for_property_syntax_validation: Option<crate::browser_protocol::dom::types::NodeId>,
 }
 impl SetStyleTextsBuilder {
     pub fn edit(mut self, edit: impl Into<super::types::StyleDeclarationEdit>) -> Self {
@@ -1010,7 +1049,7 @@ impl SetStyleTextsBuilder {
     }
     pub fn node_for_property_syntax_validation(
         mut self,
-        node_for_property_syntax_validation: impl Into<super::super::dom::types::NodeId>,
+        node_for_property_syntax_validation: impl Into<crate::browser_protocol::dom::types::NodeId>,
     ) -> Self {
         self.node_for_property_syntax_validation = Some(node_for_property_syntax_validation.into());
         self
@@ -1029,7 +1068,7 @@ impl SetStyleTextsBuilder {
 }
 impl SetLocalFontsEnabled {
     pub fn builder() -> SetLocalFontsEnabledBuilder {
-        SetLocalFontsEnabledBuilder::default()
+        <SetLocalFontsEnabledBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

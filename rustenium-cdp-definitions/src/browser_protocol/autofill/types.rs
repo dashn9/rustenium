@@ -116,10 +116,10 @@ pub struct FilledField {
     pub filling_strategy: FillingStrategy,
     #[doc = "The frame the field belongs to"]
     #[serde(rename = "frameId")]
-    pub frame_id: super::super::page::types::FrameId,
+    pub frame_id: crate::browser_protocol::page::types::FrameId,
     #[doc = "The form field's DOM node"]
     #[serde(rename = "fieldId")]
-    pub field_id: super::super::dom::types::BackendNodeId,
+    pub field_id: crate::browser_protocol::dom::types::BackendNodeId,
 }
 impl FilledField {
     pub const IDENTIFIER: &'static str = "Autofill.FilledField";

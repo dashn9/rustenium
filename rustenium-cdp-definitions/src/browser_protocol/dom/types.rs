@@ -66,12 +66,12 @@ impl StyleSheetId {
 pub struct BackendNode {
     #[doc = "`Node`'s nodeType."]
     #[serde(rename = "nodeType")]
-    pub node_type: i64,
+    pub node_type: Box<i64>,
     #[doc = "`Node`'s nodeName."]
     #[serde(rename = "nodeName")]
     pub node_name: String,
     #[serde(rename = "backendNodeId")]
-    pub backend_node_id: BackendNodeId,
+    pub backend_node_id: Box<BackendNodeId>,
 }
 impl BackendNode {
     pub fn new(
@@ -80,9 +80,9 @@ impl BackendNode {
         backend_node_id: impl Into<BackendNodeId>,
     ) -> Self {
         Self {
-            node_type: node_type.into(),
+            node_type: Box::new(node_type.into()),
             node_name: node_name.into(),
-            backend_node_id: backend_node_id.into(),
+            backend_node_id: Box::new(backend_node_id.into()),
         }
     }
 }
@@ -226,7 +226,7 @@ pub enum ScrollOrientation {
 pub struct Node {
     #[doc = "Node identifier that is passed into the rest of the DOM messages as the `nodeId`. Backend\nwill only push node with given `id` once. It is aware of all requested nodes and will only\nfire DOM events for nodes known to the client."]
     #[serde(rename = "nodeId")]
-    pub node_id: NodeId,
+    pub node_id: Box<NodeId>,
     #[doc = "The id of the parent node if any."]
     #[serde(rename = "parentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -234,10 +234,10 @@ pub struct Node {
     pub parent_id: Option<NodeId>,
     #[doc = "The BackendNodeId for this node."]
     #[serde(rename = "backendNodeId")]
-    pub backend_node_id: BackendNodeId,
+    pub backend_node_id: Box<BackendNodeId>,
     #[doc = "`Node`'s nodeType."]
     #[serde(rename = "nodeType")]
-    pub node_type: i64,
+    pub node_type: Box<i64>,
     #[doc = "`Node`'s nodeName."]
     #[serde(rename = "nodeName")]
     pub node_name: String,
@@ -306,7 +306,7 @@ pub struct Node {
     #[serde(rename = "pseudoType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub pseudo_type: Option<PseudoType>,
+    pub pseudo_type: Option<Box<PseudoType>>,
     #[doc = "Pseudo element identifier for this node. Only present if there is a\nvalid pseudoType."]
     #[serde(rename = "pseudoIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -316,12 +316,12 @@ pub struct Node {
     #[serde(rename = "shadowRootType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub shadow_root_type: Option<ShadowRootType>,
+    pub shadow_root_type: Option<Box<ShadowRootType>>,
     #[doc = "Frame ID for frame owner elements."]
     #[serde(rename = "frameId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub frame_id: Option<super::super::page::types::FrameId>,
+    pub frame_id: Option<crate::browser_protocol::page::types::FrameId>,
     #[doc = "Content document for frame owner elements."]
     #[serde(rename = "contentDocument")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -432,7 +432,7 @@ impl Rgba {
     pub const IDENTIFIER: &'static str = "DOM.RGBA";
 }
 #[doc = "An array of quad vertices, x immediately followed by y for each point, points clock-wise.\n[Quad](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#type-Quad)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Quad(Vec<f64>);
 impl Quad {
     pub fn new(val: impl Into<Vec<f64>>) -> Self {

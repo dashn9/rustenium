@@ -1,7 +1,7 @@
 use super::types::*;
 impl CertificateSecurityState {
     pub fn builder() -> CertificateSecurityStateBuilder {
-        CertificateSecurityStateBuilder::default()
+        <CertificateSecurityStateBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -14,8 +14,8 @@ pub struct CertificateSecurityStateBuilder {
     certificate: Option<Vec<String>>,
     subject_name: Option<String>,
     issuer: Option<String>,
-    valid_from: Option<super::super::network::types::TimeSinceEpoch>,
-    valid_to: Option<super::super::network::types::TimeSinceEpoch>,
+    valid_from: Option<crate::browser_protocol::network::types::TimeSinceEpoch>,
+    valid_to: Option<crate::browser_protocol::network::types::TimeSinceEpoch>,
     certificate_network_error: Option<String>,
     certificate_has_weak_signature: Option<bool>,
     certificate_has_sha1_signature: Option<bool>,
@@ -72,14 +72,14 @@ impl CertificateSecurityStateBuilder {
     }
     pub fn valid_from(
         mut self,
-        valid_from: impl Into<super::super::network::types::TimeSinceEpoch>,
+        valid_from: impl Into<crate::browser_protocol::network::types::TimeSinceEpoch>,
     ) -> Self {
         self.valid_from = Some(valid_from.into());
         self
     }
     pub fn valid_to(
         mut self,
-        valid_to: impl Into<super::super::network::types::TimeSinceEpoch>,
+        valid_to: impl Into<crate::browser_protocol::network::types::TimeSinceEpoch>,
     ) -> Self {
         self.valid_to = Some(valid_to.into());
         self
@@ -202,7 +202,7 @@ impl CertificateSecurityStateBuilder {
 }
 impl SafetyTipInfo {
     pub fn builder() -> SafetyTipInfoBuilder {
-        SafetyTipInfoBuilder::default()
+        <SafetyTipInfoBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -233,7 +233,7 @@ impl SafetyTipInfoBuilder {
 }
 impl VisibleSecurityState {
     pub fn builder() -> VisibleSecurityStateBuilder {
-        VisibleSecurityStateBuilder::default()
+        <VisibleSecurityStateBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -293,7 +293,7 @@ impl VisibleSecurityStateBuilder {
 }
 impl SecurityStateExplanation {
     pub fn builder() -> SecurityStateExplanationBuilder {
-        SecurityStateExplanationBuilder::default()
+        <SecurityStateExplanationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

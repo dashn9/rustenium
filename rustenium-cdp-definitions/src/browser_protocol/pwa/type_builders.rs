@@ -1,7 +1,7 @@
 use super::types::*;
 impl FileHandlerAccept {
     pub fn builder() -> FileHandlerAcceptBuilder {
-        FileHandlerAcceptBuilder::default()
+        <FileHandlerAcceptBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -43,7 +43,7 @@ impl FileHandlerAcceptBuilder {
 }
 impl FileHandler {
     pub fn builder() -> FileHandlerBuilder {
-        FileHandlerBuilder::default()
+        <FileHandlerBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

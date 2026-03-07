@@ -1,7 +1,7 @@
 use super::types::*;
 impl GpuDevice {
     pub fn builder() -> GpuDeviceBuilder {
-        GpuDeviceBuilder::default()
+        <GpuDeviceBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -75,7 +75,7 @@ impl GpuDeviceBuilder {
 }
 impl Size {
     pub fn builder() -> SizeBuilder {
-        SizeBuilder::default()
+        <SizeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -105,7 +105,7 @@ impl SizeBuilder {
 }
 impl VideoDecodeAcceleratorCapability {
     pub fn builder() -> VideoDecodeAcceleratorCapabilityBuilder {
-        VideoDecodeAcceleratorCapabilityBuilder::default()
+        <VideoDecodeAcceleratorCapabilityBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -143,7 +143,7 @@ impl VideoDecodeAcceleratorCapabilityBuilder {
 }
 impl VideoEncodeAcceleratorCapability {
     pub fn builder() -> VideoEncodeAcceleratorCapabilityBuilder {
-        VideoEncodeAcceleratorCapabilityBuilder::default()
+        <VideoEncodeAcceleratorCapabilityBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -195,7 +195,7 @@ impl VideoEncodeAcceleratorCapabilityBuilder {
 }
 impl GpuInfo {
     pub fn builder() -> GpuInfoBuilder {
-        GpuInfoBuilder::default()
+        <GpuInfoBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -310,7 +310,7 @@ impl GpuInfoBuilder {
 }
 impl ProcessInfo {
     pub fn builder() -> ProcessInfoBuilder {
-        ProcessInfoBuilder::default()
+        <ProcessInfoBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

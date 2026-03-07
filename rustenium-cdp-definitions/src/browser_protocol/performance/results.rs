@@ -3,6 +3,8 @@ use serde::{Deserialize, Serialize};
 pub struct DisableResult {}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct EnableResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetTimeDomainResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetMetricsResult {
     #[doc = "Current values for run-time metrics."]

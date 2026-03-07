@@ -1,7 +1,7 @@
 use super::commands::*;
 impl AddScriptToEvaluateOnNewDocument {
     pub fn builder() -> AddScriptToEvaluateOnNewDocumentBuilder {
-        AddScriptToEvaluateOnNewDocumentBuilder::default()
+        <AddScriptToEvaluateOnNewDocumentBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -44,7 +44,7 @@ impl AddScriptToEvaluateOnNewDocumentBuilder {
 }
 impl CaptureScreenshot {
     pub fn builder() -> CaptureScreenshotBuilder {
-        CaptureScreenshotBuilder::default()
+        <CaptureScreenshotBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -97,7 +97,7 @@ impl CaptureScreenshotBuilder {
 }
 impl CaptureSnapshot {
     pub fn builder() -> CaptureSnapshotBuilder {
-        CaptureSnapshotBuilder::default()
+        <CaptureSnapshotBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -120,7 +120,7 @@ impl CaptureSnapshotBuilder {
 }
 impl CreateIsolatedWorld {
     pub fn builder() -> CreateIsolatedWorldBuilder {
-        CreateIsolatedWorldBuilder::default()
+        <CreateIsolatedWorldBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -146,9 +146,9 @@ impl CreateIsolatedWorldBuilder {
         Ok(CreateIsolatedWorld {
             method: CreateIsolatedWorldMethod::CreateIsolatedWorld,
             params: CreateIsolatedWorldParams {
-                frame_id: self.frame_id.ok_or_else(|| {
+                frame_id: Box::new(self.frame_id.ok_or_else(|| {
                     format!("Field `{}` is mandatory.", std::stringify!(frame_id))
-                })?,
+                })?),
                 world_name: self.world_name,
                 grant_univeral_access: self.grant_univeral_access,
             },
@@ -157,7 +157,7 @@ impl CreateIsolatedWorldBuilder {
 }
 impl Enable {
     pub fn builder() -> EnableBuilder {
-        EnableBuilder::default()
+        <EnableBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -183,7 +183,7 @@ impl EnableBuilder {
 }
 impl GetAppManifest {
     pub fn builder() -> GetAppManifestBuilder {
-        GetAppManifestBuilder::default()
+        <GetAppManifestBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -206,7 +206,7 @@ impl GetAppManifestBuilder {
 }
 impl GetAdScriptAncestry {
     pub fn builder() -> GetAdScriptAncestryBuilder {
-        GetAdScriptAncestryBuilder::default()
+        <GetAdScriptAncestryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -222,16 +222,16 @@ impl GetAdScriptAncestryBuilder {
         Ok(GetAdScriptAncestry {
             method: GetAdScriptAncestryMethod::GetAdScriptAncestry,
             params: GetAdScriptAncestryParams {
-                frame_id: self.frame_id.ok_or_else(|| {
+                frame_id: Box::new(self.frame_id.ok_or_else(|| {
                     format!("Field `{}` is mandatory.", std::stringify!(frame_id))
-                })?,
+                })?),
             },
         })
     }
 }
 impl GetResourceContent {
     pub fn builder() -> GetResourceContentBuilder {
-        GetResourceContentBuilder::default()
+        <GetResourceContentBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -252,9 +252,9 @@ impl GetResourceContentBuilder {
         Ok(GetResourceContent {
             method: GetResourceContentMethod::GetResourceContent,
             params: GetResourceContentParams {
-                frame_id: self.frame_id.ok_or_else(|| {
+                frame_id: Box::new(self.frame_id.ok_or_else(|| {
                     format!("Field `{}` is mandatory.", std::stringify!(frame_id))
-                })?,
+                })?),
                 url: self
                     .url
                     .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(url)))?,
@@ -264,7 +264,7 @@ impl GetResourceContentBuilder {
 }
 impl HandleJavaScriptDialog {
     pub fn builder() -> HandleJavaScriptDialogBuilder {
-        HandleJavaScriptDialogBuilder::default()
+        <HandleJavaScriptDialogBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -295,7 +295,7 @@ impl HandleJavaScriptDialogBuilder {
 }
 impl Navigate {
     pub fn builder() -> NavigateBuilder {
-        NavigateBuilder::default()
+        <NavigateBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -342,7 +342,7 @@ impl NavigateBuilder {
                     .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(url)))?,
                 referrer: self.referrer,
                 transition_type: self.transition_type,
-                frame_id: self.frame_id,
+                frame_id: self.frame_id.map(Box::new),
                 referrer_policy: self.referrer_policy,
             },
         })
@@ -350,7 +350,7 @@ impl NavigateBuilder {
 }
 impl NavigateToHistoryEntry {
     pub fn builder() -> NavigateToHistoryEntryBuilder {
-        NavigateToHistoryEntryBuilder::default()
+        <NavigateToHistoryEntryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -375,7 +375,7 @@ impl NavigateToHistoryEntryBuilder {
 }
 impl PrintToPdf {
     pub fn builder() -> PrintToPdfBuilder {
-        PrintToPdfBuilder::default()
+        <PrintToPdfBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -494,14 +494,14 @@ impl PrintToPdfBuilder {
 }
 impl Reload {
     pub fn builder() -> ReloadBuilder {
-        ReloadBuilder::default()
+        <ReloadBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct ReloadBuilder {
     ignore_cache: Option<bool>,
     script_to_evaluate_on_load: Option<String>,
-    loader_id: Option<super::super::network::types::LoaderId>,
+    loader_id: Option<crate::browser_protocol::network::types::LoaderId>,
 }
 impl ReloadBuilder {
     pub fn ignore_cache(mut self, ignore_cache: impl Into<bool>) -> Self {
@@ -517,7 +517,7 @@ impl ReloadBuilder {
     }
     pub fn loader_id(
         mut self,
-        loader_id: impl Into<super::super::network::types::LoaderId>,
+        loader_id: impl Into<crate::browser_protocol::network::types::LoaderId>,
     ) -> Self {
         self.loader_id = Some(loader_id.into());
         self
@@ -535,7 +535,7 @@ impl ReloadBuilder {
 }
 impl RemoveScriptToEvaluateOnNewDocument {
     pub fn builder() -> RemoveScriptToEvaluateOnNewDocumentBuilder {
-        RemoveScriptToEvaluateOnNewDocumentBuilder::default()
+        <RemoveScriptToEvaluateOnNewDocumentBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -560,7 +560,7 @@ impl RemoveScriptToEvaluateOnNewDocumentBuilder {
 }
 impl ScreencastFrameAck {
     pub fn builder() -> ScreencastFrameAckBuilder {
-        ScreencastFrameAckBuilder::default()
+        <ScreencastFrameAckBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -585,7 +585,7 @@ impl ScreencastFrameAckBuilder {
 }
 impl SearchInResource {
     pub fn builder() -> SearchInResourceBuilder {
-        SearchInResourceBuilder::default()
+        <SearchInResourceBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -621,9 +621,9 @@ impl SearchInResourceBuilder {
         Ok(SearchInResource {
             method: SearchInResourceMethod::SearchInResource,
             params: SearchInResourceParams {
-                frame_id: self.frame_id.ok_or_else(|| {
+                frame_id: Box::new(self.frame_id.ok_or_else(|| {
                     format!("Field `{}` is mandatory.", std::stringify!(frame_id))
-                })?,
+                })?),
                 url: self
                     .url
                     .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(url)))?,
@@ -638,7 +638,7 @@ impl SearchInResourceBuilder {
 }
 impl SetAdBlockingEnabled {
     pub fn builder() -> SetAdBlockingEnabledBuilder {
-        SetAdBlockingEnabledBuilder::default()
+        <SetAdBlockingEnabledBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -663,7 +663,7 @@ impl SetAdBlockingEnabledBuilder {
 }
 impl SetBypassCsp {
     pub fn builder() -> SetBypassCspBuilder {
-        SetBypassCspBuilder::default()
+        <SetBypassCspBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -688,7 +688,7 @@ impl SetBypassCspBuilder {
 }
 impl GetPermissionsPolicyState {
     pub fn builder() -> GetPermissionsPolicyStateBuilder {
-        GetPermissionsPolicyStateBuilder::default()
+        <GetPermissionsPolicyStateBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -704,16 +704,16 @@ impl GetPermissionsPolicyStateBuilder {
         Ok(GetPermissionsPolicyState {
             method: GetPermissionsPolicyStateMethod::GetPermissionsPolicyState,
             params: GetPermissionsPolicyStateParams {
-                frame_id: self.frame_id.ok_or_else(|| {
+                frame_id: Box::new(self.frame_id.ok_or_else(|| {
                     format!("Field `{}` is mandatory.", std::stringify!(frame_id))
-                })?,
+                })?),
             },
         })
     }
 }
 impl GetOriginTrials {
     pub fn builder() -> GetOriginTrialsBuilder {
-        GetOriginTrialsBuilder::default()
+        <GetOriginTrialsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -729,16 +729,16 @@ impl GetOriginTrialsBuilder {
         Ok(GetOriginTrials {
             method: GetOriginTrialsMethod::GetOriginTrials,
             params: GetOriginTrialsParams {
-                frame_id: self.frame_id.ok_or_else(|| {
+                frame_id: Box::new(self.frame_id.ok_or_else(|| {
                     format!("Field `{}` is mandatory.", std::stringify!(frame_id))
-                })?,
+                })?),
             },
         })
     }
 }
 impl SetFontFamilies {
     pub fn builder() -> SetFontFamiliesBuilder {
-        SetFontFamiliesBuilder::default()
+        <SetFontFamiliesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -781,7 +781,7 @@ impl SetFontFamiliesBuilder {
 }
 impl SetFontSizes {
     pub fn builder() -> SetFontSizesBuilder {
-        SetFontSizesBuilder::default()
+        <SetFontSizesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -806,7 +806,7 @@ impl SetFontSizesBuilder {
 }
 impl SetDocumentContent {
     pub fn builder() -> SetDocumentContentBuilder {
-        SetDocumentContentBuilder::default()
+        <SetDocumentContentBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -827,9 +827,9 @@ impl SetDocumentContentBuilder {
         Ok(SetDocumentContent {
             method: SetDocumentContentMethod::SetDocumentContent,
             params: SetDocumentContentParams {
-                frame_id: self.frame_id.ok_or_else(|| {
+                frame_id: Box::new(self.frame_id.ok_or_else(|| {
                     format!("Field `{}` is mandatory.", std::stringify!(frame_id))
-                })?,
+                })?),
                 html: self
                     .html
                     .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(html)))?,
@@ -839,7 +839,7 @@ impl SetDocumentContentBuilder {
 }
 impl SetLifecycleEventsEnabled {
     pub fn builder() -> SetLifecycleEventsEnabledBuilder {
-        SetLifecycleEventsEnabledBuilder::default()
+        <SetLifecycleEventsEnabledBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -864,7 +864,7 @@ impl SetLifecycleEventsEnabledBuilder {
 }
 impl StartScreencast {
     pub fn builder() -> StartScreencastBuilder {
-        StartScreencastBuilder::default()
+        <StartScreencastBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -911,7 +911,7 @@ impl StartScreencastBuilder {
 }
 impl SetWebLifecycleState {
     pub fn builder() -> SetWebLifecycleStateBuilder {
-        SetWebLifecycleStateBuilder::default()
+        <SetWebLifecycleStateBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -936,7 +936,7 @@ impl SetWebLifecycleStateBuilder {
 }
 impl ProduceCompilationCache {
     pub fn builder() -> ProduceCompilationCacheBuilder {
-        ProduceCompilationCacheBuilder::default()
+        <ProduceCompilationCacheBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -973,20 +973,20 @@ impl ProduceCompilationCacheBuilder {
 }
 impl AddCompilationCache {
     pub fn builder() -> AddCompilationCacheBuilder {
-        AddCompilationCacheBuilder::default()
+        <AddCompilationCacheBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct AddCompilationCacheBuilder {
     url: Option<String>,
-    data: Option<super::super::super::Binary>,
+    data: Option<crate::Binary>,
 }
 impl AddCompilationCacheBuilder {
     pub fn url(mut self, url: impl Into<String>) -> Self {
         self.url = Some(url.into());
         self
     }
-    pub fn data(mut self, data: impl Into<super::super::super::Binary>) -> Self {
+    pub fn data(mut self, data: impl Into<crate::Binary>) -> Self {
         self.data = Some(data.into());
         self
     }
@@ -1006,7 +1006,7 @@ impl AddCompilationCacheBuilder {
 }
 impl SetSpcTransactionMode {
     pub fn builder() -> SetSpcTransactionModeBuilder {
-        SetSpcTransactionModeBuilder::default()
+        <SetSpcTransactionModeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1031,7 +1031,7 @@ impl SetSpcTransactionModeBuilder {
 }
 impl SetRphRegistrationMode {
     pub fn builder() -> SetRphRegistrationModeBuilder {
-        SetRphRegistrationModeBuilder::default()
+        <SetRphRegistrationModeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1056,7 +1056,7 @@ impl SetRphRegistrationModeBuilder {
 }
 impl GenerateTestReport {
     pub fn builder() -> GenerateTestReportBuilder {
-        GenerateTestReportBuilder::default()
+        <GenerateTestReportBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1087,7 +1087,7 @@ impl GenerateTestReportBuilder {
 }
 impl SetInterceptFileChooserDialog {
     pub fn builder() -> SetInterceptFileChooserDialogBuilder {
-        SetInterceptFileChooserDialogBuilder::default()
+        <SetInterceptFileChooserDialogBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1118,7 +1118,7 @@ impl SetInterceptFileChooserDialogBuilder {
 }
 impl SetPrerenderingAllowed {
     pub fn builder() -> SetPrerenderingAllowedBuilder {
-        SetPrerenderingAllowedBuilder::default()
+        <SetPrerenderingAllowedBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1143,7 +1143,7 @@ impl SetPrerenderingAllowedBuilder {
 }
 impl GetAnnotatedPageContent {
     pub fn builder() -> GetAnnotatedPageContentBuilder {
-        GetAnnotatedPageContentBuilder::default()
+        <GetAnnotatedPageContentBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

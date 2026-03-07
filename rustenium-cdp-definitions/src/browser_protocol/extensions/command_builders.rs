@@ -1,7 +1,7 @@
 use super::commands::*;
 impl TriggerAction {
     pub fn builder() -> TriggerActionBuilder {
-        TriggerActionBuilder::default()
+        <TriggerActionBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -34,7 +34,7 @@ impl TriggerActionBuilder {
 }
 impl LoadUnpacked {
     pub fn builder() -> LoadUnpackedBuilder {
-        LoadUnpackedBuilder::default()
+        <LoadUnpackedBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -65,7 +65,7 @@ impl LoadUnpackedBuilder {
 }
 impl Uninstall {
     pub fn builder() -> UninstallBuilder {
-        UninstallBuilder::default()
+        <UninstallBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -90,7 +90,7 @@ impl UninstallBuilder {
 }
 impl GetStorageItems {
     pub fn builder() -> GetStorageItemsBuilder {
-        GetStorageItemsBuilder::default()
+        <GetStorageItemsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -141,7 +141,7 @@ impl GetStorageItemsBuilder {
 }
 impl RemoveStorageItems {
     pub fn builder() -> RemoveStorageItemsBuilder {
-        RemoveStorageItemsBuilder::default()
+        <RemoveStorageItemsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -194,7 +194,7 @@ impl RemoveStorageItemsBuilder {
 }
 impl ClearStorageItems {
     pub fn builder() -> ClearStorageItemsBuilder {
-        ClearStorageItemsBuilder::default()
+        <ClearStorageItemsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -227,7 +227,7 @@ impl ClearStorageItemsBuilder {
 }
 impl SetStorageItems {
     pub fn builder() -> SetStorageItemsBuilder {
-        SetStorageItemsBuilder::default()
+        <SetStorageItemsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

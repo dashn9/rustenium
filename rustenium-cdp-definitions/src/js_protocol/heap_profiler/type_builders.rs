@@ -1,12 +1,12 @@
 use super::types::*;
 impl SamplingHeapProfileNode {
     pub fn builder() -> SamplingHeapProfileNodeBuilder {
-        SamplingHeapProfileNodeBuilder::default()
+        <SamplingHeapProfileNodeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct SamplingHeapProfileNodeBuilder {
-    call_frame: Option<super::super::runtime::types::CallFrame>,
+    call_frame: Option<crate::js_protocol::runtime::types::CallFrame>,
     self_size: Option<f64>,
     id: Option<i64>,
     children: Option<Vec<SamplingHeapProfileNode>>,
@@ -14,7 +14,7 @@ pub struct SamplingHeapProfileNodeBuilder {
 impl SamplingHeapProfileNodeBuilder {
     pub fn call_frame(
         mut self,
-        call_frame: impl Into<super::super::runtime::types::CallFrame>,
+        call_frame: impl Into<crate::js_protocol::runtime::types::CallFrame>,
     ) -> Self {
         self.call_frame = Some(call_frame.into());
         self
@@ -62,7 +62,7 @@ impl SamplingHeapProfileNodeBuilder {
 }
 impl SamplingHeapProfileSample {
     pub fn builder() -> SamplingHeapProfileSampleBuilder {
-        SamplingHeapProfileSampleBuilder::default()
+        <SamplingHeapProfileSampleBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -100,7 +100,7 @@ impl SamplingHeapProfileSampleBuilder {
 }
 impl SamplingHeapProfile {
     pub fn builder() -> SamplingHeapProfileBuilder {
-        SamplingHeapProfileBuilder::default()
+        <SamplingHeapProfileBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

@@ -1,10 +1,4 @@
 use serde::{Deserialize, Serialize};
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct DisableResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct EnableResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct ReleaseSnapshotResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CompositingReasonsResult {
     #[doc = "A list of strings specifying reasons for the given layer to become composited."]
@@ -16,6 +10,10 @@ pub struct CompositingReasonsResult {
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub compositing_reason_ids: Vec<String>,
 }
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct DisableResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct EnableResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LoadSnapshotResult {
     #[doc = "The id of the snapshot."]
@@ -35,6 +33,8 @@ pub struct ProfileSnapshotResult {
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub timings: Vec<super::types::PaintProfile>,
 }
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ReleaseSnapshotResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ReplaySnapshotResult {
     #[doc = "A data: URL for resulting image."]

@@ -1,7 +1,7 @@
 use super::commands::*;
 impl StartObserving {
     pub fn builder() -> StartObservingBuilder {
-        StartObservingBuilder::default()
+        <StartObservingBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -26,7 +26,7 @@ impl StartObservingBuilder {
 }
 impl StopObserving {
     pub fn builder() -> StopObservingBuilder {
-        StopObservingBuilder::default()
+        <StopObservingBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -51,7 +51,7 @@ impl StopObservingBuilder {
 }
 impl SetRecording {
     pub fn builder() -> SetRecordingBuilder {
-        SetRecordingBuilder::default()
+        <SetRecordingBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -84,7 +84,7 @@ impl SetRecordingBuilder {
 }
 impl ClearEvents {
     pub fn builder() -> ClearEventsBuilder {
-        ClearEventsBuilder::default()
+        <ClearEventsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

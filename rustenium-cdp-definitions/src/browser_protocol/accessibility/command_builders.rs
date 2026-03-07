@@ -1,31 +1,34 @@
 use super::commands::*;
 impl GetPartialAxTree {
     pub fn builder() -> GetPartialAxTreeBuilder {
-        GetPartialAxTreeBuilder::default()
+        <GetPartialAxTreeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetPartialAxTreeBuilder {
-    node_id: Option<super::super::dom::types::NodeId>,
-    backend_node_id: Option<super::super::dom::types::BackendNodeId>,
-    object_id: Option<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+    node_id: Option<crate::browser_protocol::dom::types::NodeId>,
+    backend_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
+    object_id: Option<crate::js_protocol::runtime::types::RemoteObjectId>,
     fetch_relatives: Option<bool>,
 }
 impl GetPartialAxTreeBuilder {
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
     pub fn backend_node_id(
         mut self,
-        backend_node_id: impl Into<super::super::dom::types::BackendNodeId>,
+        backend_node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
     ) -> Self {
         self.backend_node_id = Some(backend_node_id.into());
         self
     }
     pub fn object_id(
         mut self,
-        object_id: impl Into<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+        object_id: impl Into<crate::js_protocol::runtime::types::RemoteObjectId>,
     ) -> Self {
         self.object_id = Some(object_id.into());
         self
@@ -48,20 +51,23 @@ impl GetPartialAxTreeBuilder {
 }
 impl GetFullAxTree {
     pub fn builder() -> GetFullAxTreeBuilder {
-        GetFullAxTreeBuilder::default()
+        <GetFullAxTreeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetFullAxTreeBuilder {
     depth: Option<i64>,
-    frame_id: Option<super::super::page::types::FrameId>,
+    frame_id: Option<crate::browser_protocol::page::types::FrameId>,
 }
 impl GetFullAxTreeBuilder {
     pub fn depth(mut self, depth: impl Into<i64>) -> Self {
         self.depth = Some(depth.into());
         self
     }
-    pub fn frame_id(mut self, frame_id: impl Into<super::super::page::types::FrameId>) -> Self {
+    pub fn frame_id(
+        mut self,
+        frame_id: impl Into<crate::browser_protocol::page::types::FrameId>,
+    ) -> Self {
         self.frame_id = Some(frame_id.into());
         self
     }
@@ -77,15 +83,18 @@ impl GetFullAxTreeBuilder {
 }
 impl GetRootAxNode {
     pub fn builder() -> GetRootAxNodeBuilder {
-        GetRootAxNodeBuilder::default()
+        <GetRootAxNodeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetRootAxNodeBuilder {
-    frame_id: Option<super::super::page::types::FrameId>,
+    frame_id: Option<crate::browser_protocol::page::types::FrameId>,
 }
 impl GetRootAxNodeBuilder {
-    pub fn frame_id(mut self, frame_id: impl Into<super::super::page::types::FrameId>) -> Self {
+    pub fn frame_id(
+        mut self,
+        frame_id: impl Into<crate::browser_protocol::page::types::FrameId>,
+    ) -> Self {
         self.frame_id = Some(frame_id.into());
         self
     }
@@ -100,30 +109,33 @@ impl GetRootAxNodeBuilder {
 }
 impl GetAxNodeAndAncestors {
     pub fn builder() -> GetAxNodeAndAncestorsBuilder {
-        GetAxNodeAndAncestorsBuilder::default()
+        <GetAxNodeAndAncestorsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetAxNodeAndAncestorsBuilder {
-    node_id: Option<super::super::dom::types::NodeId>,
-    backend_node_id: Option<super::super::dom::types::BackendNodeId>,
-    object_id: Option<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+    node_id: Option<crate::browser_protocol::dom::types::NodeId>,
+    backend_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
+    object_id: Option<crate::js_protocol::runtime::types::RemoteObjectId>,
 }
 impl GetAxNodeAndAncestorsBuilder {
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
     pub fn backend_node_id(
         mut self,
-        backend_node_id: impl Into<super::super::dom::types::BackendNodeId>,
+        backend_node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
     ) -> Self {
         self.backend_node_id = Some(backend_node_id.into());
         self
     }
     pub fn object_id(
         mut self,
-        object_id: impl Into<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+        object_id: impl Into<crate::js_protocol::runtime::types::RemoteObjectId>,
     ) -> Self {
         self.object_id = Some(object_id.into());
         self
@@ -141,20 +153,23 @@ impl GetAxNodeAndAncestorsBuilder {
 }
 impl GetChildAxNodes {
     pub fn builder() -> GetChildAxNodesBuilder {
-        GetChildAxNodesBuilder::default()
+        <GetChildAxNodesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetChildAxNodesBuilder {
     id: Option<super::types::AxNodeId>,
-    frame_id: Option<super::super::page::types::FrameId>,
+    frame_id: Option<crate::browser_protocol::page::types::FrameId>,
 }
 impl GetChildAxNodesBuilder {
     pub fn id(mut self, id: impl Into<super::types::AxNodeId>) -> Self {
         self.id = Some(id.into());
         self
     }
-    pub fn frame_id(mut self, frame_id: impl Into<super::super::page::types::FrameId>) -> Self {
+    pub fn frame_id(
+        mut self,
+        frame_id: impl Into<crate::browser_protocol::page::types::FrameId>,
+    ) -> Self {
         self.frame_id = Some(frame_id.into());
         self
     }
@@ -172,32 +187,35 @@ impl GetChildAxNodesBuilder {
 }
 impl QueryAxTree {
     pub fn builder() -> QueryAxTreeBuilder {
-        QueryAxTreeBuilder::default()
+        <QueryAxTreeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct QueryAxTreeBuilder {
-    node_id: Option<super::super::dom::types::NodeId>,
-    backend_node_id: Option<super::super::dom::types::BackendNodeId>,
-    object_id: Option<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+    node_id: Option<crate::browser_protocol::dom::types::NodeId>,
+    backend_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
+    object_id: Option<crate::js_protocol::runtime::types::RemoteObjectId>,
     accessible_name: Option<String>,
     role: Option<String>,
 }
 impl QueryAxTreeBuilder {
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
     pub fn backend_node_id(
         mut self,
-        backend_node_id: impl Into<super::super::dom::types::BackendNodeId>,
+        backend_node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
     ) -> Self {
         self.backend_node_id = Some(backend_node_id.into());
         self
     }
     pub fn object_id(
         mut self,
-        object_id: impl Into<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+        object_id: impl Into<crate::js_protocol::runtime::types::RemoteObjectId>,
     ) -> Self {
         self.object_id = Some(object_id.into());
         self

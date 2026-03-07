@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct DialogShown {
+pub struct DialogShownParams {
     #[serde(rename = "dialogId")]
     pub dialog_id: String,
     #[serde(rename = "dialogType")]
@@ -16,16 +16,37 @@ pub struct DialogShown {
     #[serde(default)]
     pub subtitle: Option<String>,
 }
-impl DialogShown {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum DialogShownMethod {
+    #[serde(rename = "FedCm.dialogShown")]
+    DialogShown,
+}
+impl DialogShownMethod {
     pub const IDENTIFIER: &'static str = "FedCm.dialogShown";
+}
+#[derive(Debug, Clone, PartialEq)]
+pub struct DialogShown {
+    pub method: DialogShownMethod,
+    pub params: DialogShownParams,
 }
 #[doc = "Triggered when a dialog is closed, either by user action, JS abort,\nor a command below.\n[dialogClosed](https://chromedevtools.github.io/devtools-protocol/tot/FedCm/#event-dialogClosed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct DialogClosed {
+pub struct DialogClosedParams {
     #[serde(rename = "dialogId")]
     pub dialog_id: String,
 }
-impl DialogClosed {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum DialogClosedMethod {
+    #[serde(rename = "FedCm.dialogClosed")]
+    DialogClosed,
+}
+impl DialogClosedMethod {
     pub const IDENTIFIER: &'static str = "FedCm.dialogClosed";
+}
+#[doc = "Triggered when a dialog is closed, either by user action, JS abort,\nor a command below.\n[dialogClosed](https://chromedevtools.github.io/devtools-protocol/tot/FedCm/#event-dialogClosed)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct DialogClosed {
+    pub method: DialogClosedMethod,
+    pub params: DialogClosedParams,
 }
 group_enum ! (FedCmEvents { DialogShown (DialogShown) , DialogClosed (DialogClosed) });

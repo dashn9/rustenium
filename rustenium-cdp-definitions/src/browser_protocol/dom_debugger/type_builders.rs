@@ -1,7 +1,7 @@
 use super::types::*;
 impl EventListener {
     pub fn builder() -> EventListenerBuilder {
-        EventListenerBuilder::default()
+        <EventListenerBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -10,12 +10,12 @@ pub struct EventListenerBuilder {
     use_capture: Option<bool>,
     passive: Option<bool>,
     once: Option<bool>,
-    script_id: Option<super::super::super::js_protocol::runtime::types::ScriptId>,
+    script_id: Option<crate::js_protocol::runtime::types::ScriptId>,
     line_number: Option<i64>,
     column_number: Option<i64>,
-    handler: Option<super::super::super::js_protocol::runtime::types::RemoteObject>,
-    original_handler: Option<super::super::super::js_protocol::runtime::types::RemoteObject>,
-    backend_node_id: Option<super::super::dom::types::BackendNodeId>,
+    handler: Option<crate::js_protocol::runtime::types::RemoteObject>,
+    original_handler: Option<crate::js_protocol::runtime::types::RemoteObject>,
+    backend_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
 }
 impl EventListenerBuilder {
     pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
@@ -36,7 +36,7 @@ impl EventListenerBuilder {
     }
     pub fn script_id(
         mut self,
-        script_id: impl Into<super::super::super::js_protocol::runtime::types::ScriptId>,
+        script_id: impl Into<crate::js_protocol::runtime::types::ScriptId>,
     ) -> Self {
         self.script_id = Some(script_id.into());
         self
@@ -51,21 +51,21 @@ impl EventListenerBuilder {
     }
     pub fn handler(
         mut self,
-        handler: impl Into<super::super::super::js_protocol::runtime::types::RemoteObject>,
+        handler: impl Into<crate::js_protocol::runtime::types::RemoteObject>,
     ) -> Self {
         self.handler = Some(handler.into());
         self
     }
     pub fn original_handler(
         mut self,
-        original_handler: impl Into<super::super::super::js_protocol::runtime::types::RemoteObject>,
+        original_handler: impl Into<crate::js_protocol::runtime::types::RemoteObject>,
     ) -> Self {
         self.original_handler = Some(original_handler.into());
         self
     }
     pub fn backend_node_id(
         mut self,
-        backend_node_id: impl Into<super::super::dom::types::BackendNodeId>,
+        backend_node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
     ) -> Self {
         self.backend_node_id = Some(backend_node_id.into());
         self

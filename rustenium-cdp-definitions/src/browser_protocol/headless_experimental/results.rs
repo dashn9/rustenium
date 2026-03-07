@@ -8,5 +8,9 @@ pub struct BeginFrameResult {
     #[serde(rename = "screenshotData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub screenshot_data: Option<super::super::super::Binary>,
+    pub screenshot_data: Option<crate::Binary>,
 }
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct DisableResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct EnableResult {}

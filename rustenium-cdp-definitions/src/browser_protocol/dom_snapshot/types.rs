@@ -33,7 +33,7 @@ pub struct DomNode {
     pub option_selected: Option<bool>,
     #[doc = "`Node`'s id, corresponds to DOM.Node.backendNodeId."]
     #[serde(rename = "backendNodeId")]
-    pub backend_node_id: super::super::dom::types::BackendNodeId,
+    pub backend_node_id: crate::browser_protocol::dom::types::BackendNodeId,
     #[doc = "The indexes of the node's child nodes in the `domNodes` array returned by `getSnapshot`, if\nany."]
     #[serde(rename = "childNodeIndexes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -88,7 +88,7 @@ pub struct DomNode {
     #[serde(rename = "frameId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub frame_id: Option<super::super::page::types::FrameId>,
+    pub frame_id: Option<crate::browser_protocol::page::types::FrameId>,
     #[doc = "The index of a frame owner element's content document in the `domNodes` array returned by\n`getSnapshot`, if any."]
     #[serde(rename = "contentDocumentIndex")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -98,12 +98,12 @@ pub struct DomNode {
     #[serde(rename = "pseudoType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub pseudo_type: Option<super::super::dom::types::PseudoType>,
+    pub pseudo_type: Option<crate::browser_protocol::dom::types::PseudoType>,
     #[doc = "Shadow root type."]
     #[serde(rename = "shadowRootType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub shadow_root_type: Option<super::super::dom::types::ShadowRootType>,
+    pub shadow_root_type: Option<crate::browser_protocol::dom::types::ShadowRootType>,
     #[doc = "Whether this DOM node responds to mouse clicks. This includes nodes that have had click\nevent listeners attached via JavaScript as well as anchor tags that naturally navigate when\nclicked."]
     #[serde(rename = "isClickable")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -113,7 +113,7 @@ pub struct DomNode {
     #[serde(rename = "eventListeners")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub event_listeners: Option<Vec<super::super::dom_debugger::types::EventListener>>,
+    pub event_listeners: Option<Vec<crate::browser_protocol::dom_debugger::types::EventListener>>,
     #[doc = "The selected url for nodes with a srcset attribute."]
     #[serde(rename = "currentSourceURL")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -139,7 +139,7 @@ impl DomNode {
         node_type: impl Into<i64>,
         node_name: impl Into<String>,
         node_value: impl Into<String>,
-        backend_node_id: impl Into<super::super::dom::types::BackendNodeId>,
+        backend_node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
     ) -> Self {
         Self {
             node_type: node_type.into(),
@@ -181,7 +181,7 @@ impl DomNode {
 pub struct InlineTextBox {
     #[doc = "The bounding box in document coordinates. Note that scroll offset of the document is ignored."]
     #[serde(rename = "boundingBox")]
-    pub bounding_box: super::super::dom::types::Rect,
+    pub bounding_box: crate::browser_protocol::dom::types::Rect,
     #[doc = "The starting index in characters, for this post layout textbox substring. Characters that\nwould be represented as a surrogate pair in UTF-16 have length 2."]
     #[serde(rename = "startCharacterIndex")]
     pub start_character_index: i64,
@@ -191,7 +191,7 @@ pub struct InlineTextBox {
 }
 impl InlineTextBox {
     pub fn new(
-        bounding_box: impl Into<super::super::dom::types::Rect>,
+        bounding_box: impl Into<crate::browser_protocol::dom::types::Rect>,
         start_character_index: impl Into<i64>,
         num_characters: impl Into<i64>,
     ) -> Self {
@@ -213,7 +213,7 @@ pub struct LayoutTreeNode {
     pub dom_node_index: i64,
     #[doc = "The bounding box in document coordinates. Note that scroll offset of the document is ignored."]
     #[serde(rename = "boundingBox")]
-    pub bounding_box: super::super::dom::types::Rect,
+    pub bounding_box: crate::browser_protocol::dom::types::Rect,
     #[doc = "Contents of the LayoutText, if any."]
     #[serde(rename = "layoutText")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -243,7 +243,7 @@ pub struct LayoutTreeNode {
 impl LayoutTreeNode {
     pub fn new(
         dom_node_index: impl Into<i64>,
-        bounding_box: impl Into<super::super::dom::types::Rect>,
+        bounding_box: impl Into<crate::browser_protocol::dom::types::Rect>,
     ) -> Self {
         Self {
             dom_node_index: dom_node_index.into(),
@@ -311,7 +311,7 @@ impl StringIndex {
     pub const IDENTIFIER: &'static str = "DOMSnapshot.StringIndex";
 }
 #[doc = "Index of the string in the strings table.\n[ArrayOfStrings](https://chromedevtools.github.io/devtools-protocol/tot/DOMSnapshot/#type-ArrayOfStrings)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ArrayOfStrings(Vec<StringIndex>);
 impl ArrayOfStrings {
     pub fn new(val: impl Into<Vec<StringIndex>>) -> Self {
@@ -373,7 +373,7 @@ impl RareIntegerData {
 impl RareIntegerData {
     pub const IDENTIFIER: &'static str = "DOMSnapshot.RareIntegerData";
 }
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Rectangle(Vec<f64>);
 impl Rectangle {
     pub fn new(val: impl Into<Vec<f64>>) -> Self {
@@ -478,7 +478,7 @@ pub struct NodeTreeSnapshot {
     #[serde(rename = "backendNodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub backend_node_id: Option<Vec<super::super::dom::types::BackendNodeId>>,
+    pub backend_node_id: Option<Vec<crate::browser_protocol::dom::types::BackendNodeId>>,
     #[doc = "Attributes of an `Element` node. Flatten name, value pairs."]
     #[serde(rename = "attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]

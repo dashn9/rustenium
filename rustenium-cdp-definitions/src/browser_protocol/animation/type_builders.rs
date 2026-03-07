@@ -1,7 +1,7 @@
 use super::types::*;
 impl Animation {
     pub fn builder() -> AnimationBuilder {
-        AnimationBuilder::default()
+        <AnimationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -100,21 +100,21 @@ impl AnimationBuilder {
 }
 impl ViewOrScrollTimeline {
     pub fn builder() -> ViewOrScrollTimelineBuilder {
-        ViewOrScrollTimelineBuilder::default()
+        <ViewOrScrollTimelineBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct ViewOrScrollTimelineBuilder {
-    source_node_id: Option<super::super::dom::types::BackendNodeId>,
+    source_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     start_offset: Option<f64>,
     end_offset: Option<f64>,
-    subject_node_id: Option<super::super::dom::types::BackendNodeId>,
-    axis: Option<super::super::dom::types::ScrollOrientation>,
+    subject_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
+    axis: Option<crate::browser_protocol::dom::types::ScrollOrientation>,
 }
 impl ViewOrScrollTimelineBuilder {
     pub fn source_node_id(
         mut self,
-        source_node_id: impl Into<super::super::dom::types::BackendNodeId>,
+        source_node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
     ) -> Self {
         self.source_node_id = Some(source_node_id.into());
         self
@@ -129,12 +129,15 @@ impl ViewOrScrollTimelineBuilder {
     }
     pub fn subject_node_id(
         mut self,
-        subject_node_id: impl Into<super::super::dom::types::BackendNodeId>,
+        subject_node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
     ) -> Self {
         self.subject_node_id = Some(subject_node_id.into());
         self
     }
-    pub fn axis(mut self, axis: impl Into<super::super::dom::types::ScrollOrientation>) -> Self {
+    pub fn axis(
+        mut self,
+        axis: impl Into<crate::browser_protocol::dom::types::ScrollOrientation>,
+    ) -> Self {
         self.axis = Some(axis.into());
         self
     }
@@ -152,7 +155,7 @@ impl ViewOrScrollTimelineBuilder {
 }
 impl AnimationEffect {
     pub fn builder() -> AnimationEffectBuilder {
-        AnimationEffectBuilder::default()
+        <AnimationEffectBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -164,7 +167,7 @@ pub struct AnimationEffectBuilder {
     duration: Option<f64>,
     direction: Option<String>,
     fill: Option<String>,
-    backend_node_id: Option<super::super::dom::types::BackendNodeId>,
+    backend_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     keyframes_rule: Option<KeyframesRule>,
     easing: Option<String>,
 }
@@ -199,7 +202,7 @@ impl AnimationEffectBuilder {
     }
     pub fn backend_node_id(
         mut self,
-        backend_node_id: impl Into<super::super::dom::types::BackendNodeId>,
+        backend_node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
     ) -> Self {
         self.backend_node_id = Some(backend_node_id.into());
         self
@@ -243,7 +246,7 @@ impl AnimationEffectBuilder {
 }
 impl KeyframesRule {
     pub fn builder() -> KeyframesRuleBuilder {
-        KeyframesRuleBuilder::default()
+        <KeyframesRuleBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -283,7 +286,7 @@ impl KeyframesRuleBuilder {
 }
 impl KeyframeStyle {
     pub fn builder() -> KeyframeStyleBuilder {
-        KeyframeStyleBuilder::default()
+        <KeyframeStyleBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

@@ -1,7 +1,7 @@
 use super::types::*;
 impl EventMetadata {
     pub fn builder() -> EventMetadataBuilder {
-        EventMetadataBuilder::default()
+        <EventMetadataBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -31,14 +31,15 @@ impl EventMetadataBuilder {
 }
 impl BackgroundServiceEvent {
     pub fn builder() -> BackgroundServiceEventBuilder {
-        BackgroundServiceEventBuilder::default()
+        <BackgroundServiceEventBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct BackgroundServiceEventBuilder {
-    timestamp: Option<super::super::network::types::TimeSinceEpoch>,
+    timestamp: Option<crate::browser_protocol::network::types::TimeSinceEpoch>,
     origin: Option<String>,
-    service_worker_registration_id: Option<super::super::service_worker::types::RegistrationId>,
+    service_worker_registration_id:
+        Option<crate::browser_protocol::service_worker::types::RegistrationId>,
     service: Option<ServiceName>,
     event_name: Option<String>,
     instance_id: Option<String>,
@@ -48,7 +49,7 @@ pub struct BackgroundServiceEventBuilder {
 impl BackgroundServiceEventBuilder {
     pub fn timestamp(
         mut self,
-        timestamp: impl Into<super::super::network::types::TimeSinceEpoch>,
+        timestamp: impl Into<crate::browser_protocol::network::types::TimeSinceEpoch>,
     ) -> Self {
         self.timestamp = Some(timestamp.into());
         self
@@ -59,7 +60,9 @@ impl BackgroundServiceEventBuilder {
     }
     pub fn service_worker_registration_id(
         mut self,
-        service_worker_registration_id: impl Into<super::super::service_worker::types::RegistrationId>,
+        service_worker_registration_id: impl Into<
+            crate::browser_protocol::service_worker::types::RegistrationId,
+        >,
     ) -> Self {
         self.service_worker_registration_id = Some(service_worker_registration_id.into());
         self

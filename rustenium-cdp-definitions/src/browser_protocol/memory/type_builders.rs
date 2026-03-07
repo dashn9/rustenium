@@ -1,7 +1,7 @@
 use super::types::*;
 impl SamplingProfileNode {
     pub fn builder() -> SamplingProfileNodeBuilder {
-        SamplingProfileNodeBuilder::default()
+        <SamplingProfileNodeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -51,7 +51,7 @@ impl SamplingProfileNodeBuilder {
 }
 impl SamplingProfile {
     pub fn builder() -> SamplingProfileBuilder {
-        SamplingProfileBuilder::default()
+        <SamplingProfileBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -105,7 +105,7 @@ impl SamplingProfileBuilder {
 }
 impl Module {
     pub fn builder() -> ModuleBuilder {
-        ModuleBuilder::default()
+        <ModuleBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -151,7 +151,7 @@ impl ModuleBuilder {
 }
 impl DomCounter {
     pub fn builder() -> DomCounterBuilder {
-        DomCounterBuilder::default()
+        <DomCounterBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

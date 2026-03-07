@@ -165,7 +165,7 @@ pub struct Player {
     #[serde(rename = "domNodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub dom_node_id: Option<super::super::dom::types::BackendNodeId>,
+    pub dom_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
 }
 impl Player {
     pub fn new(player_id: impl Into<PlayerId>) -> Self {

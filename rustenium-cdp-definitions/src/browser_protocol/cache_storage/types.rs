@@ -98,7 +98,7 @@ pub struct Cache {
     #[serde(rename = "storageBucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub storage_bucket: Option<super::super::storage::types::StorageBucket>,
+    pub storage_bucket: Option<crate::browser_protocol::storage::types::StorageBucket>,
     #[doc = "The name of the cache."]
     #[serde(rename = "cacheName")]
     pub cache_name: String,
@@ -145,10 +145,10 @@ impl Header {
 pub struct CachedResponse {
     #[doc = "Entry content, base64-encoded."]
     #[serde(rename = "body")]
-    pub body: super::super::super::Binary,
+    pub body: crate::Binary,
 }
 impl CachedResponse {
-    pub fn new(body: impl Into<super::super::super::Binary>) -> Self {
+    pub fn new(body: impl Into<crate::Binary>) -> Self {
         Self { body: body.into() }
     }
 }

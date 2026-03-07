@@ -1,13 +1,13 @@
 use super::types::*;
 impl File {
     pub fn builder() -> FileBuilder {
-        FileBuilder::default()
+        <FileBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct FileBuilder {
     name: Option<String>,
-    last_modified: Option<super::super::network::types::TimeSinceEpoch>,
+    last_modified: Option<crate::browser_protocol::network::types::TimeSinceEpoch>,
     size: Option<f64>,
     r#type: Option<String>,
 }
@@ -18,7 +18,7 @@ impl FileBuilder {
     }
     pub fn last_modified(
         mut self,
-        last_modified: impl Into<super::super::network::types::TimeSinceEpoch>,
+        last_modified: impl Into<crate::browser_protocol::network::types::TimeSinceEpoch>,
     ) -> Self {
         self.last_modified = Some(last_modified.into());
         self
@@ -50,7 +50,7 @@ impl FileBuilder {
 }
 impl Directory {
     pub fn builder() -> DirectoryBuilder {
-        DirectoryBuilder::default()
+        <DirectoryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -115,19 +115,19 @@ impl DirectoryBuilder {
 }
 impl BucketFileSystemLocator {
     pub fn builder() -> BucketFileSystemLocatorBuilder {
-        BucketFileSystemLocatorBuilder::default()
+        <BucketFileSystemLocatorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct BucketFileSystemLocatorBuilder {
-    storage_key: Option<super::super::storage::types::SerializedStorageKey>,
+    storage_key: Option<crate::browser_protocol::storage::types::SerializedStorageKey>,
     bucket_name: Option<String>,
     path_components: Option<Vec<String>>,
 }
 impl BucketFileSystemLocatorBuilder {
     pub fn storage_key(
         mut self,
-        storage_key: impl Into<super::super::storage::types::SerializedStorageKey>,
+        storage_key: impl Into<crate::browser_protocol::storage::types::SerializedStorageKey>,
     ) -> Self {
         self.storage_key = Some(storage_key.into());
         self

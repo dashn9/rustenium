@@ -1,7 +1,7 @@
 use super::types::*;
 impl LogEntry {
     pub fn builder() -> LogEntryBuilder {
-        LogEntryBuilder::default()
+        <LogEntryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -10,13 +10,13 @@ pub struct LogEntryBuilder {
     level: Option<LogEntryLevel>,
     text: Option<String>,
     category: Option<LogEntryCategory>,
-    timestamp: Option<super::super::super::js_protocol::runtime::types::Timestamp>,
+    timestamp: Option<crate::js_protocol::runtime::types::Timestamp>,
     url: Option<String>,
     line_number: Option<i64>,
-    stack_trace: Option<super::super::super::js_protocol::runtime::types::StackTrace>,
-    network_request_id: Option<super::super::network::types::RequestId>,
+    stack_trace: Option<crate::js_protocol::runtime::types::StackTrace>,
+    network_request_id: Option<crate::browser_protocol::network::types::RequestId>,
     worker_id: Option<String>,
-    args: Option<Vec<super::super::super::js_protocol::runtime::types::RemoteObject>>,
+    args: Option<Vec<crate::js_protocol::runtime::types::RemoteObject>>,
 }
 impl LogEntryBuilder {
     pub fn source(mut self, source: impl Into<LogEntrySource>) -> Self {
@@ -37,7 +37,7 @@ impl LogEntryBuilder {
     }
     pub fn timestamp(
         mut self,
-        timestamp: impl Into<super::super::super::js_protocol::runtime::types::Timestamp>,
+        timestamp: impl Into<crate::js_protocol::runtime::types::Timestamp>,
     ) -> Self {
         self.timestamp = Some(timestamp.into());
         self
@@ -52,14 +52,14 @@ impl LogEntryBuilder {
     }
     pub fn stack_trace(
         mut self,
-        stack_trace: impl Into<super::super::super::js_protocol::runtime::types::StackTrace>,
+        stack_trace: impl Into<crate::js_protocol::runtime::types::StackTrace>,
     ) -> Self {
         self.stack_trace = Some(stack_trace.into());
         self
     }
     pub fn network_request_id(
         mut self,
-        network_request_id: impl Into<super::super::network::types::RequestId>,
+        network_request_id: impl Into<crate::browser_protocol::network::types::RequestId>,
     ) -> Self {
         self.network_request_id = Some(network_request_id.into());
         self
@@ -68,10 +68,7 @@ impl LogEntryBuilder {
         self.worker_id = Some(worker_id.into());
         self
     }
-    pub fn arg(
-        mut self,
-        arg: impl Into<super::super::super::js_protocol::runtime::types::RemoteObject>,
-    ) -> Self {
+    pub fn arg(mut self, arg: impl Into<crate::js_protocol::runtime::types::RemoteObject>) -> Self {
         let v = self.args.get_or_insert(Vec::new());
         v.push(arg.into());
         self
@@ -79,7 +76,7 @@ impl LogEntryBuilder {
     pub fn args<I, S>(mut self, args: I) -> Self
     where
         I: IntoIterator<Item = S>,
-        S: Into<super::super::super::js_protocol::runtime::types::RemoteObject>,
+        S: Into<crate::js_protocol::runtime::types::RemoteObject>,
     {
         let v = self.args.get_or_insert(Vec::new());
         for val in args {
@@ -113,7 +110,7 @@ impl LogEntryBuilder {
 }
 impl ViolationSetting {
     pub fn builder() -> ViolationSettingBuilder {
-        ViolationSettingBuilder::default()
+        <ViolationSettingBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

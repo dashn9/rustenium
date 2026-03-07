@@ -1,7 +1,7 @@
 use super::commands::*;
 impl Enable {
     pub fn builder() -> EnableBuilder {
-        EnableBuilder::default()
+        <EnableBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -24,7 +24,7 @@ impl EnableBuilder {
 }
 impl SelectAccount {
     pub fn builder() -> SelectAccountBuilder {
-        SelectAccountBuilder::default()
+        <SelectAccountBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -57,7 +57,7 @@ impl SelectAccountBuilder {
 }
 impl ClickDialogButton {
     pub fn builder() -> ClickDialogButtonBuilder {
-        ClickDialogButtonBuilder::default()
+        <ClickDialogButtonBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -90,7 +90,7 @@ impl ClickDialogButtonBuilder {
 }
 impl OpenUrl {
     pub fn builder() -> OpenUrlBuilder {
-        OpenUrlBuilder::default()
+        <OpenUrlBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -137,7 +137,7 @@ impl OpenUrlBuilder {
 }
 impl DismissDialog {
     pub fn builder() -> DismissDialogBuilder {
-        DismissDialogBuilder::default()
+        <DismissDialogBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

@@ -1,7 +1,7 @@
 use super::commands::*;
 impl Enable {
     pub fn builder() -> EnableBuilder {
-        EnableBuilder::default()
+        <EnableBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -34,7 +34,7 @@ impl EnableBuilder {
 }
 impl SetSimulatedCentralState {
     pub fn builder() -> SetSimulatedCentralStateBuilder {
-        SetSimulatedCentralStateBuilder::default()
+        <SetSimulatedCentralStateBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -59,7 +59,7 @@ impl SetSimulatedCentralStateBuilder {
 }
 impl SimulatePreconnectedPeripheral {
     pub fn builder() -> SimulatePreconnectedPeripheralBuilder {
-        SimulatePreconnectedPeripheralBuilder::default()
+        <SimulatePreconnectedPeripheralBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -141,7 +141,7 @@ impl SimulatePreconnectedPeripheralBuilder {
 }
 impl SimulateAdvertisement {
     pub fn builder() -> SimulateAdvertisementBuilder {
-        SimulateAdvertisementBuilder::default()
+        <SimulateAdvertisementBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -166,7 +166,7 @@ impl SimulateAdvertisementBuilder {
 }
 impl SimulateGattOperationResponse {
     pub fn builder() -> SimulateGattOperationResponseBuilder {
-        SimulateGattOperationResponseBuilder::default()
+        <SimulateGattOperationResponseBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -207,7 +207,7 @@ impl SimulateGattOperationResponseBuilder {
 }
 impl SimulateCharacteristicOperationResponse {
     pub fn builder() -> SimulateCharacteristicOperationResponseBuilder {
-        SimulateCharacteristicOperationResponseBuilder::default()
+        <SimulateCharacteristicOperationResponseBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -215,7 +215,7 @@ pub struct SimulateCharacteristicOperationResponseBuilder {
     characteristic_id: Option<String>,
     r#type: Option<super::types::CharacteristicOperationType>,
     code: Option<i64>,
-    data: Option<super::super::super::Binary>,
+    data: Option<crate::Binary>,
 }
 impl SimulateCharacteristicOperationResponseBuilder {
     pub fn characteristic_id(mut self, characteristic_id: impl Into<String>) -> Self {
@@ -230,7 +230,7 @@ impl SimulateCharacteristicOperationResponseBuilder {
         self.code = Some(code.into());
         self
     }
-    pub fn data(mut self, data: impl Into<super::super::super::Binary>) -> Self {
+    pub fn data(mut self, data: impl Into<crate::Binary>) -> Self {
         self.data = Some(data.into());
         self
     }
@@ -240,7 +240,7 @@ impl SimulateCharacteristicOperationResponseBuilder {
 }
 impl SimulateDescriptorOperationResponse {
     pub fn builder() -> SimulateDescriptorOperationResponseBuilder {
-        SimulateDescriptorOperationResponseBuilder::default()
+        <SimulateDescriptorOperationResponseBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -248,7 +248,7 @@ pub struct SimulateDescriptorOperationResponseBuilder {
     descriptor_id: Option<String>,
     r#type: Option<super::types::DescriptorOperationType>,
     code: Option<i64>,
-    data: Option<super::super::super::Binary>,
+    data: Option<crate::Binary>,
 }
 impl SimulateDescriptorOperationResponseBuilder {
     pub fn descriptor_id(mut self, descriptor_id: impl Into<String>) -> Self {
@@ -263,7 +263,7 @@ impl SimulateDescriptorOperationResponseBuilder {
         self.code = Some(code.into());
         self
     }
-    pub fn data(mut self, data: impl Into<super::super::super::Binary>) -> Self {
+    pub fn data(mut self, data: impl Into<crate::Binary>) -> Self {
         self.data = Some(data.into());
         self
     }
@@ -287,7 +287,7 @@ impl SimulateDescriptorOperationResponseBuilder {
 }
 impl AddService {
     pub fn builder() -> AddServiceBuilder {
-        AddServiceBuilder::default()
+        <AddServiceBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -320,7 +320,7 @@ impl AddServiceBuilder {
 }
 impl RemoveService {
     pub fn builder() -> RemoveServiceBuilder {
-        RemoveServiceBuilder::default()
+        <RemoveServiceBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -345,7 +345,7 @@ impl RemoveServiceBuilder {
 }
 impl AddCharacteristic {
     pub fn builder() -> AddCharacteristicBuilder {
-        AddCharacteristicBuilder::default()
+        <AddCharacteristicBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -392,7 +392,7 @@ impl AddCharacteristicBuilder {
 }
 impl RemoveCharacteristic {
     pub fn builder() -> RemoveCharacteristicBuilder {
-        RemoveCharacteristicBuilder::default()
+        <RemoveCharacteristicBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -420,7 +420,7 @@ impl RemoveCharacteristicBuilder {
 }
 impl AddDescriptor {
     pub fn builder() -> AddDescriptorBuilder {
-        AddDescriptorBuilder::default()
+        <AddDescriptorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -456,7 +456,7 @@ impl AddDescriptorBuilder {
 }
 impl RemoveDescriptor {
     pub fn builder() -> RemoveDescriptorBuilder {
-        RemoveDescriptorBuilder::default()
+        <RemoveDescriptorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -481,7 +481,7 @@ impl RemoveDescriptorBuilder {
 }
 impl SimulateGattDisconnection {
     pub fn builder() -> SimulateGattDisconnectionBuilder {
-        SimulateGattDisconnectionBuilder::default()
+        <SimulateGattDisconnectionBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

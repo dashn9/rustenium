@@ -1,7 +1,7 @@
 use super::commands::*;
 impl SetIgnoreCertificateErrors {
     pub fn builder() -> SetIgnoreCertificateErrorsBuilder {
-        SetIgnoreCertificateErrorsBuilder::default()
+        <SetIgnoreCertificateErrorsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

@@ -1,7 +1,7 @@
 use super::commands::*;
 impl AddInspectedHeapObject {
     pub fn builder() -> AddInspectedHeapObjectBuilder {
-        AddInspectedHeapObjectBuilder::default()
+        <AddInspectedHeapObjectBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -29,17 +29,17 @@ impl AddInspectedHeapObjectBuilder {
 }
 impl GetHeapObjectId {
     pub fn builder() -> GetHeapObjectIdBuilder {
-        GetHeapObjectIdBuilder::default()
+        <GetHeapObjectIdBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetHeapObjectIdBuilder {
-    object_id: Option<super::super::runtime::types::RemoteObjectId>,
+    object_id: Option<crate::js_protocol::runtime::types::RemoteObjectId>,
 }
 impl GetHeapObjectIdBuilder {
     pub fn object_id(
         mut self,
-        object_id: impl Into<super::super::runtime::types::RemoteObjectId>,
+        object_id: impl Into<crate::js_protocol::runtime::types::RemoteObjectId>,
     ) -> Self {
         self.object_id = Some(object_id.into());
         self
@@ -57,7 +57,7 @@ impl GetHeapObjectIdBuilder {
 }
 impl GetObjectByHeapObjectId {
     pub fn builder() -> GetObjectByHeapObjectIdBuilder {
-        GetObjectByHeapObjectIdBuilder::default()
+        <GetObjectByHeapObjectIdBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -88,7 +88,7 @@ impl GetObjectByHeapObjectIdBuilder {
 }
 impl StartSampling {
     pub fn builder() -> StartSamplingBuilder {
-        StartSamplingBuilder::default()
+        <StartSamplingBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -137,7 +137,7 @@ impl StartSamplingBuilder {
 }
 impl StartTrackingHeapObjects {
     pub fn builder() -> StartTrackingHeapObjectsBuilder {
-        StartTrackingHeapObjectsBuilder::default()
+        <StartTrackingHeapObjectsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -160,7 +160,7 @@ impl StartTrackingHeapObjectsBuilder {
 }
 impl StopTrackingHeapObjects {
     pub fn builder() -> StopTrackingHeapObjectsBuilder {
-        StopTrackingHeapObjectsBuilder::default()
+        <StopTrackingHeapObjectsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -195,7 +195,7 @@ impl StopTrackingHeapObjectsBuilder {
 }
 impl TakeHeapSnapshot {
     pub fn builder() -> TakeHeapSnapshotBuilder {
-        TakeHeapSnapshotBuilder::default()
+        <TakeHeapSnapshotBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

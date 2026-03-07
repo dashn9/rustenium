@@ -25,7 +25,7 @@ pub struct Bind {
     pub method: BindMethod,
     pub params: BindParams,
 }
-impl super::super::super::CommandResult for Bind {
+impl crate::CommandResult for Bind {
     type Result = super::results::BindResult;
 }
 #[doc = "Request browser port unbinding.\n[unbind](https://chromedevtools.github.io/devtools-protocol/tot/Tethering/#method-unbind)"]
@@ -54,7 +54,7 @@ pub struct Unbind {
     pub method: UnbindMethod,
     pub params: UnbindParams,
 }
-impl super::super::super::CommandResult for Unbind {
+impl crate::CommandResult for Unbind {
     type Result = super::results::UnbindResult;
 }
 group_enum ! (TetheringCommands { Bind (Bind) , Unbind (Unbind) });

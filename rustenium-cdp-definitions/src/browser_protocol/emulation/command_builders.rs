@@ -1,7 +1,7 @@
 use super::commands::*;
 impl SetFocusEmulationEnabled {
     pub fn builder() -> SetFocusEmulationEnabledBuilder {
-        SetFocusEmulationEnabledBuilder::default()
+        <SetFocusEmulationEnabledBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -26,7 +26,7 @@ impl SetFocusEmulationEnabledBuilder {
 }
 impl SetAutoDarkModeOverride {
     pub fn builder() -> SetAutoDarkModeOverrideBuilder {
-        SetAutoDarkModeOverrideBuilder::default()
+        <SetAutoDarkModeOverrideBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -49,7 +49,7 @@ impl SetAutoDarkModeOverrideBuilder {
 }
 impl SetCpuThrottlingRate {
     pub fn builder() -> SetCpuThrottlingRateBuilder {
-        SetCpuThrottlingRateBuilder::default()
+        <SetCpuThrottlingRateBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -74,15 +74,15 @@ impl SetCpuThrottlingRateBuilder {
 }
 impl SetDefaultBackgroundColorOverride {
     pub fn builder() -> SetDefaultBackgroundColorOverrideBuilder {
-        SetDefaultBackgroundColorOverrideBuilder::default()
+        <SetDefaultBackgroundColorOverrideBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct SetDefaultBackgroundColorOverrideBuilder {
-    color: Option<super::super::dom::types::Rgba>,
+    color: Option<crate::browser_protocol::dom::types::Rgba>,
 }
 impl SetDefaultBackgroundColorOverrideBuilder {
-    pub fn color(mut self, color: impl Into<super::super::dom::types::Rgba>) -> Self {
+    pub fn color(mut self, color: impl Into<crate::browser_protocol::dom::types::Rgba>) -> Self {
         self.color = Some(color.into());
         self
     }
@@ -95,7 +95,7 @@ impl SetDefaultBackgroundColorOverrideBuilder {
 }
 impl SetSafeAreaInsetsOverride {
     pub fn builder() -> SetSafeAreaInsetsOverrideBuilder {
-        SetSafeAreaInsetsOverrideBuilder::default()
+        <SetSafeAreaInsetsOverrideBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -120,7 +120,7 @@ impl SetSafeAreaInsetsOverrideBuilder {
 }
 impl SetDeviceMetricsOverride {
     pub fn builder() -> SetDeviceMetricsOverrideBuilder {
-        SetDeviceMetricsOverrideBuilder::default()
+        <SetDeviceMetricsOverrideBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -136,7 +136,7 @@ pub struct SetDeviceMetricsOverrideBuilder {
     position_y: Option<i64>,
     dont_set_visible_size: Option<bool>,
     screen_orientation: Option<super::types::ScreenOrientation>,
-    viewport: Option<super::super::page::types::Viewport>,
+    viewport: Option<crate::browser_protocol::page::types::Viewport>,
     scrollbar_type: Option<SetDeviceMetricsOverrideScrollbarType>,
 }
 impl SetDeviceMetricsOverrideBuilder {
@@ -187,7 +187,10 @@ impl SetDeviceMetricsOverrideBuilder {
         self.screen_orientation = Some(screen_orientation.into());
         self
     }
-    pub fn viewport(mut self, viewport: impl Into<super::super::page::types::Viewport>) -> Self {
+    pub fn viewport(
+        mut self,
+        viewport: impl Into<crate::browser_protocol::page::types::Viewport>,
+    ) -> Self {
         self.viewport = Some(viewport.into());
         self
     }
@@ -232,7 +235,7 @@ impl SetDeviceMetricsOverrideBuilder {
 }
 impl SetDevicePostureOverride {
     pub fn builder() -> SetDevicePostureOverrideBuilder {
-        SetDevicePostureOverrideBuilder::default()
+        <SetDevicePostureOverrideBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -257,7 +260,7 @@ impl SetDevicePostureOverrideBuilder {
 }
 impl SetDisplayFeaturesOverride {
     pub fn builder() -> SetDisplayFeaturesOverrideBuilder {
-        SetDisplayFeaturesOverrideBuilder::default()
+        <SetDisplayFeaturesOverrideBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -294,7 +297,7 @@ impl SetDisplayFeaturesOverrideBuilder {
 }
 impl SetScrollbarsHidden {
     pub fn builder() -> SetScrollbarsHiddenBuilder {
-        SetScrollbarsHiddenBuilder::default()
+        <SetScrollbarsHiddenBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -319,7 +322,7 @@ impl SetScrollbarsHiddenBuilder {
 }
 impl SetDocumentCookieDisabled {
     pub fn builder() -> SetDocumentCookieDisabledBuilder {
-        SetDocumentCookieDisabledBuilder::default()
+        <SetDocumentCookieDisabledBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -344,7 +347,7 @@ impl SetDocumentCookieDisabledBuilder {
 }
 impl SetEmitTouchEventsForMouse {
     pub fn builder() -> SetEmitTouchEventsForMouseBuilder {
-        SetEmitTouchEventsForMouseBuilder::default()
+        <SetEmitTouchEventsForMouseBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -378,7 +381,7 @@ impl SetEmitTouchEventsForMouseBuilder {
 }
 impl SetEmulatedMedia {
     pub fn builder() -> SetEmulatedMediaBuilder {
-        SetEmulatedMediaBuilder::default()
+        <SetEmulatedMediaBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -419,7 +422,7 @@ impl SetEmulatedMediaBuilder {
 }
 impl SetEmulatedVisionDeficiency {
     pub fn builder() -> SetEmulatedVisionDeficiencyBuilder {
-        SetEmulatedVisionDeficiencyBuilder::default()
+        <SetEmulatedVisionDeficiencyBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -444,7 +447,7 @@ impl SetEmulatedVisionDeficiencyBuilder {
 }
 impl SetEmulatedOsTextScale {
     pub fn builder() -> SetEmulatedOsTextScaleBuilder {
-        SetEmulatedOsTextScaleBuilder::default()
+        <SetEmulatedOsTextScaleBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -465,7 +468,7 @@ impl SetEmulatedOsTextScaleBuilder {
 }
 impl SetGeolocationOverride {
     pub fn builder() -> SetGeolocationOverrideBuilder {
-        SetGeolocationOverrideBuilder::default()
+        <SetGeolocationOverrideBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -524,7 +527,7 @@ impl SetGeolocationOverrideBuilder {
 }
 impl GetOverriddenSensorInformation {
     pub fn builder() -> GetOverriddenSensorInformationBuilder {
-        GetOverriddenSensorInformationBuilder::default()
+        <GetOverriddenSensorInformationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -549,7 +552,7 @@ impl GetOverriddenSensorInformationBuilder {
 }
 impl SetSensorOverrideEnabled {
     pub fn builder() -> SetSensorOverrideEnabledBuilder {
-        SetSensorOverrideEnabledBuilder::default()
+        <SetSensorOverrideEnabledBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -588,7 +591,7 @@ impl SetSensorOverrideEnabledBuilder {
 }
 impl SetSensorOverrideReadings {
     pub fn builder() -> SetSensorOverrideReadingsBuilder {
-        SetSensorOverrideReadingsBuilder::default()
+        <SetSensorOverrideReadingsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -621,7 +624,7 @@ impl SetSensorOverrideReadingsBuilder {
 }
 impl SetPressureSourceOverrideEnabled {
     pub fn builder() -> SetPressureSourceOverrideEnabledBuilder {
-        SetPressureSourceOverrideEnabledBuilder::default()
+        <SetPressureSourceOverrideEnabledBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -660,7 +663,7 @@ impl SetPressureSourceOverrideEnabledBuilder {
 }
 impl SetPressureStateOverride {
     pub fn builder() -> SetPressureStateOverrideBuilder {
-        SetPressureStateOverrideBuilder::default()
+        <SetPressureStateOverrideBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -693,7 +696,7 @@ impl SetPressureStateOverrideBuilder {
 }
 impl SetPressureDataOverride {
     pub fn builder() -> SetPressureDataOverrideBuilder {
-        SetPressureDataOverrideBuilder::default()
+        <SetPressureDataOverrideBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -732,7 +735,7 @@ impl SetPressureDataOverrideBuilder {
 }
 impl SetIdleOverride {
     pub fn builder() -> SetIdleOverrideBuilder {
-        SetIdleOverrideBuilder::default()
+        <SetIdleOverrideBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -768,7 +771,7 @@ impl SetIdleOverrideBuilder {
 }
 impl SetPageScaleFactor {
     pub fn builder() -> SetPageScaleFactorBuilder {
-        SetPageScaleFactorBuilder::default()
+        <SetPageScaleFactorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -796,7 +799,7 @@ impl SetPageScaleFactorBuilder {
 }
 impl SetScriptExecutionDisabled {
     pub fn builder() -> SetScriptExecutionDisabledBuilder {
-        SetScriptExecutionDisabledBuilder::default()
+        <SetScriptExecutionDisabledBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -821,7 +824,7 @@ impl SetScriptExecutionDisabledBuilder {
 }
 impl SetTouchEmulationEnabled {
     pub fn builder() -> SetTouchEmulationEnabledBuilder {
-        SetTouchEmulationEnabledBuilder::default()
+        <SetTouchEmulationEnabledBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -852,7 +855,7 @@ impl SetTouchEmulationEnabledBuilder {
 }
 impl SetVirtualTimePolicy {
     pub fn builder() -> SetVirtualTimePolicyBuilder {
-        SetVirtualTimePolicyBuilder::default()
+        <SetVirtualTimePolicyBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -860,7 +863,7 @@ pub struct SetVirtualTimePolicyBuilder {
     policy: Option<super::types::VirtualTimePolicy>,
     budget: Option<f64>,
     max_virtual_time_task_starvation_count: Option<i64>,
-    initial_virtual_time: Option<super::super::network::types::TimeSinceEpoch>,
+    initial_virtual_time: Option<crate::browser_protocol::network::types::TimeSinceEpoch>,
 }
 impl SetVirtualTimePolicyBuilder {
     pub fn policy(mut self, policy: impl Into<super::types::VirtualTimePolicy>) -> Self {
@@ -881,7 +884,7 @@ impl SetVirtualTimePolicyBuilder {
     }
     pub fn initial_virtual_time(
         mut self,
-        initial_virtual_time: impl Into<super::super::network::types::TimeSinceEpoch>,
+        initial_virtual_time: impl Into<crate::browser_protocol::network::types::TimeSinceEpoch>,
     ) -> Self {
         self.initial_virtual_time = Some(initial_virtual_time.into());
         self
@@ -902,7 +905,7 @@ impl SetVirtualTimePolicyBuilder {
 }
 impl SetLocaleOverride {
     pub fn builder() -> SetLocaleOverrideBuilder {
-        SetLocaleOverrideBuilder::default()
+        <SetLocaleOverrideBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -925,7 +928,7 @@ impl SetLocaleOverrideBuilder {
 }
 impl SetTimezoneOverride {
     pub fn builder() -> SetTimezoneOverrideBuilder {
-        SetTimezoneOverrideBuilder::default()
+        <SetTimezoneOverrideBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -950,7 +953,7 @@ impl SetTimezoneOverrideBuilder {
 }
 impl SetDisabledImageTypes {
     pub fn builder() -> SetDisabledImageTypesBuilder {
-        SetDisabledImageTypesBuilder::default()
+        <SetDisabledImageTypesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -987,7 +990,7 @@ impl SetDisabledImageTypesBuilder {
 }
 impl SetDataSaverOverride {
     pub fn builder() -> SetDataSaverOverrideBuilder {
-        SetDataSaverOverrideBuilder::default()
+        <SetDataSaverOverrideBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1010,7 +1013,7 @@ impl SetDataSaverOverrideBuilder {
 }
 impl SetHardwareConcurrencyOverride {
     pub fn builder() -> SetHardwareConcurrencyOverrideBuilder {
-        SetHardwareConcurrencyOverrideBuilder::default()
+        <SetHardwareConcurrencyOverrideBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1038,7 +1041,7 @@ impl SetHardwareConcurrencyOverrideBuilder {
 }
 impl SetUserAgentOverride {
     pub fn builder() -> SetUserAgentOverrideBuilder {
-        SetUserAgentOverrideBuilder::default()
+        <SetUserAgentOverrideBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1084,7 +1087,7 @@ impl SetUserAgentOverrideBuilder {
 }
 impl SetAutomationOverride {
     pub fn builder() -> SetAutomationOverrideBuilder {
-        SetAutomationOverrideBuilder::default()
+        <SetAutomationOverrideBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1109,7 +1112,7 @@ impl SetAutomationOverrideBuilder {
 }
 impl SetSmallViewportHeightDifferenceOverride {
     pub fn builder() -> SetSmallViewportHeightDifferenceOverrideBuilder {
-        SetSmallViewportHeightDifferenceOverrideBuilder::default()
+        <SetSmallViewportHeightDifferenceOverrideBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1127,7 +1130,7 @@ impl SetSmallViewportHeightDifferenceOverrideBuilder {
 }
 impl AddScreen {
     pub fn builder() -> AddScreenBuilder {
-        AddScreenBuilder::default()
+        <AddScreenBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1215,7 +1218,7 @@ impl AddScreenBuilder {
 }
 impl RemoveScreen {
     pub fn builder() -> RemoveScreenBuilder {
-        RemoveScreenBuilder::default()
+        <RemoveScreenBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

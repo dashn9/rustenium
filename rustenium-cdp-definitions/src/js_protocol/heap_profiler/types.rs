@@ -38,7 +38,7 @@ impl HeapSnapshotObjectId {
 pub struct SamplingHeapProfileNode {
     #[doc = "Function location."]
     #[serde(rename = "callFrame")]
-    pub call_frame: super::super::runtime::types::CallFrame,
+    pub call_frame: crate::js_protocol::runtime::types::CallFrame,
     #[doc = "Allocations size in bytes for the node excluding children."]
     #[serde(rename = "selfSize")]
     pub self_size: f64,
@@ -52,7 +52,7 @@ pub struct SamplingHeapProfileNode {
 }
 impl SamplingHeapProfileNode {
     pub fn new(
-        call_frame: impl Into<super::super::runtime::types::CallFrame>,
+        call_frame: impl Into<crate::js_protocol::runtime::types::CallFrame>,
         self_size: impl Into<f64>,
         id: impl Into<i64>,
         children: Vec<SamplingHeapProfileNode>,

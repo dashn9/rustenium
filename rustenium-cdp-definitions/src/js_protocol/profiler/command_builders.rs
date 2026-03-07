@@ -1,7 +1,7 @@
 use super::commands::*;
 impl SetSamplingInterval {
     pub fn builder() -> SetSamplingIntervalBuilder {
-        SetSamplingIntervalBuilder::default()
+        <SetSamplingIntervalBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -26,7 +26,7 @@ impl SetSamplingIntervalBuilder {
 }
 impl StartPreciseCoverage {
     pub fn builder() -> StartPreciseCoverageBuilder {
-        StartPreciseCoverageBuilder::default()
+        <StartPreciseCoverageBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

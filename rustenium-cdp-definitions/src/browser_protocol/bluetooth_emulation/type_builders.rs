@@ -1,20 +1,20 @@
 use super::types::*;
 impl ManufacturerData {
     pub fn builder() -> ManufacturerDataBuilder {
-        ManufacturerDataBuilder::default()
+        <ManufacturerDataBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct ManufacturerDataBuilder {
     key: Option<i64>,
-    data: Option<super::super::super::Binary>,
+    data: Option<crate::Binary>,
 }
 impl ManufacturerDataBuilder {
     pub fn key(mut self, key: impl Into<i64>) -> Self {
         self.key = Some(key.into());
         self
     }
-    pub fn data(mut self, data: impl Into<super::super::super::Binary>) -> Self {
+    pub fn data(mut self, data: impl Into<crate::Binary>) -> Self {
         self.data = Some(data.into());
         self
     }
@@ -31,7 +31,7 @@ impl ManufacturerDataBuilder {
 }
 impl ScanRecord {
     pub fn builder() -> ScanRecordBuilder {
-        ScanRecordBuilder::default()
+        <ScanRecordBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -99,7 +99,7 @@ impl ScanRecordBuilder {
 }
 impl ScanEntry {
     pub fn builder() -> ScanEntryBuilder {
-        ScanEntryBuilder::default()
+        <ScanEntryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -137,7 +137,7 @@ impl ScanEntryBuilder {
 }
 impl CharacteristicProperties {
     pub fn builder() -> CharacteristicPropertiesBuilder {
-        CharacteristicPropertiesBuilder::default()
+        <CharacteristicPropertiesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

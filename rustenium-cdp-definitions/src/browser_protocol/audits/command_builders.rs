@@ -1,12 +1,12 @@
 use super::commands::*;
 impl GetEncodedResponse {
     pub fn builder() -> GetEncodedResponseBuilder {
-        GetEncodedResponseBuilder::default()
+        <GetEncodedResponseBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetEncodedResponseBuilder {
-    request_id: Option<super::super::network::types::RequestId>,
+    request_id: Option<crate::browser_protocol::network::types::RequestId>,
     encoding: Option<GetEncodedResponseEncoding>,
     quality: Option<f64>,
     size_only: Option<bool>,
@@ -14,7 +14,7 @@ pub struct GetEncodedResponseBuilder {
 impl GetEncodedResponseBuilder {
     pub fn request_id(
         mut self,
-        request_id: impl Into<super::super::network::types::RequestId>,
+        request_id: impl Into<crate::browser_protocol::network::types::RequestId>,
     ) -> Self {
         self.request_id = Some(request_id.into());
         self
@@ -49,7 +49,7 @@ impl GetEncodedResponseBuilder {
 }
 impl CheckContrast {
     pub fn builder() -> CheckContrastBuilder {
-        CheckContrastBuilder::default()
+        <CheckContrastBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

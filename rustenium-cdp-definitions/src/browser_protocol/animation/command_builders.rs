@@ -1,7 +1,7 @@
 use super::commands::*;
 impl GetCurrentTime {
     pub fn builder() -> GetCurrentTimeBuilder {
-        GetCurrentTimeBuilder::default()
+        <GetCurrentTimeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -26,7 +26,7 @@ impl GetCurrentTimeBuilder {
 }
 impl ReleaseAnimations {
     pub fn builder() -> ReleaseAnimationsBuilder {
-        ReleaseAnimationsBuilder::default()
+        <ReleaseAnimationsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -63,7 +63,7 @@ impl ReleaseAnimationsBuilder {
 }
 impl ResolveAnimation {
     pub fn builder() -> ResolveAnimationBuilder {
-        ResolveAnimationBuilder::default()
+        <ResolveAnimationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -88,7 +88,7 @@ impl ResolveAnimationBuilder {
 }
 impl SeekAnimations {
     pub fn builder() -> SeekAnimationsBuilder {
-        SeekAnimationsBuilder::default()
+        <SeekAnimationsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -133,7 +133,7 @@ impl SeekAnimationsBuilder {
 }
 impl SetPaused {
     pub fn builder() -> SetPausedBuilder {
-        SetPausedBuilder::default()
+        <SetPausedBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -178,7 +178,7 @@ impl SetPausedBuilder {
 }
 impl SetPlaybackRate {
     pub fn builder() -> SetPlaybackRateBuilder {
-        SetPlaybackRateBuilder::default()
+        <SetPlaybackRateBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -203,7 +203,7 @@ impl SetPlaybackRateBuilder {
 }
 impl SetTiming {
     pub fn builder() -> SetTimingBuilder {
-        SetTimingBuilder::default()
+        <SetTimingBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

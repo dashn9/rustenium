@@ -34,10 +34,10 @@ pub struct DeliverPushMessage {
     pub method: DeliverPushMessageMethod,
     pub params: DeliverPushMessageParams,
 }
-impl super::super::super::CommandResult for DeliverPushMessage {
+impl crate::CommandResult for DeliverPushMessage {
     type Result = super::results::DeliverPushMessageResult;
 }
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DisableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum DisableMethod {
@@ -52,7 +52,7 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
-impl super::super::super::CommandResult for Disable {
+impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -94,7 +94,7 @@ pub struct DispatchSyncEvent {
     pub method: DispatchSyncEventMethod,
     pub params: DispatchSyncEventParams,
 }
-impl super::super::super::CommandResult for DispatchSyncEvent {
+impl crate::CommandResult for DispatchSyncEvent {
     type Result = super::results::DispatchSyncEventResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -132,10 +132,10 @@ pub struct DispatchPeriodicSyncEvent {
     pub method: DispatchPeriodicSyncEventMethod,
     pub params: DispatchPeriodicSyncEventParams,
 }
-impl super::super::super::CommandResult for DispatchPeriodicSyncEvent {
+impl crate::CommandResult for DispatchPeriodicSyncEvent {
     type Result = super::results::DispatchPeriodicSyncEventResult;
 }
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EnableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum EnableMethod {
@@ -150,7 +150,7 @@ pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
 }
-impl super::super::super::CommandResult for Enable {
+impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -178,7 +178,7 @@ pub struct SetForceUpdateOnPageLoad {
     pub method: SetForceUpdateOnPageLoadMethod,
     pub params: SetForceUpdateOnPageLoadParams,
 }
-impl super::super::super::CommandResult for SetForceUpdateOnPageLoad {
+impl crate::CommandResult for SetForceUpdateOnPageLoad {
     type Result = super::results::SetForceUpdateOnPageLoadResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -211,7 +211,7 @@ pub struct SkipWaiting {
     pub method: SkipWaitingMethod,
     pub params: SkipWaitingParams,
 }
-impl super::super::super::CommandResult for SkipWaiting {
+impl crate::CommandResult for SkipWaiting {
     type Result = super::results::SkipWaitingResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -244,10 +244,10 @@ pub struct StartWorker {
     pub method: StartWorkerMethod,
     pub params: StartWorkerParams,
 }
-impl super::super::super::CommandResult for StartWorker {
+impl crate::CommandResult for StartWorker {
     type Result = super::results::StartWorkerResult;
 }
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StopAllWorkersParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum StopAllWorkersMethod {
@@ -262,7 +262,7 @@ pub struct StopAllWorkers {
     pub method: StopAllWorkersMethod,
     pub params: StopAllWorkersParams,
 }
-impl super::super::super::CommandResult for StopAllWorkers {
+impl crate::CommandResult for StopAllWorkers {
     type Result = super::results::StopAllWorkersResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -295,7 +295,7 @@ pub struct StopWorker {
     pub method: StopWorkerMethod,
     pub params: StopWorkerParams,
 }
-impl super::super::super::CommandResult for StopWorker {
+impl crate::CommandResult for StopWorker {
     type Result = super::results::StopWorkerResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -328,7 +328,7 @@ pub struct Unregister {
     pub method: UnregisterMethod,
     pub params: UnregisterParams,
 }
-impl super::super::super::CommandResult for Unregister {
+impl crate::CommandResult for Unregister {
     type Result = super::results::UnregisterResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -361,7 +361,7 @@ pub struct UpdateRegistration {
     pub method: UpdateRegistrationMethod,
     pub params: UpdateRegistrationParams,
 }
-impl super::super::super::CommandResult for UpdateRegistration {
+impl crate::CommandResult for UpdateRegistration {
     type Result = super::results::UpdateRegistrationResult;
 }
 group_enum ! (ServiceWorkerCommands { DeliverPushMessage (DeliverPushMessage) , Disable (Disable) , DispatchSyncEvent (DispatchSyncEvent) , DispatchPeriodicSyncEvent (DispatchPeriodicSyncEvent) , Enable (Enable) , SetForceUpdateOnPageLoad (SetForceUpdateOnPageLoad) , SkipWaiting (SkipWaiting) , StartWorker (StartWorker) , StopAllWorkers (StopAllWorkers) , StopWorker (StopWorker) , Unregister (Unregister) , UpdateRegistration (UpdateRegistration) });

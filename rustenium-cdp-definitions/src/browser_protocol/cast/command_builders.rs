@@ -1,7 +1,7 @@
 use super::commands::*;
 impl Enable {
     pub fn builder() -> EnableBuilder {
-        EnableBuilder::default()
+        <EnableBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -24,7 +24,7 @@ impl EnableBuilder {
 }
 impl SetSinkToUse {
     pub fn builder() -> SetSinkToUseBuilder {
-        SetSinkToUseBuilder::default()
+        <SetSinkToUseBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -49,7 +49,7 @@ impl SetSinkToUseBuilder {
 }
 impl StartDesktopMirroring {
     pub fn builder() -> StartDesktopMirroringBuilder {
-        StartDesktopMirroringBuilder::default()
+        <StartDesktopMirroringBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -74,7 +74,7 @@ impl StartDesktopMirroringBuilder {
 }
 impl StartTabMirroring {
     pub fn builder() -> StartTabMirroringBuilder {
-        StartTabMirroringBuilder::default()
+        <StartTabMirroringBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -99,7 +99,7 @@ impl StartTabMirroringBuilder {
 }
 impl StopCasting {
     pub fn builder() -> StopCastingBuilder {
-        StopCastingBuilder::default()
+        <StopCastingBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

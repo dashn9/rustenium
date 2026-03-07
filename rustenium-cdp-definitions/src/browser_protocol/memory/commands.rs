@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 #[doc = "Retruns current DOM object counters.\n[getDOMCounters](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-getDOMCounters)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetDomCountersParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum GetDomCountersMethod {
@@ -16,11 +16,11 @@ pub struct GetDomCounters {
     pub method: GetDomCountersMethod,
     pub params: GetDomCountersParams,
 }
-impl super::super::super::CommandResult for GetDomCounters {
+impl crate::CommandResult for GetDomCounters {
     type Result = super::results::GetDomCountersResult;
 }
 #[doc = "Retruns DOM object counters after preparing renderer for leak detection.\n[getDOMCountersForLeakDetection](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-getDOMCountersForLeakDetection)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetDomCountersForLeakDetectionParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum GetDomCountersForLeakDetectionMethod {
@@ -36,11 +36,11 @@ pub struct GetDomCountersForLeakDetection {
     pub method: GetDomCountersForLeakDetectionMethod,
     pub params: GetDomCountersForLeakDetectionParams,
 }
-impl super::super::super::CommandResult for GetDomCountersForLeakDetection {
+impl crate::CommandResult for GetDomCountersForLeakDetection {
     type Result = super::results::GetDomCountersForLeakDetectionResult;
 }
 #[doc = "Prepares for leak detection by terminating workers, stopping spellcheckers,\ndropping non-essential internal caches, running garbage collections, etc.\n[prepareForLeakDetection](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-prepareForLeakDetection)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PrepareForLeakDetectionParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum PrepareForLeakDetectionMethod {
@@ -56,11 +56,11 @@ pub struct PrepareForLeakDetection {
     pub method: PrepareForLeakDetectionMethod,
     pub params: PrepareForLeakDetectionParams,
 }
-impl super::super::super::CommandResult for PrepareForLeakDetection {
+impl crate::CommandResult for PrepareForLeakDetection {
     type Result = super::results::PrepareForLeakDetectionResult;
 }
 #[doc = "Simulate OomIntervention by purging V8 memory.\n[forciblyPurgeJavaScriptMemory](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-forciblyPurgeJavaScriptMemory)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ForciblyPurgeJavaScriptMemoryParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum ForciblyPurgeJavaScriptMemoryMethod {
@@ -76,7 +76,7 @@ pub struct ForciblyPurgeJavaScriptMemory {
     pub method: ForciblyPurgeJavaScriptMemoryMethod,
     pub params: ForciblyPurgeJavaScriptMemoryParams,
 }
-impl super::super::super::CommandResult for ForciblyPurgeJavaScriptMemory {
+impl crate::CommandResult for ForciblyPurgeJavaScriptMemory {
     type Result = super::results::ForciblyPurgeJavaScriptMemoryResult;
 }
 #[doc = "Enable/disable suppressing memory pressure notifications in all processes.\n[setPressureNotificationsSuppressed](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-setPressureNotificationsSuppressed)"]
@@ -107,7 +107,7 @@ pub struct SetPressureNotificationsSuppressed {
     pub method: SetPressureNotificationsSuppressedMethod,
     pub params: SetPressureNotificationsSuppressedParams,
 }
-impl super::super::super::CommandResult for SetPressureNotificationsSuppressed {
+impl crate::CommandResult for SetPressureNotificationsSuppressed {
     type Result = super::results::SetPressureNotificationsSuppressedResult;
 }
 #[doc = "Simulate a memory pressure notification in all processes.\n[simulatePressureNotification](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-simulatePressureNotification)"]
@@ -138,7 +138,7 @@ pub struct SimulatePressureNotification {
     pub method: SimulatePressureNotificationMethod,
     pub params: SimulatePressureNotificationParams,
 }
-impl super::super::super::CommandResult for SimulatePressureNotification {
+impl crate::CommandResult for SimulatePressureNotification {
     type Result = super::results::SimulatePressureNotificationResult;
 }
 #[doc = "Start collecting native memory profile.\n[startSampling](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-startSampling)"]
@@ -169,11 +169,11 @@ pub struct StartSampling {
     pub method: StartSamplingMethod,
     pub params: StartSamplingParams,
 }
-impl super::super::super::CommandResult for StartSampling {
+impl crate::CommandResult for StartSampling {
     type Result = super::results::StartSamplingResult;
 }
 #[doc = "Stop collecting native memory profile.\n[stopSampling](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-stopSampling)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StopSamplingParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum StopSamplingMethod {
@@ -189,11 +189,11 @@ pub struct StopSampling {
     pub method: StopSamplingMethod,
     pub params: StopSamplingParams,
 }
-impl super::super::super::CommandResult for StopSampling {
+impl crate::CommandResult for StopSampling {
     type Result = super::results::StopSamplingResult;
 }
 #[doc = "Retrieve native memory allocations profile\ncollected since renderer process startup.\n[getAllTimeSamplingProfile](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-getAllTimeSamplingProfile)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetAllTimeSamplingProfileParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum GetAllTimeSamplingProfileMethod {
@@ -209,11 +209,11 @@ pub struct GetAllTimeSamplingProfile {
     pub method: GetAllTimeSamplingProfileMethod,
     pub params: GetAllTimeSamplingProfileParams,
 }
-impl super::super::super::CommandResult for GetAllTimeSamplingProfile {
+impl crate::CommandResult for GetAllTimeSamplingProfile {
     type Result = super::results::GetAllTimeSamplingProfileResult;
 }
 #[doc = "Retrieve native memory allocations profile\ncollected since browser process startup.\n[getBrowserSamplingProfile](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-getBrowserSamplingProfile)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetBrowserSamplingProfileParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum GetBrowserSamplingProfileMethod {
@@ -229,11 +229,11 @@ pub struct GetBrowserSamplingProfile {
     pub method: GetBrowserSamplingProfileMethod,
     pub params: GetBrowserSamplingProfileParams,
 }
-impl super::super::super::CommandResult for GetBrowserSamplingProfile {
+impl crate::CommandResult for GetBrowserSamplingProfile {
     type Result = super::results::GetBrowserSamplingProfileResult;
 }
 #[doc = "Retrieve native memory allocations profile collected since last\n`startSampling` call.\n[getSamplingProfile](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-getSamplingProfile)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetSamplingProfileParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum GetSamplingProfileMethod {
@@ -249,7 +249,7 @@ pub struct GetSamplingProfile {
     pub method: GetSamplingProfileMethod,
     pub params: GetSamplingProfileParams,
 }
-impl super::super::super::CommandResult for GetSamplingProfile {
+impl crate::CommandResult for GetSamplingProfile {
     type Result = super::results::GetSamplingProfileResult;
 }
 group_enum ! (MemoryCommands { GetDomCounters (GetDomCounters) , GetDomCountersForLeakDetection (GetDomCountersForLeakDetection) , PrepareForLeakDetection (PrepareForLeakDetection) , ForciblyPurgeJavaScriptMemory (ForciblyPurgeJavaScriptMemory) , SetPressureNotificationsSuppressed (SetPressureNotificationsSuppressed) , SimulatePressureNotification (SimulatePressureNotification) , StartSampling (StartSampling) , StopSampling (StopSampling) , GetAllTimeSamplingProfile (GetAllTimeSamplingProfile) , GetBrowserSamplingProfile (GetBrowserSamplingProfile) , GetSamplingProfile (GetSamplingProfile) });

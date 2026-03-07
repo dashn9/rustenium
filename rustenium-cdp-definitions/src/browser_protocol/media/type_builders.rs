@@ -1,7 +1,7 @@
 use super::types::*;
 impl PlayerMessage {
     pub fn builder() -> PlayerMessageBuilder {
-        PlayerMessageBuilder::default()
+        <PlayerMessageBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -31,7 +31,7 @@ impl PlayerMessageBuilder {
 }
 impl PlayerProperty {
     pub fn builder() -> PlayerPropertyBuilder {
-        PlayerPropertyBuilder::default()
+        <PlayerPropertyBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -61,7 +61,7 @@ impl PlayerPropertyBuilder {
 }
 impl PlayerEvent {
     pub fn builder() -> PlayerEventBuilder {
-        PlayerEventBuilder::default()
+        <PlayerEventBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -91,7 +91,7 @@ impl PlayerEventBuilder {
 }
 impl PlayerErrorSourceLocation {
     pub fn builder() -> PlayerErrorSourceLocationBuilder {
-        PlayerErrorSourceLocationBuilder::default()
+        <PlayerErrorSourceLocationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -121,7 +121,7 @@ impl PlayerErrorSourceLocationBuilder {
 }
 impl PlayerError {
     pub fn builder() -> PlayerErrorBuilder {
-        PlayerErrorBuilder::default()
+        <PlayerErrorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -199,13 +199,13 @@ impl PlayerErrorBuilder {
 }
 impl Player {
     pub fn builder() -> PlayerBuilder {
-        PlayerBuilder::default()
+        <PlayerBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct PlayerBuilder {
     player_id: Option<PlayerId>,
-    dom_node_id: Option<super::super::dom::types::BackendNodeId>,
+    dom_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
 }
 impl PlayerBuilder {
     pub fn player_id(mut self, player_id: impl Into<PlayerId>) -> Self {
@@ -214,7 +214,7 @@ impl PlayerBuilder {
     }
     pub fn dom_node_id(
         mut self,
-        dom_node_id: impl Into<super::super::dom::types::BackendNodeId>,
+        dom_node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
     ) -> Self {
         self.dom_node_id = Some(dom_node_id.into());
         self

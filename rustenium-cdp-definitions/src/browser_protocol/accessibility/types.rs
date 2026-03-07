@@ -180,7 +180,7 @@ impl AxValueSource {
 pub struct AxRelatedNode {
     #[doc = "The BackendNodeId of the related DOM node."]
     #[serde(rename = "backendDOMNodeId")]
-    pub backend_dom_node_id: super::super::dom::types::BackendNodeId,
+    pub backend_dom_node_id: crate::browser_protocol::dom::types::BackendNodeId,
     #[doc = "The IDRef value provided, if any."]
     #[serde(rename = "idref")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -193,7 +193,9 @@ pub struct AxRelatedNode {
     pub text: Option<String>,
 }
 impl AxRelatedNode {
-    pub fn new(backend_dom_node_id: impl Into<super::super::dom::types::BackendNodeId>) -> Self {
+    pub fn new(
+        backend_dom_node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
+    ) -> Self {
         Self {
             backend_dom_node_id: backend_dom_node_id.into(),
             idref: None,
@@ -438,12 +440,12 @@ pub struct AxNode {
     #[serde(rename = "backendDOMNodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub backend_dom_node_id: Option<super::super::dom::types::BackendNodeId>,
+    pub backend_dom_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     #[doc = "The frame ID for the frame associated with this nodes document."]
     #[serde(rename = "frameId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub frame_id: Option<super::super::page::types::FrameId>,
+    pub frame_id: Option<crate::browser_protocol::page::types::FrameId>,
 }
 impl AxNode {
     pub fn new(node_id: impl Into<AxNodeId>, ignored: impl Into<bool>) -> Self {

@@ -16,7 +16,7 @@ pub struct ClearObjectStoreParams {
     #[serde(rename = "storageBucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub storage_bucket: Option<super::super::storage::types::StorageBucket>,
+    pub storage_bucket: Option<crate::browser_protocol::storage::types::StorageBucket>,
     #[doc = "Database name."]
     #[serde(rename = "databaseName")]
     pub database_name: String,
@@ -49,7 +49,7 @@ pub struct ClearObjectStore {
     pub method: ClearObjectStoreMethod,
     pub params: ClearObjectStoreParams,
 }
-impl super::super::super::CommandResult for ClearObjectStore {
+impl crate::CommandResult for ClearObjectStore {
     type Result = super::results::ClearObjectStoreResult;
 }
 #[doc = "Deletes a database.\n[deleteDatabase](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-deleteDatabase)"]
@@ -69,7 +69,7 @@ pub struct DeleteDatabaseParams {
     #[serde(rename = "storageBucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub storage_bucket: Option<super::super::storage::types::StorageBucket>,
+    pub storage_bucket: Option<crate::browser_protocol::storage::types::StorageBucket>,
     #[doc = "Database name."]
     #[serde(rename = "databaseName")]
     pub database_name: String,
@@ -103,7 +103,7 @@ pub struct DeleteDatabase {
     pub method: DeleteDatabaseMethod,
     pub params: DeleteDatabaseParams,
 }
-impl super::super::super::CommandResult for DeleteDatabase {
+impl crate::CommandResult for DeleteDatabase {
     type Result = super::results::DeleteDatabaseResult;
 }
 #[doc = "Delete a range of entries from an object store\n[deleteObjectStoreEntries](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-deleteObjectStoreEntries)"]
@@ -123,7 +123,7 @@ pub struct DeleteObjectStoreEntriesParams {
     #[serde(rename = "storageBucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub storage_bucket: Option<super::super::storage::types::StorageBucket>,
+    pub storage_bucket: Option<crate::browser_protocol::storage::types::StorageBucket>,
     #[serde(rename = "databaseName")]
     pub database_name: String,
     #[serde(rename = "objectStoreName")]
@@ -162,11 +162,11 @@ pub struct DeleteObjectStoreEntries {
     pub method: DeleteObjectStoreEntriesMethod,
     pub params: DeleteObjectStoreEntriesParams,
 }
-impl super::super::super::CommandResult for DeleteObjectStoreEntries {
+impl crate::CommandResult for DeleteObjectStoreEntries {
     type Result = super::results::DeleteObjectStoreEntriesResult;
 }
 #[doc = "Disables events from backend.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-disable)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DisableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum DisableMethod {
@@ -182,11 +182,11 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
-impl super::super::super::CommandResult for Disable {
+impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
 }
 #[doc = "Enables events from backend.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-enable)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EnableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum EnableMethod {
@@ -202,7 +202,7 @@ pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
 }
-impl super::super::super::CommandResult for Enable {
+impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
 }
 #[doc = "Requests data from object store or index.\n[requestData](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-requestData)"]
@@ -222,7 +222,7 @@ pub struct RequestDataParams {
     #[serde(rename = "storageBucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub storage_bucket: Option<super::super::storage::types::StorageBucket>,
+    pub storage_bucket: Option<crate::browser_protocol::storage::types::StorageBucket>,
     #[doc = "Database name."]
     #[serde(rename = "databaseName")]
     pub database_name: String,
@@ -280,7 +280,7 @@ pub struct RequestData {
     pub method: RequestDataMethod,
     pub params: RequestDataParams,
 }
-impl super::super::super::CommandResult for RequestData {
+impl crate::CommandResult for RequestData {
     type Result = super::results::RequestDataResult;
 }
 #[doc = "Gets metadata of an object store.\n[getMetadata](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-getMetadata)"]
@@ -300,7 +300,7 @@ pub struct GetMetadataParams {
     #[serde(rename = "storageBucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub storage_bucket: Option<super::super::storage::types::StorageBucket>,
+    pub storage_bucket: Option<crate::browser_protocol::storage::types::StorageBucket>,
     #[doc = "Database name."]
     #[serde(rename = "databaseName")]
     pub database_name: String,
@@ -333,7 +333,7 @@ pub struct GetMetadata {
     pub method: GetMetadataMethod,
     pub params: GetMetadataParams,
 }
-impl super::super::super::CommandResult for GetMetadata {
+impl crate::CommandResult for GetMetadata {
     type Result = super::results::GetMetadataResult;
 }
 #[doc = "Requests database with given name in given frame.\n[requestDatabase](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-requestDatabase)"]
@@ -353,7 +353,7 @@ pub struct RequestDatabaseParams {
     #[serde(rename = "storageBucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub storage_bucket: Option<super::super::storage::types::StorageBucket>,
+    pub storage_bucket: Option<crate::browser_protocol::storage::types::StorageBucket>,
     #[doc = "Database name."]
     #[serde(rename = "databaseName")]
     pub database_name: String,
@@ -387,7 +387,7 @@ pub struct RequestDatabase {
     pub method: RequestDatabaseMethod,
     pub params: RequestDatabaseParams,
 }
-impl super::super::super::CommandResult for RequestDatabase {
+impl crate::CommandResult for RequestDatabase {
     type Result = super::results::RequestDatabaseResult;
 }
 #[doc = "Requests database names for given security origin.\n[requestDatabaseNames](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-requestDatabaseNames)"]
@@ -407,7 +407,7 @@ pub struct RequestDatabaseNamesParams {
     #[serde(rename = "storageBucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub storage_bucket: Option<super::super::storage::types::StorageBucket>,
+    pub storage_bucket: Option<crate::browser_protocol::storage::types::StorageBucket>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum RequestDatabaseNamesMethod {
@@ -423,7 +423,7 @@ pub struct RequestDatabaseNames {
     pub method: RequestDatabaseNamesMethod,
     pub params: RequestDatabaseNamesParams,
 }
-impl super::super::super::CommandResult for RequestDatabaseNames {
+impl crate::CommandResult for RequestDatabaseNames {
     type Result = super::results::RequestDatabaseNamesResult;
 }
 group_enum ! (IndexedDbCommands { ClearObjectStore (ClearObjectStore) , DeleteDatabase (DeleteDatabase) , DeleteObjectStoreEntries (DeleteObjectStoreEntries) , Disable (Disable) , Enable (Enable) , RequestData (RequestData) , GetMetadata (GetMetadata) , RequestDatabase (RequestDatabase) , RequestDatabaseNames (RequestDatabaseNames) });

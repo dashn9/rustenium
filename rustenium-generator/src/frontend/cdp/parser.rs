@@ -46,7 +46,13 @@ fn add_module_property_to_module<'a>(mod_prop: ModuleProperty<'a>, module: &mut 
                 });
             }
         }
-        ModuleProperty::CommandResult(cr) => module.command_results.push(cr),
+        ModuleProperty::CommandResult(cr) => {
+            if let Some(existing) = module.command_results.iter_mut().find(|r| r.name == cr.name) {
+                *existing = cr;
+            } else {
+                module.command_results.push(cr);
+            }
+        }
         ModuleProperty::Event(e) => module.events.push(e),
     }
 }

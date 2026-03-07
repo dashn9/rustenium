@@ -1,7 +1,7 @@
 use super::types::*;
 impl SafeAreaInsets {
     pub fn builder() -> SafeAreaInsetsBuilder {
-        SafeAreaInsetsBuilder::default()
+        <SafeAreaInsetsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -63,7 +63,7 @@ impl SafeAreaInsetsBuilder {
 }
 impl ScreenOrientation {
     pub fn builder() -> ScreenOrientationBuilder {
-        ScreenOrientationBuilder::default()
+        <ScreenOrientationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -93,7 +93,7 @@ impl ScreenOrientationBuilder {
 }
 impl DisplayFeature {
     pub fn builder() -> DisplayFeatureBuilder {
-        DisplayFeatureBuilder::default()
+        <DisplayFeatureBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -131,7 +131,7 @@ impl DisplayFeatureBuilder {
 }
 impl DevicePosture {
     pub fn builder() -> DevicePostureBuilder {
-        DevicePostureBuilder::default()
+        <DevicePostureBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -153,7 +153,7 @@ impl DevicePostureBuilder {
 }
 impl MediaFeature {
     pub fn builder() -> MediaFeatureBuilder {
-        MediaFeatureBuilder::default()
+        <MediaFeatureBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -183,7 +183,7 @@ impl MediaFeatureBuilder {
 }
 impl UserAgentBrandVersion {
     pub fn builder() -> UserAgentBrandVersionBuilder {
-        UserAgentBrandVersionBuilder::default()
+        <UserAgentBrandVersionBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -213,7 +213,7 @@ impl UserAgentBrandVersionBuilder {
 }
 impl UserAgentMetadata {
     pub fn builder() -> UserAgentMetadataBuilder {
-        UserAgentMetadataBuilder::default()
+        <UserAgentMetadataBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -339,7 +339,7 @@ impl UserAgentMetadataBuilder {
 }
 impl SensorMetadata {
     pub fn builder() -> SensorMetadataBuilder {
-        SensorMetadataBuilder::default()
+        <SensorMetadataBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -371,7 +371,7 @@ impl SensorMetadataBuilder {
 }
 impl SensorReadingSingle {
     pub fn builder() -> SensorReadingSingleBuilder {
-        SensorReadingSingleBuilder::default()
+        <SensorReadingSingleBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -393,7 +393,7 @@ impl SensorReadingSingleBuilder {
 }
 impl SensorReadingXyz {
     pub fn builder() -> SensorReadingXyzBuilder {
-        SensorReadingXyzBuilder::default()
+        <SensorReadingXyzBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -431,7 +431,7 @@ impl SensorReadingXyzBuilder {
 }
 impl SensorReadingQuaternion {
     pub fn builder() -> SensorReadingQuaternionBuilder {
-        SensorReadingQuaternionBuilder::default()
+        <SensorReadingQuaternionBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -477,7 +477,7 @@ impl SensorReadingQuaternionBuilder {
 }
 impl SensorReading {
     pub fn builder() -> SensorReadingBuilder {
-        SensorReadingBuilder::default()
+        <SensorReadingBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -509,7 +509,7 @@ impl SensorReadingBuilder {
 }
 impl PressureMetadata {
     pub fn builder() -> PressureMetadataBuilder {
-        PressureMetadataBuilder::default()
+        <PressureMetadataBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -529,7 +529,7 @@ impl PressureMetadataBuilder {
 }
 impl WorkAreaInsets {
     pub fn builder() -> WorkAreaInsetsBuilder {
-        WorkAreaInsetsBuilder::default()
+        <WorkAreaInsetsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -567,7 +567,7 @@ impl WorkAreaInsetsBuilder {
 }
 impl ScreenInfo {
     pub fn builder() -> ScreenInfoBuilder {
-        ScreenInfoBuilder::default()
+        <ScreenInfoBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

@@ -1,7 +1,7 @@
 use super::commands::*;
 impl StartViolationsReport {
     pub fn builder() -> StartViolationsReportBuilder {
-        StartViolationsReportBuilder::default()
+        <StartViolationsReportBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

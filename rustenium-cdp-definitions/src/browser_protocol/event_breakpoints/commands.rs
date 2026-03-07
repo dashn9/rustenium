@@ -32,7 +32,7 @@ pub struct SetInstrumentationBreakpoint {
     pub method: SetInstrumentationBreakpointMethod,
     pub params: SetInstrumentationBreakpointParams,
 }
-impl super::super::super::CommandResult for SetInstrumentationBreakpoint {
+impl crate::CommandResult for SetInstrumentationBreakpoint {
     type Result = super::results::SetInstrumentationBreakpointResult;
 }
 #[doc = "Removes breakpoint on particular native event.\n[removeInstrumentationBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/EventBreakpoints/#method-removeInstrumentationBreakpoint)"]
@@ -68,11 +68,11 @@ pub struct RemoveInstrumentationBreakpoint {
     pub method: RemoveInstrumentationBreakpointMethod,
     pub params: RemoveInstrumentationBreakpointParams,
 }
-impl super::super::super::CommandResult for RemoveInstrumentationBreakpoint {
+impl crate::CommandResult for RemoveInstrumentationBreakpoint {
     type Result = super::results::RemoveInstrumentationBreakpointResult;
 }
 #[doc = "Removes all breakpoints\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/EventBreakpoints/#method-disable)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DisableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum DisableMethod {
@@ -88,7 +88,7 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
-impl super::super::super::CommandResult for Disable {
+impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
 }
 group_enum ! (EventBreakpointsCommands { SetInstrumentationBreakpoint (SetInstrumentationBreakpoint) , RemoveInstrumentationBreakpoint (RemoveInstrumentationBreakpoint) , Disable (Disable) });

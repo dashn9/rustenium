@@ -27,7 +27,7 @@ pub struct DeleteCache {
     pub method: DeleteCacheMethod,
     pub params: DeleteCacheParams,
 }
-impl super::super::super::CommandResult for DeleteCache {
+impl crate::CommandResult for DeleteCache {
     type Result = super::results::DeleteCacheResult;
 }
 #[doc = "Deletes a cache entry.\n[deleteEntry](https://chromedevtools.github.io/devtools-protocol/tot/CacheStorage/#method-deleteEntry)"]
@@ -62,7 +62,7 @@ pub struct DeleteEntry {
     pub method: DeleteEntryMethod,
     pub params: DeleteEntryParams,
 }
-impl super::super::super::CommandResult for DeleteEntry {
+impl crate::CommandResult for DeleteEntry {
     type Result = super::results::DeleteEntryResult;
 }
 #[doc = "Requests cache names.\n[requestCacheNames](https://chromedevtools.github.io/devtools-protocol/tot/CacheStorage/#method-requestCacheNames)"]
@@ -82,7 +82,7 @@ pub struct RequestCacheNamesParams {
     #[serde(rename = "storageBucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub storage_bucket: Option<super::super::storage::types::StorageBucket>,
+    pub storage_bucket: Option<crate::browser_protocol::storage::types::StorageBucket>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum RequestCacheNamesMethod {
@@ -98,7 +98,7 @@ pub struct RequestCacheNames {
     pub method: RequestCacheNamesMethod,
     pub params: RequestCacheNamesParams,
 }
-impl super::super::super::CommandResult for RequestCacheNames {
+impl crate::CommandResult for RequestCacheNames {
     type Result = super::results::RequestCacheNamesResult;
 }
 #[doc = "Fetches cache entry.\n[requestCachedResponse](https://chromedevtools.github.io/devtools-protocol/tot/CacheStorage/#method-requestCachedResponse)"]
@@ -142,7 +142,7 @@ pub struct RequestCachedResponse {
     pub method: RequestCachedResponseMethod,
     pub params: RequestCachedResponseParams,
 }
-impl super::super::super::CommandResult for RequestCachedResponse {
+impl crate::CommandResult for RequestCachedResponse {
     type Result = super::results::RequestCachedResponseResult;
 }
 #[doc = "Requests data from cache.\n[requestEntries](https://chromedevtools.github.io/devtools-protocol/tot/CacheStorage/#method-requestEntries)"]
@@ -191,7 +191,7 @@ pub struct RequestEntries {
     pub method: RequestEntriesMethod,
     pub params: RequestEntriesParams,
 }
-impl super::super::super::CommandResult for RequestEntries {
+impl crate::CommandResult for RequestEntries {
     type Result = super::results::RequestEntriesResult;
 }
 group_enum ! (CacheStorageCommands { DeleteCache (DeleteCache) , DeleteEntry (DeleteEntry) , RequestCacheNames (RequestCacheNames) , RequestCachedResponse (RequestCachedResponse) , RequestEntries (RequestEntries) });

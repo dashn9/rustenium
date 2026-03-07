@@ -342,7 +342,7 @@ impl Builder {
             } else if field.ty.needs_box {
                 build_fn_assigns.extend(
                         quote!{
-                            #field_name : Box::new(self.#field_name.ok_or_else(||std::stringify!("Field `{}` is mandatory.", std::stringify!(#field_name))))?,
+                            #field_name : Box::new(self.#field_name.ok_or_else(||std::stringify!("Field `{}` is mandatory.", std::stringify!(#field_name)))?),
                         }
                     )
             } else {

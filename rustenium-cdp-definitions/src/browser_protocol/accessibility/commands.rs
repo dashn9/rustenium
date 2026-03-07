@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 #[doc = "Disables the accessibility domain.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Accessibility/#method-disable)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DisableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum DisableMethod {
@@ -16,11 +16,11 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
-impl super::super::super::CommandResult for Disable {
+impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
 }
 #[doc = "Enables the accessibility domain which causes `AXNodeId`s to remain consistent between method calls.\nThis turns on accessibility for the page, which can impact performance until accessibility is disabled.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Accessibility/#method-enable)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EnableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum EnableMethod {
@@ -36,7 +36,7 @@ pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
 }
-impl super::super::super::CommandResult for Enable {
+impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
 }
 #[doc = "Fetches the accessibility node and partial accessibility tree for this DOM node, if it exists.\n[getPartialAXTree](https://chromedevtools.github.io/devtools-protocol/tot/Accessibility/#method-getPartialAXTree)"]
@@ -46,17 +46,17 @@ pub struct GetPartialAxTreeParams {
     #[serde(rename = "nodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub node_id: Option<super::super::dom::types::NodeId>,
+    pub node_id: Option<crate::browser_protocol::dom::types::NodeId>,
     #[doc = "Identifier of the backend node to get the partial accessibility tree for."]
     #[serde(rename = "backendNodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub backend_node_id: Option<super::super::dom::types::BackendNodeId>,
+    pub backend_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     #[doc = "JavaScript object id of the node wrapper to get the partial accessibility tree for."]
     #[serde(rename = "objectId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub object_id: Option<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+    pub object_id: Option<crate::js_protocol::runtime::types::RemoteObjectId>,
     #[doc = "Whether to fetch this node's ancestors, siblings and children. Defaults to true."]
     #[serde(rename = "fetchRelatives")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -77,7 +77,7 @@ pub struct GetPartialAxTree {
     pub method: GetPartialAxTreeMethod,
     pub params: GetPartialAxTreeParams,
 }
-impl super::super::super::CommandResult for GetPartialAxTree {
+impl crate::CommandResult for GetPartialAxTree {
     type Result = super::results::GetPartialAxTreeResult;
 }
 #[doc = "Fetches the entire accessibility tree for the root Document\n[getFullAXTree](https://chromedevtools.github.io/devtools-protocol/tot/Accessibility/#method-getFullAXTree)"]
@@ -92,7 +92,7 @@ pub struct GetFullAxTreeParams {
     #[serde(rename = "frameId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub frame_id: Option<super::super::page::types::FrameId>,
+    pub frame_id: Option<crate::browser_protocol::page::types::FrameId>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum GetFullAxTreeMethod {
@@ -108,7 +108,7 @@ pub struct GetFullAxTree {
     pub method: GetFullAxTreeMethod,
     pub params: GetFullAxTreeParams,
 }
-impl super::super::super::CommandResult for GetFullAxTree {
+impl crate::CommandResult for GetFullAxTree {
     type Result = super::results::GetFullAxTreeResult;
 }
 #[doc = "Fetches the root node.\nRequires `enable()` to have been called previously.\n[getRootAXNode](https://chromedevtools.github.io/devtools-protocol/tot/Accessibility/#method-getRootAXNode)"]
@@ -118,7 +118,7 @@ pub struct GetRootAxNodeParams {
     #[serde(rename = "frameId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub frame_id: Option<super::super::page::types::FrameId>,
+    pub frame_id: Option<crate::browser_protocol::page::types::FrameId>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum GetRootAxNodeMethod {
@@ -134,7 +134,7 @@ pub struct GetRootAxNode {
     pub method: GetRootAxNodeMethod,
     pub params: GetRootAxNodeParams,
 }
-impl super::super::super::CommandResult for GetRootAxNode {
+impl crate::CommandResult for GetRootAxNode {
     type Result = super::results::GetRootAxNodeResult;
 }
 #[doc = "Fetches a node and all ancestors up to and including the root.\nRequires `enable()` to have been called previously.\n[getAXNodeAndAncestors](https://chromedevtools.github.io/devtools-protocol/tot/Accessibility/#method-getAXNodeAndAncestors)"]
@@ -144,17 +144,17 @@ pub struct GetAxNodeAndAncestorsParams {
     #[serde(rename = "nodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub node_id: Option<super::super::dom::types::NodeId>,
+    pub node_id: Option<crate::browser_protocol::dom::types::NodeId>,
     #[doc = "Identifier of the backend node to get."]
     #[serde(rename = "backendNodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub backend_node_id: Option<super::super::dom::types::BackendNodeId>,
+    pub backend_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     #[doc = "JavaScript object id of the node wrapper to get."]
     #[serde(rename = "objectId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub object_id: Option<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+    pub object_id: Option<crate::js_protocol::runtime::types::RemoteObjectId>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum GetAxNodeAndAncestorsMethod {
@@ -170,7 +170,7 @@ pub struct GetAxNodeAndAncestors {
     pub method: GetAxNodeAndAncestorsMethod,
     pub params: GetAxNodeAndAncestorsParams,
 }
-impl super::super::super::CommandResult for GetAxNodeAndAncestors {
+impl crate::CommandResult for GetAxNodeAndAncestors {
     type Result = super::results::GetAxNodeAndAncestorsResult;
 }
 #[doc = "Fetches a particular accessibility node by AXNodeId.\nRequires `enable()` to have been called previously.\n[getChildAXNodes](https://chromedevtools.github.io/devtools-protocol/tot/Accessibility/#method-getChildAXNodes)"]
@@ -182,7 +182,7 @@ pub struct GetChildAxNodesParams {
     #[serde(rename = "frameId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub frame_id: Option<super::super::page::types::FrameId>,
+    pub frame_id: Option<crate::browser_protocol::page::types::FrameId>,
 }
 impl GetChildAxNodesParams {
     pub fn new(id: impl Into<super::types::AxNodeId>) -> Self {
@@ -206,7 +206,7 @@ pub struct GetChildAxNodes {
     pub method: GetChildAxNodesMethod,
     pub params: GetChildAxNodesParams,
 }
-impl super::super::super::CommandResult for GetChildAxNodes {
+impl crate::CommandResult for GetChildAxNodes {
     type Result = super::results::GetChildAxNodesResult;
 }
 #[doc = "Query a DOM node's accessibility subtree for accessible name and role.\nThis command computes the name and role for all nodes in the subtree, including those that are\nignored for accessibility, and returns those that match the specified name and role. If no DOM\nnode is specified, or the DOM node does not exist, the command returns an error. If neither\n`accessibleName` or `role` is specified, it returns all the accessibility nodes in the subtree.\n[queryAXTree](https://chromedevtools.github.io/devtools-protocol/tot/Accessibility/#method-queryAXTree)"]
@@ -216,17 +216,17 @@ pub struct QueryAxTreeParams {
     #[serde(rename = "nodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub node_id: Option<super::super::dom::types::NodeId>,
+    pub node_id: Option<crate::browser_protocol::dom::types::NodeId>,
     #[doc = "Identifier of the backend node for the root to query."]
     #[serde(rename = "backendNodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub backend_node_id: Option<super::super::dom::types::BackendNodeId>,
+    pub backend_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     #[doc = "JavaScript object id of the node wrapper for the root to query."]
     #[serde(rename = "objectId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub object_id: Option<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+    pub object_id: Option<crate::js_protocol::runtime::types::RemoteObjectId>,
     #[doc = "Find nodes with this computed name."]
     #[serde(rename = "accessibleName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -252,7 +252,7 @@ pub struct QueryAxTree {
     pub method: QueryAxTreeMethod,
     pub params: QueryAxTreeParams,
 }
-impl super::super::super::CommandResult for QueryAxTree {
+impl crate::CommandResult for QueryAxTree {
     type Result = super::results::QueryAxTreeResult;
 }
 group_enum ! (AccessibilityCommands { Disable (Disable) , Enable (Enable) , GetPartialAxTree (GetPartialAxTree) , GetFullAxTree (GetFullAxTree) , GetRootAxNode (GetRootAxNode) , GetAxNodeAndAncestors (GetAxNodeAndAncestors) , GetChildAxNodes (GetChildAxNodes) , QueryAxTree (QueryAxTree) });

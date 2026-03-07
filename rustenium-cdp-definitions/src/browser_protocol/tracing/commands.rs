@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 #[doc = "Stop trace events collection.\n[end](https://chromedevtools.github.io/devtools-protocol/tot/Tracing/#method-end)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EndParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum EndMethod {
@@ -16,11 +16,11 @@ pub struct End {
     pub method: EndMethod,
     pub params: EndParams,
 }
-impl super::super::super::CommandResult for End {
+impl crate::CommandResult for End {
     type Result = super::results::EndResult;
 }
 #[doc = "Gets supported tracing categories.\n[getCategories](https://chromedevtools.github.io/devtools-protocol/tot/Tracing/#method-getCategories)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetCategoriesParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum GetCategoriesMethod {
@@ -36,11 +36,11 @@ pub struct GetCategories {
     pub method: GetCategoriesMethod,
     pub params: GetCategoriesParams,
 }
-impl super::super::super::CommandResult for GetCategories {
+impl crate::CommandResult for GetCategories {
     type Result = super::results::GetCategoriesResult;
 }
 #[doc = "Return a descriptor for all available tracing categories.\n[getTrackEventDescriptor](https://chromedevtools.github.io/devtools-protocol/tot/Tracing/#method-getTrackEventDescriptor)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetTrackEventDescriptorParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum GetTrackEventDescriptorMethod {
@@ -56,7 +56,7 @@ pub struct GetTrackEventDescriptor {
     pub method: GetTrackEventDescriptorMethod,
     pub params: GetTrackEventDescriptorParams,
 }
-impl super::super::super::CommandResult for GetTrackEventDescriptor {
+impl crate::CommandResult for GetTrackEventDescriptor {
     type Result = super::results::GetTrackEventDescriptorResult;
 }
 #[doc = "Record a clock sync marker in the trace.\n[recordClockSyncMarker](https://chromedevtools.github.io/devtools-protocol/tot/Tracing/#method-recordClockSyncMarker)"]
@@ -92,7 +92,7 @@ pub struct RecordClockSyncMarker {
     pub method: RecordClockSyncMarkerMethod,
     pub params: RecordClockSyncMarkerParams,
 }
-impl super::super::super::CommandResult for RecordClockSyncMarker {
+impl crate::CommandResult for RecordClockSyncMarker {
     type Result = super::results::RecordClockSyncMarkerResult;
 }
 #[doc = "Request a global memory dump.\n[requestMemoryDump](https://chromedevtools.github.io/devtools-protocol/tot/Tracing/#method-requestMemoryDump)"]
@@ -123,7 +123,7 @@ pub struct RequestMemoryDump {
     pub method: RequestMemoryDumpMethod,
     pub params: RequestMemoryDumpParams,
 }
-impl super::super::super::CommandResult for RequestMemoryDump {
+impl crate::CommandResult for RequestMemoryDump {
     type Result = super::results::RequestMemoryDumpResult;
 }
 #[doc = "Start trace events collection.\n[start](https://chromedevtools.github.io/devtools-protocol/tot/Tracing/#method-start)"]
@@ -157,7 +157,7 @@ pub struct StartParams {
     #[serde(rename = "perfettoConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub perfetto_config: Option<super::super::super::Binary>,
+    pub perfetto_config: Option<crate::Binary>,
     #[doc = "Backend type (defaults to `auto`)"]
     #[serde(rename = "tracingBackend")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -186,7 +186,7 @@ pub struct Start {
     pub method: StartMethod,
     pub params: StartParams,
 }
-impl super::super::super::CommandResult for Start {
+impl crate::CommandResult for Start {
     type Result = super::results::StartResult;
 }
 group_enum ! (TracingCommands { End (End) , GetCategories (GetCategories) , GetTrackEventDescriptor (GetTrackEventDescriptor) , RecordClockSyncMarker (RecordClockSyncMarker) , RequestMemoryDump (RequestMemoryDump) , Start (Start) });

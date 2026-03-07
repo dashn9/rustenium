@@ -39,11 +39,11 @@ pub struct ContinueToLocation {
     pub method: ContinueToLocationMethod,
     pub params: ContinueToLocationParams,
 }
-impl super::super::super::CommandResult for ContinueToLocation {
+impl crate::CommandResult for ContinueToLocation {
     type Result = super::results::ContinueToLocationResult;
 }
 #[doc = "Disables debugger for given page.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-disable)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DisableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum DisableMethod {
@@ -59,7 +59,7 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
-impl super::super::super::CommandResult for Disable {
+impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
 }
 #[doc = "Enables debugger for the given page. Clients should not assume that the debugging has been\nenabled until the result for this command is received.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-enable)"]
@@ -85,7 +85,7 @@ pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
 }
-impl super::super::super::CommandResult for Enable {
+impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
 }
 #[doc = "Evaluates expression on a given call frame.\n[evaluateOnCallFrame](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-evaluateOnCallFrame)"]
@@ -131,7 +131,7 @@ pub struct EvaluateOnCallFrameParams {
     #[serde(rename = "timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub timeout: Option<super::super::runtime::types::TimeDelta>,
+    pub timeout: Option<crate::js_protocol::runtime::types::TimeDelta>,
 }
 impl EvaluateOnCallFrameParams {
     pub fn new(
@@ -165,7 +165,7 @@ pub struct EvaluateOnCallFrame {
     pub method: EvaluateOnCallFrameMethod,
     pub params: EvaluateOnCallFrameParams,
 }
-impl super::super::super::CommandResult for EvaluateOnCallFrame {
+impl crate::CommandResult for EvaluateOnCallFrame {
     type Result = super::results::EvaluateOnCallFrameResult;
 }
 #[doc = "Returns possible locations for breakpoint. scriptId in start and end range locations should be\nthe same.\n[getPossibleBreakpoints](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-getPossibleBreakpoints)"]
@@ -208,7 +208,7 @@ pub struct GetPossibleBreakpoints {
     pub method: GetPossibleBreakpointsMethod,
     pub params: GetPossibleBreakpointsParams,
 }
-impl super::super::super::CommandResult for GetPossibleBreakpoints {
+impl crate::CommandResult for GetPossibleBreakpoints {
     type Result = super::results::GetPossibleBreakpointsResult;
 }
 #[doc = "Returns source for the script with given id.\n[getScriptSource](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-getScriptSource)"]
@@ -216,10 +216,10 @@ impl super::super::super::CommandResult for GetPossibleBreakpoints {
 pub struct GetScriptSourceParams {
     #[doc = "Id of the script to get source for."]
     #[serde(rename = "scriptId")]
-    pub script_id: super::super::runtime::types::ScriptId,
+    pub script_id: crate::js_protocol::runtime::types::ScriptId,
 }
 impl GetScriptSourceParams {
-    pub fn new(script_id: impl Into<super::super::runtime::types::ScriptId>) -> Self {
+    pub fn new(script_id: impl Into<crate::js_protocol::runtime::types::ScriptId>) -> Self {
         Self {
             script_id: script_id.into(),
         }
@@ -239,17 +239,17 @@ pub struct GetScriptSource {
     pub method: GetScriptSourceMethod,
     pub params: GetScriptSourceParams,
 }
-impl super::super::super::CommandResult for GetScriptSource {
+impl crate::CommandResult for GetScriptSource {
     type Result = super::results::GetScriptSourceResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DisassembleWasmModuleParams {
     #[doc = "Id of the script to disassemble"]
     #[serde(rename = "scriptId")]
-    pub script_id: super::super::runtime::types::ScriptId,
+    pub script_id: crate::js_protocol::runtime::types::ScriptId,
 }
 impl DisassembleWasmModuleParams {
-    pub fn new(script_id: impl Into<super::super::runtime::types::ScriptId>) -> Self {
+    pub fn new(script_id: impl Into<crate::js_protocol::runtime::types::ScriptId>) -> Self {
         Self {
             script_id: script_id.into(),
         }
@@ -268,7 +268,7 @@ pub struct DisassembleWasmModule {
     pub method: DisassembleWasmModuleMethod,
     pub params: DisassembleWasmModuleParams,
 }
-impl super::super::super::CommandResult for DisassembleWasmModule {
+impl crate::CommandResult for DisassembleWasmModule {
     type Result = super::results::DisassembleWasmModuleResult;
 }
 #[doc = "Disassemble the next chunk of lines for the module corresponding to the\nstream. If disassembly is complete, this API will invalidate the streamId\nand return an empty chunk. Any subsequent calls for the now invalid stream\nwill return errors.\n[nextWasmDisassemblyChunk](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-nextWasmDisassemblyChunk)"]
@@ -303,17 +303,19 @@ pub struct NextWasmDisassemblyChunk {
     pub method: NextWasmDisassemblyChunkMethod,
     pub params: NextWasmDisassemblyChunkParams,
 }
-impl super::super::super::CommandResult for NextWasmDisassemblyChunk {
+impl crate::CommandResult for NextWasmDisassemblyChunk {
     type Result = super::results::NextWasmDisassemblyChunkResult;
 }
 #[doc = "Returns stack trace with given `stackTraceId`.\n[getStackTrace](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-getStackTrace)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetStackTraceParams {
     #[serde(rename = "stackTraceId")]
-    pub stack_trace_id: super::super::runtime::types::StackTraceId,
+    pub stack_trace_id: crate::js_protocol::runtime::types::StackTraceId,
 }
 impl GetStackTraceParams {
-    pub fn new(stack_trace_id: impl Into<super::super::runtime::types::StackTraceId>) -> Self {
+    pub fn new(
+        stack_trace_id: impl Into<crate::js_protocol::runtime::types::StackTraceId>,
+    ) -> Self {
         Self {
             stack_trace_id: stack_trace_id.into(),
         }
@@ -333,11 +335,11 @@ pub struct GetStackTrace {
     pub method: GetStackTraceMethod,
     pub params: GetStackTraceParams,
 }
-impl super::super::super::CommandResult for GetStackTrace {
+impl crate::CommandResult for GetStackTrace {
     type Result = super::results::GetStackTraceResult;
 }
 #[doc = "Stops on the next JavaScript statement.\n[pause](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-pause)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PauseParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum PauseMethod {
@@ -353,7 +355,7 @@ pub struct Pause {
     pub method: PauseMethod,
     pub params: PauseParams,
 }
-impl super::super::super::CommandResult for Pause {
+impl crate::CommandResult for Pause {
     type Result = super::results::PauseResult;
 }
 #[doc = "Removes JavaScript breakpoint.\n[removeBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-removeBreakpoint)"]
@@ -383,7 +385,7 @@ pub struct RemoveBreakpoint {
     pub method: RemoveBreakpointMethod,
     pub params: RemoveBreakpointParams,
 }
-impl super::super::super::CommandResult for RemoveBreakpoint {
+impl crate::CommandResult for RemoveBreakpoint {
     type Result = super::results::RemoveBreakpointResult;
 }
 #[doc = "Restarts particular call frame from the beginning. The old, deprecated\nbehavior of `restartFrame` is to stay paused and allow further CDP commands\nafter a restart was scheduled. This can cause problems with restarting, so\nwe now continue execution immediatly after it has been scheduled until we\nreach the beginning of the restarted frame.\n\nTo stay back-wards compatible, `restartFrame` now expects a `mode`\nparameter to be present. If the `mode` parameter is missing, `restartFrame`\nerrors out.\n\nThe various return values are deprecated and `callFrames` is always empty.\nUse the call frames from the `Debugger#paused` events instead, that fires\nonce V8 pauses at the beginning of the restarted function.\n[restartFrame](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-restartFrame)"]
@@ -427,7 +429,7 @@ pub struct RestartFrame {
     pub method: RestartFrameMethod,
     pub params: RestartFrameParams,
 }
-impl super::super::super::CommandResult for RestartFrame {
+impl crate::CommandResult for RestartFrame {
     type Result = super::results::RestartFrameResult;
 }
 #[doc = "Resumes JavaScript execution.\n[resume](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-resume)"]
@@ -453,7 +455,7 @@ pub struct Resume {
     pub method: ResumeMethod,
     pub params: ResumeParams,
 }
-impl super::super::super::CommandResult for Resume {
+impl crate::CommandResult for Resume {
     type Result = super::results::ResumeResult;
 }
 #[doc = "Searches for given string in script content.\n[searchInContent](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-searchInContent)"]
@@ -461,7 +463,7 @@ impl super::super::super::CommandResult for Resume {
 pub struct SearchInContentParams {
     #[doc = "Id of the script to search in."]
     #[serde(rename = "scriptId")]
-    pub script_id: super::super::runtime::types::ScriptId,
+    pub script_id: crate::js_protocol::runtime::types::ScriptId,
     #[doc = "String to search for."]
     #[serde(rename = "query")]
     pub query: String,
@@ -478,7 +480,7 @@ pub struct SearchInContentParams {
 }
 impl SearchInContentParams {
     pub fn new(
-        script_id: impl Into<super::super::runtime::types::ScriptId>,
+        script_id: impl Into<crate::js_protocol::runtime::types::ScriptId>,
         query: impl Into<String>,
     ) -> Self {
         Self {
@@ -503,7 +505,7 @@ pub struct SearchInContent {
     pub method: SearchInContentMethod,
     pub params: SearchInContentParams,
 }
-impl super::super::super::CommandResult for SearchInContent {
+impl crate::CommandResult for SearchInContent {
     type Result = super::results::SearchInContentResult;
 }
 #[doc = "Enables or disables async call stacks tracking.\n[setAsyncCallStackDepth](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setAsyncCallStackDepth)"]
@@ -534,7 +536,7 @@ pub struct SetAsyncCallStackDepth {
     pub method: SetAsyncCallStackDepthMethod,
     pub params: SetAsyncCallStackDepthParams,
 }
-impl super::super::super::CommandResult for SetAsyncCallStackDepth {
+impl crate::CommandResult for SetAsyncCallStackDepth {
     type Result = super::results::SetAsyncCallStackDepthResult;
 }
 #[doc = "Replace previous blackbox execution contexts with passed ones. Forces backend to skip\nstepping/pausing in scripts in these execution contexts. VM will try to leave blackboxed script by\nperforming 'step in' several times, finally resorting to 'step out' if unsuccessful.\n[setBlackboxExecutionContexts](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setBlackboxExecutionContexts)"]
@@ -564,7 +566,7 @@ pub struct SetBlackboxExecutionContexts {
     pub method: SetBlackboxExecutionContextsMethod,
     pub params: SetBlackboxExecutionContextsParams,
 }
-impl super::super::super::CommandResult for SetBlackboxExecutionContexts {
+impl crate::CommandResult for SetBlackboxExecutionContexts {
     type Result = super::results::SetBlackboxExecutionContextsResult;
 }
 #[doc = "Replace previous blackbox patterns with passed ones. Forces backend to skip stepping/pausing in\nscripts with url matching one of the patterns. VM will try to leave blackboxed script by\nperforming 'step in' several times, finally resorting to 'step out' if unsuccessful.\n[setBlackboxPatterns](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setBlackboxPatterns)"]
@@ -602,7 +604,7 @@ pub struct SetBlackboxPatterns {
     pub method: SetBlackboxPatternsMethod,
     pub params: SetBlackboxPatternsParams,
 }
-impl super::super::super::CommandResult for SetBlackboxPatterns {
+impl crate::CommandResult for SetBlackboxPatterns {
     type Result = super::results::SetBlackboxPatternsResult;
 }
 #[doc = "Makes backend skip steps in the script in blackboxed ranges. VM will try leave blacklisted\nscripts by performing 'step in' several times, finally resorting to 'step out' if unsuccessful.\nPositions array contains positions where blackbox state is changed. First interval isn't\nblackboxed. Array should be sorted.\n[setBlackboxedRanges](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setBlackboxedRanges)"]
@@ -610,14 +612,14 @@ impl super::super::super::CommandResult for SetBlackboxPatterns {
 pub struct SetBlackboxedRangesParams {
     #[doc = "Id of the script."]
     #[serde(rename = "scriptId")]
-    pub script_id: super::super::runtime::types::ScriptId,
+    pub script_id: crate::js_protocol::runtime::types::ScriptId,
     #[serde(rename = "positions")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub positions: Vec<super::types::ScriptPosition>,
 }
 impl SetBlackboxedRangesParams {
     pub fn new(
-        script_id: impl Into<super::super::runtime::types::ScriptId>,
+        script_id: impl Into<crate::js_protocol::runtime::types::ScriptId>,
         positions: Vec<super::types::ScriptPosition>,
     ) -> Self {
         Self {
@@ -640,7 +642,7 @@ pub struct SetBlackboxedRanges {
     pub method: SetBlackboxedRangesMethod,
     pub params: SetBlackboxedRangesParams,
 }
-impl super::super::super::CommandResult for SetBlackboxedRanges {
+impl crate::CommandResult for SetBlackboxedRanges {
     type Result = super::results::SetBlackboxedRangesResult;
 }
 #[doc = "Sets JavaScript breakpoint at a given location.\n[setBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setBreakpoint)"]
@@ -677,7 +679,7 @@ pub struct SetBreakpoint {
     pub method: SetBreakpointMethod,
     pub params: SetBreakpointParams,
 }
-impl super::super::super::CommandResult for SetBreakpoint {
+impl crate::CommandResult for SetBreakpoint {
     type Result = super::results::SetBreakpointResult;
 }
 #[doc = "Sets instrumentation breakpoint.\n[setInstrumentationBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setInstrumentationBreakpoint)"]
@@ -716,7 +718,7 @@ pub struct SetInstrumentationBreakpoint {
     pub method: SetInstrumentationBreakpointMethod,
     pub params: SetInstrumentationBreakpointParams,
 }
-impl super::super::super::CommandResult for SetInstrumentationBreakpoint {
+impl crate::CommandResult for SetInstrumentationBreakpoint {
     type Result = super::results::SetInstrumentationBreakpointResult;
 }
 #[doc = "Sets JavaScript breakpoint at given location specified either by URL or URL regex. Once this\ncommand is issued, all existing parsed scripts will have breakpoints resolved and returned in\n`locations` property. Further matching script parsing will result in subsequent\n`breakpointResolved` events issued. This logical breakpoint will survive page reloads.\n[setBreakpointByUrl](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setBreakpointByUrl)"]
@@ -777,7 +779,7 @@ pub struct SetBreakpointByUrl {
     pub method: SetBreakpointByUrlMethod,
     pub params: SetBreakpointByUrlParams,
 }
-impl super::super::super::CommandResult for SetBreakpointByUrl {
+impl crate::CommandResult for SetBreakpointByUrl {
     type Result = super::results::SetBreakpointByUrlResult;
 }
 #[doc = "Sets JavaScript breakpoint before each call to the given function.\nIf another function was created from the same source as a given one,\ncalling it will also trigger the breakpoint.\n[setBreakpointOnFunctionCall](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setBreakpointOnFunctionCall)"]
@@ -785,7 +787,7 @@ impl super::super::super::CommandResult for SetBreakpointByUrl {
 pub struct SetBreakpointOnFunctionCallParams {
     #[doc = "Function object id."]
     #[serde(rename = "objectId")]
-    pub object_id: super::super::runtime::types::RemoteObjectId,
+    pub object_id: crate::js_protocol::runtime::types::RemoteObjectId,
     #[doc = "Expression to use as a breakpoint condition. When specified, debugger will\nstop on the breakpoint if this expression evaluates to true."]
     #[serde(rename = "condition")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -793,7 +795,7 @@ pub struct SetBreakpointOnFunctionCallParams {
     pub condition: Option<String>,
 }
 impl SetBreakpointOnFunctionCallParams {
-    pub fn new(object_id: impl Into<super::super::runtime::types::RemoteObjectId>) -> Self {
+    pub fn new(object_id: impl Into<crate::js_protocol::runtime::types::RemoteObjectId>) -> Self {
         Self {
             object_id: object_id.into(),
             condition: None,
@@ -814,7 +816,7 @@ pub struct SetBreakpointOnFunctionCall {
     pub method: SetBreakpointOnFunctionCallMethod,
     pub params: SetBreakpointOnFunctionCallParams,
 }
-impl super::super::super::CommandResult for SetBreakpointOnFunctionCall {
+impl crate::CommandResult for SetBreakpointOnFunctionCall {
     type Result = super::results::SetBreakpointOnFunctionCallResult;
 }
 #[doc = "Activates / deactivates all breakpoints on the page.\n[setBreakpointsActive](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setBreakpointsActive)"]
@@ -845,7 +847,7 @@ pub struct SetBreakpointsActive {
     pub method: SetBreakpointsActiveMethod,
     pub params: SetBreakpointsActiveParams,
 }
-impl super::super::super::CommandResult for SetBreakpointsActive {
+impl crate::CommandResult for SetBreakpointsActive {
     type Result = super::results::SetBreakpointsActiveResult;
 }
 #[doc = "Defines pause on exceptions state. Can be set to stop on all exceptions, uncaught exceptions,\nor caught exceptions, no exceptions. Initial pause on exceptions state is `none`.\n[setPauseOnExceptions](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setPauseOnExceptions)"]
@@ -888,7 +890,7 @@ pub struct SetPauseOnExceptions {
     pub method: SetPauseOnExceptionsMethod,
     pub params: SetPauseOnExceptionsParams,
 }
-impl super::super::super::CommandResult for SetPauseOnExceptions {
+impl crate::CommandResult for SetPauseOnExceptions {
     type Result = super::results::SetPauseOnExceptionsResult;
 }
 #[doc = "Changes return value in top frame. Available only at return break position.\n[setReturnValue](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setReturnValue)"]
@@ -896,10 +898,10 @@ impl super::super::super::CommandResult for SetPauseOnExceptions {
 pub struct SetReturnValueParams {
     #[doc = "New return value."]
     #[serde(rename = "newValue")]
-    pub new_value: super::super::runtime::types::CallArgument,
+    pub new_value: crate::js_protocol::runtime::types::CallArgument,
 }
 impl SetReturnValueParams {
-    pub fn new(new_value: impl Into<super::super::runtime::types::CallArgument>) -> Self {
+    pub fn new(new_value: impl Into<crate::js_protocol::runtime::types::CallArgument>) -> Self {
         Self {
             new_value: new_value.into(),
         }
@@ -919,7 +921,7 @@ pub struct SetReturnValue {
     pub method: SetReturnValueMethod,
     pub params: SetReturnValueParams,
 }
-impl super::super::super::CommandResult for SetReturnValue {
+impl crate::CommandResult for SetReturnValue {
     type Result = super::results::SetReturnValueResult;
 }
 #[doc = "Edits JavaScript source live.\n\nIn general, functions that are currently on the stack can not be edited with\na single exception: If the edited function is the top-most stack frame and\nthat is the only activation of that function on the stack. In this case\nthe live edit will be successful and a `Debugger.restartFrame` for the\ntop-most function is automatically triggered.\n[setScriptSource](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setScriptSource)"]
@@ -927,7 +929,7 @@ impl super::super::super::CommandResult for SetReturnValue {
 pub struct SetScriptSourceParams {
     #[doc = "Id of the script to edit."]
     #[serde(rename = "scriptId")]
-    pub script_id: super::super::runtime::types::ScriptId,
+    pub script_id: crate::js_protocol::runtime::types::ScriptId,
     #[doc = "New content of the script."]
     #[serde(rename = "scriptSource")]
     pub script_source: String,
@@ -944,7 +946,7 @@ pub struct SetScriptSourceParams {
 }
 impl SetScriptSourceParams {
     pub fn new(
-        script_id: impl Into<super::super::runtime::types::ScriptId>,
+        script_id: impl Into<crate::js_protocol::runtime::types::ScriptId>,
         script_source: impl Into<String>,
     ) -> Self {
         Self {
@@ -969,7 +971,7 @@ pub struct SetScriptSource {
     pub method: SetScriptSourceMethod,
     pub params: SetScriptSourceParams,
 }
-impl super::super::super::CommandResult for SetScriptSource {
+impl crate::CommandResult for SetScriptSource {
     type Result = super::results::SetScriptSourceResult;
 }
 #[doc = "Makes page not interrupt on any pauses (breakpoint, exception, dom exception etc).\n[setSkipAllPauses](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setSkipAllPauses)"]
@@ -998,7 +1000,7 @@ pub struct SetSkipAllPauses {
     pub method: SetSkipAllPausesMethod,
     pub params: SetSkipAllPausesParams,
 }
-impl super::super::super::CommandResult for SetSkipAllPauses {
+impl crate::CommandResult for SetSkipAllPauses {
     type Result = super::results::SetSkipAllPausesResult;
 }
 #[doc = "Changes value of variable in a callframe. Object-based scopes are not supported and must be\nmutated manually.\n[setVariableValue](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setVariableValue)"]
@@ -1012,7 +1014,7 @@ pub struct SetVariableValueParams {
     pub variable_name: String,
     #[doc = "New variable value."]
     #[serde(rename = "newValue")]
-    pub new_value: super::super::runtime::types::CallArgument,
+    pub new_value: crate::js_protocol::runtime::types::CallArgument,
     #[doc = "Id of callframe that holds variable."]
     #[serde(rename = "callFrameId")]
     pub call_frame_id: super::types::CallFrameId,
@@ -1021,7 +1023,7 @@ impl SetVariableValueParams {
     pub fn new(
         scope_number: impl Into<i64>,
         variable_name: impl Into<String>,
-        new_value: impl Into<super::super::runtime::types::CallArgument>,
+        new_value: impl Into<crate::js_protocol::runtime::types::CallArgument>,
         call_frame_id: impl Into<super::types::CallFrameId>,
     ) -> Self {
         Self {
@@ -1046,7 +1048,7 @@ pub struct SetVariableValue {
     pub method: SetVariableValueMethod,
     pub params: SetVariableValueParams,
 }
-impl super::super::super::CommandResult for SetVariableValue {
+impl crate::CommandResult for SetVariableValue {
     type Result = super::results::SetVariableValueResult;
 }
 #[doc = "Steps into the function call.\n[stepInto](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-stepInto)"]
@@ -1077,11 +1079,11 @@ pub struct StepInto {
     pub method: StepIntoMethod,
     pub params: StepIntoParams,
 }
-impl super::super::super::CommandResult for StepInto {
+impl crate::CommandResult for StepInto {
     type Result = super::results::StepIntoResult;
 }
 #[doc = "Steps out of the function call.\n[stepOut](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-stepOut)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StepOutParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum StepOutMethod {
@@ -1097,7 +1099,7 @@ pub struct StepOut {
     pub method: StepOutMethod,
     pub params: StepOutParams,
 }
-impl super::super::super::CommandResult for StepOut {
+impl crate::CommandResult for StepOut {
     type Result = super::results::StepOutResult;
 }
 #[doc = "Steps over the statement.\n[stepOver](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-stepOver)"]
@@ -1123,7 +1125,7 @@ pub struct StepOver {
     pub method: StepOverMethod,
     pub params: StepOverParams,
 }
-impl super::super::super::CommandResult for StepOver {
+impl crate::CommandResult for StepOver {
     type Result = super::results::StepOverResult;
 }
 group_enum ! (DebuggerCommands { ContinueToLocation (ContinueToLocation) , Disable (Disable) , Enable (Enable) , EvaluateOnCallFrame (EvaluateOnCallFrame) , GetPossibleBreakpoints (GetPossibleBreakpoints) , GetScriptSource (GetScriptSource) , DisassembleWasmModule (DisassembleWasmModule) , NextWasmDisassemblyChunk (NextWasmDisassemblyChunk) , GetStackTrace (GetStackTrace) , Pause (Pause) , RemoveBreakpoint (RemoveBreakpoint) , RestartFrame (RestartFrame) , Resume (Resume) , SearchInContent (SearchInContent) , SetAsyncCallStackDepth (SetAsyncCallStackDepth) , SetBlackboxExecutionContexts (SetBlackboxExecutionContexts) , SetBlackboxPatterns (SetBlackboxPatterns) , SetBlackboxedRanges (SetBlackboxedRanges) , SetBreakpoint (SetBreakpoint) , SetInstrumentationBreakpoint (SetInstrumentationBreakpoint) , SetBreakpointByUrl (SetBreakpointByUrl) , SetBreakpointOnFunctionCall (SetBreakpointOnFunctionCall) , SetBreakpointsActive (SetBreakpointsActive) , SetPauseOnExceptions (SetPauseOnExceptions) , SetReturnValue (SetReturnValue) , SetScriptSource (SetScriptSource) , SetSkipAllPauses (SetSkipAllPauses) , SetVariableValue (SetVariableValue) , StepInto (StepInto) , StepOut (StepOut) , StepOver (StepOver) });

@@ -25,5 +25,5 @@ pub struct GetResponseBodyResult {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TakeResponseBodyAsStreamResult {
     #[serde(rename = "stream")]
-    pub stream: super::super::io::types::StreamHandle,
+    pub stream: crate::browser_protocol::io::types::StreamHandle,
 }

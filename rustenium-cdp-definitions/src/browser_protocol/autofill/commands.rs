@@ -4,12 +4,12 @@ use serde::{Deserialize, Serialize};
 pub struct TriggerParams {
     #[doc = "Identifies a field that serves as an anchor for autofill."]
     #[serde(rename = "fieldId")]
-    pub field_id: super::super::dom::types::BackendNodeId,
+    pub field_id: crate::browser_protocol::dom::types::BackendNodeId,
     #[doc = "Identifies the frame that field belongs to."]
     #[serde(rename = "frameId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub frame_id: Option<super::super::page::types::FrameId>,
+    pub frame_id: Option<crate::browser_protocol::page::types::FrameId>,
     #[doc = "Credit card information to fill out the form. Credit card data is not saved.  Mutually exclusive with `address`."]
     #[serde(rename = "card")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -22,7 +22,7 @@ pub struct TriggerParams {
     pub address: Option<super::types::Address>,
 }
 impl TriggerParams {
-    pub fn new(field_id: impl Into<super::super::dom::types::BackendNodeId>) -> Self {
+    pub fn new(field_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>) -> Self {
         Self {
             field_id: field_id.into(),
             frame_id: None,
@@ -45,7 +45,7 @@ pub struct Trigger {
     pub method: TriggerMethod,
     pub params: TriggerParams,
 }
-impl super::super::super::CommandResult for Trigger {
+impl crate::CommandResult for Trigger {
     type Result = super::results::TriggerResult;
 }
 #[doc = "Set addresses so that developers can verify their forms implementation.\n[setAddresses](https://chromedevtools.github.io/devtools-protocol/tot/Autofill/#method-setAddresses)"]
@@ -75,11 +75,11 @@ pub struct SetAddresses {
     pub method: SetAddressesMethod,
     pub params: SetAddressesParams,
 }
-impl super::super::super::CommandResult for SetAddresses {
+impl crate::CommandResult for SetAddresses {
     type Result = super::results::SetAddressesResult;
 }
 #[doc = "Disables autofill domain notifications.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Autofill/#method-disable)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DisableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum DisableMethod {
@@ -95,11 +95,11 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
-impl super::super::super::CommandResult for Disable {
+impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
 }
 #[doc = "Enables autofill domain notifications.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Autofill/#method-enable)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EnableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum EnableMethod {
@@ -115,7 +115,7 @@ pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
 }
-impl super::super::super::CommandResult for Enable {
+impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
 }
 group_enum ! (AutofillCommands { Trigger (Trigger) , SetAddresses (SetAddresses) , Disable (Disable) , Enable (Enable) });

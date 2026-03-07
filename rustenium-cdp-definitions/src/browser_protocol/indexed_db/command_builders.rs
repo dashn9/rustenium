@@ -1,14 +1,14 @@
 use super::commands::*;
 impl ClearObjectStore {
     pub fn builder() -> ClearObjectStoreBuilder {
-        ClearObjectStoreBuilder::default()
+        <ClearObjectStoreBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct ClearObjectStoreBuilder {
     security_origin: Option<String>,
     storage_key: Option<String>,
-    storage_bucket: Option<super::super::storage::types::StorageBucket>,
+    storage_bucket: Option<crate::browser_protocol::storage::types::StorageBucket>,
     database_name: Option<String>,
     object_store_name: Option<String>,
 }
@@ -23,7 +23,7 @@ impl ClearObjectStoreBuilder {
     }
     pub fn storage_bucket(
         mut self,
-        storage_bucket: impl Into<super::super::storage::types::StorageBucket>,
+        storage_bucket: impl Into<crate::browser_protocol::storage::types::StorageBucket>,
     ) -> Self {
         self.storage_bucket = Some(storage_bucket.into());
         self
@@ -58,14 +58,14 @@ impl ClearObjectStoreBuilder {
 }
 impl DeleteDatabase {
     pub fn builder() -> DeleteDatabaseBuilder {
-        DeleteDatabaseBuilder::default()
+        <DeleteDatabaseBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct DeleteDatabaseBuilder {
     security_origin: Option<String>,
     storage_key: Option<String>,
-    storage_bucket: Option<super::super::storage::types::StorageBucket>,
+    storage_bucket: Option<crate::browser_protocol::storage::types::StorageBucket>,
     database_name: Option<String>,
 }
 impl DeleteDatabaseBuilder {
@@ -79,7 +79,7 @@ impl DeleteDatabaseBuilder {
     }
     pub fn storage_bucket(
         mut self,
-        storage_bucket: impl Into<super::super::storage::types::StorageBucket>,
+        storage_bucket: impl Into<crate::browser_protocol::storage::types::StorageBucket>,
     ) -> Self {
         self.storage_bucket = Some(storage_bucket.into());
         self
@@ -104,14 +104,14 @@ impl DeleteDatabaseBuilder {
 }
 impl DeleteObjectStoreEntries {
     pub fn builder() -> DeleteObjectStoreEntriesBuilder {
-        DeleteObjectStoreEntriesBuilder::default()
+        <DeleteObjectStoreEntriesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct DeleteObjectStoreEntriesBuilder {
     security_origin: Option<String>,
     storage_key: Option<String>,
-    storage_bucket: Option<super::super::storage::types::StorageBucket>,
+    storage_bucket: Option<crate::browser_protocol::storage::types::StorageBucket>,
     database_name: Option<String>,
     object_store_name: Option<String>,
     key_range: Option<super::types::KeyRange>,
@@ -127,7 +127,7 @@ impl DeleteObjectStoreEntriesBuilder {
     }
     pub fn storage_bucket(
         mut self,
-        storage_bucket: impl Into<super::super::storage::types::StorageBucket>,
+        storage_bucket: impl Into<crate::browser_protocol::storage::types::StorageBucket>,
     ) -> Self {
         self.storage_bucket = Some(storage_bucket.into());
         self
@@ -169,14 +169,14 @@ impl DeleteObjectStoreEntriesBuilder {
 }
 impl RequestData {
     pub fn builder() -> RequestDataBuilder {
-        RequestDataBuilder::default()
+        <RequestDataBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct RequestDataBuilder {
     security_origin: Option<String>,
     storage_key: Option<String>,
-    storage_bucket: Option<super::super::storage::types::StorageBucket>,
+    storage_bucket: Option<crate::browser_protocol::storage::types::StorageBucket>,
     database_name: Option<String>,
     object_store_name: Option<String>,
     index_name: Option<String>,
@@ -195,7 +195,7 @@ impl RequestDataBuilder {
     }
     pub fn storage_bucket(
         mut self,
-        storage_bucket: impl Into<super::super::storage::types::StorageBucket>,
+        storage_bucket: impl Into<crate::browser_protocol::storage::types::StorageBucket>,
     ) -> Self {
         self.storage_bucket = Some(storage_bucket.into());
         self
@@ -254,14 +254,14 @@ impl RequestDataBuilder {
 }
 impl GetMetadata {
     pub fn builder() -> GetMetadataBuilder {
-        GetMetadataBuilder::default()
+        <GetMetadataBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetMetadataBuilder {
     security_origin: Option<String>,
     storage_key: Option<String>,
-    storage_bucket: Option<super::super::storage::types::StorageBucket>,
+    storage_bucket: Option<crate::browser_protocol::storage::types::StorageBucket>,
     database_name: Option<String>,
     object_store_name: Option<String>,
 }
@@ -276,7 +276,7 @@ impl GetMetadataBuilder {
     }
     pub fn storage_bucket(
         mut self,
-        storage_bucket: impl Into<super::super::storage::types::StorageBucket>,
+        storage_bucket: impl Into<crate::browser_protocol::storage::types::StorageBucket>,
     ) -> Self {
         self.storage_bucket = Some(storage_bucket.into());
         self
@@ -311,14 +311,14 @@ impl GetMetadataBuilder {
 }
 impl RequestDatabase {
     pub fn builder() -> RequestDatabaseBuilder {
-        RequestDatabaseBuilder::default()
+        <RequestDatabaseBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct RequestDatabaseBuilder {
     security_origin: Option<String>,
     storage_key: Option<String>,
-    storage_bucket: Option<super::super::storage::types::StorageBucket>,
+    storage_bucket: Option<crate::browser_protocol::storage::types::StorageBucket>,
     database_name: Option<String>,
 }
 impl RequestDatabaseBuilder {
@@ -332,7 +332,7 @@ impl RequestDatabaseBuilder {
     }
     pub fn storage_bucket(
         mut self,
-        storage_bucket: impl Into<super::super::storage::types::StorageBucket>,
+        storage_bucket: impl Into<crate::browser_protocol::storage::types::StorageBucket>,
     ) -> Self {
         self.storage_bucket = Some(storage_bucket.into());
         self
@@ -357,14 +357,14 @@ impl RequestDatabaseBuilder {
 }
 impl RequestDatabaseNames {
     pub fn builder() -> RequestDatabaseNamesBuilder {
-        RequestDatabaseNamesBuilder::default()
+        <RequestDatabaseNamesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct RequestDatabaseNamesBuilder {
     security_origin: Option<String>,
     storage_key: Option<String>,
-    storage_bucket: Option<super::super::storage::types::StorageBucket>,
+    storage_bucket: Option<crate::browser_protocol::storage::types::StorageBucket>,
 }
 impl RequestDatabaseNamesBuilder {
     pub fn security_origin(mut self, security_origin: impl Into<String>) -> Self {
@@ -377,7 +377,7 @@ impl RequestDatabaseNamesBuilder {
     }
     pub fn storage_bucket(
         mut self,
-        storage_bucket: impl Into<super::super::storage::types::StorageBucket>,
+        storage_bucket: impl Into<crate::browser_protocol::storage::types::StorageBucket>,
     ) -> Self {
         self.storage_bucket = Some(storage_bucket.into());
         self

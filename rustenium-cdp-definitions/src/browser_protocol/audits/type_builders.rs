@@ -1,7 +1,7 @@
 use super::types::*;
 impl AffectedCookie {
     pub fn builder() -> AffectedCookieBuilder {
-        AffectedCookieBuilder::default()
+        <AffectedCookieBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -39,18 +39,18 @@ impl AffectedCookieBuilder {
 }
 impl AffectedRequest {
     pub fn builder() -> AffectedRequestBuilder {
-        AffectedRequestBuilder::default()
+        <AffectedRequestBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct AffectedRequestBuilder {
-    request_id: Option<super::super::network::types::RequestId>,
+    request_id: Option<crate::browser_protocol::network::types::RequestId>,
     url: Option<String>,
 }
 impl AffectedRequestBuilder {
     pub fn request_id(
         mut self,
-        request_id: impl Into<super::super::network::types::RequestId>,
+        request_id: impl Into<crate::browser_protocol::network::types::RequestId>,
     ) -> Self {
         self.request_id = Some(request_id.into());
         self
@@ -70,15 +70,18 @@ impl AffectedRequestBuilder {
 }
 impl AffectedFrame {
     pub fn builder() -> AffectedFrameBuilder {
-        AffectedFrameBuilder::default()
+        <AffectedFrameBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct AffectedFrameBuilder {
-    frame_id: Option<super::super::page::types::FrameId>,
+    frame_id: Option<crate::browser_protocol::page::types::FrameId>,
 }
 impl AffectedFrameBuilder {
-    pub fn frame_id(mut self, frame_id: impl Into<super::super::page::types::FrameId>) -> Self {
+    pub fn frame_id(
+        mut self,
+        frame_id: impl Into<crate::browser_protocol::page::types::FrameId>,
+    ) -> Self {
         self.frame_id = Some(frame_id.into());
         self
     }
@@ -92,7 +95,7 @@ impl AffectedFrameBuilder {
 }
 impl CookieIssueInsight {
     pub fn builder() -> CookieIssueInsightBuilder {
-        CookieIssueInsightBuilder::default()
+        <CookieIssueInsightBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -120,7 +123,7 @@ impl CookieIssueInsightBuilder {
 }
 impl CookieIssueDetails {
     pub fn builder() -> CookieIssueDetailsBuilder {
-        CookieIssueDetailsBuilder::default()
+        <CookieIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -230,7 +233,7 @@ impl CookieIssueDetailsBuilder {
 }
 impl PerformanceIssueDetails {
     pub fn builder() -> PerformanceIssueDetailsBuilder {
-        PerformanceIssueDetailsBuilder::default()
+        <PerformanceIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -267,7 +270,7 @@ impl PerformanceIssueDetailsBuilder {
 }
 impl MixedContentIssueDetails {
     pub fn builder() -> MixedContentIssueDetailsBuilder {
-        MixedContentIssueDetailsBuilder::default()
+        <MixedContentIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -332,7 +335,7 @@ impl MixedContentIssueDetailsBuilder {
 }
 impl BlockedByResponseIssueDetails {
     pub fn builder() -> BlockedByResponseIssueDetailsBuilder {
-        BlockedByResponseIssueDetailsBuilder::default()
+        <BlockedByResponseIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -374,7 +377,7 @@ impl BlockedByResponseIssueDetailsBuilder {
 }
 impl HeavyAdIssueDetails {
     pub fn builder() -> HeavyAdIssueDetailsBuilder {
-        HeavyAdIssueDetailsBuilder::default()
+        <HeavyAdIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -412,12 +415,12 @@ impl HeavyAdIssueDetailsBuilder {
 }
 impl SourceCodeLocation {
     pub fn builder() -> SourceCodeLocationBuilder {
-        SourceCodeLocationBuilder::default()
+        <SourceCodeLocationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct SourceCodeLocationBuilder {
-    script_id: Option<super::super::super::js_protocol::runtime::types::ScriptId>,
+    script_id: Option<crate::js_protocol::runtime::types::ScriptId>,
     url: Option<String>,
     line_number: Option<i64>,
     column_number: Option<i64>,
@@ -425,7 +428,7 @@ pub struct SourceCodeLocationBuilder {
 impl SourceCodeLocationBuilder {
     pub fn script_id(
         mut self,
-        script_id: impl Into<super::super::super::js_protocol::runtime::types::ScriptId>,
+        script_id: impl Into<crate::js_protocol::runtime::types::ScriptId>,
     ) -> Self {
         self.script_id = Some(script_id.into());
         self
@@ -459,7 +462,7 @@ impl SourceCodeLocationBuilder {
 }
 impl ContentSecurityPolicyIssueDetails {
     pub fn builder() -> ContentSecurityPolicyIssueDetailsBuilder {
-        ContentSecurityPolicyIssueDetailsBuilder::default()
+        <ContentSecurityPolicyIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -470,7 +473,7 @@ pub struct ContentSecurityPolicyIssueDetailsBuilder {
     content_security_policy_violation_type: Option<ContentSecurityPolicyViolationType>,
     frame_ancestor: Option<AffectedFrame>,
     source_code_location: Option<SourceCodeLocation>,
-    violating_node_id: Option<super::super::dom::types::BackendNodeId>,
+    violating_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
 }
 impl ContentSecurityPolicyIssueDetailsBuilder {
     pub fn blocked_url(mut self, blocked_url: impl Into<String>) -> Self {
@@ -506,7 +509,7 @@ impl ContentSecurityPolicyIssueDetailsBuilder {
     }
     pub fn violating_node_id(
         mut self,
-        violating_node_id: impl Into<super::super::dom::types::BackendNodeId>,
+        violating_node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
     ) -> Self {
         self.violating_node_id = Some(violating_node_id.into());
         self
@@ -539,7 +542,7 @@ impl ContentSecurityPolicyIssueDetailsBuilder {
 }
 impl SharedArrayBufferIssueDetails {
     pub fn builder() -> SharedArrayBufferIssueDetailsBuilder {
-        SharedArrayBufferIssueDetailsBuilder::default()
+        <SharedArrayBufferIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -583,12 +586,12 @@ impl SharedArrayBufferIssueDetailsBuilder {
 }
 impl LowTextContrastIssueDetails {
     pub fn builder() -> LowTextContrastIssueDetailsBuilder {
-        LowTextContrastIssueDetailsBuilder::default()
+        <LowTextContrastIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct LowTextContrastIssueDetailsBuilder {
-    violating_node_id: Option<super::super::dom::types::BackendNodeId>,
+    violating_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     violating_node_selector: Option<String>,
     contrast_ratio: Option<f64>,
     threshold_aa: Option<f64>,
@@ -599,7 +602,7 @@ pub struct LowTextContrastIssueDetailsBuilder {
 impl LowTextContrastIssueDetailsBuilder {
     pub fn violating_node_id(
         mut self,
-        violating_node_id: impl Into<super::super::dom::types::BackendNodeId>,
+        violating_node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
     ) -> Self {
         self.violating_node_id = Some(violating_node_id.into());
         self
@@ -662,23 +665,23 @@ impl LowTextContrastIssueDetailsBuilder {
 }
 impl CorsIssueDetails {
     pub fn builder() -> CorsIssueDetailsBuilder {
-        CorsIssueDetailsBuilder::default()
+        <CorsIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct CorsIssueDetailsBuilder {
-    cors_error_status: Option<super::super::network::types::CorsErrorStatus>,
+    cors_error_status: Option<crate::browser_protocol::network::types::CorsErrorStatus>,
     is_warning: Option<bool>,
     request: Option<AffectedRequest>,
     location: Option<SourceCodeLocation>,
     initiator_origin: Option<String>,
-    resource_ip_address_space: Option<super::super::network::types::IpAddressSpace>,
-    client_security_state: Option<super::super::network::types::ClientSecurityState>,
+    resource_ip_address_space: Option<crate::browser_protocol::network::types::IpAddressSpace>,
+    client_security_state: Option<crate::browser_protocol::network::types::ClientSecurityState>,
 }
 impl CorsIssueDetailsBuilder {
     pub fn cors_error_status(
         mut self,
-        cors_error_status: impl Into<super::super::network::types::CorsErrorStatus>,
+        cors_error_status: impl Into<crate::browser_protocol::network::types::CorsErrorStatus>,
     ) -> Self {
         self.cors_error_status = Some(cors_error_status.into());
         self
@@ -701,14 +704,14 @@ impl CorsIssueDetailsBuilder {
     }
     pub fn resource_ip_address_space(
         mut self,
-        resource_ip_address_space: impl Into<super::super::network::types::IpAddressSpace>,
+        resource_ip_address_space: impl Into<crate::browser_protocol::network::types::IpAddressSpace>,
     ) -> Self {
         self.resource_ip_address_space = Some(resource_ip_address_space.into());
         self
     }
     pub fn client_security_state(
         mut self,
-        client_security_state: impl Into<super::super::network::types::ClientSecurityState>,
+        client_security_state: impl Into<crate::browser_protocol::network::types::ClientSecurityState>,
     ) -> Self {
         self.client_security_state = Some(client_security_state.into());
         self
@@ -736,14 +739,14 @@ impl CorsIssueDetailsBuilder {
 }
 impl AttributionReportingIssueDetails {
     pub fn builder() -> AttributionReportingIssueDetailsBuilder {
-        AttributionReportingIssueDetailsBuilder::default()
+        <AttributionReportingIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct AttributionReportingIssueDetailsBuilder {
     violation_type: Option<AttributionReportingIssueType>,
     request: Option<AffectedRequest>,
-    violating_node_id: Option<super::super::dom::types::BackendNodeId>,
+    violating_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     invalid_parameter: Option<String>,
 }
 impl AttributionReportingIssueDetailsBuilder {
@@ -760,7 +763,7 @@ impl AttributionReportingIssueDetailsBuilder {
     }
     pub fn violating_node_id(
         mut self,
-        violating_node_id: impl Into<super::super::dom::types::BackendNodeId>,
+        violating_node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
     ) -> Self {
         self.violating_node_id = Some(violating_node_id.into());
         self
@@ -782,16 +785,16 @@ impl AttributionReportingIssueDetailsBuilder {
 }
 impl QuirksModeIssueDetails {
     pub fn builder() -> QuirksModeIssueDetailsBuilder {
-        QuirksModeIssueDetailsBuilder::default()
+        <QuirksModeIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct QuirksModeIssueDetailsBuilder {
     is_limited_quirks_mode: Option<bool>,
-    document_node_id: Option<super::super::dom::types::BackendNodeId>,
+    document_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     url: Option<String>,
-    frame_id: Option<super::super::page::types::FrameId>,
-    loader_id: Option<super::super::network::types::LoaderId>,
+    frame_id: Option<crate::browser_protocol::page::types::FrameId>,
+    loader_id: Option<crate::browser_protocol::network::types::LoaderId>,
 }
 impl QuirksModeIssueDetailsBuilder {
     pub fn is_limited_quirks_mode(mut self, is_limited_quirks_mode: impl Into<bool>) -> Self {
@@ -800,7 +803,7 @@ impl QuirksModeIssueDetailsBuilder {
     }
     pub fn document_node_id(
         mut self,
-        document_node_id: impl Into<super::super::dom::types::BackendNodeId>,
+        document_node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
     ) -> Self {
         self.document_node_id = Some(document_node_id.into());
         self
@@ -809,13 +812,16 @@ impl QuirksModeIssueDetailsBuilder {
         self.url = Some(url.into());
         self
     }
-    pub fn frame_id(mut self, frame_id: impl Into<super::super::page::types::FrameId>) -> Self {
+    pub fn frame_id(
+        mut self,
+        frame_id: impl Into<crate::browser_protocol::page::types::FrameId>,
+    ) -> Self {
         self.frame_id = Some(frame_id.into());
         self
     }
     pub fn loader_id(
         mut self,
-        loader_id: impl Into<super::super::network::types::LoaderId>,
+        loader_id: impl Into<crate::browser_protocol::network::types::LoaderId>,
     ) -> Self {
         self.loader_id = Some(loader_id.into());
         self
@@ -848,7 +854,7 @@ impl QuirksModeIssueDetailsBuilder {
 }
 impl SharedDictionaryIssueDetails {
     pub fn builder() -> SharedDictionaryIssueDetailsBuilder {
-        SharedDictionaryIssueDetailsBuilder::default()
+        <SharedDictionaryIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -884,7 +890,7 @@ impl SharedDictionaryIssueDetailsBuilder {
 }
 impl SriMessageSignatureIssueDetails {
     pub fn builder() -> SriMessageSignatureIssueDetailsBuilder {
-        SriMessageSignatureIssueDetailsBuilder::default()
+        <SriMessageSignatureIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -945,7 +951,7 @@ impl SriMessageSignatureIssueDetailsBuilder {
 }
 impl UnencodedDigestIssueDetails {
     pub fn builder() -> UnencodedDigestIssueDetailsBuilder {
-        UnencodedDigestIssueDetailsBuilder::default()
+        <UnencodedDigestIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -975,7 +981,7 @@ impl UnencodedDigestIssueDetailsBuilder {
 }
 impl ConnectionAllowlistIssueDetails {
     pub fn builder() -> ConnectionAllowlistIssueDetailsBuilder {
-        ConnectionAllowlistIssueDetailsBuilder::default()
+        <ConnectionAllowlistIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1005,14 +1011,14 @@ impl ConnectionAllowlistIssueDetailsBuilder {
 }
 impl GenericIssueDetails {
     pub fn builder() -> GenericIssueDetailsBuilder {
-        GenericIssueDetailsBuilder::default()
+        <GenericIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GenericIssueDetailsBuilder {
     error_type: Option<GenericIssueErrorType>,
-    frame_id: Option<super::super::page::types::FrameId>,
-    violating_node_id: Option<super::super::dom::types::BackendNodeId>,
+    frame_id: Option<crate::browser_protocol::page::types::FrameId>,
+    violating_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     violating_node_attribute: Option<String>,
     request: Option<AffectedRequest>,
 }
@@ -1021,13 +1027,16 @@ impl GenericIssueDetailsBuilder {
         self.error_type = Some(error_type.into());
         self
     }
-    pub fn frame_id(mut self, frame_id: impl Into<super::super::page::types::FrameId>) -> Self {
+    pub fn frame_id(
+        mut self,
+        frame_id: impl Into<crate::browser_protocol::page::types::FrameId>,
+    ) -> Self {
         self.frame_id = Some(frame_id.into());
         self
     }
     pub fn violating_node_id(
         mut self,
-        violating_node_id: impl Into<super::super::dom::types::BackendNodeId>,
+        violating_node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
     ) -> Self {
         self.violating_node_id = Some(violating_node_id.into());
         self
@@ -1054,7 +1063,7 @@ impl GenericIssueDetailsBuilder {
 }
 impl DeprecationIssueDetails {
     pub fn builder() -> DeprecationIssueDetailsBuilder {
-        DeprecationIssueDetailsBuilder::default()
+        <DeprecationIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1096,7 +1105,7 @@ impl DeprecationIssueDetailsBuilder {
 }
 impl BounceTrackingIssueDetails {
     pub fn builder() -> BounceTrackingIssueDetailsBuilder {
-        BounceTrackingIssueDetailsBuilder::default()
+        <BounceTrackingIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1130,7 +1139,7 @@ impl BounceTrackingIssueDetailsBuilder {
 }
 impl CookieDeprecationMetadataIssueDetails {
     pub fn builder() -> CookieDeprecationMetadataIssueDetailsBuilder {
-        CookieDeprecationMetadataIssueDetailsBuilder::default()
+        <CookieDeprecationMetadataIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1194,7 +1203,7 @@ impl CookieDeprecationMetadataIssueDetailsBuilder {
 }
 impl FederatedAuthRequestIssueDetails {
     pub fn builder() -> FederatedAuthRequestIssueDetailsBuilder {
-        FederatedAuthRequestIssueDetailsBuilder::default()
+        <FederatedAuthRequestIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1224,7 +1233,7 @@ impl FederatedAuthRequestIssueDetailsBuilder {
 }
 impl FederatedAuthUserInfoRequestIssueDetails {
     pub fn builder() -> FederatedAuthUserInfoRequestIssueDetailsBuilder {
-        FederatedAuthUserInfoRequestIssueDetailsBuilder::default()
+        <FederatedAuthUserInfoRequestIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1257,7 +1266,7 @@ impl FederatedAuthUserInfoRequestIssueDetailsBuilder {
 }
 impl ClientHintIssueDetails {
     pub fn builder() -> ClientHintIssueDetailsBuilder {
-        ClientHintIssueDetailsBuilder::default()
+        <ClientHintIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1299,14 +1308,14 @@ impl ClientHintIssueDetailsBuilder {
 }
 impl FailedRequestInfo {
     pub fn builder() -> FailedRequestInfoBuilder {
-        FailedRequestInfoBuilder::default()
+        <FailedRequestInfoBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct FailedRequestInfoBuilder {
     url: Option<String>,
     failure_message: Option<String>,
-    request_id: Option<super::super::network::types::RequestId>,
+    request_id: Option<crate::browser_protocol::network::types::RequestId>,
 }
 impl FailedRequestInfoBuilder {
     pub fn url(mut self, url: impl Into<String>) -> Self {
@@ -1319,7 +1328,7 @@ impl FailedRequestInfoBuilder {
     }
     pub fn request_id(
         mut self,
-        request_id: impl Into<super::super::network::types::RequestId>,
+        request_id: impl Into<crate::browser_protocol::network::types::RequestId>,
     ) -> Self {
         self.request_id = Some(request_id.into());
         self
@@ -1338,7 +1347,7 @@ impl FailedRequestInfoBuilder {
 }
 impl PartitioningBlobUrlIssueDetails {
     pub fn builder() -> PartitioningBlobUrlIssueDetailsBuilder {
-        PartitioningBlobUrlIssueDetailsBuilder::default()
+        <PartitioningBlobUrlIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1374,17 +1383,20 @@ impl PartitioningBlobUrlIssueDetailsBuilder {
 }
 impl ElementAccessibilityIssueDetails {
     pub fn builder() -> ElementAccessibilityIssueDetailsBuilder {
-        ElementAccessibilityIssueDetailsBuilder::default()
+        <ElementAccessibilityIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct ElementAccessibilityIssueDetailsBuilder {
-    node_id: Option<super::super::dom::types::BackendNodeId>,
+    node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     element_accessibility_issue_reason: Option<ElementAccessibilityIssueReason>,
     has_disallowed_attributes: Option<bool>,
 }
 impl ElementAccessibilityIssueDetailsBuilder {
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::BackendNodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
@@ -1423,7 +1435,7 @@ impl ElementAccessibilityIssueDetailsBuilder {
 }
 impl StylesheetLoadingIssueDetails {
     pub fn builder() -> StylesheetLoadingIssueDetailsBuilder {
-        StylesheetLoadingIssueDetailsBuilder::default()
+        <StylesheetLoadingIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1476,7 +1488,7 @@ impl StylesheetLoadingIssueDetailsBuilder {
 }
 impl PropertyRuleIssueDetails {
     pub fn builder() -> PropertyRuleIssueDetailsBuilder {
-        PropertyRuleIssueDetailsBuilder::default()
+        <PropertyRuleIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1524,7 +1536,7 @@ impl PropertyRuleIssueDetailsBuilder {
 }
 impl UserReidentificationIssueDetails {
     pub fn builder() -> UserReidentificationIssueDetailsBuilder {
-        UserReidentificationIssueDetailsBuilder::default()
+        <UserReidentificationIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1561,14 +1573,14 @@ impl UserReidentificationIssueDetailsBuilder {
 }
 impl PermissionElementIssueDetails {
     pub fn builder() -> PermissionElementIssueDetailsBuilder {
-        PermissionElementIssueDetailsBuilder::default()
+        <PermissionElementIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct PermissionElementIssueDetailsBuilder {
     issue_type: Option<PermissionElementIssueType>,
     r#type: Option<String>,
-    node_id: Option<super::super::dom::types::BackendNodeId>,
+    node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     is_warning: Option<bool>,
     permission_name: Option<String>,
     occluder_node_info: Option<String>,
@@ -1584,7 +1596,10 @@ impl PermissionElementIssueDetailsBuilder {
         self.r#type = Some(r#type.into());
         self
     }
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::BackendNodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
@@ -1628,26 +1643,26 @@ impl PermissionElementIssueDetailsBuilder {
 }
 impl AdScriptIdentifier {
     pub fn builder() -> AdScriptIdentifierBuilder {
-        AdScriptIdentifierBuilder::default()
+        <AdScriptIdentifierBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct AdScriptIdentifierBuilder {
-    script_id: Option<super::super::super::js_protocol::runtime::types::ScriptId>,
-    debugger_id: Option<super::super::super::js_protocol::runtime::types::UniqueDebuggerId>,
+    script_id: Option<crate::js_protocol::runtime::types::ScriptId>,
+    debugger_id: Option<crate::js_protocol::runtime::types::UniqueDebuggerId>,
     name: Option<String>,
 }
 impl AdScriptIdentifierBuilder {
     pub fn script_id(
         mut self,
-        script_id: impl Into<super::super::super::js_protocol::runtime::types::ScriptId>,
+        script_id: impl Into<crate::js_protocol::runtime::types::ScriptId>,
     ) -> Self {
         self.script_id = Some(script_id.into());
         self
     }
     pub fn debugger_id(
         mut self,
-        debugger_id: impl Into<super::super::super::js_protocol::runtime::types::UniqueDebuggerId>,
+        debugger_id: impl Into<crate::js_protocol::runtime::types::UniqueDebuggerId>,
     ) -> Self {
         self.debugger_id = Some(debugger_id.into());
         self
@@ -1672,7 +1687,7 @@ impl AdScriptIdentifierBuilder {
 }
 impl AdAncestry {
     pub fn builder() -> AdAncestryBuilder {
-        AdAncestryBuilder::default()
+        <AdAncestryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1718,14 +1733,14 @@ impl AdAncestryBuilder {
 }
 impl SelectivePermissionsInterventionIssueDetails {
     pub fn builder() -> SelectivePermissionsInterventionIssueDetailsBuilder {
-        SelectivePermissionsInterventionIssueDetailsBuilder::default()
+        <SelectivePermissionsInterventionIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct SelectivePermissionsInterventionIssueDetailsBuilder {
     api_name: Option<String>,
     ad_ancestry: Option<AdAncestry>,
-    stack_trace: Option<super::super::super::js_protocol::runtime::types::StackTrace>,
+    stack_trace: Option<crate::js_protocol::runtime::types::StackTrace>,
 }
 impl SelectivePermissionsInterventionIssueDetailsBuilder {
     pub fn api_name(mut self, api_name: impl Into<String>) -> Self {
@@ -1738,7 +1753,7 @@ impl SelectivePermissionsInterventionIssueDetailsBuilder {
     }
     pub fn stack_trace(
         mut self,
-        stack_trace: impl Into<super::super::super::js_protocol::runtime::types::StackTrace>,
+        stack_trace: impl Into<crate::js_protocol::runtime::types::StackTrace>,
     ) -> Self {
         self.stack_trace = Some(stack_trace.into());
         self
@@ -1757,7 +1772,7 @@ impl SelectivePermissionsInterventionIssueDetailsBuilder {
 }
 impl InspectorIssueDetails {
     pub fn builder() -> InspectorIssueDetailsBuilder {
-        InspectorIssueDetailsBuilder::default()
+        <InspectorIssueDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -2043,7 +2058,7 @@ impl InspectorIssueDetailsBuilder {
 }
 impl InspectorIssue {
     pub fn builder() -> InspectorIssueBuilder {
-        InspectorIssueBuilder::default()
+        <InspectorIssueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

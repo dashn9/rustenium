@@ -1,7 +1,7 @@
 use super::types::*;
 impl ScreenshotParams {
     pub fn builder() -> ScreenshotParamsBuilder {
-        ScreenshotParamsBuilder::default()
+        <ScreenshotParamsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

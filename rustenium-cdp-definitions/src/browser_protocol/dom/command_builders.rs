@@ -1,7 +1,7 @@
 use super::commands::*;
 impl CollectClassNamesFromSubtree {
     pub fn builder() -> CollectClassNamesFromSubtreeBuilder {
-        CollectClassNamesFromSubtreeBuilder::default()
+        <CollectClassNamesFromSubtreeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -17,16 +17,16 @@ impl CollectClassNamesFromSubtreeBuilder {
         Ok(CollectClassNamesFromSubtree {
             method: CollectClassNamesFromSubtreeMethod::CollectClassNamesFromSubtree,
             params: CollectClassNamesFromSubtreeParams {
-                node_id: self
-                    .node_id
-                    .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_id)))?,
+                node_id: Box::new(self.node_id.ok_or_else(|| {
+                    format!("Field `{}` is mandatory.", std::stringify!(node_id))
+                })?),
             },
         })
     }
 }
 impl CopyTo {
     pub fn builder() -> CopyToBuilder {
-        CopyToBuilder::default()
+        <CopyToBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -55,9 +55,9 @@ impl CopyToBuilder {
         Ok(CopyTo {
             method: CopyToMethod::CopyTo,
             params: CopyToParams {
-                node_id: self
-                    .node_id
-                    .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_id)))?,
+                node_id: Box::new(self.node_id.ok_or_else(|| {
+                    format!("Field `{}` is mandatory.", std::stringify!(node_id))
+                })?),
                 target_node_id: self.target_node_id.ok_or_else(|| {
                     format!("Field `{}` is mandatory.", std::stringify!(target_node_id))
                 })?,
@@ -68,14 +68,14 @@ impl CopyToBuilder {
 }
 impl DescribeNode {
     pub fn builder() -> DescribeNodeBuilder {
-        DescribeNodeBuilder::default()
+        <DescribeNodeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct DescribeNodeBuilder {
     node_id: Option<super::types::NodeId>,
     backend_node_id: Option<super::types::BackendNodeId>,
-    object_id: Option<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+    object_id: Option<crate::js_protocol::runtime::types::RemoteObjectId>,
     depth: Option<i64>,
     pierce: Option<bool>,
 }
@@ -93,7 +93,7 @@ impl DescribeNodeBuilder {
     }
     pub fn object_id(
         mut self,
-        object_id: impl Into<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+        object_id: impl Into<crate::js_protocol::runtime::types::RemoteObjectId>,
     ) -> Self {
         self.object_id = Some(object_id.into());
         self
@@ -110,8 +110,8 @@ impl DescribeNodeBuilder {
         DescribeNode {
             method: DescribeNodeMethod::DescribeNode,
             params: DescribeNodeParams {
-                node_id: self.node_id,
-                backend_node_id: self.backend_node_id,
+                node_id: self.node_id.map(Box::new),
+                backend_node_id: self.backend_node_id.map(Box::new),
                 object_id: self.object_id,
                 depth: self.depth,
                 pierce: self.pierce,
@@ -121,14 +121,14 @@ impl DescribeNodeBuilder {
 }
 impl ScrollIntoViewIfNeeded {
     pub fn builder() -> ScrollIntoViewIfNeededBuilder {
-        ScrollIntoViewIfNeededBuilder::default()
+        <ScrollIntoViewIfNeededBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct ScrollIntoViewIfNeededBuilder {
     node_id: Option<super::types::NodeId>,
     backend_node_id: Option<super::types::BackendNodeId>,
-    object_id: Option<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+    object_id: Option<crate::js_protocol::runtime::types::RemoteObjectId>,
     rect: Option<super::types::Rect>,
 }
 impl ScrollIntoViewIfNeededBuilder {
@@ -145,7 +145,7 @@ impl ScrollIntoViewIfNeededBuilder {
     }
     pub fn object_id(
         mut self,
-        object_id: impl Into<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+        object_id: impl Into<crate::js_protocol::runtime::types::RemoteObjectId>,
     ) -> Self {
         self.object_id = Some(object_id.into());
         self
@@ -158,8 +158,8 @@ impl ScrollIntoViewIfNeededBuilder {
         ScrollIntoViewIfNeeded {
             method: ScrollIntoViewIfNeededMethod::ScrollIntoViewIfNeeded,
             params: ScrollIntoViewIfNeededParams {
-                node_id: self.node_id,
-                backend_node_id: self.backend_node_id,
+                node_id: self.node_id.map(Box::new),
+                backend_node_id: self.backend_node_id.map(Box::new),
                 object_id: self.object_id,
                 rect: self.rect,
             },
@@ -168,7 +168,7 @@ impl ScrollIntoViewIfNeededBuilder {
 }
 impl DiscardSearchResults {
     pub fn builder() -> DiscardSearchResultsBuilder {
-        DiscardSearchResultsBuilder::default()
+        <DiscardSearchResultsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -193,7 +193,7 @@ impl DiscardSearchResultsBuilder {
 }
 impl Enable {
     pub fn builder() -> EnableBuilder {
-        EnableBuilder::default()
+        <EnableBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -219,14 +219,14 @@ impl EnableBuilder {
 }
 impl Focus {
     pub fn builder() -> FocusBuilder {
-        FocusBuilder::default()
+        <FocusBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct FocusBuilder {
     node_id: Option<super::types::NodeId>,
     backend_node_id: Option<super::types::BackendNodeId>,
-    object_id: Option<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+    object_id: Option<crate::js_protocol::runtime::types::RemoteObjectId>,
 }
 impl FocusBuilder {
     pub fn node_id(mut self, node_id: impl Into<super::types::NodeId>) -> Self {
@@ -242,7 +242,7 @@ impl FocusBuilder {
     }
     pub fn object_id(
         mut self,
-        object_id: impl Into<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+        object_id: impl Into<crate::js_protocol::runtime::types::RemoteObjectId>,
     ) -> Self {
         self.object_id = Some(object_id.into());
         self
@@ -251,8 +251,8 @@ impl FocusBuilder {
         Focus {
             method: FocusMethod::Focus,
             params: FocusParams {
-                node_id: self.node_id,
-                backend_node_id: self.backend_node_id,
+                node_id: self.node_id.map(Box::new),
+                backend_node_id: self.backend_node_id.map(Box::new),
                 object_id: self.object_id,
             },
         }
@@ -260,7 +260,7 @@ impl FocusBuilder {
 }
 impl GetAttributes {
     pub fn builder() -> GetAttributesBuilder {
-        GetAttributesBuilder::default()
+        <GetAttributesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -276,23 +276,23 @@ impl GetAttributesBuilder {
         Ok(GetAttributes {
             method: GetAttributesMethod::GetAttributes,
             params: GetAttributesParams {
-                node_id: self
-                    .node_id
-                    .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_id)))?,
+                node_id: Box::new(self.node_id.ok_or_else(|| {
+                    format!("Field `{}` is mandatory.", std::stringify!(node_id))
+                })?),
             },
         })
     }
 }
 impl GetBoxModel {
     pub fn builder() -> GetBoxModelBuilder {
-        GetBoxModelBuilder::default()
+        <GetBoxModelBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetBoxModelBuilder {
     node_id: Option<super::types::NodeId>,
     backend_node_id: Option<super::types::BackendNodeId>,
-    object_id: Option<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+    object_id: Option<crate::js_protocol::runtime::types::RemoteObjectId>,
 }
 impl GetBoxModelBuilder {
     pub fn node_id(mut self, node_id: impl Into<super::types::NodeId>) -> Self {
@@ -308,7 +308,7 @@ impl GetBoxModelBuilder {
     }
     pub fn object_id(
         mut self,
-        object_id: impl Into<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+        object_id: impl Into<crate::js_protocol::runtime::types::RemoteObjectId>,
     ) -> Self {
         self.object_id = Some(object_id.into());
         self
@@ -317,8 +317,8 @@ impl GetBoxModelBuilder {
         GetBoxModel {
             method: GetBoxModelMethod::GetBoxModel,
             params: GetBoxModelParams {
-                node_id: self.node_id,
-                backend_node_id: self.backend_node_id,
+                node_id: self.node_id.map(Box::new),
+                backend_node_id: self.backend_node_id.map(Box::new),
                 object_id: self.object_id,
             },
         }
@@ -326,14 +326,14 @@ impl GetBoxModelBuilder {
 }
 impl GetContentQuads {
     pub fn builder() -> GetContentQuadsBuilder {
-        GetContentQuadsBuilder::default()
+        <GetContentQuadsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetContentQuadsBuilder {
     node_id: Option<super::types::NodeId>,
     backend_node_id: Option<super::types::BackendNodeId>,
-    object_id: Option<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+    object_id: Option<crate::js_protocol::runtime::types::RemoteObjectId>,
 }
 impl GetContentQuadsBuilder {
     pub fn node_id(mut self, node_id: impl Into<super::types::NodeId>) -> Self {
@@ -349,7 +349,7 @@ impl GetContentQuadsBuilder {
     }
     pub fn object_id(
         mut self,
-        object_id: impl Into<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+        object_id: impl Into<crate::js_protocol::runtime::types::RemoteObjectId>,
     ) -> Self {
         self.object_id = Some(object_id.into());
         self
@@ -358,8 +358,8 @@ impl GetContentQuadsBuilder {
         GetContentQuads {
             method: GetContentQuadsMethod::GetContentQuads,
             params: GetContentQuadsParams {
-                node_id: self.node_id,
-                backend_node_id: self.backend_node_id,
+                node_id: self.node_id.map(Box::new),
+                backend_node_id: self.backend_node_id.map(Box::new),
                 object_id: self.object_id,
             },
         }
@@ -367,7 +367,7 @@ impl GetContentQuadsBuilder {
 }
 impl GetDocument {
     pub fn builder() -> GetDocumentBuilder {
-        GetDocumentBuilder::default()
+        <GetDocumentBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -396,7 +396,7 @@ impl GetDocumentBuilder {
 }
 impl GetNodesForSubtreeByStyle {
     pub fn builder() -> GetNodesForSubtreeByStyleBuilder {
-        GetNodesForSubtreeByStyleBuilder::default()
+        <GetNodesForSubtreeByStyleBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -437,9 +437,9 @@ impl GetNodesForSubtreeByStyleBuilder {
         Ok(GetNodesForSubtreeByStyle {
             method: GetNodesForSubtreeByStyleMethod::GetNodesForSubtreeByStyle,
             params: GetNodesForSubtreeByStyleParams {
-                node_id: self
-                    .node_id
-                    .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_id)))?,
+                node_id: Box::new(self.node_id.ok_or_else(|| {
+                    format!("Field `{}` is mandatory.", std::stringify!(node_id))
+                })?),
                 computed_styles: self.computed_styles.ok_or_else(|| {
                     format!("Field `{}` is mandatory.", std::stringify!(computed_styles))
                 })?,
@@ -450,7 +450,7 @@ impl GetNodesForSubtreeByStyleBuilder {
 }
 impl GetNodeForLocation {
     pub fn builder() -> GetNodeForLocationBuilder {
-        GetNodeForLocationBuilder::default()
+        <GetNodeForLocationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -501,14 +501,14 @@ impl GetNodeForLocationBuilder {
 }
 impl GetOuterHtml {
     pub fn builder() -> GetOuterHtmlBuilder {
-        GetOuterHtmlBuilder::default()
+        <GetOuterHtmlBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetOuterHtmlBuilder {
     node_id: Option<super::types::NodeId>,
     backend_node_id: Option<super::types::BackendNodeId>,
-    object_id: Option<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+    object_id: Option<crate::js_protocol::runtime::types::RemoteObjectId>,
     include_shadow_dom: Option<bool>,
 }
 impl GetOuterHtmlBuilder {
@@ -525,7 +525,7 @@ impl GetOuterHtmlBuilder {
     }
     pub fn object_id(
         mut self,
-        object_id: impl Into<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+        object_id: impl Into<crate::js_protocol::runtime::types::RemoteObjectId>,
     ) -> Self {
         self.object_id = Some(object_id.into());
         self
@@ -538,8 +538,8 @@ impl GetOuterHtmlBuilder {
         GetOuterHtml {
             method: GetOuterHtmlMethod::GetOuterHtml,
             params: GetOuterHtmlParams {
-                node_id: self.node_id,
-                backend_node_id: self.backend_node_id,
+                node_id: self.node_id.map(Box::new),
+                backend_node_id: self.backend_node_id.map(Box::new),
                 object_id: self.object_id,
                 include_shadow_dom: self.include_shadow_dom,
             },
@@ -548,7 +548,7 @@ impl GetOuterHtmlBuilder {
 }
 impl GetRelayoutBoundary {
     pub fn builder() -> GetRelayoutBoundaryBuilder {
-        GetRelayoutBoundaryBuilder::default()
+        <GetRelayoutBoundaryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -564,16 +564,16 @@ impl GetRelayoutBoundaryBuilder {
         Ok(GetRelayoutBoundary {
             method: GetRelayoutBoundaryMethod::GetRelayoutBoundary,
             params: GetRelayoutBoundaryParams {
-                node_id: self
-                    .node_id
-                    .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_id)))?,
+                node_id: Box::new(self.node_id.ok_or_else(|| {
+                    format!("Field `{}` is mandatory.", std::stringify!(node_id))
+                })?),
             },
         })
     }
 }
 impl GetSearchResults {
     pub fn builder() -> GetSearchResultsBuilder {
-        GetSearchResultsBuilder::default()
+        <GetSearchResultsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -614,7 +614,7 @@ impl GetSearchResultsBuilder {
 }
 impl MoveTo {
     pub fn builder() -> MoveToBuilder {
-        MoveToBuilder::default()
+        <MoveToBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -643,9 +643,9 @@ impl MoveToBuilder {
         Ok(MoveTo {
             method: MoveToMethod::MoveTo,
             params: MoveToParams {
-                node_id: self
-                    .node_id
-                    .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_id)))?,
+                node_id: Box::new(self.node_id.ok_or_else(|| {
+                    format!("Field `{}` is mandatory.", std::stringify!(node_id))
+                })?),
                 target_node_id: self.target_node_id.ok_or_else(|| {
                     format!("Field `{}` is mandatory.", std::stringify!(target_node_id))
                 })?,
@@ -656,7 +656,7 @@ impl MoveToBuilder {
 }
 impl PerformSearch {
     pub fn builder() -> PerformSearchBuilder {
-        PerformSearchBuilder::default()
+        <PerformSearchBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -690,7 +690,7 @@ impl PerformSearchBuilder {
 }
 impl PushNodeByPathToFrontend {
     pub fn builder() -> PushNodeByPathToFrontendBuilder {
-        PushNodeByPathToFrontendBuilder::default()
+        <PushNodeByPathToFrontendBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -715,7 +715,7 @@ impl PushNodeByPathToFrontendBuilder {
 }
 impl PushNodesByBackendIdsToFrontend {
     pub fn builder() -> PushNodesByBackendIdsToFrontendBuilder {
-        PushNodesByBackendIdsToFrontendBuilder::default()
+        <PushNodesByBackendIdsToFrontendBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -758,7 +758,7 @@ impl PushNodesByBackendIdsToFrontendBuilder {
 }
 impl QuerySelector {
     pub fn builder() -> QuerySelectorBuilder {
-        QuerySelectorBuilder::default()
+        <QuerySelectorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -779,9 +779,9 @@ impl QuerySelectorBuilder {
         Ok(QuerySelector {
             method: QuerySelectorMethod::QuerySelector,
             params: QuerySelectorParams {
-                node_id: self
-                    .node_id
-                    .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_id)))?,
+                node_id: Box::new(self.node_id.ok_or_else(|| {
+                    format!("Field `{}` is mandatory.", std::stringify!(node_id))
+                })?),
                 selector: self.selector.ok_or_else(|| {
                     format!("Field `{}` is mandatory.", std::stringify!(selector))
                 })?,
@@ -791,7 +791,7 @@ impl QuerySelectorBuilder {
 }
 impl QuerySelectorAll {
     pub fn builder() -> QuerySelectorAllBuilder {
-        QuerySelectorAllBuilder::default()
+        <QuerySelectorAllBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -812,9 +812,9 @@ impl QuerySelectorAllBuilder {
         Ok(QuerySelectorAll {
             method: QuerySelectorAllMethod::QuerySelectorAll,
             params: QuerySelectorAllParams {
-                node_id: self
-                    .node_id
-                    .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_id)))?,
+                node_id: Box::new(self.node_id.ok_or_else(|| {
+                    format!("Field `{}` is mandatory.", std::stringify!(node_id))
+                })?),
                 selector: self.selector.ok_or_else(|| {
                     format!("Field `{}` is mandatory.", std::stringify!(selector))
                 })?,
@@ -824,7 +824,7 @@ impl QuerySelectorAllBuilder {
 }
 impl GetElementByRelation {
     pub fn builder() -> GetElementByRelationBuilder {
-        GetElementByRelationBuilder::default()
+        <GetElementByRelationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -845,9 +845,9 @@ impl GetElementByRelationBuilder {
         Ok(GetElementByRelation {
             method: GetElementByRelationMethod::GetElementByRelation,
             params: GetElementByRelationParams {
-                node_id: self
-                    .node_id
-                    .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_id)))?,
+                node_id: Box::new(self.node_id.ok_or_else(|| {
+                    format!("Field `{}` is mandatory.", std::stringify!(node_id))
+                })?),
                 relation: self.relation.ok_or_else(|| {
                     format!("Field `{}` is mandatory.", std::stringify!(relation))
                 })?,
@@ -857,7 +857,7 @@ impl GetElementByRelationBuilder {
 }
 impl RemoveAttribute {
     pub fn builder() -> RemoveAttributeBuilder {
-        RemoveAttributeBuilder::default()
+        <RemoveAttributeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -878,9 +878,9 @@ impl RemoveAttributeBuilder {
         Ok(RemoveAttribute {
             method: RemoveAttributeMethod::RemoveAttribute,
             params: RemoveAttributeParams {
-                node_id: self
-                    .node_id
-                    .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_id)))?,
+                node_id: Box::new(self.node_id.ok_or_else(|| {
+                    format!("Field `{}` is mandatory.", std::stringify!(node_id))
+                })?),
                 name: self
                     .name
                     .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(name)))?,
@@ -890,7 +890,7 @@ impl RemoveAttributeBuilder {
 }
 impl RemoveNode {
     pub fn builder() -> RemoveNodeBuilder {
-        RemoveNodeBuilder::default()
+        <RemoveNodeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -906,16 +906,16 @@ impl RemoveNodeBuilder {
         Ok(RemoveNode {
             method: RemoveNodeMethod::RemoveNode,
             params: RemoveNodeParams {
-                node_id: self
-                    .node_id
-                    .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_id)))?,
+                node_id: Box::new(self.node_id.ok_or_else(|| {
+                    format!("Field `{}` is mandatory.", std::stringify!(node_id))
+                })?),
             },
         })
     }
 }
 impl RequestChildNodes {
     pub fn builder() -> RequestChildNodesBuilder {
-        RequestChildNodesBuilder::default()
+        <RequestChildNodesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -941,9 +941,9 @@ impl RequestChildNodesBuilder {
         Ok(RequestChildNodes {
             method: RequestChildNodesMethod::RequestChildNodes,
             params: RequestChildNodesParams {
-                node_id: self
-                    .node_id
-                    .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_id)))?,
+                node_id: Box::new(self.node_id.ok_or_else(|| {
+                    format!("Field `{}` is mandatory.", std::stringify!(node_id))
+                })?),
                 depth: self.depth,
                 pierce: self.pierce,
             },
@@ -952,17 +952,17 @@ impl RequestChildNodesBuilder {
 }
 impl RequestNode {
     pub fn builder() -> RequestNodeBuilder {
-        RequestNodeBuilder::default()
+        <RequestNodeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct RequestNodeBuilder {
-    object_id: Option<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+    object_id: Option<crate::js_protocol::runtime::types::RemoteObjectId>,
 }
 impl RequestNodeBuilder {
     pub fn object_id(
         mut self,
-        object_id: impl Into<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+        object_id: impl Into<crate::js_protocol::runtime::types::RemoteObjectId>,
     ) -> Self {
         self.object_id = Some(object_id.into());
         self
@@ -980,7 +980,7 @@ impl RequestNodeBuilder {
 }
 impl ResolveNode {
     pub fn builder() -> ResolveNodeBuilder {
-        ResolveNodeBuilder::default()
+        <ResolveNodeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -988,8 +988,7 @@ pub struct ResolveNodeBuilder {
     node_id: Option<super::types::NodeId>,
     backend_node_id: Option<super::types::BackendNodeId>,
     object_group: Option<String>,
-    execution_context_id:
-        Option<super::super::super::js_protocol::runtime::types::ExecutionContextId>,
+    execution_context_id: Option<crate::js_protocol::runtime::types::ExecutionContextId>,
 }
 impl ResolveNodeBuilder {
     pub fn node_id(mut self, node_id: impl Into<super::types::NodeId>) -> Self {
@@ -1009,9 +1008,7 @@ impl ResolveNodeBuilder {
     }
     pub fn execution_context_id(
         mut self,
-        execution_context_id: impl Into<
-            super::super::super::js_protocol::runtime::types::ExecutionContextId,
-        >,
+        execution_context_id: impl Into<crate::js_protocol::runtime::types::ExecutionContextId>,
     ) -> Self {
         self.execution_context_id = Some(execution_context_id.into());
         self
@@ -1020,8 +1017,8 @@ impl ResolveNodeBuilder {
         ResolveNode {
             method: ResolveNodeMethod::ResolveNode,
             params: ResolveNodeParams {
-                node_id: self.node_id,
-                backend_node_id: self.backend_node_id,
+                node_id: self.node_id.map(Box::new),
+                backend_node_id: self.backend_node_id.map(Box::new),
                 object_group: self.object_group,
                 execution_context_id: self.execution_context_id,
             },
@@ -1030,7 +1027,7 @@ impl ResolveNodeBuilder {
 }
 impl SetAttributeValue {
     pub fn builder() -> SetAttributeValueBuilder {
-        SetAttributeValueBuilder::default()
+        <SetAttributeValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1056,9 +1053,9 @@ impl SetAttributeValueBuilder {
         Ok(SetAttributeValue {
             method: SetAttributeValueMethod::SetAttributeValue,
             params: SetAttributeValueParams {
-                node_id: self
-                    .node_id
-                    .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_id)))?,
+                node_id: Box::new(self.node_id.ok_or_else(|| {
+                    format!("Field `{}` is mandatory.", std::stringify!(node_id))
+                })?),
                 name: self
                     .name
                     .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(name)))?,
@@ -1071,7 +1068,7 @@ impl SetAttributeValueBuilder {
 }
 impl SetAttributesAsText {
     pub fn builder() -> SetAttributesAsTextBuilder {
-        SetAttributesAsTextBuilder::default()
+        <SetAttributesAsTextBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1097,9 +1094,9 @@ impl SetAttributesAsTextBuilder {
         Ok(SetAttributesAsText {
             method: SetAttributesAsTextMethod::SetAttributesAsText,
             params: SetAttributesAsTextParams {
-                node_id: self
-                    .node_id
-                    .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_id)))?,
+                node_id: Box::new(self.node_id.ok_or_else(|| {
+                    format!("Field `{}` is mandatory.", std::stringify!(node_id))
+                })?),
                 text: self
                     .text
                     .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(text)))?,
@@ -1110,7 +1107,7 @@ impl SetAttributesAsTextBuilder {
 }
 impl SetFileInputFiles {
     pub fn builder() -> SetFileInputFilesBuilder {
-        SetFileInputFilesBuilder::default()
+        <SetFileInputFilesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1118,7 +1115,7 @@ pub struct SetFileInputFilesBuilder {
     files: Option<Vec<String>>,
     node_id: Option<super::types::NodeId>,
     backend_node_id: Option<super::types::BackendNodeId>,
-    object_id: Option<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+    object_id: Option<crate::js_protocol::runtime::types::RemoteObjectId>,
 }
 impl SetFileInputFilesBuilder {
     pub fn file(mut self, file: impl Into<String>) -> Self {
@@ -1150,7 +1147,7 @@ impl SetFileInputFilesBuilder {
     }
     pub fn object_id(
         mut self,
-        object_id: impl Into<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+        object_id: impl Into<crate::js_protocol::runtime::types::RemoteObjectId>,
     ) -> Self {
         self.object_id = Some(object_id.into());
         self
@@ -1162,8 +1159,8 @@ impl SetFileInputFilesBuilder {
                 files: self
                     .files
                     .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(files)))?,
-                node_id: self.node_id,
-                backend_node_id: self.backend_node_id,
+                node_id: self.node_id.map(Box::new),
+                backend_node_id: self.backend_node_id.map(Box::new),
                 object_id: self.object_id,
             },
         })
@@ -1171,7 +1168,7 @@ impl SetFileInputFilesBuilder {
 }
 impl SetNodeStackTracesEnabled {
     pub fn builder() -> SetNodeStackTracesEnabledBuilder {
-        SetNodeStackTracesEnabledBuilder::default()
+        <SetNodeStackTracesEnabledBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1196,7 +1193,7 @@ impl SetNodeStackTracesEnabledBuilder {
 }
 impl GetNodeStackTraces {
     pub fn builder() -> GetNodeStackTracesBuilder {
-        GetNodeStackTracesBuilder::default()
+        <GetNodeStackTracesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1212,26 +1209,26 @@ impl GetNodeStackTracesBuilder {
         Ok(GetNodeStackTraces {
             method: GetNodeStackTracesMethod::GetNodeStackTraces,
             params: GetNodeStackTracesParams {
-                node_id: self
-                    .node_id
-                    .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_id)))?,
+                node_id: Box::new(self.node_id.ok_or_else(|| {
+                    format!("Field `{}` is mandatory.", std::stringify!(node_id))
+                })?),
             },
         })
     }
 }
 impl GetFileInfo {
     pub fn builder() -> GetFileInfoBuilder {
-        GetFileInfoBuilder::default()
+        <GetFileInfoBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetFileInfoBuilder {
-    object_id: Option<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+    object_id: Option<crate::js_protocol::runtime::types::RemoteObjectId>,
 }
 impl GetFileInfoBuilder {
     pub fn object_id(
         mut self,
-        object_id: impl Into<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+        object_id: impl Into<crate::js_protocol::runtime::types::RemoteObjectId>,
     ) -> Self {
         self.object_id = Some(object_id.into());
         self
@@ -1249,7 +1246,7 @@ impl GetFileInfoBuilder {
 }
 impl SetInspectedNode {
     pub fn builder() -> SetInspectedNodeBuilder {
-        SetInspectedNodeBuilder::default()
+        <SetInspectedNodeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1265,16 +1262,16 @@ impl SetInspectedNodeBuilder {
         Ok(SetInspectedNode {
             method: SetInspectedNodeMethod::SetInspectedNode,
             params: SetInspectedNodeParams {
-                node_id: self
-                    .node_id
-                    .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_id)))?,
+                node_id: Box::new(self.node_id.ok_or_else(|| {
+                    format!("Field `{}` is mandatory.", std::stringify!(node_id))
+                })?),
             },
         })
     }
 }
 impl SetNodeName {
     pub fn builder() -> SetNodeNameBuilder {
-        SetNodeNameBuilder::default()
+        <SetNodeNameBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1295,9 +1292,9 @@ impl SetNodeNameBuilder {
         Ok(SetNodeName {
             method: SetNodeNameMethod::SetNodeName,
             params: SetNodeNameParams {
-                node_id: self
-                    .node_id
-                    .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_id)))?,
+                node_id: Box::new(self.node_id.ok_or_else(|| {
+                    format!("Field `{}` is mandatory.", std::stringify!(node_id))
+                })?),
                 name: self
                     .name
                     .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(name)))?,
@@ -1307,7 +1304,7 @@ impl SetNodeNameBuilder {
 }
 impl SetNodeValue {
     pub fn builder() -> SetNodeValueBuilder {
-        SetNodeValueBuilder::default()
+        <SetNodeValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1328,9 +1325,9 @@ impl SetNodeValueBuilder {
         Ok(SetNodeValue {
             method: SetNodeValueMethod::SetNodeValue,
             params: SetNodeValueParams {
-                node_id: self
-                    .node_id
-                    .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_id)))?,
+                node_id: Box::new(self.node_id.ok_or_else(|| {
+                    format!("Field `{}` is mandatory.", std::stringify!(node_id))
+                })?),
                 value: self
                     .value
                     .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(value)))?,
@@ -1340,7 +1337,7 @@ impl SetNodeValueBuilder {
 }
 impl SetOuterHtml {
     pub fn builder() -> SetOuterHtmlBuilder {
-        SetOuterHtmlBuilder::default()
+        <SetOuterHtmlBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1361,9 +1358,9 @@ impl SetOuterHtmlBuilder {
         Ok(SetOuterHtml {
             method: SetOuterHtmlMethod::SetOuterHtml,
             params: SetOuterHtmlParams {
-                node_id: self
-                    .node_id
-                    .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_id)))?,
+                node_id: Box::new(self.node_id.ok_or_else(|| {
+                    format!("Field `{}` is mandatory.", std::stringify!(node_id))
+                })?),
                 outer_html: self.outer_html.ok_or_else(|| {
                     format!("Field `{}` is mandatory.", std::stringify!(outer_html))
                 })?,
@@ -1373,15 +1370,18 @@ impl SetOuterHtmlBuilder {
 }
 impl GetFrameOwner {
     pub fn builder() -> GetFrameOwnerBuilder {
-        GetFrameOwnerBuilder::default()
+        <GetFrameOwnerBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetFrameOwnerBuilder {
-    frame_id: Option<super::super::page::types::FrameId>,
+    frame_id: Option<crate::browser_protocol::page::types::FrameId>,
 }
 impl GetFrameOwnerBuilder {
-    pub fn frame_id(mut self, frame_id: impl Into<super::super::page::types::FrameId>) -> Self {
+    pub fn frame_id(
+        mut self,
+        frame_id: impl Into<crate::browser_protocol::page::types::FrameId>,
+    ) -> Self {
         self.frame_id = Some(frame_id.into());
         self
     }
@@ -1398,7 +1398,7 @@ impl GetFrameOwnerBuilder {
 }
 impl GetContainerForNode {
     pub fn builder() -> GetContainerForNodeBuilder {
-        GetContainerForNodeBuilder::default()
+        <GetContainerForNodeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1439,9 +1439,9 @@ impl GetContainerForNodeBuilder {
         Ok(GetContainerForNode {
             method: GetContainerForNodeMethod::GetContainerForNode,
             params: GetContainerForNodeParams {
-                node_id: self
-                    .node_id
-                    .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_id)))?,
+                node_id: Box::new(self.node_id.ok_or_else(|| {
+                    format!("Field `{}` is mandatory.", std::stringify!(node_id))
+                })?),
                 container_name: self.container_name,
                 physical_axes: self.physical_axes,
                 logical_axes: self.logical_axes,
@@ -1453,7 +1453,7 @@ impl GetContainerForNodeBuilder {
 }
 impl GetQueryingDescendantsForContainer {
     pub fn builder() -> GetQueryingDescendantsForContainerBuilder {
-        GetQueryingDescendantsForContainerBuilder::default()
+        <GetQueryingDescendantsForContainerBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1469,16 +1469,16 @@ impl GetQueryingDescendantsForContainerBuilder {
         Ok(GetQueryingDescendantsForContainer {
             method: GetQueryingDescendantsForContainerMethod::GetQueryingDescendantsForContainer,
             params: GetQueryingDescendantsForContainerParams {
-                node_id: self
-                    .node_id
-                    .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_id)))?,
+                node_id: Box::new(self.node_id.ok_or_else(|| {
+                    format!("Field `{}` is mandatory.", std::stringify!(node_id))
+                })?),
             },
         })
     }
 }
 impl GetAnchorElement {
     pub fn builder() -> GetAnchorElementBuilder {
-        GetAnchorElementBuilder::default()
+        <GetAnchorElementBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1499,9 +1499,9 @@ impl GetAnchorElementBuilder {
         Ok(GetAnchorElement {
             method: GetAnchorElementMethod::GetAnchorElement,
             params: GetAnchorElementParams {
-                node_id: self
-                    .node_id
-                    .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_id)))?,
+                node_id: Box::new(self.node_id.ok_or_else(|| {
+                    format!("Field `{}` is mandatory.", std::stringify!(node_id))
+                })?),
                 anchor_specifier: self.anchor_specifier,
             },
         })
@@ -1509,7 +1509,7 @@ impl GetAnchorElementBuilder {
 }
 impl ForceShowPopover {
     pub fn builder() -> ForceShowPopoverBuilder {
-        ForceShowPopoverBuilder::default()
+        <ForceShowPopoverBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1530,9 +1530,9 @@ impl ForceShowPopoverBuilder {
         Ok(ForceShowPopover {
             method: ForceShowPopoverMethod::ForceShowPopover,
             params: ForceShowPopoverParams {
-                node_id: self
-                    .node_id
-                    .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_id)))?,
+                node_id: Box::new(self.node_id.ok_or_else(|| {
+                    format!("Field `{}` is mandatory.", std::stringify!(node_id))
+                })?),
                 enable: self
                     .enable
                     .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(enable)))?,

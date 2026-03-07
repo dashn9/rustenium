@@ -1,7 +1,7 @@
 use super::commands::*;
 impl SetPermission {
     pub fn builder() -> SetPermissionBuilder {
-        SetPermissionBuilder::default()
+        <SetPermissionBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -48,14 +48,14 @@ impl SetPermissionBuilder {
                     .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(setting)))?,
                 origin: self.origin,
                 embedded_origin: self.embedded_origin,
-                browser_context_id: self.browser_context_id,
+                browser_context_id: self.browser_context_id.map(Box::new),
             },
         })
     }
 }
 impl ResetPermissions {
     pub fn builder() -> ResetPermissionsBuilder {
-        ResetPermissionsBuilder::default()
+        <ResetPermissionsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -74,14 +74,14 @@ impl ResetPermissionsBuilder {
         ResetPermissions {
             method: ResetPermissionsMethod::ResetPermissions,
             params: ResetPermissionsParams {
-                browser_context_id: self.browser_context_id,
+                browser_context_id: self.browser_context_id.map(Box::new),
             },
         }
     }
 }
 impl SetDownloadBehavior {
     pub fn builder() -> SetDownloadBehaviorBuilder {
-        SetDownloadBehaviorBuilder::default()
+        <SetDownloadBehaviorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -118,7 +118,7 @@ impl SetDownloadBehaviorBuilder {
                 behavior: self.behavior.ok_or_else(|| {
                     format!("Field `{}` is mandatory.", std::stringify!(behavior))
                 })?,
-                browser_context_id: self.browser_context_id,
+                browser_context_id: self.browser_context_id.map(Box::new),
                 download_path: self.download_path,
                 events_enabled: self.events_enabled,
             },
@@ -127,7 +127,7 @@ impl SetDownloadBehaviorBuilder {
 }
 impl CancelDownload {
     pub fn builder() -> CancelDownloadBuilder {
-        CancelDownloadBuilder::default()
+        <CancelDownloadBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -154,14 +154,14 @@ impl CancelDownloadBuilder {
                 guid: self
                     .guid
                     .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(guid)))?,
-                browser_context_id: self.browser_context_id,
+                browser_context_id: self.browser_context_id.map(Box::new),
             },
         })
     }
 }
 impl GetHistograms {
     pub fn builder() -> GetHistogramsBuilder {
-        GetHistogramsBuilder::default()
+        <GetHistogramsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -190,7 +190,7 @@ impl GetHistogramsBuilder {
 }
 impl GetHistogram {
     pub fn builder() -> GetHistogramBuilder {
-        GetHistogramBuilder::default()
+        <GetHistogramBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -221,7 +221,7 @@ impl GetHistogramBuilder {
 }
 impl GetWindowBounds {
     pub fn builder() -> GetWindowBoundsBuilder {
-        GetWindowBoundsBuilder::default()
+        <GetWindowBoundsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -246,17 +246,17 @@ impl GetWindowBoundsBuilder {
 }
 impl GetWindowForTarget {
     pub fn builder() -> GetWindowForTargetBuilder {
-        GetWindowForTargetBuilder::default()
+        <GetWindowForTargetBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetWindowForTargetBuilder {
-    target_id: Option<super::super::target::types::TargetId>,
+    target_id: Option<crate::browser_protocol::target::types::TargetId>,
 }
 impl GetWindowForTargetBuilder {
     pub fn target_id(
         mut self,
-        target_id: impl Into<super::super::target::types::TargetId>,
+        target_id: impl Into<crate::browser_protocol::target::types::TargetId>,
     ) -> Self {
         self.target_id = Some(target_id.into());
         self
@@ -272,7 +272,7 @@ impl GetWindowForTargetBuilder {
 }
 impl SetWindowBounds {
     pub fn builder() -> SetWindowBoundsBuilder {
-        SetWindowBoundsBuilder::default()
+        <SetWindowBoundsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -305,7 +305,7 @@ impl SetWindowBoundsBuilder {
 }
 impl SetContentsSize {
     pub fn builder() -> SetContentsSizeBuilder {
-        SetContentsSizeBuilder::default()
+        <SetContentsSizeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -342,20 +342,20 @@ impl SetContentsSizeBuilder {
 }
 impl SetDockTile {
     pub fn builder() -> SetDockTileBuilder {
-        SetDockTileBuilder::default()
+        <SetDockTileBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct SetDockTileBuilder {
     badge_label: Option<String>,
-    image: Option<super::super::super::Binary>,
+    image: Option<crate::Binary>,
 }
 impl SetDockTileBuilder {
     pub fn badge_label(mut self, badge_label: impl Into<String>) -> Self {
         self.badge_label = Some(badge_label.into());
         self
     }
-    pub fn image(mut self, image: impl Into<super::super::super::Binary>) -> Self {
+    pub fn image(mut self, image: impl Into<crate::Binary>) -> Self {
         self.image = Some(image.into());
         self
     }
@@ -371,7 +371,7 @@ impl SetDockTileBuilder {
 }
 impl ExecuteBrowserCommand {
     pub fn builder() -> ExecuteBrowserCommandBuilder {
-        ExecuteBrowserCommandBuilder::default()
+        <ExecuteBrowserCommandBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -396,7 +396,7 @@ impl ExecuteBrowserCommandBuilder {
 }
 impl AddPrivacySandboxEnrollmentOverride {
     pub fn builder() -> AddPrivacySandboxEnrollmentOverrideBuilder {
-        AddPrivacySandboxEnrollmentOverrideBuilder::default()
+        <AddPrivacySandboxEnrollmentOverrideBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -421,7 +421,7 @@ impl AddPrivacySandboxEnrollmentOverrideBuilder {
 }
 impl AddPrivacySandboxCoordinatorKeyConfig {
     pub fn builder() -> AddPrivacySandboxCoordinatorKeyConfigBuilder {
-        AddPrivacySandboxCoordinatorKeyConfigBuilder::default()
+        <AddPrivacySandboxCoordinatorKeyConfigBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -468,7 +468,7 @@ impl AddPrivacySandboxCoordinatorKeyConfigBuilder {
                 key_config: self.key_config.ok_or_else(|| {
                     format!("Field `{}` is mandatory.", std::stringify!(key_config))
                 })?,
-                browser_context_id: self.browser_context_id,
+                browser_context_id: self.browser_context_id.map(Box::new),
             },
         })
     }

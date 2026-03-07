@@ -1,7 +1,7 @@
 use super::commands::*;
 impl Clear {
     pub fn builder() -> ClearBuilder {
-        ClearBuilder::default()
+        <ClearBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -26,7 +26,7 @@ impl ClearBuilder {
 }
 impl GetDomStorageItems {
     pub fn builder() -> GetDomStorageItemsBuilder {
-        GetDomStorageItemsBuilder::default()
+        <GetDomStorageItemsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -51,7 +51,7 @@ impl GetDomStorageItemsBuilder {
 }
 impl RemoveDomStorageItem {
     pub fn builder() -> RemoveDomStorageItemBuilder {
-        RemoveDomStorageItemBuilder::default()
+        <RemoveDomStorageItemBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -84,7 +84,7 @@ impl RemoveDomStorageItemBuilder {
 }
 impl SetDomStorageItem {
     pub fn builder() -> SetDomStorageItemBuilder {
-        SetDomStorageItemBuilder::default()
+        <SetDomStorageItemBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

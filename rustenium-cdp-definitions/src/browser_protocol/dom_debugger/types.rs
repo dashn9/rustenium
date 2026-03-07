@@ -34,7 +34,7 @@ pub struct EventListener {
     pub once: bool,
     #[doc = "Script id of the handler code."]
     #[serde(rename = "scriptId")]
-    pub script_id: super::super::super::js_protocol::runtime::types::ScriptId,
+    pub script_id: crate::js_protocol::runtime::types::ScriptId,
     #[doc = "Line number in the script (0-based)."]
     #[serde(rename = "lineNumber")]
     pub line_number: i64,
@@ -45,17 +45,17 @@ pub struct EventListener {
     #[serde(rename = "handler")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub handler: Option<super::super::super::js_protocol::runtime::types::RemoteObject>,
+    pub handler: Option<crate::js_protocol::runtime::types::RemoteObject>,
     #[doc = "Event original handler function value."]
     #[serde(rename = "originalHandler")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub original_handler: Option<super::super::super::js_protocol::runtime::types::RemoteObject>,
+    pub original_handler: Option<crate::js_protocol::runtime::types::RemoteObject>,
     #[doc = "Node the listener is added to (if any)."]
     #[serde(rename = "backendNodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub backend_node_id: Option<super::super::dom::types::BackendNodeId>,
+    pub backend_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
 }
 impl EventListener {
     pub const IDENTIFIER: &'static str = "DOMDebugger.EventListener";

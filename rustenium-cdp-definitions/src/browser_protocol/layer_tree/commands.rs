@@ -27,11 +27,11 @@ pub struct CompositingReasons {
     pub method: CompositingReasonsMethod,
     pub params: CompositingReasonsParams,
 }
-impl super::super::super::CommandResult for CompositingReasons {
+impl crate::CommandResult for CompositingReasons {
     type Result = super::results::CompositingReasonsResult;
 }
 #[doc = "Disables compositing tree inspection.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#method-disable)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DisableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum DisableMethod {
@@ -47,11 +47,11 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
-impl super::super::super::CommandResult for Disable {
+impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
 }
 #[doc = "Enables compositing tree inspection.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#method-enable)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EnableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum EnableMethod {
@@ -67,7 +67,7 @@ pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
 }
-impl super::super::super::CommandResult for Enable {
+impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
 }
 #[doc = "Returns the snapshot identifier.\n[loadSnapshot](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#method-loadSnapshot)"]
@@ -97,7 +97,7 @@ pub struct LoadSnapshot {
     pub method: LoadSnapshotMethod,
     pub params: LoadSnapshotParams,
 }
-impl super::super::super::CommandResult for LoadSnapshot {
+impl crate::CommandResult for LoadSnapshot {
     type Result = super::results::LoadSnapshotResult;
 }
 #[doc = "Returns the layer snapshot identifier.\n[makeSnapshot](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#method-makeSnapshot)"]
@@ -128,7 +128,7 @@ pub struct MakeSnapshot {
     pub method: MakeSnapshotMethod,
     pub params: MakeSnapshotParams,
 }
-impl super::super::super::CommandResult for MakeSnapshot {
+impl crate::CommandResult for MakeSnapshot {
     type Result = super::results::MakeSnapshotResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -150,7 +150,7 @@ pub struct ProfileSnapshotParams {
     #[serde(rename = "clipRect")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub clip_rect: Option<super::super::dom::types::Rect>,
+    pub clip_rect: Option<crate::browser_protocol::dom::types::Rect>,
 }
 impl ProfileSnapshotParams {
     pub fn new(snapshot_id: impl Into<super::types::SnapshotId>) -> Self {
@@ -175,7 +175,7 @@ pub struct ProfileSnapshot {
     pub method: ProfileSnapshotMethod,
     pub params: ProfileSnapshotParams,
 }
-impl super::super::super::CommandResult for ProfileSnapshot {
+impl crate::CommandResult for ProfileSnapshot {
     type Result = super::results::ProfileSnapshotResult;
 }
 #[doc = "Releases layer snapshot captured by the back-end.\n[releaseSnapshot](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#method-releaseSnapshot)"]
@@ -206,7 +206,7 @@ pub struct ReleaseSnapshot {
     pub method: ReleaseSnapshotMethod,
     pub params: ReleaseSnapshotParams,
 }
-impl super::super::super::CommandResult for ReleaseSnapshot {
+impl crate::CommandResult for ReleaseSnapshot {
     type Result = super::results::ReleaseSnapshotResult;
 }
 #[doc = "Replays the layer snapshot and returns the resulting bitmap.\n[replaySnapshot](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#method-replaySnapshot)"]
@@ -255,7 +255,7 @@ pub struct ReplaySnapshot {
     pub method: ReplaySnapshotMethod,
     pub params: ReplaySnapshotParams,
 }
-impl super::super::super::CommandResult for ReplaySnapshot {
+impl crate::CommandResult for ReplaySnapshot {
     type Result = super::results::ReplaySnapshotResult;
 }
 #[doc = "Replays the layer snapshot and returns canvas log.\n[snapshotCommandLog](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#method-snapshotCommandLog)"]
@@ -286,7 +286,7 @@ pub struct SnapshotCommandLog {
     pub method: SnapshotCommandLogMethod,
     pub params: SnapshotCommandLogParams,
 }
-impl super::super::super::CommandResult for SnapshotCommandLog {
+impl crate::CommandResult for SnapshotCommandLog {
     type Result = super::results::SnapshotCommandLogResult;
 }
 group_enum ! (LayerTreeCommands { CompositingReasons (CompositingReasons) , Disable (Disable) , Enable (Enable) , LoadSnapshot (LoadSnapshot) , MakeSnapshot (MakeSnapshot) , ProfileSnapshot (ProfileSnapshot) , ReleaseSnapshot (ReleaseSnapshot) , ReplaySnapshot (ReplaySnapshot) , SnapshotCommandLog (SnapshotCommandLog) });

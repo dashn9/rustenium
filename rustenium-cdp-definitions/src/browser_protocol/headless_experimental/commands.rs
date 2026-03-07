@@ -37,7 +37,7 @@ pub struct BeginFrame {
     pub method: BeginFrameMethod,
     pub params: BeginFrameParams,
 }
-impl super::super::super::CommandResult for BeginFrame {
+impl crate::CommandResult for BeginFrame {
     type Result = super::results::BeginFrameResult;
 }
 group_enum ! (HeadlessExperimentalCommands { BeginFrame (BeginFrame) });

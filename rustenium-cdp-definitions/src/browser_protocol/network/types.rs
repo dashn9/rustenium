@@ -377,7 +377,7 @@ pub struct PostDataEntry {
     #[serde(rename = "bytes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub bytes: Option<super::super::super::Binary>,
+    pub bytes: Option<crate::Binary>,
 }
 impl PostDataEntry {
     pub const IDENTIFIER: &'static str = "Network.PostDataEntry";
@@ -413,7 +413,7 @@ pub struct Request {
     #[serde(rename = "mixedContentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub mixed_content_type: Option<super::super::security::types::MixedContentType>,
+    pub mixed_content_type: Option<crate::browser_protocol::security::types::MixedContentType>,
     #[doc = "Priority of the resource request at the time request is sent."]
     #[serde(rename = "initialPriority")]
     pub initial_priority: ResourcePriority,
@@ -519,7 +519,7 @@ pub struct SecurityDetails {
     pub mac: Option<String>,
     #[doc = "Certificate ID value."]
     #[serde(rename = "certificateId")]
-    pub certificate_id: super::super::security::types::CertificateId,
+    pub certificate_id: crate::browser_protocol::security::types::CertificateId,
     #[doc = "Certificate subject name."]
     #[serde(rename = "subjectName")]
     pub subject_name: String,
@@ -910,7 +910,7 @@ pub struct Response {
     pub alternate_protocol_usage: Option<AlternateProtocolUsage>,
     #[doc = "Security state of the request resource."]
     #[serde(rename = "securityState")]
-    pub security_state: super::super::security::types::SecurityState,
+    pub security_state: crate::browser_protocol::security::types::SecurityState,
     #[doc = "Security details for the request."]
     #[serde(rename = "securityDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1058,7 +1058,7 @@ pub struct Initiator {
     #[serde(rename = "stack")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub stack: Option<super::super::super::js_protocol::runtime::types::StackTrace>,
+    pub stack: Option<crate::js_protocol::runtime::types::StackTrace>,
     #[doc = "Initiator URL, set for Parser type or for Script type (when script is importing module) or for SignedExchange type."]
     #[serde(rename = "url")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1982,7 +1982,7 @@ impl DirectUdpSocketOptions {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DirectUdpMessage {
     #[serde(rename = "data")]
-    pub data: super::super::super::Binary,
+    pub data: crate::Binary,
     #[doc = "Null for connected mode."]
     #[serde(rename = "remoteAddr")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1995,7 +1995,7 @@ pub struct DirectUdpMessage {
     pub remote_port: Option<i64>,
 }
 impl DirectUdpMessage {
-    pub fn new(data: impl Into<super::super::super::Binary>) -> Self {
+    pub fn new(data: impl Into<crate::Binary>) -> Self {
         Self {
             data: data.into(),
             remote_addr: None,
@@ -2894,7 +2894,7 @@ pub struct LoadNetworkResourcePageResult {
     #[serde(rename = "stream")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub stream: Option<super::super::io::types::StreamHandle>,
+    pub stream: Option<crate::browser_protocol::io::types::StreamHandle>,
     #[doc = "Response headers."]
     #[serde(rename = "headers")]
     #[serde(skip_serializing_if = "Option::is_none")]

@@ -1,7 +1,7 @@
 use super::commands::*;
 impl GetDirectory {
     pub fn builder() -> GetDirectoryBuilder {
-        GetDirectoryBuilder::default()
+        <GetDirectoryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

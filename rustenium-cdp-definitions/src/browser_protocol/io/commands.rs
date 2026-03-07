@@ -27,7 +27,7 @@ pub struct Close {
     pub method: CloseMethod,
     pub params: CloseParams,
 }
-impl super::super::super::CommandResult for Close {
+impl crate::CommandResult for Close {
     type Result = super::results::CloseResult;
 }
 #[doc = "Read a chunk of the stream\n[read](https://chromedevtools.github.io/devtools-protocol/tot/IO/#method-read)"]
@@ -70,7 +70,7 @@ pub struct Read {
     pub method: ReadMethod,
     pub params: ReadParams,
 }
-impl super::super::super::CommandResult for Read {
+impl crate::CommandResult for Read {
     type Result = super::results::ReadResult;
 }
 #[doc = "Return UUID of Blob object specified by a remote object id.\n[resolveBlob](https://chromedevtools.github.io/devtools-protocol/tot/IO/#method-resolveBlob)"]
@@ -78,12 +78,10 @@ impl super::super::super::CommandResult for Read {
 pub struct ResolveBlobParams {
     #[doc = "Object id of a Blob object wrapper."]
     #[serde(rename = "objectId")]
-    pub object_id: super::super::super::js_protocol::runtime::types::RemoteObjectId,
+    pub object_id: crate::js_protocol::runtime::types::RemoteObjectId,
 }
 impl ResolveBlobParams {
-    pub fn new(
-        object_id: impl Into<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
-    ) -> Self {
+    pub fn new(object_id: impl Into<crate::js_protocol::runtime::types::RemoteObjectId>) -> Self {
         Self {
             object_id: object_id.into(),
         }
@@ -103,7 +101,7 @@ pub struct ResolveBlob {
     pub method: ResolveBlobMethod,
     pub params: ResolveBlobParams,
 }
-impl super::super::super::CommandResult for ResolveBlob {
+impl crate::CommandResult for ResolveBlob {
     type Result = super::results::ResolveBlobResult;
 }
 group_enum ! (IoCommands { Close (Close) , Read (Read) , ResolveBlob (ResolveBlob) });

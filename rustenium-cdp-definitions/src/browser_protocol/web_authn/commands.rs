@@ -22,11 +22,11 @@ pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
 }
-impl super::super::super::CommandResult for Enable {
+impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
 }
 #[doc = "Disable the WebAuthn domain.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-disable)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DisableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum DisableMethod {
@@ -42,7 +42,7 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
-impl super::super::super::CommandResult for Disable {
+impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
 }
 #[doc = "Creates and adds a virtual authenticator.\n[addVirtualAuthenticator](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-addVirtualAuthenticator)"]
@@ -72,7 +72,7 @@ pub struct AddVirtualAuthenticator {
     pub method: AddVirtualAuthenticatorMethod,
     pub params: AddVirtualAuthenticatorParams,
 }
-impl super::super::super::CommandResult for AddVirtualAuthenticator {
+impl crate::CommandResult for AddVirtualAuthenticator {
     type Result = super::results::AddVirtualAuthenticatorResult;
 }
 #[doc = "Resets parameters isBogusSignature, isBadUV, isBadUP to false if they are not present.\n[setResponseOverrideBits](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-setResponseOverrideBits)"]
@@ -120,7 +120,7 @@ pub struct SetResponseOverrideBits {
     pub method: SetResponseOverrideBitsMethod,
     pub params: SetResponseOverrideBitsParams,
 }
-impl super::super::super::CommandResult for SetResponseOverrideBits {
+impl crate::CommandResult for SetResponseOverrideBits {
     type Result = super::results::SetResponseOverrideBitsResult;
 }
 #[doc = "Removes the given authenticator.\n[removeVirtualAuthenticator](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-removeVirtualAuthenticator)"]
@@ -150,7 +150,7 @@ pub struct RemoveVirtualAuthenticator {
     pub method: RemoveVirtualAuthenticatorMethod,
     pub params: RemoveVirtualAuthenticatorParams,
 }
-impl super::super::super::CommandResult for RemoveVirtualAuthenticator {
+impl crate::CommandResult for RemoveVirtualAuthenticator {
     type Result = super::results::RemoveVirtualAuthenticatorResult;
 }
 #[doc = "Adds the credential to the specified authenticator.\n[addCredential](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-addCredential)"]
@@ -186,7 +186,7 @@ pub struct AddCredential {
     pub method: AddCredentialMethod,
     pub params: AddCredentialParams,
 }
-impl super::super::super::CommandResult for AddCredential {
+impl crate::CommandResult for AddCredential {
     type Result = super::results::AddCredentialResult;
 }
 #[doc = "Returns a single credential stored in the given virtual authenticator that\nmatches the credential ID.\n[getCredential](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-getCredential)"]
@@ -195,12 +195,12 @@ pub struct GetCredentialParams {
     #[serde(rename = "authenticatorId")]
     pub authenticator_id: super::types::AuthenticatorId,
     #[serde(rename = "credentialId")]
-    pub credential_id: super::super::super::Binary,
+    pub credential_id: crate::Binary,
 }
 impl GetCredentialParams {
     pub fn new(
         authenticator_id: impl Into<super::types::AuthenticatorId>,
-        credential_id: impl Into<super::super::super::Binary>,
+        credential_id: impl Into<crate::Binary>,
     ) -> Self {
         Self {
             authenticator_id: authenticator_id.into(),
@@ -222,7 +222,7 @@ pub struct GetCredential {
     pub method: GetCredentialMethod,
     pub params: GetCredentialParams,
 }
-impl super::super::super::CommandResult for GetCredential {
+impl crate::CommandResult for GetCredential {
     type Result = super::results::GetCredentialResult;
 }
 #[doc = "Returns all the credentials stored in the given virtual authenticator.\n[getCredentials](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-getCredentials)"]
@@ -252,7 +252,7 @@ pub struct GetCredentials {
     pub method: GetCredentialsMethod,
     pub params: GetCredentialsParams,
 }
-impl super::super::super::CommandResult for GetCredentials {
+impl crate::CommandResult for GetCredentials {
     type Result = super::results::GetCredentialsResult;
 }
 #[doc = "Removes a credential from the authenticator.\n[removeCredential](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-removeCredential)"]
@@ -261,12 +261,12 @@ pub struct RemoveCredentialParams {
     #[serde(rename = "authenticatorId")]
     pub authenticator_id: super::types::AuthenticatorId,
     #[serde(rename = "credentialId")]
-    pub credential_id: super::super::super::Binary,
+    pub credential_id: crate::Binary,
 }
 impl RemoveCredentialParams {
     pub fn new(
         authenticator_id: impl Into<super::types::AuthenticatorId>,
-        credential_id: impl Into<super::super::super::Binary>,
+        credential_id: impl Into<crate::Binary>,
     ) -> Self {
         Self {
             authenticator_id: authenticator_id.into(),
@@ -288,7 +288,7 @@ pub struct RemoveCredential {
     pub method: RemoveCredentialMethod,
     pub params: RemoveCredentialParams,
 }
-impl super::super::super::CommandResult for RemoveCredential {
+impl crate::CommandResult for RemoveCredential {
     type Result = super::results::RemoveCredentialResult;
 }
 #[doc = "Clears all the credentials from the specified device.\n[clearCredentials](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-clearCredentials)"]
@@ -318,7 +318,7 @@ pub struct ClearCredentials {
     pub method: ClearCredentialsMethod,
     pub params: ClearCredentialsParams,
 }
-impl super::super::super::CommandResult for ClearCredentials {
+impl crate::CommandResult for ClearCredentials {
     type Result = super::results::ClearCredentialsResult;
 }
 #[doc = "Sets whether User Verification succeeds or fails for an authenticator.\nThe default is true.\n[setUserVerified](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-setUserVerified)"]
@@ -354,7 +354,7 @@ pub struct SetUserVerified {
     pub method: SetUserVerifiedMethod,
     pub params: SetUserVerifiedParams,
 }
-impl super::super::super::CommandResult for SetUserVerified {
+impl crate::CommandResult for SetUserVerified {
     type Result = super::results::SetUserVerifiedResult;
 }
 #[doc = "Sets whether tests of user presence will succeed immediately (if true) or fail to resolve (if false) for an authenticator.\nThe default is true.\n[setAutomaticPresenceSimulation](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-setAutomaticPresenceSimulation)"]
@@ -390,7 +390,7 @@ pub struct SetAutomaticPresenceSimulation {
     pub method: SetAutomaticPresenceSimulationMethod,
     pub params: SetAutomaticPresenceSimulationParams,
 }
-impl super::super::super::CommandResult for SetAutomaticPresenceSimulation {
+impl crate::CommandResult for SetAutomaticPresenceSimulation {
     type Result = super::results::SetAutomaticPresenceSimulationResult;
 }
 #[doc = "Allows setting credential properties.\nhttps://w3c.github.io/webauthn/#sctn-automation-set-credential-properties\n[setCredentialProperties](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#method-setCredentialProperties)"]
@@ -399,7 +399,7 @@ pub struct SetCredentialPropertiesParams {
     #[serde(rename = "authenticatorId")]
     pub authenticator_id: super::types::AuthenticatorId,
     #[serde(rename = "credentialId")]
-    pub credential_id: super::super::super::Binary,
+    pub credential_id: crate::Binary,
     #[serde(rename = "backupEligibility")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -412,7 +412,7 @@ pub struct SetCredentialPropertiesParams {
 impl SetCredentialPropertiesParams {
     pub fn new(
         authenticator_id: impl Into<super::types::AuthenticatorId>,
-        credential_id: impl Into<super::super::super::Binary>,
+        credential_id: impl Into<crate::Binary>,
     ) -> Self {
         Self {
             authenticator_id: authenticator_id.into(),
@@ -436,7 +436,7 @@ pub struct SetCredentialProperties {
     pub method: SetCredentialPropertiesMethod,
     pub params: SetCredentialPropertiesParams,
 }
-impl super::super::super::CommandResult for SetCredentialProperties {
+impl crate::CommandResult for SetCredentialProperties {
     type Result = super::results::SetCredentialPropertiesResult;
 }
 group_enum ! (WebAuthnCommands { Enable (Enable) , Disable (Disable) , AddVirtualAuthenticator (AddVirtualAuthenticator) , SetResponseOverrideBits (SetResponseOverrideBits) , RemoveVirtualAuthenticator (RemoveVirtualAuthenticator) , AddCredential (AddCredential) , GetCredential (GetCredential) , GetCredentials (GetCredentials) , RemoveCredential (RemoveCredential) , ClearCredentials (ClearCredentials) , SetUserVerified (SetUserVerified) , SetAutomaticPresenceSimulation (SetAutomaticPresenceSimulation) , SetCredentialProperties (SetCredentialProperties) });

@@ -1,7 +1,7 @@
 use super::commands::*;
 impl Close {
     pub fn builder() -> CloseBuilder {
-        CloseBuilder::default()
+        <CloseBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -26,7 +26,7 @@ impl CloseBuilder {
 }
 impl Read {
     pub fn builder() -> ReadBuilder {
-        ReadBuilder::default()
+        <ReadBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -63,17 +63,17 @@ impl ReadBuilder {
 }
 impl ResolveBlob {
     pub fn builder() -> ResolveBlobBuilder {
-        ResolveBlobBuilder::default()
+        <ResolveBlobBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct ResolveBlobBuilder {
-    object_id: Option<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+    object_id: Option<crate::js_protocol::runtime::types::RemoteObjectId>,
 }
 impl ResolveBlobBuilder {
     pub fn object_id(
         mut self,
-        object_id: impl Into<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+        object_id: impl Into<crate::js_protocol::runtime::types::RemoteObjectId>,
     ) -> Self {
         self.object_id = Some(object_id.into());
         self

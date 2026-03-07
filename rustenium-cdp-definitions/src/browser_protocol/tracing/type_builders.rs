@@ -1,7 +1,7 @@
 use super::types::*;
 impl TraceConfig {
     pub fn builder() -> TraceConfigBuilder {
-        TraceConfigBuilder::default()
+        <TraceConfigBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

@@ -1,7 +1,7 @@
 use super::commands::*;
 impl CaptureSnapshot {
     pub fn builder() -> CaptureSnapshotBuilder {
-        CaptureSnapshotBuilder::default()
+        <CaptureSnapshotBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

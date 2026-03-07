@@ -17,7 +17,7 @@ pub struct LogEntry {
     pub category: Option<LogEntryCategory>,
     #[doc = "Timestamp when this entry was added."]
     #[serde(rename = "timestamp")]
-    pub timestamp: super::super::super::js_protocol::runtime::types::Timestamp,
+    pub timestamp: crate::js_protocol::runtime::types::Timestamp,
     #[doc = "URL of the resource if known."]
     #[serde(rename = "url")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -32,12 +32,12 @@ pub struct LogEntry {
     #[serde(rename = "stackTrace")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub stack_trace: Option<super::super::super::js_protocol::runtime::types::StackTrace>,
+    pub stack_trace: Option<crate::js_protocol::runtime::types::StackTrace>,
     #[doc = "Identifier of the network request associated with this entry."]
     #[serde(rename = "networkRequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub network_request_id: Option<super::super::network::types::RequestId>,
+    pub network_request_id: Option<crate::browser_protocol::network::types::RequestId>,
     #[doc = "Identifier of the worker associated with this entry."]
     #[serde(rename = "workerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -47,7 +47,7 @@ pub struct LogEntry {
     #[serde(rename = "args")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub args: Option<Vec<super::super::super::js_protocol::runtime::types::RemoteObject>>,
+    pub args: Option<Vec<crate::js_protocol::runtime::types::RemoteObject>>,
 }
 #[doc = "Log entry source."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -101,7 +101,7 @@ impl LogEntry {
         source: impl Into<LogEntrySource>,
         level: impl Into<LogEntryLevel>,
         text: impl Into<String>,
-        timestamp: impl Into<super::super::super::js_protocol::runtime::types::Timestamp>,
+        timestamp: impl Into<crate::js_protocol::runtime::types::Timestamp>,
     ) -> Self {
         Self {
             source: source.into(),

@@ -1,7 +1,7 @@
 use super::types::*;
 impl ResourceTiming {
     pub fn builder() -> ResourceTimingBuilder {
-        ResourceTimingBuilder::default()
+        <ResourceTimingBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -197,15 +197,15 @@ impl ResourceTimingBuilder {
 }
 impl PostDataEntry {
     pub fn builder() -> PostDataEntryBuilder {
-        PostDataEntryBuilder::default()
+        <PostDataEntryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct PostDataEntryBuilder {
-    bytes: Option<super::super::super::Binary>,
+    bytes: Option<crate::Binary>,
 }
 impl PostDataEntryBuilder {
-    pub fn bytes(mut self, bytes: impl Into<super::super::super::Binary>) -> Self {
+    pub fn bytes(mut self, bytes: impl Into<crate::Binary>) -> Self {
         self.bytes = Some(bytes.into());
         self
     }
@@ -215,7 +215,7 @@ impl PostDataEntryBuilder {
 }
 impl Request {
     pub fn builder() -> RequestBuilder {
-        RequestBuilder::default()
+        <RequestBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -226,7 +226,7 @@ pub struct RequestBuilder {
     headers: Option<Headers>,
     has_post_data: Option<bool>,
     post_data_entries: Option<Vec<PostDataEntry>>,
-    mixed_content_type: Option<super::super::security::types::MixedContentType>,
+    mixed_content_type: Option<crate::browser_protocol::security::types::MixedContentType>,
     initial_priority: Option<ResourcePriority>,
     referrer_policy: Option<RequestReferrerPolicy>,
     is_link_preload: Option<bool>,
@@ -273,7 +273,7 @@ impl RequestBuilder {
     }
     pub fn mixed_content_type(
         mut self,
-        mixed_content_type: impl Into<super::super::security::types::MixedContentType>,
+        mixed_content_type: impl Into<crate::browser_protocol::security::types::MixedContentType>,
     ) -> Self {
         self.mixed_content_type = Some(mixed_content_type.into());
         self
@@ -335,7 +335,7 @@ impl RequestBuilder {
 }
 impl SignedCertificateTimestamp {
     pub fn builder() -> SignedCertificateTimestampBuilder {
-        SignedCertificateTimestampBuilder::default()
+        <SignedCertificateTimestampBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -416,7 +416,7 @@ impl SignedCertificateTimestampBuilder {
 }
 impl SecurityDetails {
     pub fn builder() -> SecurityDetailsBuilder {
-        SecurityDetailsBuilder::default()
+        <SecurityDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -426,7 +426,7 @@ pub struct SecurityDetailsBuilder {
     key_exchange_group: Option<String>,
     cipher: Option<String>,
     mac: Option<String>,
-    certificate_id: Option<super::super::security::types::CertificateId>,
+    certificate_id: Option<crate::browser_protocol::security::types::CertificateId>,
     subject_name: Option<String>,
     san_list: Option<Vec<String>>,
     issuer: Option<String>,
@@ -460,7 +460,7 @@ impl SecurityDetailsBuilder {
     }
     pub fn certificate_id(
         mut self,
-        certificate_id: impl Into<super::super::security::types::CertificateId>,
+        certificate_id: impl Into<crate::browser_protocol::security::types::CertificateId>,
     ) -> Self {
         self.certificate_id = Some(certificate_id.into());
         self
@@ -600,7 +600,7 @@ impl SecurityDetailsBuilder {
 }
 impl CorsErrorStatus {
     pub fn builder() -> CorsErrorStatusBuilder {
-        CorsErrorStatusBuilder::default()
+        <CorsErrorStatusBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -633,7 +633,7 @@ impl CorsErrorStatusBuilder {
 }
 impl TrustTokenParams {
     pub fn builder() -> TrustTokenParamsBuilder {
-        TrustTokenParamsBuilder::default()
+        <TrustTokenParamsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -684,7 +684,7 @@ impl TrustTokenParamsBuilder {
 }
 impl ServiceWorkerRouterInfo {
     pub fn builder() -> ServiceWorkerRouterInfoBuilder {
-        ServiceWorkerRouterInfoBuilder::default()
+        <ServiceWorkerRouterInfoBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -722,7 +722,7 @@ impl ServiceWorkerRouterInfoBuilder {
 }
 impl Response {
     pub fn builder() -> ResponseBuilder {
-        ResponseBuilder::default()
+        <ResponseBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -750,7 +750,7 @@ pub struct ResponseBuilder {
     cache_storage_cache_name: Option<String>,
     protocol: Option<String>,
     alternate_protocol_usage: Option<AlternateProtocolUsage>,
-    security_state: Option<super::super::security::types::SecurityState>,
+    security_state: Option<crate::browser_protocol::security::types::SecurityState>,
     security_details: Option<SecurityDetails>,
 }
 impl ResponseBuilder {
@@ -857,7 +857,7 @@ impl ResponseBuilder {
     }
     pub fn security_state(
         mut self,
-        security_state: impl Into<super::super::security::types::SecurityState>,
+        security_state: impl Into<crate::browser_protocol::security::types::SecurityState>,
     ) -> Self {
         self.security_state = Some(security_state.into());
         self
@@ -924,7 +924,7 @@ impl ResponseBuilder {
 }
 impl WebSocketRequest {
     pub fn builder() -> WebSocketRequestBuilder {
-        WebSocketRequestBuilder::default()
+        <WebSocketRequestBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -946,7 +946,7 @@ impl WebSocketRequestBuilder {
 }
 impl WebSocketResponse {
     pub fn builder() -> WebSocketResponseBuilder {
-        WebSocketResponseBuilder::default()
+        <WebSocketResponseBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1002,7 +1002,7 @@ impl WebSocketResponseBuilder {
 }
 impl WebSocketFrame {
     pub fn builder() -> WebSocketFrameBuilder {
-        WebSocketFrameBuilder::default()
+        <WebSocketFrameBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1040,7 +1040,7 @@ impl WebSocketFrameBuilder {
 }
 impl CachedResource {
     pub fn builder() -> CachedResourceBuilder {
-        CachedResourceBuilder::default()
+        <CachedResourceBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1084,13 +1084,13 @@ impl CachedResourceBuilder {
 }
 impl Initiator {
     pub fn builder() -> InitiatorBuilder {
-        InitiatorBuilder::default()
+        <InitiatorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct InitiatorBuilder {
     r#type: Option<InitiatorType>,
-    stack: Option<super::super::super::js_protocol::runtime::types::StackTrace>,
+    stack: Option<crate::js_protocol::runtime::types::StackTrace>,
     url: Option<String>,
     line_number: Option<f64>,
     column_number: Option<f64>,
@@ -1103,7 +1103,7 @@ impl InitiatorBuilder {
     }
     pub fn stack(
         mut self,
-        stack: impl Into<super::super::super::js_protocol::runtime::types::StackTrace>,
+        stack: impl Into<crate::js_protocol::runtime::types::StackTrace>,
     ) -> Self {
         self.stack = Some(stack.into());
         self
@@ -1139,7 +1139,7 @@ impl InitiatorBuilder {
 }
 impl CookiePartitionKey {
     pub fn builder() -> CookiePartitionKeyBuilder {
-        CookiePartitionKeyBuilder::default()
+        <CookiePartitionKeyBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1172,7 +1172,7 @@ impl CookiePartitionKeyBuilder {
 }
 impl Cookie {
     pub fn builder() -> CookieBuilder {
-        CookieBuilder::default()
+        <CookieBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1300,7 +1300,7 @@ impl CookieBuilder {
 }
 impl BlockedSetCookieWithReason {
     pub fn builder() -> BlockedSetCookieWithReasonBuilder {
-        BlockedSetCookieWithReasonBuilder::default()
+        <BlockedSetCookieWithReasonBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1348,7 +1348,7 @@ impl BlockedSetCookieWithReasonBuilder {
 }
 impl ExemptedSetCookieWithReason {
     pub fn builder() -> ExemptedSetCookieWithReasonBuilder {
-        ExemptedSetCookieWithReasonBuilder::default()
+        <ExemptedSetCookieWithReasonBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1389,7 +1389,7 @@ impl ExemptedSetCookieWithReasonBuilder {
 }
 impl AssociatedCookie {
     pub fn builder() -> AssociatedCookieBuilder {
-        AssociatedCookieBuilder::default()
+        <AssociatedCookieBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1437,7 +1437,7 @@ impl AssociatedCookieBuilder {
 }
 impl CookieParam {
     pub fn builder() -> CookieParamBuilder {
-        CookieParamBuilder::default()
+        <CookieParamBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1533,7 +1533,7 @@ impl CookieParamBuilder {
 }
 impl AuthChallenge {
     pub fn builder() -> AuthChallengeBuilder {
-        AuthChallengeBuilder::default()
+        <AuthChallengeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1577,7 +1577,7 @@ impl AuthChallengeBuilder {
 }
 impl AuthChallengeResponse {
     pub fn builder() -> AuthChallengeResponseBuilder {
-        AuthChallengeResponseBuilder::default()
+        <AuthChallengeResponseBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1611,7 +1611,7 @@ impl AuthChallengeResponseBuilder {
 }
 impl RequestPattern {
     pub fn builder() -> RequestPatternBuilder {
-        RequestPatternBuilder::default()
+        <RequestPatternBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1643,7 +1643,7 @@ impl RequestPatternBuilder {
 }
 impl SignedExchangeSignature {
     pub fn builder() -> SignedExchangeSignatureBuilder {
-        SignedExchangeSignatureBuilder::default()
+        <SignedExchangeSignatureBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1735,7 +1735,7 @@ impl SignedExchangeSignatureBuilder {
 }
 impl SignedExchangeHeader {
     pub fn builder() -> SignedExchangeHeaderBuilder {
-        SignedExchangeHeaderBuilder::default()
+        <SignedExchangeHeaderBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1807,7 +1807,7 @@ impl SignedExchangeHeaderBuilder {
 }
 impl SignedExchangeError {
     pub fn builder() -> SignedExchangeErrorBuilder {
-        SignedExchangeErrorBuilder::default()
+        <SignedExchangeErrorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1841,7 +1841,7 @@ impl SignedExchangeErrorBuilder {
 }
 impl SignedExchangeInfo {
     pub fn builder() -> SignedExchangeInfoBuilder {
-        SignedExchangeInfoBuilder::default()
+        <SignedExchangeInfoBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1901,7 +1901,7 @@ impl SignedExchangeInfoBuilder {
 }
 impl NetworkConditions {
     pub fn builder() -> NetworkConditionsBuilder {
-        NetworkConditionsBuilder::default()
+        <NetworkConditionsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1977,7 +1977,7 @@ impl NetworkConditionsBuilder {
 }
 impl BlockPattern {
     pub fn builder() -> BlockPatternBuilder {
-        BlockPatternBuilder::default()
+        <BlockPatternBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -2007,7 +2007,7 @@ impl BlockPatternBuilder {
 }
 impl DirectTcpSocketOptions {
     pub fn builder() -> DirectTcpSocketOptionsBuilder {
-        DirectTcpSocketOptionsBuilder::default()
+        <DirectTcpSocketOptionsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -2053,7 +2053,7 @@ impl DirectTcpSocketOptionsBuilder {
 }
 impl DirectUdpSocketOptions {
     pub fn builder() -> DirectUdpSocketOptionsBuilder {
-        DirectUdpSocketOptionsBuilder::default()
+        <DirectUdpSocketOptionsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -2130,17 +2130,17 @@ impl DirectUdpSocketOptionsBuilder {
 }
 impl DirectUdpMessage {
     pub fn builder() -> DirectUdpMessageBuilder {
-        DirectUdpMessageBuilder::default()
+        <DirectUdpMessageBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct DirectUdpMessageBuilder {
-    data: Option<super::super::super::Binary>,
+    data: Option<crate::Binary>,
     remote_addr: Option<String>,
     remote_port: Option<i64>,
 }
 impl DirectUdpMessageBuilder {
-    pub fn data(mut self, data: impl Into<super::super::super::Binary>) -> Self {
+    pub fn data(mut self, data: impl Into<crate::Binary>) -> Self {
         self.data = Some(data.into());
         self
     }
@@ -2164,7 +2164,7 @@ impl DirectUdpMessageBuilder {
 }
 impl ConnectTiming {
     pub fn builder() -> ConnectTimingBuilder {
-        ConnectTimingBuilder::default()
+        <ConnectTimingBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -2186,7 +2186,7 @@ impl ConnectTimingBuilder {
 }
 impl ClientSecurityState {
     pub fn builder() -> ClientSecurityStateBuilder {
-        ClientSecurityStateBuilder::default()
+        <ClientSecurityStateBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -2244,7 +2244,7 @@ impl ClientSecurityStateBuilder {
 }
 impl CrossOriginOpenerPolicyStatus {
     pub fn builder() -> CrossOriginOpenerPolicyStatusBuilder {
-        CrossOriginOpenerPolicyStatusBuilder::default()
+        <CrossOriginOpenerPolicyStatusBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -2295,7 +2295,7 @@ impl CrossOriginOpenerPolicyStatusBuilder {
 }
 impl CrossOriginEmbedderPolicyStatus {
     pub fn builder() -> CrossOriginEmbedderPolicyStatusBuilder {
-        CrossOriginEmbedderPolicyStatusBuilder::default()
+        <CrossOriginEmbedderPolicyStatusBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -2346,7 +2346,7 @@ impl CrossOriginEmbedderPolicyStatusBuilder {
 }
 impl ContentSecurityPolicyStatus {
     pub fn builder() -> ContentSecurityPolicyStatusBuilder {
-        ContentSecurityPolicyStatusBuilder::default()
+        <ContentSecurityPolicyStatusBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -2387,7 +2387,7 @@ impl ContentSecurityPolicyStatusBuilder {
 }
 impl SecurityIsolationStatus {
     pub fn builder() -> SecurityIsolationStatusBuilder {
-        SecurityIsolationStatusBuilder::default()
+        <SecurityIsolationStatusBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -2431,7 +2431,7 @@ impl SecurityIsolationStatusBuilder {
 }
 impl ReportingApiReport {
     pub fn builder() -> ReportingApiReportBuilder {
-        ReportingApiReportBuilder::default()
+        <ReportingApiReportBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -2520,7 +2520,7 @@ impl ReportingApiReportBuilder {
 }
 impl ReportingApiEndpoint {
     pub fn builder() -> ReportingApiEndpointBuilder {
-        ReportingApiEndpointBuilder::default()
+        <ReportingApiEndpointBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -2550,7 +2550,7 @@ impl ReportingApiEndpointBuilder {
 }
 impl DeviceBoundSessionKey {
     pub fn builder() -> DeviceBoundSessionKeyBuilder {
-        DeviceBoundSessionKeyBuilder::default()
+        <DeviceBoundSessionKeyBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -2580,7 +2580,7 @@ impl DeviceBoundSessionKeyBuilder {
 }
 impl DeviceBoundSessionWithUsage {
     pub fn builder() -> DeviceBoundSessionWithUsageBuilder {
-        DeviceBoundSessionWithUsageBuilder::default()
+        <DeviceBoundSessionWithUsageBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -2610,7 +2610,7 @@ impl DeviceBoundSessionWithUsageBuilder {
 }
 impl DeviceBoundSessionCookieCraving {
     pub fn builder() -> DeviceBoundSessionCookieCravingBuilder {
-        DeviceBoundSessionCookieCravingBuilder::default()
+        <DeviceBoundSessionCookieCravingBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -2670,7 +2670,7 @@ impl DeviceBoundSessionCookieCravingBuilder {
 }
 impl DeviceBoundSessionUrlRule {
     pub fn builder() -> DeviceBoundSessionUrlRuleBuilder {
-        DeviceBoundSessionUrlRuleBuilder::default()
+        <DeviceBoundSessionUrlRuleBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -2708,7 +2708,7 @@ impl DeviceBoundSessionUrlRuleBuilder {
 }
 impl DeviceBoundSessionInclusionRules {
     pub fn builder() -> DeviceBoundSessionInclusionRulesBuilder {
-        DeviceBoundSessionInclusionRulesBuilder::default()
+        <DeviceBoundSessionInclusionRulesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -2758,7 +2758,7 @@ impl DeviceBoundSessionInclusionRulesBuilder {
 }
 impl DeviceBoundSession {
     pub fn builder() -> DeviceBoundSessionBuilder {
-        DeviceBoundSessionBuilder::default()
+        <DeviceBoundSessionBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -2862,7 +2862,7 @@ impl DeviceBoundSessionBuilder {
 }
 impl DeviceBoundSessionFailedRequest {
     pub fn builder() -> DeviceBoundSessionFailedRequestBuilder {
-        DeviceBoundSessionFailedRequestBuilder::default()
+        <DeviceBoundSessionFailedRequestBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -2902,7 +2902,7 @@ impl DeviceBoundSessionFailedRequestBuilder {
 }
 impl CreationEventDetails {
     pub fn builder() -> CreationEventDetailsBuilder {
-        CreationEventDetailsBuilder::default()
+        <CreationEventDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -2939,7 +2939,7 @@ impl CreationEventDetailsBuilder {
 }
 impl RefreshEventDetails {
     pub fn builder() -> RefreshEventDetailsBuilder {
-        RefreshEventDetailsBuilder::default()
+        <RefreshEventDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -2999,7 +2999,7 @@ impl RefreshEventDetailsBuilder {
 }
 impl TerminationEventDetails {
     pub fn builder() -> TerminationEventDetailsBuilder {
-        TerminationEventDetailsBuilder::default()
+        <TerminationEventDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -3024,7 +3024,7 @@ impl TerminationEventDetailsBuilder {
 }
 impl ChallengeEventDetails {
     pub fn builder() -> ChallengeEventDetailsBuilder {
-        ChallengeEventDetailsBuilder::default()
+        <ChallengeEventDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -3060,7 +3060,7 @@ impl ChallengeEventDetailsBuilder {
 }
 impl LoadNetworkResourcePageResult {
     pub fn builder() -> LoadNetworkResourcePageResultBuilder {
-        LoadNetworkResourcePageResultBuilder::default()
+        <LoadNetworkResourcePageResultBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -3069,7 +3069,7 @@ pub struct LoadNetworkResourcePageResultBuilder {
     net_error: Option<f64>,
     net_error_name: Option<String>,
     http_status_code: Option<f64>,
-    stream: Option<super::super::io::types::StreamHandle>,
+    stream: Option<crate::browser_protocol::io::types::StreamHandle>,
     headers: Option<Headers>,
 }
 impl LoadNetworkResourcePageResultBuilder {
@@ -3089,7 +3089,10 @@ impl LoadNetworkResourcePageResultBuilder {
         self.http_status_code = Some(http_status_code.into());
         self
     }
-    pub fn stream(mut self, stream: impl Into<super::super::io::types::StreamHandle>) -> Self {
+    pub fn stream(
+        mut self,
+        stream: impl Into<crate::browser_protocol::io::types::StreamHandle>,
+    ) -> Self {
         self.stream = Some(stream.into());
         self
     }
@@ -3112,7 +3115,7 @@ impl LoadNetworkResourcePageResultBuilder {
 }
 impl LoadNetworkResourceOptions {
     pub fn builder() -> LoadNetworkResourceOptionsBuilder {
-        LoadNetworkResourceOptionsBuilder::default()
+        <LoadNetworkResourceOptionsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

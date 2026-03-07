@@ -80,15 +80,15 @@ impl AdFrameStatus {
 pub struct AdScriptId {
     #[doc = "Script Id of the script which caused a script or frame to be labelled as\nan ad."]
     #[serde(rename = "scriptId")]
-    pub script_id: super::super::super::js_protocol::runtime::types::ScriptId,
+    pub script_id: crate::js_protocol::runtime::types::ScriptId,
     #[doc = "Id of scriptId's debugger."]
     #[serde(rename = "debuggerId")]
-    pub debugger_id: super::super::super::js_protocol::runtime::types::UniqueDebuggerId,
+    pub debugger_id: crate::js_protocol::runtime::types::UniqueDebuggerId,
 }
 impl AdScriptId {
     pub fn new(
-        script_id: impl Into<super::super::super::js_protocol::runtime::types::ScriptId>,
-        debugger_id: impl Into<super::super::super::js_protocol::runtime::types::UniqueDebuggerId>,
+        script_id: impl Into<crate::js_protocol::runtime::types::ScriptId>,
+        debugger_id: impl Into<crate::js_protocol::runtime::types::UniqueDebuggerId>,
     ) -> Self {
         Self {
             script_id: script_id.into(),
@@ -406,7 +406,7 @@ pub enum PermissionsPolicyBlockReason {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PermissionsPolicyBlockLocator {
     #[serde(rename = "frameId")]
-    pub frame_id: FrameId,
+    pub frame_id: Box<FrameId>,
     #[serde(rename = "blockReason")]
     pub block_reason: PermissionsPolicyBlockReason,
 }
@@ -416,7 +416,7 @@ impl PermissionsPolicyBlockLocator {
         block_reason: impl Into<PermissionsPolicyBlockReason>,
     ) -> Self {
         Self {
-            frame_id: frame_id.into(),
+            frame_id: Box::new(frame_id.into()),
             block_reason: block_reason.into(),
         }
     }
@@ -503,7 +503,7 @@ pub struct OriginTrialToken {
     #[serde(rename = "trialName")]
     pub trial_name: String,
     #[serde(rename = "expiryTime")]
-    pub expiry_time: super::super::network::types::TimeSinceEpoch,
+    pub expiry_time: crate::browser_protocol::network::types::TimeSinceEpoch,
     #[serde(rename = "isThirdParty")]
     pub is_third_party: bool,
     #[serde(rename = "usageRestriction")]
@@ -595,7 +595,7 @@ pub struct Frame {
     pub parent_id: Option<FrameId>,
     #[doc = "Identifier of the loader associated with this frame."]
     #[serde(rename = "loaderId")]
-    pub loader_id: super::super::network::types::LoaderId,
+    pub loader_id: crate::browser_protocol::network::types::LoaderId,
     #[doc = "Frame's name as specified in the tag."]
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -655,7 +655,7 @@ pub struct FrameResource {
     pub url: String,
     #[doc = "Type of this resource."]
     #[serde(rename = "type")]
-    pub r#type: super::super::network::types::ResourceType,
+    pub r#type: crate::browser_protocol::network::types::ResourceType,
     #[doc = "Resource mimeType as determined by the browser."]
     #[serde(rename = "mimeType")]
     pub mime_type: String,
@@ -663,7 +663,7 @@ pub struct FrameResource {
     #[serde(rename = "lastModified")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub last_modified: Option<super::super::network::types::TimeSinceEpoch>,
+    pub last_modified: Option<crate::browser_protocol::network::types::TimeSinceEpoch>,
     #[doc = "Resource content size."]
     #[serde(rename = "contentSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -683,7 +683,7 @@ pub struct FrameResource {
 impl FrameResource {
     pub fn new(
         url: impl Into<String>,
-        r#type: impl Into<super::super::network::types::ResourceType>,
+        r#type: impl Into<crate::browser_protocol::network::types::ResourceType>,
         mime_type: impl Into<String>,
     ) -> Self {
         Self {
@@ -705,7 +705,7 @@ impl FrameResource {
 pub struct FrameResourceTree {
     #[doc = "Frame information for this tree item."]
     #[serde(rename = "frame")]
-    pub frame: Frame,
+    pub frame: Box<Frame>,
     #[doc = "Child frames."]
     #[serde(rename = "childFrames")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -719,7 +719,7 @@ pub struct FrameResourceTree {
 impl FrameResourceTree {
     pub fn new(frame: impl Into<Frame>, resources: Vec<FrameResource>) -> Self {
         Self {
-            frame: frame.into(),
+            frame: Box::new(frame.into()),
             resources,
             child_frames: None,
         }
@@ -733,7 +733,7 @@ impl FrameResourceTree {
 pub struct FrameTree {
     #[doc = "Frame information for this tree item."]
     #[serde(rename = "frame")]
-    pub frame: Frame,
+    pub frame: Box<Frame>,
     #[doc = "Child frames."]
     #[serde(rename = "childFrames")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -743,7 +743,7 @@ pub struct FrameTree {
 impl FrameTree {
     pub fn new(frame: impl Into<Frame>) -> Self {
         Self {
-            frame: frame.into(),
+            frame: Box::new(frame.into()),
             child_frames: None,
         }
     }
@@ -857,7 +857,7 @@ pub struct ScreencastFrameMetadata {
     #[serde(rename = "timestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub timestamp: Option<super::super::network::types::TimeSinceEpoch>,
+    pub timestamp: Option<crate::browser_protocol::network::types::TimeSinceEpoch>,
 }
 impl ScreencastFrameMetadata {
     pub const IDENTIFIER: &'static str = "Page.ScreencastFrameMetadata";

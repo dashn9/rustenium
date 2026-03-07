@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 pub struct GetEncodedResponseParams {
     #[doc = "Identifier of the network request to get content for."]
     #[serde(rename = "requestId")]
-    pub request_id: super::super::network::types::RequestId,
+    pub request_id: crate::browser_protocol::network::types::RequestId,
     #[doc = "The encoding to use."]
     #[serde(rename = "encoding")]
     pub encoding: GetEncodedResponseEncoding,
@@ -31,7 +31,7 @@ pub enum GetEncodedResponseEncoding {
 }
 impl GetEncodedResponseParams {
     pub fn new(
-        request_id: impl Into<super::super::network::types::RequestId>,
+        request_id: impl Into<crate::browser_protocol::network::types::RequestId>,
         encoding: impl Into<GetEncodedResponseEncoding>,
     ) -> Self {
         Self {
@@ -56,11 +56,11 @@ pub struct GetEncodedResponse {
     pub method: GetEncodedResponseMethod,
     pub params: GetEncodedResponseParams,
 }
-impl super::super::super::CommandResult for GetEncodedResponse {
+impl crate::CommandResult for GetEncodedResponse {
     type Result = super::results::GetEncodedResponseResult;
 }
 #[doc = "Disables issues domain, prevents further issues from being reported to the client.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Audits/#method-disable)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DisableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum DisableMethod {
@@ -76,11 +76,11 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
-impl super::super::super::CommandResult for Disable {
+impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
 }
 #[doc = "Enables issues domain, sends the issues collected so far to the client by means of the\n`issueAdded` event.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Audits/#method-enable)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EnableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum EnableMethod {
@@ -96,7 +96,7 @@ pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
 }
-impl super::super::super::CommandResult for Enable {
+impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
 }
 #[doc = "Runs the contrast check for the target page. Found issues are reported\nusing Audits.issueAdded event.\n[checkContrast](https://chromedevtools.github.io/devtools-protocol/tot/Audits/#method-checkContrast)"]
@@ -122,11 +122,11 @@ pub struct CheckContrast {
     pub method: CheckContrastMethod,
     pub params: CheckContrastParams,
 }
-impl super::super::super::CommandResult for CheckContrast {
+impl crate::CommandResult for CheckContrast {
     type Result = super::results::CheckContrastResult;
 }
 #[doc = "Runs the form issues check for the target page. Found issues are reported\nusing Audits.issueAdded event.\n[checkFormsIssues](https://chromedevtools.github.io/devtools-protocol/tot/Audits/#method-checkFormsIssues)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CheckFormsIssuesParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum CheckFormsIssuesMethod {
@@ -142,7 +142,7 @@ pub struct CheckFormsIssues {
     pub method: CheckFormsIssuesMethod,
     pub params: CheckFormsIssuesParams,
 }
-impl super::super::super::CommandResult for CheckFormsIssues {
+impl crate::CommandResult for CheckFormsIssues {
     type Result = super::results::CheckFormsIssuesResult;
 }
 group_enum ! (AuditsCommands { GetEncodedResponse (GetEncodedResponse) , Disable (Disable) , Enable (Enable) , CheckContrast (CheckContrast) , CheckFormsIssues (CheckFormsIssues) });

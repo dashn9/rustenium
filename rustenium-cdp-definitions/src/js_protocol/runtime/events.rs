@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 #[doc = "Notification is issued every time when binding is called.\n[bindingCalled](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-bindingCalled)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct BindingCalled {
+pub struct BindingCalledParams {
     #[serde(rename = "name")]
     pub name: String,
     #[serde(rename = "payload")]
@@ -10,12 +10,23 @@ pub struct BindingCalled {
     #[serde(rename = "executionContextId")]
     pub execution_context_id: super::types::ExecutionContextId,
 }
-impl BindingCalled {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum BindingCalledMethod {
+    #[serde(rename = "Runtime.bindingCalled")]
+    BindingCalled,
+}
+impl BindingCalledMethod {
     pub const IDENTIFIER: &'static str = "Runtime.bindingCalled";
+}
+#[doc = "Notification is issued every time when binding is called.\n[bindingCalled](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-bindingCalled)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct BindingCalled {
+    pub method: BindingCalledMethod,
+    pub params: BindingCalledParams,
 }
 #[doc = "Issued when console API was called.\n[consoleAPICalled](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-consoleAPICalled)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct ConsoleApiCalled {
+pub struct ConsoleApiCalledParams {
     #[doc = "Type of the call."]
     #[serde(rename = "type")]
     pub r#type: ConsoleApiCalledType,
@@ -80,12 +91,23 @@ pub enum ConsoleApiCalledType {
     #[serde(rename = "timeEnd")]
     TimeEnd,
 }
-impl ConsoleApiCalled {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum ConsoleApiCalledMethod {
+    #[serde(rename = "Runtime.consoleAPICalled")]
+    ConsoleApiCalled,
+}
+impl ConsoleApiCalledMethod {
     pub const IDENTIFIER: &'static str = "Runtime.consoleAPICalled";
+}
+#[doc = "Issued when console API was called.\n[consoleAPICalled](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-consoleAPICalled)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct ConsoleApiCalled {
+    pub method: ConsoleApiCalledMethod,
+    pub params: ConsoleApiCalledParams,
 }
 #[doc = "Issued when unhandled exception was revoked.\n[exceptionRevoked](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-exceptionRevoked)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct ExceptionRevoked {
+pub struct ExceptionRevokedParams {
     #[doc = "Reason describing why exception was revoked."]
     #[serde(rename = "reason")]
     pub reason: String,
@@ -93,50 +115,105 @@ pub struct ExceptionRevoked {
     #[serde(rename = "exceptionId")]
     pub exception_id: i64,
 }
-impl ExceptionRevoked {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum ExceptionRevokedMethod {
+    #[serde(rename = "Runtime.exceptionRevoked")]
+    ExceptionRevoked,
+}
+impl ExceptionRevokedMethod {
     pub const IDENTIFIER: &'static str = "Runtime.exceptionRevoked";
+}
+#[doc = "Issued when unhandled exception was revoked.\n[exceptionRevoked](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-exceptionRevoked)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct ExceptionRevoked {
+    pub method: ExceptionRevokedMethod,
+    pub params: ExceptionRevokedParams,
 }
 #[doc = "Issued when exception was thrown and unhandled.\n[exceptionThrown](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-exceptionThrown)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct ExceptionThrown {
+pub struct ExceptionThrownParams {
     #[doc = "Timestamp of the exception."]
     #[serde(rename = "timestamp")]
     pub timestamp: super::types::Timestamp,
     #[serde(rename = "exceptionDetails")]
     pub exception_details: super::types::ExceptionDetails,
 }
-impl ExceptionThrown {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum ExceptionThrownMethod {
+    #[serde(rename = "Runtime.exceptionThrown")]
+    ExceptionThrown,
+}
+impl ExceptionThrownMethod {
     pub const IDENTIFIER: &'static str = "Runtime.exceptionThrown";
+}
+#[doc = "Issued when exception was thrown and unhandled.\n[exceptionThrown](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-exceptionThrown)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct ExceptionThrown {
+    pub method: ExceptionThrownMethod,
+    pub params: ExceptionThrownParams,
 }
 #[doc = "Issued when new execution context is created.\n[executionContextCreated](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-executionContextCreated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct ExecutionContextCreated {
+pub struct ExecutionContextCreatedParams {
     #[doc = "A newly created execution context."]
     #[serde(rename = "context")]
     pub context: super::types::ExecutionContextDescription,
 }
-impl ExecutionContextCreated {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum ExecutionContextCreatedMethod {
+    #[serde(rename = "Runtime.executionContextCreated")]
+    ExecutionContextCreated,
+}
+impl ExecutionContextCreatedMethod {
     pub const IDENTIFIER: &'static str = "Runtime.executionContextCreated";
+}
+#[doc = "Issued when new execution context is created.\n[executionContextCreated](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-executionContextCreated)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct ExecutionContextCreated {
+    pub method: ExecutionContextCreatedMethod,
+    pub params: ExecutionContextCreatedParams,
 }
 #[doc = "Issued when execution context is destroyed.\n[executionContextDestroyed](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-executionContextDestroyed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct ExecutionContextDestroyed {
+pub struct ExecutionContextDestroyedParams {
     #[doc = "Unique Id of the destroyed context"]
     #[serde(rename = "executionContextUniqueId")]
     pub execution_context_unique_id: String,
 }
-impl ExecutionContextDestroyed {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum ExecutionContextDestroyedMethod {
+    #[serde(rename = "Runtime.executionContextDestroyed")]
+    ExecutionContextDestroyed,
+}
+impl ExecutionContextDestroyedMethod {
     pub const IDENTIFIER: &'static str = "Runtime.executionContextDestroyed";
 }
+#[doc = "Issued when execution context is destroyed.\n[executionContextDestroyed](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-executionContextDestroyed)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct ExecutionContextDestroyed {
+    pub method: ExecutionContextDestroyedMethod,
+    pub params: ExecutionContextDestroyedParams,
+}
 #[doc = "Issued when all executionContexts were cleared in browser\n[executionContextsCleared](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-executionContextsCleared)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct ExecutionContextsCleared {}
-impl ExecutionContextsCleared {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ExecutionContextsClearedParams {}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum ExecutionContextsClearedMethod {
+    #[serde(rename = "Runtime.executionContextsCleared")]
+    ExecutionContextsCleared,
+}
+impl ExecutionContextsClearedMethod {
     pub const IDENTIFIER: &'static str = "Runtime.executionContextsCleared";
+}
+#[doc = "Issued when all executionContexts were cleared in browser\n[executionContextsCleared](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-executionContextsCleared)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct ExecutionContextsCleared {
+    pub method: ExecutionContextsClearedMethod,
+    pub params: ExecutionContextsClearedParams,
 }
 #[doc = "Issued when object should be inspected (for example, as a result of inspect() command line API\ncall).\n[inspectRequested](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-inspectRequested)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct InspectRequested {
+pub struct InspectRequestedParams {
     #[serde(rename = "object")]
     pub object: super::types::RemoteObject,
     #[serde(rename = "hints")]
@@ -147,7 +224,18 @@ pub struct InspectRequested {
     #[serde(default)]
     pub execution_context_id: Option<super::types::ExecutionContextId>,
 }
-impl InspectRequested {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum InspectRequestedMethod {
+    #[serde(rename = "Runtime.inspectRequested")]
+    InspectRequested,
+}
+impl InspectRequestedMethod {
     pub const IDENTIFIER: &'static str = "Runtime.inspectRequested";
+}
+#[doc = "Issued when object should be inspected (for example, as a result of inspect() command line API\ncall).\n[inspectRequested](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-inspectRequested)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct InspectRequested {
+    pub method: InspectRequestedMethod,
+    pub params: InspectRequestedParams,
 }
 group_enum ! (RuntimeEvents { BindingCalled (BindingCalled) , ConsoleApiCalled (ConsoleApiCalled) , ExceptionRevoked (ExceptionRevoked) , ExceptionThrown (ExceptionThrown) , ExecutionContextCreated (ExecutionContextCreated) , ExecutionContextDestroyed (ExecutionContextDestroyed) , ExecutionContextsCleared (ExecutionContextsCleared) , InspectRequested (InspectRequested) });

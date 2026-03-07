@@ -1,7 +1,7 @@
 use super::types::*;
 impl UsageForType {
     pub fn builder() -> UsageForTypeBuilder {
-        UsageForTypeBuilder::default()
+        <UsageForTypeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -31,7 +31,7 @@ impl UsageForTypeBuilder {
 }
 impl TrustTokens {
     pub fn builder() -> TrustTokensBuilder {
-        TrustTokensBuilder::default()
+        <TrustTokensBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -61,7 +61,7 @@ impl TrustTokensBuilder {
 }
 impl SharedStorageEntry {
     pub fn builder() -> SharedStorageEntryBuilder {
-        SharedStorageEntryBuilder::default()
+        <SharedStorageEntryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -91,12 +91,12 @@ impl SharedStorageEntryBuilder {
 }
 impl SharedStorageMetadata {
     pub fn builder() -> SharedStorageMetadataBuilder {
-        SharedStorageMetadataBuilder::default()
+        <SharedStorageMetadataBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct SharedStorageMetadataBuilder {
-    creation_time: Option<super::super::network::types::TimeSinceEpoch>,
+    creation_time: Option<crate::browser_protocol::network::types::TimeSinceEpoch>,
     length: Option<i64>,
     remaining_budget: Option<f64>,
     bytes_used: Option<i64>,
@@ -104,7 +104,7 @@ pub struct SharedStorageMetadataBuilder {
 impl SharedStorageMetadataBuilder {
     pub fn creation_time(
         mut self,
-        creation_time: impl Into<super::super::network::types::TimeSinceEpoch>,
+        creation_time: impl Into<crate::browser_protocol::network::types::TimeSinceEpoch>,
     ) -> Self {
         self.creation_time = Some(creation_time.into());
         self
@@ -143,7 +143,7 @@ impl SharedStorageMetadataBuilder {
 }
 impl SharedStoragePrivateAggregationConfig {
     pub fn builder() -> SharedStoragePrivateAggregationConfigBuilder {
-        SharedStoragePrivateAggregationConfigBuilder::default()
+        <SharedStoragePrivateAggregationConfigBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -189,7 +189,7 @@ impl SharedStoragePrivateAggregationConfigBuilder {
 }
 impl SharedStorageReportingMetadata {
     pub fn builder() -> SharedStorageReportingMetadataBuilder {
-        SharedStorageReportingMetadataBuilder::default()
+        <SharedStorageReportingMetadataBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -219,7 +219,7 @@ impl SharedStorageReportingMetadataBuilder {
 }
 impl SharedStorageUrlWithMetadata {
     pub fn builder() -> SharedStorageUrlWithMetadataBuilder {
-        SharedStorageUrlWithMetadataBuilder::default()
+        <SharedStorageUrlWithMetadataBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -267,7 +267,7 @@ impl SharedStorageUrlWithMetadataBuilder {
 }
 impl SharedStorageAccessParams {
     pub fn builder() -> SharedStorageAccessParamsBuilder {
-        SharedStorageAccessParamsBuilder::default()
+        <SharedStorageAccessParamsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -285,7 +285,7 @@ pub struct SharedStorageAccessParamsBuilder {
     value: Option<String>,
     ignore_if_present: Option<bool>,
     worklet_ordinal: Option<i64>,
-    worklet_target_id: Option<super::super::target::types::TargetId>,
+    worklet_target_id: Option<crate::browser_protocol::target::types::TargetId>,
     with_lock: Option<String>,
     batch_update_id: Option<String>,
     batch_size: Option<i64>,
@@ -363,7 +363,7 @@ impl SharedStorageAccessParamsBuilder {
     }
     pub fn worklet_target_id(
         mut self,
-        worklet_target_id: impl Into<super::super::target::types::TargetId>,
+        worklet_target_id: impl Into<crate::browser_protocol::target::types::TargetId>,
     ) -> Self {
         self.worklet_target_id = Some(worklet_target_id.into());
         self
@@ -404,7 +404,7 @@ impl SharedStorageAccessParamsBuilder {
 }
 impl StorageBucket {
     pub fn builder() -> StorageBucketBuilder {
-        StorageBucketBuilder::default()
+        <StorageBucketBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -432,14 +432,14 @@ impl StorageBucketBuilder {
 }
 impl StorageBucketInfo {
     pub fn builder() -> StorageBucketInfoBuilder {
-        StorageBucketInfoBuilder::default()
+        <StorageBucketInfoBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct StorageBucketInfoBuilder {
     bucket: Option<StorageBucket>,
     id: Option<String>,
-    expiration: Option<super::super::network::types::TimeSinceEpoch>,
+    expiration: Option<crate::browser_protocol::network::types::TimeSinceEpoch>,
     quota: Option<f64>,
     persistent: Option<bool>,
     durability: Option<StorageBucketsDurability>,
@@ -455,7 +455,7 @@ impl StorageBucketInfoBuilder {
     }
     pub fn expiration(
         mut self,
-        expiration: impl Into<super::super::network::types::TimeSinceEpoch>,
+        expiration: impl Into<crate::browser_protocol::network::types::TimeSinceEpoch>,
     ) -> Self {
         self.expiration = Some(expiration.into());
         self
@@ -497,7 +497,7 @@ impl StorageBucketInfoBuilder {
 }
 impl AttributionReportingFilterDataEntry {
     pub fn builder() -> AttributionReportingFilterDataEntryBuilder {
-        AttributionReportingFilterDataEntryBuilder::default()
+        <AttributionReportingFilterDataEntryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -539,7 +539,7 @@ impl AttributionReportingFilterDataEntryBuilder {
 }
 impl AttributionReportingFilterConfig {
     pub fn builder() -> AttributionReportingFilterConfigBuilder {
-        AttributionReportingFilterConfigBuilder::default()
+        <AttributionReportingFilterConfigBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -582,7 +582,7 @@ impl AttributionReportingFilterConfigBuilder {
 }
 impl AttributionReportingFilterPair {
     pub fn builder() -> AttributionReportingFilterPairBuilder {
-        AttributionReportingFilterPairBuilder::default()
+        <AttributionReportingFilterPairBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -636,7 +636,7 @@ impl AttributionReportingFilterPairBuilder {
 }
 impl AttributionReportingAggregationKeysEntry {
     pub fn builder() -> AttributionReportingAggregationKeysEntryBuilder {
-        AttributionReportingAggregationKeysEntryBuilder::default()
+        <AttributionReportingAggregationKeysEntryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -666,7 +666,7 @@ impl AttributionReportingAggregationKeysEntryBuilder {
 }
 impl AttributionReportingEventReportWindows {
     pub fn builder() -> AttributionReportingEventReportWindowsBuilder {
-        AttributionReportingEventReportWindowsBuilder::default()
+        <AttributionReportingEventReportWindowsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -708,7 +708,7 @@ impl AttributionReportingEventReportWindowsBuilder {
 }
 impl AttributionReportingAggregatableDebugReportingData {
     pub fn builder() -> AttributionReportingAggregatableDebugReportingDataBuilder {
-        AttributionReportingAggregatableDebugReportingDataBuilder::default()
+        <AttributionReportingAggregatableDebugReportingDataBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -758,7 +758,7 @@ impl AttributionReportingAggregatableDebugReportingDataBuilder {
 }
 impl AttributionReportingAggregatableDebugReportingConfig {
     pub fn builder() -> AttributionReportingAggregatableDebugReportingConfigBuilder {
-        AttributionReportingAggregatableDebugReportingConfigBuilder::default()
+        <AttributionReportingAggregatableDebugReportingConfigBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -818,7 +818,7 @@ impl AttributionReportingAggregatableDebugReportingConfigBuilder {
 }
 impl AttributionScopesData {
     pub fn builder() -> AttributionScopesDataBuilder {
-        AttributionScopesDataBuilder::default()
+        <AttributionScopesDataBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -871,7 +871,7 @@ impl AttributionScopesDataBuilder {
 }
 impl AttributionReportingNamedBudgetDef {
     pub fn builder() -> AttributionReportingNamedBudgetDefBuilder {
-        AttributionReportingNamedBudgetDefBuilder::default()
+        <AttributionReportingNamedBudgetDefBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -901,12 +901,12 @@ impl AttributionReportingNamedBudgetDefBuilder {
 }
 impl AttributionReportingSourceRegistration {
     pub fn builder() -> AttributionReportingSourceRegistrationBuilder {
-        AttributionReportingSourceRegistrationBuilder::default()
+        <AttributionReportingSourceRegistrationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct AttributionReportingSourceRegistrationBuilder {
-    time: Option<super::super::network::types::TimeSinceEpoch>,
+    time: Option<crate::browser_protocol::network::types::TimeSinceEpoch>,
     expiry: Option<i64>,
     trigger_data: Option<Vec<f64>>,
     event_report_windows: Option<AttributionReportingEventReportWindows>,
@@ -931,7 +931,10 @@ pub struct AttributionReportingSourceRegistrationBuilder {
     event_level_epsilon: Option<f64>,
 }
 impl AttributionReportingSourceRegistrationBuilder {
-    pub fn time(mut self, time: impl Into<super::super::network::types::TimeSinceEpoch>) -> Self {
+    pub fn time(
+        mut self,
+        time: impl Into<crate::browser_protocol::network::types::TimeSinceEpoch>,
+    ) -> Self {
         self.time = Some(time.into());
         self
     }
@@ -1206,7 +1209,7 @@ impl AttributionReportingSourceRegistrationBuilder {
 }
 impl AttributionReportingAggregatableValueDictEntry {
     pub fn builder() -> AttributionReportingAggregatableValueDictEntryBuilder {
-        AttributionReportingAggregatableValueDictEntryBuilder::default()
+        <AttributionReportingAggregatableValueDictEntryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1244,7 +1247,7 @@ impl AttributionReportingAggregatableValueDictEntryBuilder {
 }
 impl AttributionReportingAggregatableValueEntry {
     pub fn builder() -> AttributionReportingAggregatableValueEntryBuilder {
-        AttributionReportingAggregatableValueEntryBuilder::default()
+        <AttributionReportingAggregatableValueEntryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1289,7 +1292,7 @@ impl AttributionReportingAggregatableValueEntryBuilder {
 }
 impl AttributionReportingEventTriggerData {
     pub fn builder() -> AttributionReportingEventTriggerDataBuilder {
-        AttributionReportingEventTriggerDataBuilder::default()
+        <AttributionReportingEventTriggerDataBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1333,7 +1336,7 @@ impl AttributionReportingEventTriggerDataBuilder {
 }
 impl AttributionReportingAggregatableTriggerData {
     pub fn builder() -> AttributionReportingAggregatableTriggerDataBuilder {
-        AttributionReportingAggregatableTriggerDataBuilder::default()
+        <AttributionReportingAggregatableTriggerDataBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1383,7 +1386,7 @@ impl AttributionReportingAggregatableTriggerDataBuilder {
 }
 impl AttributionReportingAggregatableDedupKey {
     pub fn builder() -> AttributionReportingAggregatableDedupKeyBuilder {
-        AttributionReportingAggregatableDedupKeyBuilder::default()
+        <AttributionReportingAggregatableDedupKeyBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1411,7 +1414,7 @@ impl AttributionReportingAggregatableDedupKeyBuilder {
 }
 impl AttributionReportingNamedBudgetCandidate {
     pub fn builder() -> AttributionReportingNamedBudgetCandidateBuilder {
-        AttributionReportingNamedBudgetCandidateBuilder::default()
+        <AttributionReportingNamedBudgetCandidateBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1439,7 +1442,7 @@ impl AttributionReportingNamedBudgetCandidateBuilder {
 }
 impl AttributionReportingTriggerRegistration {
     pub fn builder() -> AttributionReportingTriggerRegistrationBuilder {
-        AttributionReportingTriggerRegistrationBuilder::default()
+        <AttributionReportingTriggerRegistrationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1688,7 +1691,7 @@ impl AttributionReportingTriggerRegistrationBuilder {
 }
 impl RelatedWebsiteSet {
     pub fn builder() -> RelatedWebsiteSetBuilder {
-        RelatedWebsiteSetBuilder::default()
+        <RelatedWebsiteSetBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

@@ -1,17 +1,11 @@
 use serde::{Deserialize, Serialize};
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct DisableResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct EnableResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct CheckContrastResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetEncodedResponseResult {
     #[doc = "The encoded body as a base64 string. Omitted if sizeOnly is true."]
     #[serde(rename = "body")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub body: Option<super::super::super::Binary>,
+    pub body: Option<crate::Binary>,
     #[doc = "Size before re-encoding."]
     #[serde(rename = "originalSize")]
     pub original_size: i64,
@@ -19,6 +13,12 @@ pub struct GetEncodedResponseResult {
     #[serde(rename = "encodedSize")]
     pub encoded_size: i64,
 }
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct DisableResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct EnableResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct CheckContrastResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CheckFormsIssuesResult {
     #[serde(rename = "formIssues")]

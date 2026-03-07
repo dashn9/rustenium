@@ -72,7 +72,7 @@ impl SnapshotId {
 pub struct ScrollRect {
     #[doc = "Rectangle itself."]
     #[serde(rename = "rect")]
-    pub rect: super::super::dom::types::Rect,
+    pub rect: crate::browser_protocol::dom::types::Rect,
     #[doc = "Reason for rectangle to force scrolling on the main thread"]
     #[serde(rename = "type")]
     pub r#type: ScrollRectType,
@@ -89,7 +89,7 @@ pub enum ScrollRectType {
 }
 impl ScrollRect {
     pub fn new(
-        rect: impl Into<super::super::dom::types::Rect>,
+        rect: impl Into<crate::browser_protocol::dom::types::Rect>,
         r#type: impl Into<ScrollRectType>,
     ) -> Self {
         Self {
@@ -106,10 +106,10 @@ impl ScrollRect {
 pub struct StickyPositionConstraint {
     #[doc = "Layout rectangle of the sticky element before being shifted"]
     #[serde(rename = "stickyBoxRect")]
-    pub sticky_box_rect: super::super::dom::types::Rect,
+    pub sticky_box_rect: crate::browser_protocol::dom::types::Rect,
     #[doc = "Layout rectangle of the containing block of the sticky element"]
     #[serde(rename = "containingBlockRect")]
-    pub containing_block_rect: super::super::dom::types::Rect,
+    pub containing_block_rect: crate::browser_protocol::dom::types::Rect,
     #[doc = "The nearest sticky layer that shifts the sticky box"]
     #[serde(rename = "nearestLayerShiftingStickyBox")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -123,8 +123,8 @@ pub struct StickyPositionConstraint {
 }
 impl StickyPositionConstraint {
     pub fn new(
-        sticky_box_rect: impl Into<super::super::dom::types::Rect>,
-        containing_block_rect: impl Into<super::super::dom::types::Rect>,
+        sticky_box_rect: impl Into<crate::browser_protocol::dom::types::Rect>,
+        containing_block_rect: impl Into<crate::browser_protocol::dom::types::Rect>,
     ) -> Self {
         Self {
             sticky_box_rect: sticky_box_rect.into(),
@@ -148,14 +148,10 @@ pub struct PictureTile {
     pub y: f64,
     #[doc = "Base64-encoded snapshot data."]
     #[serde(rename = "picture")]
-    pub picture: super::super::super::Binary,
+    pub picture: crate::Binary,
 }
 impl PictureTile {
-    pub fn new(
-        x: impl Into<f64>,
-        y: impl Into<f64>,
-        picture: impl Into<super::super::super::Binary>,
-    ) -> Self {
+    pub fn new(x: impl Into<f64>, y: impl Into<f64>, picture: impl Into<crate::Binary>) -> Self {
         Self {
             x: x.into(),
             y: y.into(),
@@ -181,7 +177,7 @@ pub struct Layer {
     #[serde(rename = "backendNodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub backend_node_id: Option<super::super::dom::types::BackendNodeId>,
+    pub backend_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     #[doc = "Offset from parent layer, X coordinate."]
     #[serde(rename = "offsetX")]
     pub offset_x: f64,
@@ -240,7 +236,7 @@ impl Layer {
     pub const IDENTIFIER: &'static str = "LayerTree.Layer";
 }
 #[doc = "Array of timings, one per paint step.\n[PaintProfile](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#type-PaintProfile)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PaintProfile(Vec<f64>);
 impl PaintProfile {
     pub fn new(val: impl Into<Vec<f64>>) -> Self {

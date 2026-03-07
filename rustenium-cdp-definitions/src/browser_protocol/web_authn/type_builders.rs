@@ -1,7 +1,7 @@
 use super::types::*;
 impl VirtualAuthenticatorOptions {
     pub fn builder() -> VirtualAuthenticatorOptionsBuilder {
-        VirtualAuthenticatorOptionsBuilder::default()
+        <VirtualAuthenticatorOptionsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -103,25 +103,25 @@ impl VirtualAuthenticatorOptionsBuilder {
 }
 impl Credential {
     pub fn builder() -> CredentialBuilder {
-        CredentialBuilder::default()
+        <CredentialBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct CredentialBuilder {
-    credential_id: Option<super::super::super::Binary>,
+    credential_id: Option<crate::Binary>,
     is_resident_credential: Option<bool>,
     rp_id: Option<String>,
-    private_key: Option<super::super::super::Binary>,
-    user_handle: Option<super::super::super::Binary>,
+    private_key: Option<crate::Binary>,
+    user_handle: Option<crate::Binary>,
     sign_count: Option<i64>,
-    large_blob: Option<super::super::super::Binary>,
+    large_blob: Option<crate::Binary>,
     backup_eligibility: Option<bool>,
     backup_state: Option<bool>,
     user_name: Option<String>,
     user_display_name: Option<String>,
 }
 impl CredentialBuilder {
-    pub fn credential_id(mut self, credential_id: impl Into<super::super::super::Binary>) -> Self {
+    pub fn credential_id(mut self, credential_id: impl Into<crate::Binary>) -> Self {
         self.credential_id = Some(credential_id.into());
         self
     }
@@ -133,11 +133,11 @@ impl CredentialBuilder {
         self.rp_id = Some(rp_id.into());
         self
     }
-    pub fn private_key(mut self, private_key: impl Into<super::super::super::Binary>) -> Self {
+    pub fn private_key(mut self, private_key: impl Into<crate::Binary>) -> Self {
         self.private_key = Some(private_key.into());
         self
     }
-    pub fn user_handle(mut self, user_handle: impl Into<super::super::super::Binary>) -> Self {
+    pub fn user_handle(mut self, user_handle: impl Into<crate::Binary>) -> Self {
         self.user_handle = Some(user_handle.into());
         self
     }
@@ -145,7 +145,7 @@ impl CredentialBuilder {
         self.sign_count = Some(sign_count.into());
         self
     }
-    pub fn large_blob(mut self, large_blob: impl Into<super::super::super::Binary>) -> Self {
+    pub fn large_blob(mut self, large_blob: impl Into<crate::Binary>) -> Self {
         self.large_blob = Some(large_blob.into());
         self
     }

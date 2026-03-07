@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 #[doc = "Disables domain notifications.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-disable)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DisableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum DisableMethod {
@@ -16,11 +16,11 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
-impl super::super::super::CommandResult for Disable {
+impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
 }
 #[doc = "Enables domain notifications.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-enable)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EnableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum EnableMethod {
@@ -36,7 +36,7 @@ pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
 }
-impl super::super::super::CommandResult for Enable {
+impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
 }
 #[doc = "For testing.\n[getHighlightObjectForTest](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-getHighlightObjectForTest)"]
@@ -44,7 +44,7 @@ impl super::super::super::CommandResult for Enable {
 pub struct GetHighlightObjectForTestParams {
     #[doc = "Id of the node to get highlight object for."]
     #[serde(rename = "nodeId")]
-    pub node_id: super::super::dom::types::NodeId,
+    pub node_id: crate::browser_protocol::dom::types::NodeId,
     #[doc = "Whether to include distance info."]
     #[serde(rename = "includeDistance")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -67,7 +67,7 @@ pub struct GetHighlightObjectForTestParams {
     pub show_accessibility_info: Option<bool>,
 }
 impl GetHighlightObjectForTestParams {
-    pub fn new(node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn new(node_id: impl Into<crate::browser_protocol::dom::types::NodeId>) -> Self {
         Self {
             node_id: node_id.into(),
             include_distance: None,
@@ -91,7 +91,7 @@ pub struct GetHighlightObjectForTest {
     pub method: GetHighlightObjectForTestMethod,
     pub params: GetHighlightObjectForTestParams,
 }
-impl super::super::super::CommandResult for GetHighlightObjectForTest {
+impl crate::CommandResult for GetHighlightObjectForTest {
     type Result = super::results::GetHighlightObjectForTestResult;
 }
 #[doc = "For Persistent Grid testing.\n[getGridHighlightObjectsForTest](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-getGridHighlightObjectsForTest)"]
@@ -100,10 +100,10 @@ pub struct GetGridHighlightObjectsForTestParams {
     #[doc = "Ids of the node to get highlight object for."]
     #[serde(rename = "nodeIds")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
-    pub node_ids: Vec<super::super::dom::types::NodeId>,
+    pub node_ids: Vec<crate::browser_protocol::dom::types::NodeId>,
 }
 impl GetGridHighlightObjectsForTestParams {
-    pub fn new(node_ids: Vec<super::super::dom::types::NodeId>) -> Self {
+    pub fn new(node_ids: Vec<crate::browser_protocol::dom::types::NodeId>) -> Self {
         Self { node_ids }
     }
 }
@@ -121,7 +121,7 @@ pub struct GetGridHighlightObjectsForTest {
     pub method: GetGridHighlightObjectsForTestMethod,
     pub params: GetGridHighlightObjectsForTestParams,
 }
-impl super::super::super::CommandResult for GetGridHighlightObjectsForTest {
+impl crate::CommandResult for GetGridHighlightObjectsForTest {
     type Result = super::results::GetGridHighlightObjectsForTestResult;
 }
 #[doc = "For Source Order Viewer testing.\n[getSourceOrderHighlightObjectForTest](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-getSourceOrderHighlightObjectForTest)"]
@@ -129,10 +129,10 @@ impl super::super::super::CommandResult for GetGridHighlightObjectsForTest {
 pub struct GetSourceOrderHighlightObjectForTestParams {
     #[doc = "Id of the node to highlight."]
     #[serde(rename = "nodeId")]
-    pub node_id: super::super::dom::types::NodeId,
+    pub node_id: crate::browser_protocol::dom::types::NodeId,
 }
 impl GetSourceOrderHighlightObjectForTestParams {
-    pub fn new(node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn new(node_id: impl Into<crate::browser_protocol::dom::types::NodeId>) -> Self {
         Self {
             node_id: node_id.into(),
         }
@@ -152,11 +152,11 @@ pub struct GetSourceOrderHighlightObjectForTest {
     pub method: GetSourceOrderHighlightObjectForTestMethod,
     pub params: GetSourceOrderHighlightObjectForTestParams,
 }
-impl super::super::super::CommandResult for GetSourceOrderHighlightObjectForTest {
+impl crate::CommandResult for GetSourceOrderHighlightObjectForTest {
     type Result = super::results::GetSourceOrderHighlightObjectForTestResult;
 }
 #[doc = "Hides any highlight.\n[hideHighlight](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-hideHighlight)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HideHighlightParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum HideHighlightMethod {
@@ -172,7 +172,7 @@ pub struct HideHighlight {
     pub method: HideHighlightMethod,
     pub params: HideHighlightParams,
 }
-impl super::super::super::CommandResult for HideHighlight {
+impl crate::CommandResult for HideHighlight {
     type Result = super::results::HideHighlightResult;
 }
 #[doc = "Highlights DOM node with given id or with the given JavaScript object wrapper. Either nodeId or\nobjectId must be specified.\n[highlightNode](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-highlightNode)"]
@@ -185,17 +185,17 @@ pub struct HighlightNodeParams {
     #[serde(rename = "nodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub node_id: Option<super::super::dom::types::NodeId>,
+    pub node_id: Option<crate::browser_protocol::dom::types::NodeId>,
     #[doc = "Identifier of the backend node to highlight."]
     #[serde(rename = "backendNodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub backend_node_id: Option<super::super::dom::types::BackendNodeId>,
+    pub backend_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     #[doc = "JavaScript object id of the node to be highlighted."]
     #[serde(rename = "objectId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub object_id: Option<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+    pub object_id: Option<crate::js_protocol::runtime::types::RemoteObjectId>,
     #[doc = "Selectors to highlight relevant nodes."]
     #[serde(rename = "selector")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -227,7 +227,7 @@ pub struct HighlightNode {
     pub method: HighlightNodeMethod,
     pub params: HighlightNodeParams,
 }
-impl super::super::super::CommandResult for HighlightNode {
+impl crate::CommandResult for HighlightNode {
     type Result = super::results::HighlightNodeResult;
 }
 #[doc = "Highlights given quad. Coordinates are absolute with respect to the main frame viewport.\n[highlightQuad](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-highlightQuad)"]
@@ -235,20 +235,20 @@ impl super::super::super::CommandResult for HighlightNode {
 pub struct HighlightQuadParams {
     #[doc = "Quad to highlight"]
     #[serde(rename = "quad")]
-    pub quad: super::super::dom::types::Quad,
+    pub quad: crate::browser_protocol::dom::types::Quad,
     #[doc = "The highlight fill color (default: transparent)."]
     #[serde(rename = "color")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub color: Option<super::super::dom::types::Rgba>,
+    pub color: Option<crate::browser_protocol::dom::types::Rgba>,
     #[doc = "The highlight outline color (default: transparent)."]
     #[serde(rename = "outlineColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub outline_color: Option<super::super::dom::types::Rgba>,
+    pub outline_color: Option<crate::browser_protocol::dom::types::Rgba>,
 }
 impl HighlightQuadParams {
-    pub fn new(quad: impl Into<super::super::dom::types::Quad>) -> Self {
+    pub fn new(quad: impl Into<crate::browser_protocol::dom::types::Quad>) -> Self {
         Self {
             quad: quad.into(),
             color: None,
@@ -270,7 +270,7 @@ pub struct HighlightQuad {
     pub method: HighlightQuadMethod,
     pub params: HighlightQuadParams,
 }
-impl super::super::super::CommandResult for HighlightQuad {
+impl crate::CommandResult for HighlightQuad {
     type Result = super::results::HighlightQuadResult;
 }
 #[doc = "Highlights given rectangle. Coordinates are absolute with respect to the main frame viewport.\nIssue: the method does not handle device pixel ratio (DPR) correctly.\nThe coordinates currently have to be adjusted by the client\nif DPR is not 1 (see crbug.com/437807128).\n[highlightRect](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-highlightRect)"]
@@ -292,12 +292,12 @@ pub struct HighlightRectParams {
     #[serde(rename = "color")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub color: Option<super::super::dom::types::Rgba>,
+    pub color: Option<crate::browser_protocol::dom::types::Rgba>,
     #[doc = "The highlight outline color (default: transparent)."]
     #[serde(rename = "outlineColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub outline_color: Option<super::super::dom::types::Rgba>,
+    pub outline_color: Option<crate::browser_protocol::dom::types::Rgba>,
 }
 impl HighlightRectParams {
     pub fn new(
@@ -330,7 +330,7 @@ pub struct HighlightRect {
     pub method: HighlightRectMethod,
     pub params: HighlightRectParams,
 }
-impl super::super::super::CommandResult for HighlightRect {
+impl crate::CommandResult for HighlightRect {
     type Result = super::results::HighlightRectResult;
 }
 #[doc = "Highlights the source order of the children of the DOM node with given id or with the given\nJavaScript object wrapper. Either nodeId or objectId must be specified.\n[highlightSourceOrder](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-highlightSourceOrder)"]
@@ -343,17 +343,17 @@ pub struct HighlightSourceOrderParams {
     #[serde(rename = "nodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub node_id: Option<super::super::dom::types::NodeId>,
+    pub node_id: Option<crate::browser_protocol::dom::types::NodeId>,
     #[doc = "Identifier of the backend node to highlight."]
     #[serde(rename = "backendNodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub backend_node_id: Option<super::super::dom::types::BackendNodeId>,
+    pub backend_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     #[doc = "JavaScript object id of the node to be highlighted."]
     #[serde(rename = "objectId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub object_id: Option<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+    pub object_id: Option<crate::js_protocol::runtime::types::RemoteObjectId>,
 }
 impl HighlightSourceOrderParams {
     pub fn new(source_order_config: impl Into<super::types::SourceOrderConfig>) -> Self {
@@ -379,7 +379,7 @@ pub struct HighlightSourceOrder {
     pub method: HighlightSourceOrderMethod,
     pub params: HighlightSourceOrderParams,
 }
-impl super::super::super::CommandResult for HighlightSourceOrder {
+impl crate::CommandResult for HighlightSourceOrder {
     type Result = super::results::HighlightSourceOrderResult;
 }
 #[doc = "Enters the 'inspect' mode. In this mode, elements that user is hovering over are highlighted.\nBackend then generates 'inspectNodeRequested' event upon element selection.\n[setInspectMode](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setInspectMode)"]
@@ -416,7 +416,7 @@ pub struct SetInspectMode {
     pub method: SetInspectModeMethod,
     pub params: SetInspectModeParams,
 }
-impl super::super::super::CommandResult for SetInspectMode {
+impl crate::CommandResult for SetInspectMode {
     type Result = super::results::SetInspectModeResult;
 }
 #[doc = "Highlights owner element of all frames detected to be ads.\n[setShowAdHighlights](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowAdHighlights)"]
@@ -445,7 +445,7 @@ pub struct SetShowAdHighlights {
     pub method: SetShowAdHighlightsMethod,
     pub params: SetShowAdHighlightsParams,
 }
-impl super::super::super::CommandResult for SetShowAdHighlights {
+impl crate::CommandResult for SetShowAdHighlights {
     type Result = super::results::SetShowAdHighlightsResult;
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -469,7 +469,7 @@ pub struct SetPausedInDebuggerMessage {
     pub method: SetPausedInDebuggerMessageMethod,
     pub params: SetPausedInDebuggerMessageParams,
 }
-impl super::super::super::CommandResult for SetPausedInDebuggerMessage {
+impl crate::CommandResult for SetPausedInDebuggerMessage {
     type Result = super::results::SetPausedInDebuggerMessageResult;
 }
 #[doc = "Requests that backend shows debug borders on layers\n[setShowDebugBorders](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowDebugBorders)"]
@@ -498,7 +498,7 @@ pub struct SetShowDebugBorders {
     pub method: SetShowDebugBordersMethod,
     pub params: SetShowDebugBordersParams,
 }
-impl super::super::super::CommandResult for SetShowDebugBorders {
+impl crate::CommandResult for SetShowDebugBorders {
     type Result = super::results::SetShowDebugBordersResult;
 }
 #[doc = "Requests that backend shows the FPS counter\n[setShowFPSCounter](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowFPSCounter)"]
@@ -527,7 +527,7 @@ pub struct SetShowFpsCounter {
     pub method: SetShowFpsCounterMethod,
     pub params: SetShowFpsCounterParams,
 }
-impl super::super::super::CommandResult for SetShowFpsCounter {
+impl crate::CommandResult for SetShowFpsCounter {
     type Result = super::results::SetShowFpsCounterResult;
 }
 #[doc = "Highlight multiple elements with the CSS Grid overlay.\n[setShowGridOverlays](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowGridOverlays)"]
@@ -559,7 +559,7 @@ pub struct SetShowGridOverlays {
     pub method: SetShowGridOverlaysMethod,
     pub params: SetShowGridOverlaysParams,
 }
-impl super::super::super::CommandResult for SetShowGridOverlays {
+impl crate::CommandResult for SetShowGridOverlays {
     type Result = super::results::SetShowGridOverlaysResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -589,7 +589,7 @@ pub struct SetShowFlexOverlays {
     pub method: SetShowFlexOverlaysMethod,
     pub params: SetShowFlexOverlaysParams,
 }
-impl super::super::super::CommandResult for SetShowFlexOverlays {
+impl crate::CommandResult for SetShowFlexOverlays {
     type Result = super::results::SetShowFlexOverlaysResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -621,7 +621,7 @@ pub struct SetShowScrollSnapOverlays {
     pub method: SetShowScrollSnapOverlaysMethod,
     pub params: SetShowScrollSnapOverlaysParams,
 }
-impl super::super::super::CommandResult for SetShowScrollSnapOverlays {
+impl crate::CommandResult for SetShowScrollSnapOverlays {
     type Result = super::results::SetShowScrollSnapOverlaysResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -653,7 +653,7 @@ pub struct SetShowContainerQueryOverlays {
     pub method: SetShowContainerQueryOverlaysMethod,
     pub params: SetShowContainerQueryOverlaysParams,
 }
-impl super::super::super::CommandResult for SetShowContainerQueryOverlays {
+impl crate::CommandResult for SetShowContainerQueryOverlays {
     type Result = super::results::SetShowContainerQueryOverlaysResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -684,7 +684,7 @@ pub struct SetShowInspectedElementAnchor {
     pub method: SetShowInspectedElementAnchorMethod,
     pub params: SetShowInspectedElementAnchorParams,
 }
-impl super::super::super::CommandResult for SetShowInspectedElementAnchor {
+impl crate::CommandResult for SetShowInspectedElementAnchor {
     type Result = super::results::SetShowInspectedElementAnchorResult;
 }
 #[doc = "Requests that backend shows paint rectangles\n[setShowPaintRects](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowPaintRects)"]
@@ -715,7 +715,7 @@ pub struct SetShowPaintRects {
     pub method: SetShowPaintRectsMethod,
     pub params: SetShowPaintRectsParams,
 }
-impl super::super::super::CommandResult for SetShowPaintRects {
+impl crate::CommandResult for SetShowPaintRects {
     type Result = super::results::SetShowPaintRectsResult;
 }
 #[doc = "Requests that backend shows layout shift regions\n[setShowLayoutShiftRegions](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowLayoutShiftRegions)"]
@@ -746,7 +746,7 @@ pub struct SetShowLayoutShiftRegions {
     pub method: SetShowLayoutShiftRegionsMethod,
     pub params: SetShowLayoutShiftRegionsParams,
 }
-impl super::super::super::CommandResult for SetShowLayoutShiftRegions {
+impl crate::CommandResult for SetShowLayoutShiftRegions {
     type Result = super::results::SetShowLayoutShiftRegionsResult;
 }
 #[doc = "Requests that backend shows scroll bottleneck rects\n[setShowScrollBottleneckRects](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowScrollBottleneckRects)"]
@@ -775,7 +775,7 @@ pub struct SetShowScrollBottleneckRects {
     pub method: SetShowScrollBottleneckRectsMethod,
     pub params: SetShowScrollBottleneckRectsParams,
 }
-impl super::super::super::CommandResult for SetShowScrollBottleneckRects {
+impl crate::CommandResult for SetShowScrollBottleneckRects {
     type Result = super::results::SetShowScrollBottleneckRectsResult;
 }
 #[doc = "Paints viewport size upon main frame resize.\n[setShowViewportSizeOnResize](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowViewportSizeOnResize)"]
@@ -804,7 +804,7 @@ pub struct SetShowViewportSizeOnResize {
     pub method: SetShowViewportSizeOnResizeMethod,
     pub params: SetShowViewportSizeOnResizeParams,
 }
-impl super::super::super::CommandResult for SetShowViewportSizeOnResize {
+impl crate::CommandResult for SetShowViewportSizeOnResize {
     type Result = super::results::SetShowViewportSizeOnResizeResult;
 }
 #[doc = "Add a dual screen device hinge\n[setShowHinge](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowHinge)"]
@@ -830,7 +830,7 @@ pub struct SetShowHinge {
     pub method: SetShowHingeMethod,
     pub params: SetShowHingeParams,
 }
-impl super::super::super::CommandResult for SetShowHinge {
+impl crate::CommandResult for SetShowHinge {
     type Result = super::results::SetShowHingeResult;
 }
 #[doc = "Show elements in isolation mode with overlays.\n[setShowIsolatedElements](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowIsolatedElements)"]
@@ -864,7 +864,7 @@ pub struct SetShowIsolatedElements {
     pub method: SetShowIsolatedElementsMethod,
     pub params: SetShowIsolatedElementsParams,
 }
-impl super::super::super::CommandResult for SetShowIsolatedElements {
+impl crate::CommandResult for SetShowIsolatedElements {
     type Result = super::results::SetShowIsolatedElementsResult;
 }
 #[doc = "Show Window Controls Overlay for PWA\n[setShowWindowControlsOverlay](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowWindowControlsOverlay)"]
@@ -890,7 +890,7 @@ pub struct SetShowWindowControlsOverlay {
     pub method: SetShowWindowControlsOverlayMethod,
     pub params: SetShowWindowControlsOverlayParams,
 }
-impl super::super::super::CommandResult for SetShowWindowControlsOverlay {
+impl crate::CommandResult for SetShowWindowControlsOverlay {
     type Result = super::results::SetShowWindowControlsOverlayResult;
 }
 group_enum ! (OverlayCommands { Disable (Disable) , Enable (Enable) , GetHighlightObjectForTest (GetHighlightObjectForTest) , GetGridHighlightObjectsForTest (GetGridHighlightObjectsForTest) , GetSourceOrderHighlightObjectForTest (GetSourceOrderHighlightObjectForTest) , HideHighlight (HideHighlight) , HighlightNode (HighlightNode) , HighlightQuad (HighlightQuad) , HighlightRect (HighlightRect) , HighlightSourceOrder (HighlightSourceOrder) , SetInspectMode (SetInspectMode) , SetShowAdHighlights (SetShowAdHighlights) , SetPausedInDebuggerMessage (SetPausedInDebuggerMessage) , SetShowDebugBorders (SetShowDebugBorders) , SetShowFpsCounter (SetShowFpsCounter) , SetShowGridOverlays (SetShowGridOverlays) , SetShowFlexOverlays (SetShowFlexOverlays) , SetShowScrollSnapOverlays (SetShowScrollSnapOverlays) , SetShowContainerQueryOverlays (SetShowContainerQueryOverlays) , SetShowInspectedElementAnchor (SetShowInspectedElementAnchor) , SetShowPaintRects (SetShowPaintRects) , SetShowLayoutShiftRegions (SetShowLayoutShiftRegions) , SetShowScrollBottleneckRects (SetShowScrollBottleneckRects) , SetShowViewportSizeOnResize (SetShowViewportSizeOnResize) , SetShowHinge (SetShowHinge) , SetShowIsolatedElements (SetShowIsolatedElements) , SetShowWindowControlsOverlay (SetShowWindowControlsOverlay) });

@@ -1,7 +1,7 @@
 use super::types::*;
 impl SerializationOptions {
     pub fn builder() -> SerializationOptionsBuilder {
-        SerializationOptionsBuilder::default()
+        <SerializationOptionsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -41,7 +41,7 @@ impl SerializationOptionsBuilder {
 }
 impl DeepSerializedValue {
     pub fn builder() -> DeepSerializedValueBuilder {
-        DeepSerializedValueBuilder::default()
+        <DeepSerializedValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -84,7 +84,7 @@ impl DeepSerializedValueBuilder {
 }
 impl RemoteObject {
     pub fn builder() -> RemoteObjectBuilder {
-        RemoteObjectBuilder::default()
+        <RemoteObjectBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -166,7 +166,7 @@ impl RemoteObjectBuilder {
 }
 impl CustomPreview {
     pub fn builder() -> CustomPreviewBuilder {
-        CustomPreviewBuilder::default()
+        <CustomPreviewBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -194,7 +194,7 @@ impl CustomPreviewBuilder {
 }
 impl ObjectPreview {
     pub fn builder() -> ObjectPreviewBuilder {
-        ObjectPreviewBuilder::default()
+        <ObjectPreviewBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -274,7 +274,7 @@ impl ObjectPreviewBuilder {
 }
 impl PropertyPreview {
     pub fn builder() -> PropertyPreviewBuilder {
-        PropertyPreviewBuilder::default()
+        <PropertyPreviewBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -322,7 +322,7 @@ impl PropertyPreviewBuilder {
 }
 impl EntryPreview {
     pub fn builder() -> EntryPreviewBuilder {
-        EntryPreviewBuilder::default()
+        <EntryPreviewBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -350,7 +350,7 @@ impl EntryPreviewBuilder {
 }
 impl PropertyDescriptor {
     pub fn builder() -> PropertyDescriptorBuilder {
-        PropertyDescriptorBuilder::default()
+        <PropertyDescriptorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -430,7 +430,7 @@ impl PropertyDescriptorBuilder {
 }
 impl InternalPropertyDescriptor {
     pub fn builder() -> InternalPropertyDescriptorBuilder {
-        InternalPropertyDescriptorBuilder::default()
+        <InternalPropertyDescriptorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -458,7 +458,7 @@ impl InternalPropertyDescriptorBuilder {
 }
 impl PrivatePropertyDescriptor {
     pub fn builder() -> PrivatePropertyDescriptorBuilder {
-        PrivatePropertyDescriptorBuilder::default()
+        <PrivatePropertyDescriptorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -498,7 +498,7 @@ impl PrivatePropertyDescriptorBuilder {
 }
 impl CallArgument {
     pub fn builder() -> CallArgumentBuilder {
-        CallArgumentBuilder::default()
+        <CallArgumentBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -533,7 +533,7 @@ impl CallArgumentBuilder {
 }
 impl ExecutionContextDescription {
     pub fn builder() -> ExecutionContextDescriptionBuilder {
-        ExecutionContextDescriptionBuilder::default()
+        <ExecutionContextDescriptionBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -585,7 +585,7 @@ impl ExecutionContextDescriptionBuilder {
 }
 impl ExceptionDetails {
     pub fn builder() -> ExceptionDetailsBuilder {
-        ExceptionDetailsBuilder::default()
+        <ExceptionDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -673,7 +673,7 @@ impl ExceptionDetailsBuilder {
 }
 impl CallFrame {
     pub fn builder() -> CallFrameBuilder {
-        CallFrameBuilder::default()
+        <CallFrameBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -727,7 +727,7 @@ impl CallFrameBuilder {
 }
 impl StackTrace {
     pub fn builder() -> StackTraceBuilder {
-        StackTraceBuilder::default()
+        <StackTraceBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -779,7 +779,7 @@ impl StackTraceBuilder {
 }
 impl StackTraceId {
     pub fn builder() -> StackTraceIdBuilder {
-        StackTraceIdBuilder::default()
+        <StackTraceIdBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

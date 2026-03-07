@@ -1,7 +1,7 @@
 use super::types::*;
 impl AdFrameStatus {
     pub fn builder() -> AdFrameStatusBuilder {
-        AdFrameStatusBuilder::default()
+        <AdFrameStatusBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -41,25 +41,25 @@ impl AdFrameStatusBuilder {
 }
 impl AdScriptId {
     pub fn builder() -> AdScriptIdBuilder {
-        AdScriptIdBuilder::default()
+        <AdScriptIdBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct AdScriptIdBuilder {
-    script_id: Option<super::super::super::js_protocol::runtime::types::ScriptId>,
-    debugger_id: Option<super::super::super::js_protocol::runtime::types::UniqueDebuggerId>,
+    script_id: Option<crate::js_protocol::runtime::types::ScriptId>,
+    debugger_id: Option<crate::js_protocol::runtime::types::UniqueDebuggerId>,
 }
 impl AdScriptIdBuilder {
     pub fn script_id(
         mut self,
-        script_id: impl Into<super::super::super::js_protocol::runtime::types::ScriptId>,
+        script_id: impl Into<crate::js_protocol::runtime::types::ScriptId>,
     ) -> Self {
         self.script_id = Some(script_id.into());
         self
     }
     pub fn debugger_id(
         mut self,
-        debugger_id: impl Into<super::super::super::js_protocol::runtime::types::UniqueDebuggerId>,
+        debugger_id: impl Into<crate::js_protocol::runtime::types::UniqueDebuggerId>,
     ) -> Self {
         self.debugger_id = Some(debugger_id.into());
         self
@@ -77,7 +77,7 @@ impl AdScriptIdBuilder {
 }
 impl AdScriptAncestry {
     pub fn builder() -> AdScriptAncestryBuilder {
-        AdScriptAncestryBuilder::default()
+        <AdScriptAncestryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -120,7 +120,7 @@ impl AdScriptAncestryBuilder {
 }
 impl PermissionsPolicyBlockLocator {
     pub fn builder() -> PermissionsPolicyBlockLocatorBuilder {
-        PermissionsPolicyBlockLocatorBuilder::default()
+        <PermissionsPolicyBlockLocatorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -139,9 +139,9 @@ impl PermissionsPolicyBlockLocatorBuilder {
     }
     pub fn build(self) -> Result<PermissionsPolicyBlockLocator, String> {
         Ok(PermissionsPolicyBlockLocator {
-            frame_id: self
-                .frame_id
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(frame_id)))?,
+            frame_id: Box::new(self.frame_id.ok_or_else(|| {
+                std::stringify!("Field `{}` is mandatory.", std::stringify!(frame_id))
+            })?),
             block_reason: self.block_reason.ok_or_else(|| {
                 format!("Field `{}` is mandatory.", std::stringify!(block_reason))
             })?,
@@ -150,7 +150,7 @@ impl PermissionsPolicyBlockLocatorBuilder {
 }
 impl PermissionsPolicyFeatureState {
     pub fn builder() -> PermissionsPolicyFeatureStateBuilder {
-        PermissionsPolicyFeatureStateBuilder::default()
+        <PermissionsPolicyFeatureStateBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -186,7 +186,7 @@ impl PermissionsPolicyFeatureStateBuilder {
 }
 impl OriginTrialToken {
     pub fn builder() -> OriginTrialTokenBuilder {
-        OriginTrialTokenBuilder::default()
+        <OriginTrialTokenBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -194,7 +194,7 @@ pub struct OriginTrialTokenBuilder {
     origin: Option<String>,
     match_sub_domains: Option<bool>,
     trial_name: Option<String>,
-    expiry_time: Option<super::super::network::types::TimeSinceEpoch>,
+    expiry_time: Option<crate::browser_protocol::network::types::TimeSinceEpoch>,
     is_third_party: Option<bool>,
     usage_restriction: Option<OriginTrialUsageRestriction>,
 }
@@ -213,7 +213,7 @@ impl OriginTrialTokenBuilder {
     }
     pub fn expiry_time(
         mut self,
-        expiry_time: impl Into<super::super::network::types::TimeSinceEpoch>,
+        expiry_time: impl Into<crate::browser_protocol::network::types::TimeSinceEpoch>,
     ) -> Self {
         self.expiry_time = Some(expiry_time.into());
         self
@@ -260,7 +260,7 @@ impl OriginTrialTokenBuilder {
 }
 impl OriginTrialTokenWithStatus {
     pub fn builder() -> OriginTrialTokenWithStatusBuilder {
-        OriginTrialTokenWithStatusBuilder::default()
+        <OriginTrialTokenWithStatusBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -296,7 +296,7 @@ impl OriginTrialTokenWithStatusBuilder {
 }
 impl OriginTrial {
     pub fn builder() -> OriginTrialBuilder {
-        OriginTrialBuilder::default()
+        <OriginTrialBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -352,7 +352,7 @@ impl OriginTrialBuilder {
 }
 impl SecurityOriginDetails {
     pub fn builder() -> SecurityOriginDetailsBuilder {
-        SecurityOriginDetailsBuilder::default()
+        <SecurityOriginDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -374,14 +374,14 @@ impl SecurityOriginDetailsBuilder {
 }
 impl Frame {
     pub fn builder() -> FrameBuilder {
-        FrameBuilder::default()
+        <FrameBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct FrameBuilder {
     id: Option<FrameId>,
     parent_id: Option<FrameId>,
-    loader_id: Option<super::super::network::types::LoaderId>,
+    loader_id: Option<crate::browser_protocol::network::types::LoaderId>,
     name: Option<String>,
     url: Option<String>,
     url_fragment: Option<String>,
@@ -406,7 +406,7 @@ impl FrameBuilder {
     }
     pub fn loader_id(
         mut self,
-        loader_id: impl Into<super::super::network::types::LoaderId>,
+        loader_id: impl Into<crate::browser_protocol::network::types::LoaderId>,
     ) -> Self {
         self.loader_id = Some(loader_id.into());
         self
@@ -534,15 +534,15 @@ impl FrameBuilder {
 }
 impl FrameResource {
     pub fn builder() -> FrameResourceBuilder {
-        FrameResourceBuilder::default()
+        <FrameResourceBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct FrameResourceBuilder {
     url: Option<String>,
-    r#type: Option<super::super::network::types::ResourceType>,
+    r#type: Option<crate::browser_protocol::network::types::ResourceType>,
     mime_type: Option<String>,
-    last_modified: Option<super::super::network::types::TimeSinceEpoch>,
+    last_modified: Option<crate::browser_protocol::network::types::TimeSinceEpoch>,
     content_size: Option<f64>,
     failed: Option<bool>,
     canceled: Option<bool>,
@@ -552,7 +552,10 @@ impl FrameResourceBuilder {
         self.url = Some(url.into());
         self
     }
-    pub fn r#type(mut self, r#type: impl Into<super::super::network::types::ResourceType>) -> Self {
+    pub fn r#type(
+        mut self,
+        r#type: impl Into<crate::browser_protocol::network::types::ResourceType>,
+    ) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -562,7 +565,7 @@ impl FrameResourceBuilder {
     }
     pub fn last_modified(
         mut self,
-        last_modified: impl Into<super::super::network::types::TimeSinceEpoch>,
+        last_modified: impl Into<crate::browser_protocol::network::types::TimeSinceEpoch>,
     ) -> Self {
         self.last_modified = Some(last_modified.into());
         self
@@ -599,7 +602,7 @@ impl FrameResourceBuilder {
 }
 impl FrameResourceTree {
     pub fn builder() -> FrameResourceTreeBuilder {
-        FrameResourceTreeBuilder::default()
+        <FrameResourceTreeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -647,9 +650,9 @@ impl FrameResourceTreeBuilder {
     }
     pub fn build(self) -> Result<FrameResourceTree, String> {
         Ok(FrameResourceTree {
-            frame: self
-                .frame
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(frame)))?,
+            frame: Box::new(self.frame.ok_or_else(|| {
+                std::stringify!("Field `{}` is mandatory.", std::stringify!(frame))
+            })?),
             child_frames: self.child_frames,
             resources: self
                 .resources
@@ -659,7 +662,7 @@ impl FrameResourceTreeBuilder {
 }
 impl FrameTree {
     pub fn builder() -> FrameTreeBuilder {
-        FrameTreeBuilder::default()
+        <FrameTreeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -690,16 +693,16 @@ impl FrameTreeBuilder {
     }
     pub fn build(self) -> Result<FrameTree, String> {
         Ok(FrameTree {
-            frame: self
-                .frame
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(frame)))?,
+            frame: Box::new(self.frame.ok_or_else(|| {
+                std::stringify!("Field `{}` is mandatory.", std::stringify!(frame))
+            })?),
             child_frames: self.child_frames,
         })
     }
 }
 impl NavigationEntry {
     pub fn builder() -> NavigationEntryBuilder {
-        NavigationEntryBuilder::default()
+        <NavigationEntryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -753,7 +756,7 @@ impl NavigationEntryBuilder {
 }
 impl ScreencastFrameMetadata {
     pub fn builder() -> ScreencastFrameMetadataBuilder {
-        ScreencastFrameMetadataBuilder::default()
+        <ScreencastFrameMetadataBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -764,7 +767,7 @@ pub struct ScreencastFrameMetadataBuilder {
     device_height: Option<f64>,
     scroll_offset_x: Option<f64>,
     scroll_offset_y: Option<f64>,
-    timestamp: Option<super::super::network::types::TimeSinceEpoch>,
+    timestamp: Option<crate::browser_protocol::network::types::TimeSinceEpoch>,
 }
 impl ScreencastFrameMetadataBuilder {
     pub fn offset_top(mut self, offset_top: impl Into<f64>) -> Self {
@@ -793,7 +796,7 @@ impl ScreencastFrameMetadataBuilder {
     }
     pub fn timestamp(
         mut self,
-        timestamp: impl Into<super::super::network::types::TimeSinceEpoch>,
+        timestamp: impl Into<crate::browser_protocol::network::types::TimeSinceEpoch>,
     ) -> Self {
         self.timestamp = Some(timestamp.into());
         self
@@ -827,7 +830,7 @@ impl ScreencastFrameMetadataBuilder {
 }
 impl AppManifestError {
     pub fn builder() -> AppManifestErrorBuilder {
-        AppManifestErrorBuilder::default()
+        <AppManifestErrorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -873,7 +876,7 @@ impl AppManifestErrorBuilder {
 }
 impl AppManifestParsedProperties {
     pub fn builder() -> AppManifestParsedPropertiesBuilder {
-        AppManifestParsedPropertiesBuilder::default()
+        <AppManifestParsedPropertiesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -895,7 +898,7 @@ impl AppManifestParsedPropertiesBuilder {
 }
 impl LayoutViewport {
     pub fn builder() -> LayoutViewportBuilder {
-        LayoutViewportBuilder::default()
+        <LayoutViewportBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -941,7 +944,7 @@ impl LayoutViewportBuilder {
 }
 impl VisualViewport {
     pub fn builder() -> VisualViewportBuilder {
-        VisualViewportBuilder::default()
+        <VisualViewportBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1017,7 +1020,7 @@ impl VisualViewportBuilder {
 }
 impl Viewport {
     pub fn builder() -> ViewportBuilder {
-        ViewportBuilder::default()
+        <ViewportBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1071,7 +1074,7 @@ impl ViewportBuilder {
 }
 impl FontFamilies {
     pub fn builder() -> FontFamiliesBuilder {
-        FontFamiliesBuilder::default()
+        <FontFamiliesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1127,7 +1130,7 @@ impl FontFamiliesBuilder {
 }
 impl ScriptFontFamilies {
     pub fn builder() -> ScriptFontFamiliesBuilder {
-        ScriptFontFamiliesBuilder::default()
+        <ScriptFontFamiliesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1157,7 +1160,7 @@ impl ScriptFontFamiliesBuilder {
 }
 impl FontSizes {
     pub fn builder() -> FontSizesBuilder {
-        FontSizesBuilder::default()
+        <FontSizesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1183,7 +1186,7 @@ impl FontSizesBuilder {
 }
 impl InstallabilityErrorArgument {
     pub fn builder() -> InstallabilityErrorArgumentBuilder {
-        InstallabilityErrorArgumentBuilder::default()
+        <InstallabilityErrorArgumentBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1213,7 +1216,7 @@ impl InstallabilityErrorArgumentBuilder {
 }
 impl InstallabilityError {
     pub fn builder() -> InstallabilityErrorBuilder {
-        InstallabilityErrorBuilder::default()
+        <InstallabilityErrorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1258,7 +1261,7 @@ impl InstallabilityErrorBuilder {
 }
 impl CompilationCacheParams {
     pub fn builder() -> CompilationCacheParamsBuilder {
-        CompilationCacheParamsBuilder::default()
+        <CompilationCacheParamsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1286,7 +1289,7 @@ impl CompilationCacheParamsBuilder {
 }
 impl FileFilter {
     pub fn builder() -> FileFilterBuilder {
-        FileFilterBuilder::default()
+        <FileFilterBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1324,7 +1327,7 @@ impl FileFilterBuilder {
 }
 impl FileHandler {
     pub fn builder() -> FileHandlerBuilder {
-        FileHandlerBuilder::default()
+        <FileHandlerBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1398,7 +1401,7 @@ impl FileHandlerBuilder {
 }
 impl ImageResource {
     pub fn builder() -> ImageResourceBuilder {
-        ImageResourceBuilder::default()
+        <ImageResourceBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1432,7 +1435,7 @@ impl ImageResourceBuilder {
 }
 impl LaunchHandler {
     pub fn builder() -> LaunchHandlerBuilder {
-        LaunchHandlerBuilder::default()
+        <LaunchHandlerBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1454,7 +1457,7 @@ impl LaunchHandlerBuilder {
 }
 impl ProtocolHandler {
     pub fn builder() -> ProtocolHandlerBuilder {
-        ProtocolHandlerBuilder::default()
+        <ProtocolHandlerBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1484,7 +1487,7 @@ impl ProtocolHandlerBuilder {
 }
 impl RelatedApplication {
     pub fn builder() -> RelatedApplicationBuilder {
-        RelatedApplicationBuilder::default()
+        <RelatedApplicationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1512,7 +1515,7 @@ impl RelatedApplicationBuilder {
 }
 impl ScopeExtension {
     pub fn builder() -> ScopeExtensionBuilder {
-        ScopeExtensionBuilder::default()
+        <ScopeExtensionBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1545,7 +1548,7 @@ impl ScopeExtensionBuilder {
 }
 impl Screenshot {
     pub fn builder() -> ScreenshotBuilder {
-        ScreenshotBuilder::default()
+        <ScreenshotBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1581,7 +1584,7 @@ impl ScreenshotBuilder {
 }
 impl ShareTarget {
     pub fn builder() -> ShareTargetBuilder {
-        ShareTargetBuilder::default()
+        <ShareTargetBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1655,7 +1658,7 @@ impl ShareTargetBuilder {
 }
 impl Shortcut {
     pub fn builder() -> ShortcutBuilder {
-        ShortcutBuilder::default()
+        <ShortcutBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1685,7 +1688,7 @@ impl ShortcutBuilder {
 }
 impl WebAppManifest {
     pub fn builder() -> WebAppManifestBuilder {
-        WebAppManifestBuilder::default()
+        <WebAppManifestBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1939,7 +1942,7 @@ impl WebAppManifestBuilder {
 }
 impl BackForwardCacheBlockingDetails {
     pub fn builder() -> BackForwardCacheBlockingDetailsBuilder {
-        BackForwardCacheBlockingDetailsBuilder::default()
+        <BackForwardCacheBlockingDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1981,7 +1984,7 @@ impl BackForwardCacheBlockingDetailsBuilder {
 }
 impl BackForwardCacheNotRestoredExplanation {
     pub fn builder() -> BackForwardCacheNotRestoredExplanationBuilder {
-        BackForwardCacheNotRestoredExplanationBuilder::default()
+        <BackForwardCacheNotRestoredExplanationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -2035,7 +2038,7 @@ impl BackForwardCacheNotRestoredExplanationBuilder {
 }
 impl BackForwardCacheNotRestoredExplanationTree {
     pub fn builder() -> BackForwardCacheNotRestoredExplanationTreeBuilder {
-        BackForwardCacheNotRestoredExplanationTreeBuilder::default()
+        <BackForwardCacheNotRestoredExplanationTreeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

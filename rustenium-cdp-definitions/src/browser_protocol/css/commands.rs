@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 pub struct AddRuleParams {
     #[doc = "The css style sheet identifier where a new rule should be inserted."]
     #[serde(rename = "styleSheetId")]
-    pub style_sheet_id: super::super::dom::types::StyleSheetId,
+    pub style_sheet_id: crate::browser_protocol::dom::types::StyleSheetId,
     #[doc = "The text of a new rule."]
     #[serde(rename = "ruleText")]
     pub rule_text: String,
@@ -15,11 +15,11 @@ pub struct AddRuleParams {
     #[serde(rename = "nodeForPropertySyntaxValidation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub node_for_property_syntax_validation: Option<super::super::dom::types::NodeId>,
+    pub node_for_property_syntax_validation: Option<crate::browser_protocol::dom::types::NodeId>,
 }
 impl AddRuleParams {
     pub fn new(
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
         rule_text: impl Into<String>,
         location: impl Into<super::types::SourceRange>,
     ) -> Self {
@@ -45,17 +45,19 @@ pub struct AddRule {
     pub method: AddRuleMethod,
     pub params: AddRuleParams,
 }
-impl super::super::super::CommandResult for AddRule {
+impl crate::CommandResult for AddRule {
     type Result = super::results::AddRuleResult;
 }
 #[doc = "Returns all class names from specified stylesheet.\n[collectClassNames](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-collectClassNames)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CollectClassNamesParams {
     #[serde(rename = "styleSheetId")]
-    pub style_sheet_id: super::super::dom::types::StyleSheetId,
+    pub style_sheet_id: crate::browser_protocol::dom::types::StyleSheetId,
 }
 impl CollectClassNamesParams {
-    pub fn new(style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>) -> Self {
+    pub fn new(
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
+    ) -> Self {
         Self {
             style_sheet_id: style_sheet_id.into(),
         }
@@ -75,7 +77,7 @@ pub struct CollectClassNames {
     pub method: CollectClassNamesMethod,
     pub params: CollectClassNamesParams,
 }
-impl super::super::super::CommandResult for CollectClassNames {
+impl crate::CommandResult for CollectClassNames {
     type Result = super::results::CollectClassNamesResult;
 }
 #[doc = "Creates a new special \"via-inspector\" stylesheet in the frame with given `frameId`.\n[createStyleSheet](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-createStyleSheet)"]
@@ -83,7 +85,7 @@ impl super::super::super::CommandResult for CollectClassNames {
 pub struct CreateStyleSheetParams {
     #[doc = "Identifier of the frame where \"via-inspector\" stylesheet should be created."]
     #[serde(rename = "frameId")]
-    pub frame_id: super::super::page::types::FrameId,
+    pub frame_id: crate::browser_protocol::page::types::FrameId,
     #[doc = "If true, creates a new stylesheet for every call. If false,\nreturns a stylesheet previously created by a call with force=false\nfor the frame's document if it exists or creates a new stylesheet\n(default: false)."]
     #[serde(rename = "force")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -91,7 +93,7 @@ pub struct CreateStyleSheetParams {
     pub force: Option<bool>,
 }
 impl CreateStyleSheetParams {
-    pub fn new(frame_id: impl Into<super::super::page::types::FrameId>) -> Self {
+    pub fn new(frame_id: impl Into<crate::browser_protocol::page::types::FrameId>) -> Self {
         Self {
             frame_id: frame_id.into(),
             force: None,
@@ -112,11 +114,11 @@ pub struct CreateStyleSheet {
     pub method: CreateStyleSheetMethod,
     pub params: CreateStyleSheetParams,
 }
-impl super::super::super::CommandResult for CreateStyleSheet {
+impl crate::CommandResult for CreateStyleSheet {
     type Result = super::results::CreateStyleSheetResult;
 }
 #[doc = "Disables the CSS agent for the given page.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-disable)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DisableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum DisableMethod {
@@ -132,11 +134,11 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
-impl super::super::super::CommandResult for Disable {
+impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
 }
 #[doc = "Enables the CSS agent for the given page. Clients should not assume that the CSS agent has been\nenabled until the result of this command is received.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-enable)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EnableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum EnableMethod {
@@ -152,7 +154,7 @@ pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
 }
-impl super::super::super::CommandResult for Enable {
+impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
 }
 #[doc = "Ensures that the given node will have specified pseudo-classes whenever its style is computed by\nthe browser.\n[forcePseudoState](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-forcePseudoState)"]
@@ -160,7 +162,7 @@ impl super::super::super::CommandResult for Enable {
 pub struct ForcePseudoStateParams {
     #[doc = "The element id for which to force the pseudo state."]
     #[serde(rename = "nodeId")]
-    pub node_id: super::super::dom::types::NodeId,
+    pub node_id: crate::browser_protocol::dom::types::NodeId,
     #[doc = "Element pseudo classes to force when computing the element's style."]
     #[serde(rename = "forcedPseudoClasses")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
@@ -168,7 +170,7 @@ pub struct ForcePseudoStateParams {
 }
 impl ForcePseudoStateParams {
     pub fn new(
-        node_id: impl Into<super::super::dom::types::NodeId>,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
         forced_pseudo_classes: Vec<String>,
     ) -> Self {
         Self {
@@ -191,7 +193,7 @@ pub struct ForcePseudoState {
     pub method: ForcePseudoStateMethod,
     pub params: ForcePseudoStateParams,
 }
-impl super::super::super::CommandResult for ForcePseudoState {
+impl crate::CommandResult for ForcePseudoState {
     type Result = super::results::ForcePseudoStateResult;
 }
 #[doc = "Ensures that the given node is in its starting-style state.\n[forceStartingStyle](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-forceStartingStyle)"]
@@ -199,14 +201,14 @@ impl super::super::super::CommandResult for ForcePseudoState {
 pub struct ForceStartingStyleParams {
     #[doc = "The element id for which to force the starting-style state."]
     #[serde(rename = "nodeId")]
-    pub node_id: super::super::dom::types::NodeId,
+    pub node_id: crate::browser_protocol::dom::types::NodeId,
     #[doc = "Boolean indicating if this is on or off."]
     #[serde(rename = "forced")]
     pub forced: bool,
 }
 impl ForceStartingStyleParams {
     pub fn new(
-        node_id: impl Into<super::super::dom::types::NodeId>,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
         forced: impl Into<bool>,
     ) -> Self {
         Self {
@@ -229,17 +231,17 @@ pub struct ForceStartingStyle {
     pub method: ForceStartingStyleMethod,
     pub params: ForceStartingStyleParams,
 }
-impl super::super::super::CommandResult for ForceStartingStyle {
+impl crate::CommandResult for ForceStartingStyle {
     type Result = super::results::ForceStartingStyleResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetBackgroundColorsParams {
     #[doc = "Id of the node to get background colors for."]
     #[serde(rename = "nodeId")]
-    pub node_id: super::super::dom::types::NodeId,
+    pub node_id: crate::browser_protocol::dom::types::NodeId,
 }
 impl GetBackgroundColorsParams {
-    pub fn new(node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn new(node_id: impl Into<crate::browser_protocol::dom::types::NodeId>) -> Self {
         Self {
             node_id: node_id.into(),
         }
@@ -258,17 +260,17 @@ pub struct GetBackgroundColors {
     pub method: GetBackgroundColorsMethod,
     pub params: GetBackgroundColorsParams,
 }
-impl super::super::super::CommandResult for GetBackgroundColors {
+impl crate::CommandResult for GetBackgroundColors {
     type Result = super::results::GetBackgroundColorsResult;
 }
 #[doc = "Returns the computed style for a DOM node identified by `nodeId`.\n[getComputedStyleForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getComputedStyleForNode)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetComputedStyleForNodeParams {
     #[serde(rename = "nodeId")]
-    pub node_id: super::super::dom::types::NodeId,
+    pub node_id: crate::browser_protocol::dom::types::NodeId,
 }
 impl GetComputedStyleForNodeParams {
-    pub fn new(node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn new(node_id: impl Into<crate::browser_protocol::dom::types::NodeId>) -> Self {
         Self {
             node_id: node_id.into(),
         }
@@ -288,7 +290,7 @@ pub struct GetComputedStyleForNode {
     pub method: GetComputedStyleForNodeMethod,
     pub params: GetComputedStyleForNodeParams,
 }
-impl super::super::super::CommandResult for GetComputedStyleForNode {
+impl crate::CommandResult for GetComputedStyleForNode {
     type Result = super::results::GetComputedStyleForNodeResult;
 }
 #[doc = "Resolve the specified values in the context of the provided element.\nFor example, a value of '1em' is evaluated according to the computed\n'font-size' of the element and a value 'calc(1px + 2px)' will be\nresolved to '3px'.\nIf the `propertyName` was specified the `values` are resolved as if\nthey were property's declaration. If a value cannot be parsed according\nto the provided property syntax, the value is parsed using combined\nsyntax as if null `propertyName` was provided. If the value cannot be\nresolved even then, return the provided value without any changes.\nNote: this function currently does not resolve CSS random() function,\nit returns unmodified random() function parts.`\n[resolveValues](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-resolveValues)"]
@@ -300,7 +302,7 @@ pub struct ResolveValuesParams {
     pub values: Vec<String>,
     #[doc = "Id of the node in whose context the expression is evaluated"]
     #[serde(rename = "nodeId")]
-    pub node_id: super::super::dom::types::NodeId,
+    pub node_id: crate::browser_protocol::dom::types::NodeId,
     #[doc = "Only longhands and custom property names are accepted."]
     #[serde(rename = "propertyName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -310,7 +312,7 @@ pub struct ResolveValuesParams {
     #[serde(rename = "pseudoType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub pseudo_type: Option<super::super::dom::types::PseudoType>,
+    pub pseudo_type: Option<crate::browser_protocol::dom::types::PseudoType>,
     #[doc = "Pseudo element custom ident."]
     #[serde(rename = "pseudoIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -318,7 +320,10 @@ pub struct ResolveValuesParams {
     pub pseudo_identifier: Option<String>,
 }
 impl ResolveValuesParams {
-    pub fn new(values: Vec<String>, node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn new(
+        values: Vec<String>,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
+    ) -> Self {
         Self {
             values,
             node_id: node_id.into(),
@@ -342,7 +347,7 @@ pub struct ResolveValues {
     pub method: ResolveValuesMethod,
     pub params: ResolveValuesParams,
 }
-impl super::super::super::CommandResult for ResolveValues {
+impl crate::CommandResult for ResolveValues {
     type Result = super::results::ResolveValuesResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -373,17 +378,17 @@ pub struct GetLonghandProperties {
     pub method: GetLonghandPropertiesMethod,
     pub params: GetLonghandPropertiesParams,
 }
-impl super::super::super::CommandResult for GetLonghandProperties {
+impl crate::CommandResult for GetLonghandProperties {
     type Result = super::results::GetLonghandPropertiesResult;
 }
 #[doc = "Returns the styles defined inline (explicitly in the \"style\" attribute and implicitly, using DOM\nattributes) for a DOM node identified by `nodeId`.\n[getInlineStylesForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getInlineStylesForNode)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetInlineStylesForNodeParams {
     #[serde(rename = "nodeId")]
-    pub node_id: super::super::dom::types::NodeId,
+    pub node_id: crate::browser_protocol::dom::types::NodeId,
 }
 impl GetInlineStylesForNodeParams {
-    pub fn new(node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn new(node_id: impl Into<crate::browser_protocol::dom::types::NodeId>) -> Self {
         Self {
             node_id: node_id.into(),
         }
@@ -403,17 +408,17 @@ pub struct GetInlineStylesForNode {
     pub method: GetInlineStylesForNodeMethod,
     pub params: GetInlineStylesForNodeParams,
 }
-impl super::super::super::CommandResult for GetInlineStylesForNode {
+impl crate::CommandResult for GetInlineStylesForNode {
     type Result = super::results::GetInlineStylesForNodeResult;
 }
 #[doc = "Returns the styles coming from animations & transitions\nincluding the animation & transition styles coming from inheritance chain.\n[getAnimatedStylesForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getAnimatedStylesForNode)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetAnimatedStylesForNodeParams {
     #[serde(rename = "nodeId")]
-    pub node_id: super::super::dom::types::NodeId,
+    pub node_id: crate::browser_protocol::dom::types::NodeId,
 }
 impl GetAnimatedStylesForNodeParams {
-    pub fn new(node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn new(node_id: impl Into<crate::browser_protocol::dom::types::NodeId>) -> Self {
         Self {
             node_id: node_id.into(),
         }
@@ -433,17 +438,17 @@ pub struct GetAnimatedStylesForNode {
     pub method: GetAnimatedStylesForNodeMethod,
     pub params: GetAnimatedStylesForNodeParams,
 }
-impl super::super::super::CommandResult for GetAnimatedStylesForNode {
+impl crate::CommandResult for GetAnimatedStylesForNode {
     type Result = super::results::GetAnimatedStylesForNodeResult;
 }
 #[doc = "Returns requested styles for a DOM node identified by `nodeId`.\n[getMatchedStylesForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getMatchedStylesForNode)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetMatchedStylesForNodeParams {
     #[serde(rename = "nodeId")]
-    pub node_id: super::super::dom::types::NodeId,
+    pub node_id: crate::browser_protocol::dom::types::NodeId,
 }
 impl GetMatchedStylesForNodeParams {
-    pub fn new(node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn new(node_id: impl Into<crate::browser_protocol::dom::types::NodeId>) -> Self {
         Self {
             node_id: node_id.into(),
         }
@@ -463,11 +468,11 @@ pub struct GetMatchedStylesForNode {
     pub method: GetMatchedStylesForNodeMethod,
     pub params: GetMatchedStylesForNodeParams,
 }
-impl super::super::super::CommandResult for GetMatchedStylesForNode {
+impl crate::CommandResult for GetMatchedStylesForNode {
     type Result = super::results::GetMatchedStylesForNodeResult;
 }
 #[doc = "Returns the values of the default UA-defined environment variables used in env()\n[getEnvironmentVariables](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getEnvironmentVariables)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetEnvironmentVariablesParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum GetEnvironmentVariablesMethod {
@@ -483,11 +488,11 @@ pub struct GetEnvironmentVariables {
     pub method: GetEnvironmentVariablesMethod,
     pub params: GetEnvironmentVariablesParams,
 }
-impl super::super::super::CommandResult for GetEnvironmentVariables {
+impl crate::CommandResult for GetEnvironmentVariables {
     type Result = super::results::GetEnvironmentVariablesResult;
 }
 #[doc = "Returns all media queries parsed by the rendering engine.\n[getMediaQueries](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getMediaQueries)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetMediaQueriesParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum GetMediaQueriesMethod {
@@ -503,17 +508,17 @@ pub struct GetMediaQueries {
     pub method: GetMediaQueriesMethod,
     pub params: GetMediaQueriesParams,
 }
-impl super::super::super::CommandResult for GetMediaQueries {
+impl crate::CommandResult for GetMediaQueries {
     type Result = super::results::GetMediaQueriesResult;
 }
 #[doc = "Requests information about platform fonts which we used to render child TextNodes in the given\nnode.\n[getPlatformFontsForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getPlatformFontsForNode)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetPlatformFontsForNodeParams {
     #[serde(rename = "nodeId")]
-    pub node_id: super::super::dom::types::NodeId,
+    pub node_id: crate::browser_protocol::dom::types::NodeId,
 }
 impl GetPlatformFontsForNodeParams {
-    pub fn new(node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn new(node_id: impl Into<crate::browser_protocol::dom::types::NodeId>) -> Self {
         Self {
             node_id: node_id.into(),
         }
@@ -533,17 +538,19 @@ pub struct GetPlatformFontsForNode {
     pub method: GetPlatformFontsForNodeMethod,
     pub params: GetPlatformFontsForNodeParams,
 }
-impl super::super::super::CommandResult for GetPlatformFontsForNode {
+impl crate::CommandResult for GetPlatformFontsForNode {
     type Result = super::results::GetPlatformFontsForNodeResult;
 }
 #[doc = "Returns the current textual content for a stylesheet.\n[getStyleSheetText](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getStyleSheetText)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetStyleSheetTextParams {
     #[serde(rename = "styleSheetId")]
-    pub style_sheet_id: super::super::dom::types::StyleSheetId,
+    pub style_sheet_id: crate::browser_protocol::dom::types::StyleSheetId,
 }
 impl GetStyleSheetTextParams {
-    pub fn new(style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>) -> Self {
+    pub fn new(
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
+    ) -> Self {
         Self {
             style_sheet_id: style_sheet_id.into(),
         }
@@ -563,17 +570,17 @@ pub struct GetStyleSheetText {
     pub method: GetStyleSheetTextMethod,
     pub params: GetStyleSheetTextParams,
 }
-impl super::super::super::CommandResult for GetStyleSheetText {
+impl crate::CommandResult for GetStyleSheetText {
     type Result = super::results::GetStyleSheetTextResult;
 }
 #[doc = "Returns all layers parsed by the rendering engine for the tree scope of a node.\nGiven a DOM element identified by nodeId, getLayersForNode returns the root\nlayer for the nearest ancestor document or shadow root. The layer root contains\nthe full layer tree for the tree scope and their ordering.\n[getLayersForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getLayersForNode)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetLayersForNodeParams {
     #[serde(rename = "nodeId")]
-    pub node_id: super::super::dom::types::NodeId,
+    pub node_id: crate::browser_protocol::dom::types::NodeId,
 }
 impl GetLayersForNodeParams {
-    pub fn new(node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn new(node_id: impl Into<crate::browser_protocol::dom::types::NodeId>) -> Self {
         Self {
             node_id: node_id.into(),
         }
@@ -593,20 +600,20 @@ pub struct GetLayersForNode {
     pub method: GetLayersForNodeMethod,
     pub params: GetLayersForNodeParams,
 }
-impl super::super::super::CommandResult for GetLayersForNode {
+impl crate::CommandResult for GetLayersForNode {
     type Result = super::results::GetLayersForNodeResult;
 }
 #[doc = "Given a CSS selector text and a style sheet ID, getLocationForSelector\nreturns an array of locations of the CSS selector in the style sheet.\n[getLocationForSelector](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getLocationForSelector)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetLocationForSelectorParams {
     #[serde(rename = "styleSheetId")]
-    pub style_sheet_id: super::super::dom::types::StyleSheetId,
+    pub style_sheet_id: crate::browser_protocol::dom::types::StyleSheetId,
     #[serde(rename = "selectorText")]
     pub selector_text: String,
 }
 impl GetLocationForSelectorParams {
     pub fn new(
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
         selector_text: impl Into<String>,
     ) -> Self {
         Self {
@@ -629,7 +636,7 @@ pub struct GetLocationForSelector {
     pub method: GetLocationForSelectorMethod,
     pub params: GetLocationForSelectorParams,
 }
-impl super::super::super::CommandResult for GetLocationForSelector {
+impl crate::CommandResult for GetLocationForSelector {
     type Result = super::results::GetLocationForSelectorResult;
 }
 #[doc = "Starts tracking the given node for the computed style updates\nand whenever the computed style is updated for node, it queues\na `computedStyleUpdated` event with throttling.\nThere can only be 1 node tracked for computed style updates\nso passing a new node id removes tracking from the previous node.\nPass `undefined` to disable tracking.\n[trackComputedStyleUpdatesForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-trackComputedStyleUpdatesForNode)"]
@@ -638,7 +645,7 @@ pub struct TrackComputedStyleUpdatesForNodeParams {
     #[serde(rename = "nodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub node_id: Option<super::super::dom::types::NodeId>,
+    pub node_id: Option<crate::browser_protocol::dom::types::NodeId>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum TrackComputedStyleUpdatesForNodeMethod {
@@ -654,7 +661,7 @@ pub struct TrackComputedStyleUpdatesForNode {
     pub method: TrackComputedStyleUpdatesForNodeMethod,
     pub params: TrackComputedStyleUpdatesForNodeParams,
 }
-impl super::super::super::CommandResult for TrackComputedStyleUpdatesForNode {
+impl crate::CommandResult for TrackComputedStyleUpdatesForNode {
     type Result = super::results::TrackComputedStyleUpdatesForNodeResult;
 }
 #[doc = "Starts tracking the given computed styles for updates. The specified array of properties\nreplaces the one previously specified. Pass empty array to disable tracking.\nUse takeComputedStyleUpdates to retrieve the list of nodes that had properties modified.\nThe changes to computed style properties are only tracked for nodes pushed to the front-end\nby the DOM agent. If no changes to the tracked properties occur after the node has been pushed\nto the front-end, no updates will be issued for the node.\n[trackComputedStyleUpdates](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-trackComputedStyleUpdates)"]
@@ -685,11 +692,11 @@ pub struct TrackComputedStyleUpdates {
     pub method: TrackComputedStyleUpdatesMethod,
     pub params: TrackComputedStyleUpdatesParams,
 }
-impl super::super::super::CommandResult for TrackComputedStyleUpdates {
+impl crate::CommandResult for TrackComputedStyleUpdates {
     type Result = super::results::TrackComputedStyleUpdatesResult;
 }
 #[doc = "Polls the next batch of computed style updates.\n[takeComputedStyleUpdates](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-takeComputedStyleUpdates)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TakeComputedStyleUpdatesParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum TakeComputedStyleUpdatesMethod {
@@ -705,7 +712,7 @@ pub struct TakeComputedStyleUpdates {
     pub method: TakeComputedStyleUpdatesMethod,
     pub params: TakeComputedStyleUpdatesParams,
 }
-impl super::super::super::CommandResult for TakeComputedStyleUpdates {
+impl crate::CommandResult for TakeComputedStyleUpdates {
     type Result = super::results::TakeComputedStyleUpdatesResult;
 }
 #[doc = "Find a rule with the given active property for the given node and set the new value for this\nproperty\n[setEffectivePropertyValueForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setEffectivePropertyValueForNode)"]
@@ -713,7 +720,7 @@ impl super::super::super::CommandResult for TakeComputedStyleUpdates {
 pub struct SetEffectivePropertyValueForNodeParams {
     #[doc = "The element id for which to set property."]
     #[serde(rename = "nodeId")]
-    pub node_id: super::super::dom::types::NodeId,
+    pub node_id: crate::browser_protocol::dom::types::NodeId,
     #[serde(rename = "propertyName")]
     pub property_name: String,
     #[serde(rename = "value")]
@@ -721,7 +728,7 @@ pub struct SetEffectivePropertyValueForNodeParams {
 }
 impl SetEffectivePropertyValueForNodeParams {
     pub fn new(
-        node_id: impl Into<super::super::dom::types::NodeId>,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
         property_name: impl Into<String>,
         value: impl Into<String>,
     ) -> Self {
@@ -746,14 +753,14 @@ pub struct SetEffectivePropertyValueForNode {
     pub method: SetEffectivePropertyValueForNodeMethod,
     pub params: SetEffectivePropertyValueForNodeParams,
 }
-impl super::super::super::CommandResult for SetEffectivePropertyValueForNode {
+impl crate::CommandResult for SetEffectivePropertyValueForNode {
     type Result = super::results::SetEffectivePropertyValueForNodeResult;
 }
 #[doc = "Modifies the property rule property name.\n[setPropertyRulePropertyName](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setPropertyRulePropertyName)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetPropertyRulePropertyNameParams {
     #[serde(rename = "styleSheetId")]
-    pub style_sheet_id: super::super::dom::types::StyleSheetId,
+    pub style_sheet_id: crate::browser_protocol::dom::types::StyleSheetId,
     #[serde(rename = "range")]
     pub range: super::types::SourceRange,
     #[serde(rename = "propertyName")]
@@ -761,7 +768,7 @@ pub struct SetPropertyRulePropertyNameParams {
 }
 impl SetPropertyRulePropertyNameParams {
     pub fn new(
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
         range: impl Into<super::types::SourceRange>,
         property_name: impl Into<String>,
     ) -> Self {
@@ -786,14 +793,14 @@ pub struct SetPropertyRulePropertyName {
     pub method: SetPropertyRulePropertyNameMethod,
     pub params: SetPropertyRulePropertyNameParams,
 }
-impl super::super::super::CommandResult for SetPropertyRulePropertyName {
+impl crate::CommandResult for SetPropertyRulePropertyName {
     type Result = super::results::SetPropertyRulePropertyNameResult;
 }
 #[doc = "Modifies the keyframe rule key text.\n[setKeyframeKey](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setKeyframeKey)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetKeyframeKeyParams {
     #[serde(rename = "styleSheetId")]
-    pub style_sheet_id: super::super::dom::types::StyleSheetId,
+    pub style_sheet_id: crate::browser_protocol::dom::types::StyleSheetId,
     #[serde(rename = "range")]
     pub range: super::types::SourceRange,
     #[serde(rename = "keyText")]
@@ -801,7 +808,7 @@ pub struct SetKeyframeKeyParams {
 }
 impl SetKeyframeKeyParams {
     pub fn new(
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
         range: impl Into<super::types::SourceRange>,
         key_text: impl Into<String>,
     ) -> Self {
@@ -826,14 +833,14 @@ pub struct SetKeyframeKey {
     pub method: SetKeyframeKeyMethod,
     pub params: SetKeyframeKeyParams,
 }
-impl super::super::super::CommandResult for SetKeyframeKey {
+impl crate::CommandResult for SetKeyframeKey {
     type Result = super::results::SetKeyframeKeyResult;
 }
 #[doc = "Modifies the rule selector.\n[setMediaText](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setMediaText)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetMediaTextParams {
     #[serde(rename = "styleSheetId")]
-    pub style_sheet_id: super::super::dom::types::StyleSheetId,
+    pub style_sheet_id: crate::browser_protocol::dom::types::StyleSheetId,
     #[serde(rename = "range")]
     pub range: super::types::SourceRange,
     #[serde(rename = "text")]
@@ -841,7 +848,7 @@ pub struct SetMediaTextParams {
 }
 impl SetMediaTextParams {
     pub fn new(
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
         range: impl Into<super::types::SourceRange>,
         text: impl Into<String>,
     ) -> Self {
@@ -866,14 +873,14 @@ pub struct SetMediaText {
     pub method: SetMediaTextMethod,
     pub params: SetMediaTextParams,
 }
-impl super::super::super::CommandResult for SetMediaText {
+impl crate::CommandResult for SetMediaText {
     type Result = super::results::SetMediaTextResult;
 }
 #[doc = "Modifies the expression of a container query.\n[setContainerQueryText](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setContainerQueryText)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetContainerQueryTextParams {
     #[serde(rename = "styleSheetId")]
-    pub style_sheet_id: super::super::dom::types::StyleSheetId,
+    pub style_sheet_id: crate::browser_protocol::dom::types::StyleSheetId,
     #[serde(rename = "range")]
     pub range: super::types::SourceRange,
     #[serde(rename = "text")]
@@ -881,7 +888,7 @@ pub struct SetContainerQueryTextParams {
 }
 impl SetContainerQueryTextParams {
     pub fn new(
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
         range: impl Into<super::types::SourceRange>,
         text: impl Into<String>,
     ) -> Self {
@@ -906,14 +913,14 @@ pub struct SetContainerQueryText {
     pub method: SetContainerQueryTextMethod,
     pub params: SetContainerQueryTextParams,
 }
-impl super::super::super::CommandResult for SetContainerQueryText {
+impl crate::CommandResult for SetContainerQueryText {
     type Result = super::results::SetContainerQueryTextResult;
 }
 #[doc = "Modifies the expression of a supports at-rule.\n[setSupportsText](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setSupportsText)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetSupportsTextParams {
     #[serde(rename = "styleSheetId")]
-    pub style_sheet_id: super::super::dom::types::StyleSheetId,
+    pub style_sheet_id: crate::browser_protocol::dom::types::StyleSheetId,
     #[serde(rename = "range")]
     pub range: super::types::SourceRange,
     #[serde(rename = "text")]
@@ -921,7 +928,7 @@ pub struct SetSupportsTextParams {
 }
 impl SetSupportsTextParams {
     pub fn new(
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
         range: impl Into<super::types::SourceRange>,
         text: impl Into<String>,
     ) -> Self {
@@ -946,14 +953,14 @@ pub struct SetSupportsText {
     pub method: SetSupportsTextMethod,
     pub params: SetSupportsTextParams,
 }
-impl super::super::super::CommandResult for SetSupportsText {
+impl crate::CommandResult for SetSupportsText {
     type Result = super::results::SetSupportsTextResult;
 }
 #[doc = "Modifies the expression of a scope at-rule.\n[setScopeText](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setScopeText)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetScopeTextParams {
     #[serde(rename = "styleSheetId")]
-    pub style_sheet_id: super::super::dom::types::StyleSheetId,
+    pub style_sheet_id: crate::browser_protocol::dom::types::StyleSheetId,
     #[serde(rename = "range")]
     pub range: super::types::SourceRange,
     #[serde(rename = "text")]
@@ -961,7 +968,7 @@ pub struct SetScopeTextParams {
 }
 impl SetScopeTextParams {
     pub fn new(
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
         range: impl Into<super::types::SourceRange>,
         text: impl Into<String>,
     ) -> Self {
@@ -986,14 +993,14 @@ pub struct SetScopeText {
     pub method: SetScopeTextMethod,
     pub params: SetScopeTextParams,
 }
-impl super::super::super::CommandResult for SetScopeText {
+impl crate::CommandResult for SetScopeText {
     type Result = super::results::SetScopeTextResult;
 }
 #[doc = "Modifies the rule selector.\n[setRuleSelector](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setRuleSelector)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetRuleSelectorParams {
     #[serde(rename = "styleSheetId")]
-    pub style_sheet_id: super::super::dom::types::StyleSheetId,
+    pub style_sheet_id: crate::browser_protocol::dom::types::StyleSheetId,
     #[serde(rename = "range")]
     pub range: super::types::SourceRange,
     #[serde(rename = "selector")]
@@ -1001,7 +1008,7 @@ pub struct SetRuleSelectorParams {
 }
 impl SetRuleSelectorParams {
     pub fn new(
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
         range: impl Into<super::types::SourceRange>,
         selector: impl Into<String>,
     ) -> Self {
@@ -1026,20 +1033,20 @@ pub struct SetRuleSelector {
     pub method: SetRuleSelectorMethod,
     pub params: SetRuleSelectorParams,
 }
-impl super::super::super::CommandResult for SetRuleSelector {
+impl crate::CommandResult for SetRuleSelector {
     type Result = super::results::SetRuleSelectorResult;
 }
 #[doc = "Sets the new stylesheet text.\n[setStyleSheetText](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setStyleSheetText)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetStyleSheetTextParams {
     #[serde(rename = "styleSheetId")]
-    pub style_sheet_id: super::super::dom::types::StyleSheetId,
+    pub style_sheet_id: crate::browser_protocol::dom::types::StyleSheetId,
     #[serde(rename = "text")]
     pub text: String,
 }
 impl SetStyleSheetTextParams {
     pub fn new(
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
         text: impl Into<String>,
     ) -> Self {
         Self {
@@ -1062,7 +1069,7 @@ pub struct SetStyleSheetText {
     pub method: SetStyleSheetTextMethod,
     pub params: SetStyleSheetTextParams,
 }
-impl super::super::super::CommandResult for SetStyleSheetText {
+impl crate::CommandResult for SetStyleSheetText {
     type Result = super::results::SetStyleSheetTextResult;
 }
 #[doc = "Applies specified style edits one after another in the given order.\n[setStyleTexts](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setStyleTexts)"]
@@ -1075,7 +1082,7 @@ pub struct SetStyleTextsParams {
     #[serde(rename = "nodeForPropertySyntaxValidation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub node_for_property_syntax_validation: Option<super::super::dom::types::NodeId>,
+    pub node_for_property_syntax_validation: Option<crate::browser_protocol::dom::types::NodeId>,
 }
 impl SetStyleTextsParams {
     pub fn new(edits: Vec<super::types::StyleDeclarationEdit>) -> Self {
@@ -1099,11 +1106,11 @@ pub struct SetStyleTexts {
     pub method: SetStyleTextsMethod,
     pub params: SetStyleTextsParams,
 }
-impl super::super::super::CommandResult for SetStyleTexts {
+impl crate::CommandResult for SetStyleTexts {
     type Result = super::results::SetStyleTextsResult;
 }
 #[doc = "Enables the selector recording.\n[startRuleUsageTracking](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-startRuleUsageTracking)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StartRuleUsageTrackingParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum StartRuleUsageTrackingMethod {
@@ -1119,11 +1126,11 @@ pub struct StartRuleUsageTracking {
     pub method: StartRuleUsageTrackingMethod,
     pub params: StartRuleUsageTrackingParams,
 }
-impl super::super::super::CommandResult for StartRuleUsageTracking {
+impl crate::CommandResult for StartRuleUsageTracking {
     type Result = super::results::StartRuleUsageTrackingResult;
 }
 #[doc = "Stop tracking rule usage and return the list of rules that were used since last call to\n`takeCoverageDelta` (or since start of coverage instrumentation).\n[stopRuleUsageTracking](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-stopRuleUsageTracking)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StopRuleUsageTrackingParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum StopRuleUsageTrackingMethod {
@@ -1139,11 +1146,11 @@ pub struct StopRuleUsageTracking {
     pub method: StopRuleUsageTrackingMethod,
     pub params: StopRuleUsageTrackingParams,
 }
-impl super::super::super::CommandResult for StopRuleUsageTracking {
+impl crate::CommandResult for StopRuleUsageTracking {
     type Result = super::results::StopRuleUsageTrackingResult;
 }
 #[doc = "Obtain list of rules that became used since last call to this method (or since start of coverage\ninstrumentation).\n[takeCoverageDelta](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-takeCoverageDelta)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TakeCoverageDeltaParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum TakeCoverageDeltaMethod {
@@ -1159,7 +1166,7 @@ pub struct TakeCoverageDelta {
     pub method: TakeCoverageDeltaMethod,
     pub params: TakeCoverageDeltaParams,
 }
-impl super::super::super::CommandResult for TakeCoverageDelta {
+impl crate::CommandResult for TakeCoverageDelta {
     type Result = super::results::TakeCoverageDeltaResult;
 }
 #[doc = "Enables/disables rendering of local CSS fonts (enabled by default).\n[setLocalFontsEnabled](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setLocalFontsEnabled)"]
@@ -1190,7 +1197,7 @@ pub struct SetLocalFontsEnabled {
     pub method: SetLocalFontsEnabledMethod,
     pub params: SetLocalFontsEnabledParams,
 }
-impl super::super::super::CommandResult for SetLocalFontsEnabled {
+impl crate::CommandResult for SetLocalFontsEnabled {
     type Result = super::results::SetLocalFontsEnabledResult;
 }
 group_enum ! (CssCommands { AddRule (AddRule) , CollectClassNames (CollectClassNames) , CreateStyleSheet (CreateStyleSheet) , Disable (Disable) , Enable (Enable) , ForcePseudoState (ForcePseudoState) , ForceStartingStyle (ForceStartingStyle) , GetBackgroundColors (GetBackgroundColors) , GetComputedStyleForNode (GetComputedStyleForNode) , ResolveValues (ResolveValues) , GetLonghandProperties (GetLonghandProperties) , GetInlineStylesForNode (GetInlineStylesForNode) , GetAnimatedStylesForNode (GetAnimatedStylesForNode) , GetMatchedStylesForNode (GetMatchedStylesForNode) , GetEnvironmentVariables (GetEnvironmentVariables) , GetMediaQueries (GetMediaQueries) , GetPlatformFontsForNode (GetPlatformFontsForNode) , GetStyleSheetText (GetStyleSheetText) , GetLayersForNode (GetLayersForNode) , GetLocationForSelector (GetLocationForSelector) , TrackComputedStyleUpdatesForNode (TrackComputedStyleUpdatesForNode) , TrackComputedStyleUpdates (TrackComputedStyleUpdates) , TakeComputedStyleUpdates (TakeComputedStyleUpdates) , SetEffectivePropertyValueForNode (SetEffectivePropertyValueForNode) , SetPropertyRulePropertyName (SetPropertyRulePropertyName) , SetKeyframeKey (SetKeyframeKey) , SetMediaText (SetMediaText) , SetContainerQueryText (SetContainerQueryText) , SetSupportsText (SetSupportsText) , SetScopeText (SetScopeText) , SetRuleSelector (SetRuleSelector) , SetStyleSheetText (SetStyleSheetText) , SetStyleTexts (SetStyleTexts) , StartRuleUsageTracking (StartRuleUsageTracking) , StopRuleUsageTracking (StopRuleUsageTracking) , TakeCoverageDelta (TakeCoverageDelta) , SetLocalFontsEnabled (SetLocalFontsEnabled) });

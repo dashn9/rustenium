@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct BufferUsage {
+pub struct BufferUsageParams {
     #[doc = "A number in range [0..1] that indicates the used size of event buffer as a fraction of its\ntotal size."]
     #[serde(rename = "percentFull")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -17,22 +17,43 @@ pub struct BufferUsage {
     #[serde(default)]
     pub value: Option<f64>,
 }
-impl BufferUsage {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum BufferUsageMethod {
+    #[serde(rename = "Tracing.bufferUsage")]
+    BufferUsage,
+}
+impl BufferUsageMethod {
     pub const IDENTIFIER: &'static str = "Tracing.bufferUsage";
+}
+#[derive(Debug, Clone, PartialEq)]
+pub struct BufferUsage {
+    pub method: BufferUsageMethod,
+    pub params: BufferUsageParams,
 }
 #[doc = "Contains a bucket of collected trace events. When tracing is stopped collected events will be\nsent as a sequence of dataCollected events followed by tracingComplete event.\n[dataCollected](https://chromedevtools.github.io/devtools-protocol/tot/Tracing/#event-dataCollected)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct DataCollected {
+pub struct DataCollectedParams {
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub value: Vec<serde_json::Value>,
 }
-impl DataCollected {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum DataCollectedMethod {
+    #[serde(rename = "Tracing.dataCollected")]
+    DataCollected,
+}
+impl DataCollectedMethod {
     pub const IDENTIFIER: &'static str = "Tracing.dataCollected";
+}
+#[doc = "Contains a bucket of collected trace events. When tracing is stopped collected events will be\nsent as a sequence of dataCollected events followed by tracingComplete event.\n[dataCollected](https://chromedevtools.github.io/devtools-protocol/tot/Tracing/#event-dataCollected)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct DataCollected {
+    pub method: DataCollectedMethod,
+    pub params: DataCollectedParams,
 }
 #[doc = "Signals that tracing is stopped and there is no trace buffers pending flush, all data were\ndelivered via dataCollected events.\n[tracingComplete](https://chromedevtools.github.io/devtools-protocol/tot/Tracing/#event-tracingComplete)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct TracingComplete {
+pub struct TracingCompleteParams {
     #[doc = "Indicates whether some trace data is known to have been lost, e.g. because the trace ring\nbuffer wrapped around."]
     #[serde(rename = "dataLossOccurred")]
     pub data_loss_occurred: bool,
@@ -40,7 +61,7 @@ pub struct TracingComplete {
     #[serde(rename = "stream")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub stream: Option<super::super::io::types::StreamHandle>,
+    pub stream: Option<crate::browser_protocol::io::types::StreamHandle>,
     #[doc = "Trace data format of returned stream."]
     #[serde(rename = "traceFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -52,7 +73,18 @@ pub struct TracingComplete {
     #[serde(default)]
     pub stream_compression: Option<super::types::StreamCompression>,
 }
-impl TracingComplete {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum TracingCompleteMethod {
+    #[serde(rename = "Tracing.tracingComplete")]
+    TracingComplete,
+}
+impl TracingCompleteMethod {
     pub const IDENTIFIER: &'static str = "Tracing.tracingComplete";
+}
+#[doc = "Signals that tracing is stopped and there is no trace buffers pending flush, all data were\ndelivered via dataCollected events.\n[tracingComplete](https://chromedevtools.github.io/devtools-protocol/tot/Tracing/#event-tracingComplete)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct TracingComplete {
+    pub method: TracingCompleteMethod,
+    pub params: TracingCompleteParams,
 }
 group_enum ! (TracingEvents { BufferUsage (BufferUsage) , DataCollected (DataCollected) , TracingComplete (TracingComplete) });

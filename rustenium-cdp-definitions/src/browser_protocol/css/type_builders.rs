@@ -1,19 +1,19 @@
 use super::types::*;
 impl PseudoElementMatches {
     pub fn builder() -> PseudoElementMatchesBuilder {
-        PseudoElementMatchesBuilder::default()
+        <PseudoElementMatchesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct PseudoElementMatchesBuilder {
-    pseudo_type: Option<super::super::dom::types::PseudoType>,
+    pseudo_type: Option<crate::browser_protocol::dom::types::PseudoType>,
     pseudo_identifier: Option<String>,
     matches: Option<Vec<RuleMatch>>,
 }
 impl PseudoElementMatchesBuilder {
     pub fn pseudo_type(
         mut self,
-        pseudo_type: impl Into<super::super::dom::types::PseudoType>,
+        pseudo_type: impl Into<crate::browser_protocol::dom::types::PseudoType>,
     ) -> Self {
         self.pseudo_type = Some(pseudo_type.into());
         self
@@ -52,7 +52,7 @@ impl PseudoElementMatchesBuilder {
 }
 impl CssAnimationStyle {
     pub fn builder() -> CssAnimationStyleBuilder {
-        CssAnimationStyleBuilder::default()
+        <CssAnimationStyleBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -80,7 +80,7 @@ impl CssAnimationStyleBuilder {
 }
 impl InheritedStyleEntry {
     pub fn builder() -> InheritedStyleEntryBuilder {
-        InheritedStyleEntryBuilder::default()
+        <InheritedStyleEntryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -123,7 +123,7 @@ impl InheritedStyleEntryBuilder {
 }
 impl InheritedAnimatedStyleEntry {
     pub fn builder() -> InheritedAnimatedStyleEntryBuilder {
-        InheritedAnimatedStyleEntryBuilder::default()
+        <InheritedAnimatedStyleEntryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -161,7 +161,7 @@ impl InheritedAnimatedStyleEntryBuilder {
 }
 impl InheritedPseudoElementMatches {
     pub fn builder() -> InheritedPseudoElementMatchesBuilder {
-        InheritedPseudoElementMatchesBuilder::default()
+        <InheritedPseudoElementMatchesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -195,7 +195,7 @@ impl InheritedPseudoElementMatchesBuilder {
 }
 impl RuleMatch {
     pub fn builder() -> RuleMatchBuilder {
-        RuleMatchBuilder::default()
+        <RuleMatchBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -240,7 +240,7 @@ impl RuleMatchBuilder {
 }
 impl Value {
     pub fn builder() -> ValueBuilder {
-        ValueBuilder::default()
+        <ValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -274,7 +274,7 @@ impl ValueBuilder {
 }
 impl Specificity {
     pub fn builder() -> SpecificityBuilder {
-        SpecificityBuilder::default()
+        <SpecificityBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -312,7 +312,7 @@ impl SpecificityBuilder {
 }
 impl SelectorList {
     pub fn builder() -> SelectorListBuilder {
-        SelectorListBuilder::default()
+        <SelectorListBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -354,18 +354,18 @@ impl SelectorListBuilder {
 }
 impl CssStyleSheetHeader {
     pub fn builder() -> CssStyleSheetHeaderBuilder {
-        CssStyleSheetHeaderBuilder::default()
+        <CssStyleSheetHeaderBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct CssStyleSheetHeaderBuilder {
-    style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
-    frame_id: Option<super::super::page::types::FrameId>,
+    style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
+    frame_id: Option<crate::browser_protocol::page::types::FrameId>,
     source_url: Option<String>,
     source_map_url: Option<String>,
     origin: Option<StyleSheetOrigin>,
     title: Option<String>,
-    owner_node: Option<super::super::dom::types::BackendNodeId>,
+    owner_node: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     disabled: Option<bool>,
     has_source_url: Option<bool>,
     is_inline: Option<bool>,
@@ -381,12 +381,15 @@ pub struct CssStyleSheetHeaderBuilder {
 impl CssStyleSheetHeaderBuilder {
     pub fn style_sheet_id(
         mut self,
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
     ) -> Self {
         self.style_sheet_id = Some(style_sheet_id.into());
         self
     }
-    pub fn frame_id(mut self, frame_id: impl Into<super::super::page::types::FrameId>) -> Self {
+    pub fn frame_id(
+        mut self,
+        frame_id: impl Into<crate::browser_protocol::page::types::FrameId>,
+    ) -> Self {
         self.frame_id = Some(frame_id.into());
         self
     }
@@ -408,7 +411,7 @@ impl CssStyleSheetHeaderBuilder {
     }
     pub fn owner_node(
         mut self,
-        owner_node: impl Into<super::super::dom::types::BackendNodeId>,
+        owner_node: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
     ) -> Self {
         self.owner_node = Some(owner_node.into());
         self
@@ -510,17 +513,17 @@ impl CssStyleSheetHeaderBuilder {
 }
 impl CssRule {
     pub fn builder() -> CssRuleBuilder {
-        CssRuleBuilder::default()
+        <CssRuleBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct CssRuleBuilder {
-    style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     selector_list: Option<SelectorList>,
     nesting_selectors: Option<Vec<String>>,
     origin: Option<StyleSheetOrigin>,
     style: Option<CssStyle>,
-    origin_tree_scope_node_id: Option<super::super::dom::types::BackendNodeId>,
+    origin_tree_scope_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     media: Option<Vec<CssMedia>>,
     container_queries: Option<Vec<CssContainerQuery>>,
     supports: Option<Vec<CssSupports>>,
@@ -532,7 +535,7 @@ pub struct CssRuleBuilder {
 impl CssRuleBuilder {
     pub fn style_sheet_id(
         mut self,
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
     ) -> Self {
         self.style_sheet_id = Some(style_sheet_id.into());
         self
@@ -567,7 +570,7 @@ impl CssRuleBuilder {
     }
     pub fn origin_tree_scope_node_id(
         mut self,
-        origin_tree_scope_node_id: impl Into<super::super::dom::types::BackendNodeId>,
+        origin_tree_scope_node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
     ) -> Self {
         self.origin_tree_scope_node_id = Some(origin_tree_scope_node_id.into());
         self
@@ -710,12 +713,12 @@ impl CssRuleBuilder {
 }
 impl RuleUsage {
     pub fn builder() -> RuleUsageBuilder {
-        RuleUsageBuilder::default()
+        <RuleUsageBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct RuleUsageBuilder {
-    style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     start_offset: Option<f64>,
     end_offset: Option<f64>,
     used: Option<bool>,
@@ -723,7 +726,7 @@ pub struct RuleUsageBuilder {
 impl RuleUsageBuilder {
     pub fn style_sheet_id(
         mut self,
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
     ) -> Self {
         self.style_sheet_id = Some(style_sheet_id.into());
         self
@@ -759,7 +762,7 @@ impl RuleUsageBuilder {
 }
 impl SourceRange {
     pub fn builder() -> SourceRangeBuilder {
-        SourceRangeBuilder::default()
+        <SourceRangeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -805,7 +808,7 @@ impl SourceRangeBuilder {
 }
 impl ShorthandEntry {
     pub fn builder() -> ShorthandEntryBuilder {
-        ShorthandEntryBuilder::default()
+        <ShorthandEntryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -841,7 +844,7 @@ impl ShorthandEntryBuilder {
 }
 impl CssComputedStyleProperty {
     pub fn builder() -> CssComputedStylePropertyBuilder {
-        CssComputedStylePropertyBuilder::default()
+        <CssComputedStylePropertyBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -871,7 +874,7 @@ impl CssComputedStylePropertyBuilder {
 }
 impl ComputedStyleExtraFields {
     pub fn builder() -> ComputedStyleExtraFieldsBuilder {
-        ComputedStyleExtraFieldsBuilder::default()
+        <ComputedStyleExtraFieldsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -896,12 +899,12 @@ impl ComputedStyleExtraFieldsBuilder {
 }
 impl CssStyle {
     pub fn builder() -> CssStyleBuilder {
-        CssStyleBuilder::default()
+        <CssStyleBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct CssStyleBuilder {
-    style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     css_properties: Option<Vec<CssProperty>>,
     shorthand_entries: Option<Vec<ShorthandEntry>>,
     css_text: Option<String>,
@@ -910,7 +913,7 @@ pub struct CssStyleBuilder {
 impl CssStyleBuilder {
     pub fn style_sheet_id(
         mut self,
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
     ) -> Self {
         self.style_sheet_id = Some(style_sheet_id.into());
         self
@@ -974,7 +977,7 @@ impl CssStyleBuilder {
 }
 impl CssProperty {
     pub fn builder() -> CssPropertyBuilder {
-        CssPropertyBuilder::default()
+        <CssPropertyBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1058,7 +1061,7 @@ impl CssPropertyBuilder {
 }
 impl CssMedia {
     pub fn builder() -> CssMediaBuilder {
-        CssMediaBuilder::default()
+        <CssMediaBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1067,7 +1070,7 @@ pub struct CssMediaBuilder {
     source: Option<CssMediaSource>,
     source_url: Option<String>,
     range: Option<SourceRange>,
-    style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     media_list: Option<Vec<MediaQuery>>,
 }
 impl CssMediaBuilder {
@@ -1089,7 +1092,7 @@ impl CssMediaBuilder {
     }
     pub fn style_sheet_id(
         mut self,
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
     ) -> Self {
         self.style_sheet_id = Some(style_sheet_id.into());
         self
@@ -1127,7 +1130,7 @@ impl CssMediaBuilder {
 }
 impl MediaQuery {
     pub fn builder() -> MediaQueryBuilder {
-        MediaQueryBuilder::default()
+        <MediaQueryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1169,7 +1172,7 @@ impl MediaQueryBuilder {
 }
 impl MediaQueryExpression {
     pub fn builder() -> MediaQueryExpressionBuilder {
-        MediaQueryExpressionBuilder::default()
+        <MediaQueryExpressionBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1219,17 +1222,17 @@ impl MediaQueryExpressionBuilder {
 }
 impl CssContainerQuery {
     pub fn builder() -> CssContainerQueryBuilder {
-        CssContainerQueryBuilder::default()
+        <CssContainerQueryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct CssContainerQueryBuilder {
     text: Option<String>,
     range: Option<SourceRange>,
-    style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     name: Option<String>,
-    physical_axes: Option<super::super::dom::types::PhysicalAxes>,
-    logical_axes: Option<super::super::dom::types::LogicalAxes>,
+    physical_axes: Option<crate::browser_protocol::dom::types::PhysicalAxes>,
+    logical_axes: Option<crate::browser_protocol::dom::types::LogicalAxes>,
     queries_scroll_state: Option<bool>,
     queries_anchored: Option<bool>,
 }
@@ -1244,7 +1247,7 @@ impl CssContainerQueryBuilder {
     }
     pub fn style_sheet_id(
         mut self,
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
     ) -> Self {
         self.style_sheet_id = Some(style_sheet_id.into());
         self
@@ -1255,14 +1258,14 @@ impl CssContainerQueryBuilder {
     }
     pub fn physical_axes(
         mut self,
-        physical_axes: impl Into<super::super::dom::types::PhysicalAxes>,
+        physical_axes: impl Into<crate::browser_protocol::dom::types::PhysicalAxes>,
     ) -> Self {
         self.physical_axes = Some(physical_axes.into());
         self
     }
     pub fn logical_axes(
         mut self,
-        logical_axes: impl Into<super::super::dom::types::LogicalAxes>,
+        logical_axes: impl Into<crate::browser_protocol::dom::types::LogicalAxes>,
     ) -> Self {
         self.logical_axes = Some(logical_axes.into());
         self
@@ -1292,7 +1295,7 @@ impl CssContainerQueryBuilder {
 }
 impl CssSupports {
     pub fn builder() -> CssSupportsBuilder {
-        CssSupportsBuilder::default()
+        <CssSupportsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1300,7 +1303,7 @@ pub struct CssSupportsBuilder {
     text: Option<String>,
     active: Option<bool>,
     range: Option<SourceRange>,
-    style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
 }
 impl CssSupportsBuilder {
     pub fn text(mut self, text: impl Into<String>) -> Self {
@@ -1317,7 +1320,7 @@ impl CssSupportsBuilder {
     }
     pub fn style_sheet_id(
         mut self,
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
     ) -> Self {
         self.style_sheet_id = Some(style_sheet_id.into());
         self
@@ -1337,14 +1340,14 @@ impl CssSupportsBuilder {
 }
 impl CssScope {
     pub fn builder() -> CssScopeBuilder {
-        CssScopeBuilder::default()
+        <CssScopeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct CssScopeBuilder {
     text: Option<String>,
     range: Option<SourceRange>,
-    style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
 }
 impl CssScopeBuilder {
     pub fn text(mut self, text: impl Into<String>) -> Self {
@@ -1357,7 +1360,7 @@ impl CssScopeBuilder {
     }
     pub fn style_sheet_id(
         mut self,
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
     ) -> Self {
         self.style_sheet_id = Some(style_sheet_id.into());
         self
@@ -1374,14 +1377,14 @@ impl CssScopeBuilder {
 }
 impl CssLayer {
     pub fn builder() -> CssLayerBuilder {
-        CssLayerBuilder::default()
+        <CssLayerBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct CssLayerBuilder {
     text: Option<String>,
     range: Option<SourceRange>,
-    style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
 }
 impl CssLayerBuilder {
     pub fn text(mut self, text: impl Into<String>) -> Self {
@@ -1394,7 +1397,7 @@ impl CssLayerBuilder {
     }
     pub fn style_sheet_id(
         mut self,
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
     ) -> Self {
         self.style_sheet_id = Some(style_sheet_id.into());
         self
@@ -1411,13 +1414,13 @@ impl CssLayerBuilder {
 }
 impl CssStartingStyle {
     pub fn builder() -> CssStartingStyleBuilder {
-        CssStartingStyleBuilder::default()
+        <CssStartingStyleBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct CssStartingStyleBuilder {
     range: Option<SourceRange>,
-    style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
 }
 impl CssStartingStyleBuilder {
     pub fn range(mut self, range: impl Into<SourceRange>) -> Self {
@@ -1426,7 +1429,7 @@ impl CssStartingStyleBuilder {
     }
     pub fn style_sheet_id(
         mut self,
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
     ) -> Self {
         self.style_sheet_id = Some(style_sheet_id.into());
         self
@@ -1440,7 +1443,7 @@ impl CssStartingStyleBuilder {
 }
 impl CssLayerData {
     pub fn builder() -> CssLayerDataBuilder {
-        CssLayerDataBuilder::default()
+        <CssLayerDataBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1488,7 +1491,7 @@ impl CssLayerDataBuilder {
 }
 impl PlatformFontUsage {
     pub fn builder() -> PlatformFontUsageBuilder {
-        PlatformFontUsageBuilder::default()
+        <PlatformFontUsageBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1537,7 +1540,7 @@ impl PlatformFontUsageBuilder {
 }
 impl FontVariationAxis {
     pub fn builder() -> FontVariationAxisBuilder {
-        FontVariationAxisBuilder::default()
+        <FontVariationAxisBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1591,7 +1594,7 @@ impl FontVariationAxisBuilder {
 }
 impl FontFace {
     pub fn builder() -> FontFaceBuilder {
-        FontFaceBuilder::default()
+        <FontFaceBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1698,19 +1701,19 @@ impl FontFaceBuilder {
 }
 impl CssTryRule {
     pub fn builder() -> CssTryRuleBuilder {
-        CssTryRuleBuilder::default()
+        <CssTryRuleBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct CssTryRuleBuilder {
-    style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     origin: Option<StyleSheetOrigin>,
     style: Option<CssStyle>,
 }
 impl CssTryRuleBuilder {
     pub fn style_sheet_id(
         mut self,
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
     ) -> Self {
         self.style_sheet_id = Some(style_sheet_id.into());
         self
@@ -1737,13 +1740,13 @@ impl CssTryRuleBuilder {
 }
 impl CssPositionTryRule {
     pub fn builder() -> CssPositionTryRuleBuilder {
-        CssPositionTryRuleBuilder::default()
+        <CssPositionTryRuleBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct CssPositionTryRuleBuilder {
     name: Option<Value>,
-    style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     origin: Option<StyleSheetOrigin>,
     style: Option<CssStyle>,
     active: Option<bool>,
@@ -1755,7 +1758,7 @@ impl CssPositionTryRuleBuilder {
     }
     pub fn style_sheet_id(
         mut self,
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
     ) -> Self {
         self.style_sheet_id = Some(style_sheet_id.into());
         self
@@ -1792,7 +1795,7 @@ impl CssPositionTryRuleBuilder {
 }
 impl CssKeyframesRule {
     pub fn builder() -> CssKeyframesRuleBuilder {
-        CssKeyframesRuleBuilder::default()
+        <CssKeyframesRuleBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1834,7 +1837,7 @@ impl CssKeyframesRuleBuilder {
 }
 impl CssPropertyRegistration {
     pub fn builder() -> CssPropertyRegistrationBuilder {
-        CssPropertyRegistrationBuilder::default()
+        <CssPropertyRegistrationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1878,7 +1881,7 @@ impl CssPropertyRegistrationBuilder {
 }
 impl CssAtRule {
     pub fn builder() -> CssAtRuleBuilder {
-        CssAtRuleBuilder::default()
+        <CssAtRuleBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1886,7 +1889,7 @@ pub struct CssAtRuleBuilder {
     r#type: Option<CssAtRuleType>,
     subsection: Option<CssAtRuleSubsection>,
     name: Option<Value>,
-    style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     origin: Option<StyleSheetOrigin>,
     style: Option<CssStyle>,
 }
@@ -1905,7 +1908,7 @@ impl CssAtRuleBuilder {
     }
     pub fn style_sheet_id(
         mut self,
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
     ) -> Self {
         self.style_sheet_id = Some(style_sheet_id.into());
         self
@@ -1937,12 +1940,12 @@ impl CssAtRuleBuilder {
 }
 impl CssPropertyRule {
     pub fn builder() -> CssPropertyRuleBuilder {
-        CssPropertyRuleBuilder::default()
+        <CssPropertyRuleBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct CssPropertyRuleBuilder {
-    style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     origin: Option<StyleSheetOrigin>,
     property_name: Option<Value>,
     style: Option<CssStyle>,
@@ -1950,7 +1953,7 @@ pub struct CssPropertyRuleBuilder {
 impl CssPropertyRuleBuilder {
     pub fn style_sheet_id(
         mut self,
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
     ) -> Self {
         self.style_sheet_id = Some(style_sheet_id.into());
         self
@@ -1984,7 +1987,7 @@ impl CssPropertyRuleBuilder {
 }
 impl CssFunctionParameter {
     pub fn builder() -> CssFunctionParameterBuilder {
-        CssFunctionParameterBuilder::default()
+        <CssFunctionParameterBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -2014,7 +2017,7 @@ impl CssFunctionParameterBuilder {
 }
 impl CssFunctionConditionNode {
     pub fn builder() -> CssFunctionConditionNodeBuilder {
-        CssFunctionConditionNodeBuilder::default()
+        <CssFunctionConditionNodeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -2074,7 +2077,7 @@ impl CssFunctionConditionNodeBuilder {
 }
 impl CssFunctionNode {
     pub fn builder() -> CssFunctionNodeBuilder {
-        CssFunctionNodeBuilder::default()
+        <CssFunctionNodeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -2100,13 +2103,13 @@ impl CssFunctionNodeBuilder {
 }
 impl CssFunctionRule {
     pub fn builder() -> CssFunctionRuleBuilder {
-        CssFunctionRuleBuilder::default()
+        <CssFunctionRuleBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct CssFunctionRuleBuilder {
     name: Option<Value>,
-    style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     origin: Option<StyleSheetOrigin>,
     parameters: Option<Vec<CssFunctionParameter>>,
     children: Option<Vec<CssFunctionNode>>,
@@ -2118,7 +2121,7 @@ impl CssFunctionRuleBuilder {
     }
     pub fn style_sheet_id(
         mut self,
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
     ) -> Self {
         self.style_sheet_id = Some(style_sheet_id.into());
         self
@@ -2179,12 +2182,12 @@ impl CssFunctionRuleBuilder {
 }
 impl CssKeyframeRule {
     pub fn builder() -> CssKeyframeRuleBuilder {
-        CssKeyframeRuleBuilder::default()
+        <CssKeyframeRuleBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct CssKeyframeRuleBuilder {
-    style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     origin: Option<StyleSheetOrigin>,
     key_text: Option<Value>,
     style: Option<CssStyle>,
@@ -2192,7 +2195,7 @@ pub struct CssKeyframeRuleBuilder {
 impl CssKeyframeRuleBuilder {
     pub fn style_sheet_id(
         mut self,
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
     ) -> Self {
         self.style_sheet_id = Some(style_sheet_id.into());
         self
@@ -2226,19 +2229,19 @@ impl CssKeyframeRuleBuilder {
 }
 impl StyleDeclarationEdit {
     pub fn builder() -> StyleDeclarationEditBuilder {
-        StyleDeclarationEditBuilder::default()
+        <StyleDeclarationEditBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct StyleDeclarationEditBuilder {
-    style_sheet_id: Option<super::super::dom::types::StyleSheetId>,
+    style_sheet_id: Option<crate::browser_protocol::dom::types::StyleSheetId>,
     range: Option<SourceRange>,
     text: Option<String>,
 }
 impl StyleDeclarationEditBuilder {
     pub fn style_sheet_id(
         mut self,
-        style_sheet_id: impl Into<super::super::dom::types::StyleSheetId>,
+        style_sheet_id: impl Into<crate::browser_protocol::dom::types::StyleSheetId>,
     ) -> Self {
         self.style_sheet_id = Some(style_sheet_id.into());
         self

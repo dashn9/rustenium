@@ -1,25 +1,25 @@
 use super::types::*;
 impl SourceOrderConfig {
     pub fn builder() -> SourceOrderConfigBuilder {
-        SourceOrderConfigBuilder::default()
+        <SourceOrderConfigBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct SourceOrderConfigBuilder {
-    parent_outline_color: Option<super::super::dom::types::Rgba>,
-    child_outline_color: Option<super::super::dom::types::Rgba>,
+    parent_outline_color: Option<crate::browser_protocol::dom::types::Rgba>,
+    child_outline_color: Option<crate::browser_protocol::dom::types::Rgba>,
 }
 impl SourceOrderConfigBuilder {
     pub fn parent_outline_color(
         mut self,
-        parent_outline_color: impl Into<super::super::dom::types::Rgba>,
+        parent_outline_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
     ) -> Self {
         self.parent_outline_color = Some(parent_outline_color.into());
         self
     }
     pub fn child_outline_color(
         mut self,
-        child_outline_color: impl Into<super::super::dom::types::Rgba>,
+        child_outline_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
     ) -> Self {
         self.child_outline_color = Some(child_outline_color.into());
         self
@@ -43,7 +43,7 @@ impl SourceOrderConfigBuilder {
 }
 impl GridHighlightConfig {
     pub fn builder() -> GridHighlightConfigBuilder {
-        GridHighlightConfigBuilder::default()
+        <GridHighlightConfigBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -54,18 +54,18 @@ pub struct GridHighlightConfigBuilder {
     show_area_names: Option<bool>,
     show_line_names: Option<bool>,
     show_track_sizes: Option<bool>,
-    grid_border_color: Option<super::super::dom::types::Rgba>,
-    row_line_color: Option<super::super::dom::types::Rgba>,
-    column_line_color: Option<super::super::dom::types::Rgba>,
+    grid_border_color: Option<crate::browser_protocol::dom::types::Rgba>,
+    row_line_color: Option<crate::browser_protocol::dom::types::Rgba>,
+    column_line_color: Option<crate::browser_protocol::dom::types::Rgba>,
     grid_border_dash: Option<bool>,
     row_line_dash: Option<bool>,
     column_line_dash: Option<bool>,
-    row_gap_color: Option<super::super::dom::types::Rgba>,
-    row_hatch_color: Option<super::super::dom::types::Rgba>,
-    column_gap_color: Option<super::super::dom::types::Rgba>,
-    column_hatch_color: Option<super::super::dom::types::Rgba>,
-    area_border_color: Option<super::super::dom::types::Rgba>,
-    grid_background_color: Option<super::super::dom::types::Rgba>,
+    row_gap_color: Option<crate::browser_protocol::dom::types::Rgba>,
+    row_hatch_color: Option<crate::browser_protocol::dom::types::Rgba>,
+    column_gap_color: Option<crate::browser_protocol::dom::types::Rgba>,
+    column_hatch_color: Option<crate::browser_protocol::dom::types::Rgba>,
+    area_border_color: Option<crate::browser_protocol::dom::types::Rgba>,
+    grid_background_color: Option<crate::browser_protocol::dom::types::Rgba>,
 }
 impl GridHighlightConfigBuilder {
     pub fn show_grid_extension_lines(mut self, show_grid_extension_lines: impl Into<bool>) -> Self {
@@ -100,21 +100,21 @@ impl GridHighlightConfigBuilder {
     }
     pub fn grid_border_color(
         mut self,
-        grid_border_color: impl Into<super::super::dom::types::Rgba>,
+        grid_border_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
     ) -> Self {
         self.grid_border_color = Some(grid_border_color.into());
         self
     }
     pub fn row_line_color(
         mut self,
-        row_line_color: impl Into<super::super::dom::types::Rgba>,
+        row_line_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
     ) -> Self {
         self.row_line_color = Some(row_line_color.into());
         self
     }
     pub fn column_line_color(
         mut self,
-        column_line_color: impl Into<super::super::dom::types::Rgba>,
+        column_line_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
     ) -> Self {
         self.column_line_color = Some(column_line_color.into());
         self
@@ -133,42 +133,42 @@ impl GridHighlightConfigBuilder {
     }
     pub fn row_gap_color(
         mut self,
-        row_gap_color: impl Into<super::super::dom::types::Rgba>,
+        row_gap_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
     ) -> Self {
         self.row_gap_color = Some(row_gap_color.into());
         self
     }
     pub fn row_hatch_color(
         mut self,
-        row_hatch_color: impl Into<super::super::dom::types::Rgba>,
+        row_hatch_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
     ) -> Self {
         self.row_hatch_color = Some(row_hatch_color.into());
         self
     }
     pub fn column_gap_color(
         mut self,
-        column_gap_color: impl Into<super::super::dom::types::Rgba>,
+        column_gap_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
     ) -> Self {
         self.column_gap_color = Some(column_gap_color.into());
         self
     }
     pub fn column_hatch_color(
         mut self,
-        column_hatch_color: impl Into<super::super::dom::types::Rgba>,
+        column_hatch_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
     ) -> Self {
         self.column_hatch_color = Some(column_hatch_color.into());
         self
     }
     pub fn area_border_color(
         mut self,
-        area_border_color: impl Into<super::super::dom::types::Rgba>,
+        area_border_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
     ) -> Self {
         self.area_border_color = Some(area_border_color.into());
         self
     }
     pub fn grid_background_color(
         mut self,
-        grid_background_color: impl Into<super::super::dom::types::Rgba>,
+        grid_background_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
     ) -> Self {
         self.grid_background_color = Some(grid_background_color.into());
         self
@@ -198,7 +198,7 @@ impl GridHighlightConfigBuilder {
 }
 impl FlexContainerHighlightConfig {
     pub fn builder() -> FlexContainerHighlightConfigBuilder {
-        FlexContainerHighlightConfigBuilder::default()
+        <FlexContainerHighlightConfigBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -260,7 +260,7 @@ impl FlexContainerHighlightConfigBuilder {
 }
 impl FlexItemHighlightConfig {
     pub fn builder() -> FlexItemHighlightConfigBuilder {
-        FlexItemHighlightConfigBuilder::default()
+        <FlexItemHighlightConfigBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -292,16 +292,16 @@ impl FlexItemHighlightConfigBuilder {
 }
 impl LineStyle {
     pub fn builder() -> LineStyleBuilder {
-        LineStyleBuilder::default()
+        <LineStyleBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct LineStyleBuilder {
-    color: Option<super::super::dom::types::Rgba>,
+    color: Option<crate::browser_protocol::dom::types::Rgba>,
     pattern: Option<LineStylePattern>,
 }
 impl LineStyleBuilder {
-    pub fn color(mut self, color: impl Into<super::super::dom::types::Rgba>) -> Self {
+    pub fn color(mut self, color: impl Into<crate::browser_protocol::dom::types::Rgba>) -> Self {
         self.color = Some(color.into());
         self
     }
@@ -318,20 +318,26 @@ impl LineStyleBuilder {
 }
 impl BoxStyle {
     pub fn builder() -> BoxStyleBuilder {
-        BoxStyleBuilder::default()
+        <BoxStyleBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct BoxStyleBuilder {
-    fill_color: Option<super::super::dom::types::Rgba>,
-    hatch_color: Option<super::super::dom::types::Rgba>,
+    fill_color: Option<crate::browser_protocol::dom::types::Rgba>,
+    hatch_color: Option<crate::browser_protocol::dom::types::Rgba>,
 }
 impl BoxStyleBuilder {
-    pub fn fill_color(mut self, fill_color: impl Into<super::super::dom::types::Rgba>) -> Self {
+    pub fn fill_color(
+        mut self,
+        fill_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
+    ) -> Self {
         self.fill_color = Some(fill_color.into());
         self
     }
-    pub fn hatch_color(mut self, hatch_color: impl Into<super::super::dom::types::Rgba>) -> Self {
+    pub fn hatch_color(
+        mut self,
+        hatch_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
+    ) -> Self {
         self.hatch_color = Some(hatch_color.into());
         self
     }
@@ -344,7 +350,7 @@ impl BoxStyleBuilder {
 }
 impl HighlightConfig {
     pub fn builder() -> HighlightConfigBuilder {
-        HighlightConfigBuilder::default()
+        <HighlightConfigBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -354,14 +360,14 @@ pub struct HighlightConfigBuilder {
     show_rulers: Option<bool>,
     show_accessibility_info: Option<bool>,
     show_extension_lines: Option<bool>,
-    content_color: Option<super::super::dom::types::Rgba>,
-    padding_color: Option<super::super::dom::types::Rgba>,
-    border_color: Option<super::super::dom::types::Rgba>,
-    margin_color: Option<super::super::dom::types::Rgba>,
-    event_target_color: Option<super::super::dom::types::Rgba>,
-    shape_color: Option<super::super::dom::types::Rgba>,
-    shape_margin_color: Option<super::super::dom::types::Rgba>,
-    css_grid_color: Option<super::super::dom::types::Rgba>,
+    content_color: Option<crate::browser_protocol::dom::types::Rgba>,
+    padding_color: Option<crate::browser_protocol::dom::types::Rgba>,
+    border_color: Option<crate::browser_protocol::dom::types::Rgba>,
+    margin_color: Option<crate::browser_protocol::dom::types::Rgba>,
+    event_target_color: Option<crate::browser_protocol::dom::types::Rgba>,
+    shape_color: Option<crate::browser_protocol::dom::types::Rgba>,
+    shape_margin_color: Option<crate::browser_protocol::dom::types::Rgba>,
+    css_grid_color: Option<crate::browser_protocol::dom::types::Rgba>,
     color_format: Option<ColorFormat>,
     grid_highlight_config: Option<GridHighlightConfig>,
     flex_container_highlight_config: Option<FlexContainerHighlightConfig>,
@@ -392,47 +398,56 @@ impl HighlightConfigBuilder {
     }
     pub fn content_color(
         mut self,
-        content_color: impl Into<super::super::dom::types::Rgba>,
+        content_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
     ) -> Self {
         self.content_color = Some(content_color.into());
         self
     }
     pub fn padding_color(
         mut self,
-        padding_color: impl Into<super::super::dom::types::Rgba>,
+        padding_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
     ) -> Self {
         self.padding_color = Some(padding_color.into());
         self
     }
-    pub fn border_color(mut self, border_color: impl Into<super::super::dom::types::Rgba>) -> Self {
+    pub fn border_color(
+        mut self,
+        border_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
+    ) -> Self {
         self.border_color = Some(border_color.into());
         self
     }
-    pub fn margin_color(mut self, margin_color: impl Into<super::super::dom::types::Rgba>) -> Self {
+    pub fn margin_color(
+        mut self,
+        margin_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
+    ) -> Self {
         self.margin_color = Some(margin_color.into());
         self
     }
     pub fn event_target_color(
         mut self,
-        event_target_color: impl Into<super::super::dom::types::Rgba>,
+        event_target_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
     ) -> Self {
         self.event_target_color = Some(event_target_color.into());
         self
     }
-    pub fn shape_color(mut self, shape_color: impl Into<super::super::dom::types::Rgba>) -> Self {
+    pub fn shape_color(
+        mut self,
+        shape_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
+    ) -> Self {
         self.shape_color = Some(shape_color.into());
         self
     }
     pub fn shape_margin_color(
         mut self,
-        shape_margin_color: impl Into<super::super::dom::types::Rgba>,
+        shape_margin_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
     ) -> Self {
         self.shape_margin_color = Some(shape_margin_color.into());
         self
     }
     pub fn css_grid_color(
         mut self,
-        css_grid_color: impl Into<super::super::dom::types::Rgba>,
+        css_grid_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
     ) -> Self {
         self.css_grid_color = Some(css_grid_color.into());
         self
@@ -501,13 +516,13 @@ impl HighlightConfigBuilder {
 }
 impl GridNodeHighlightConfig {
     pub fn builder() -> GridNodeHighlightConfigBuilder {
-        GridNodeHighlightConfigBuilder::default()
+        <GridNodeHighlightConfigBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GridNodeHighlightConfigBuilder {
     grid_highlight_config: Option<GridHighlightConfig>,
-    node_id: Option<super::super::dom::types::NodeId>,
+    node_id: Option<crate::browser_protocol::dom::types::NodeId>,
 }
 impl GridNodeHighlightConfigBuilder {
     pub fn grid_highlight_config(
@@ -517,7 +532,10 @@ impl GridNodeHighlightConfigBuilder {
         self.grid_highlight_config = Some(grid_highlight_config.into());
         self
     }
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
@@ -537,13 +555,13 @@ impl GridNodeHighlightConfigBuilder {
 }
 impl FlexNodeHighlightConfig {
     pub fn builder() -> FlexNodeHighlightConfigBuilder {
-        FlexNodeHighlightConfigBuilder::default()
+        <FlexNodeHighlightConfigBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct FlexNodeHighlightConfigBuilder {
     flex_container_highlight_config: Option<FlexContainerHighlightConfig>,
-    node_id: Option<super::super::dom::types::NodeId>,
+    node_id: Option<crate::browser_protocol::dom::types::NodeId>,
 }
 impl FlexNodeHighlightConfigBuilder {
     pub fn flex_container_highlight_config(
@@ -553,7 +571,10 @@ impl FlexNodeHighlightConfigBuilder {
         self.flex_container_highlight_config = Some(flex_container_highlight_config.into());
         self
     }
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
@@ -575,15 +596,15 @@ impl FlexNodeHighlightConfigBuilder {
 }
 impl ScrollSnapContainerHighlightConfig {
     pub fn builder() -> ScrollSnapContainerHighlightConfigBuilder {
-        ScrollSnapContainerHighlightConfigBuilder::default()
+        <ScrollSnapContainerHighlightConfigBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct ScrollSnapContainerHighlightConfigBuilder {
     snapport_border: Option<LineStyle>,
     snap_area_border: Option<LineStyle>,
-    scroll_margin_color: Option<super::super::dom::types::Rgba>,
-    scroll_padding_color: Option<super::super::dom::types::Rgba>,
+    scroll_margin_color: Option<crate::browser_protocol::dom::types::Rgba>,
+    scroll_padding_color: Option<crate::browser_protocol::dom::types::Rgba>,
 }
 impl ScrollSnapContainerHighlightConfigBuilder {
     pub fn snapport_border(mut self, snapport_border: impl Into<LineStyle>) -> Self {
@@ -596,14 +617,14 @@ impl ScrollSnapContainerHighlightConfigBuilder {
     }
     pub fn scroll_margin_color(
         mut self,
-        scroll_margin_color: impl Into<super::super::dom::types::Rgba>,
+        scroll_margin_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
     ) -> Self {
         self.scroll_margin_color = Some(scroll_margin_color.into());
         self
     }
     pub fn scroll_padding_color(
         mut self,
-        scroll_padding_color: impl Into<super::super::dom::types::Rgba>,
+        scroll_padding_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
     ) -> Self {
         self.scroll_padding_color = Some(scroll_padding_color.into());
         self
@@ -619,13 +640,13 @@ impl ScrollSnapContainerHighlightConfigBuilder {
 }
 impl ScrollSnapHighlightConfig {
     pub fn builder() -> ScrollSnapHighlightConfigBuilder {
-        ScrollSnapHighlightConfigBuilder::default()
+        <ScrollSnapHighlightConfigBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct ScrollSnapHighlightConfigBuilder {
     scroll_snap_container_highlight_config: Option<ScrollSnapContainerHighlightConfig>,
-    node_id: Option<super::super::dom::types::NodeId>,
+    node_id: Option<crate::browser_protocol::dom::types::NodeId>,
 }
 impl ScrollSnapHighlightConfigBuilder {
     pub fn scroll_snap_container_highlight_config(
@@ -636,7 +657,10 @@ impl ScrollSnapHighlightConfigBuilder {
             Some(scroll_snap_container_highlight_config.into());
         self
     }
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
@@ -658,30 +682,30 @@ impl ScrollSnapHighlightConfigBuilder {
 }
 impl HingeConfig {
     pub fn builder() -> HingeConfigBuilder {
-        HingeConfigBuilder::default()
+        <HingeConfigBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct HingeConfigBuilder {
-    rect: Option<super::super::dom::types::Rect>,
-    content_color: Option<super::super::dom::types::Rgba>,
-    outline_color: Option<super::super::dom::types::Rgba>,
+    rect: Option<crate::browser_protocol::dom::types::Rect>,
+    content_color: Option<crate::browser_protocol::dom::types::Rgba>,
+    outline_color: Option<crate::browser_protocol::dom::types::Rgba>,
 }
 impl HingeConfigBuilder {
-    pub fn rect(mut self, rect: impl Into<super::super::dom::types::Rect>) -> Self {
+    pub fn rect(mut self, rect: impl Into<crate::browser_protocol::dom::types::Rect>) -> Self {
         self.rect = Some(rect.into());
         self
     }
     pub fn content_color(
         mut self,
-        content_color: impl Into<super::super::dom::types::Rgba>,
+        content_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
     ) -> Self {
         self.content_color = Some(content_color.into());
         self
     }
     pub fn outline_color(
         mut self,
-        outline_color: impl Into<super::super::dom::types::Rgba>,
+        outline_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
     ) -> Self {
         self.outline_color = Some(outline_color.into());
         self
@@ -698,7 +722,7 @@ impl HingeConfigBuilder {
 }
 impl WindowControlsOverlayConfig {
     pub fn builder() -> WindowControlsOverlayConfigBuilder {
-        WindowControlsOverlayConfigBuilder::default()
+        <WindowControlsOverlayConfigBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -739,13 +763,13 @@ impl WindowControlsOverlayConfigBuilder {
 }
 impl ContainerQueryHighlightConfig {
     pub fn builder() -> ContainerQueryHighlightConfigBuilder {
-        ContainerQueryHighlightConfigBuilder::default()
+        <ContainerQueryHighlightConfigBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct ContainerQueryHighlightConfigBuilder {
     container_query_container_highlight_config: Option<ContainerQueryContainerHighlightConfig>,
-    node_id: Option<super::super::dom::types::NodeId>,
+    node_id: Option<crate::browser_protocol::dom::types::NodeId>,
 }
 impl ContainerQueryHighlightConfigBuilder {
     pub fn container_query_container_highlight_config(
@@ -756,7 +780,10 @@ impl ContainerQueryHighlightConfigBuilder {
             Some(container_query_container_highlight_config.into());
         self
     }
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
@@ -778,7 +805,7 @@ impl ContainerQueryHighlightConfigBuilder {
 }
 impl ContainerQueryContainerHighlightConfig {
     pub fn builder() -> ContainerQueryContainerHighlightConfigBuilder {
-        ContainerQueryContainerHighlightConfigBuilder::default()
+        <ContainerQueryContainerHighlightConfigBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -804,13 +831,13 @@ impl ContainerQueryContainerHighlightConfigBuilder {
 }
 impl IsolatedElementHighlightConfig {
     pub fn builder() -> IsolatedElementHighlightConfigBuilder {
-        IsolatedElementHighlightConfigBuilder::default()
+        <IsolatedElementHighlightConfigBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct IsolatedElementHighlightConfigBuilder {
     isolation_mode_highlight_config: Option<IsolationModeHighlightConfig>,
-    node_id: Option<super::super::dom::types::NodeId>,
+    node_id: Option<crate::browser_protocol::dom::types::NodeId>,
 }
 impl IsolatedElementHighlightConfigBuilder {
     pub fn isolation_mode_highlight_config(
@@ -820,7 +847,10 @@ impl IsolatedElementHighlightConfigBuilder {
         self.isolation_mode_highlight_config = Some(isolation_mode_highlight_config.into());
         self
     }
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
@@ -842,31 +872,34 @@ impl IsolatedElementHighlightConfigBuilder {
 }
 impl IsolationModeHighlightConfig {
     pub fn builder() -> IsolationModeHighlightConfigBuilder {
-        IsolationModeHighlightConfigBuilder::default()
+        <IsolationModeHighlightConfigBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct IsolationModeHighlightConfigBuilder {
-    resizer_color: Option<super::super::dom::types::Rgba>,
-    resizer_handle_color: Option<super::super::dom::types::Rgba>,
-    mask_color: Option<super::super::dom::types::Rgba>,
+    resizer_color: Option<crate::browser_protocol::dom::types::Rgba>,
+    resizer_handle_color: Option<crate::browser_protocol::dom::types::Rgba>,
+    mask_color: Option<crate::browser_protocol::dom::types::Rgba>,
 }
 impl IsolationModeHighlightConfigBuilder {
     pub fn resizer_color(
         mut self,
-        resizer_color: impl Into<super::super::dom::types::Rgba>,
+        resizer_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
     ) -> Self {
         self.resizer_color = Some(resizer_color.into());
         self
     }
     pub fn resizer_handle_color(
         mut self,
-        resizer_handle_color: impl Into<super::super::dom::types::Rgba>,
+        resizer_handle_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
     ) -> Self {
         self.resizer_handle_color = Some(resizer_handle_color.into());
         self
     }
-    pub fn mask_color(mut self, mask_color: impl Into<super::super::dom::types::Rgba>) -> Self {
+    pub fn mask_color(
+        mut self,
+        mask_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
+    ) -> Self {
         self.mask_color = Some(mask_color.into());
         self
     }
@@ -880,22 +913,25 @@ impl IsolationModeHighlightConfigBuilder {
 }
 impl InspectedElementAnchorConfig {
     pub fn builder() -> InspectedElementAnchorConfigBuilder {
-        InspectedElementAnchorConfigBuilder::default()
+        <InspectedElementAnchorConfigBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct InspectedElementAnchorConfigBuilder {
-    node_id: Option<super::super::dom::types::NodeId>,
-    backend_node_id: Option<super::super::dom::types::BackendNodeId>,
+    node_id: Option<crate::browser_protocol::dom::types::NodeId>,
+    backend_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
 }
 impl InspectedElementAnchorConfigBuilder {
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
     pub fn backend_node_id(
         mut self,
-        backend_node_id: impl Into<super::super::dom::types::BackendNodeId>,
+        backend_node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
     ) -> Self {
         self.backend_node_id = Some(backend_node_id.into());
         self

@@ -1,24 +1,24 @@
 use serde::{Deserialize, Serialize};
 #[doc = "Issued when the domain is enabled and the request URL matches the\nspecified filter. The request is paused until the client responds\nwith one of continueRequest, failRequest or fulfillRequest.\nThe stage of the request can be determined by presence of responseErrorReason\nand responseStatusCode -- the request is at the response stage if either\nof these fields is present and in the request stage otherwise.\nRedirect responses and subsequent requests are reported similarly to regular\nresponses and requests. Redirect responses may be distinguished by the value\nof `responseStatusCode` (which is one of 301, 302, 303, 307, 308) along with\npresence of the `location` header. Requests resulting from a redirect will\nhave `redirectedRequestId` field set.\n[requestPaused](https://chromedevtools.github.io/devtools-protocol/tot/Fetch/#event-requestPaused)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct RequestPaused {
+pub struct RequestPausedParams {
     #[doc = "Each request the page makes will have a unique id."]
     #[serde(rename = "requestId")]
     pub request_id: super::types::RequestId,
     #[doc = "The details of the request."]
     #[serde(rename = "request")]
-    pub request: super::super::network::types::Request,
+    pub request: crate::browser_protocol::network::types::Request,
     #[doc = "The id of the frame that initiated the request."]
     #[serde(rename = "frameId")]
-    pub frame_id: super::super::page::types::FrameId,
+    pub frame_id: crate::browser_protocol::page::types::FrameId,
     #[doc = "How the requested resource will be used."]
     #[serde(rename = "resourceType")]
-    pub resource_type: super::super::network::types::ResourceType,
+    pub resource_type: crate::browser_protocol::network::types::ResourceType,
     #[doc = "Response error if intercepted at response stage."]
     #[serde(rename = "responseErrorReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub response_error_reason: Option<super::super::network::types::ErrorReason>,
+    pub response_error_reason: Option<crate::browser_protocol::network::types::ErrorReason>,
     #[doc = "Response code if intercepted at response stage."]
     #[serde(rename = "responseStatusCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -38,36 +38,58 @@ pub struct RequestPaused {
     #[serde(rename = "networkId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub network_id: Option<super::super::network::types::RequestId>,
+    pub network_id: Option<crate::browser_protocol::network::types::RequestId>,
     #[doc = "If the request is due to a redirect response from the server, the id of the request that\nhas caused the redirect."]
     #[serde(rename = "redirectedRequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
     pub redirected_request_id: Option<super::types::RequestId>,
 }
-impl RequestPaused {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum RequestPausedMethod {
+    #[serde(rename = "Fetch.requestPaused")]
+    RequestPaused,
+}
+impl RequestPausedMethod {
     pub const IDENTIFIER: &'static str = "Fetch.requestPaused";
+}
+#[doc = "Issued when the domain is enabled and the request URL matches the\nspecified filter. The request is paused until the client responds\nwith one of continueRequest, failRequest or fulfillRequest.\nThe stage of the request can be determined by presence of responseErrorReason\nand responseStatusCode -- the request is at the response stage if either\nof these fields is present and in the request stage otherwise.\nRedirect responses and subsequent requests are reported similarly to regular\nresponses and requests. Redirect responses may be distinguished by the value\nof `responseStatusCode` (which is one of 301, 302, 303, 307, 308) along with\npresence of the `location` header. Requests resulting from a redirect will\nhave `redirectedRequestId` field set.\n[requestPaused](https://chromedevtools.github.io/devtools-protocol/tot/Fetch/#event-requestPaused)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct RequestPaused {
+    pub method: RequestPausedMethod,
+    pub params: RequestPausedParams,
 }
 #[doc = "Issued when the domain is enabled with handleAuthRequests set to true.\nThe request is paused until client responds with continueWithAuth.\n[authRequired](https://chromedevtools.github.io/devtools-protocol/tot/Fetch/#event-authRequired)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct AuthRequired {
+pub struct AuthRequiredParams {
     #[doc = "Each request the page makes will have a unique id."]
     #[serde(rename = "requestId")]
     pub request_id: super::types::RequestId,
     #[doc = "The details of the request."]
     #[serde(rename = "request")]
-    pub request: super::super::network::types::Request,
+    pub request: crate::browser_protocol::network::types::Request,
     #[doc = "The id of the frame that initiated the request."]
     #[serde(rename = "frameId")]
-    pub frame_id: super::super::page::types::FrameId,
+    pub frame_id: crate::browser_protocol::page::types::FrameId,
     #[doc = "How the requested resource will be used."]
     #[serde(rename = "resourceType")]
-    pub resource_type: super::super::network::types::ResourceType,
+    pub resource_type: crate::browser_protocol::network::types::ResourceType,
     #[doc = "Details of the Authorization Challenge encountered.\nIf this is set, client should respond with continueRequest that\ncontains AuthChallengeResponse."]
     #[serde(rename = "authChallenge")]
     pub auth_challenge: super::types::AuthChallenge,
 }
-impl AuthRequired {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum AuthRequiredMethod {
+    #[serde(rename = "Fetch.authRequired")]
+    AuthRequired,
+}
+impl AuthRequiredMethod {
     pub const IDENTIFIER: &'static str = "Fetch.authRequired";
+}
+#[doc = "Issued when the domain is enabled with handleAuthRequests set to true.\nThe request is paused until client responds with continueWithAuth.\n[authRequired](https://chromedevtools.github.io/devtools-protocol/tot/Fetch/#event-authRequired)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct AuthRequired {
+    pub method: AuthRequiredMethod,
+    pub params: AuthRequiredParams,
 }
 group_enum ! (FetchEvents { RequestPaused (RequestPaused) , AuthRequired (AuthRequired) });

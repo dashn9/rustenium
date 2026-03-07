@@ -55,10 +55,10 @@ pub struct ManufacturerData {
     pub key: i64,
     #[doc = "Manufacturer-specific data"]
     #[serde(rename = "data")]
-    pub data: super::super::super::Binary,
+    pub data: crate::Binary,
 }
 impl ManufacturerData {
-    pub fn new(key: impl Into<i64>, data: impl Into<super::super::super::Binary>) -> Self {
+    pub fn new(key: impl Into<i64>, data: impl Into<crate::Binary>) -> Self {
         Self {
             key: key.into(),
             data: data.into(),

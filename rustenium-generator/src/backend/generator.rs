@@ -921,8 +921,8 @@ impl Generator {
             let ref_module_snake = format_ident!("{}", ref_module.to_snake_case());
             let ref_protocol = self.module_protocol_map.get(ref_module.as_ref());
             if let Some(ref_proto) = ref_protocol {
-                if ref_proto.is_empty() || ref_proto == current_protocol {
-                    // Same protocol or flat mode
+                if ref_proto.is_empty() {
+                    // Flat mode — no protocol subdirectory
                     quote! { crate::#ref_module_snake::types::#ident }
                 } else {
                     let proto_ident = format_ident!("{}", ref_proto);

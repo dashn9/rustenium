@@ -1,7 +1,7 @@
 use super::types::*;
 impl Account {
     pub fn builder() -> AccountBuilder {
-        AccountBuilder::default()
+        <AccountBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

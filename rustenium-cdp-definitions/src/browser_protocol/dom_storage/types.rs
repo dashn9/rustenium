@@ -57,7 +57,7 @@ impl StorageId {
     pub const IDENTIFIER: &'static str = "DOMStorage.StorageId";
 }
 #[doc = "DOM Storage item.\n[Item](https://chromedevtools.github.io/devtools-protocol/tot/DOMStorage/#type-Item)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Item(Vec<String>);
 impl Item {
     pub fn new(val: impl Into<Vec<String>>) -> Self {

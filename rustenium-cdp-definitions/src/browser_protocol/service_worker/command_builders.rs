@@ -1,7 +1,7 @@
 use super::commands::*;
 impl DeliverPushMessage {
     pub fn builder() -> DeliverPushMessageBuilder {
-        DeliverPushMessageBuilder::default()
+        <DeliverPushMessageBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -45,7 +45,7 @@ impl DeliverPushMessageBuilder {
 }
 impl DispatchSyncEvent {
     pub fn builder() -> DispatchSyncEventBuilder {
-        DispatchSyncEventBuilder::default()
+        <DispatchSyncEventBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -97,7 +97,7 @@ impl DispatchSyncEventBuilder {
 }
 impl DispatchPeriodicSyncEvent {
     pub fn builder() -> DispatchPeriodicSyncEventBuilder {
-        DispatchPeriodicSyncEventBuilder::default()
+        <DispatchPeriodicSyncEventBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -141,7 +141,7 @@ impl DispatchPeriodicSyncEventBuilder {
 }
 impl SetForceUpdateOnPageLoad {
     pub fn builder() -> SetForceUpdateOnPageLoadBuilder {
-        SetForceUpdateOnPageLoadBuilder::default()
+        <SetForceUpdateOnPageLoadBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -169,7 +169,7 @@ impl SetForceUpdateOnPageLoadBuilder {
 }
 impl SkipWaiting {
     pub fn builder() -> SkipWaitingBuilder {
-        SkipWaitingBuilder::default()
+        <SkipWaitingBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -194,7 +194,7 @@ impl SkipWaitingBuilder {
 }
 impl StartWorker {
     pub fn builder() -> StartWorkerBuilder {
-        StartWorkerBuilder::default()
+        <StartWorkerBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -219,7 +219,7 @@ impl StartWorkerBuilder {
 }
 impl StopWorker {
     pub fn builder() -> StopWorkerBuilder {
-        StopWorkerBuilder::default()
+        <StopWorkerBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -244,7 +244,7 @@ impl StopWorkerBuilder {
 }
 impl Unregister {
     pub fn builder() -> UnregisterBuilder {
-        UnregisterBuilder::default()
+        <UnregisterBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -269,7 +269,7 @@ impl UnregisterBuilder {
 }
 impl UpdateRegistration {
     pub fn builder() -> UpdateRegistrationBuilder {
-        UpdateRegistrationBuilder::default()
+        <UpdateRegistrationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

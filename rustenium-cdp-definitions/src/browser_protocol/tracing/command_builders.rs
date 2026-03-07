@@ -1,7 +1,7 @@
 use super::commands::*;
 impl RecordClockSyncMarker {
     pub fn builder() -> RecordClockSyncMarkerBuilder {
-        RecordClockSyncMarkerBuilder::default()
+        <RecordClockSyncMarkerBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -26,7 +26,7 @@ impl RecordClockSyncMarkerBuilder {
 }
 impl RequestMemoryDump {
     pub fn builder() -> RequestMemoryDumpBuilder {
-        RequestMemoryDumpBuilder::default()
+        <RequestMemoryDumpBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -58,7 +58,7 @@ impl RequestMemoryDumpBuilder {
 }
 impl Start {
     pub fn builder() -> StartBuilder {
-        StartBuilder::default()
+        <StartBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -68,7 +68,7 @@ pub struct StartBuilder {
     stream_format: Option<super::types::StreamFormat>,
     stream_compression: Option<super::types::StreamCompression>,
     trace_config: Option<super::types::TraceConfig>,
-    perfetto_config: Option<super::super::super::Binary>,
+    perfetto_config: Option<crate::Binary>,
     tracing_backend: Option<super::types::TracingBackend>,
 }
 impl StartBuilder {
@@ -98,10 +98,7 @@ impl StartBuilder {
         self.trace_config = Some(trace_config.into());
         self
     }
-    pub fn perfetto_config(
-        mut self,
-        perfetto_config: impl Into<super::super::super::Binary>,
-    ) -> Self {
+    pub fn perfetto_config(mut self, perfetto_config: impl Into<crate::Binary>) -> Self {
         self.perfetto_config = Some(perfetto_config.into());
         self
     }

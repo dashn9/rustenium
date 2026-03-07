@@ -1,10 +1,10 @@
 use serde::{Deserialize, Serialize};
 #[doc = "Fired when page is about to start a download.\n[downloadWillBegin](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#event-downloadWillBegin)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct DownloadWillBegin {
+pub struct DownloadWillBeginParams {
     #[doc = "Id of the frame that caused the download to begin."]
     #[serde(rename = "frameId")]
-    pub frame_id: super::super::page::types::FrameId,
+    pub frame_id: crate::browser_protocol::page::types::FrameId,
     #[doc = "Global unique identifier of the download."]
     #[serde(rename = "guid")]
     pub guid: String,
@@ -15,12 +15,23 @@ pub struct DownloadWillBegin {
     #[serde(rename = "suggestedFilename")]
     pub suggested_filename: String,
 }
-impl DownloadWillBegin {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum DownloadWillBeginMethod {
+    #[serde(rename = "Browser.downloadWillBegin")]
+    DownloadWillBegin,
+}
+impl DownloadWillBeginMethod {
     pub const IDENTIFIER: &'static str = "Browser.downloadWillBegin";
+}
+#[doc = "Fired when page is about to start a download.\n[downloadWillBegin](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#event-downloadWillBegin)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct DownloadWillBegin {
+    pub method: DownloadWillBeginMethod,
+    pub params: DownloadWillBeginParams,
 }
 #[doc = "Fired when download makes progress. Last call has |done| == true.\n[downloadProgress](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#event-downloadProgress)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct DownloadProgress {
+pub struct DownloadProgressParams {
     #[doc = "Global unique identifier of the download."]
     #[serde(rename = "guid")]
     pub guid: String,
@@ -49,7 +60,18 @@ pub enum DownloadProgressState {
     #[serde(rename = "canceled")]
     Canceled,
 }
-impl DownloadProgress {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum DownloadProgressMethod {
+    #[serde(rename = "Browser.downloadProgress")]
+    DownloadProgress,
+}
+impl DownloadProgressMethod {
     pub const IDENTIFIER: &'static str = "Browser.downloadProgress";
+}
+#[doc = "Fired when download makes progress. Last call has |done| == true.\n[downloadProgress](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#event-downloadProgress)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct DownloadProgress {
+    pub method: DownloadProgressMethod,
+    pub params: DownloadProgressParams,
 }
 group_enum ! (BrowserEvents { DownloadWillBegin (DownloadWillBegin) , DownloadProgress (DownloadProgress) });

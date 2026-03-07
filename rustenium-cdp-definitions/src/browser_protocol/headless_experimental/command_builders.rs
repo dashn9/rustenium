@@ -1,7 +1,7 @@
 use super::commands::*;
 impl BeginFrame {
     pub fn builder() -> BeginFrameBuilder {
-        BeginFrameBuilder::default()
+        <BeginFrameBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

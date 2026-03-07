@@ -72,7 +72,7 @@ impl CallFrameId {
 pub struct Location {
     #[doc = "Script identifier as reported in the `Debugger.scriptParsed`."]
     #[serde(rename = "scriptId")]
-    pub script_id: super::super::runtime::types::ScriptId,
+    pub script_id: crate::js_protocol::runtime::types::ScriptId,
     #[doc = "Line number in the script (0-based)."]
     #[serde(rename = "lineNumber")]
     pub line_number: i64,
@@ -84,7 +84,7 @@ pub struct Location {
 }
 impl Location {
     pub fn new(
-        script_id: impl Into<super::super::runtime::types::ScriptId>,
+        script_id: impl Into<crate::js_protocol::runtime::types::ScriptId>,
         line_number: impl Into<i64>,
     ) -> Self {
         Self {
@@ -120,7 +120,7 @@ impl ScriptPosition {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LocationRange {
     #[serde(rename = "scriptId")]
-    pub script_id: super::super::runtime::types::ScriptId,
+    pub script_id: crate::js_protocol::runtime::types::ScriptId,
     #[serde(rename = "start")]
     pub start: ScriptPosition,
     #[serde(rename = "end")]
@@ -128,7 +128,7 @@ pub struct LocationRange {
 }
 impl LocationRange {
     pub fn new(
-        script_id: impl Into<super::super::runtime::types::ScriptId>,
+        script_id: impl Into<crate::js_protocol::runtime::types::ScriptId>,
         start: impl Into<ScriptPosition>,
         end: impl Into<ScriptPosition>,
     ) -> Self {
@@ -165,12 +165,12 @@ pub struct CallFrame {
     pub scope_chain: Vec<Scope>,
     #[doc = "`this` object for this call frame."]
     #[serde(rename = "this")]
-    pub this: super::super::runtime::types::RemoteObject,
+    pub this: crate::js_protocol::runtime::types::RemoteObject,
     #[doc = "The value being returned, if the function is at return point."]
     #[serde(rename = "returnValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub return_value: Option<super::super::runtime::types::RemoteObject>,
+    pub return_value: Option<crate::js_protocol::runtime::types::RemoteObject>,
     #[doc = "Valid only while the VM is paused and indicates whether this frame\ncan be restarted or not. Note that a `true` value here does not\nguarantee that Debugger#restartFrame with this CallFrameId will be\nsuccessful, but it is very likely."]
     #[serde(rename = "canBeRestarted")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -188,7 +188,7 @@ pub struct Scope {
     pub r#type: ScopeType,
     #[doc = "Object representing the scope. For `global` and `with` scopes it represents the actual\nobject; for the rest of the scopes, it is artificial transient object enumerating scope\nvariables as its properties."]
     #[serde(rename = "object")]
-    pub object: super::super::runtime::types::RemoteObject,
+    pub object: crate::js_protocol::runtime::types::RemoteObject,
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -231,7 +231,7 @@ pub enum ScopeType {
 impl Scope {
     pub fn new(
         r#type: impl Into<ScopeType>,
-        object: impl Into<super::super::runtime::types::RemoteObject>,
+        object: impl Into<crate::js_protocol::runtime::types::RemoteObject>,
     ) -> Self {
         Self {
             r#type: r#type.into(),
@@ -270,7 +270,7 @@ impl SearchMatch {
 pub struct BreakLocation {
     #[doc = "Script identifier as reported in the `Debugger.scriptParsed`."]
     #[serde(rename = "scriptId")]
-    pub script_id: super::super::runtime::types::ScriptId,
+    pub script_id: crate::js_protocol::runtime::types::ScriptId,
     #[doc = "Line number in the script (0-based)."]
     #[serde(rename = "lineNumber")]
     pub line_number: i64,
@@ -295,7 +295,7 @@ pub enum BreakLocationType {
 }
 impl BreakLocation {
     pub fn new(
-        script_id: impl Into<super::super::runtime::types::ScriptId>,
+        script_id: impl Into<crate::js_protocol::runtime::types::ScriptId>,
         line_number: impl Into<i64>,
     ) -> Self {
         Self {

@@ -1,13 +1,13 @@
 use super::types::*;
 impl ProfileNode {
     pub fn builder() -> ProfileNodeBuilder {
-        ProfileNodeBuilder::default()
+        <ProfileNodeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct ProfileNodeBuilder {
     id: Option<i64>,
-    call_frame: Option<super::super::runtime::types::CallFrame>,
+    call_frame: Option<crate::js_protocol::runtime::types::CallFrame>,
     hit_count: Option<i64>,
     children: Option<Vec<i64>>,
     deopt_reason: Option<String>,
@@ -20,7 +20,7 @@ impl ProfileNodeBuilder {
     }
     pub fn call_frame(
         mut self,
-        call_frame: impl Into<super::super::runtime::types::CallFrame>,
+        call_frame: impl Into<crate::js_protocol::runtime::types::CallFrame>,
     ) -> Self {
         self.call_frame = Some(call_frame.into());
         self
@@ -82,7 +82,7 @@ impl ProfileNodeBuilder {
 }
 impl Profile {
     pub fn builder() -> ProfileBuilder {
-        ProfileBuilder::default()
+        <ProfileBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -168,7 +168,7 @@ impl ProfileBuilder {
 }
 impl PositionTickInfo {
     pub fn builder() -> PositionTickInfoBuilder {
-        PositionTickInfoBuilder::default()
+        <PositionTickInfoBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -198,7 +198,7 @@ impl PositionTickInfoBuilder {
 }
 impl CoverageRange {
     pub fn builder() -> CoverageRangeBuilder {
-        CoverageRangeBuilder::default()
+        <CoverageRangeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -236,7 +236,7 @@ impl CoverageRangeBuilder {
 }
 impl FunctionCoverage {
     pub fn builder() -> FunctionCoverageBuilder {
-        FunctionCoverageBuilder::default()
+        <FunctionCoverageBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -289,19 +289,19 @@ impl FunctionCoverageBuilder {
 }
 impl ScriptCoverage {
     pub fn builder() -> ScriptCoverageBuilder {
-        ScriptCoverageBuilder::default()
+        <ScriptCoverageBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct ScriptCoverageBuilder {
-    script_id: Option<super::super::runtime::types::ScriptId>,
+    script_id: Option<crate::js_protocol::runtime::types::ScriptId>,
     url: Option<String>,
     functions: Option<Vec<FunctionCoverage>>,
 }
 impl ScriptCoverageBuilder {
     pub fn script_id(
         mut self,
-        script_id: impl Into<super::super::runtime::types::ScriptId>,
+        script_id: impl Into<crate::js_protocol::runtime::types::ScriptId>,
     ) -> Self {
         self.script_id = Some(script_id.into());
         self

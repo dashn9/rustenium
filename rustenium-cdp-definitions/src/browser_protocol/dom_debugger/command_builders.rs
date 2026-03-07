@@ -1,19 +1,19 @@
 use super::commands::*;
 impl GetEventListeners {
     pub fn builder() -> GetEventListenersBuilder {
-        GetEventListenersBuilder::default()
+        <GetEventListenersBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetEventListenersBuilder {
-    object_id: Option<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+    object_id: Option<crate::js_protocol::runtime::types::RemoteObjectId>,
     depth: Option<i64>,
     pierce: Option<bool>,
 }
 impl GetEventListenersBuilder {
     pub fn object_id(
         mut self,
-        object_id: impl Into<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+        object_id: impl Into<crate::js_protocol::runtime::types::RemoteObjectId>,
     ) -> Self {
         self.object_id = Some(object_id.into());
         self
@@ -41,16 +41,19 @@ impl GetEventListenersBuilder {
 }
 impl RemoveDomBreakpoint {
     pub fn builder() -> RemoveDomBreakpointBuilder {
-        RemoveDomBreakpointBuilder::default()
+        <RemoveDomBreakpointBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct RemoveDomBreakpointBuilder {
-    node_id: Option<super::super::dom::types::NodeId>,
+    node_id: Option<crate::browser_protocol::dom::types::NodeId>,
     r#type: Option<super::types::DomBreakpointType>,
 }
 impl RemoveDomBreakpointBuilder {
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
@@ -74,7 +77,7 @@ impl RemoveDomBreakpointBuilder {
 }
 impl RemoveEventListenerBreakpoint {
     pub fn builder() -> RemoveEventListenerBreakpointBuilder {
-        RemoveEventListenerBreakpointBuilder::default()
+        <RemoveEventListenerBreakpointBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -105,7 +108,7 @@ impl RemoveEventListenerBreakpointBuilder {
 }
 impl RemoveXhrBreakpoint {
     pub fn builder() -> RemoveXhrBreakpointBuilder {
-        RemoveXhrBreakpointBuilder::default()
+        <RemoveXhrBreakpointBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -130,7 +133,7 @@ impl RemoveXhrBreakpointBuilder {
 }
 impl SetBreakOnCspViolation {
     pub fn builder() -> SetBreakOnCspViolationBuilder {
-        SetBreakOnCspViolationBuilder::default()
+        <SetBreakOnCspViolationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -170,16 +173,19 @@ impl SetBreakOnCspViolationBuilder {
 }
 impl SetDomBreakpoint {
     pub fn builder() -> SetDomBreakpointBuilder {
-        SetDomBreakpointBuilder::default()
+        <SetDomBreakpointBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct SetDomBreakpointBuilder {
-    node_id: Option<super::super::dom::types::NodeId>,
+    node_id: Option<crate::browser_protocol::dom::types::NodeId>,
     r#type: Option<super::types::DomBreakpointType>,
 }
 impl SetDomBreakpointBuilder {
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
@@ -203,7 +209,7 @@ impl SetDomBreakpointBuilder {
 }
 impl SetEventListenerBreakpoint {
     pub fn builder() -> SetEventListenerBreakpointBuilder {
-        SetEventListenerBreakpointBuilder::default()
+        <SetEventListenerBreakpointBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -234,7 +240,7 @@ impl SetEventListenerBreakpointBuilder {
 }
 impl SetXhrBreakpoint {
     pub fn builder() -> SetXhrBreakpointBuilder {
-        SetXhrBreakpointBuilder::default()
+        <SetXhrBreakpointBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

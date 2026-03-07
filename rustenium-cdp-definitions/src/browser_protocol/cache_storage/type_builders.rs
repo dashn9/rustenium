@@ -1,7 +1,7 @@
 use super::types::*;
 impl DataEntry {
     pub fn builder() -> DataEntryBuilder {
-        DataEntryBuilder::default()
+        <DataEntryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -109,7 +109,7 @@ impl DataEntryBuilder {
 }
 impl Cache {
     pub fn builder() -> CacheBuilder {
-        CacheBuilder::default()
+        <CacheBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -117,7 +117,7 @@ pub struct CacheBuilder {
     cache_id: Option<CacheId>,
     security_origin: Option<String>,
     storage_key: Option<String>,
-    storage_bucket: Option<super::super::storage::types::StorageBucket>,
+    storage_bucket: Option<crate::browser_protocol::storage::types::StorageBucket>,
     cache_name: Option<String>,
 }
 impl CacheBuilder {
@@ -135,7 +135,7 @@ impl CacheBuilder {
     }
     pub fn storage_bucket(
         mut self,
-        storage_bucket: impl Into<super::super::storage::types::StorageBucket>,
+        storage_bucket: impl Into<crate::browser_protocol::storage::types::StorageBucket>,
     ) -> Self {
         self.storage_bucket = Some(storage_bucket.into());
         self
@@ -164,7 +164,7 @@ impl CacheBuilder {
 }
 impl Header {
     pub fn builder() -> HeaderBuilder {
-        HeaderBuilder::default()
+        <HeaderBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -194,15 +194,15 @@ impl HeaderBuilder {
 }
 impl CachedResponse {
     pub fn builder() -> CachedResponseBuilder {
-        CachedResponseBuilder::default()
+        <CachedResponseBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct CachedResponseBuilder {
-    body: Option<super::super::super::Binary>,
+    body: Option<crate::Binary>,
 }
 impl CachedResponseBuilder {
-    pub fn body(mut self, body: impl Into<super::super::super::Binary>) -> Self {
+    pub fn body(mut self, body: impl Into<crate::Binary>) -> Self {
         self.body = Some(body.into());
         self
     }

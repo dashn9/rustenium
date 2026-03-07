@@ -38,13 +38,14 @@ impl EventMetadata {
 pub struct BackgroundServiceEvent {
     #[doc = "Timestamp of the event (in seconds)."]
     #[serde(rename = "timestamp")]
-    pub timestamp: super::super::network::types::TimeSinceEpoch,
+    pub timestamp: crate::browser_protocol::network::types::TimeSinceEpoch,
     #[doc = "The origin this event belongs to."]
     #[serde(rename = "origin")]
     pub origin: String,
     #[doc = "The Service Worker ID that initiated the event."]
     #[serde(rename = "serviceWorkerRegistrationId")]
-    pub service_worker_registration_id: super::super::service_worker::types::RegistrationId,
+    pub service_worker_registration_id:
+        crate::browser_protocol::service_worker::types::RegistrationId,
     #[doc = "The Background Service this event belongs to."]
     #[serde(rename = "service")]
     pub service: ServiceName,

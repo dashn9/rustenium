@@ -1,7 +1,7 @@
 use super::commands::*;
 impl SetAcceptedEncodings {
     pub fn builder() -> SetAcceptedEncodingsBuilder {
-        SetAcceptedEncodingsBuilder::default()
+        <SetAcceptedEncodingsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -38,7 +38,7 @@ impl SetAcceptedEncodingsBuilder {
 }
 impl DeleteCookies {
     pub fn builder() -> DeleteCookiesBuilder {
-        DeleteCookiesBuilder::default()
+        <DeleteCookiesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -90,7 +90,7 @@ impl DeleteCookiesBuilder {
 }
 impl EmulateNetworkConditionsByRule {
     pub fn builder() -> EmulateNetworkConditionsByRuleBuilder {
-        EmulateNetworkConditionsByRuleBuilder::default()
+        <EmulateNetworkConditionsByRuleBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -141,7 +141,7 @@ impl EmulateNetworkConditionsByRuleBuilder {
 }
 impl OverrideNetworkState {
     pub fn builder() -> OverrideNetworkStateBuilder {
-        OverrideNetworkStateBuilder::default()
+        <OverrideNetworkStateBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -205,7 +205,7 @@ impl OverrideNetworkStateBuilder {
 }
 impl Enable {
     pub fn builder() -> EnableBuilder {
-        EnableBuilder::default()
+        <EnableBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -255,7 +255,7 @@ impl EnableBuilder {
 }
 impl ConfigureDurableMessages {
     pub fn builder() -> ConfigureDurableMessagesBuilder {
-        ConfigureDurableMessagesBuilder::default()
+        <ConfigureDurableMessagesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -284,7 +284,7 @@ impl ConfigureDurableMessagesBuilder {
 }
 impl GetCertificate {
     pub fn builder() -> GetCertificateBuilder {
-        GetCertificateBuilder::default()
+        <GetCertificateBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -309,7 +309,7 @@ impl GetCertificateBuilder {
 }
 impl GetCookies {
     pub fn builder() -> GetCookiesBuilder {
-        GetCookiesBuilder::default()
+        <GetCookiesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -342,7 +342,7 @@ impl GetCookiesBuilder {
 }
 impl GetResponseBody {
     pub fn builder() -> GetResponseBodyBuilder {
-        GetResponseBodyBuilder::default()
+        <GetResponseBodyBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -367,7 +367,7 @@ impl GetResponseBodyBuilder {
 }
 impl GetRequestPostData {
     pub fn builder() -> GetRequestPostDataBuilder {
-        GetRequestPostDataBuilder::default()
+        <GetRequestPostDataBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -392,7 +392,7 @@ impl GetRequestPostDataBuilder {
 }
 impl GetResponseBodyForInterception {
     pub fn builder() -> GetResponseBodyForInterceptionBuilder {
-        GetResponseBodyForInterceptionBuilder::default()
+        <GetResponseBodyForInterceptionBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -420,7 +420,7 @@ impl GetResponseBodyForInterceptionBuilder {
 }
 impl TakeResponseBodyForInterceptionAsStream {
     pub fn builder() -> TakeResponseBodyForInterceptionAsStreamBuilder {
-        TakeResponseBodyForInterceptionAsStreamBuilder::default()
+        <TakeResponseBodyForInterceptionAsStreamBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -441,7 +441,7 @@ impl TakeResponseBodyForInterceptionAsStreamBuilder {
 }
 impl ReplayXhr {
     pub fn builder() -> ReplayXhrBuilder {
-        ReplayXhrBuilder::default()
+        <ReplayXhrBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -466,7 +466,7 @@ impl ReplayXhrBuilder {
 }
 impl SearchInResponseBody {
     pub fn builder() -> SearchInResponseBodyBuilder {
-        SearchInResponseBodyBuilder::default()
+        <SearchInResponseBodyBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -511,7 +511,7 @@ impl SearchInResponseBodyBuilder {
 }
 impl SetBlockedUrLs {
     pub fn builder() -> SetBlockedUrLsBuilder {
-        SetBlockedUrLsBuilder::default()
+        <SetBlockedUrLsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -546,7 +546,7 @@ impl SetBlockedUrLsBuilder {
 }
 impl SetBypassServiceWorker {
     pub fn builder() -> SetBypassServiceWorkerBuilder {
-        SetBypassServiceWorkerBuilder::default()
+        <SetBypassServiceWorkerBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -571,7 +571,7 @@ impl SetBypassServiceWorkerBuilder {
 }
 impl SetCacheDisabled {
     pub fn builder() -> SetCacheDisabledBuilder {
-        SetCacheDisabledBuilder::default()
+        <SetCacheDisabledBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -596,7 +596,7 @@ impl SetCacheDisabledBuilder {
 }
 impl SetCookie {
     pub fn builder() -> SetCookieBuilder {
-        SetCookieBuilder::default()
+        <SetCookieBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -701,7 +701,7 @@ impl SetCookieBuilder {
 }
 impl SetCookies {
     pub fn builder() -> SetCookiesBuilder {
-        SetCookiesBuilder::default()
+        <SetCookiesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -738,7 +738,7 @@ impl SetCookiesBuilder {
 }
 impl SetExtraHttpHeaders {
     pub fn builder() -> SetExtraHttpHeadersBuilder {
-        SetExtraHttpHeadersBuilder::default()
+        <SetExtraHttpHeadersBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -763,7 +763,7 @@ impl SetExtraHttpHeadersBuilder {
 }
 impl SetAttachDebugStack {
     pub fn builder() -> SetAttachDebugStackBuilder {
-        SetAttachDebugStackBuilder::default()
+        <SetAttachDebugStackBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -788,7 +788,7 @@ impl SetAttachDebugStackBuilder {
 }
 impl SetUserAgentOverride {
     pub fn builder() -> SetUserAgentOverrideBuilder {
-        SetUserAgentOverrideBuilder::default()
+        <SetUserAgentOverrideBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -796,7 +796,7 @@ pub struct SetUserAgentOverrideBuilder {
     user_agent: Option<String>,
     accept_language: Option<String>,
     platform: Option<String>,
-    user_agent_metadata: Option<super::super::emulation::types::UserAgentMetadata>,
+    user_agent_metadata: Option<crate::browser_protocol::emulation::types::UserAgentMetadata>,
 }
 impl SetUserAgentOverrideBuilder {
     pub fn user_agent(mut self, user_agent: impl Into<String>) -> Self {
@@ -813,7 +813,7 @@ impl SetUserAgentOverrideBuilder {
     }
     pub fn user_agent_metadata(
         mut self,
-        user_agent_metadata: impl Into<super::super::emulation::types::UserAgentMetadata>,
+        user_agent_metadata: impl Into<crate::browser_protocol::emulation::types::UserAgentMetadata>,
     ) -> Self {
         self.user_agent_metadata = Some(user_agent_metadata.into());
         self
@@ -834,7 +834,7 @@ impl SetUserAgentOverrideBuilder {
 }
 impl StreamResourceContent {
     pub fn builder() -> StreamResourceContentBuilder {
-        StreamResourceContentBuilder::default()
+        <StreamResourceContentBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -859,15 +859,18 @@ impl StreamResourceContentBuilder {
 }
 impl GetSecurityIsolationStatus {
     pub fn builder() -> GetSecurityIsolationStatusBuilder {
-        GetSecurityIsolationStatusBuilder::default()
+        <GetSecurityIsolationStatusBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetSecurityIsolationStatusBuilder {
-    frame_id: Option<super::super::page::types::FrameId>,
+    frame_id: Option<crate::browser_protocol::page::types::FrameId>,
 }
 impl GetSecurityIsolationStatusBuilder {
-    pub fn frame_id(mut self, frame_id: impl Into<super::super::page::types::FrameId>) -> Self {
+    pub fn frame_id(
+        mut self,
+        frame_id: impl Into<crate::browser_protocol::page::types::FrameId>,
+    ) -> Self {
         self.frame_id = Some(frame_id.into());
         self
     }
@@ -882,7 +885,7 @@ impl GetSecurityIsolationStatusBuilder {
 }
 impl EnableReportingApi {
     pub fn builder() -> EnableReportingApiBuilder {
-        EnableReportingApiBuilder::default()
+        <EnableReportingApiBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -907,7 +910,7 @@ impl EnableReportingApiBuilder {
 }
 impl EnableDeviceBoundSessions {
     pub fn builder() -> EnableDeviceBoundSessionsBuilder {
-        EnableDeviceBoundSessionsBuilder::default()
+        <EnableDeviceBoundSessionsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -932,7 +935,7 @@ impl EnableDeviceBoundSessionsBuilder {
 }
 impl FetchSchemefulSite {
     pub fn builder() -> FetchSchemefulSiteBuilder {
-        FetchSchemefulSiteBuilder::default()
+        <FetchSchemefulSiteBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -957,17 +960,20 @@ impl FetchSchemefulSiteBuilder {
 }
 impl LoadNetworkResource {
     pub fn builder() -> LoadNetworkResourceBuilder {
-        LoadNetworkResourceBuilder::default()
+        <LoadNetworkResourceBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct LoadNetworkResourceBuilder {
-    frame_id: Option<super::super::page::types::FrameId>,
+    frame_id: Option<crate::browser_protocol::page::types::FrameId>,
     url: Option<String>,
     options: Option<super::types::LoadNetworkResourceOptions>,
 }
 impl LoadNetworkResourceBuilder {
-    pub fn frame_id(mut self, frame_id: impl Into<super::super::page::types::FrameId>) -> Self {
+    pub fn frame_id(
+        mut self,
+        frame_id: impl Into<crate::browser_protocol::page::types::FrameId>,
+    ) -> Self {
         self.frame_id = Some(frame_id.into());
         self
     }
@@ -996,7 +1002,7 @@ impl LoadNetworkResourceBuilder {
 }
 impl SetCookieControls {
     pub fn builder() -> SetCookieControlsBuilder {
-        SetCookieControlsBuilder::default()
+        <SetCookieControlsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

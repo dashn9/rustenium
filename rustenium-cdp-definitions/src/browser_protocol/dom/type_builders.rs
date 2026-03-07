@@ -1,7 +1,7 @@
 use super::types::*;
 impl BackendNode {
     pub fn builder() -> BackendNodeBuilder {
-        BackendNodeBuilder::default()
+        <BackendNodeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -25,21 +25,21 @@ impl BackendNodeBuilder {
     }
     pub fn build(self) -> Result<BackendNode, String> {
         Ok(BackendNode {
-            node_type: self
-                .node_type
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_type)))?,
+            node_type: Box::new(self.node_type.ok_or_else(|| {
+                std::stringify!("Field `{}` is mandatory.", std::stringify!(node_type))
+            })?),
             node_name: self
                 .node_name
                 .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_name)))?,
-            backend_node_id: self.backend_node_id.ok_or_else(|| {
-                format!("Field `{}` is mandatory.", std::stringify!(backend_node_id))
-            })?,
+            backend_node_id: Box::new(self.backend_node_id.ok_or_else(|| {
+                std::stringify!("Field `{}` is mandatory.", std::stringify!(backend_node_id))
+            })?),
         })
     }
 }
 impl Node {
     pub fn builder() -> NodeBuilder {
-        NodeBuilder::default()
+        <NodeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -65,7 +65,7 @@ pub struct NodeBuilder {
     pseudo_type: Option<PseudoType>,
     pseudo_identifier: Option<String>,
     shadow_root_type: Option<ShadowRootType>,
-    frame_id: Option<super::super::page::types::FrameId>,
+    frame_id: Option<crate::browser_protocol::page::types::FrameId>,
     content_document: Option<Node>,
     shadow_roots: Option<Vec<Node>>,
     template_content: Option<Node>,
@@ -188,7 +188,10 @@ impl NodeBuilder {
         self.shadow_root_type = Some(shadow_root_type.into());
         self
     }
-    pub fn frame_id(mut self, frame_id: impl Into<super::super::page::types::FrameId>) -> Self {
+    pub fn frame_id(
+        mut self,
+        frame_id: impl Into<crate::browser_protocol::page::types::FrameId>,
+    ) -> Self {
         self.frame_id = Some(frame_id.into());
         self
     }
@@ -293,16 +296,16 @@ impl NodeBuilder {
     }
     pub fn build(self) -> Result<Node, String> {
         Ok(Node {
-            node_id: self
-                .node_id
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_id)))?,
+            node_id: Box::new(self.node_id.ok_or_else(|| {
+                std::stringify!("Field `{}` is mandatory.", std::stringify!(node_id))
+            })?),
             parent_id: self.parent_id,
-            backend_node_id: self.backend_node_id.ok_or_else(|| {
-                format!("Field `{}` is mandatory.", std::stringify!(backend_node_id))
-            })?,
-            node_type: self
-                .node_type
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_type)))?,
+            backend_node_id: Box::new(self.backend_node_id.ok_or_else(|| {
+                std::stringify!("Field `{}` is mandatory.", std::stringify!(backend_node_id))
+            })?),
+            node_type: Box::new(self.node_type.ok_or_else(|| {
+                std::stringify!("Field `{}` is mandatory.", std::stringify!(node_type))
+            })?),
             node_name: self
                 .node_name
                 .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_name)))?,
@@ -323,9 +326,9 @@ impl NodeBuilder {
             xml_version: self.xml_version,
             name: self.name,
             value: self.value,
-            pseudo_type: self.pseudo_type,
+            pseudo_type: self.pseudo_type.map(Box::new),
             pseudo_identifier: self.pseudo_identifier,
-            shadow_root_type: self.shadow_root_type,
+            shadow_root_type: self.shadow_root_type.map(Box::new),
             frame_id: self.frame_id,
             content_document: self.content_document.map(Box::new),
             shadow_roots: self.shadow_roots,
@@ -344,7 +347,7 @@ impl NodeBuilder {
 }
 impl DetachedElementInfo {
     pub fn builder() -> DetachedElementInfoBuilder {
-        DetachedElementInfoBuilder::default()
+        <DetachedElementInfoBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -389,7 +392,7 @@ impl DetachedElementInfoBuilder {
 }
 impl Rgba {
     pub fn builder() -> RgbaBuilder {
-        RgbaBuilder::default()
+        <RgbaBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -433,7 +436,7 @@ impl RgbaBuilder {
 }
 impl BoxModel {
     pub fn builder() -> BoxModelBuilder {
-        BoxModelBuilder::default()
+        <BoxModelBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -501,7 +504,7 @@ impl BoxModelBuilder {
 }
 impl ShapeOutsideInfo {
     pub fn builder() -> ShapeOutsideInfoBuilder {
-        ShapeOutsideInfoBuilder::default()
+        <ShapeOutsideInfoBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -563,7 +566,7 @@ impl ShapeOutsideInfoBuilder {
 }
 impl Rect {
     pub fn builder() -> RectBuilder {
-        RectBuilder::default()
+        <RectBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -609,7 +612,7 @@ impl RectBuilder {
 }
 impl CssComputedStyleProperty {
     pub fn builder() -> CssComputedStylePropertyBuilder {
-        CssComputedStylePropertyBuilder::default()
+        <CssComputedStylePropertyBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

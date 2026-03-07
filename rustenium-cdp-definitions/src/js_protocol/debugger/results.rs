@@ -3,52 +3,22 @@ use serde::{Deserialize, Serialize};
 pub struct ContinueToLocationResult {}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct DisableResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct PauseResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct RemoveBreakpointResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct ResumeResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetAsyncCallStackDepthResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetBlackboxExecutionContextsResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetBlackboxPatternsResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetBlackboxedRangesResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetBreakpointsActiveResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetPauseOnExceptionsResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetReturnValueResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetSkipAllPausesResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetVariableValueResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct StepIntoResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct StepOutResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct StepOverResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EnableResult {
     #[doc = "Unique identifier of the debugger."]
     #[serde(rename = "debuggerId")]
-    pub debugger_id: super::super::runtime::types::UniqueDebuggerId,
+    pub debugger_id: crate::js_protocol::runtime::types::UniqueDebuggerId,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EvaluateOnCallFrameResult {
     #[doc = "Object wrapper for the evaluation result."]
     #[serde(rename = "result")]
-    pub result: super::super::runtime::types::RemoteObject,
+    pub result: crate::js_protocol::runtime::types::RemoteObject,
     #[doc = "Exception details."]
     #[serde(rename = "exceptionDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub exception_details: Option<super::super::runtime::types::ExceptionDetails>,
+    pub exception_details: Option<crate::js_protocol::runtime::types::ExceptionDetails>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetPossibleBreakpointsResult {
@@ -66,7 +36,7 @@ pub struct GetScriptSourceResult {
     #[serde(rename = "bytecode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub bytecode: Option<super::super::super::Binary>,
+    pub bytecode: Option<crate::Binary>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DisassembleWasmModuleResult {
@@ -96,15 +66,23 @@ pub struct NextWasmDisassemblyChunkResult {
 pub struct GetWasmBytecodeResult {
     #[doc = "Script source."]
     #[serde(rename = "bytecode")]
-    pub bytecode: super::super::super::Binary,
+    pub bytecode: crate::Binary,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetStackTraceResult {
     #[serde(rename = "stackTrace")]
-    pub stack_trace: super::super::runtime::types::StackTrace,
+    pub stack_trace: crate::js_protocol::runtime::types::StackTrace,
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct PauseResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct PauseOnAsyncCallResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct RemoveBreakpointResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct RestartFrameResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ResumeResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SearchInContentResult {
     #[doc = "List of search matches."]
@@ -112,6 +90,14 @@ pub struct SearchInContentResult {
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub result: Vec<super::types::SearchMatch>,
 }
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetAsyncCallStackDepthResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetBlackboxExecutionContextsResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetBlackboxPatternsResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetBlackboxedRangesResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetBreakpointResult {
     #[doc = "Id of the created breakpoint for further reference."]
@@ -143,6 +129,12 @@ pub struct SetBreakpointOnFunctionCallResult {
     #[serde(rename = "breakpointId")]
     pub breakpoint_id: super::types::BreakpointId,
 }
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetBreakpointsActiveResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetPauseOnExceptionsResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetReturnValueResult {}
 #[doc = "Whether the operation was successful or not. Only `Ok` denotes a\nsuccessful live edit while the other enum variants denote why\nthe live edit failed."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum SetScriptSourceResultStatus {
@@ -166,5 +158,15 @@ pub struct SetScriptSourceResult {
     #[serde(rename = "exceptionDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub exception_details: Option<super::super::runtime::types::ExceptionDetails>,
+    pub exception_details: Option<crate::js_protocol::runtime::types::ExceptionDetails>,
 }
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetSkipAllPausesResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetVariableValueResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct StepIntoResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct StepOutResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct StepOverResult {}

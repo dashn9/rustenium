@@ -1,7 +1,7 @@
 use super::commands::*;
 impl SetDeviceOrientationOverride {
     pub fn builder() -> SetDeviceOrientationOverrideBuilder {
-        SetDeviceOrientationOverrideBuilder::default()
+        <SetDeviceOrientationOverrideBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

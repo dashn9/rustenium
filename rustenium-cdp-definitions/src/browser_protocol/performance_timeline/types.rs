@@ -3,9 +3,9 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LargestContentfulPaint {
     #[serde(rename = "renderTime")]
-    pub render_time: super::super::network::types::TimeSinceEpoch,
+    pub render_time: crate::browser_protocol::network::types::TimeSinceEpoch,
     #[serde(rename = "loadTime")]
-    pub load_time: super::super::network::types::TimeSinceEpoch,
+    pub load_time: crate::browser_protocol::network::types::TimeSinceEpoch,
     #[doc = "The number of pixels being painted."]
     #[serde(rename = "size")]
     pub size: f64,
@@ -22,12 +22,12 @@ pub struct LargestContentfulPaint {
     #[serde(rename = "nodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub node_id: Option<super::super::dom::types::BackendNodeId>,
+    pub node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
 }
 impl LargestContentfulPaint {
     pub fn new(
-        render_time: impl Into<super::super::network::types::TimeSinceEpoch>,
-        load_time: impl Into<super::super::network::types::TimeSinceEpoch>,
+        render_time: impl Into<crate::browser_protocol::network::types::TimeSinceEpoch>,
+        load_time: impl Into<crate::browser_protocol::network::types::TimeSinceEpoch>,
         size: impl Into<f64>,
     ) -> Self {
         Self {
@@ -46,18 +46,18 @@ impl LargestContentfulPaint {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LayoutShiftAttribution {
     #[serde(rename = "previousRect")]
-    pub previous_rect: super::super::dom::types::Rect,
+    pub previous_rect: crate::browser_protocol::dom::types::Rect,
     #[serde(rename = "currentRect")]
-    pub current_rect: super::super::dom::types::Rect,
+    pub current_rect: crate::browser_protocol::dom::types::Rect,
     #[serde(rename = "nodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub node_id: Option<super::super::dom::types::BackendNodeId>,
+    pub node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
 }
 impl LayoutShiftAttribution {
     pub fn new(
-        previous_rect: impl Into<super::super::dom::types::Rect>,
-        current_rect: impl Into<super::super::dom::types::Rect>,
+        previous_rect: impl Into<crate::browser_protocol::dom::types::Rect>,
+        current_rect: impl Into<crate::browser_protocol::dom::types::Rect>,
     ) -> Self {
         Self {
             previous_rect: previous_rect.into(),
@@ -78,7 +78,7 @@ pub struct LayoutShift {
     #[serde(rename = "hadRecentInput")]
     pub had_recent_input: bool,
     #[serde(rename = "lastInputTime")]
-    pub last_input_time: super::super::network::types::TimeSinceEpoch,
+    pub last_input_time: crate::browser_protocol::network::types::TimeSinceEpoch,
     #[serde(rename = "sources")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub sources: Vec<LayoutShiftAttribution>,
@@ -87,7 +87,7 @@ impl LayoutShift {
     pub fn new(
         value: impl Into<f64>,
         had_recent_input: impl Into<bool>,
-        last_input_time: impl Into<super::super::network::types::TimeSinceEpoch>,
+        last_input_time: impl Into<crate::browser_protocol::network::types::TimeSinceEpoch>,
         sources: Vec<LayoutShiftAttribution>,
     ) -> Self {
         Self {
@@ -105,7 +105,7 @@ impl LayoutShift {
 pub struct TimelineEvent {
     #[doc = "Identifies the frame that this event is related to. Empty for non-frame targets."]
     #[serde(rename = "frameId")]
-    pub frame_id: super::super::page::types::FrameId,
+    pub frame_id: crate::browser_protocol::page::types::FrameId,
     #[doc = "The event type, as specified in https://w3c.github.io/performance-timeline/#dom-performanceentry-entrytype\nThis determines which of the optional \"details\" fields is present."]
     #[serde(rename = "type")]
     pub r#type: String,
@@ -114,7 +114,7 @@ pub struct TimelineEvent {
     pub name: String,
     #[doc = "Time in seconds since Epoch, monotonically increasing within document lifetime."]
     #[serde(rename = "time")]
-    pub time: super::super::network::types::TimeSinceEpoch,
+    pub time: crate::browser_protocol::network::types::TimeSinceEpoch,
     #[doc = "Event duration, if applicable."]
     #[serde(rename = "duration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -131,10 +131,10 @@ pub struct TimelineEvent {
 }
 impl TimelineEvent {
     pub fn new(
-        frame_id: impl Into<super::super::page::types::FrameId>,
+        frame_id: impl Into<crate::browser_protocol::page::types::FrameId>,
         r#type: impl Into<String>,
         name: impl Into<String>,
-        time: impl Into<super::super::network::types::TimeSinceEpoch>,
+        time: impl Into<crate::browser_protocol::network::types::TimeSinceEpoch>,
     ) -> Self {
         Self {
             frame_id: frame_id.into(),

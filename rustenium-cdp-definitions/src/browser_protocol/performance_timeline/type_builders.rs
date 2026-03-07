@@ -1,29 +1,29 @@
 use super::types::*;
 impl LargestContentfulPaint {
     pub fn builder() -> LargestContentfulPaintBuilder {
-        LargestContentfulPaintBuilder::default()
+        <LargestContentfulPaintBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct LargestContentfulPaintBuilder {
-    render_time: Option<super::super::network::types::TimeSinceEpoch>,
-    load_time: Option<super::super::network::types::TimeSinceEpoch>,
+    render_time: Option<crate::browser_protocol::network::types::TimeSinceEpoch>,
+    load_time: Option<crate::browser_protocol::network::types::TimeSinceEpoch>,
     size: Option<f64>,
     element_id: Option<String>,
     url: Option<String>,
-    node_id: Option<super::super::dom::types::BackendNodeId>,
+    node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
 }
 impl LargestContentfulPaintBuilder {
     pub fn render_time(
         mut self,
-        render_time: impl Into<super::super::network::types::TimeSinceEpoch>,
+        render_time: impl Into<crate::browser_protocol::network::types::TimeSinceEpoch>,
     ) -> Self {
         self.render_time = Some(render_time.into());
         self
     }
     pub fn load_time(
         mut self,
-        load_time: impl Into<super::super::network::types::TimeSinceEpoch>,
+        load_time: impl Into<crate::browser_protocol::network::types::TimeSinceEpoch>,
     ) -> Self {
         self.load_time = Some(load_time.into());
         self
@@ -40,7 +40,10 @@ impl LargestContentfulPaintBuilder {
         self.url = Some(url.into());
         self
     }
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::BackendNodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
@@ -63,28 +66,34 @@ impl LargestContentfulPaintBuilder {
 }
 impl LayoutShiftAttribution {
     pub fn builder() -> LayoutShiftAttributionBuilder {
-        LayoutShiftAttributionBuilder::default()
+        <LayoutShiftAttributionBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct LayoutShiftAttributionBuilder {
-    previous_rect: Option<super::super::dom::types::Rect>,
-    current_rect: Option<super::super::dom::types::Rect>,
-    node_id: Option<super::super::dom::types::BackendNodeId>,
+    previous_rect: Option<crate::browser_protocol::dom::types::Rect>,
+    current_rect: Option<crate::browser_protocol::dom::types::Rect>,
+    node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
 }
 impl LayoutShiftAttributionBuilder {
     pub fn previous_rect(
         mut self,
-        previous_rect: impl Into<super::super::dom::types::Rect>,
+        previous_rect: impl Into<crate::browser_protocol::dom::types::Rect>,
     ) -> Self {
         self.previous_rect = Some(previous_rect.into());
         self
     }
-    pub fn current_rect(mut self, current_rect: impl Into<super::super::dom::types::Rect>) -> Self {
+    pub fn current_rect(
+        mut self,
+        current_rect: impl Into<crate::browser_protocol::dom::types::Rect>,
+    ) -> Self {
         self.current_rect = Some(current_rect.into());
         self
     }
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::BackendNodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
@@ -102,14 +111,14 @@ impl LayoutShiftAttributionBuilder {
 }
 impl LayoutShift {
     pub fn builder() -> LayoutShiftBuilder {
-        LayoutShiftBuilder::default()
+        <LayoutShiftBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct LayoutShiftBuilder {
     value: Option<f64>,
     had_recent_input: Option<bool>,
-    last_input_time: Option<super::super::network::types::TimeSinceEpoch>,
+    last_input_time: Option<crate::browser_protocol::network::types::TimeSinceEpoch>,
     sources: Option<Vec<LayoutShiftAttribution>>,
 }
 impl LayoutShiftBuilder {
@@ -123,7 +132,7 @@ impl LayoutShiftBuilder {
     }
     pub fn last_input_time(
         mut self,
-        last_input_time: impl Into<super::super::network::types::TimeSinceEpoch>,
+        last_input_time: impl Into<crate::browser_protocol::network::types::TimeSinceEpoch>,
     ) -> Self {
         self.last_input_time = Some(last_input_time.into());
         self
@@ -166,21 +175,24 @@ impl LayoutShiftBuilder {
 }
 impl TimelineEvent {
     pub fn builder() -> TimelineEventBuilder {
-        TimelineEventBuilder::default()
+        <TimelineEventBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct TimelineEventBuilder {
-    frame_id: Option<super::super::page::types::FrameId>,
+    frame_id: Option<crate::browser_protocol::page::types::FrameId>,
     r#type: Option<String>,
     name: Option<String>,
-    time: Option<super::super::network::types::TimeSinceEpoch>,
+    time: Option<crate::browser_protocol::network::types::TimeSinceEpoch>,
     duration: Option<f64>,
     lcp_details: Option<LargestContentfulPaint>,
     layout_shift_details: Option<LayoutShift>,
 }
 impl TimelineEventBuilder {
-    pub fn frame_id(mut self, frame_id: impl Into<super::super::page::types::FrameId>) -> Self {
+    pub fn frame_id(
+        mut self,
+        frame_id: impl Into<crate::browser_protocol::page::types::FrameId>,
+    ) -> Self {
         self.frame_id = Some(frame_id.into());
         self
     }
@@ -192,7 +204,10 @@ impl TimelineEventBuilder {
         self.name = Some(name.into());
         self
     }
-    pub fn time(mut self, time: impl Into<super::super::network::types::TimeSinceEpoch>) -> Self {
+    pub fn time(
+        mut self,
+        time: impl Into<crate::browser_protocol::network::types::TimeSinceEpoch>,
+    ) -> Self {
         self.time = Some(time.into());
         self
     }

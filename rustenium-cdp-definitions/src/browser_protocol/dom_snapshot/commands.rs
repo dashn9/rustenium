@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 #[doc = "Disables DOM snapshot agent for the given page.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/DOMSnapshot/#method-disable)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DisableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum DisableMethod {
@@ -16,11 +16,11 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
-impl super::super::super::CommandResult for Disable {
+impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
 }
 #[doc = "Enables DOM snapshot agent for the given page.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/DOMSnapshot/#method-enable)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EnableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum EnableMethod {
@@ -36,7 +36,7 @@ pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
 }
-impl super::super::super::CommandResult for Enable {
+impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
 }
 #[doc = "Returns a document snapshot, including the full DOM tree of the root node (including iframes,\ntemplate contents, and imported documents) in a flattened array, as well as layout and\nwhite-listed computed style information for the nodes. Shadow DOM in the returned DOM tree is\nflattened.\n[captureSnapshot](https://chromedevtools.github.io/devtools-protocol/tot/DOMSnapshot/#method-captureSnapshot)"]
@@ -92,7 +92,7 @@ pub struct CaptureSnapshot {
     pub method: CaptureSnapshotMethod,
     pub params: CaptureSnapshotParams,
 }
-impl super::super::super::CommandResult for CaptureSnapshot {
+impl crate::CommandResult for CaptureSnapshot {
     type Result = super::results::CaptureSnapshotResult;
 }
 group_enum ! (DomSnapshotCommands { Disable (Disable) , Enable (Enable) , CaptureSnapshot (CaptureSnapshot) });

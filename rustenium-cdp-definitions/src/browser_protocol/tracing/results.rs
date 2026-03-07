@@ -1,10 +1,6 @@
 use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct EndResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct RecordClockSyncMarkerResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct StartResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetCategoriesResult {
     #[doc = "A list of supported tracing categories."]
@@ -16,8 +12,10 @@ pub struct GetCategoriesResult {
 pub struct GetTrackEventDescriptorResult {
     #[doc = "Base64-encoded serialized perfetto.protos.TrackEventDescriptor protobuf message."]
     #[serde(rename = "descriptor")]
-    pub descriptor: super::super::super::Binary,
+    pub descriptor: crate::Binary,
 }
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct RecordClockSyncMarkerResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RequestMemoryDumpResult {
     #[doc = "GUID of the resulting global memory dump."]
@@ -27,3 +25,5 @@ pub struct RequestMemoryDumpResult {
     #[serde(rename = "success")]
     pub success: bool,
 }
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct StartResult {}

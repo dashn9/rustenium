@@ -1,17 +1,17 @@
 use super::types::*;
 impl RuleSet {
     pub fn builder() -> RuleSetBuilder {
-        RuleSetBuilder::default()
+        <RuleSetBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct RuleSetBuilder {
     id: Option<RuleSetId>,
-    loader_id: Option<super::super::network::types::LoaderId>,
+    loader_id: Option<crate::browser_protocol::network::types::LoaderId>,
     source_text: Option<String>,
-    backend_node_id: Option<super::super::dom::types::BackendNodeId>,
+    backend_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     url: Option<String>,
-    request_id: Option<super::super::network::types::RequestId>,
+    request_id: Option<crate::browser_protocol::network::types::RequestId>,
     error_type: Option<RuleSetErrorType>,
     tag: Option<String>,
 }
@@ -22,7 +22,7 @@ impl RuleSetBuilder {
     }
     pub fn loader_id(
         mut self,
-        loader_id: impl Into<super::super::network::types::LoaderId>,
+        loader_id: impl Into<crate::browser_protocol::network::types::LoaderId>,
     ) -> Self {
         self.loader_id = Some(loader_id.into());
         self
@@ -33,7 +33,7 @@ impl RuleSetBuilder {
     }
     pub fn backend_node_id(
         mut self,
-        backend_node_id: impl Into<super::super::dom::types::BackendNodeId>,
+        backend_node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
     ) -> Self {
         self.backend_node_id = Some(backend_node_id.into());
         self
@@ -44,7 +44,7 @@ impl RuleSetBuilder {
     }
     pub fn request_id(
         mut self,
-        request_id: impl Into<super::super::network::types::RequestId>,
+        request_id: impl Into<crate::browser_protocol::network::types::RequestId>,
     ) -> Self {
         self.request_id = Some(request_id.into());
         self
@@ -78,12 +78,12 @@ impl RuleSetBuilder {
 }
 impl PreloadingAttemptKey {
     pub fn builder() -> PreloadingAttemptKeyBuilder {
-        PreloadingAttemptKeyBuilder::default()
+        <PreloadingAttemptKeyBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct PreloadingAttemptKeyBuilder {
-    loader_id: Option<super::super::network::types::LoaderId>,
+    loader_id: Option<crate::browser_protocol::network::types::LoaderId>,
     action: Option<SpeculationAction>,
     url: Option<String>,
     target_hint: Option<SpeculationTargetHint>,
@@ -91,7 +91,7 @@ pub struct PreloadingAttemptKeyBuilder {
 impl PreloadingAttemptKeyBuilder {
     pub fn loader_id(
         mut self,
-        loader_id: impl Into<super::super::network::types::LoaderId>,
+        loader_id: impl Into<crate::browser_protocol::network::types::LoaderId>,
     ) -> Self {
         self.loader_id = Some(loader_id.into());
         self
@@ -125,14 +125,14 @@ impl PreloadingAttemptKeyBuilder {
 }
 impl PreloadingAttemptSource {
     pub fn builder() -> PreloadingAttemptSourceBuilder {
-        PreloadingAttemptSourceBuilder::default()
+        <PreloadingAttemptSourceBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct PreloadingAttemptSourceBuilder {
     key: Option<PreloadingAttemptKey>,
     rule_set_ids: Option<Vec<RuleSetId>>,
-    node_ids: Option<Vec<super::super::dom::types::BackendNodeId>>,
+    node_ids: Option<Vec<crate::browser_protocol::dom::types::BackendNodeId>>,
 }
 impl PreloadingAttemptSourceBuilder {
     pub fn key(mut self, key: impl Into<PreloadingAttemptKey>) -> Self {
@@ -155,7 +155,10 @@ impl PreloadingAttemptSourceBuilder {
         }
         self
     }
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::BackendNodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
+    ) -> Self {
         let v = self.node_ids.get_or_insert(Vec::new());
         v.push(node_id.into());
         self
@@ -163,7 +166,7 @@ impl PreloadingAttemptSourceBuilder {
     pub fn node_ids<I, S>(mut self, node_ids: I) -> Self
     where
         I: IntoIterator<Item = S>,
-        S: Into<super::super::dom::types::BackendNodeId>,
+        S: Into<crate::browser_protocol::dom::types::BackendNodeId>,
     {
         let v = self.node_ids.get_or_insert(Vec::new());
         for val in node_ids {
@@ -187,7 +190,7 @@ impl PreloadingAttemptSourceBuilder {
 }
 impl PrerenderMismatchedHeaders {
     pub fn builder() -> PrerenderMismatchedHeadersBuilder {
-        PrerenderMismatchedHeadersBuilder::default()
+        <PrerenderMismatchedHeadersBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

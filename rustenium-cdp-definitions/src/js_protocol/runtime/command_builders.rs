@@ -1,7 +1,7 @@
 use super::commands::*;
 impl AwaitPromise {
     pub fn builder() -> AwaitPromiseBuilder {
-        AwaitPromiseBuilder::default()
+        <AwaitPromiseBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -44,7 +44,7 @@ impl AwaitPromiseBuilder {
 }
 impl CallFunctionOn {
     pub fn builder() -> CallFunctionOnBuilder {
-        CallFunctionOnBuilder::default()
+        <CallFunctionOnBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -162,7 +162,7 @@ impl CallFunctionOnBuilder {
 }
 impl CompileScript {
     pub fn builder() -> CompileScriptBuilder {
-        CompileScriptBuilder::default()
+        <CompileScriptBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -212,7 +212,7 @@ impl CompileScriptBuilder {
 }
 impl Evaluate {
     pub fn builder() -> EvaluateBuilder {
-        EvaluateBuilder::default()
+        <EvaluateBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -333,7 +333,7 @@ impl EvaluateBuilder {
 }
 impl GetProperties {
     pub fn builder() -> GetPropertiesBuilder {
-        GetPropertiesBuilder::default()
+        <GetPropertiesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -385,7 +385,7 @@ impl GetPropertiesBuilder {
 }
 impl GlobalLexicalScopeNames {
     pub fn builder() -> GlobalLexicalScopeNamesBuilder {
-        GlobalLexicalScopeNamesBuilder::default()
+        <GlobalLexicalScopeNamesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -411,7 +411,7 @@ impl GlobalLexicalScopeNamesBuilder {
 }
 impl QueryObjects {
     pub fn builder() -> QueryObjectsBuilder {
-        QueryObjectsBuilder::default()
+        <QueryObjectsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -448,7 +448,7 @@ impl QueryObjectsBuilder {
 }
 impl ReleaseObject {
     pub fn builder() -> ReleaseObjectBuilder {
-        ReleaseObjectBuilder::default()
+        <ReleaseObjectBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -473,7 +473,7 @@ impl ReleaseObjectBuilder {
 }
 impl ReleaseObjectGroup {
     pub fn builder() -> ReleaseObjectGroupBuilder {
-        ReleaseObjectGroupBuilder::default()
+        <ReleaseObjectGroupBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -498,7 +498,7 @@ impl ReleaseObjectGroupBuilder {
 }
 impl RunScript {
     pub fn builder() -> RunScriptBuilder {
-        RunScriptBuilder::default()
+        <RunScriptBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -568,7 +568,7 @@ impl RunScriptBuilder {
 }
 impl SetAsyncCallStackDepth {
     pub fn builder() -> SetAsyncCallStackDepthBuilder {
-        SetAsyncCallStackDepthBuilder::default()
+        <SetAsyncCallStackDepthBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -593,7 +593,7 @@ impl SetAsyncCallStackDepthBuilder {
 }
 impl SetCustomObjectFormatterEnabled {
     pub fn builder() -> SetCustomObjectFormatterEnabledBuilder {
-        SetCustomObjectFormatterEnabledBuilder::default()
+        <SetCustomObjectFormatterEnabledBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -618,7 +618,7 @@ impl SetCustomObjectFormatterEnabledBuilder {
 }
 impl SetMaxCallStackSizeToCapture {
     pub fn builder() -> SetMaxCallStackSizeToCaptureBuilder {
-        SetMaxCallStackSizeToCaptureBuilder::default()
+        <SetMaxCallStackSizeToCaptureBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -643,7 +643,7 @@ impl SetMaxCallStackSizeToCaptureBuilder {
 }
 impl AddBinding {
     pub fn builder() -> AddBindingBuilder {
-        AddBindingBuilder::default()
+        <AddBindingBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -674,7 +674,7 @@ impl AddBindingBuilder {
 }
 impl RemoveBinding {
     pub fn builder() -> RemoveBindingBuilder {
-        RemoveBindingBuilder::default()
+        <RemoveBindingBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -699,7 +699,7 @@ impl RemoveBindingBuilder {
 }
 impl GetExceptionDetails {
     pub fn builder() -> GetExceptionDetailsBuilder {
-        GetExceptionDetailsBuilder::default()
+        <GetExceptionDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

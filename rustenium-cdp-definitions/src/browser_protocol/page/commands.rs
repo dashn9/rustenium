@@ -49,11 +49,11 @@ pub struct AddScriptToEvaluateOnNewDocument {
     pub method: AddScriptToEvaluateOnNewDocumentMethod,
     pub params: AddScriptToEvaluateOnNewDocumentParams,
 }
-impl super::super::super::CommandResult for AddScriptToEvaluateOnNewDocument {
+impl crate::CommandResult for AddScriptToEvaluateOnNewDocument {
     type Result = super::results::AddScriptToEvaluateOnNewDocumentResult;
 }
 #[doc = "Brings page to front (activates tab).\n[bringToFront](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-bringToFront)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BringToFrontParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum BringToFrontMethod {
@@ -69,7 +69,7 @@ pub struct BringToFront {
     pub method: BringToFrontMethod,
     pub params: BringToFrontParams,
 }
-impl super::super::super::CommandResult for BringToFront {
+impl crate::CommandResult for BringToFront {
     type Result = super::results::BringToFrontResult;
 }
 #[doc = "Capture page screenshot.\n[captureScreenshot](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-captureScreenshot)"]
@@ -130,7 +130,7 @@ pub struct CaptureScreenshot {
     pub method: CaptureScreenshotMethod,
     pub params: CaptureScreenshotParams,
 }
-impl super::super::super::CommandResult for CaptureScreenshot {
+impl crate::CommandResult for CaptureScreenshot {
     type Result = super::results::CaptureScreenshotResult;
 }
 #[doc = "Returns a snapshot of the page as a string. For MHTML format, the serialization includes\niframes, shadow DOM, external resources, and element-inline styles.\n[captureSnapshot](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-captureSnapshot)"]
@@ -162,7 +162,7 @@ pub struct CaptureSnapshot {
     pub method: CaptureSnapshotMethod,
     pub params: CaptureSnapshotParams,
 }
-impl super::super::super::CommandResult for CaptureSnapshot {
+impl crate::CommandResult for CaptureSnapshot {
     type Result = super::results::CaptureSnapshotResult;
 }
 #[doc = "Creates an isolated world for the given frame.\n[createIsolatedWorld](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-createIsolatedWorld)"]
@@ -170,7 +170,7 @@ impl super::super::super::CommandResult for CaptureSnapshot {
 pub struct CreateIsolatedWorldParams {
     #[doc = "Id of the frame in which the isolated world should be created."]
     #[serde(rename = "frameId")]
-    pub frame_id: super::types::FrameId,
+    pub frame_id: Box<super::types::FrameId>,
     #[doc = "An optional name which is reported in the Execution Context."]
     #[serde(rename = "worldName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -185,7 +185,7 @@ pub struct CreateIsolatedWorldParams {
 impl CreateIsolatedWorldParams {
     pub fn new(frame_id: impl Into<super::types::FrameId>) -> Self {
         Self {
-            frame_id: frame_id.into(),
+            frame_id: Box::new(frame_id.into()),
             world_name: None,
             grant_univeral_access: None,
         }
@@ -205,11 +205,11 @@ pub struct CreateIsolatedWorld {
     pub method: CreateIsolatedWorldMethod,
     pub params: CreateIsolatedWorldParams,
 }
-impl super::super::super::CommandResult for CreateIsolatedWorld {
+impl crate::CommandResult for CreateIsolatedWorld {
     type Result = super::results::CreateIsolatedWorldResult;
 }
 #[doc = "Disables page domain notifications.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-disable)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DisableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum DisableMethod {
@@ -225,7 +225,7 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
-impl super::super::super::CommandResult for Disable {
+impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
 }
 #[doc = "Enables page domain notifications.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-enable)"]
@@ -251,7 +251,7 @@ pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
 }
-impl super::super::super::CommandResult for Enable {
+impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
 }
 #[doc = "Gets the processed manifest for this current document.\nThis API always waits for the manifest to be loaded.\nIf manifestId is provided, and it does not match the manifest of the\ncurrent document, this API errors out.\nIf there is not a loaded page, this API errors out immediately.\n[getAppManifest](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getAppManifest)"]
@@ -276,10 +276,10 @@ pub struct GetAppManifest {
     pub method: GetAppManifestMethod,
     pub params: GetAppManifestParams,
 }
-impl super::super::super::CommandResult for GetAppManifest {
+impl crate::CommandResult for GetAppManifest {
     type Result = super::results::GetAppManifestResult;
 }
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetInstallabilityErrorsParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum GetInstallabilityErrorsMethod {
@@ -294,11 +294,11 @@ pub struct GetInstallabilityErrors {
     pub method: GetInstallabilityErrorsMethod,
     pub params: GetInstallabilityErrorsParams,
 }
-impl super::super::super::CommandResult for GetInstallabilityErrors {
+impl crate::CommandResult for GetInstallabilityErrors {
     type Result = super::results::GetInstallabilityErrorsResult;
 }
 #[doc = "Returns the unique (PWA) app id.\nOnly returns values if the feature flag 'WebAppEnableManifestId' is enabled\n[getAppId](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getAppId)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetAppIdParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum GetAppIdMethod {
@@ -314,18 +314,18 @@ pub struct GetAppId {
     pub method: GetAppIdMethod,
     pub params: GetAppIdParams,
 }
-impl super::super::super::CommandResult for GetAppId {
+impl crate::CommandResult for GetAppId {
     type Result = super::results::GetAppIdResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetAdScriptAncestryParams {
     #[serde(rename = "frameId")]
-    pub frame_id: super::types::FrameId,
+    pub frame_id: Box<super::types::FrameId>,
 }
 impl GetAdScriptAncestryParams {
     pub fn new(frame_id: impl Into<super::types::FrameId>) -> Self {
         Self {
-            frame_id: frame_id.into(),
+            frame_id: Box::new(frame_id.into()),
         }
     }
 }
@@ -342,11 +342,11 @@ pub struct GetAdScriptAncestry {
     pub method: GetAdScriptAncestryMethod,
     pub params: GetAdScriptAncestryParams,
 }
-impl super::super::super::CommandResult for GetAdScriptAncestry {
+impl crate::CommandResult for GetAdScriptAncestry {
     type Result = super::results::GetAdScriptAncestryResult;
 }
 #[doc = "Returns present frame tree structure.\n[getFrameTree](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getFrameTree)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetFrameTreeParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum GetFrameTreeMethod {
@@ -362,11 +362,11 @@ pub struct GetFrameTree {
     pub method: GetFrameTreeMethod,
     pub params: GetFrameTreeParams,
 }
-impl super::super::super::CommandResult for GetFrameTree {
+impl crate::CommandResult for GetFrameTree {
     type Result = super::results::GetFrameTreeResult;
 }
 #[doc = "Returns metrics relating to the layouting of the page, such as viewport bounds/scale.\n[getLayoutMetrics](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getLayoutMetrics)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetLayoutMetricsParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum GetLayoutMetricsMethod {
@@ -382,11 +382,11 @@ pub struct GetLayoutMetrics {
     pub method: GetLayoutMetricsMethod,
     pub params: GetLayoutMetricsParams,
 }
-impl super::super::super::CommandResult for GetLayoutMetrics {
+impl crate::CommandResult for GetLayoutMetrics {
     type Result = super::results::GetLayoutMetricsResult;
 }
 #[doc = "Returns navigation history for the current page.\n[getNavigationHistory](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getNavigationHistory)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetNavigationHistoryParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum GetNavigationHistoryMethod {
@@ -402,11 +402,11 @@ pub struct GetNavigationHistory {
     pub method: GetNavigationHistoryMethod,
     pub params: GetNavigationHistoryParams,
 }
-impl super::super::super::CommandResult for GetNavigationHistory {
+impl crate::CommandResult for GetNavigationHistory {
     type Result = super::results::GetNavigationHistoryResult;
 }
 #[doc = "Resets navigation history for the current page.\n[resetNavigationHistory](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-resetNavigationHistory)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResetNavigationHistoryParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum ResetNavigationHistoryMethod {
@@ -422,7 +422,7 @@ pub struct ResetNavigationHistory {
     pub method: ResetNavigationHistoryMethod,
     pub params: ResetNavigationHistoryParams,
 }
-impl super::super::super::CommandResult for ResetNavigationHistory {
+impl crate::CommandResult for ResetNavigationHistory {
     type Result = super::results::ResetNavigationHistoryResult;
 }
 #[doc = "Returns content of the given resource.\n[getResourceContent](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getResourceContent)"]
@@ -430,7 +430,7 @@ impl super::super::super::CommandResult for ResetNavigationHistory {
 pub struct GetResourceContentParams {
     #[doc = "Frame id to get resource for."]
     #[serde(rename = "frameId")]
-    pub frame_id: super::types::FrameId,
+    pub frame_id: Box<super::types::FrameId>,
     #[doc = "URL of the resource to get content for."]
     #[serde(rename = "url")]
     pub url: String,
@@ -438,7 +438,7 @@ pub struct GetResourceContentParams {
 impl GetResourceContentParams {
     pub fn new(frame_id: impl Into<super::types::FrameId>, url: impl Into<String>) -> Self {
         Self {
-            frame_id: frame_id.into(),
+            frame_id: Box::new(frame_id.into()),
             url: url.into(),
         }
     }
@@ -457,11 +457,11 @@ pub struct GetResourceContent {
     pub method: GetResourceContentMethod,
     pub params: GetResourceContentParams,
 }
-impl super::super::super::CommandResult for GetResourceContent {
+impl crate::CommandResult for GetResourceContent {
     type Result = super::results::GetResourceContentResult;
 }
 #[doc = "Returns present frame / resource tree structure.\n[getResourceTree](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getResourceTree)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetResourceTreeParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum GetResourceTreeMethod {
@@ -477,7 +477,7 @@ pub struct GetResourceTree {
     pub method: GetResourceTreeMethod,
     pub params: GetResourceTreeParams,
 }
-impl super::super::super::CommandResult for GetResourceTree {
+impl crate::CommandResult for GetResourceTree {
     type Result = super::results::GetResourceTreeResult;
 }
 #[doc = "Accepts or dismisses a JavaScript initiated dialog (alert, confirm, prompt, or onbeforeunload).\n[handleJavaScriptDialog](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-handleJavaScriptDialog)"]
@@ -514,7 +514,7 @@ pub struct HandleJavaScriptDialog {
     pub method: HandleJavaScriptDialogMethod,
     pub params: HandleJavaScriptDialogParams,
 }
-impl super::super::super::CommandResult for HandleJavaScriptDialog {
+impl crate::CommandResult for HandleJavaScriptDialog {
     type Result = super::results::HandleJavaScriptDialogResult;
 }
 #[doc = "Navigates current page to the given URL.\n[navigate](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-navigate)"]
@@ -537,7 +537,7 @@ pub struct NavigateParams {
     #[serde(rename = "frameId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub frame_id: Option<super::types::FrameId>,
+    pub frame_id: Option<Box<super::types::FrameId>>,
     #[doc = "Referrer-policy used for the navigation."]
     #[serde(rename = "referrerPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -574,7 +574,7 @@ pub struct Navigate {
     pub method: NavigateMethod,
     pub params: NavigateParams,
 }
-impl super::super::super::CommandResult for Navigate {
+impl crate::CommandResult for Navigate {
     type Result = super::results::NavigateResult;
 }
 #[doc = "Navigates current page to the given history entry.\n[navigateToHistoryEntry](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-navigateToHistoryEntry)"]
@@ -605,7 +605,7 @@ pub struct NavigateToHistoryEntry {
     pub method: NavigateToHistoryEntryMethod,
     pub params: NavigateToHistoryEntryParams,
 }
-impl super::super::super::CommandResult for NavigateToHistoryEntry {
+impl crate::CommandResult for NavigateToHistoryEntry {
     type Result = super::results::NavigateToHistoryEntryResult;
 }
 #[doc = "Print page as PDF.\n[printToPDF](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-printToPDF)"]
@@ -719,7 +719,7 @@ pub struct PrintToPdf {
     pub method: PrintToPdfMethod,
     pub params: PrintToPdfParams,
 }
-impl super::super::super::CommandResult for PrintToPdf {
+impl crate::CommandResult for PrintToPdf {
     type Result = super::results::PrintToPdfResult;
 }
 #[doc = "Reloads given page optionally ignoring the cache.\n[reload](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-reload)"]
@@ -739,7 +739,7 @@ pub struct ReloadParams {
     #[serde(rename = "loaderId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub loader_id: Option<super::super::network::types::LoaderId>,
+    pub loader_id: Option<crate::browser_protocol::network::types::LoaderId>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum ReloadMethod {
@@ -755,7 +755,7 @@ pub struct Reload {
     pub method: ReloadMethod,
     pub params: ReloadParams,
 }
-impl super::super::super::CommandResult for Reload {
+impl crate::CommandResult for Reload {
     type Result = super::results::ReloadResult;
 }
 #[doc = "Removes given script from the list.\n[removeScriptToEvaluateOnNewDocument](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-removeScriptToEvaluateOnNewDocument)"]
@@ -785,7 +785,7 @@ pub struct RemoveScriptToEvaluateOnNewDocument {
     pub method: RemoveScriptToEvaluateOnNewDocumentMethod,
     pub params: RemoveScriptToEvaluateOnNewDocumentParams,
 }
-impl super::super::super::CommandResult for RemoveScriptToEvaluateOnNewDocument {
+impl crate::CommandResult for RemoveScriptToEvaluateOnNewDocument {
     type Result = super::results::RemoveScriptToEvaluateOnNewDocumentResult;
 }
 #[doc = "Acknowledges that a screencast frame has been received by the frontend.\n[screencastFrameAck](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-screencastFrameAck)"]
@@ -816,7 +816,7 @@ pub struct ScreencastFrameAck {
     pub method: ScreencastFrameAckMethod,
     pub params: ScreencastFrameAckParams,
 }
-impl super::super::super::CommandResult for ScreencastFrameAck {
+impl crate::CommandResult for ScreencastFrameAck {
     type Result = super::results::ScreencastFrameAckResult;
 }
 #[doc = "Searches for given string in resource content.\n[searchInResource](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-searchInResource)"]
@@ -824,7 +824,7 @@ impl super::super::super::CommandResult for ScreencastFrameAck {
 pub struct SearchInResourceParams {
     #[doc = "Frame id for resource to search in."]
     #[serde(rename = "frameId")]
-    pub frame_id: super::types::FrameId,
+    pub frame_id: Box<super::types::FrameId>,
     #[doc = "URL of the resource to search in."]
     #[serde(rename = "url")]
     pub url: String,
@@ -849,7 +849,7 @@ impl SearchInResourceParams {
         query: impl Into<String>,
     ) -> Self {
         Self {
-            frame_id: frame_id.into(),
+            frame_id: Box::new(frame_id.into()),
             url: url.into(),
             query: query.into(),
             case_sensitive: None,
@@ -871,7 +871,7 @@ pub struct SearchInResource {
     pub method: SearchInResourceMethod,
     pub params: SearchInResourceParams,
 }
-impl super::super::super::CommandResult for SearchInResource {
+impl crate::CommandResult for SearchInResource {
     type Result = super::results::SearchInResourceResult;
 }
 #[doc = "Enable Chrome's experimental ad filter on all sites.\n[setAdBlockingEnabled](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setAdBlockingEnabled)"]
@@ -902,7 +902,7 @@ pub struct SetAdBlockingEnabled {
     pub method: SetAdBlockingEnabledMethod,
     pub params: SetAdBlockingEnabledParams,
 }
-impl super::super::super::CommandResult for SetAdBlockingEnabled {
+impl crate::CommandResult for SetAdBlockingEnabled {
     type Result = super::results::SetAdBlockingEnabledResult;
 }
 #[doc = "Enable page Content Security Policy by-passing.\n[setBypassCSP](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setBypassCSP)"]
@@ -933,19 +933,19 @@ pub struct SetBypassCsp {
     pub method: SetBypassCspMethod,
     pub params: SetBypassCspParams,
 }
-impl super::super::super::CommandResult for SetBypassCsp {
+impl crate::CommandResult for SetBypassCsp {
     type Result = super::results::SetBypassCspResult;
 }
 #[doc = "Get Permissions Policy state on given frame.\n[getPermissionsPolicyState](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getPermissionsPolicyState)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetPermissionsPolicyStateParams {
     #[serde(rename = "frameId")]
-    pub frame_id: super::types::FrameId,
+    pub frame_id: Box<super::types::FrameId>,
 }
 impl GetPermissionsPolicyStateParams {
     pub fn new(frame_id: impl Into<super::types::FrameId>) -> Self {
         Self {
-            frame_id: frame_id.into(),
+            frame_id: Box::new(frame_id.into()),
         }
     }
 }
@@ -963,19 +963,19 @@ pub struct GetPermissionsPolicyState {
     pub method: GetPermissionsPolicyStateMethod,
     pub params: GetPermissionsPolicyStateParams,
 }
-impl super::super::super::CommandResult for GetPermissionsPolicyState {
+impl crate::CommandResult for GetPermissionsPolicyState {
     type Result = super::results::GetPermissionsPolicyStateResult;
 }
 #[doc = "Get Origin Trials on given frame.\n[getOriginTrials](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getOriginTrials)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetOriginTrialsParams {
     #[serde(rename = "frameId")]
-    pub frame_id: super::types::FrameId,
+    pub frame_id: Box<super::types::FrameId>,
 }
 impl GetOriginTrialsParams {
     pub fn new(frame_id: impl Into<super::types::FrameId>) -> Self {
         Self {
-            frame_id: frame_id.into(),
+            frame_id: Box::new(frame_id.into()),
         }
     }
 }
@@ -993,7 +993,7 @@ pub struct GetOriginTrials {
     pub method: GetOriginTrialsMethod,
     pub params: GetOriginTrialsParams,
 }
-impl super::super::super::CommandResult for GetOriginTrials {
+impl crate::CommandResult for GetOriginTrials {
     type Result = super::results::GetOriginTrialsResult;
 }
 #[doc = "Set generic font families.\n[setFontFamilies](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setFontFamilies)"]
@@ -1030,7 +1030,7 @@ pub struct SetFontFamilies {
     pub method: SetFontFamiliesMethod,
     pub params: SetFontFamiliesParams,
 }
-impl super::super::super::CommandResult for SetFontFamilies {
+impl crate::CommandResult for SetFontFamilies {
     type Result = super::results::SetFontFamiliesResult;
 }
 #[doc = "Set default font sizes.\n[setFontSizes](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setFontSizes)"]
@@ -1061,7 +1061,7 @@ pub struct SetFontSizes {
     pub method: SetFontSizesMethod,
     pub params: SetFontSizesParams,
 }
-impl super::super::super::CommandResult for SetFontSizes {
+impl crate::CommandResult for SetFontSizes {
     type Result = super::results::SetFontSizesResult;
 }
 #[doc = "Sets given markup as the document's HTML.\n[setDocumentContent](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setDocumentContent)"]
@@ -1069,7 +1069,7 @@ impl super::super::super::CommandResult for SetFontSizes {
 pub struct SetDocumentContentParams {
     #[doc = "Frame id to set HTML for."]
     #[serde(rename = "frameId")]
-    pub frame_id: super::types::FrameId,
+    pub frame_id: Box<super::types::FrameId>,
     #[doc = "HTML content to set."]
     #[serde(rename = "html")]
     pub html: String,
@@ -1077,7 +1077,7 @@ pub struct SetDocumentContentParams {
 impl SetDocumentContentParams {
     pub fn new(frame_id: impl Into<super::types::FrameId>, html: impl Into<String>) -> Self {
         Self {
-            frame_id: frame_id.into(),
+            frame_id: Box::new(frame_id.into()),
             html: html.into(),
         }
     }
@@ -1096,7 +1096,7 @@ pub struct SetDocumentContent {
     pub method: SetDocumentContentMethod,
     pub params: SetDocumentContentParams,
 }
-impl super::super::super::CommandResult for SetDocumentContent {
+impl crate::CommandResult for SetDocumentContent {
     type Result = super::results::SetDocumentContentResult;
 }
 #[doc = "Controls whether page will emit lifecycle events.\n[setLifecycleEventsEnabled](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setLifecycleEventsEnabled)"]
@@ -1127,7 +1127,7 @@ pub struct SetLifecycleEventsEnabled {
     pub method: SetLifecycleEventsEnabledMethod,
     pub params: SetLifecycleEventsEnabledParams,
 }
-impl super::super::super::CommandResult for SetLifecycleEventsEnabled {
+impl crate::CommandResult for SetLifecycleEventsEnabled {
     type Result = super::results::SetLifecycleEventsEnabledResult;
 }
 #[doc = "Starts sending each frame using the `screencastFrame` event.\n[startScreencast](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-startScreencast)"]
@@ -1181,11 +1181,11 @@ pub struct StartScreencast {
     pub method: StartScreencastMethod,
     pub params: StartScreencastParams,
 }
-impl super::super::super::CommandResult for StartScreencast {
+impl crate::CommandResult for StartScreencast {
     type Result = super::results::StartScreencastResult;
 }
 #[doc = "Force the page stop all navigations and pending resource fetches.\n[stopLoading](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-stopLoading)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StopLoadingParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum StopLoadingMethod {
@@ -1201,11 +1201,11 @@ pub struct StopLoading {
     pub method: StopLoadingMethod,
     pub params: StopLoadingParams,
 }
-impl super::super::super::CommandResult for StopLoading {
+impl crate::CommandResult for StopLoading {
     type Result = super::results::StopLoadingResult;
 }
 #[doc = "Crashes renderer on the IO thread, generates minidumps.\n[crash](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-crash)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CrashParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum CrashMethod {
@@ -1221,11 +1221,11 @@ pub struct Crash {
     pub method: CrashMethod,
     pub params: CrashParams,
 }
-impl super::super::super::CommandResult for Crash {
+impl crate::CommandResult for Crash {
     type Result = super::results::CrashResult;
 }
 #[doc = "Tries to close page, running its beforeunload hooks, if any.\n[close](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-close)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CloseParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum CloseMethod {
@@ -1241,7 +1241,7 @@ pub struct Close {
     pub method: CloseMethod,
     pub params: CloseParams,
 }
-impl super::super::super::CommandResult for Close {
+impl crate::CommandResult for Close {
     type Result = super::results::CloseResult;
 }
 #[doc = "Tries to update the web lifecycle state of the page.\nIt will transition the page to the given state according to:\nhttps://github.com/WICG/web-lifecycle/\n[setWebLifecycleState](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setWebLifecycleState)"]
@@ -1280,11 +1280,11 @@ pub struct SetWebLifecycleState {
     pub method: SetWebLifecycleStateMethod,
     pub params: SetWebLifecycleStateParams,
 }
-impl super::super::super::CommandResult for SetWebLifecycleState {
+impl crate::CommandResult for SetWebLifecycleState {
     type Result = super::results::SetWebLifecycleStateResult;
 }
 #[doc = "Stops sending each frame in the `screencastFrame`.\n[stopScreencast](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-stopScreencast)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StopScreencastParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum StopScreencastMethod {
@@ -1300,7 +1300,7 @@ pub struct StopScreencast {
     pub method: StopScreencastMethod,
     pub params: StopScreencastParams,
 }
-impl super::super::super::CommandResult for StopScreencast {
+impl crate::CommandResult for StopScreencast {
     type Result = super::results::StopScreencastResult;
 }
 #[doc = "Requests backend to produce compilation cache for the specified scripts.\n`scripts` are appended to the list of scripts for which the cache\nwould be produced. The list may be reset during page navigation.\nWhen script with a matching URL is encountered, the cache is optionally\nproduced upon backend discretion, based on internal heuristics.\nSee also: `Page.compilationCacheProduced`.\n[produceCompilationCache](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-produceCompilationCache)"]
@@ -1329,7 +1329,7 @@ pub struct ProduceCompilationCache {
     pub method: ProduceCompilationCacheMethod,
     pub params: ProduceCompilationCacheParams,
 }
-impl super::super::super::CommandResult for ProduceCompilationCache {
+impl crate::CommandResult for ProduceCompilationCache {
     type Result = super::results::ProduceCompilationCacheResult;
 }
 #[doc = "Seeds compilation cache for given url. Compilation cache does not survive\ncross-process navigation.\n[addCompilationCache](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-addCompilationCache)"]
@@ -1339,10 +1339,10 @@ pub struct AddCompilationCacheParams {
     pub url: String,
     #[doc = "Base64-encoded data"]
     #[serde(rename = "data")]
-    pub data: super::super::super::Binary,
+    pub data: crate::Binary,
 }
 impl AddCompilationCacheParams {
-    pub fn new(url: impl Into<String>, data: impl Into<super::super::super::Binary>) -> Self {
+    pub fn new(url: impl Into<String>, data: impl Into<crate::Binary>) -> Self {
         Self {
             url: url.into(),
             data: data.into(),
@@ -1363,11 +1363,11 @@ pub struct AddCompilationCache {
     pub method: AddCompilationCacheMethod,
     pub params: AddCompilationCacheParams,
 }
-impl super::super::super::CommandResult for AddCompilationCache {
+impl crate::CommandResult for AddCompilationCache {
     type Result = super::results::AddCompilationCacheResult;
 }
 #[doc = "Clears seeded compilation cache.\n[clearCompilationCache](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-clearCompilationCache)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClearCompilationCacheParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum ClearCompilationCacheMethod {
@@ -1383,7 +1383,7 @@ pub struct ClearCompilationCache {
     pub method: ClearCompilationCacheMethod,
     pub params: ClearCompilationCacheParams,
 }
-impl super::super::super::CommandResult for ClearCompilationCache {
+impl crate::CommandResult for ClearCompilationCache {
     type Result = super::results::ClearCompilationCacheResult;
 }
 #[doc = "Sets the Secure Payment Confirmation transaction mode.\nhttps://w3c.github.io/secure-payment-confirmation/#sctn-automation-set-spc-transaction-mode\n[setSPCTransactionMode](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setSPCTransactionMode)"]
@@ -1424,7 +1424,7 @@ pub struct SetSpcTransactionMode {
     pub method: SetSpcTransactionModeMethod,
     pub params: SetSpcTransactionModeParams,
 }
-impl super::super::super::CommandResult for SetSpcTransactionMode {
+impl crate::CommandResult for SetSpcTransactionMode {
     type Result = super::results::SetSpcTransactionModeResult;
 }
 #[doc = "Extensions for Custom Handlers API:\nhttps://html.spec.whatwg.org/multipage/system-state.html#rph-automation\n[setRPHRegistrationMode](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setRPHRegistrationMode)"]
@@ -1461,7 +1461,7 @@ pub struct SetRphRegistrationMode {
     pub method: SetRphRegistrationModeMethod,
     pub params: SetRphRegistrationModeParams,
 }
-impl super::super::super::CommandResult for SetRphRegistrationMode {
+impl crate::CommandResult for SetRphRegistrationMode {
     type Result = super::results::SetRphRegistrationModeResult;
 }
 #[doc = "Generates a report for testing.\n[generateTestReport](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-generateTestReport)"]
@@ -1503,11 +1503,11 @@ pub struct GenerateTestReport {
     pub method: GenerateTestReportMethod,
     pub params: GenerateTestReportParams,
 }
-impl super::super::super::CommandResult for GenerateTestReport {
+impl crate::CommandResult for GenerateTestReport {
     type Result = super::results::GenerateTestReportResult;
 }
 #[doc = "Pauses page execution. Can be resumed using generic Runtime.runIfWaitingForDebugger.\n[waitForDebugger](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-waitForDebugger)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WaitForDebuggerParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum WaitForDebuggerMethod {
@@ -1523,7 +1523,7 @@ pub struct WaitForDebugger {
     pub method: WaitForDebuggerMethod,
     pub params: WaitForDebuggerParams,
 }
-impl super::super::super::CommandResult for WaitForDebugger {
+impl crate::CommandResult for WaitForDebugger {
     type Result = super::results::WaitForDebuggerResult;
 }
 #[doc = "Intercept file chooser requests and transfer control to protocol clients.\nWhen file chooser interception is enabled, native file chooser dialog is not shown.\nInstead, a protocol event `Page.fileChooserOpened` is emitted.\n[setInterceptFileChooserDialog](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setInterceptFileChooserDialog)"]
@@ -1559,7 +1559,7 @@ pub struct SetInterceptFileChooserDialog {
     pub method: SetInterceptFileChooserDialogMethod,
     pub params: SetInterceptFileChooserDialogParams,
 }
-impl super::super::super::CommandResult for SetInterceptFileChooserDialog {
+impl crate::CommandResult for SetInterceptFileChooserDialog {
     type Result = super::results::SetInterceptFileChooserDialogResult;
 }
 #[doc = "Enable/disable prerendering manually.\n\nThis command is a short-term solution for https://crbug.com/1440085.\nSee https://docs.google.com/document/d/12HVmFxYj5Jc-eJr5OmWsa2bqTJsbgGLKI6ZIyx0_wpA\nfor more details.\n\nTODO(https://crbug.com/1440085): Remove this once Puppeteer supports tab targets.\n[setPrerenderingAllowed](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setPrerenderingAllowed)"]
@@ -1589,7 +1589,7 @@ pub struct SetPrerenderingAllowed {
     pub method: SetPrerenderingAllowedMethod,
     pub params: SetPrerenderingAllowedParams,
 }
-impl super::super::super::CommandResult for SetPrerenderingAllowed {
+impl crate::CommandResult for SetPrerenderingAllowed {
     type Result = super::results::SetPrerenderingAllowedResult;
 }
 #[doc = "Get the annotated page content for the main frame.\nThis is an experimental command that is subject to change.\n[getAnnotatedPageContent](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getAnnotatedPageContent)"]
@@ -1615,7 +1615,7 @@ pub struct GetAnnotatedPageContent {
     pub method: GetAnnotatedPageContentMethod,
     pub params: GetAnnotatedPageContentParams,
 }
-impl super::super::super::CommandResult for GetAnnotatedPageContent {
+impl crate::CommandResult for GetAnnotatedPageContent {
     type Result = super::results::GetAnnotatedPageContentResult;
 }
 group_enum ! (PageCommands { AddScriptToEvaluateOnNewDocument (AddScriptToEvaluateOnNewDocument) , BringToFront (BringToFront) , CaptureScreenshot (CaptureScreenshot) , CaptureSnapshot (CaptureSnapshot) , CreateIsolatedWorld (CreateIsolatedWorld) , Disable (Disable) , Enable (Enable) , GetAppManifest (GetAppManifest) , GetInstallabilityErrors (GetInstallabilityErrors) , GetAppId (GetAppId) , GetAdScriptAncestry (GetAdScriptAncestry) , GetFrameTree (GetFrameTree) , GetLayoutMetrics (GetLayoutMetrics) , GetNavigationHistory (GetNavigationHistory) , ResetNavigationHistory (ResetNavigationHistory) , GetResourceContent (GetResourceContent) , GetResourceTree (GetResourceTree) , HandleJavaScriptDialog (HandleJavaScriptDialog) , Navigate (Navigate) , NavigateToHistoryEntry (NavigateToHistoryEntry) , PrintToPdf (PrintToPdf) , Reload (Reload) , RemoveScriptToEvaluateOnNewDocument (RemoveScriptToEvaluateOnNewDocument) , ScreencastFrameAck (ScreencastFrameAck) , SearchInResource (SearchInResource) , SetAdBlockingEnabled (SetAdBlockingEnabled) , SetBypassCsp (SetBypassCsp) , GetPermissionsPolicyState (GetPermissionsPolicyState) , GetOriginTrials (GetOriginTrials) , SetFontFamilies (SetFontFamilies) , SetFontSizes (SetFontSizes) , SetDocumentContent (SetDocumentContent) , SetLifecycleEventsEnabled (SetLifecycleEventsEnabled) , StartScreencast (StartScreencast) , StopLoading (StopLoading) , Crash (Crash) , Close (Close) , SetWebLifecycleState (SetWebLifecycleState) , StopScreencast (StopScreencast) , ProduceCompilationCache (ProduceCompilationCache) , AddCompilationCache (AddCompilationCache) , ClearCompilationCache (ClearCompilationCache) , SetSpcTransactionMode (SetSpcTransactionMode) , SetRphRegistrationMode (SetRphRegistrationMode) , GenerateTestReport (GenerateTestReport) , WaitForDebugger (WaitForDebugger) , SetInterceptFileChooserDialog (SetInterceptFileChooserDialog) , SetPrerenderingAllowed (SetPrerenderingAllowed) , GetAnnotatedPageContent (GetAnnotatedPageContent) });

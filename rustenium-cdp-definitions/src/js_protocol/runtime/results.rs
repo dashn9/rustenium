@@ -1,28 +1,4 @@
 use serde::{Deserialize, Serialize};
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct DisableResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct DiscardConsoleEntriesResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct EnableResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct ReleaseObjectResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct ReleaseObjectGroupResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct RunIfWaitingForDebuggerResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetAsyncCallStackDepthResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetCustomObjectFormatterEnabledResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetMaxCallStackSizeToCaptureResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct TerminateExecutionResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct AddBindingResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct RemoveBindingResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AwaitPromiseResult {
     #[doc = "Promise result. Will contain rejected value if promise was rejected."]
@@ -58,6 +34,12 @@ pub struct CompileScriptResult {
     #[serde(default)]
     pub exception_details: Option<super::types::ExceptionDetails>,
 }
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct DisableResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct DiscardConsoleEntriesResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct EnableResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EvaluateResult {
     #[doc = "Evaluation result."]
@@ -124,6 +106,12 @@ pub struct QueryObjectsResult {
     #[serde(rename = "objects")]
     pub objects: super::types::RemoteObject,
 }
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ReleaseObjectResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ReleaseObjectGroupResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct RunIfWaitingForDebuggerResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RunScriptResult {
     #[doc = "Run result."]
@@ -135,6 +123,18 @@ pub struct RunScriptResult {
     #[serde(default)]
     pub exception_details: Option<super::types::ExceptionDetails>,
 }
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetAsyncCallStackDepthResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetCustomObjectFormatterEnabledResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetMaxCallStackSizeToCaptureResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct TerminateExecutionResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct AddBindingResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct RemoveBindingResult {}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct GetExceptionDetailsResult {
     #[serde(rename = "exceptionDetails")]

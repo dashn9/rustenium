@@ -1,7 +1,7 @@
 use super::types::*;
 impl CreditCard {
     pub fn builder() -> CreditCardBuilder {
-        CreditCardBuilder::default()
+        <CreditCardBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -55,7 +55,7 @@ impl CreditCardBuilder {
 }
 impl AddressField {
     pub fn builder() -> AddressFieldBuilder {
-        AddressFieldBuilder::default()
+        <AddressFieldBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -85,7 +85,7 @@ impl AddressFieldBuilder {
 }
 impl AddressFields {
     pub fn builder() -> AddressFieldsBuilder {
-        AddressFieldsBuilder::default()
+        <AddressFieldsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -119,7 +119,7 @@ impl AddressFieldsBuilder {
 }
 impl Address {
     pub fn builder() -> AddressBuilder {
-        AddressBuilder::default()
+        <AddressBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -153,7 +153,7 @@ impl AddressBuilder {
 }
 impl AddressUi {
     pub fn builder() -> AddressUiBuilder {
-        AddressUiBuilder::default()
+        <AddressUiBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -187,7 +187,7 @@ impl AddressUiBuilder {
 }
 impl FilledField {
     pub fn builder() -> FilledFieldBuilder {
-        FilledFieldBuilder::default()
+        <FilledFieldBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -198,8 +198,8 @@ pub struct FilledFieldBuilder {
     value: Option<String>,
     autofill_type: Option<String>,
     filling_strategy: Option<FillingStrategy>,
-    frame_id: Option<super::super::page::types::FrameId>,
-    field_id: Option<super::super::dom::types::BackendNodeId>,
+    frame_id: Option<crate::browser_protocol::page::types::FrameId>,
+    field_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
 }
 impl FilledFieldBuilder {
     pub fn html_type(mut self, html_type: impl Into<String>) -> Self {
@@ -226,13 +226,16 @@ impl FilledFieldBuilder {
         self.filling_strategy = Some(filling_strategy.into());
         self
     }
-    pub fn frame_id(mut self, frame_id: impl Into<super::super::page::types::FrameId>) -> Self {
+    pub fn frame_id(
+        mut self,
+        frame_id: impl Into<crate::browser_protocol::page::types::FrameId>,
+    ) -> Self {
         self.frame_id = Some(frame_id.into());
         self
     }
     pub fn field_id(
         mut self,
-        field_id: impl Into<super::super::dom::types::BackendNodeId>,
+        field_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
     ) -> Self {
         self.field_id = Some(field_id.into());
         self

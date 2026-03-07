@@ -1,7 +1,7 @@
 use super::types::*;
 impl AxValueSource {
     pub fn builder() -> AxValueSourceBuilder {
-        AxValueSourceBuilder::default()
+        <AxValueSourceBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -71,19 +71,19 @@ impl AxValueSourceBuilder {
 }
 impl AxRelatedNode {
     pub fn builder() -> AxRelatedNodeBuilder {
-        AxRelatedNodeBuilder::default()
+        <AxRelatedNodeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct AxRelatedNodeBuilder {
-    backend_dom_node_id: Option<super::super::dom::types::BackendNodeId>,
+    backend_dom_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     idref: Option<String>,
     text: Option<String>,
 }
 impl AxRelatedNodeBuilder {
     pub fn backend_dom_node_id(
         mut self,
-        backend_dom_node_id: impl Into<super::super::dom::types::BackendNodeId>,
+        backend_dom_node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
     ) -> Self {
         self.backend_dom_node_id = Some(backend_dom_node_id.into());
         self
@@ -111,7 +111,7 @@ impl AxRelatedNodeBuilder {
 }
 impl AxProperty {
     pub fn builder() -> AxPropertyBuilder {
-        AxPropertyBuilder::default()
+        <AxPropertyBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -141,7 +141,7 @@ impl AxPropertyBuilder {
 }
 impl AxValue {
     pub fn builder() -> AxValueBuilder {
-        AxValueBuilder::default()
+        <AxValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -205,7 +205,7 @@ impl AxValueBuilder {
 }
 impl AxNode {
     pub fn builder() -> AxNodeBuilder {
-        AxNodeBuilder::default()
+        <AxNodeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -221,8 +221,8 @@ pub struct AxNodeBuilder {
     properties: Option<Vec<AxProperty>>,
     parent_id: Option<AxNodeId>,
     child_ids: Option<Vec<AxNodeId>>,
-    backend_dom_node_id: Option<super::super::dom::types::BackendNodeId>,
-    frame_id: Option<super::super::page::types::FrameId>,
+    backend_dom_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
+    frame_id: Option<crate::browser_protocol::page::types::FrameId>,
 }
 impl AxNodeBuilder {
     pub fn node_id(mut self, node_id: impl Into<AxNodeId>) -> Self {
@@ -307,12 +307,15 @@ impl AxNodeBuilder {
     }
     pub fn backend_dom_node_id(
         mut self,
-        backend_dom_node_id: impl Into<super::super::dom::types::BackendNodeId>,
+        backend_dom_node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
     ) -> Self {
         self.backend_dom_node_id = Some(backend_dom_node_id.into());
         self
     }
-    pub fn frame_id(mut self, frame_id: impl Into<super::super::page::types::FrameId>) -> Self {
+    pub fn frame_id(
+        mut self,
+        frame_id: impl Into<crate::browser_protocol::page::types::FrameId>,
+    ) -> Self {
         self.frame_id = Some(frame_id.into());
         self
     }

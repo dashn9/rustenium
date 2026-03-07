@@ -1,64 +1,4 @@
 use serde::{Deserialize, Serialize};
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct BringToFrontResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct DisableResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct EnableResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct ResetNavigationHistoryResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct HandleJavaScriptDialogResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct NavigateToHistoryEntryResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct ReloadResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct RemoveScriptToEvaluateOnNewDocumentResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct ScreencastFrameAckResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetAdBlockingEnabledResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetBypassCspResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetFontFamiliesResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetFontSizesResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetDocumentContentResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetLifecycleEventsEnabledResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct StartScreencastResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct StopLoadingResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct CrashResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct CloseResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetWebLifecycleStateResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct StopScreencastResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct ProduceCompilationCacheResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct AddCompilationCacheResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct ClearCompilationCacheResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetSpcTransactionModeResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetRphRegistrationModeResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct GenerateTestReportResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct WaitForDebuggerResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetInterceptFileChooserDialogResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetPrerenderingAllowedResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AddScriptToEvaluateOnLoadResult {
     #[doc = "Identifier of the added script."]
@@ -71,11 +11,13 @@ pub struct AddScriptToEvaluateOnNewDocumentResult {
     #[serde(rename = "identifier")]
     pub identifier: super::types::ScriptIdentifier,
 }
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct BringToFrontResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CaptureScreenshotResult {
     #[doc = "Base64-encoded image data."]
     #[serde(rename = "data")]
-    pub data: super::super::super::Binary,
+    pub data: crate::Binary,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CaptureSnapshotResult {
@@ -83,12 +25,24 @@ pub struct CaptureSnapshotResult {
     #[serde(rename = "data")]
     pub data: String,
 }
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ClearDeviceMetricsOverrideResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ClearDeviceOrientationOverrideResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ClearGeolocationOverrideResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CreateIsolatedWorldResult {
     #[doc = "Execution context of the isolated world."]
     #[serde(rename = "executionContextId")]
-    pub execution_context_id: super::super::super::js_protocol::runtime::types::ExecutionContextId,
+    pub execution_context_id: crate::js_protocol::runtime::types::ExecutionContextId,
 }
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct DeleteCookieResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct DisableResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct EnableResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetAppManifestResult {
     #[doc = "Manifest location."]
@@ -116,7 +70,7 @@ pub struct GetManifestIconsResult {
     #[serde(rename = "primaryIcon")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub primary_icon: Option<super::super::super::Binary>,
+    pub primary_icon: Option<crate::Binary>,
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct GetAppIdResult {
@@ -155,7 +109,7 @@ pub struct GetLayoutMetricsResult {
     pub css_visual_viewport: super::types::VisualViewport,
     #[doc = "Size of scrollable area in CSS pixels."]
     #[serde(rename = "cssContentSize")]
-    pub css_content_size: super::super::dom::types::Rect,
+    pub css_content_size: crate::browser_protocol::dom::types::Rect,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetNavigationHistoryResult {
@@ -167,6 +121,8 @@ pub struct GetNavigationHistoryResult {
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub entries: Vec<super::types::NavigationEntry>,
 }
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ResetNavigationHistoryResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetResourceContentResult {
     #[doc = "Resource content."]
@@ -182,16 +138,18 @@ pub struct GetResourceTreeResult {
     #[serde(rename = "frameTree")]
     pub frame_tree: super::types::FrameResourceTree,
 }
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct HandleJavaScriptDialogResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NavigateResult {
     #[doc = "Frame id that has navigated (or failed to navigate)"]
     #[serde(rename = "frameId")]
-    pub frame_id: super::types::FrameId,
+    pub frame_id: Box<super::types::FrameId>,
     #[doc = "Loader identifier. This is omitted in case of same-document navigation,\nas the previously committed loaderId would not change."]
     #[serde(rename = "loaderId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub loader_id: Option<super::super::network::types::LoaderId>,
+    pub loader_id: Option<crate::browser_protocol::network::types::LoaderId>,
     #[doc = "User friendly error message, present if and only if navigation has failed."]
     #[serde(rename = "errorText")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -203,24 +161,38 @@ pub struct NavigateResult {
     #[serde(default)]
     pub is_download: Option<bool>,
 }
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct NavigateToHistoryEntryResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PrintToPdfResult {
     #[doc = "Base64-encoded pdf data. Empty if |returnAsStream| is specified."]
     #[serde(rename = "data")]
-    pub data: super::super::super::Binary,
+    pub data: crate::Binary,
     #[doc = "A handle of the stream that holds resulting PDF data."]
     #[serde(rename = "stream")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub stream: Option<super::super::io::types::StreamHandle>,
+    pub stream: Option<crate::browser_protocol::io::types::StreamHandle>,
 }
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ReloadResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct RemoveScriptToEvaluateOnLoadResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct RemoveScriptToEvaluateOnNewDocumentResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ScreencastFrameAckResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SearchInResourceResult {
     #[doc = "List of search matches."]
     #[serde(rename = "result")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
-    pub result: Vec<super::super::super::js_protocol::debugger::types::SearchMatch>,
+    pub result: Vec<crate::js_protocol::debugger::types::SearchMatch>,
 }
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetAdBlockingEnabledResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetBypassCspResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetPermissionsPolicyStateResult {
     #[serde(rename = "states")]
@@ -233,9 +205,57 @@ pub struct GetOriginTrialsResult {
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub origin_trials: Vec<super::types::OriginTrial>,
 }
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetDeviceMetricsOverrideResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetDeviceOrientationOverrideResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetFontFamiliesResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetFontSizesResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetDocumentContentResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetDownloadBehaviorResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetGeolocationOverrideResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetLifecycleEventsEnabledResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetTouchEmulationEnabledResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct StartScreencastResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct StopLoadingResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct CrashResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct CloseResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetWebLifecycleStateResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct StopScreencastResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ProduceCompilationCacheResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct AddCompilationCacheResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ClearCompilationCacheResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetSpcTransactionModeResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetRphRegistrationModeResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct GenerateTestReportResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct WaitForDebuggerResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetInterceptFileChooserDialogResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetPrerenderingAllowedResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetAnnotatedPageContentResult {
     #[doc = "The annotated page content as a base64 encoded protobuf.\nThe format is defined by the `AnnotatedPageContent` message in\ncomponents/optimization_guide/proto/features/common_quality_data.proto"]
     #[serde(rename = "content")]
-    pub content: super::super::super::Binary,
+    pub content: crate::Binary,
 }

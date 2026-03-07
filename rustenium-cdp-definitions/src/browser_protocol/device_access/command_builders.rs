@@ -1,7 +1,7 @@
 use super::commands::*;
 impl SelectPrompt {
     pub fn builder() -> SelectPromptBuilder {
-        SelectPromptBuilder::default()
+        <SelectPromptBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -34,7 +34,7 @@ impl SelectPromptBuilder {
 }
 impl CancelPrompt {
     pub fn builder() -> CancelPromptBuilder {
-        CancelPromptBuilder::default()
+        <CancelPromptBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

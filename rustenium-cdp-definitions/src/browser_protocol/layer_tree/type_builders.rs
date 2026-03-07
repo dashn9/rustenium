@@ -1,16 +1,16 @@
 use super::types::*;
 impl ScrollRect {
     pub fn builder() -> ScrollRectBuilder {
-        ScrollRectBuilder::default()
+        <ScrollRectBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct ScrollRectBuilder {
-    rect: Option<super::super::dom::types::Rect>,
+    rect: Option<crate::browser_protocol::dom::types::Rect>,
     r#type: Option<ScrollRectType>,
 }
 impl ScrollRectBuilder {
-    pub fn rect(mut self, rect: impl Into<super::super::dom::types::Rect>) -> Self {
+    pub fn rect(mut self, rect: impl Into<crate::browser_protocol::dom::types::Rect>) -> Self {
         self.rect = Some(rect.into());
         self
     }
@@ -31,27 +31,27 @@ impl ScrollRectBuilder {
 }
 impl StickyPositionConstraint {
     pub fn builder() -> StickyPositionConstraintBuilder {
-        StickyPositionConstraintBuilder::default()
+        <StickyPositionConstraintBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct StickyPositionConstraintBuilder {
-    sticky_box_rect: Option<super::super::dom::types::Rect>,
-    containing_block_rect: Option<super::super::dom::types::Rect>,
+    sticky_box_rect: Option<crate::browser_protocol::dom::types::Rect>,
+    containing_block_rect: Option<crate::browser_protocol::dom::types::Rect>,
     nearest_layer_shifting_sticky_box: Option<LayerId>,
     nearest_layer_shifting_containing_block: Option<LayerId>,
 }
 impl StickyPositionConstraintBuilder {
     pub fn sticky_box_rect(
         mut self,
-        sticky_box_rect: impl Into<super::super::dom::types::Rect>,
+        sticky_box_rect: impl Into<crate::browser_protocol::dom::types::Rect>,
     ) -> Self {
         self.sticky_box_rect = Some(sticky_box_rect.into());
         self
     }
     pub fn containing_block_rect(
         mut self,
-        containing_block_rect: impl Into<super::super::dom::types::Rect>,
+        containing_block_rect: impl Into<crate::browser_protocol::dom::types::Rect>,
     ) -> Self {
         self.containing_block_rect = Some(containing_block_rect.into());
         self
@@ -89,14 +89,14 @@ impl StickyPositionConstraintBuilder {
 }
 impl PictureTile {
     pub fn builder() -> PictureTileBuilder {
-        PictureTileBuilder::default()
+        <PictureTileBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct PictureTileBuilder {
     x: Option<f64>,
     y: Option<f64>,
-    picture: Option<super::super::super::Binary>,
+    picture: Option<crate::Binary>,
 }
 impl PictureTileBuilder {
     pub fn x(mut self, x: impl Into<f64>) -> Self {
@@ -107,7 +107,7 @@ impl PictureTileBuilder {
         self.y = Some(y.into());
         self
     }
-    pub fn picture(mut self, picture: impl Into<super::super::super::Binary>) -> Self {
+    pub fn picture(mut self, picture: impl Into<crate::Binary>) -> Self {
         self.picture = Some(picture.into());
         self
     }
@@ -127,14 +127,14 @@ impl PictureTileBuilder {
 }
 impl Layer {
     pub fn builder() -> LayerBuilder {
-        LayerBuilder::default()
+        <LayerBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct LayerBuilder {
     layer_id: Option<LayerId>,
     parent_layer_id: Option<LayerId>,
-    backend_node_id: Option<super::super::dom::types::BackendNodeId>,
+    backend_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     offset_x: Option<f64>,
     offset_y: Option<f64>,
     width: Option<f64>,
@@ -160,7 +160,7 @@ impl LayerBuilder {
     }
     pub fn backend_node_id(
         mut self,
-        backend_node_id: impl Into<super::super::dom::types::BackendNodeId>,
+        backend_node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
     ) -> Self {
         self.backend_node_id = Some(backend_node_id.into());
         self

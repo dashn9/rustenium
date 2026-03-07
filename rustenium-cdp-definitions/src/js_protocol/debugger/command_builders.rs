@@ -1,7 +1,7 @@
 use super::commands::*;
 impl ContinueToLocation {
     pub fn builder() -> ContinueToLocationBuilder {
-        ContinueToLocationBuilder::default()
+        <ContinueToLocationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -35,7 +35,7 @@ impl ContinueToLocationBuilder {
 }
 impl Enable {
     pub fn builder() -> EnableBuilder {
-        EnableBuilder::default()
+        <EnableBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -58,7 +58,7 @@ impl EnableBuilder {
 }
 impl EvaluateOnCallFrame {
     pub fn builder() -> EvaluateOnCallFrameBuilder {
-        EvaluateOnCallFrameBuilder::default()
+        <EvaluateOnCallFrameBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -71,7 +71,7 @@ pub struct EvaluateOnCallFrameBuilder {
     return_by_value: Option<bool>,
     generate_preview: Option<bool>,
     throw_on_side_effect: Option<bool>,
-    timeout: Option<super::super::runtime::types::TimeDelta>,
+    timeout: Option<crate::js_protocol::runtime::types::TimeDelta>,
 }
 impl EvaluateOnCallFrameBuilder {
     pub fn call_frame_id(mut self, call_frame_id: impl Into<super::types::CallFrameId>) -> Self {
@@ -106,7 +106,10 @@ impl EvaluateOnCallFrameBuilder {
         self.throw_on_side_effect = Some(throw_on_side_effect.into());
         self
     }
-    pub fn timeout(mut self, timeout: impl Into<super::super::runtime::types::TimeDelta>) -> Self {
+    pub fn timeout(
+        mut self,
+        timeout: impl Into<crate::js_protocol::runtime::types::TimeDelta>,
+    ) -> Self {
         self.timeout = Some(timeout.into());
         self
     }
@@ -133,7 +136,7 @@ impl EvaluateOnCallFrameBuilder {
 }
 impl GetPossibleBreakpoints {
     pub fn builder() -> GetPossibleBreakpointsBuilder {
-        GetPossibleBreakpointsBuilder::default()
+        <GetPossibleBreakpointsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -170,17 +173,17 @@ impl GetPossibleBreakpointsBuilder {
 }
 impl GetScriptSource {
     pub fn builder() -> GetScriptSourceBuilder {
-        GetScriptSourceBuilder::default()
+        <GetScriptSourceBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetScriptSourceBuilder {
-    script_id: Option<super::super::runtime::types::ScriptId>,
+    script_id: Option<crate::js_protocol::runtime::types::ScriptId>,
 }
 impl GetScriptSourceBuilder {
     pub fn script_id(
         mut self,
-        script_id: impl Into<super::super::runtime::types::ScriptId>,
+        script_id: impl Into<crate::js_protocol::runtime::types::ScriptId>,
     ) -> Self {
         self.script_id = Some(script_id.into());
         self
@@ -198,17 +201,17 @@ impl GetScriptSourceBuilder {
 }
 impl DisassembleWasmModule {
     pub fn builder() -> DisassembleWasmModuleBuilder {
-        DisassembleWasmModuleBuilder::default()
+        <DisassembleWasmModuleBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct DisassembleWasmModuleBuilder {
-    script_id: Option<super::super::runtime::types::ScriptId>,
+    script_id: Option<crate::js_protocol::runtime::types::ScriptId>,
 }
 impl DisassembleWasmModuleBuilder {
     pub fn script_id(
         mut self,
-        script_id: impl Into<super::super::runtime::types::ScriptId>,
+        script_id: impl Into<crate::js_protocol::runtime::types::ScriptId>,
     ) -> Self {
         self.script_id = Some(script_id.into());
         self
@@ -226,7 +229,7 @@ impl DisassembleWasmModuleBuilder {
 }
 impl NextWasmDisassemblyChunk {
     pub fn builder() -> NextWasmDisassemblyChunkBuilder {
-        NextWasmDisassemblyChunkBuilder::default()
+        <NextWasmDisassemblyChunkBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -251,17 +254,17 @@ impl NextWasmDisassemblyChunkBuilder {
 }
 impl GetStackTrace {
     pub fn builder() -> GetStackTraceBuilder {
-        GetStackTraceBuilder::default()
+        <GetStackTraceBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetStackTraceBuilder {
-    stack_trace_id: Option<super::super::runtime::types::StackTraceId>,
+    stack_trace_id: Option<crate::js_protocol::runtime::types::StackTraceId>,
 }
 impl GetStackTraceBuilder {
     pub fn stack_trace_id(
         mut self,
-        stack_trace_id: impl Into<super::super::runtime::types::StackTraceId>,
+        stack_trace_id: impl Into<crate::js_protocol::runtime::types::StackTraceId>,
     ) -> Self {
         self.stack_trace_id = Some(stack_trace_id.into());
         self
@@ -279,7 +282,7 @@ impl GetStackTraceBuilder {
 }
 impl RemoveBreakpoint {
     pub fn builder() -> RemoveBreakpointBuilder {
-        RemoveBreakpointBuilder::default()
+        <RemoveBreakpointBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -304,7 +307,7 @@ impl RemoveBreakpointBuilder {
 }
 impl RestartFrame {
     pub fn builder() -> RestartFrameBuilder {
-        RestartFrameBuilder::default()
+        <RestartFrameBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -335,7 +338,7 @@ impl RestartFrameBuilder {
 }
 impl Resume {
     pub fn builder() -> ResumeBuilder {
-        ResumeBuilder::default()
+        <ResumeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -358,12 +361,12 @@ impl ResumeBuilder {
 }
 impl SearchInContent {
     pub fn builder() -> SearchInContentBuilder {
-        SearchInContentBuilder::default()
+        <SearchInContentBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct SearchInContentBuilder {
-    script_id: Option<super::super::runtime::types::ScriptId>,
+    script_id: Option<crate::js_protocol::runtime::types::ScriptId>,
     query: Option<String>,
     case_sensitive: Option<bool>,
     is_regex: Option<bool>,
@@ -371,7 +374,7 @@ pub struct SearchInContentBuilder {
 impl SearchInContentBuilder {
     pub fn script_id(
         mut self,
-        script_id: impl Into<super::super::runtime::types::ScriptId>,
+        script_id: impl Into<crate::js_protocol::runtime::types::ScriptId>,
     ) -> Self {
         self.script_id = Some(script_id.into());
         self
@@ -406,7 +409,7 @@ impl SearchInContentBuilder {
 }
 impl SetAsyncCallStackDepth {
     pub fn builder() -> SetAsyncCallStackDepthBuilder {
-        SetAsyncCallStackDepthBuilder::default()
+        <SetAsyncCallStackDepthBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -431,7 +434,7 @@ impl SetAsyncCallStackDepthBuilder {
 }
 impl SetBlackboxExecutionContexts {
     pub fn builder() -> SetBlackboxExecutionContextsBuilder {
-        SetBlackboxExecutionContextsBuilder::default()
+        <SetBlackboxExecutionContextsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -468,7 +471,7 @@ impl SetBlackboxExecutionContextsBuilder {
 }
 impl SetBlackboxPatterns {
     pub fn builder() -> SetBlackboxPatternsBuilder {
-        SetBlackboxPatternsBuilder::default()
+        <SetBlackboxPatternsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -511,18 +514,18 @@ impl SetBlackboxPatternsBuilder {
 }
 impl SetBlackboxedRanges {
     pub fn builder() -> SetBlackboxedRangesBuilder {
-        SetBlackboxedRangesBuilder::default()
+        <SetBlackboxedRangesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct SetBlackboxedRangesBuilder {
-    script_id: Option<super::super::runtime::types::ScriptId>,
+    script_id: Option<crate::js_protocol::runtime::types::ScriptId>,
     positions: Option<Vec<super::types::ScriptPosition>>,
 }
 impl SetBlackboxedRangesBuilder {
     pub fn script_id(
         mut self,
-        script_id: impl Into<super::super::runtime::types::ScriptId>,
+        script_id: impl Into<crate::js_protocol::runtime::types::ScriptId>,
     ) -> Self {
         self.script_id = Some(script_id.into());
         self
@@ -559,7 +562,7 @@ impl SetBlackboxedRangesBuilder {
 }
 impl SetBreakpoint {
     pub fn builder() -> SetBreakpointBuilder {
-        SetBreakpointBuilder::default()
+        <SetBreakpointBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -590,7 +593,7 @@ impl SetBreakpointBuilder {
 }
 impl SetInstrumentationBreakpoint {
     pub fn builder() -> SetInstrumentationBreakpointBuilder {
-        SetInstrumentationBreakpointBuilder::default()
+        <SetInstrumentationBreakpointBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -618,7 +621,7 @@ impl SetInstrumentationBreakpointBuilder {
 }
 impl SetBreakpointByUrl {
     pub fn builder() -> SetBreakpointByUrlBuilder {
-        SetBreakpointByUrlBuilder::default()
+        <SetBreakpointByUrlBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -673,18 +676,18 @@ impl SetBreakpointByUrlBuilder {
 }
 impl SetBreakpointOnFunctionCall {
     pub fn builder() -> SetBreakpointOnFunctionCallBuilder {
-        SetBreakpointOnFunctionCallBuilder::default()
+        <SetBreakpointOnFunctionCallBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct SetBreakpointOnFunctionCallBuilder {
-    object_id: Option<super::super::runtime::types::RemoteObjectId>,
+    object_id: Option<crate::js_protocol::runtime::types::RemoteObjectId>,
     condition: Option<String>,
 }
 impl SetBreakpointOnFunctionCallBuilder {
     pub fn object_id(
         mut self,
-        object_id: impl Into<super::super::runtime::types::RemoteObjectId>,
+        object_id: impl Into<crate::js_protocol::runtime::types::RemoteObjectId>,
     ) -> Self {
         self.object_id = Some(object_id.into());
         self
@@ -707,7 +710,7 @@ impl SetBreakpointOnFunctionCallBuilder {
 }
 impl SetBreakpointsActive {
     pub fn builder() -> SetBreakpointsActiveBuilder {
-        SetBreakpointsActiveBuilder::default()
+        <SetBreakpointsActiveBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -732,7 +735,7 @@ impl SetBreakpointsActiveBuilder {
 }
 impl SetPauseOnExceptions {
     pub fn builder() -> SetPauseOnExceptionsBuilder {
-        SetPauseOnExceptionsBuilder::default()
+        <SetPauseOnExceptionsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -757,17 +760,17 @@ impl SetPauseOnExceptionsBuilder {
 }
 impl SetReturnValue {
     pub fn builder() -> SetReturnValueBuilder {
-        SetReturnValueBuilder::default()
+        <SetReturnValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct SetReturnValueBuilder {
-    new_value: Option<super::super::runtime::types::CallArgument>,
+    new_value: Option<crate::js_protocol::runtime::types::CallArgument>,
 }
 impl SetReturnValueBuilder {
     pub fn new_value(
         mut self,
-        new_value: impl Into<super::super::runtime::types::CallArgument>,
+        new_value: impl Into<crate::js_protocol::runtime::types::CallArgument>,
     ) -> Self {
         self.new_value = Some(new_value.into());
         self
@@ -785,12 +788,12 @@ impl SetReturnValueBuilder {
 }
 impl SetScriptSource {
     pub fn builder() -> SetScriptSourceBuilder {
-        SetScriptSourceBuilder::default()
+        <SetScriptSourceBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct SetScriptSourceBuilder {
-    script_id: Option<super::super::runtime::types::ScriptId>,
+    script_id: Option<crate::js_protocol::runtime::types::ScriptId>,
     script_source: Option<String>,
     dry_run: Option<bool>,
     allow_top_frame_editing: Option<bool>,
@@ -798,7 +801,7 @@ pub struct SetScriptSourceBuilder {
 impl SetScriptSourceBuilder {
     pub fn script_id(
         mut self,
-        script_id: impl Into<super::super::runtime::types::ScriptId>,
+        script_id: impl Into<crate::js_protocol::runtime::types::ScriptId>,
     ) -> Self {
         self.script_id = Some(script_id.into());
         self
@@ -833,7 +836,7 @@ impl SetScriptSourceBuilder {
 }
 impl SetSkipAllPauses {
     pub fn builder() -> SetSkipAllPausesBuilder {
-        SetSkipAllPausesBuilder::default()
+        <SetSkipAllPausesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -858,14 +861,14 @@ impl SetSkipAllPausesBuilder {
 }
 impl SetVariableValue {
     pub fn builder() -> SetVariableValueBuilder {
-        SetVariableValueBuilder::default()
+        <SetVariableValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct SetVariableValueBuilder {
     scope_number: Option<i64>,
     variable_name: Option<String>,
-    new_value: Option<super::super::runtime::types::CallArgument>,
+    new_value: Option<crate::js_protocol::runtime::types::CallArgument>,
     call_frame_id: Option<super::types::CallFrameId>,
 }
 impl SetVariableValueBuilder {
@@ -879,7 +882,7 @@ impl SetVariableValueBuilder {
     }
     pub fn new_value(
         mut self,
-        new_value: impl Into<super::super::runtime::types::CallArgument>,
+        new_value: impl Into<crate::js_protocol::runtime::types::CallArgument>,
     ) -> Self {
         self.new_value = Some(new_value.into());
         self
@@ -910,7 +913,7 @@ impl SetVariableValueBuilder {
 }
 impl StepInto {
     pub fn builder() -> StepIntoBuilder {
-        StepIntoBuilder::default()
+        <StepIntoBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -951,7 +954,7 @@ impl StepIntoBuilder {
 }
 impl StepOver {
     pub fn builder() -> StepOverBuilder {
-        StepOverBuilder::default()
+        <StepOverBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

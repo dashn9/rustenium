@@ -1,28 +1,58 @@
 use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct WorkerErrorReported {
+pub struct WorkerErrorReportedParams {
     #[serde(rename = "errorMessage")]
     pub error_message: super::types::ServiceWorkerErrorMessage,
 }
-impl WorkerErrorReported {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum WorkerErrorReportedMethod {
+    #[serde(rename = "ServiceWorker.workerErrorReported")]
+    WorkerErrorReported,
+}
+impl WorkerErrorReportedMethod {
     pub const IDENTIFIER: &'static str = "ServiceWorker.workerErrorReported";
 }
+#[derive(Debug, Clone, PartialEq)]
+pub struct WorkerErrorReported {
+    pub method: WorkerErrorReportedMethod,
+    pub params: WorkerErrorReportedParams,
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct WorkerRegistrationUpdated {
+pub struct WorkerRegistrationUpdatedParams {
     #[serde(rename = "registrations")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub registrations: Vec<super::types::ServiceWorkerRegistration>,
 }
-impl WorkerRegistrationUpdated {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum WorkerRegistrationUpdatedMethod {
+    #[serde(rename = "ServiceWorker.workerRegistrationUpdated")]
+    WorkerRegistrationUpdated,
+}
+impl WorkerRegistrationUpdatedMethod {
     pub const IDENTIFIER: &'static str = "ServiceWorker.workerRegistrationUpdated";
 }
+#[derive(Debug, Clone, PartialEq)]
+pub struct WorkerRegistrationUpdated {
+    pub method: WorkerRegistrationUpdatedMethod,
+    pub params: WorkerRegistrationUpdatedParams,
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct WorkerVersionUpdated {
+pub struct WorkerVersionUpdatedParams {
     #[serde(rename = "versions")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub versions: Vec<super::types::ServiceWorkerVersion>,
 }
-impl WorkerVersionUpdated {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum WorkerVersionUpdatedMethod {
+    #[serde(rename = "ServiceWorker.workerVersionUpdated")]
+    WorkerVersionUpdated,
+}
+impl WorkerVersionUpdatedMethod {
     pub const IDENTIFIER: &'static str = "ServiceWorker.workerVersionUpdated";
+}
+#[derive(Debug, Clone, PartialEq)]
+pub struct WorkerVersionUpdated {
+    pub method: WorkerVersionUpdatedMethod,
+    pub params: WorkerVersionUpdatedParams,
 }
 group_enum ! (ServiceWorkerEvents { WorkerErrorReported (WorkerErrorReported) , WorkerRegistrationUpdated (WorkerRegistrationUpdated) , WorkerVersionUpdated (WorkerVersionUpdated) });

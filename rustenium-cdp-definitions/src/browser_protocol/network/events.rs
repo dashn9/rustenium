@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 #[doc = "Fired when data chunk was received over the network.\n[dataReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-dataReceived)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct DataReceived {
+pub struct DataReceivedParams {
     #[doc = "Request identifier."]
     #[serde(rename = "requestId")]
     pub request_id: super::types::RequestId,
@@ -18,14 +18,25 @@ pub struct DataReceived {
     #[serde(rename = "data")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub data: Option<super::super::super::Binary>,
+    pub data: Option<crate::Binary>,
 }
-impl DataReceived {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum DataReceivedMethod {
+    #[serde(rename = "Network.dataReceived")]
+    DataReceived,
+}
+impl DataReceivedMethod {
     pub const IDENTIFIER: &'static str = "Network.dataReceived";
+}
+#[doc = "Fired when data chunk was received over the network.\n[dataReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-dataReceived)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct DataReceived {
+    pub method: DataReceivedMethod,
+    pub params: DataReceivedParams,
 }
 #[doc = "Fired when EventSource message is received.\n[eventSourceMessageReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-eventSourceMessageReceived)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct EventSourceMessageReceived {
+pub struct EventSourceMessageReceivedParams {
     #[doc = "Request identifier."]
     #[serde(rename = "requestId")]
     pub request_id: super::types::RequestId,
@@ -42,12 +53,23 @@ pub struct EventSourceMessageReceived {
     #[serde(rename = "data")]
     pub data: String,
 }
-impl EventSourceMessageReceived {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum EventSourceMessageReceivedMethod {
+    #[serde(rename = "Network.eventSourceMessageReceived")]
+    EventSourceMessageReceived,
+}
+impl EventSourceMessageReceivedMethod {
     pub const IDENTIFIER: &'static str = "Network.eventSourceMessageReceived";
+}
+#[doc = "Fired when EventSource message is received.\n[eventSourceMessageReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-eventSourceMessageReceived)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct EventSourceMessageReceived {
+    pub method: EventSourceMessageReceivedMethod,
+    pub params: EventSourceMessageReceivedParams,
 }
 #[doc = "Fired when HTTP request has failed to load.\n[loadingFailed](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-loadingFailed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct LoadingFailed {
+pub struct LoadingFailedParams {
     #[doc = "Request identifier."]
     #[serde(rename = "requestId")]
     pub request_id: super::types::RequestId,
@@ -76,12 +98,23 @@ pub struct LoadingFailed {
     #[serde(default)]
     pub cors_error_status: Option<super::types::CorsErrorStatus>,
 }
-impl LoadingFailed {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum LoadingFailedMethod {
+    #[serde(rename = "Network.loadingFailed")]
+    LoadingFailed,
+}
+impl LoadingFailedMethod {
     pub const IDENTIFIER: &'static str = "Network.loadingFailed";
+}
+#[doc = "Fired when HTTP request has failed to load.\n[loadingFailed](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-loadingFailed)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct LoadingFailed {
+    pub method: LoadingFailedMethod,
+    pub params: LoadingFailedParams,
 }
 #[doc = "Fired when HTTP request has finished loading.\n[loadingFinished](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-loadingFinished)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct LoadingFinished {
+pub struct LoadingFinishedParams {
     #[doc = "Request identifier."]
     #[serde(rename = "requestId")]
     pub request_id: super::types::RequestId,
@@ -92,28 +125,50 @@ pub struct LoadingFinished {
     #[serde(rename = "encodedDataLength")]
     pub encoded_data_length: f64,
 }
-impl LoadingFinished {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum LoadingFinishedMethod {
+    #[serde(rename = "Network.loadingFinished")]
+    LoadingFinished,
+}
+impl LoadingFinishedMethod {
     pub const IDENTIFIER: &'static str = "Network.loadingFinished";
+}
+#[doc = "Fired when HTTP request has finished loading.\n[loadingFinished](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-loadingFinished)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct LoadingFinished {
+    pub method: LoadingFinishedMethod,
+    pub params: LoadingFinishedParams,
 }
 #[doc = "Fired if request ended up loading from cache.\n[requestServedFromCache](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-requestServedFromCache)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct RequestServedFromCache {
+pub struct RequestServedFromCacheParams {
     #[doc = "Request identifier."]
     #[serde(rename = "requestId")]
     pub request_id: super::types::RequestId,
 }
-impl RequestServedFromCache {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum RequestServedFromCacheMethod {
+    #[serde(rename = "Network.requestServedFromCache")]
+    RequestServedFromCache,
+}
+impl RequestServedFromCacheMethod {
     pub const IDENTIFIER: &'static str = "Network.requestServedFromCache";
+}
+#[doc = "Fired if request ended up loading from cache.\n[requestServedFromCache](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-requestServedFromCache)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct RequestServedFromCache {
+    pub method: RequestServedFromCacheMethod,
+    pub params: RequestServedFromCacheParams,
 }
 #[doc = "Fired when page is about to send HTTP request.\n[requestWillBeSent](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-requestWillBeSent)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct RequestWillBeSent {
+pub struct RequestWillBeSentParams {
     #[doc = "Request identifier."]
     #[serde(rename = "requestId")]
     pub request_id: super::types::RequestId,
     #[doc = "Loader identifier. Empty string if the request is fetched from worker."]
     #[serde(rename = "loaderId")]
-    pub loader_id: super::types::LoaderId,
+    pub loader_id: Box<super::types::LoaderId>,
     #[doc = "URL of the document this request is loaded for."]
     #[serde(rename = "documentURL")]
     pub document_url: String,
@@ -146,7 +201,7 @@ pub struct RequestWillBeSent {
     #[serde(rename = "frameId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub frame_id: Option<super::super::page::types::FrameId>,
+    pub frame_id: Option<crate::browser_protocol::page::types::FrameId>,
     #[doc = "Whether the request is initiated by a user gesture. Defaults to false."]
     #[serde(rename = "hasUserGesture")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -158,12 +213,23 @@ pub struct RequestWillBeSent {
     #[serde(default)]
     pub render_blocking_behavior: Option<super::types::RenderBlockingBehavior>,
 }
-impl RequestWillBeSent {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum RequestWillBeSentMethod {
+    #[serde(rename = "Network.requestWillBeSent")]
+    RequestWillBeSent,
+}
+impl RequestWillBeSentMethod {
     pub const IDENTIFIER: &'static str = "Network.requestWillBeSent";
+}
+#[doc = "Fired when page is about to send HTTP request.\n[requestWillBeSent](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-requestWillBeSent)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct RequestWillBeSent {
+    pub method: RequestWillBeSentMethod,
+    pub params: RequestWillBeSentParams,
 }
 #[doc = "Fired when resource loading priority is changed\n[resourceChangedPriority](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-resourceChangedPriority)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct ResourceChangedPriority {
+pub struct ResourceChangedPriorityParams {
     #[doc = "Request identifier."]
     #[serde(rename = "requestId")]
     pub request_id: super::types::RequestId,
@@ -174,12 +240,23 @@ pub struct ResourceChangedPriority {
     #[serde(rename = "timestamp")]
     pub timestamp: super::types::MonotonicTime,
 }
-impl ResourceChangedPriority {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum ResourceChangedPriorityMethod {
+    #[serde(rename = "Network.resourceChangedPriority")]
+    ResourceChangedPriority,
+}
+impl ResourceChangedPriorityMethod {
     pub const IDENTIFIER: &'static str = "Network.resourceChangedPriority";
+}
+#[doc = "Fired when resource loading priority is changed\n[resourceChangedPriority](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-resourceChangedPriority)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct ResourceChangedPriority {
+    pub method: ResourceChangedPriorityMethod,
+    pub params: ResourceChangedPriorityParams,
 }
 #[doc = "Fired when a signed exchange was received over the network\n[signedExchangeReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-signedExchangeReceived)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct SignedExchangeReceived {
+pub struct SignedExchangeReceivedParams {
     #[doc = "Request identifier."]
     #[serde(rename = "requestId")]
     pub request_id: super::types::RequestId,
@@ -187,18 +264,29 @@ pub struct SignedExchangeReceived {
     #[serde(rename = "info")]
     pub info: super::types::SignedExchangeInfo,
 }
-impl SignedExchangeReceived {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum SignedExchangeReceivedMethod {
+    #[serde(rename = "Network.signedExchangeReceived")]
+    SignedExchangeReceived,
+}
+impl SignedExchangeReceivedMethod {
     pub const IDENTIFIER: &'static str = "Network.signedExchangeReceived";
+}
+#[doc = "Fired when a signed exchange was received over the network\n[signedExchangeReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-signedExchangeReceived)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct SignedExchangeReceived {
+    pub method: SignedExchangeReceivedMethod,
+    pub params: SignedExchangeReceivedParams,
 }
 #[doc = "Fired when HTTP response is available.\n[responseReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-responseReceived)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct ResponseReceived {
+pub struct ResponseReceivedParams {
     #[doc = "Request identifier."]
     #[serde(rename = "requestId")]
     pub request_id: super::types::RequestId,
     #[doc = "Loader identifier. Empty string if the request is fetched from worker."]
     #[serde(rename = "loaderId")]
-    pub loader_id: super::types::LoaderId,
+    pub loader_id: Box<super::types::LoaderId>,
     #[doc = "Timestamp."]
     #[serde(rename = "timestamp")]
     pub timestamp: super::types::MonotonicTime,
@@ -215,14 +303,25 @@ pub struct ResponseReceived {
     #[serde(rename = "frameId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub frame_id: Option<super::super::page::types::FrameId>,
+    pub frame_id: Option<crate::browser_protocol::page::types::FrameId>,
 }
-impl ResponseReceived {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum ResponseReceivedMethod {
+    #[serde(rename = "Network.responseReceived")]
+    ResponseReceived,
+}
+impl ResponseReceivedMethod {
     pub const IDENTIFIER: &'static str = "Network.responseReceived";
+}
+#[doc = "Fired when HTTP response is available.\n[responseReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-responseReceived)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct ResponseReceived {
+    pub method: ResponseReceivedMethod,
+    pub params: ResponseReceivedParams,
 }
 #[doc = "Fired when WebSocket is closed.\n[webSocketClosed](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webSocketClosed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct WebSocketClosed {
+pub struct WebSocketClosedParams {
     #[doc = "Request identifier."]
     #[serde(rename = "requestId")]
     pub request_id: super::types::RequestId,
@@ -230,12 +329,23 @@ pub struct WebSocketClosed {
     #[serde(rename = "timestamp")]
     pub timestamp: super::types::MonotonicTime,
 }
-impl WebSocketClosed {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum WebSocketClosedMethod {
+    #[serde(rename = "Network.webSocketClosed")]
+    WebSocketClosed,
+}
+impl WebSocketClosedMethod {
     pub const IDENTIFIER: &'static str = "Network.webSocketClosed";
+}
+#[doc = "Fired when WebSocket is closed.\n[webSocketClosed](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webSocketClosed)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct WebSocketClosed {
+    pub method: WebSocketClosedMethod,
+    pub params: WebSocketClosedParams,
 }
 #[doc = "Fired upon WebSocket creation.\n[webSocketCreated](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webSocketCreated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct WebSocketCreated {
+pub struct WebSocketCreatedParams {
     #[doc = "Request identifier."]
     #[serde(rename = "requestId")]
     pub request_id: super::types::RequestId,
@@ -248,12 +358,23 @@ pub struct WebSocketCreated {
     #[serde(default)]
     pub initiator: Option<super::types::Initiator>,
 }
-impl WebSocketCreated {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum WebSocketCreatedMethod {
+    #[serde(rename = "Network.webSocketCreated")]
+    WebSocketCreated,
+}
+impl WebSocketCreatedMethod {
     pub const IDENTIFIER: &'static str = "Network.webSocketCreated";
+}
+#[doc = "Fired upon WebSocket creation.\n[webSocketCreated](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webSocketCreated)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct WebSocketCreated {
+    pub method: WebSocketCreatedMethod,
+    pub params: WebSocketCreatedParams,
 }
 #[doc = "Fired when WebSocket message error occurs.\n[webSocketFrameError](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webSocketFrameError)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct WebSocketFrameError {
+pub struct WebSocketFrameErrorParams {
     #[doc = "Request identifier."]
     #[serde(rename = "requestId")]
     pub request_id: super::types::RequestId,
@@ -264,12 +385,23 @@ pub struct WebSocketFrameError {
     #[serde(rename = "errorMessage")]
     pub error_message: String,
 }
-impl WebSocketFrameError {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum WebSocketFrameErrorMethod {
+    #[serde(rename = "Network.webSocketFrameError")]
+    WebSocketFrameError,
+}
+impl WebSocketFrameErrorMethod {
     pub const IDENTIFIER: &'static str = "Network.webSocketFrameError";
+}
+#[doc = "Fired when WebSocket message error occurs.\n[webSocketFrameError](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webSocketFrameError)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct WebSocketFrameError {
+    pub method: WebSocketFrameErrorMethod,
+    pub params: WebSocketFrameErrorParams,
 }
 #[doc = "Fired when WebSocket message is received.\n[webSocketFrameReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webSocketFrameReceived)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct WebSocketFrameReceived {
+pub struct WebSocketFrameReceivedParams {
     #[doc = "Request identifier."]
     #[serde(rename = "requestId")]
     pub request_id: super::types::RequestId,
@@ -280,12 +412,23 @@ pub struct WebSocketFrameReceived {
     #[serde(rename = "response")]
     pub response: super::types::WebSocketFrame,
 }
-impl WebSocketFrameReceived {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum WebSocketFrameReceivedMethod {
+    #[serde(rename = "Network.webSocketFrameReceived")]
+    WebSocketFrameReceived,
+}
+impl WebSocketFrameReceivedMethod {
     pub const IDENTIFIER: &'static str = "Network.webSocketFrameReceived";
+}
+#[doc = "Fired when WebSocket message is received.\n[webSocketFrameReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webSocketFrameReceived)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct WebSocketFrameReceived {
+    pub method: WebSocketFrameReceivedMethod,
+    pub params: WebSocketFrameReceivedParams,
 }
 #[doc = "Fired when WebSocket message is sent.\n[webSocketFrameSent](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webSocketFrameSent)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct WebSocketFrameSent {
+pub struct WebSocketFrameSentParams {
     #[doc = "Request identifier."]
     #[serde(rename = "requestId")]
     pub request_id: super::types::RequestId,
@@ -296,12 +439,23 @@ pub struct WebSocketFrameSent {
     #[serde(rename = "response")]
     pub response: super::types::WebSocketFrame,
 }
-impl WebSocketFrameSent {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum WebSocketFrameSentMethod {
+    #[serde(rename = "Network.webSocketFrameSent")]
+    WebSocketFrameSent,
+}
+impl WebSocketFrameSentMethod {
     pub const IDENTIFIER: &'static str = "Network.webSocketFrameSent";
+}
+#[doc = "Fired when WebSocket message is sent.\n[webSocketFrameSent](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webSocketFrameSent)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct WebSocketFrameSent {
+    pub method: WebSocketFrameSentMethod,
+    pub params: WebSocketFrameSentParams,
 }
 #[doc = "Fired when WebSocket handshake response becomes available.\n[webSocketHandshakeResponseReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webSocketHandshakeResponseReceived)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct WebSocketHandshakeResponseReceived {
+pub struct WebSocketHandshakeResponseReceivedParams {
     #[doc = "Request identifier."]
     #[serde(rename = "requestId")]
     pub request_id: super::types::RequestId,
@@ -312,12 +466,23 @@ pub struct WebSocketHandshakeResponseReceived {
     #[serde(rename = "response")]
     pub response: super::types::WebSocketResponse,
 }
-impl WebSocketHandshakeResponseReceived {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum WebSocketHandshakeResponseReceivedMethod {
+    #[serde(rename = "Network.webSocketHandshakeResponseReceived")]
+    WebSocketHandshakeResponseReceived,
+}
+impl WebSocketHandshakeResponseReceivedMethod {
     pub const IDENTIFIER: &'static str = "Network.webSocketHandshakeResponseReceived";
+}
+#[doc = "Fired when WebSocket handshake response becomes available.\n[webSocketHandshakeResponseReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webSocketHandshakeResponseReceived)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct WebSocketHandshakeResponseReceived {
+    pub method: WebSocketHandshakeResponseReceivedMethod,
+    pub params: WebSocketHandshakeResponseReceivedParams,
 }
 #[doc = "Fired when WebSocket is about to initiate handshake.\n[webSocketWillSendHandshakeRequest](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webSocketWillSendHandshakeRequest)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct WebSocketWillSendHandshakeRequest {
+pub struct WebSocketWillSendHandshakeRequestParams {
     #[doc = "Request identifier."]
     #[serde(rename = "requestId")]
     pub request_id: super::types::RequestId,
@@ -331,12 +496,23 @@ pub struct WebSocketWillSendHandshakeRequest {
     #[serde(rename = "request")]
     pub request: super::types::WebSocketRequest,
 }
-impl WebSocketWillSendHandshakeRequest {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum WebSocketWillSendHandshakeRequestMethod {
+    #[serde(rename = "Network.webSocketWillSendHandshakeRequest")]
+    WebSocketWillSendHandshakeRequest,
+}
+impl WebSocketWillSendHandshakeRequestMethod {
     pub const IDENTIFIER: &'static str = "Network.webSocketWillSendHandshakeRequest";
+}
+#[doc = "Fired when WebSocket is about to initiate handshake.\n[webSocketWillSendHandshakeRequest](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webSocketWillSendHandshakeRequest)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct WebSocketWillSendHandshakeRequest {
+    pub method: WebSocketWillSendHandshakeRequestMethod,
+    pub params: WebSocketWillSendHandshakeRequestParams,
 }
 #[doc = "Fired upon WebTransport creation.\n[webTransportCreated](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webTransportCreated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct WebTransportCreated {
+pub struct WebTransportCreatedParams {
     #[doc = "WebTransport identifier."]
     #[serde(rename = "transportId")]
     pub transport_id: super::types::RequestId,
@@ -352,12 +528,23 @@ pub struct WebTransportCreated {
     #[serde(default)]
     pub initiator: Option<super::types::Initiator>,
 }
-impl WebTransportCreated {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum WebTransportCreatedMethod {
+    #[serde(rename = "Network.webTransportCreated")]
+    WebTransportCreated,
+}
+impl WebTransportCreatedMethod {
     pub const IDENTIFIER: &'static str = "Network.webTransportCreated";
+}
+#[doc = "Fired upon WebTransport creation.\n[webTransportCreated](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webTransportCreated)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct WebTransportCreated {
+    pub method: WebTransportCreatedMethod,
+    pub params: WebTransportCreatedParams,
 }
 #[doc = "Fired when WebTransport handshake is finished.\n[webTransportConnectionEstablished](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webTransportConnectionEstablished)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct WebTransportConnectionEstablished {
+pub struct WebTransportConnectionEstablishedParams {
     #[doc = "WebTransport identifier."]
     #[serde(rename = "transportId")]
     pub transport_id: super::types::RequestId,
@@ -365,12 +552,23 @@ pub struct WebTransportConnectionEstablished {
     #[serde(rename = "timestamp")]
     pub timestamp: super::types::MonotonicTime,
 }
-impl WebTransportConnectionEstablished {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum WebTransportConnectionEstablishedMethod {
+    #[serde(rename = "Network.webTransportConnectionEstablished")]
+    WebTransportConnectionEstablished,
+}
+impl WebTransportConnectionEstablishedMethod {
     pub const IDENTIFIER: &'static str = "Network.webTransportConnectionEstablished";
+}
+#[doc = "Fired when WebTransport handshake is finished.\n[webTransportConnectionEstablished](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webTransportConnectionEstablished)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct WebTransportConnectionEstablished {
+    pub method: WebTransportConnectionEstablishedMethod,
+    pub params: WebTransportConnectionEstablishedParams,
 }
 #[doc = "Fired when WebTransport is disposed.\n[webTransportClosed](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webTransportClosed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct WebTransportClosed {
+pub struct WebTransportClosedParams {
     #[doc = "WebTransport identifier."]
     #[serde(rename = "transportId")]
     pub transport_id: super::types::RequestId,
@@ -378,12 +576,23 @@ pub struct WebTransportClosed {
     #[serde(rename = "timestamp")]
     pub timestamp: super::types::MonotonicTime,
 }
-impl WebTransportClosed {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum WebTransportClosedMethod {
+    #[serde(rename = "Network.webTransportClosed")]
+    WebTransportClosed,
+}
+impl WebTransportClosedMethod {
     pub const IDENTIFIER: &'static str = "Network.webTransportClosed";
+}
+#[doc = "Fired when WebTransport is disposed.\n[webTransportClosed](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webTransportClosed)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct WebTransportClosed {
+    pub method: WebTransportClosedMethod,
+    pub params: WebTransportClosedParams,
 }
 #[doc = "Fired upon direct_socket.TCPSocket creation.\n[directTCPSocketCreated](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directTCPSocketCreated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct DirectTcpSocketCreated {
+pub struct DirectTcpSocketCreatedParams {
     #[serde(rename = "identifier")]
     pub identifier: super::types::RequestId,
     #[serde(rename = "remoteAddr")]
@@ -400,12 +609,23 @@ pub struct DirectTcpSocketCreated {
     #[serde(default)]
     pub initiator: Option<super::types::Initiator>,
 }
-impl DirectTcpSocketCreated {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum DirectTcpSocketCreatedMethod {
+    #[serde(rename = "Network.directTCPSocketCreated")]
+    DirectTcpSocketCreated,
+}
+impl DirectTcpSocketCreatedMethod {
     pub const IDENTIFIER: &'static str = "Network.directTCPSocketCreated";
+}
+#[doc = "Fired upon direct_socket.TCPSocket creation.\n[directTCPSocketCreated](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directTCPSocketCreated)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct DirectTcpSocketCreated {
+    pub method: DirectTcpSocketCreatedMethod,
+    pub params: DirectTcpSocketCreatedParams,
 }
 #[doc = "Fired when direct_socket.TCPSocket connection is opened.\n[directTCPSocketOpened](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directTCPSocketOpened)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct DirectTcpSocketOpened {
+pub struct DirectTcpSocketOpenedParams {
     #[serde(rename = "identifier")]
     pub identifier: super::types::RequestId,
     #[serde(rename = "remoteAddr")]
@@ -425,12 +645,23 @@ pub struct DirectTcpSocketOpened {
     #[serde(default)]
     pub local_port: Option<i64>,
 }
-impl DirectTcpSocketOpened {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum DirectTcpSocketOpenedMethod {
+    #[serde(rename = "Network.directTCPSocketOpened")]
+    DirectTcpSocketOpened,
+}
+impl DirectTcpSocketOpenedMethod {
     pub const IDENTIFIER: &'static str = "Network.directTCPSocketOpened";
+}
+#[doc = "Fired when direct_socket.TCPSocket connection is opened.\n[directTCPSocketOpened](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directTCPSocketOpened)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct DirectTcpSocketOpened {
+    pub method: DirectTcpSocketOpenedMethod,
+    pub params: DirectTcpSocketOpenedParams,
 }
 #[doc = "Fired when direct_socket.TCPSocket is aborted.\n[directTCPSocketAborted](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directTCPSocketAborted)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct DirectTcpSocketAborted {
+pub struct DirectTcpSocketAbortedParams {
     #[serde(rename = "identifier")]
     pub identifier: super::types::RequestId,
     #[serde(rename = "errorMessage")]
@@ -438,69 +669,133 @@ pub struct DirectTcpSocketAborted {
     #[serde(rename = "timestamp")]
     pub timestamp: super::types::MonotonicTime,
 }
-impl DirectTcpSocketAborted {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum DirectTcpSocketAbortedMethod {
+    #[serde(rename = "Network.directTCPSocketAborted")]
+    DirectTcpSocketAborted,
+}
+impl DirectTcpSocketAbortedMethod {
     pub const IDENTIFIER: &'static str = "Network.directTCPSocketAborted";
+}
+#[doc = "Fired when direct_socket.TCPSocket is aborted.\n[directTCPSocketAborted](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directTCPSocketAborted)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct DirectTcpSocketAborted {
+    pub method: DirectTcpSocketAbortedMethod,
+    pub params: DirectTcpSocketAbortedParams,
 }
 #[doc = "Fired when direct_socket.TCPSocket is closed.\n[directTCPSocketClosed](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directTCPSocketClosed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct DirectTcpSocketClosed {
+pub struct DirectTcpSocketClosedParams {
     #[serde(rename = "identifier")]
     pub identifier: super::types::RequestId,
     #[serde(rename = "timestamp")]
     pub timestamp: super::types::MonotonicTime,
 }
-impl DirectTcpSocketClosed {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum DirectTcpSocketClosedMethod {
+    #[serde(rename = "Network.directTCPSocketClosed")]
+    DirectTcpSocketClosed,
+}
+impl DirectTcpSocketClosedMethod {
     pub const IDENTIFIER: &'static str = "Network.directTCPSocketClosed";
+}
+#[doc = "Fired when direct_socket.TCPSocket is closed.\n[directTCPSocketClosed](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directTCPSocketClosed)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct DirectTcpSocketClosed {
+    pub method: DirectTcpSocketClosedMethod,
+    pub params: DirectTcpSocketClosedParams,
 }
 #[doc = "Fired when data is sent to tcp direct socket stream.\n[directTCPSocketChunkSent](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directTCPSocketChunkSent)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct DirectTcpSocketChunkSent {
+pub struct DirectTcpSocketChunkSentParams {
     #[serde(rename = "identifier")]
     pub identifier: super::types::RequestId,
     #[serde(rename = "data")]
-    pub data: super::super::super::Binary,
+    pub data: crate::Binary,
     #[serde(rename = "timestamp")]
     pub timestamp: super::types::MonotonicTime,
 }
-impl DirectTcpSocketChunkSent {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum DirectTcpSocketChunkSentMethod {
+    #[serde(rename = "Network.directTCPSocketChunkSent")]
+    DirectTcpSocketChunkSent,
+}
+impl DirectTcpSocketChunkSentMethod {
     pub const IDENTIFIER: &'static str = "Network.directTCPSocketChunkSent";
+}
+#[doc = "Fired when data is sent to tcp direct socket stream.\n[directTCPSocketChunkSent](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directTCPSocketChunkSent)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct DirectTcpSocketChunkSent {
+    pub method: DirectTcpSocketChunkSentMethod,
+    pub params: DirectTcpSocketChunkSentParams,
 }
 #[doc = "Fired when data is received from tcp direct socket stream.\n[directTCPSocketChunkReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directTCPSocketChunkReceived)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct DirectTcpSocketChunkReceived {
+pub struct DirectTcpSocketChunkReceivedParams {
     #[serde(rename = "identifier")]
     pub identifier: super::types::RequestId,
     #[serde(rename = "data")]
-    pub data: super::super::super::Binary,
+    pub data: crate::Binary,
     #[serde(rename = "timestamp")]
     pub timestamp: super::types::MonotonicTime,
 }
-impl DirectTcpSocketChunkReceived {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum DirectTcpSocketChunkReceivedMethod {
+    #[serde(rename = "Network.directTCPSocketChunkReceived")]
+    DirectTcpSocketChunkReceived,
+}
+impl DirectTcpSocketChunkReceivedMethod {
     pub const IDENTIFIER: &'static str = "Network.directTCPSocketChunkReceived";
 }
+#[doc = "Fired when data is received from tcp direct socket stream.\n[directTCPSocketChunkReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directTCPSocketChunkReceived)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct DirectTcpSocketChunkReceived {
+    pub method: DirectTcpSocketChunkReceivedMethod,
+    pub params: DirectTcpSocketChunkReceivedParams,
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct DirectUdpSocketJoinedMulticastGroup {
+pub struct DirectUdpSocketJoinedMulticastGroupParams {
     #[serde(rename = "identifier")]
     pub identifier: super::types::RequestId,
     #[serde(rename = "IPAddress")]
     pub ip_address: String,
 }
-impl DirectUdpSocketJoinedMulticastGroup {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum DirectUdpSocketJoinedMulticastGroupMethod {
+    #[serde(rename = "Network.directUDPSocketJoinedMulticastGroup")]
+    DirectUdpSocketJoinedMulticastGroup,
+}
+impl DirectUdpSocketJoinedMulticastGroupMethod {
     pub const IDENTIFIER: &'static str = "Network.directUDPSocketJoinedMulticastGroup";
 }
+#[derive(Debug, Clone, PartialEq)]
+pub struct DirectUdpSocketJoinedMulticastGroup {
+    pub method: DirectUdpSocketJoinedMulticastGroupMethod,
+    pub params: DirectUdpSocketJoinedMulticastGroupParams,
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct DirectUdpSocketLeftMulticastGroup {
+pub struct DirectUdpSocketLeftMulticastGroupParams {
     #[serde(rename = "identifier")]
     pub identifier: super::types::RequestId,
     #[serde(rename = "IPAddress")]
     pub ip_address: String,
 }
-impl DirectUdpSocketLeftMulticastGroup {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum DirectUdpSocketLeftMulticastGroupMethod {
+    #[serde(rename = "Network.directUDPSocketLeftMulticastGroup")]
+    DirectUdpSocketLeftMulticastGroup,
+}
+impl DirectUdpSocketLeftMulticastGroupMethod {
     pub const IDENTIFIER: &'static str = "Network.directUDPSocketLeftMulticastGroup";
+}
+#[derive(Debug, Clone, PartialEq)]
+pub struct DirectUdpSocketLeftMulticastGroup {
+    pub method: DirectUdpSocketLeftMulticastGroupMethod,
+    pub params: DirectUdpSocketLeftMulticastGroupParams,
 }
 #[doc = "Fired upon direct_socket.UDPSocket creation.\n[directUDPSocketCreated](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directUDPSocketCreated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct DirectUdpSocketCreated {
+pub struct DirectUdpSocketCreatedParams {
     #[serde(rename = "identifier")]
     pub identifier: super::types::RequestId,
     #[serde(rename = "options")]
@@ -512,12 +807,23 @@ pub struct DirectUdpSocketCreated {
     #[serde(default)]
     pub initiator: Option<super::types::Initiator>,
 }
-impl DirectUdpSocketCreated {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum DirectUdpSocketCreatedMethod {
+    #[serde(rename = "Network.directUDPSocketCreated")]
+    DirectUdpSocketCreated,
+}
+impl DirectUdpSocketCreatedMethod {
     pub const IDENTIFIER: &'static str = "Network.directUDPSocketCreated";
+}
+#[doc = "Fired upon direct_socket.UDPSocket creation.\n[directUDPSocketCreated](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directUDPSocketCreated)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct DirectUdpSocketCreated {
+    pub method: DirectUdpSocketCreatedMethod,
+    pub params: DirectUdpSocketCreatedParams,
 }
 #[doc = "Fired when direct_socket.UDPSocket connection is opened.\n[directUDPSocketOpened](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directUDPSocketOpened)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct DirectUdpSocketOpened {
+pub struct DirectUdpSocketOpenedParams {
     #[serde(rename = "identifier")]
     pub identifier: super::types::RequestId,
     #[serde(rename = "localAddr")]
@@ -537,12 +843,23 @@ pub struct DirectUdpSocketOpened {
     #[serde(default)]
     pub remote_port: Option<i64>,
 }
-impl DirectUdpSocketOpened {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum DirectUdpSocketOpenedMethod {
+    #[serde(rename = "Network.directUDPSocketOpened")]
+    DirectUdpSocketOpened,
+}
+impl DirectUdpSocketOpenedMethod {
     pub const IDENTIFIER: &'static str = "Network.directUDPSocketOpened";
+}
+#[doc = "Fired when direct_socket.UDPSocket connection is opened.\n[directUDPSocketOpened](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directUDPSocketOpened)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct DirectUdpSocketOpened {
+    pub method: DirectUdpSocketOpenedMethod,
+    pub params: DirectUdpSocketOpenedParams,
 }
 #[doc = "Fired when direct_socket.UDPSocket is aborted.\n[directUDPSocketAborted](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directUDPSocketAborted)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct DirectUdpSocketAborted {
+pub struct DirectUdpSocketAbortedParams {
     #[serde(rename = "identifier")]
     pub identifier: super::types::RequestId,
     #[serde(rename = "errorMessage")]
@@ -550,23 +867,45 @@ pub struct DirectUdpSocketAborted {
     #[serde(rename = "timestamp")]
     pub timestamp: super::types::MonotonicTime,
 }
-impl DirectUdpSocketAborted {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum DirectUdpSocketAbortedMethod {
+    #[serde(rename = "Network.directUDPSocketAborted")]
+    DirectUdpSocketAborted,
+}
+impl DirectUdpSocketAbortedMethod {
     pub const IDENTIFIER: &'static str = "Network.directUDPSocketAborted";
+}
+#[doc = "Fired when direct_socket.UDPSocket is aborted.\n[directUDPSocketAborted](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directUDPSocketAborted)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct DirectUdpSocketAborted {
+    pub method: DirectUdpSocketAbortedMethod,
+    pub params: DirectUdpSocketAbortedParams,
 }
 #[doc = "Fired when direct_socket.UDPSocket is closed.\n[directUDPSocketClosed](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directUDPSocketClosed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct DirectUdpSocketClosed {
+pub struct DirectUdpSocketClosedParams {
     #[serde(rename = "identifier")]
     pub identifier: super::types::RequestId,
     #[serde(rename = "timestamp")]
     pub timestamp: super::types::MonotonicTime,
 }
-impl DirectUdpSocketClosed {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum DirectUdpSocketClosedMethod {
+    #[serde(rename = "Network.directUDPSocketClosed")]
+    DirectUdpSocketClosed,
+}
+impl DirectUdpSocketClosedMethod {
     pub const IDENTIFIER: &'static str = "Network.directUDPSocketClosed";
+}
+#[doc = "Fired when direct_socket.UDPSocket is closed.\n[directUDPSocketClosed](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directUDPSocketClosed)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct DirectUdpSocketClosed {
+    pub method: DirectUdpSocketClosedMethod,
+    pub params: DirectUdpSocketClosedParams,
 }
 #[doc = "Fired when message is sent to udp direct socket stream.\n[directUDPSocketChunkSent](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directUDPSocketChunkSent)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct DirectUdpSocketChunkSent {
+pub struct DirectUdpSocketChunkSentParams {
     #[serde(rename = "identifier")]
     pub identifier: super::types::RequestId,
     #[serde(rename = "message")]
@@ -574,12 +913,23 @@ pub struct DirectUdpSocketChunkSent {
     #[serde(rename = "timestamp")]
     pub timestamp: super::types::MonotonicTime,
 }
-impl DirectUdpSocketChunkSent {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum DirectUdpSocketChunkSentMethod {
+    #[serde(rename = "Network.directUDPSocketChunkSent")]
+    DirectUdpSocketChunkSent,
+}
+impl DirectUdpSocketChunkSentMethod {
     pub const IDENTIFIER: &'static str = "Network.directUDPSocketChunkSent";
+}
+#[doc = "Fired when message is sent to udp direct socket stream.\n[directUDPSocketChunkSent](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directUDPSocketChunkSent)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct DirectUdpSocketChunkSent {
+    pub method: DirectUdpSocketChunkSentMethod,
+    pub params: DirectUdpSocketChunkSentParams,
 }
 #[doc = "Fired when message is received from udp direct socket stream.\n[directUDPSocketChunkReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directUDPSocketChunkReceived)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct DirectUdpSocketChunkReceived {
+pub struct DirectUdpSocketChunkReceivedParams {
     #[serde(rename = "identifier")]
     pub identifier: super::types::RequestId,
     #[serde(rename = "message")]
@@ -587,12 +937,23 @@ pub struct DirectUdpSocketChunkReceived {
     #[serde(rename = "timestamp")]
     pub timestamp: super::types::MonotonicTime,
 }
-impl DirectUdpSocketChunkReceived {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum DirectUdpSocketChunkReceivedMethod {
+    #[serde(rename = "Network.directUDPSocketChunkReceived")]
+    DirectUdpSocketChunkReceived,
+}
+impl DirectUdpSocketChunkReceivedMethod {
     pub const IDENTIFIER: &'static str = "Network.directUDPSocketChunkReceived";
+}
+#[doc = "Fired when message is received from udp direct socket stream.\n[directUDPSocketChunkReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directUDPSocketChunkReceived)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct DirectUdpSocketChunkReceived {
+    pub method: DirectUdpSocketChunkReceivedMethod,
+    pub params: DirectUdpSocketChunkReceivedParams,
 }
 #[doc = "Fired when additional information about a requestWillBeSent event is available from the\nnetwork stack. Not every requestWillBeSent event will have an additional\nrequestWillBeSentExtraInfo fired for it, and there is no guarantee whether requestWillBeSent\nor requestWillBeSentExtraInfo will be fired first for the same request.\n[requestWillBeSentExtraInfo](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-requestWillBeSentExtraInfo)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct RequestWillBeSentExtraInfo {
+pub struct RequestWillBeSentExtraInfoParams {
     #[doc = "Request identifier. Used to match this information to an existing requestWillBeSent event."]
     #[serde(rename = "requestId")]
     pub request_id: super::types::RequestId,
@@ -627,12 +988,23 @@ pub struct RequestWillBeSentExtraInfo {
     #[serde(default)]
     pub applied_network_conditions_id: Option<String>,
 }
-impl RequestWillBeSentExtraInfo {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum RequestWillBeSentExtraInfoMethod {
+    #[serde(rename = "Network.requestWillBeSentExtraInfo")]
+    RequestWillBeSentExtraInfo,
+}
+impl RequestWillBeSentExtraInfoMethod {
     pub const IDENTIFIER: &'static str = "Network.requestWillBeSentExtraInfo";
+}
+#[doc = "Fired when additional information about a requestWillBeSent event is available from the\nnetwork stack. Not every requestWillBeSent event will have an additional\nrequestWillBeSentExtraInfo fired for it, and there is no guarantee whether requestWillBeSent\nor requestWillBeSentExtraInfo will be fired first for the same request.\n[requestWillBeSentExtraInfo](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-requestWillBeSentExtraInfo)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct RequestWillBeSentExtraInfo {
+    pub method: RequestWillBeSentExtraInfoMethod,
+    pub params: RequestWillBeSentExtraInfoParams,
 }
 #[doc = "Fired when additional information about a responseReceived event is available from the network\nstack. Not every responseReceived event will have an additional responseReceivedExtraInfo for\nit, and responseReceivedExtraInfo may be fired before or after responseReceived.\n[responseReceivedExtraInfo](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-responseReceivedExtraInfo)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct ResponseReceivedExtraInfo {
+pub struct ResponseReceivedExtraInfoParams {
     #[doc = "Request identifier. Used to match this information to another responseReceived event."]
     #[serde(rename = "requestId")]
     pub request_id: super::types::RequestId,
@@ -670,12 +1042,23 @@ pub struct ResponseReceivedExtraInfo {
     #[serde(default)]
     pub exempted_cookies: Option<Vec<super::types::ExemptedSetCookieWithReason>>,
 }
-impl ResponseReceivedExtraInfo {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum ResponseReceivedExtraInfoMethod {
+    #[serde(rename = "Network.responseReceivedExtraInfo")]
+    ResponseReceivedExtraInfo,
+}
+impl ResponseReceivedExtraInfoMethod {
     pub const IDENTIFIER: &'static str = "Network.responseReceivedExtraInfo";
+}
+#[doc = "Fired when additional information about a responseReceived event is available from the network\nstack. Not every responseReceived event will have an additional responseReceivedExtraInfo for\nit, and responseReceivedExtraInfo may be fired before or after responseReceived.\n[responseReceivedExtraInfo](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-responseReceivedExtraInfo)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct ResponseReceivedExtraInfo {
+    pub method: ResponseReceivedExtraInfoMethod,
+    pub params: ResponseReceivedExtraInfoParams,
 }
 #[doc = "Fired when 103 Early Hints headers is received in addition to the common response.\nNot every responseReceived event will have an responseReceivedEarlyHints fired.\nOnly one responseReceivedEarlyHints may be fired for eached responseReceived event.\n[responseReceivedEarlyHints](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-responseReceivedEarlyHints)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct ResponseReceivedEarlyHints {
+pub struct ResponseReceivedEarlyHintsParams {
     #[doc = "Request identifier. Used to match this information to another responseReceived event."]
     #[serde(rename = "requestId")]
     pub request_id: super::types::RequestId,
@@ -683,12 +1066,23 @@ pub struct ResponseReceivedEarlyHints {
     #[serde(rename = "headers")]
     pub headers: super::types::Headers,
 }
-impl ResponseReceivedEarlyHints {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum ResponseReceivedEarlyHintsMethod {
+    #[serde(rename = "Network.responseReceivedEarlyHints")]
+    ResponseReceivedEarlyHints,
+}
+impl ResponseReceivedEarlyHintsMethod {
     pub const IDENTIFIER: &'static str = "Network.responseReceivedEarlyHints";
+}
+#[doc = "Fired when 103 Early Hints headers is received in addition to the common response.\nNot every responseReceived event will have an responseReceivedEarlyHints fired.\nOnly one responseReceivedEarlyHints may be fired for eached responseReceived event.\n[responseReceivedEarlyHints](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-responseReceivedEarlyHints)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct ResponseReceivedEarlyHints {
+    pub method: ResponseReceivedEarlyHintsMethod,
+    pub params: ResponseReceivedEarlyHintsParams,
 }
 #[doc = "Fired exactly once for each Trust Token operation. Depending on\nthe type of the operation and whether the operation succeeded or\nfailed, the event is fired before the corresponding request was sent\nor after the response was received.\n[trustTokenOperationDone](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-trustTokenOperationDone)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct TrustTokenOperationDone {
+pub struct TrustTokenOperationDoneParams {
     #[doc = "Detailed success or error status of the operation.\n'AlreadyExists' also signifies a successful operation, as the result\nof the operation already exists und thus, the operation was abort\npreemptively (e.g. a cache hit)."]
     #[serde(rename = "status")]
     pub status: TrustTokenOperationDoneStatus,
@@ -742,34 +1136,77 @@ pub enum TrustTokenOperationDoneStatus {
     #[serde(rename = "SiteIssuerLimit")]
     SiteIssuerLimit,
 }
-impl TrustTokenOperationDone {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum TrustTokenOperationDoneMethod {
+    #[serde(rename = "Network.trustTokenOperationDone")]
+    TrustTokenOperationDone,
+}
+impl TrustTokenOperationDoneMethod {
     pub const IDENTIFIER: &'static str = "Network.trustTokenOperationDone";
 }
+#[doc = "Fired exactly once for each Trust Token operation. Depending on\nthe type of the operation and whether the operation succeeded or\nfailed, the event is fired before the corresponding request was sent\nor after the response was received.\n[trustTokenOperationDone](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-trustTokenOperationDone)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct TrustTokenOperationDone {
+    pub method: TrustTokenOperationDoneMethod,
+    pub params: TrustTokenOperationDoneParams,
+}
 #[doc = "Fired once security policy has been updated.\n[policyUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-policyUpdated)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct PolicyUpdated {}
-impl PolicyUpdated {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct PolicyUpdatedParams {}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum PolicyUpdatedMethod {
+    #[serde(rename = "Network.policyUpdated")]
+    PolicyUpdated,
+}
+impl PolicyUpdatedMethod {
     pub const IDENTIFIER: &'static str = "Network.policyUpdated";
+}
+#[doc = "Fired once security policy has been updated.\n[policyUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-policyUpdated)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct PolicyUpdated {
+    pub method: PolicyUpdatedMethod,
+    pub params: PolicyUpdatedParams,
 }
 #[doc = "Is sent whenever a new report is added.\nAnd after 'enableReportingApi' for all existing reports.\n[reportingApiReportAdded](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-reportingApiReportAdded)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct ReportingApiReportAdded {
+pub struct ReportingApiReportAddedParams {
     #[serde(rename = "report")]
     pub report: super::types::ReportingApiReport,
 }
-impl ReportingApiReportAdded {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum ReportingApiReportAddedMethod {
+    #[serde(rename = "Network.reportingApiReportAdded")]
+    ReportingApiReportAdded,
+}
+impl ReportingApiReportAddedMethod {
     pub const IDENTIFIER: &'static str = "Network.reportingApiReportAdded";
 }
+#[doc = "Is sent whenever a new report is added.\nAnd after 'enableReportingApi' for all existing reports.\n[reportingApiReportAdded](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-reportingApiReportAdded)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct ReportingApiReportAdded {
+    pub method: ReportingApiReportAddedMethod,
+    pub params: ReportingApiReportAddedParams,
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct ReportingApiReportUpdated {
+pub struct ReportingApiReportUpdatedParams {
     #[serde(rename = "report")]
     pub report: super::types::ReportingApiReport,
 }
-impl ReportingApiReportUpdated {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum ReportingApiReportUpdatedMethod {
+    #[serde(rename = "Network.reportingApiReportUpdated")]
+    ReportingApiReportUpdated,
+}
+impl ReportingApiReportUpdatedMethod {
     pub const IDENTIFIER: &'static str = "Network.reportingApiReportUpdated";
 }
+#[derive(Debug, Clone, PartialEq)]
+pub struct ReportingApiReportUpdated {
+    pub method: ReportingApiReportUpdatedMethod,
+    pub params: ReportingApiReportUpdatedParams,
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct ReportingApiEndpointsChangedForOrigin {
+pub struct ReportingApiEndpointsChangedForOriginParams {
     #[doc = "Origin of the document(s) which configured the endpoints."]
     #[serde(rename = "origin")]
     pub origin: String,
@@ -777,23 +1214,44 @@ pub struct ReportingApiEndpointsChangedForOrigin {
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub endpoints: Vec<super::types::ReportingApiEndpoint>,
 }
-impl ReportingApiEndpointsChangedForOrigin {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum ReportingApiEndpointsChangedForOriginMethod {
+    #[serde(rename = "Network.reportingApiEndpointsChangedForOrigin")]
+    ReportingApiEndpointsChangedForOrigin,
+}
+impl ReportingApiEndpointsChangedForOriginMethod {
     pub const IDENTIFIER: &'static str = "Network.reportingApiEndpointsChangedForOrigin";
+}
+#[derive(Debug, Clone, PartialEq)]
+pub struct ReportingApiEndpointsChangedForOrigin {
+    pub method: ReportingApiEndpointsChangedForOriginMethod,
+    pub params: ReportingApiEndpointsChangedForOriginParams,
 }
 #[doc = "Triggered when the initial set of device bound sessions is added.\n[deviceBoundSessionsAdded](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-deviceBoundSessionsAdded)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct DeviceBoundSessionsAdded {
+pub struct DeviceBoundSessionsAddedParams {
     #[doc = "The device bound sessions."]
     #[serde(rename = "sessions")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub sessions: Vec<super::types::DeviceBoundSession>,
 }
-impl DeviceBoundSessionsAdded {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum DeviceBoundSessionsAddedMethod {
+    #[serde(rename = "Network.deviceBoundSessionsAdded")]
+    DeviceBoundSessionsAdded,
+}
+impl DeviceBoundSessionsAddedMethod {
     pub const IDENTIFIER: &'static str = "Network.deviceBoundSessionsAdded";
+}
+#[doc = "Triggered when the initial set of device bound sessions is added.\n[deviceBoundSessionsAdded](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-deviceBoundSessionsAdded)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct DeviceBoundSessionsAdded {
+    pub method: DeviceBoundSessionsAddedMethod,
+    pub params: DeviceBoundSessionsAddedParams,
 }
 #[doc = "Triggered when a device bound session event occurs.\n[deviceBoundSessionEventOccurred](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-deviceBoundSessionEventOccurred)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct DeviceBoundSessionEventOccurred {
+pub struct DeviceBoundSessionEventOccurredParams {
     #[doc = "A unique identifier for this session event."]
     #[serde(rename = "eventId")]
     pub event_id: super::types::DeviceBoundSessionEventId,
@@ -826,7 +1284,18 @@ pub struct DeviceBoundSessionEventOccurred {
     #[serde(default)]
     pub challenge_event_details: Option<super::types::ChallengeEventDetails>,
 }
-impl DeviceBoundSessionEventOccurred {
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub enum DeviceBoundSessionEventOccurredMethod {
+    #[serde(rename = "Network.deviceBoundSessionEventOccurred")]
+    DeviceBoundSessionEventOccurred,
+}
+impl DeviceBoundSessionEventOccurredMethod {
     pub const IDENTIFIER: &'static str = "Network.deviceBoundSessionEventOccurred";
+}
+#[doc = "Triggered when a device bound session event occurs.\n[deviceBoundSessionEventOccurred](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-deviceBoundSessionEventOccurred)"]
+#[derive(Debug, Clone, PartialEq)]
+pub struct DeviceBoundSessionEventOccurred {
+    pub method: DeviceBoundSessionEventOccurredMethod,
+    pub params: DeviceBoundSessionEventOccurredParams,
 }
 group_enum ! (NetworkEvents { DataReceived (DataReceived) , EventSourceMessageReceived (EventSourceMessageReceived) , LoadingFailed (LoadingFailed) , LoadingFinished (LoadingFinished) , RequestServedFromCache (RequestServedFromCache) , RequestWillBeSent (RequestWillBeSent) , ResourceChangedPriority (ResourceChangedPriority) , SignedExchangeReceived (SignedExchangeReceived) , ResponseReceived (ResponseReceived) , WebSocketClosed (WebSocketClosed) , WebSocketCreated (WebSocketCreated) , WebSocketFrameError (WebSocketFrameError) , WebSocketFrameReceived (WebSocketFrameReceived) , WebSocketFrameSent (WebSocketFrameSent) , WebSocketHandshakeResponseReceived (WebSocketHandshakeResponseReceived) , WebSocketWillSendHandshakeRequest (WebSocketWillSendHandshakeRequest) , WebTransportCreated (WebTransportCreated) , WebTransportConnectionEstablished (WebTransportConnectionEstablished) , WebTransportClosed (WebTransportClosed) , DirectTcpSocketCreated (DirectTcpSocketCreated) , DirectTcpSocketOpened (DirectTcpSocketOpened) , DirectTcpSocketAborted (DirectTcpSocketAborted) , DirectTcpSocketClosed (DirectTcpSocketClosed) , DirectTcpSocketChunkSent (DirectTcpSocketChunkSent) , DirectTcpSocketChunkReceived (DirectTcpSocketChunkReceived) , DirectUdpSocketJoinedMulticastGroup (DirectUdpSocketJoinedMulticastGroup) , DirectUdpSocketLeftMulticastGroup (DirectUdpSocketLeftMulticastGroup) , DirectUdpSocketCreated (DirectUdpSocketCreated) , DirectUdpSocketOpened (DirectUdpSocketOpened) , DirectUdpSocketAborted (DirectUdpSocketAborted) , DirectUdpSocketClosed (DirectUdpSocketClosed) , DirectUdpSocketChunkSent (DirectUdpSocketChunkSent) , DirectUdpSocketChunkReceived (DirectUdpSocketChunkReceived) , RequestWillBeSentExtraInfo (RequestWillBeSentExtraInfo) , ResponseReceivedExtraInfo (ResponseReceivedExtraInfo) , ResponseReceivedEarlyHints (ResponseReceivedEarlyHints) , TrustTokenOperationDone (TrustTokenOperationDone) , PolicyUpdated (PolicyUpdated) , ReportingApiReportAdded (ReportingApiReportAdded) , ReportingApiReportUpdated (ReportingApiReportUpdated) , ReportingApiEndpointsChangedForOrigin (ReportingApiEndpointsChangedForOrigin) , DeviceBoundSessionsAdded (DeviceBoundSessionsAdded) , DeviceBoundSessionEventOccurred (DeviceBoundSessionEventOccurred) });

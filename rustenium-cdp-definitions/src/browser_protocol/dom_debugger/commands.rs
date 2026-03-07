@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 pub struct GetEventListenersParams {
     #[doc = "Identifier of the object to return listeners for."]
     #[serde(rename = "objectId")]
-    pub object_id: super::super::super::js_protocol::runtime::types::RemoteObjectId,
+    pub object_id: crate::js_protocol::runtime::types::RemoteObjectId,
     #[doc = "The maximum depth at which Node children should be retrieved, defaults to 1. Use -1 for the\nentire subtree or provide an integer larger than 0."]
     #[serde(rename = "depth")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -17,9 +17,7 @@ pub struct GetEventListenersParams {
     pub pierce: Option<bool>,
 }
 impl GetEventListenersParams {
-    pub fn new(
-        object_id: impl Into<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
-    ) -> Self {
+    pub fn new(object_id: impl Into<crate::js_protocol::runtime::types::RemoteObjectId>) -> Self {
         Self {
             object_id: object_id.into(),
             depth: None,
@@ -41,7 +39,7 @@ pub struct GetEventListeners {
     pub method: GetEventListenersMethod,
     pub params: GetEventListenersParams,
 }
-impl super::super::super::CommandResult for GetEventListeners {
+impl crate::CommandResult for GetEventListeners {
     type Result = super::results::GetEventListenersResult;
 }
 #[doc = "Removes DOM breakpoint that was set using `setDOMBreakpoint`.\n[removeDOMBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/DOMDebugger/#method-removeDOMBreakpoint)"]
@@ -49,14 +47,14 @@ impl super::super::super::CommandResult for GetEventListeners {
 pub struct RemoveDomBreakpointParams {
     #[doc = "Identifier of the node to remove breakpoint from."]
     #[serde(rename = "nodeId")]
-    pub node_id: super::super::dom::types::NodeId,
+    pub node_id: crate::browser_protocol::dom::types::NodeId,
     #[doc = "Type of the breakpoint to remove."]
     #[serde(rename = "type")]
     pub r#type: super::types::DomBreakpointType,
 }
 impl RemoveDomBreakpointParams {
     pub fn new(
-        node_id: impl Into<super::super::dom::types::NodeId>,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
         r#type: impl Into<super::types::DomBreakpointType>,
     ) -> Self {
         Self {
@@ -79,7 +77,7 @@ pub struct RemoveDomBreakpoint {
     pub method: RemoveDomBreakpointMethod,
     pub params: RemoveDomBreakpointParams,
 }
-impl super::super::super::CommandResult for RemoveDomBreakpoint {
+impl crate::CommandResult for RemoveDomBreakpoint {
     type Result = super::results::RemoveDomBreakpointResult;
 }
 #[doc = "Removes breakpoint on particular DOM event.\n[removeEventListenerBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/DOMDebugger/#method-removeEventListenerBreakpoint)"]
@@ -121,7 +119,7 @@ pub struct RemoveEventListenerBreakpoint {
     pub method: RemoveEventListenerBreakpointMethod,
     pub params: RemoveEventListenerBreakpointParams,
 }
-impl super::super::super::CommandResult for RemoveEventListenerBreakpoint {
+impl crate::CommandResult for RemoveEventListenerBreakpoint {
     type Result = super::results::RemoveEventListenerBreakpointResult;
 }
 #[doc = "Removes breakpoint from XMLHttpRequest.\n[removeXHRBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/DOMDebugger/#method-removeXHRBreakpoint)"]
@@ -155,7 +153,7 @@ pub struct RemoveXhrBreakpoint {
     pub method: RemoveXhrBreakpointMethod,
     pub params: RemoveXhrBreakpointParams,
 }
-impl super::super::super::CommandResult for RemoveXhrBreakpoint {
+impl crate::CommandResult for RemoveXhrBreakpoint {
     type Result = super::results::RemoveXhrBreakpointResult;
 }
 #[doc = "Sets breakpoint on particular CSP violations.\n[setBreakOnCSPViolation](https://chromedevtools.github.io/devtools-protocol/tot/DOMDebugger/#method-setBreakOnCSPViolation)"]
@@ -185,7 +183,7 @@ pub struct SetBreakOnCspViolation {
     pub method: SetBreakOnCspViolationMethod,
     pub params: SetBreakOnCspViolationParams,
 }
-impl super::super::super::CommandResult for SetBreakOnCspViolation {
+impl crate::CommandResult for SetBreakOnCspViolation {
     type Result = super::results::SetBreakOnCspViolationResult;
 }
 #[doc = "Sets breakpoint on particular operation with DOM.\n[setDOMBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/DOMDebugger/#method-setDOMBreakpoint)"]
@@ -193,14 +191,14 @@ impl super::super::super::CommandResult for SetBreakOnCspViolation {
 pub struct SetDomBreakpointParams {
     #[doc = "Identifier of the node to set breakpoint on."]
     #[serde(rename = "nodeId")]
-    pub node_id: super::super::dom::types::NodeId,
+    pub node_id: crate::browser_protocol::dom::types::NodeId,
     #[doc = "Type of the operation to stop upon."]
     #[serde(rename = "type")]
     pub r#type: super::types::DomBreakpointType,
 }
 impl SetDomBreakpointParams {
     pub fn new(
-        node_id: impl Into<super::super::dom::types::NodeId>,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
         r#type: impl Into<super::types::DomBreakpointType>,
     ) -> Self {
         Self {
@@ -223,7 +221,7 @@ pub struct SetDomBreakpoint {
     pub method: SetDomBreakpointMethod,
     pub params: SetDomBreakpointParams,
 }
-impl super::super::super::CommandResult for SetDomBreakpoint {
+impl crate::CommandResult for SetDomBreakpoint {
     type Result = super::results::SetDomBreakpointResult;
 }
 #[doc = "Sets breakpoint on particular DOM event.\n[setEventListenerBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/DOMDebugger/#method-setEventListenerBreakpoint)"]
@@ -265,7 +263,7 @@ pub struct SetEventListenerBreakpoint {
     pub method: SetEventListenerBreakpointMethod,
     pub params: SetEventListenerBreakpointParams,
 }
-impl super::super::super::CommandResult for SetEventListenerBreakpoint {
+impl crate::CommandResult for SetEventListenerBreakpoint {
     type Result = super::results::SetEventListenerBreakpointResult;
 }
 #[doc = "Sets breakpoint on XMLHttpRequest.\n[setXHRBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/DOMDebugger/#method-setXHRBreakpoint)"]
@@ -299,7 +297,7 @@ pub struct SetXhrBreakpoint {
     pub method: SetXhrBreakpointMethod,
     pub params: SetXhrBreakpointParams,
 }
-impl super::super::super::CommandResult for SetXhrBreakpoint {
+impl crate::CommandResult for SetXhrBreakpoint {
     type Result = super::results::SetXhrBreakpointResult;
 }
 group_enum ! (DomDebuggerCommands { GetEventListeners (GetEventListeners) , RemoveDomBreakpoint (RemoveDomBreakpoint) , RemoveEventListenerBreakpoint (RemoveEventListenerBreakpoint) , RemoveXhrBreakpoint (RemoveXhrBreakpoint) , SetBreakOnCspViolation (SetBreakOnCspViolation) , SetDomBreakpoint (SetDomBreakpoint) , SetEventListenerBreakpoint (SetEventListenerBreakpoint) , SetXhrBreakpoint (SetXhrBreakpoint) });

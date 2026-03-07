@@ -40,7 +40,7 @@ pub struct RuleSet {
     pub id: RuleSetId,
     #[doc = "Identifies a document which the rule set is associated with."]
     #[serde(rename = "loaderId")]
-    pub loader_id: super::super::network::types::LoaderId,
+    pub loader_id: crate::browser_protocol::network::types::LoaderId,
     #[doc = "Source text of JSON representing the rule set. If it comes from\n`<script>` tag, it is the textContent of the node. Note that it is\na JSON for valid case.\n\nSee also:\n- https://wicg.github.io/nav-speculation/speculation-rules.html\n- https://github.com/WICG/nav-speculation/blob/main/triggers.md"]
     #[serde(rename = "sourceText")]
     pub source_text: String,
@@ -48,7 +48,7 @@ pub struct RuleSet {
     #[serde(rename = "backendNodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub backend_node_id: Option<super::super::dom::types::BackendNodeId>,
+    pub backend_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     #[serde(rename = "url")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -56,7 +56,7 @@ pub struct RuleSet {
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub request_id: Option<super::super::network::types::RequestId>,
+    pub request_id: Option<crate::browser_protocol::network::types::RequestId>,
     #[doc = "Error information\n`errorMessage` is null iff `errorType` is null."]
     #[serde(rename = "errorType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -71,7 +71,7 @@ pub struct RuleSet {
 impl RuleSet {
     pub fn new(
         id: impl Into<RuleSetId>,
-        loader_id: impl Into<super::super::network::types::LoaderId>,
+        loader_id: impl Into<crate::browser_protocol::network::types::LoaderId>,
         source_text: impl Into<String>,
     ) -> Self {
         Self {
@@ -120,7 +120,7 @@ pub enum SpeculationTargetHint {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PreloadingAttemptKey {
     #[serde(rename = "loaderId")]
-    pub loader_id: super::super::network::types::LoaderId,
+    pub loader_id: crate::browser_protocol::network::types::LoaderId,
     #[serde(rename = "action")]
     pub action: SpeculationAction,
     #[serde(rename = "url")]
@@ -132,7 +132,7 @@ pub struct PreloadingAttemptKey {
 }
 impl PreloadingAttemptKey {
     pub fn new(
-        loader_id: impl Into<super::super::network::types::LoaderId>,
+        loader_id: impl Into<crate::browser_protocol::network::types::LoaderId>,
         action: impl Into<SpeculationAction>,
         url: impl Into<String>,
     ) -> Self {
@@ -157,13 +157,13 @@ pub struct PreloadingAttemptSource {
     pub rule_set_ids: Vec<RuleSetId>,
     #[serde(rename = "nodeIds")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
-    pub node_ids: Vec<super::super::dom::types::BackendNodeId>,
+    pub node_ids: Vec<crate::browser_protocol::dom::types::BackendNodeId>,
 }
 impl PreloadingAttemptSource {
     pub fn new(
         key: impl Into<PreloadingAttemptKey>,
         rule_set_ids: Vec<RuleSetId>,
-        node_ids: Vec<super::super::dom::types::BackendNodeId>,
+        node_ids: Vec<crate::browser_protocol::dom::types::BackendNodeId>,
     ) -> Self {
         Self {
             key: key.into(),

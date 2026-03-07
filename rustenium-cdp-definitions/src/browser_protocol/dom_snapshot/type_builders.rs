@@ -1,7 +1,7 @@
 use super::types::*;
 impl DomNode {
     pub fn builder() -> DomNodeBuilder {
-        DomNodeBuilder::default()
+        <DomNodeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -13,7 +13,7 @@ pub struct DomNodeBuilder {
     input_value: Option<String>,
     input_checked: Option<bool>,
     option_selected: Option<bool>,
-    backend_node_id: Option<super::super::dom::types::BackendNodeId>,
+    backend_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     child_node_indexes: Option<Vec<i64>>,
     attributes: Option<Vec<NameValue>>,
     pseudo_element_indexes: Option<Vec<i64>>,
@@ -24,12 +24,12 @@ pub struct DomNodeBuilder {
     document_encoding: Option<String>,
     public_id: Option<String>,
     system_id: Option<String>,
-    frame_id: Option<super::super::page::types::FrameId>,
+    frame_id: Option<crate::browser_protocol::page::types::FrameId>,
     content_document_index: Option<i64>,
-    pseudo_type: Option<super::super::dom::types::PseudoType>,
-    shadow_root_type: Option<super::super::dom::types::ShadowRootType>,
+    pseudo_type: Option<crate::browser_protocol::dom::types::PseudoType>,
+    shadow_root_type: Option<crate::browser_protocol::dom::types::ShadowRootType>,
     is_clickable: Option<bool>,
-    event_listeners: Option<Vec<super::super::dom_debugger::types::EventListener>>,
+    event_listeners: Option<Vec<crate::browser_protocol::dom_debugger::types::EventListener>>,
     current_source_url: Option<String>,
     origin_url: Option<String>,
     scroll_offset_x: Option<f64>,
@@ -66,7 +66,7 @@ impl DomNodeBuilder {
     }
     pub fn backend_node_id(
         mut self,
-        backend_node_id: impl Into<super::super::dom::types::BackendNodeId>,
+        backend_node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
     ) -> Self {
         self.backend_node_id = Some(backend_node_id.into());
         self
@@ -147,7 +147,10 @@ impl DomNodeBuilder {
         self.system_id = Some(system_id.into());
         self
     }
-    pub fn frame_id(mut self, frame_id: impl Into<super::super::page::types::FrameId>) -> Self {
+    pub fn frame_id(
+        mut self,
+        frame_id: impl Into<crate::browser_protocol::page::types::FrameId>,
+    ) -> Self {
         self.frame_id = Some(frame_id.into());
         self
     }
@@ -157,14 +160,14 @@ impl DomNodeBuilder {
     }
     pub fn pseudo_type(
         mut self,
-        pseudo_type: impl Into<super::super::dom::types::PseudoType>,
+        pseudo_type: impl Into<crate::browser_protocol::dom::types::PseudoType>,
     ) -> Self {
         self.pseudo_type = Some(pseudo_type.into());
         self
     }
     pub fn shadow_root_type(
         mut self,
-        shadow_root_type: impl Into<super::super::dom::types::ShadowRootType>,
+        shadow_root_type: impl Into<crate::browser_protocol::dom::types::ShadowRootType>,
     ) -> Self {
         self.shadow_root_type = Some(shadow_root_type.into());
         self
@@ -175,7 +178,7 @@ impl DomNodeBuilder {
     }
     pub fn event_listener(
         mut self,
-        event_listener: impl Into<super::super::dom_debugger::types::EventListener>,
+        event_listener: impl Into<crate::browser_protocol::dom_debugger::types::EventListener>,
     ) -> Self {
         let v = self.event_listeners.get_or_insert(Vec::new());
         v.push(event_listener.into());
@@ -184,7 +187,7 @@ impl DomNodeBuilder {
     pub fn event_listeners<I, S>(mut self, event_listeners: I) -> Self
     where
         I: IntoIterator<Item = S>,
-        S: Into<super::super::dom_debugger::types::EventListener>,
+        S: Into<crate::browser_protocol::dom_debugger::types::EventListener>,
     {
         let v = self.event_listeners.get_or_insert(Vec::new());
         for val in event_listeners {
@@ -251,17 +254,20 @@ impl DomNodeBuilder {
 }
 impl InlineTextBox {
     pub fn builder() -> InlineTextBoxBuilder {
-        InlineTextBoxBuilder::default()
+        <InlineTextBoxBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct InlineTextBoxBuilder {
-    bounding_box: Option<super::super::dom::types::Rect>,
+    bounding_box: Option<crate::browser_protocol::dom::types::Rect>,
     start_character_index: Option<i64>,
     num_characters: Option<i64>,
 }
 impl InlineTextBoxBuilder {
-    pub fn bounding_box(mut self, bounding_box: impl Into<super::super::dom::types::Rect>) -> Self {
+    pub fn bounding_box(
+        mut self,
+        bounding_box: impl Into<crate::browser_protocol::dom::types::Rect>,
+    ) -> Self {
         self.bounding_box = Some(bounding_box.into());
         self
     }
@@ -292,13 +298,13 @@ impl InlineTextBoxBuilder {
 }
 impl LayoutTreeNode {
     pub fn builder() -> LayoutTreeNodeBuilder {
-        LayoutTreeNodeBuilder::default()
+        <LayoutTreeNodeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct LayoutTreeNodeBuilder {
     dom_node_index: Option<i64>,
-    bounding_box: Option<super::super::dom::types::Rect>,
+    bounding_box: Option<crate::browser_protocol::dom::types::Rect>,
     layout_text: Option<String>,
     inline_text_nodes: Option<Vec<InlineTextBox>>,
     style_index: Option<i64>,
@@ -310,7 +316,10 @@ impl LayoutTreeNodeBuilder {
         self.dom_node_index = Some(dom_node_index.into());
         self
     }
-    pub fn bounding_box(mut self, bounding_box: impl Into<super::super::dom::types::Rect>) -> Self {
+    pub fn bounding_box(
+        mut self,
+        bounding_box: impl Into<crate::browser_protocol::dom::types::Rect>,
+    ) -> Self {
         self.bounding_box = Some(bounding_box.into());
         self
     }
@@ -364,7 +373,7 @@ impl LayoutTreeNodeBuilder {
 }
 impl ComputedStyle {
     pub fn builder() -> ComputedStyleBuilder {
-        ComputedStyleBuilder::default()
+        <ComputedStyleBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -398,7 +407,7 @@ impl ComputedStyleBuilder {
 }
 impl NameValue {
     pub fn builder() -> NameValueBuilder {
-        NameValueBuilder::default()
+        <NameValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -428,7 +437,7 @@ impl NameValueBuilder {
 }
 impl RareStringData {
     pub fn builder() -> RareStringDataBuilder {
-        RareStringDataBuilder::default()
+        <RareStringDataBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -482,7 +491,7 @@ impl RareStringDataBuilder {
 }
 impl RareBooleanData {
     pub fn builder() -> RareBooleanDataBuilder {
-        RareBooleanDataBuilder::default()
+        <RareBooleanDataBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -516,7 +525,7 @@ impl RareBooleanDataBuilder {
 }
 impl RareIntegerData {
     pub fn builder() -> RareIntegerDataBuilder {
-        RareIntegerDataBuilder::default()
+        <RareIntegerDataBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -570,7 +579,7 @@ impl RareIntegerDataBuilder {
 }
 impl DocumentSnapshot {
     pub fn builder() -> DocumentSnapshotBuilder {
-        DocumentSnapshotBuilder::default()
+        <DocumentSnapshotBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -699,7 +708,7 @@ impl DocumentSnapshotBuilder {
 }
 impl NodeTreeSnapshot {
     pub fn builder() -> NodeTreeSnapshotBuilder {
-        NodeTreeSnapshotBuilder::default()
+        <NodeTreeSnapshotBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -709,7 +718,7 @@ pub struct NodeTreeSnapshotBuilder {
     shadow_root_type: Option<RareStringData>,
     node_name: Option<Vec<StringIndex>>,
     node_value: Option<Vec<StringIndex>>,
-    backend_node_id: Option<Vec<super::super::dom::types::BackendNodeId>>,
+    backend_node_id: Option<Vec<crate::browser_protocol::dom::types::BackendNodeId>>,
     attributes: Option<Vec<ArrayOfStrings>>,
     text_value: Option<RareStringData>,
     input_value: Option<RareStringData>,
@@ -793,7 +802,7 @@ impl NodeTreeSnapshotBuilder {
     }
     pub fn backend_node_id(
         mut self,
-        backend_node_id: impl Into<super::super::dom::types::BackendNodeId>,
+        backend_node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
     ) -> Self {
         let v = self.backend_node_id.get_or_insert(Vec::new());
         v.push(backend_node_id.into());
@@ -802,7 +811,7 @@ impl NodeTreeSnapshotBuilder {
     pub fn backend_node_ids<I, S>(mut self, backend_node_ids: I) -> Self
     where
         I: IntoIterator<Item = S>,
-        S: Into<super::super::dom::types::BackendNodeId>,
+        S: Into<crate::browser_protocol::dom::types::BackendNodeId>,
     {
         let v = self.backend_node_id.get_or_insert(Vec::new());
         for val in backend_node_ids {
@@ -893,7 +902,7 @@ impl NodeTreeSnapshotBuilder {
 }
 impl LayoutTreeSnapshot {
     pub fn builder() -> LayoutTreeSnapshotBuilder {
-        LayoutTreeSnapshotBuilder::default()
+        <LayoutTreeSnapshotBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1109,7 +1118,7 @@ impl LayoutTreeSnapshotBuilder {
 }
 impl TextBoxSnapshot {
     pub fn builder() -> TextBoxSnapshotBuilder {
-        TextBoxSnapshotBuilder::default()
+        <TextBoxSnapshotBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

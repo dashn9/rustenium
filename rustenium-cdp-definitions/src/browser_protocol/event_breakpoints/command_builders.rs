@@ -1,7 +1,7 @@
 use super::commands::*;
 impl SetInstrumentationBreakpoint {
     pub fn builder() -> SetInstrumentationBreakpointBuilder {
-        SetInstrumentationBreakpointBuilder::default()
+        <SetInstrumentationBreakpointBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -26,7 +26,7 @@ impl SetInstrumentationBreakpointBuilder {
 }
 impl RemoveInstrumentationBreakpoint {
     pub fn builder() -> RemoveInstrumentationBreakpointBuilder {
-        RemoveInstrumentationBreakpointBuilder::default()
+        <RemoveInstrumentationBreakpointBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

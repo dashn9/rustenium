@@ -1,22 +1,4 @@
 use serde::{Deserialize, Serialize};
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct DisableResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct EnableResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct ForcePseudoStateResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct ForceStartingStyleResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct TrackComputedStyleUpdatesForNodeResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct TrackComputedStyleUpdatesResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetEffectivePropertyValueForNodeResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct StartRuleUsageTrackingResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct SetLocalFontsEnabledResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AddRuleResult {
     #[doc = "The newly created rule."]
@@ -34,8 +16,16 @@ pub struct CollectClassNamesResult {
 pub struct CreateStyleSheetResult {
     #[doc = "Identifier of the created \"via-inspector\" stylesheet."]
     #[serde(rename = "styleSheetId")]
-    pub style_sheet_id: super::super::dom::types::StyleSheetId,
+    pub style_sheet_id: crate::browser_protocol::dom::types::StyleSheetId,
 }
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct DisableResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct EnableResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ForcePseudoStateResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct ForceStartingStyleResult {}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct GetBackgroundColorsResult {
     #[doc = "The range of background colors behind this element, if it contains any visible text. If no\nvisible text is present, this will be undefined. In the case of a flat background color,\nthis will consist of simply that color. In the case of a gradient, this will consist of each\nof the color stops. For anything more complicated, this will be an empty array. Images will\nbe ignored (as if the image had failed to load)."]
@@ -173,7 +163,7 @@ pub struct GetMatchedStylesForNodeResult {
     #[serde(rename = "parentLayoutNodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub parent_layout_node_id: Option<super::super::dom::types::NodeId>,
+    pub parent_layout_node_id: Option<crate::browser_protocol::dom::types::NodeId>,
     #[doc = "A list of CSS at-function rules referenced by styles of this node."]
     #[serde(rename = "cssFunctionRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -215,13 +205,19 @@ pub struct GetLocationForSelectorResult {
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub ranges: Vec<super::types::SourceRange>,
 }
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct TrackComputedStyleUpdatesForNodeResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct TrackComputedStyleUpdatesResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TakeComputedStyleUpdatesResult {
     #[doc = "The list of node Ids that have their tracked computed styles updated."]
     #[serde(rename = "nodeIds")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
-    pub node_ids: Vec<super::super::dom::types::NodeId>,
+    pub node_ids: Vec<crate::browser_protocol::dom::types::NodeId>,
 }
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetEffectivePropertyValueForNodeResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetPropertyRulePropertyNameResult {
     #[doc = "The resulting key text after modification."]
@@ -279,6 +275,8 @@ pub struct SetStyleTextsResult {
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub styles: Vec<super::types::CssStyle>,
 }
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct StartRuleUsageTrackingResult {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StopRuleUsageTrackingResult {
     #[serde(rename = "ruleUsage")]
@@ -294,3 +292,5 @@ pub struct TakeCoverageDeltaResult {
     #[serde(rename = "timestamp")]
     pub timestamp: f64,
 }
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetLocalFontsEnabledResult {}

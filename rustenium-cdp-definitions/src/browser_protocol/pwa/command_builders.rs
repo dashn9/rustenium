@@ -1,7 +1,7 @@
 use super::commands::*;
 impl GetOsAppState {
     pub fn builder() -> GetOsAppStateBuilder {
-        GetOsAppStateBuilder::default()
+        <GetOsAppStateBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -26,7 +26,7 @@ impl GetOsAppStateBuilder {
 }
 impl Install {
     pub fn builder() -> InstallBuilder {
-        InstallBuilder::default()
+        <InstallBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -60,7 +60,7 @@ impl InstallBuilder {
 }
 impl Uninstall {
     pub fn builder() -> UninstallBuilder {
-        UninstallBuilder::default()
+        <UninstallBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -85,7 +85,7 @@ impl UninstallBuilder {
 }
 impl Launch {
     pub fn builder() -> LaunchBuilder {
-        LaunchBuilder::default()
+        <LaunchBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -116,7 +116,7 @@ impl LaunchBuilder {
 }
 impl LaunchFilesInApp {
     pub fn builder() -> LaunchFilesInAppBuilder {
-        LaunchFilesInAppBuilder::default()
+        <LaunchFilesInAppBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -161,7 +161,7 @@ impl LaunchFilesInAppBuilder {
 }
 impl OpenCurrentPageInApp {
     pub fn builder() -> OpenCurrentPageInAppBuilder {
-        OpenCurrentPageInAppBuilder::default()
+        <OpenCurrentPageInAppBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -186,7 +186,7 @@ impl OpenCurrentPageInAppBuilder {
 }
 impl ChangeAppUserSettings {
     pub fn builder() -> ChangeAppUserSettingsBuilder {
-        ChangeAppUserSettingsBuilder::default()
+        <ChangeAppUserSettingsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

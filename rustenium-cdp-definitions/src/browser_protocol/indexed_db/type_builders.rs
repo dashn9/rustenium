@@ -1,7 +1,7 @@
 use super::types::*;
 impl DatabaseWithObjectStores {
     pub fn builder() -> DatabaseWithObjectStoresBuilder {
-        DatabaseWithObjectStoresBuilder::default()
+        <DatabaseWithObjectStoresBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -51,7 +51,7 @@ impl DatabaseWithObjectStoresBuilder {
 }
 impl ObjectStore {
     pub fn builder() -> ObjectStoreBuilder {
-        ObjectStoreBuilder::default()
+        <ObjectStoreBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -109,7 +109,7 @@ impl ObjectStoreBuilder {
 }
 impl ObjectStoreIndex {
     pub fn builder() -> ObjectStoreIndexBuilder {
-        ObjectStoreIndexBuilder::default()
+        <ObjectStoreIndexBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -155,7 +155,7 @@ impl ObjectStoreIndexBuilder {
 }
 impl Key {
     pub fn builder() -> KeyBuilder {
-        KeyBuilder::default()
+        <KeyBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -213,7 +213,7 @@ impl KeyBuilder {
 }
 impl KeyRange {
     pub fn builder() -> KeyRangeBuilder {
-        KeyRangeBuilder::default()
+        <KeyRangeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -255,33 +255,30 @@ impl KeyRangeBuilder {
 }
 impl DataEntry {
     pub fn builder() -> DataEntryBuilder {
-        DataEntryBuilder::default()
+        <DataEntryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct DataEntryBuilder {
-    key: Option<super::super::super::js_protocol::runtime::types::RemoteObject>,
-    primary_key: Option<super::super::super::js_protocol::runtime::types::RemoteObject>,
-    value: Option<super::super::super::js_protocol::runtime::types::RemoteObject>,
+    key: Option<crate::js_protocol::runtime::types::RemoteObject>,
+    primary_key: Option<crate::js_protocol::runtime::types::RemoteObject>,
+    value: Option<crate::js_protocol::runtime::types::RemoteObject>,
 }
 impl DataEntryBuilder {
-    pub fn key(
-        mut self,
-        key: impl Into<super::super::super::js_protocol::runtime::types::RemoteObject>,
-    ) -> Self {
+    pub fn key(mut self, key: impl Into<crate::js_protocol::runtime::types::RemoteObject>) -> Self {
         self.key = Some(key.into());
         self
     }
     pub fn primary_key(
         mut self,
-        primary_key: impl Into<super::super::super::js_protocol::runtime::types::RemoteObject>,
+        primary_key: impl Into<crate::js_protocol::runtime::types::RemoteObject>,
     ) -> Self {
         self.primary_key = Some(primary_key.into());
         self
     }
     pub fn value(
         mut self,
-        value: impl Into<super::super::super::js_protocol::runtime::types::RemoteObject>,
+        value: impl Into<crate::js_protocol::runtime::types::RemoteObject>,
     ) -> Self {
         self.value = Some(value.into());
         self
@@ -302,7 +299,7 @@ impl DataEntryBuilder {
 }
 impl KeyPath {
     pub fn builder() -> KeyPathBuilder {
-        KeyPathBuilder::default()
+        <KeyPathBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

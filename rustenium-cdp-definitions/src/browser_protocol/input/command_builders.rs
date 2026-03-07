@@ -1,7 +1,7 @@
 use super::commands::*;
 impl DispatchDragEvent {
     pub fn builder() -> DispatchDragEventBuilder {
-        DispatchDragEventBuilder::default()
+        <DispatchDragEventBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -56,7 +56,7 @@ impl DispatchDragEventBuilder {
 }
 impl DispatchKeyEvent {
     pub fn builder() -> DispatchKeyEventBuilder {
-        DispatchKeyEventBuilder::default()
+        <DispatchKeyEventBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -177,7 +177,7 @@ impl DispatchKeyEventBuilder {
 }
 impl InsertText {
     pub fn builder() -> InsertTextBuilder {
-        InsertTextBuilder::default()
+        <InsertTextBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -202,7 +202,7 @@ impl InsertTextBuilder {
 }
 impl ImeSetComposition {
     pub fn builder() -> ImeSetCompositionBuilder {
-        ImeSetCompositionBuilder::default()
+        <ImeSetCompositionBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -255,7 +255,7 @@ impl ImeSetCompositionBuilder {
 }
 impl DispatchMouseEvent {
     pub fn builder() -> DispatchMouseEventBuilder {
-        DispatchMouseEventBuilder::default()
+        <DispatchMouseEventBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -374,7 +374,7 @@ impl DispatchMouseEventBuilder {
 }
 impl DispatchTouchEvent {
     pub fn builder() -> DispatchTouchEventBuilder {
-        DispatchTouchEventBuilder::default()
+        <DispatchTouchEventBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -431,7 +431,7 @@ impl DispatchTouchEventBuilder {
 }
 impl EmulateTouchFromMouseEvent {
     pub fn builder() -> EmulateTouchFromMouseEventBuilder {
-        EmulateTouchFromMouseEventBuilder::default()
+        <EmulateTouchFromMouseEventBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -510,7 +510,7 @@ impl EmulateTouchFromMouseEventBuilder {
 }
 impl SetIgnoreInputEvents {
     pub fn builder() -> SetIgnoreInputEventsBuilder {
-        SetIgnoreInputEventsBuilder::default()
+        <SetIgnoreInputEventsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -535,7 +535,7 @@ impl SetIgnoreInputEventsBuilder {
 }
 impl SetInterceptDrags {
     pub fn builder() -> SetInterceptDragsBuilder {
-        SetInterceptDragsBuilder::default()
+        <SetInterceptDragsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -560,7 +560,7 @@ impl SetInterceptDragsBuilder {
 }
 impl SynthesizePinchGesture {
     pub fn builder() -> SynthesizePinchGestureBuilder {
-        SynthesizePinchGestureBuilder::default()
+        <SynthesizePinchGestureBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -616,7 +616,7 @@ impl SynthesizePinchGestureBuilder {
 }
 impl SynthesizeScrollGesture {
     pub fn builder() -> SynthesizeScrollGestureBuilder {
-        SynthesizeScrollGestureBuilder::default()
+        <SynthesizeScrollGestureBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -712,7 +712,7 @@ impl SynthesizeScrollGestureBuilder {
 }
 impl SynthesizeTapGesture {
     pub fn builder() -> SynthesizeTapGestureBuilder {
-        SynthesizeTapGestureBuilder::default()
+        <SynthesizeTapGestureBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

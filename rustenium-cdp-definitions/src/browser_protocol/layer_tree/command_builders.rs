@@ -1,7 +1,7 @@
 use super::commands::*;
 impl CompositingReasons {
     pub fn builder() -> CompositingReasonsBuilder {
-        CompositingReasonsBuilder::default()
+        <CompositingReasonsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -26,7 +26,7 @@ impl CompositingReasonsBuilder {
 }
 impl LoadSnapshot {
     pub fn builder() -> LoadSnapshotBuilder {
-        LoadSnapshotBuilder::default()
+        <LoadSnapshotBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -63,7 +63,7 @@ impl LoadSnapshotBuilder {
 }
 impl MakeSnapshot {
     pub fn builder() -> MakeSnapshotBuilder {
-        MakeSnapshotBuilder::default()
+        <MakeSnapshotBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -88,7 +88,7 @@ impl MakeSnapshotBuilder {
 }
 impl ProfileSnapshot {
     pub fn builder() -> ProfileSnapshotBuilder {
-        ProfileSnapshotBuilder::default()
+        <ProfileSnapshotBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -96,7 +96,7 @@ pub struct ProfileSnapshotBuilder {
     snapshot_id: Option<super::types::SnapshotId>,
     min_repeat_count: Option<i64>,
     min_duration: Option<f64>,
-    clip_rect: Option<super::super::dom::types::Rect>,
+    clip_rect: Option<crate::browser_protocol::dom::types::Rect>,
 }
 impl ProfileSnapshotBuilder {
     pub fn snapshot_id(mut self, snapshot_id: impl Into<super::types::SnapshotId>) -> Self {
@@ -111,7 +111,10 @@ impl ProfileSnapshotBuilder {
         self.min_duration = Some(min_duration.into());
         self
     }
-    pub fn clip_rect(mut self, clip_rect: impl Into<super::super::dom::types::Rect>) -> Self {
+    pub fn clip_rect(
+        mut self,
+        clip_rect: impl Into<crate::browser_protocol::dom::types::Rect>,
+    ) -> Self {
         self.clip_rect = Some(clip_rect.into());
         self
     }
@@ -131,7 +134,7 @@ impl ProfileSnapshotBuilder {
 }
 impl ReleaseSnapshot {
     pub fn builder() -> ReleaseSnapshotBuilder {
-        ReleaseSnapshotBuilder::default()
+        <ReleaseSnapshotBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -156,7 +159,7 @@ impl ReleaseSnapshotBuilder {
 }
 impl ReplaySnapshot {
     pub fn builder() -> ReplaySnapshotBuilder {
-        ReplaySnapshotBuilder::default()
+        <ReplaySnapshotBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -199,7 +202,7 @@ impl ReplaySnapshotBuilder {
 }
 impl SnapshotCommandLog {
     pub fn builder() -> SnapshotCommandLogBuilder {
-        SnapshotCommandLogBuilder::default()
+        <SnapshotCommandLogBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

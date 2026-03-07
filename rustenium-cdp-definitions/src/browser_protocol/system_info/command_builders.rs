@@ -1,7 +1,7 @@
 use super::commands::*;
 impl GetFeatureState {
     pub fn builder() -> GetFeatureStateBuilder {
-        GetFeatureStateBuilder::default()
+        <GetFeatureStateBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

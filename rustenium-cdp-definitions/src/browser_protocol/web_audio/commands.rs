@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 #[doc = "Enables the WebAudio domain and starts sending context lifetime events.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#method-enable)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EnableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum EnableMethod {
@@ -16,11 +16,11 @@ pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
 }
-impl super::super::super::CommandResult for Enable {
+impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
 }
 #[doc = "Disables the WebAudio domain.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#method-disable)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DisableParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum DisableMethod {
@@ -36,7 +36,7 @@ pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
 }
-impl super::super::super::CommandResult for Disable {
+impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
 }
 #[doc = "Fetch the realtime data from the registered contexts.\n[getRealtimeData](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#method-getRealtimeData)"]
@@ -66,7 +66,7 @@ pub struct GetRealtimeData {
     pub method: GetRealtimeDataMethod,
     pub params: GetRealtimeDataParams,
 }
-impl super::super::super::CommandResult for GetRealtimeData {
+impl crate::CommandResult for GetRealtimeData {
     type Result = super::results::GetRealtimeDataResult;
 }
 group_enum ! (WebAudioCommands { Enable (Enable) , Disable (Disable) , GetRealtimeData (GetRealtimeData) });

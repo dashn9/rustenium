@@ -1,19 +1,19 @@
 use super::types::*;
 impl Location {
     pub fn builder() -> LocationBuilder {
-        LocationBuilder::default()
+        <LocationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct LocationBuilder {
-    script_id: Option<super::super::runtime::types::ScriptId>,
+    script_id: Option<crate::js_protocol::runtime::types::ScriptId>,
     line_number: Option<i64>,
     column_number: Option<i64>,
 }
 impl LocationBuilder {
     pub fn script_id(
         mut self,
-        script_id: impl Into<super::super::runtime::types::ScriptId>,
+        script_id: impl Into<crate::js_protocol::runtime::types::ScriptId>,
     ) -> Self {
         self.script_id = Some(script_id.into());
         self
@@ -40,7 +40,7 @@ impl LocationBuilder {
 }
 impl ScriptPosition {
     pub fn builder() -> ScriptPositionBuilder {
-        ScriptPositionBuilder::default()
+        <ScriptPositionBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -70,19 +70,19 @@ impl ScriptPositionBuilder {
 }
 impl LocationRange {
     pub fn builder() -> LocationRangeBuilder {
-        LocationRangeBuilder::default()
+        <LocationRangeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct LocationRangeBuilder {
-    script_id: Option<super::super::runtime::types::ScriptId>,
+    script_id: Option<crate::js_protocol::runtime::types::ScriptId>,
     start: Option<ScriptPosition>,
     end: Option<ScriptPosition>,
 }
 impl LocationRangeBuilder {
     pub fn script_id(
         mut self,
-        script_id: impl Into<super::super::runtime::types::ScriptId>,
+        script_id: impl Into<crate::js_protocol::runtime::types::ScriptId>,
     ) -> Self {
         self.script_id = Some(script_id.into());
         self
@@ -111,7 +111,7 @@ impl LocationRangeBuilder {
 }
 impl CallFrame {
     pub fn builder() -> CallFrameBuilder {
-        CallFrameBuilder::default()
+        <CallFrameBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -121,8 +121,8 @@ pub struct CallFrameBuilder {
     function_location: Option<Location>,
     location: Option<Location>,
     scope_chain: Option<Vec<Scope>>,
-    this: Option<super::super::runtime::types::RemoteObject>,
-    return_value: Option<super::super::runtime::types::RemoteObject>,
+    this: Option<crate::js_protocol::runtime::types::RemoteObject>,
+    return_value: Option<crate::js_protocol::runtime::types::RemoteObject>,
     can_be_restarted: Option<bool>,
 }
 impl CallFrameBuilder {
@@ -158,13 +158,16 @@ impl CallFrameBuilder {
         }
         self
     }
-    pub fn this(mut self, this: impl Into<super::super::runtime::types::RemoteObject>) -> Self {
+    pub fn this(
+        mut self,
+        this: impl Into<crate::js_protocol::runtime::types::RemoteObject>,
+    ) -> Self {
         self.this = Some(this.into());
         self
     }
     pub fn return_value(
         mut self,
-        return_value: impl Into<super::super::runtime::types::RemoteObject>,
+        return_value: impl Into<crate::js_protocol::runtime::types::RemoteObject>,
     ) -> Self {
         self.return_value = Some(return_value.into());
         self
@@ -198,13 +201,13 @@ impl CallFrameBuilder {
 }
 impl Scope {
     pub fn builder() -> ScopeBuilder {
-        ScopeBuilder::default()
+        <ScopeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct ScopeBuilder {
     r#type: Option<ScopeType>,
-    object: Option<super::super::runtime::types::RemoteObject>,
+    object: Option<crate::js_protocol::runtime::types::RemoteObject>,
     name: Option<String>,
     start_location: Option<Location>,
     end_location: Option<Location>,
@@ -214,7 +217,10 @@ impl ScopeBuilder {
         self.r#type = Some(r#type.into());
         self
     }
-    pub fn object(mut self, object: impl Into<super::super::runtime::types::RemoteObject>) -> Self {
+    pub fn object(
+        mut self,
+        object: impl Into<crate::js_protocol::runtime::types::RemoteObject>,
+    ) -> Self {
         self.object = Some(object.into());
         self
     }
@@ -246,7 +252,7 @@ impl ScopeBuilder {
 }
 impl SearchMatch {
     pub fn builder() -> SearchMatchBuilder {
-        SearchMatchBuilder::default()
+        <SearchMatchBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -276,12 +282,12 @@ impl SearchMatchBuilder {
 }
 impl BreakLocation {
     pub fn builder() -> BreakLocationBuilder {
-        BreakLocationBuilder::default()
+        <BreakLocationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct BreakLocationBuilder {
-    script_id: Option<super::super::runtime::types::ScriptId>,
+    script_id: Option<crate::js_protocol::runtime::types::ScriptId>,
     line_number: Option<i64>,
     column_number: Option<i64>,
     r#type: Option<BreakLocationType>,
@@ -289,7 +295,7 @@ pub struct BreakLocationBuilder {
 impl BreakLocationBuilder {
     pub fn script_id(
         mut self,
-        script_id: impl Into<super::super::runtime::types::ScriptId>,
+        script_id: impl Into<crate::js_protocol::runtime::types::ScriptId>,
     ) -> Self {
         self.script_id = Some(script_id.into());
         self
@@ -321,7 +327,7 @@ impl BreakLocationBuilder {
 }
 impl WasmDisassemblyChunk {
     pub fn builder() -> WasmDisassemblyChunkBuilder {
-        WasmDisassemblyChunkBuilder::default()
+        <WasmDisassemblyChunkBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -378,7 +384,7 @@ impl WasmDisassemblyChunkBuilder {
 }
 impl DebugSymbols {
     pub fn builder() -> DebugSymbolsBuilder {
-        DebugSymbolsBuilder::default()
+        <DebugSymbolsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -406,7 +412,7 @@ impl DebugSymbolsBuilder {
 }
 impl ResolvedBreakpoint {
     pub fn builder() -> ResolvedBreakpointBuilder {
-        ResolvedBreakpointBuilder::default()
+        <ResolvedBreakpointBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

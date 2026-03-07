@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 #[doc = "Returns information about the system.\n[getInfo](https://chromedevtools.github.io/devtools-protocol/tot/SystemInfo/#method-getInfo)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetInfoParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum GetInfoMethod {
@@ -16,7 +16,7 @@ pub struct GetInfo {
     pub method: GetInfoMethod,
     pub params: GetInfoParams,
 }
-impl super::super::super::CommandResult for GetInfo {
+impl crate::CommandResult for GetInfo {
     type Result = super::results::GetInfoResult;
 }
 #[doc = "Returns information about the feature state.\n[getFeatureState](https://chromedevtools.github.io/devtools-protocol/tot/SystemInfo/#method-getFeatureState)"]
@@ -51,11 +51,11 @@ pub struct GetFeatureState {
     pub method: GetFeatureStateMethod,
     pub params: GetFeatureStateParams,
 }
-impl super::super::super::CommandResult for GetFeatureState {
+impl crate::CommandResult for GetFeatureState {
     type Result = super::results::GetFeatureStateResult;
 }
 #[doc = "Returns information about all running processes.\n[getProcessInfo](https://chromedevtools.github.io/devtools-protocol/tot/SystemInfo/#method-getProcessInfo)"]
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetProcessInfoParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum GetProcessInfoMethod {
@@ -71,7 +71,7 @@ pub struct GetProcessInfo {
     pub method: GetProcessInfoMethod,
     pub params: GetProcessInfoParams,
 }
-impl super::super::super::CommandResult for GetProcessInfo {
+impl crate::CommandResult for GetProcessInfo {
     type Result = super::results::GetProcessInfoResult;
 }
 group_enum ! (SystemInfoCommands { GetInfo (GetInfo) , GetFeatureState (GetFeatureState) , GetProcessInfo (GetProcessInfo) });

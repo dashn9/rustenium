@@ -4,15 +4,15 @@ use serde::{Deserialize, Serialize};
 pub struct SourceOrderConfig {
     #[doc = "the color to outline the given element in."]
     #[serde(rename = "parentOutlineColor")]
-    pub parent_outline_color: super::super::dom::types::Rgba,
+    pub parent_outline_color: crate::browser_protocol::dom::types::Rgba,
     #[doc = "the color to outline the child elements in."]
     #[serde(rename = "childOutlineColor")]
-    pub child_outline_color: super::super::dom::types::Rgba,
+    pub child_outline_color: crate::browser_protocol::dom::types::Rgba,
 }
 impl SourceOrderConfig {
     pub fn new(
-        parent_outline_color: impl Into<super::super::dom::types::Rgba>,
-        child_outline_color: impl Into<super::super::dom::types::Rgba>,
+        parent_outline_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
+        child_outline_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
     ) -> Self {
         Self {
             parent_outline_color: parent_outline_color.into(),
@@ -60,17 +60,17 @@ pub struct GridHighlightConfig {
     #[serde(rename = "gridBorderColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub grid_border_color: Option<super::super::dom::types::Rgba>,
+    pub grid_border_color: Option<crate::browser_protocol::dom::types::Rgba>,
     #[doc = "The row line color (default: transparent)."]
     #[serde(rename = "rowLineColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub row_line_color: Option<super::super::dom::types::Rgba>,
+    pub row_line_color: Option<crate::browser_protocol::dom::types::Rgba>,
     #[doc = "The column line color (default: transparent)."]
     #[serde(rename = "columnLineColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub column_line_color: Option<super::super::dom::types::Rgba>,
+    pub column_line_color: Option<crate::browser_protocol::dom::types::Rgba>,
     #[doc = "Whether the grid border is dashed (default: false)."]
     #[serde(rename = "gridBorderDash")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -90,32 +90,32 @@ pub struct GridHighlightConfig {
     #[serde(rename = "rowGapColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub row_gap_color: Option<super::super::dom::types::Rgba>,
+    pub row_gap_color: Option<crate::browser_protocol::dom::types::Rgba>,
     #[doc = "The row gap hatching fill color (default: transparent)."]
     #[serde(rename = "rowHatchColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub row_hatch_color: Option<super::super::dom::types::Rgba>,
+    pub row_hatch_color: Option<crate::browser_protocol::dom::types::Rgba>,
     #[doc = "The column gap highlight fill color (default: transparent)."]
     #[serde(rename = "columnGapColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub column_gap_color: Option<super::super::dom::types::Rgba>,
+    pub column_gap_color: Option<crate::browser_protocol::dom::types::Rgba>,
     #[doc = "The column gap hatching fill color (default: transparent)."]
     #[serde(rename = "columnHatchColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub column_hatch_color: Option<super::super::dom::types::Rgba>,
+    pub column_hatch_color: Option<crate::browser_protocol::dom::types::Rgba>,
     #[doc = "The named grid areas border color (Default: transparent)."]
     #[serde(rename = "areaBorderColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub area_border_color: Option<super::super::dom::types::Rgba>,
+    pub area_border_color: Option<crate::browser_protocol::dom::types::Rgba>,
     #[doc = "The grid container background color (Default: transparent)."]
     #[serde(rename = "gridBackgroundColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub grid_background_color: Option<super::super::dom::types::Rgba>,
+    pub grid_background_color: Option<crate::browser_protocol::dom::types::Rgba>,
 }
 impl GridHighlightConfig {
     pub const IDENTIFIER: &'static str = "Overlay.GridHighlightConfig";
@@ -196,7 +196,7 @@ pub struct LineStyle {
     #[serde(rename = "color")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub color: Option<super::super::dom::types::Rgba>,
+    pub color: Option<crate::browser_protocol::dom::types::Rgba>,
     #[doc = "The line pattern (default: solid)"]
     #[serde(rename = "pattern")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -221,12 +221,12 @@ pub struct BoxStyle {
     #[serde(rename = "fillColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub fill_color: Option<super::super::dom::types::Rgba>,
+    pub fill_color: Option<crate::browser_protocol::dom::types::Rgba>,
     #[doc = "The hatching color for the box (default: transparent)"]
     #[serde(rename = "hatchColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub hatch_color: Option<super::super::dom::types::Rgba>,
+    pub hatch_color: Option<crate::browser_protocol::dom::types::Rgba>,
 }
 impl BoxStyle {
     pub const IDENTIFIER: &'static str = "Overlay.BoxStyle";
@@ -272,42 +272,42 @@ pub struct HighlightConfig {
     #[serde(rename = "contentColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub content_color: Option<super::super::dom::types::Rgba>,
+    pub content_color: Option<crate::browser_protocol::dom::types::Rgba>,
     #[doc = "The padding highlight fill color (default: transparent)."]
     #[serde(rename = "paddingColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub padding_color: Option<super::super::dom::types::Rgba>,
+    pub padding_color: Option<crate::browser_protocol::dom::types::Rgba>,
     #[doc = "The border highlight fill color (default: transparent)."]
     #[serde(rename = "borderColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub border_color: Option<super::super::dom::types::Rgba>,
+    pub border_color: Option<crate::browser_protocol::dom::types::Rgba>,
     #[doc = "The margin highlight fill color (default: transparent)."]
     #[serde(rename = "marginColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub margin_color: Option<super::super::dom::types::Rgba>,
+    pub margin_color: Option<crate::browser_protocol::dom::types::Rgba>,
     #[doc = "The event target element highlight fill color (default: transparent)."]
     #[serde(rename = "eventTargetColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub event_target_color: Option<super::super::dom::types::Rgba>,
+    pub event_target_color: Option<crate::browser_protocol::dom::types::Rgba>,
     #[doc = "The shape outside fill color (default: transparent)."]
     #[serde(rename = "shapeColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub shape_color: Option<super::super::dom::types::Rgba>,
+    pub shape_color: Option<crate::browser_protocol::dom::types::Rgba>,
     #[doc = "The shape margin fill color (default: transparent)."]
     #[serde(rename = "shapeMarginColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub shape_margin_color: Option<super::super::dom::types::Rgba>,
+    pub shape_margin_color: Option<crate::browser_protocol::dom::types::Rgba>,
     #[doc = "The grid layout color (default: transparent)."]
     #[serde(rename = "cssGridColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub css_grid_color: Option<super::super::dom::types::Rgba>,
+    pub css_grid_color: Option<crate::browser_protocol::dom::types::Rgba>,
     #[doc = "The color format used to format color styles (default: hex)."]
     #[serde(rename = "colorFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -361,12 +361,12 @@ pub struct GridNodeHighlightConfig {
     pub grid_highlight_config: GridHighlightConfig,
     #[doc = "Identifier of the node to highlight."]
     #[serde(rename = "nodeId")]
-    pub node_id: super::super::dom::types::NodeId,
+    pub node_id: crate::browser_protocol::dom::types::NodeId,
 }
 impl GridNodeHighlightConfig {
     pub fn new(
         grid_highlight_config: impl Into<GridHighlightConfig>,
-        node_id: impl Into<super::super::dom::types::NodeId>,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
     ) -> Self {
         Self {
             grid_highlight_config: grid_highlight_config.into(),
@@ -384,12 +384,12 @@ pub struct FlexNodeHighlightConfig {
     pub flex_container_highlight_config: FlexContainerHighlightConfig,
     #[doc = "Identifier of the node to highlight."]
     #[serde(rename = "nodeId")]
-    pub node_id: super::super::dom::types::NodeId,
+    pub node_id: crate::browser_protocol::dom::types::NodeId,
 }
 impl FlexNodeHighlightConfig {
     pub fn new(
         flex_container_highlight_config: impl Into<FlexContainerHighlightConfig>,
-        node_id: impl Into<super::super::dom::types::NodeId>,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
     ) -> Self {
         Self {
             flex_container_highlight_config: flex_container_highlight_config.into(),
@@ -416,12 +416,12 @@ pub struct ScrollSnapContainerHighlightConfig {
     #[serde(rename = "scrollMarginColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub scroll_margin_color: Option<super::super::dom::types::Rgba>,
+    pub scroll_margin_color: Option<crate::browser_protocol::dom::types::Rgba>,
     #[doc = "The padding highlight fill color (default: transparent)."]
     #[serde(rename = "scrollPaddingColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub scroll_padding_color: Option<super::super::dom::types::Rgba>,
+    pub scroll_padding_color: Option<crate::browser_protocol::dom::types::Rgba>,
 }
 impl ScrollSnapContainerHighlightConfig {
     pub const IDENTIFIER: &'static str = "Overlay.ScrollSnapContainerHighlightConfig";
@@ -433,12 +433,12 @@ pub struct ScrollSnapHighlightConfig {
     pub scroll_snap_container_highlight_config: ScrollSnapContainerHighlightConfig,
     #[doc = "Identifier of the node to highlight."]
     #[serde(rename = "nodeId")]
-    pub node_id: super::super::dom::types::NodeId,
+    pub node_id: crate::browser_protocol::dom::types::NodeId,
 }
 impl ScrollSnapHighlightConfig {
     pub fn new(
         scroll_snap_container_highlight_config: impl Into<ScrollSnapContainerHighlightConfig>,
-        node_id: impl Into<super::super::dom::types::NodeId>,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
     ) -> Self {
         Self {
             scroll_snap_container_highlight_config: scroll_snap_container_highlight_config.into(),
@@ -454,20 +454,20 @@ impl ScrollSnapHighlightConfig {
 pub struct HingeConfig {
     #[doc = "A rectangle represent hinge"]
     #[serde(rename = "rect")]
-    pub rect: super::super::dom::types::Rect,
+    pub rect: crate::browser_protocol::dom::types::Rect,
     #[doc = "The content box highlight fill color (default: a dark color)."]
     #[serde(rename = "contentColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub content_color: Option<super::super::dom::types::Rgba>,
+    pub content_color: Option<crate::browser_protocol::dom::types::Rgba>,
     #[doc = "The content box highlight outline color (default: transparent)."]
     #[serde(rename = "outlineColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub outline_color: Option<super::super::dom::types::Rgba>,
+    pub outline_color: Option<crate::browser_protocol::dom::types::Rgba>,
 }
 impl HingeConfig {
-    pub fn new(rect: impl Into<super::super::dom::types::Rect>) -> Self {
+    pub fn new(rect: impl Into<crate::browser_protocol::dom::types::Rect>) -> Self {
         Self {
             rect: rect.into(),
             content_color: None,
@@ -514,12 +514,12 @@ pub struct ContainerQueryHighlightConfig {
     pub container_query_container_highlight_config: ContainerQueryContainerHighlightConfig,
     #[doc = "Identifier of the container node to highlight."]
     #[serde(rename = "nodeId")]
-    pub node_id: super::super::dom::types::NodeId,
+    pub node_id: crate::browser_protocol::dom::types::NodeId,
 }
 impl ContainerQueryHighlightConfig {
     pub fn new(
         container_query_container_highlight_config: impl Into<ContainerQueryContainerHighlightConfig>,
-        node_id: impl Into<super::super::dom::types::NodeId>,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
     ) -> Self {
         Self {
             container_query_container_highlight_config: container_query_container_highlight_config
@@ -554,12 +554,12 @@ pub struct IsolatedElementHighlightConfig {
     pub isolation_mode_highlight_config: IsolationModeHighlightConfig,
     #[doc = "Identifier of the isolated element to highlight."]
     #[serde(rename = "nodeId")]
-    pub node_id: super::super::dom::types::NodeId,
+    pub node_id: crate::browser_protocol::dom::types::NodeId,
 }
 impl IsolatedElementHighlightConfig {
     pub fn new(
         isolation_mode_highlight_config: impl Into<IsolationModeHighlightConfig>,
-        node_id: impl Into<super::super::dom::types::NodeId>,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
     ) -> Self {
         Self {
             isolation_mode_highlight_config: isolation_mode_highlight_config.into(),
@@ -576,17 +576,17 @@ pub struct IsolationModeHighlightConfig {
     #[serde(rename = "resizerColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub resizer_color: Option<super::super::dom::types::Rgba>,
+    pub resizer_color: Option<crate::browser_protocol::dom::types::Rgba>,
     #[doc = "The fill color for resizer handles (default: transparent)."]
     #[serde(rename = "resizerHandleColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub resizer_handle_color: Option<super::super::dom::types::Rgba>,
+    pub resizer_handle_color: Option<crate::browser_protocol::dom::types::Rgba>,
     #[doc = "The fill color for the mask covering non-isolated elements (default: transparent)."]
     #[serde(rename = "maskColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub mask_color: Option<super::super::dom::types::Rgba>,
+    pub mask_color: Option<crate::browser_protocol::dom::types::Rgba>,
 }
 impl IsolationModeHighlightConfig {
     pub const IDENTIFIER: &'static str = "Overlay.IsolationModeHighlightConfig";
@@ -608,12 +608,12 @@ pub struct InspectedElementAnchorConfig {
     #[serde(rename = "nodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub node_id: Option<super::super::dom::types::NodeId>,
+    pub node_id: Option<crate::browser_protocol::dom::types::NodeId>,
     #[doc = "Identifier of the backend node to highlight."]
     #[serde(rename = "backendNodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub backend_node_id: Option<super::super::dom::types::BackendNodeId>,
+    pub backend_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
 }
 impl InspectedElementAnchorConfig {
     pub const IDENTIFIER: &'static str = "Overlay.InspectedElementAnchorConfig";

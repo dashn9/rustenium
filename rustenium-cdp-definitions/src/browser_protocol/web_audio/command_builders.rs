@@ -1,7 +1,7 @@
 use super::commands::*;
 impl GetRealtimeData {
     pub fn builder() -> GetRealtimeDataBuilder {
-        GetRealtimeDataBuilder::default()
+        <GetRealtimeDataBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

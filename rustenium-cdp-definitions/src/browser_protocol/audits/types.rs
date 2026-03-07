@@ -33,7 +33,7 @@ pub struct AffectedRequest {
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub request_id: Option<super::super::network::types::RequestId>,
+    pub request_id: Option<crate::browser_protocol::network::types::RequestId>,
     #[serde(rename = "url")]
     pub url: String,
 }
@@ -57,10 +57,10 @@ impl AffectedRequest {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AffectedFrame {
     #[serde(rename = "frameId")]
-    pub frame_id: super::super::page::types::FrameId,
+    pub frame_id: crate::browser_protocol::page::types::FrameId,
 }
 impl AffectedFrame {
-    pub fn new(frame_id: impl Into<super::super::page::types::FrameId>) -> Self {
+    pub fn new(frame_id: impl Into<crate::browser_protocol::page::types::FrameId>) -> Self {
         Self {
             frame_id: frame_id.into(),
         }
@@ -484,7 +484,7 @@ pub struct SourceCodeLocation {
     #[serde(rename = "scriptId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub script_id: Option<super::super::super::js_protocol::runtime::types::ScriptId>,
+    pub script_id: Option<crate::js_protocol::runtime::types::ScriptId>,
     #[serde(rename = "url")]
     pub url: String,
     #[serde(rename = "lineNumber")]
@@ -534,7 +534,7 @@ pub struct ContentSecurityPolicyIssueDetails {
     #[serde(rename = "violatingNodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub violating_node_id: Option<super::super::dom::types::BackendNodeId>,
+    pub violating_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
 }
 impl ContentSecurityPolicyIssueDetails {
     pub fn new(
@@ -592,7 +592,7 @@ impl SharedArrayBufferIssueDetails {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LowTextContrastIssueDetails {
     #[serde(rename = "violatingNodeId")]
-    pub violating_node_id: super::super::dom::types::BackendNodeId,
+    pub violating_node_id: crate::browser_protocol::dom::types::BackendNodeId,
     #[serde(rename = "violatingNodeSelector")]
     pub violating_node_selector: String,
     #[serde(rename = "contrastRatio")]
@@ -613,7 +613,7 @@ impl LowTextContrastIssueDetails {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CorsIssueDetails {
     #[serde(rename = "corsErrorStatus")]
-    pub cors_error_status: super::super::network::types::CorsErrorStatus,
+    pub cors_error_status: crate::browser_protocol::network::types::CorsErrorStatus,
     #[serde(rename = "isWarning")]
     pub is_warning: bool,
     #[serde(rename = "request")]
@@ -629,15 +629,15 @@ pub struct CorsIssueDetails {
     #[serde(rename = "resourceIPAddressSpace")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub resource_ip_address_space: Option<super::super::network::types::IpAddressSpace>,
+    pub resource_ip_address_space: Option<crate::browser_protocol::network::types::IpAddressSpace>,
     #[serde(rename = "clientSecurityState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub client_security_state: Option<super::super::network::types::ClientSecurityState>,
+    pub client_security_state: Option<crate::browser_protocol::network::types::ClientSecurityState>,
 }
 impl CorsIssueDetails {
     pub fn new(
-        cors_error_status: impl Into<super::super::network::types::CorsErrorStatus>,
+        cors_error_status: impl Into<crate::browser_protocol::network::types::CorsErrorStatus>,
         is_warning: impl Into<bool>,
         request: impl Into<AffectedRequest>,
     ) -> Self {
@@ -837,7 +837,7 @@ pub struct AttributionReportingIssueDetails {
     #[serde(rename = "violatingNodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub violating_node_id: Option<super::super::dom::types::BackendNodeId>,
+    pub violating_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     #[serde(rename = "invalidParameter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -863,13 +863,13 @@ pub struct QuirksModeIssueDetails {
     #[serde(rename = "isLimitedQuirksMode")]
     pub is_limited_quirks_mode: bool,
     #[serde(rename = "documentNodeId")]
-    pub document_node_id: super::super::dom::types::BackendNodeId,
+    pub document_node_id: crate::browser_protocol::dom::types::BackendNodeId,
     #[serde(rename = "url")]
     pub url: String,
     #[serde(rename = "frameId")]
-    pub frame_id: super::super::page::types::FrameId,
+    pub frame_id: crate::browser_protocol::page::types::FrameId,
     #[serde(rename = "loaderId")]
-    pub loader_id: super::super::network::types::LoaderId,
+    pub loader_id: crate::browser_protocol::network::types::LoaderId,
 }
 impl QuirksModeIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.QuirksModeIssueDetails";
@@ -1009,11 +1009,11 @@ pub struct GenericIssueDetails {
     #[serde(rename = "frameId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub frame_id: Option<super::super::page::types::FrameId>,
+    pub frame_id: Option<crate::browser_protocol::page::types::FrameId>,
     #[serde(rename = "violatingNodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub violating_node_id: Option<super::super::dom::types::BackendNodeId>,
+    pub violating_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     #[serde(rename = "violatingNodeAttribute")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -1300,7 +1300,7 @@ pub struct FailedRequestInfo {
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub request_id: Option<super::super::network::types::RequestId>,
+    pub request_id: Option<crate::browser_protocol::network::types::RequestId>,
 }
 impl FailedRequestInfo {
     pub fn new(url: impl Into<String>, failure_message: impl Into<String>) -> Self {
@@ -1363,7 +1363,7 @@ pub enum ElementAccessibilityIssueReason {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ElementAccessibilityIssueDetails {
     #[serde(rename = "nodeId")]
-    pub node_id: super::super::dom::types::BackendNodeId,
+    pub node_id: crate::browser_protocol::dom::types::BackendNodeId,
     #[serde(rename = "elementAccessibilityIssueReason")]
     pub element_accessibility_issue_reason: ElementAccessibilityIssueReason,
     #[serde(rename = "hasDisallowedAttributes")]
@@ -1371,7 +1371,7 @@ pub struct ElementAccessibilityIssueDetails {
 }
 impl ElementAccessibilityIssueDetails {
     pub fn new(
-        node_id: impl Into<super::super::dom::types::BackendNodeId>,
+        node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
         element_accessibility_issue_reason: impl Into<ElementAccessibilityIssueReason>,
         has_disallowed_attributes: impl Into<bool>,
     ) -> Self {
@@ -1559,7 +1559,7 @@ pub struct PermissionElementIssueDetails {
     #[serde(rename = "nodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub node_id: Option<super::super::dom::types::BackendNodeId>,
+    pub node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     #[doc = "True if the issue is a warning, false if it is an error."]
     #[serde(rename = "isWarning")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1608,18 +1608,18 @@ impl PermissionElementIssueDetails {
 pub struct AdScriptIdentifier {
     #[doc = "The script's v8 identifier."]
     #[serde(rename = "scriptId")]
-    pub script_id: super::super::super::js_protocol::runtime::types::ScriptId,
+    pub script_id: crate::js_protocol::runtime::types::ScriptId,
     #[doc = "v8's debugging id for the v8::Context."]
     #[serde(rename = "debuggerId")]
-    pub debugger_id: super::super::super::js_protocol::runtime::types::UniqueDebuggerId,
+    pub debugger_id: crate::js_protocol::runtime::types::UniqueDebuggerId,
     #[doc = "The script's url (or generated name based on id if inline script)."]
     #[serde(rename = "name")]
     pub name: String,
 }
 impl AdScriptIdentifier {
     pub fn new(
-        script_id: impl Into<super::super::super::js_protocol::runtime::types::ScriptId>,
-        debugger_id: impl Into<super::super::super::js_protocol::runtime::types::UniqueDebuggerId>,
+        script_id: impl Into<crate::js_protocol::runtime::types::ScriptId>,
+        debugger_id: impl Into<crate::js_protocol::runtime::types::UniqueDebuggerId>,
         name: impl Into<String>,
     ) -> Self {
         Self {
@@ -1669,7 +1669,7 @@ pub struct SelectivePermissionsInterventionIssueDetails {
     #[serde(rename = "stackTrace")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub stack_trace: Option<super::super::super::js_protocol::runtime::types::StackTrace>,
+    pub stack_trace: Option<crate::js_protocol::runtime::types::StackTrace>,
 }
 impl SelectivePermissionsInterventionIssueDetails {
     pub fn new(api_name: impl Into<String>, ad_ancestry: impl Into<AdAncestry>) -> Self {

@@ -1,4 +1,10 @@
 use serde::{Deserialize, Serialize};
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CanEmulateResult {
+    #[doc = "True if emulation is supported."]
+    #[serde(rename = "result")]
+    pub result: bool,
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ClearDeviceMetricsOverrideResult {}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -39,6 +45,11 @@ pub struct SetEmulatedVisionDeficiencyResult {}
 pub struct SetEmulatedOsTextScaleResult {}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetGeolocationOverrideResult {}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct GetOverriddenSensorInformationResult {
+    #[serde(rename = "requestedSamplingFrequency")]
+    pub requested_sampling_frequency: f64,
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetSensorOverrideEnabledResult {}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -54,15 +65,25 @@ pub struct SetIdleOverrideResult {}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ClearIdleOverrideResult {}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetNavigatorOverridesResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetPageScaleFactorResult {}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetScriptExecutionDisabledResult {}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetTouchEmulationEnabledResult {}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SetVirtualTimePolicyResult {
+    #[doc = "Absolute timestamp at which virtual time was first enabled (up time in milliseconds)."]
+    #[serde(rename = "virtualTimeTicksBase")]
+    pub virtual_time_ticks_base: f64,
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetLocaleOverrideResult {}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetTimezoneOverrideResult {}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct SetVisibleSizeResult {}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetDisabledImageTypesResult {}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -75,25 +96,6 @@ pub struct SetUserAgentOverrideResult {}
 pub struct SetAutomationOverrideResult {}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetSmallViewportHeightDifferenceOverrideResult {}
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct RemoveScreenResult {}
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct CanEmulateResult {
-    #[doc = "True if emulation is supported."]
-    #[serde(rename = "result")]
-    pub result: bool,
-}
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct GetOverriddenSensorInformationResult {
-    #[serde(rename = "requestedSamplingFrequency")]
-    pub requested_sampling_frequency: f64,
-}
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct SetVirtualTimePolicyResult {
-    #[doc = "Absolute timestamp at which virtual time was first enabled (up time in milliseconds)."]
-    #[serde(rename = "virtualTimeTicksBase")]
-    pub virtual_time_ticks_base: f64,
-}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetScreenInfosResult {
     #[serde(rename = "screenInfos")]
@@ -105,3 +107,5 @@ pub struct AddScreenResult {
     #[serde(rename = "screenInfo")]
     pub screen_info: super::types::ScreenInfo,
 }
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct RemoveScreenResult {}

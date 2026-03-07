@@ -1,7 +1,7 @@
 use super::types::*;
 impl Bounds {
     pub fn builder() -> BoundsBuilder {
-        BoundsBuilder::default()
+        <BoundsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -45,7 +45,7 @@ impl BoundsBuilder {
 }
 impl PermissionDescriptor {
     pub fn builder() -> PermissionDescriptorBuilder {
-        PermissionDescriptorBuilder::default()
+        <PermissionDescriptorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -100,7 +100,7 @@ impl PermissionDescriptorBuilder {
 }
 impl Bucket {
     pub fn builder() -> BucketBuilder {
-        BucketBuilder::default()
+        <BucketBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -138,7 +138,7 @@ impl BucketBuilder {
 }
 impl Histogram {
     pub fn builder() -> HistogramBuilder {
-        HistogramBuilder::default()
+        <HistogramBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

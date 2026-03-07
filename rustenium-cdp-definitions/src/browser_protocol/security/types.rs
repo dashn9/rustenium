@@ -73,10 +73,10 @@ pub struct CertificateSecurityState {
     pub issuer: String,
     #[doc = "Certificate valid from date."]
     #[serde(rename = "validFrom")]
-    pub valid_from: super::super::network::types::TimeSinceEpoch,
+    pub valid_from: crate::browser_protocol::network::types::TimeSinceEpoch,
     #[doc = "Certificate valid to (expiration) date"]
     #[serde(rename = "validTo")]
-    pub valid_to: super::super::network::types::TimeSinceEpoch,
+    pub valid_to: crate::browser_protocol::network::types::TimeSinceEpoch,
     #[doc = "The highest priority network error code, if the certificate has an error."]
     #[serde(rename = "certificateNetworkError")]
     #[serde(skip_serializing_if = "Option::is_none")]

@@ -7,7 +7,7 @@ pub struct ProfileNode {
     pub id: i64,
     #[doc = "Function location."]
     #[serde(rename = "callFrame")]
-    pub call_frame: super::super::runtime::types::CallFrame,
+    pub call_frame: crate::js_protocol::runtime::types::CallFrame,
     #[doc = "Number of samples where this node was on top of the call stack."]
     #[serde(rename = "hitCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -32,7 +32,7 @@ pub struct ProfileNode {
 impl ProfileNode {
     pub fn new(
         id: impl Into<i64>,
-        call_frame: impl Into<super::super::runtime::types::CallFrame>,
+        call_frame: impl Into<crate::js_protocol::runtime::types::CallFrame>,
     ) -> Self {
         Self {
             id: id.into(),
@@ -174,7 +174,7 @@ impl FunctionCoverage {
 pub struct ScriptCoverage {
     #[doc = "JavaScript script id."]
     #[serde(rename = "scriptId")]
-    pub script_id: super::super::runtime::types::ScriptId,
+    pub script_id: crate::js_protocol::runtime::types::ScriptId,
     #[doc = "JavaScript script name or url."]
     #[serde(rename = "url")]
     pub url: String,
@@ -185,7 +185,7 @@ pub struct ScriptCoverage {
 }
 impl ScriptCoverage {
     pub fn new(
-        script_id: impl Into<super::super::runtime::types::ScriptId>,
+        script_id: impl Into<crate::js_protocol::runtime::types::ScriptId>,
         url: impl Into<String>,
         functions: Vec<FunctionCoverage>,
     ) -> Self {

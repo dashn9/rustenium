@@ -62,7 +62,7 @@ pub struct ViewOrScrollTimeline {
     #[serde(rename = "sourceNodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub source_node_id: Option<super::super::dom::types::BackendNodeId>,
+    pub source_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     #[doc = "Represents the starting scroll position of the timeline\nas a length offset in pixels from scroll origin."]
     #[serde(rename = "startOffset")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -77,13 +77,13 @@ pub struct ViewOrScrollTimeline {
     #[serde(rename = "subjectNodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub subject_node_id: Option<super::super::dom::types::BackendNodeId>,
+    pub subject_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     #[doc = "Orientation of the scroll"]
     #[serde(rename = "axis")]
-    pub axis: super::super::dom::types::ScrollOrientation,
+    pub axis: crate::browser_protocol::dom::types::ScrollOrientation,
 }
 impl ViewOrScrollTimeline {
-    pub fn new(axis: impl Into<super::super::dom::types::ScrollOrientation>) -> Self {
+    pub fn new(axis: impl Into<crate::browser_protocol::dom::types::ScrollOrientation>) -> Self {
         Self {
             axis: axis.into(),
             source_node_id: None,
@@ -126,7 +126,7 @@ pub struct AnimationEffect {
     #[serde(rename = "backendNodeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub backend_node_id: Option<super::super::dom::types::BackendNodeId>,
+    pub backend_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
     #[doc = "`AnimationEffect`'s keyframes."]
     #[serde(rename = "keyframesRule")]
     #[serde(skip_serializing_if = "Option::is_none")]

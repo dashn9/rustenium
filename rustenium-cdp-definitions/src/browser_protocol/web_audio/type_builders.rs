@@ -1,7 +1,7 @@
 use super::types::*;
 impl ContextRealtimeData {
     pub fn builder() -> ContextRealtimeDataBuilder {
-        ContextRealtimeDataBuilder::default()
+        <ContextRealtimeDataBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -56,7 +56,7 @@ impl ContextRealtimeDataBuilder {
 }
 impl BaseAudioContext {
     pub fn builder() -> BaseAudioContextBuilder {
-        BaseAudioContextBuilder::default()
+        <BaseAudioContextBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -130,7 +130,7 @@ impl BaseAudioContextBuilder {
 }
 impl AudioListener {
     pub fn builder() -> AudioListenerBuilder {
-        AudioListenerBuilder::default()
+        <AudioListenerBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -160,7 +160,7 @@ impl AudioListenerBuilder {
 }
 impl AudioNode {
     pub fn builder() -> AudioNodeBuilder {
-        AudioNodeBuilder::default()
+        <AudioNodeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -253,7 +253,7 @@ impl AudioNodeBuilder {
 }
 impl AudioParam {
     pub fn builder() -> AudioParamBuilder {
-        AudioParamBuilder::default()
+        <AudioParamBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

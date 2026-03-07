@@ -1,19 +1,22 @@
 use super::commands::*;
 impl GetHighlightObjectForTest {
     pub fn builder() -> GetHighlightObjectForTestBuilder {
-        GetHighlightObjectForTestBuilder::default()
+        <GetHighlightObjectForTestBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetHighlightObjectForTestBuilder {
-    node_id: Option<super::super::dom::types::NodeId>,
+    node_id: Option<crate::browser_protocol::dom::types::NodeId>,
     include_distance: Option<bool>,
     include_style: Option<bool>,
     color_format: Option<super::types::ColorFormat>,
     show_accessibility_info: Option<bool>,
 }
 impl GetHighlightObjectForTestBuilder {
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
@@ -50,15 +53,18 @@ impl GetHighlightObjectForTestBuilder {
 }
 impl GetGridHighlightObjectsForTest {
     pub fn builder() -> GetGridHighlightObjectsForTestBuilder {
-        GetGridHighlightObjectsForTestBuilder::default()
+        <GetGridHighlightObjectsForTestBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetGridHighlightObjectsForTestBuilder {
-    node_ids: Option<Vec<super::super::dom::types::NodeId>>,
+    node_ids: Option<Vec<crate::browser_protocol::dom::types::NodeId>>,
 }
 impl GetGridHighlightObjectsForTestBuilder {
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
+    ) -> Self {
         let v = self.node_ids.get_or_insert(Vec::new());
         v.push(node_id.into());
         self
@@ -66,7 +72,7 @@ impl GetGridHighlightObjectsForTestBuilder {
     pub fn node_ids<I, S>(mut self, node_ids: I) -> Self
     where
         I: IntoIterator<Item = S>,
-        S: Into<super::super::dom::types::NodeId>,
+        S: Into<crate::browser_protocol::dom::types::NodeId>,
     {
         let v = self.node_ids.get_or_insert(Vec::new());
         for val in node_ids {
@@ -87,15 +93,18 @@ impl GetGridHighlightObjectsForTestBuilder {
 }
 impl GetSourceOrderHighlightObjectForTest {
     pub fn builder() -> GetSourceOrderHighlightObjectForTestBuilder {
-        GetSourceOrderHighlightObjectForTestBuilder::default()
+        <GetSourceOrderHighlightObjectForTestBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetSourceOrderHighlightObjectForTestBuilder {
-    node_id: Option<super::super::dom::types::NodeId>,
+    node_id: Option<crate::browser_protocol::dom::types::NodeId>,
 }
 impl GetSourceOrderHighlightObjectForTestBuilder {
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
@@ -113,15 +122,15 @@ impl GetSourceOrderHighlightObjectForTestBuilder {
 }
 impl HighlightNode {
     pub fn builder() -> HighlightNodeBuilder {
-        HighlightNodeBuilder::default()
+        <HighlightNodeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct HighlightNodeBuilder {
     highlight_config: Option<super::types::HighlightConfig>,
-    node_id: Option<super::super::dom::types::NodeId>,
-    backend_node_id: Option<super::super::dom::types::BackendNodeId>,
-    object_id: Option<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+    node_id: Option<crate::browser_protocol::dom::types::NodeId>,
+    backend_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
+    object_id: Option<crate::js_protocol::runtime::types::RemoteObjectId>,
     selector: Option<String>,
 }
 impl HighlightNodeBuilder {
@@ -132,20 +141,23 @@ impl HighlightNodeBuilder {
         self.highlight_config = Some(highlight_config.into());
         self
     }
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
     pub fn backend_node_id(
         mut self,
-        backend_node_id: impl Into<super::super::dom::types::BackendNodeId>,
+        backend_node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
     ) -> Self {
         self.backend_node_id = Some(backend_node_id.into());
         self
     }
     pub fn object_id(
         mut self,
-        object_id: impl Into<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+        object_id: impl Into<crate::js_protocol::runtime::types::RemoteObjectId>,
     ) -> Self {
         self.object_id = Some(object_id.into());
         self
@@ -174,27 +186,27 @@ impl HighlightNodeBuilder {
 }
 impl HighlightQuad {
     pub fn builder() -> HighlightQuadBuilder {
-        HighlightQuadBuilder::default()
+        <HighlightQuadBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct HighlightQuadBuilder {
-    quad: Option<super::super::dom::types::Quad>,
-    color: Option<super::super::dom::types::Rgba>,
-    outline_color: Option<super::super::dom::types::Rgba>,
+    quad: Option<crate::browser_protocol::dom::types::Quad>,
+    color: Option<crate::browser_protocol::dom::types::Rgba>,
+    outline_color: Option<crate::browser_protocol::dom::types::Rgba>,
 }
 impl HighlightQuadBuilder {
-    pub fn quad(mut self, quad: impl Into<super::super::dom::types::Quad>) -> Self {
+    pub fn quad(mut self, quad: impl Into<crate::browser_protocol::dom::types::Quad>) -> Self {
         self.quad = Some(quad.into());
         self
     }
-    pub fn color(mut self, color: impl Into<super::super::dom::types::Rgba>) -> Self {
+    pub fn color(mut self, color: impl Into<crate::browser_protocol::dom::types::Rgba>) -> Self {
         self.color = Some(color.into());
         self
     }
     pub fn outline_color(
         mut self,
-        outline_color: impl Into<super::super::dom::types::Rgba>,
+        outline_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
     ) -> Self {
         self.outline_color = Some(outline_color.into());
         self
@@ -214,7 +226,7 @@ impl HighlightQuadBuilder {
 }
 impl HighlightRect {
     pub fn builder() -> HighlightRectBuilder {
-        HighlightRectBuilder::default()
+        <HighlightRectBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -223,8 +235,8 @@ pub struct HighlightRectBuilder {
     y: Option<i64>,
     width: Option<i64>,
     height: Option<i64>,
-    color: Option<super::super::dom::types::Rgba>,
-    outline_color: Option<super::super::dom::types::Rgba>,
+    color: Option<crate::browser_protocol::dom::types::Rgba>,
+    outline_color: Option<crate::browser_protocol::dom::types::Rgba>,
 }
 impl HighlightRectBuilder {
     pub fn x(mut self, x: impl Into<i64>) -> Self {
@@ -243,13 +255,13 @@ impl HighlightRectBuilder {
         self.height = Some(height.into());
         self
     }
-    pub fn color(mut self, color: impl Into<super::super::dom::types::Rgba>) -> Self {
+    pub fn color(mut self, color: impl Into<crate::browser_protocol::dom::types::Rgba>) -> Self {
         self.color = Some(color.into());
         self
     }
     pub fn outline_color(
         mut self,
-        outline_color: impl Into<super::super::dom::types::Rgba>,
+        outline_color: impl Into<crate::browser_protocol::dom::types::Rgba>,
     ) -> Self {
         self.outline_color = Some(outline_color.into());
         self
@@ -278,15 +290,15 @@ impl HighlightRectBuilder {
 }
 impl HighlightSourceOrder {
     pub fn builder() -> HighlightSourceOrderBuilder {
-        HighlightSourceOrderBuilder::default()
+        <HighlightSourceOrderBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct HighlightSourceOrderBuilder {
     source_order_config: Option<super::types::SourceOrderConfig>,
-    node_id: Option<super::super::dom::types::NodeId>,
-    backend_node_id: Option<super::super::dom::types::BackendNodeId>,
-    object_id: Option<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+    node_id: Option<crate::browser_protocol::dom::types::NodeId>,
+    backend_node_id: Option<crate::browser_protocol::dom::types::BackendNodeId>,
+    object_id: Option<crate::js_protocol::runtime::types::RemoteObjectId>,
 }
 impl HighlightSourceOrderBuilder {
     pub fn source_order_config(
@@ -296,20 +308,23 @@ impl HighlightSourceOrderBuilder {
         self.source_order_config = Some(source_order_config.into());
         self
     }
-    pub fn node_id(mut self, node_id: impl Into<super::super::dom::types::NodeId>) -> Self {
+    pub fn node_id(
+        mut self,
+        node_id: impl Into<crate::browser_protocol::dom::types::NodeId>,
+    ) -> Self {
         self.node_id = Some(node_id.into());
         self
     }
     pub fn backend_node_id(
         mut self,
-        backend_node_id: impl Into<super::super::dom::types::BackendNodeId>,
+        backend_node_id: impl Into<crate::browser_protocol::dom::types::BackendNodeId>,
     ) -> Self {
         self.backend_node_id = Some(backend_node_id.into());
         self
     }
     pub fn object_id(
         mut self,
-        object_id: impl Into<super::super::super::js_protocol::runtime::types::RemoteObjectId>,
+        object_id: impl Into<crate::js_protocol::runtime::types::RemoteObjectId>,
     ) -> Self {
         self.object_id = Some(object_id.into());
         self
@@ -333,7 +348,7 @@ impl HighlightSourceOrderBuilder {
 }
 impl SetInspectMode {
     pub fn builder() -> SetInspectModeBuilder {
-        SetInspectModeBuilder::default()
+        <SetInspectModeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -367,7 +382,7 @@ impl SetInspectModeBuilder {
 }
 impl SetShowAdHighlights {
     pub fn builder() -> SetShowAdHighlightsBuilder {
-        SetShowAdHighlightsBuilder::default()
+        <SetShowAdHighlightsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -392,7 +407,7 @@ impl SetShowAdHighlightsBuilder {
 }
 impl SetPausedInDebuggerMessage {
     pub fn builder() -> SetPausedInDebuggerMessageBuilder {
-        SetPausedInDebuggerMessageBuilder::default()
+        <SetPausedInDebuggerMessageBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -415,7 +430,7 @@ impl SetPausedInDebuggerMessageBuilder {
 }
 impl SetShowDebugBorders {
     pub fn builder() -> SetShowDebugBordersBuilder {
-        SetShowDebugBordersBuilder::default()
+        <SetShowDebugBordersBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -440,7 +455,7 @@ impl SetShowDebugBordersBuilder {
 }
 impl SetShowFpsCounter {
     pub fn builder() -> SetShowFpsCounterBuilder {
-        SetShowFpsCounterBuilder::default()
+        <SetShowFpsCounterBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -465,7 +480,7 @@ impl SetShowFpsCounterBuilder {
 }
 impl SetShowGridOverlays {
     pub fn builder() -> SetShowGridOverlaysBuilder {
-        SetShowGridOverlaysBuilder::default()
+        <SetShowGridOverlaysBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -508,7 +523,7 @@ impl SetShowGridOverlaysBuilder {
 }
 impl SetShowFlexOverlays {
     pub fn builder() -> SetShowFlexOverlaysBuilder {
-        SetShowFlexOverlaysBuilder::default()
+        <SetShowFlexOverlaysBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -551,7 +566,7 @@ impl SetShowFlexOverlaysBuilder {
 }
 impl SetShowScrollSnapOverlays {
     pub fn builder() -> SetShowScrollSnapOverlaysBuilder {
-        SetShowScrollSnapOverlaysBuilder::default()
+        <SetShowScrollSnapOverlaysBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -596,7 +611,7 @@ impl SetShowScrollSnapOverlaysBuilder {
 }
 impl SetShowContainerQueryOverlays {
     pub fn builder() -> SetShowContainerQueryOverlaysBuilder {
-        SetShowContainerQueryOverlaysBuilder::default()
+        <SetShowContainerQueryOverlaysBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -648,7 +663,7 @@ impl SetShowContainerQueryOverlaysBuilder {
 }
 impl SetShowInspectedElementAnchor {
     pub fn builder() -> SetShowInspectedElementAnchorBuilder {
-        SetShowInspectedElementAnchorBuilder::default()
+        <SetShowInspectedElementAnchorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -681,7 +696,7 @@ impl SetShowInspectedElementAnchorBuilder {
 }
 impl SetShowPaintRects {
     pub fn builder() -> SetShowPaintRectsBuilder {
-        SetShowPaintRectsBuilder::default()
+        <SetShowPaintRectsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -706,7 +721,7 @@ impl SetShowPaintRectsBuilder {
 }
 impl SetShowLayoutShiftRegions {
     pub fn builder() -> SetShowLayoutShiftRegionsBuilder {
-        SetShowLayoutShiftRegionsBuilder::default()
+        <SetShowLayoutShiftRegionsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -731,7 +746,7 @@ impl SetShowLayoutShiftRegionsBuilder {
 }
 impl SetShowScrollBottleneckRects {
     pub fn builder() -> SetShowScrollBottleneckRectsBuilder {
-        SetShowScrollBottleneckRectsBuilder::default()
+        <SetShowScrollBottleneckRectsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -756,7 +771,7 @@ impl SetShowScrollBottleneckRectsBuilder {
 }
 impl SetShowViewportSizeOnResize {
     pub fn builder() -> SetShowViewportSizeOnResizeBuilder {
-        SetShowViewportSizeOnResizeBuilder::default()
+        <SetShowViewportSizeOnResizeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -781,7 +796,7 @@ impl SetShowViewportSizeOnResizeBuilder {
 }
 impl SetShowHinge {
     pub fn builder() -> SetShowHingeBuilder {
-        SetShowHingeBuilder::default()
+        <SetShowHingeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -804,7 +819,7 @@ impl SetShowHingeBuilder {
 }
 impl SetShowIsolatedElements {
     pub fn builder() -> SetShowIsolatedElementsBuilder {
-        SetShowIsolatedElementsBuilder::default()
+        <SetShowIsolatedElementsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -856,7 +871,7 @@ impl SetShowIsolatedElementsBuilder {
 }
 impl SetShowWindowControlsOverlay {
     pub fn builder() -> SetShowWindowControlsOverlayBuilder {
-        SetShowWindowControlsOverlayBuilder::default()
+        <SetShowWindowControlsOverlayBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

@@ -5,7 +5,7 @@ pub struct File {
     pub name: String,
     #[doc = "Timestamp"]
     #[serde(rename = "lastModified")]
-    pub last_modified: super::super::network::types::TimeSinceEpoch,
+    pub last_modified: crate::browser_protocol::network::types::TimeSinceEpoch,
     #[doc = "Size in bytes"]
     #[serde(rename = "size")]
     pub size: f64,
@@ -15,7 +15,7 @@ pub struct File {
 impl File {
     pub fn new(
         name: impl Into<String>,
-        last_modified: impl Into<super::super::network::types::TimeSinceEpoch>,
+        last_modified: impl Into<crate::browser_protocol::network::types::TimeSinceEpoch>,
         size: impl Into<f64>,
         r#type: impl Into<String>,
     ) -> Self {
@@ -62,7 +62,7 @@ impl Directory {
 pub struct BucketFileSystemLocator {
     #[doc = "Storage key"]
     #[serde(rename = "storageKey")]
-    pub storage_key: super::super::storage::types::SerializedStorageKey,
+    pub storage_key: crate::browser_protocol::storage::types::SerializedStorageKey,
     #[doc = "Bucket name. Not passing a `bucketName` will retrieve the default Bucket. (https://developer.mozilla.org/en-US/docs/Web/API/Storage_API#storage_buckets)"]
     #[serde(rename = "bucketName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -75,7 +75,7 @@ pub struct BucketFileSystemLocator {
 }
 impl BucketFileSystemLocator {
     pub fn new(
-        storage_key: impl Into<super::super::storage::types::SerializedStorageKey>,
+        storage_key: impl Into<crate::browser_protocol::storage::types::SerializedStorageKey>,
         path_components: Vec<String>,
     ) -> Self {
         Self {

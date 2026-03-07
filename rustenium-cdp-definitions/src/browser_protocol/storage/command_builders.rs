@@ -1,15 +1,18 @@
 use super::commands::*;
 impl GetStorageKey {
     pub fn builder() -> GetStorageKeyBuilder {
-        GetStorageKeyBuilder::default()
+        <GetStorageKeyBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetStorageKeyBuilder {
-    frame_id: Option<super::super::page::types::FrameId>,
+    frame_id: Option<crate::browser_protocol::page::types::FrameId>,
 }
 impl GetStorageKeyBuilder {
-    pub fn frame_id(mut self, frame_id: impl Into<super::super::page::types::FrameId>) -> Self {
+    pub fn frame_id(
+        mut self,
+        frame_id: impl Into<crate::browser_protocol::page::types::FrameId>,
+    ) -> Self {
         self.frame_id = Some(frame_id.into());
         self
     }
@@ -24,7 +27,7 @@ impl GetStorageKeyBuilder {
 }
 impl ClearDataForOrigin {
     pub fn builder() -> ClearDataForOriginBuilder {
-        ClearDataForOriginBuilder::default()
+        <ClearDataForOriginBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -57,7 +60,7 @@ impl ClearDataForOriginBuilder {
 }
 impl ClearDataForStorageKey {
     pub fn builder() -> ClearDataForStorageKeyBuilder {
-        ClearDataForStorageKeyBuilder::default()
+        <ClearDataForStorageKeyBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -90,17 +93,17 @@ impl ClearDataForStorageKeyBuilder {
 }
 impl GetCookies {
     pub fn builder() -> GetCookiesBuilder {
-        GetCookiesBuilder::default()
+        <GetCookiesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct GetCookiesBuilder {
-    browser_context_id: Option<super::super::browser::types::BrowserContextId>,
+    browser_context_id: Option<crate::browser_protocol::browser::types::BrowserContextId>,
 }
 impl GetCookiesBuilder {
     pub fn browser_context_id(
         mut self,
-        browser_context_id: impl Into<super::super::browser::types::BrowserContextId>,
+        browser_context_id: impl Into<crate::browser_protocol::browser::types::BrowserContextId>,
     ) -> Self {
         self.browser_context_id = Some(browser_context_id.into());
         self
@@ -116,16 +119,19 @@ impl GetCookiesBuilder {
 }
 impl SetCookies {
     pub fn builder() -> SetCookiesBuilder {
-        SetCookiesBuilder::default()
+        <SetCookiesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct SetCookiesBuilder {
-    cookies: Option<Vec<super::super::network::types::CookieParam>>,
-    browser_context_id: Option<super::super::browser::types::BrowserContextId>,
+    cookies: Option<Vec<crate::browser_protocol::network::types::CookieParam>>,
+    browser_context_id: Option<crate::browser_protocol::browser::types::BrowserContextId>,
 }
 impl SetCookiesBuilder {
-    pub fn cookie(mut self, cookie: impl Into<super::super::network::types::CookieParam>) -> Self {
+    pub fn cookie(
+        mut self,
+        cookie: impl Into<crate::browser_protocol::network::types::CookieParam>,
+    ) -> Self {
         let v = self.cookies.get_or_insert(Vec::new());
         v.push(cookie.into());
         self
@@ -133,7 +139,7 @@ impl SetCookiesBuilder {
     pub fn cookies<I, S>(mut self, cookies: I) -> Self
     where
         I: IntoIterator<Item = S>,
-        S: Into<super::super::network::types::CookieParam>,
+        S: Into<crate::browser_protocol::network::types::CookieParam>,
     {
         let v = self.cookies.get_or_insert(Vec::new());
         for val in cookies {
@@ -143,7 +149,7 @@ impl SetCookiesBuilder {
     }
     pub fn browser_context_id(
         mut self,
-        browser_context_id: impl Into<super::super::browser::types::BrowserContextId>,
+        browser_context_id: impl Into<crate::browser_protocol::browser::types::BrowserContextId>,
     ) -> Self {
         self.browser_context_id = Some(browser_context_id.into());
         self
@@ -162,17 +168,17 @@ impl SetCookiesBuilder {
 }
 impl ClearCookies {
     pub fn builder() -> ClearCookiesBuilder {
-        ClearCookiesBuilder::default()
+        <ClearCookiesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct ClearCookiesBuilder {
-    browser_context_id: Option<super::super::browser::types::BrowserContextId>,
+    browser_context_id: Option<crate::browser_protocol::browser::types::BrowserContextId>,
 }
 impl ClearCookiesBuilder {
     pub fn browser_context_id(
         mut self,
-        browser_context_id: impl Into<super::super::browser::types::BrowserContextId>,
+        browser_context_id: impl Into<crate::browser_protocol::browser::types::BrowserContextId>,
     ) -> Self {
         self.browser_context_id = Some(browser_context_id.into());
         self
@@ -188,7 +194,7 @@ impl ClearCookiesBuilder {
 }
 impl GetUsageAndQuota {
     pub fn builder() -> GetUsageAndQuotaBuilder {
-        GetUsageAndQuotaBuilder::default()
+        <GetUsageAndQuotaBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -213,7 +219,7 @@ impl GetUsageAndQuotaBuilder {
 }
 impl OverrideQuotaForOrigin {
     pub fn builder() -> OverrideQuotaForOriginBuilder {
-        OverrideQuotaForOriginBuilder::default()
+        <OverrideQuotaForOriginBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -244,7 +250,7 @@ impl OverrideQuotaForOriginBuilder {
 }
 impl TrackCacheStorageForOrigin {
     pub fn builder() -> TrackCacheStorageForOriginBuilder {
-        TrackCacheStorageForOriginBuilder::default()
+        <TrackCacheStorageForOriginBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -269,7 +275,7 @@ impl TrackCacheStorageForOriginBuilder {
 }
 impl TrackCacheStorageForStorageKey {
     pub fn builder() -> TrackCacheStorageForStorageKeyBuilder {
-        TrackCacheStorageForStorageKeyBuilder::default()
+        <TrackCacheStorageForStorageKeyBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -294,7 +300,7 @@ impl TrackCacheStorageForStorageKeyBuilder {
 }
 impl TrackIndexedDbForOrigin {
     pub fn builder() -> TrackIndexedDbForOriginBuilder {
-        TrackIndexedDbForOriginBuilder::default()
+        <TrackIndexedDbForOriginBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -319,7 +325,7 @@ impl TrackIndexedDbForOriginBuilder {
 }
 impl TrackIndexedDbForStorageKey {
     pub fn builder() -> TrackIndexedDbForStorageKeyBuilder {
-        TrackIndexedDbForStorageKeyBuilder::default()
+        <TrackIndexedDbForStorageKeyBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -344,7 +350,7 @@ impl TrackIndexedDbForStorageKeyBuilder {
 }
 impl UntrackCacheStorageForOrigin {
     pub fn builder() -> UntrackCacheStorageForOriginBuilder {
-        UntrackCacheStorageForOriginBuilder::default()
+        <UntrackCacheStorageForOriginBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -369,7 +375,7 @@ impl UntrackCacheStorageForOriginBuilder {
 }
 impl UntrackCacheStorageForStorageKey {
     pub fn builder() -> UntrackCacheStorageForStorageKeyBuilder {
-        UntrackCacheStorageForStorageKeyBuilder::default()
+        <UntrackCacheStorageForStorageKeyBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -394,7 +400,7 @@ impl UntrackCacheStorageForStorageKeyBuilder {
 }
 impl UntrackIndexedDbForOrigin {
     pub fn builder() -> UntrackIndexedDbForOriginBuilder {
-        UntrackIndexedDbForOriginBuilder::default()
+        <UntrackIndexedDbForOriginBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -419,7 +425,7 @@ impl UntrackIndexedDbForOriginBuilder {
 }
 impl UntrackIndexedDbForStorageKey {
     pub fn builder() -> UntrackIndexedDbForStorageKeyBuilder {
-        UntrackIndexedDbForStorageKeyBuilder::default()
+        <UntrackIndexedDbForStorageKeyBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -444,7 +450,7 @@ impl UntrackIndexedDbForStorageKeyBuilder {
 }
 impl ClearTrustTokens {
     pub fn builder() -> ClearTrustTokensBuilder {
-        ClearTrustTokensBuilder::default()
+        <ClearTrustTokensBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -469,7 +475,7 @@ impl ClearTrustTokensBuilder {
 }
 impl GetInterestGroupDetails {
     pub fn builder() -> GetInterestGroupDetailsBuilder {
-        GetInterestGroupDetailsBuilder::default()
+        <GetInterestGroupDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -502,7 +508,7 @@ impl GetInterestGroupDetailsBuilder {
 }
 impl SetInterestGroupTracking {
     pub fn builder() -> SetInterestGroupTrackingBuilder {
-        SetInterestGroupTrackingBuilder::default()
+        <SetInterestGroupTrackingBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -527,7 +533,7 @@ impl SetInterestGroupTrackingBuilder {
 }
 impl SetInterestGroupAuctionTracking {
     pub fn builder() -> SetInterestGroupAuctionTrackingBuilder {
-        SetInterestGroupAuctionTrackingBuilder::default()
+        <SetInterestGroupAuctionTrackingBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -552,7 +558,7 @@ impl SetInterestGroupAuctionTrackingBuilder {
 }
 impl GetSharedStorageMetadata {
     pub fn builder() -> GetSharedStorageMetadataBuilder {
-        GetSharedStorageMetadataBuilder::default()
+        <GetSharedStorageMetadataBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -577,7 +583,7 @@ impl GetSharedStorageMetadataBuilder {
 }
 impl GetSharedStorageEntries {
     pub fn builder() -> GetSharedStorageEntriesBuilder {
-        GetSharedStorageEntriesBuilder::default()
+        <GetSharedStorageEntriesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -602,7 +608,7 @@ impl GetSharedStorageEntriesBuilder {
 }
 impl SetSharedStorageEntry {
     pub fn builder() -> SetSharedStorageEntryBuilder {
-        SetSharedStorageEntryBuilder::default()
+        <SetSharedStorageEntryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -649,7 +655,7 @@ impl SetSharedStorageEntryBuilder {
 }
 impl DeleteSharedStorageEntry {
     pub fn builder() -> DeleteSharedStorageEntryBuilder {
-        DeleteSharedStorageEntryBuilder::default()
+        <DeleteSharedStorageEntryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -682,7 +688,7 @@ impl DeleteSharedStorageEntryBuilder {
 }
 impl ClearSharedStorageEntries {
     pub fn builder() -> ClearSharedStorageEntriesBuilder {
-        ClearSharedStorageEntriesBuilder::default()
+        <ClearSharedStorageEntriesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -707,7 +713,7 @@ impl ClearSharedStorageEntriesBuilder {
 }
 impl ResetSharedStorageBudget {
     pub fn builder() -> ResetSharedStorageBudgetBuilder {
-        ResetSharedStorageBudgetBuilder::default()
+        <ResetSharedStorageBudgetBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -732,7 +738,7 @@ impl ResetSharedStorageBudgetBuilder {
 }
 impl SetSharedStorageTracking {
     pub fn builder() -> SetSharedStorageTrackingBuilder {
-        SetSharedStorageTrackingBuilder::default()
+        <SetSharedStorageTrackingBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -757,7 +763,7 @@ impl SetSharedStorageTrackingBuilder {
 }
 impl SetStorageBucketTracking {
     pub fn builder() -> SetStorageBucketTrackingBuilder {
-        SetStorageBucketTrackingBuilder::default()
+        <SetStorageBucketTrackingBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -790,7 +796,7 @@ impl SetStorageBucketTrackingBuilder {
 }
 impl DeleteStorageBucket {
     pub fn builder() -> DeleteStorageBucketBuilder {
-        DeleteStorageBucketBuilder::default()
+        <DeleteStorageBucketBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -815,7 +821,7 @@ impl DeleteStorageBucketBuilder {
 }
 impl SetAttributionReportingLocalTestingMode {
     pub fn builder() -> SetAttributionReportingLocalTestingModeBuilder {
-        SetAttributionReportingLocalTestingModeBuilder::default()
+        <SetAttributionReportingLocalTestingModeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -833,7 +839,7 @@ impl SetAttributionReportingLocalTestingModeBuilder {
 }
 impl SetAttributionReportingTracking {
     pub fn builder() -> SetAttributionReportingTrackingBuilder {
-        SetAttributionReportingTrackingBuilder::default()
+        <SetAttributionReportingTrackingBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -858,7 +864,7 @@ impl SetAttributionReportingTrackingBuilder {
 }
 impl GetAffectedUrlsForThirdPartyCookieMetadata {
     pub fn builder() -> GetAffectedUrlsForThirdPartyCookieMetadataBuilder {
-        GetAffectedUrlsForThirdPartyCookieMetadataBuilder::default()
+        <GetAffectedUrlsForThirdPartyCookieMetadataBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -893,14 +899,14 @@ impl GetAffectedUrlsForThirdPartyCookieMetadataBuilder {
 }
 impl SetProtectedAudienceKAnonymity {
     pub fn builder() -> SetProtectedAudienceKAnonymityBuilder {
-        SetProtectedAudienceKAnonymityBuilder::default()
+        <SetProtectedAudienceKAnonymityBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
 pub struct SetProtectedAudienceKAnonymityBuilder {
     owner: Option<String>,
     name: Option<String>,
-    hashes: Option<Vec<super::super::super::Binary>>,
+    hashes: Option<Vec<crate::Binary>>,
 }
 impl SetProtectedAudienceKAnonymityBuilder {
     pub fn owner(mut self, owner: impl Into<String>) -> Self {
@@ -911,7 +917,7 @@ impl SetProtectedAudienceKAnonymityBuilder {
         self.name = Some(name.into());
         self
     }
-    pub fn hashe(mut self, hashe: impl Into<super::super::super::Binary>) -> Self {
+    pub fn hashe(mut self, hashe: impl Into<crate::Binary>) -> Self {
         let v = self.hashes.get_or_insert(Vec::new());
         v.push(hashe.into());
         self
@@ -919,7 +925,7 @@ impl SetProtectedAudienceKAnonymityBuilder {
     pub fn hashes<I, S>(mut self, hashes: I) -> Self
     where
         I: IntoIterator<Item = S>,
-        S: Into<super::super::super::Binary>,
+        S: Into<crate::Binary>,
     {
         let v = self.hashes.get_or_insert(Vec::new());
         for val in hashes {

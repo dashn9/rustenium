@@ -153,7 +153,7 @@ impl VirtualAuthenticatorOptions {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Credential {
     #[serde(rename = "credentialId")]
-    pub credential_id: super::super::super::Binary,
+    pub credential_id: crate::Binary,
     #[serde(rename = "isResidentCredential")]
     pub is_resident_credential: bool,
     #[doc = "Relying Party ID the credential is scoped to. Must be set when adding a\ncredential."]
@@ -163,12 +163,12 @@ pub struct Credential {
     pub rp_id: Option<String>,
     #[doc = "The ECDSA P-256 private key in PKCS#8 format."]
     #[serde(rename = "privateKey")]
-    pub private_key: super::super::super::Binary,
+    pub private_key: crate::Binary,
     #[doc = "An opaque byte sequence with a maximum size of 64 bytes mapping the\ncredential to a specific user."]
     #[serde(rename = "userHandle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub user_handle: Option<super::super::super::Binary>,
+    pub user_handle: Option<crate::Binary>,
     #[doc = "Signature counter. This is incremented by one for each successful\nassertion.\nSee https://w3c.github.io/webauthn/#signature-counter"]
     #[serde(rename = "signCount")]
     pub sign_count: i64,
@@ -176,7 +176,7 @@ pub struct Credential {
     #[serde(rename = "largeBlob")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub large_blob: Option<super::super::super::Binary>,
+    pub large_blob: Option<crate::Binary>,
     #[doc = "Assertions returned by this credential will have the backup eligibility\n(BE) flag set to this value. Defaults to the authenticator's\ndefaultBackupEligibility value."]
     #[serde(rename = "backupEligibility")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -200,9 +200,9 @@ pub struct Credential {
 }
 impl Credential {
     pub fn new(
-        credential_id: impl Into<super::super::super::Binary>,
+        credential_id: impl Into<crate::Binary>,
         is_resident_credential: impl Into<bool>,
-        private_key: impl Into<super::super::super::Binary>,
+        private_key: impl Into<crate::Binary>,
         sign_count: impl Into<i64>,
     ) -> Self {
         Self {

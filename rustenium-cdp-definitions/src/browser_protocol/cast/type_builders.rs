@@ -1,7 +1,7 @@
 use super::types::*;
 impl Sink {
     pub fn builder() -> SinkBuilder {
-        SinkBuilder::default()
+        <SinkBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
