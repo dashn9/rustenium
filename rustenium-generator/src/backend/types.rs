@@ -347,23 +347,27 @@ impl FieldDefinition {
             }
         }
 
-        // Validation constraints
+        // Validation constraints — literal type must match the field type
         let mut validation_attr = TokenStream::default();
         if let Some(ref constraints) = param.validation {
+            let ty_str = self.ty.ty.to_string();
+            let val_lit = |v: f64| -> TokenStream {
+                if ty_str.contains("u64") {
+                    let vi = v as u64;
+                    quote! { #vi }
+                } else if ty_str.contains("i64") {
+                    let vi = v as i64;
+                    quote! { #vi }
+                } else {
+                    quote! { #v }
+                }
+            };
             for c in constraints {
                 match c {
-                    Constraint::Ge(v) => validation_attr.extend(quote! {
-                        #[validate(minimum = #v)]
-                    }),
-                    Constraint::Gt(v) => validation_attr.extend(quote! {
-                        #[validate(exclusive_minimum = #v)]
-                    }),
-                    Constraint::Le(v) => validation_attr.extend(quote! {
-                        #[validate(maximum = #v)]
-                    }),
-                    Constraint::Lt(v) => validation_attr.extend(quote! {
-                        #[validate(exclusive_maximum = #v)]
-                    }),
+                    Constraint::Ge(v) => { let lit = val_lit(*v); validation_attr.extend(quote! { #[validate(minimum = #lit)] }); }
+                    Constraint::Gt(v) => { let lit = val_lit(*v); validation_attr.extend(quote! { #[validate(exclusive_minimum = #lit)] }); }
+                    Constraint::Le(v) => { let lit = val_lit(*v); validation_attr.extend(quote! { #[validate(maximum = #lit)] }); }
+                    Constraint::Lt(v) => { let lit = val_lit(*v); validation_attr.extend(quote! { #[validate(exclusive_maximum = #lit)] }); }
                 }
             }
         }

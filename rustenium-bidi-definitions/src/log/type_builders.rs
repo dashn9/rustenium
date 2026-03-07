@@ -1,7 +1,7 @@
 use super::types::*;
 impl BaseLogEntry {
     pub fn builder() -> BaseLogEntryBuilder {
-        BaseLogEntryBuilder::default()
+        <BaseLogEntryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -51,7 +51,7 @@ impl BaseLogEntryBuilder {
 }
 impl GenericLogEntry {
     pub fn builder() -> GenericLogEntryBuilder {
-        GenericLogEntryBuilder::default()
+        <GenericLogEntryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -109,7 +109,7 @@ impl GenericLogEntryBuilder {
 }
 impl ConsoleLogEntry {
     pub fn builder() -> ConsoleLogEntryBuilder {
-        ConsoleLogEntryBuilder::default()
+        <ConsoleLogEntryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -195,7 +195,7 @@ impl ConsoleLogEntryBuilder {
 }
 impl JavascriptLogEntry {
     pub fn builder() -> JavascriptLogEntryBuilder {
-        JavascriptLogEntryBuilder::default()
+        <JavascriptLogEntryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

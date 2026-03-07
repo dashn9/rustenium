@@ -1,7 +1,7 @@
 use super::types::*;
 impl ExtensionPath {
     pub fn builder() -> ExtensionPathBuilder {
-        ExtensionPathBuilder::default()
+        <ExtensionPathBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -31,7 +31,7 @@ impl ExtensionPathBuilder {
 }
 impl ExtensionArchivePath {
     pub fn builder() -> ExtensionArchivePathBuilder {
-        ExtensionArchivePathBuilder::default()
+        <ExtensionArchivePathBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -61,7 +61,7 @@ impl ExtensionArchivePathBuilder {
 }
 impl ExtensionBase64Encoded {
     pub fn builder() -> ExtensionBase64EncodedBuilder {
-        ExtensionBase64EncodedBuilder::default()
+        <ExtensionBase64EncodedBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

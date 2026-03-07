@@ -88,14 +88,37 @@ pub fn parse_cddl(inputs: &[(&str, DomainDirection)]) -> Protocol<'static> {
     }
 
     // Collect param type names from commands and events to exclude from types.
-    // Only exclude types whose body is a struct (starts with '{'), not type choices.
+    // Only exclude types whose body is a struct (starts with '{') AND are not
+    // referenced by any other type (i.e., only used as inline params).
     let mut param_types: HashSet<String> = HashSet::new();
+    let mut all_type_refs: HashSet<String> = HashSet::new();
+
+    // Gather all type references from all rule bodies
+    for rule in &rules {
+        for word in rule.body.split_whitespace() {
+            let w = word.trim_matches(|c: char| c == ',' || c == '[' || c == ']' || c == '*' || c == '+' || c == '/' || c == '(' || c == ')');
+            if w.contains('.') && !w.starts_with('"') && !w.contains(':') {
+                all_type_refs.insert(w.to_string());
+            }
+        }
+    }
+
     for name in commands.iter().chain(events.iter()) {
         if let Some(body) = rule_map.get(name.as_str()) {
             if let Some(pt) = extract_value(body, "params:") {
+                // Only exclude if it's a struct body and not referenced elsewhere as a type
                 if let Some(pt_body) = rule_map.get(pt.as_str()) {
                     if pt_body.trim().starts_with('{') {
-                        param_types.insert(pt);
+                        // Check if this param type is referenced by non-command/event rules
+                        let referenced_elsewhere = rules.iter().any(|r| {
+                            !commands.contains(r.name.as_str())
+                                && !events.contains(r.name.as_str())
+                                && r.name != pt
+                                && r.body.contains(&pt)
+                        });
+                        if !referenced_elsewhere {
+                            param_types.insert(pt);
+                        }
                     }
                 } else {
                     param_types.insert(pt);

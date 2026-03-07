@@ -1,7 +1,7 @@
 use super::commands::*;
 impl AddDataCollector {
     pub fn builder() -> AddDataCollectorBuilder {
-        AddDataCollectorBuilder::default()
+        <AddDataCollectorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -100,7 +100,7 @@ impl AddDataCollectorBuilder {
 }
 impl AddIntercept {
     pub fn builder() -> AddInterceptBuilder {
-        AddInterceptBuilder::default()
+        <AddInterceptBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -176,7 +176,7 @@ impl AddInterceptBuilder {
 }
 impl ContinueRequest {
     pub fn builder() -> ContinueRequestBuilder {
-        ContinueRequestBuilder::default()
+        <ContinueRequestBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -255,7 +255,7 @@ impl ContinueRequestBuilder {
 }
 impl ContinueResponse {
     pub fn builder() -> ContinueResponseBuilder {
-        ContinueResponseBuilder::default()
+        <ContinueResponseBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -334,7 +334,7 @@ impl ContinueResponseBuilder {
 }
 impl ContinueWithAuth {
     pub fn builder() -> ContinueWithAuthBuilder {
-        ContinueWithAuthBuilder::default()
+        <ContinueWithAuthBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -359,7 +359,7 @@ impl ContinueWithAuthBuilder {
 }
 impl DisownData {
     pub fn builder() -> DisownDataBuilder {
-        DisownDataBuilder::default()
+        <DisownDataBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -400,7 +400,7 @@ impl DisownDataBuilder {
 }
 impl FailRequest {
     pub fn builder() -> FailRequestBuilder {
-        FailRequestBuilder::default()
+        <FailRequestBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -425,7 +425,7 @@ impl FailRequestBuilder {
 }
 impl GetData {
     pub fn builder() -> GetDataBuilder {
-        GetDataBuilder::default()
+        <GetDataBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -470,7 +470,7 @@ impl GetDataBuilder {
 }
 impl ProvideResponse {
     pub fn builder() -> ProvideResponseBuilder {
-        ProvideResponseBuilder::default()
+        <ProvideResponseBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -549,7 +549,7 @@ impl ProvideResponseBuilder {
 }
 impl RemoveDataCollector {
     pub fn builder() -> RemoveDataCollectorBuilder {
-        RemoveDataCollectorBuilder::default()
+        <RemoveDataCollectorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -574,7 +574,7 @@ impl RemoveDataCollectorBuilder {
 }
 impl RemoveIntercept {
     pub fn builder() -> RemoveInterceptBuilder {
-        RemoveInterceptBuilder::default()
+        <RemoveInterceptBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -599,7 +599,7 @@ impl RemoveInterceptBuilder {
 }
 impl SetCacheBehavior {
     pub fn builder() -> SetCacheBehaviorBuilder {
-        SetCacheBehaviorBuilder::default()
+        <SetCacheBehaviorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -648,7 +648,7 @@ impl SetCacheBehaviorBuilder {
 }
 impl SetExtraHeaders {
     pub fn builder() -> SetExtraHeadersBuilder {
-        SetExtraHeadersBuilder::default()
+        <SetExtraHeadersBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

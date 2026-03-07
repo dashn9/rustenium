@@ -1,7 +1,7 @@
 use super::types::*;
 impl ChannelValue {
     pub fn builder() -> ChannelValueBuilder {
-        ChannelValueBuilder::default()
+        <ChannelValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -31,7 +31,7 @@ impl ChannelValueBuilder {
 }
 impl ChannelProperties {
     pub fn builder() -> ChannelPropertiesBuilder {
-        ChannelPropertiesBuilder::default()
+        <ChannelPropertiesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -68,7 +68,7 @@ impl ChannelPropertiesBuilder {
 }
 impl EvaluateResultSuccess {
     pub fn builder() -> EvaluateResultSuccessBuilder {
-        EvaluateResultSuccessBuilder::default()
+        <EvaluateResultSuccessBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -106,7 +106,7 @@ impl EvaluateResultSuccessBuilder {
 }
 impl EvaluateResultException {
     pub fn builder() -> EvaluateResultExceptionBuilder {
-        EvaluateResultExceptionBuilder::default()
+        <EvaluateResultExceptionBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -147,7 +147,7 @@ impl EvaluateResultExceptionBuilder {
 }
 impl ExceptionDetails {
     pub fn builder() -> ExceptionDetailsBuilder {
-        ExceptionDetailsBuilder::default()
+        <ExceptionDetailsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -201,7 +201,7 @@ impl ExceptionDetailsBuilder {
 }
 impl ArrayLocalValue {
     pub fn builder() -> ArrayLocalValueBuilder {
-        ArrayLocalValueBuilder::default()
+        <ArrayLocalValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -231,7 +231,7 @@ impl ArrayLocalValueBuilder {
 }
 impl DateLocalValue {
     pub fn builder() -> DateLocalValueBuilder {
-        DateLocalValueBuilder::default()
+        <DateLocalValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -261,7 +261,7 @@ impl DateLocalValueBuilder {
 }
 impl MapLocalValue {
     pub fn builder() -> MapLocalValueBuilder {
-        MapLocalValueBuilder::default()
+        <MapLocalValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -291,7 +291,7 @@ impl MapLocalValueBuilder {
 }
 impl ObjectLocalValue {
     pub fn builder() -> ObjectLocalValueBuilder {
-        ObjectLocalValueBuilder::default()
+        <ObjectLocalValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -321,7 +321,7 @@ impl ObjectLocalValueBuilder {
 }
 impl RegExpValue {
     pub fn builder() -> RegExpValueBuilder {
-        RegExpValueBuilder::default()
+        <RegExpValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -349,7 +349,7 @@ impl RegExpValueBuilder {
 }
 impl RegExpLocalValue {
     pub fn builder() -> RegExpLocalValueBuilder {
-        RegExpLocalValueBuilder::default()
+        <RegExpLocalValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -379,7 +379,7 @@ impl RegExpLocalValueBuilder {
 }
 impl SetLocalValue {
     pub fn builder() -> SetLocalValueBuilder {
-        SetLocalValueBuilder::default()
+        <SetLocalValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -409,7 +409,7 @@ impl SetLocalValueBuilder {
 }
 impl UndefinedValue {
     pub fn builder() -> UndefinedValueBuilder {
-        UndefinedValueBuilder::default()
+        <UndefinedValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -431,7 +431,7 @@ impl UndefinedValueBuilder {
 }
 impl NullValue {
     pub fn builder() -> NullValueBuilder {
-        NullValueBuilder::default()
+        <NullValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -453,7 +453,7 @@ impl NullValueBuilder {
 }
 impl StringValue {
     pub fn builder() -> StringValueBuilder {
-        StringValueBuilder::default()
+        <StringValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -483,7 +483,7 @@ impl StringValueBuilder {
 }
 impl NumberValue {
     pub fn builder() -> NumberValueBuilder {
-        NumberValueBuilder::default()
+        <NumberValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -513,7 +513,7 @@ impl NumberValueBuilder {
 }
 impl BooleanValue {
     pub fn builder() -> BooleanValueBuilder {
-        BooleanValueBuilder::default()
+        <BooleanValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -543,7 +543,7 @@ impl BooleanValueBuilder {
 }
 impl BigIntValue {
     pub fn builder() -> BigIntValueBuilder {
-        BigIntValueBuilder::default()
+        <BigIntValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -573,7 +573,7 @@ impl BigIntValueBuilder {
 }
 impl SharedReference {
     pub fn builder() -> SharedReferenceBuilder {
-        SharedReferenceBuilder::default()
+        <SharedReferenceBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -612,7 +612,7 @@ impl SharedReferenceBuilder {
 }
 impl RemoteObjectReference {
     pub fn builder() -> RemoteObjectReferenceBuilder {
-        RemoteObjectReferenceBuilder::default()
+        <RemoteObjectReferenceBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -651,7 +651,7 @@ impl RemoteObjectReferenceBuilder {
 }
 impl SymbolRemoteValue {
     pub fn builder() -> SymbolRemoteValueBuilder {
-        SymbolRemoteValueBuilder::default()
+        <SymbolRemoteValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -685,7 +685,7 @@ impl SymbolRemoteValueBuilder {
 }
 impl ArrayRemoteValue {
     pub fn builder() -> ArrayRemoteValueBuilder {
-        ArrayRemoteValueBuilder::default()
+        <ArrayRemoteValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -725,7 +725,7 @@ impl ArrayRemoteValueBuilder {
 }
 impl ObjectRemoteValue {
     pub fn builder() -> ObjectRemoteValueBuilder {
-        ObjectRemoteValueBuilder::default()
+        <ObjectRemoteValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -765,7 +765,7 @@ impl ObjectRemoteValueBuilder {
 }
 impl FunctionRemoteValue {
     pub fn builder() -> FunctionRemoteValueBuilder {
-        FunctionRemoteValueBuilder::default()
+        <FunctionRemoteValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -799,7 +799,7 @@ impl FunctionRemoteValueBuilder {
 }
 impl RegExpRemoteValue {
     pub fn builder() -> RegExpRemoteValueBuilder {
-        RegExpRemoteValueBuilder::default()
+        <RegExpRemoteValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -841,7 +841,7 @@ impl RegExpRemoteValueBuilder {
 }
 impl DateRemoteValue {
     pub fn builder() -> DateRemoteValueBuilder {
-        DateRemoteValueBuilder::default()
+        <DateRemoteValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -883,7 +883,7 @@ impl DateRemoteValueBuilder {
 }
 impl MapRemoteValue {
     pub fn builder() -> MapRemoteValueBuilder {
-        MapRemoteValueBuilder::default()
+        <MapRemoteValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -923,7 +923,7 @@ impl MapRemoteValueBuilder {
 }
 impl SetRemoteValue {
     pub fn builder() -> SetRemoteValueBuilder {
-        SetRemoteValueBuilder::default()
+        <SetRemoteValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -963,7 +963,7 @@ impl SetRemoteValueBuilder {
 }
 impl WeakMapRemoteValue {
     pub fn builder() -> WeakMapRemoteValueBuilder {
-        WeakMapRemoteValueBuilder::default()
+        <WeakMapRemoteValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -997,7 +997,7 @@ impl WeakMapRemoteValueBuilder {
 }
 impl WeakSetRemoteValue {
     pub fn builder() -> WeakSetRemoteValueBuilder {
-        WeakSetRemoteValueBuilder::default()
+        <WeakSetRemoteValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1031,7 +1031,7 @@ impl WeakSetRemoteValueBuilder {
 }
 impl GeneratorRemoteValue {
     pub fn builder() -> GeneratorRemoteValueBuilder {
-        GeneratorRemoteValueBuilder::default()
+        <GeneratorRemoteValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1065,7 +1065,7 @@ impl GeneratorRemoteValueBuilder {
 }
 impl ErrorRemoteValue {
     pub fn builder() -> ErrorRemoteValueBuilder {
-        ErrorRemoteValueBuilder::default()
+        <ErrorRemoteValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1099,7 +1099,7 @@ impl ErrorRemoteValueBuilder {
 }
 impl ProxyRemoteValue {
     pub fn builder() -> ProxyRemoteValueBuilder {
-        ProxyRemoteValueBuilder::default()
+        <ProxyRemoteValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1133,7 +1133,7 @@ impl ProxyRemoteValueBuilder {
 }
 impl PromiseRemoteValue {
     pub fn builder() -> PromiseRemoteValueBuilder {
-        PromiseRemoteValueBuilder::default()
+        <PromiseRemoteValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1167,7 +1167,7 @@ impl PromiseRemoteValueBuilder {
 }
 impl TypedArrayRemoteValue {
     pub fn builder() -> TypedArrayRemoteValueBuilder {
-        TypedArrayRemoteValueBuilder::default()
+        <TypedArrayRemoteValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1201,7 +1201,7 @@ impl TypedArrayRemoteValueBuilder {
 }
 impl ArrayBufferRemoteValue {
     pub fn builder() -> ArrayBufferRemoteValueBuilder {
-        ArrayBufferRemoteValueBuilder::default()
+        <ArrayBufferRemoteValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1235,7 +1235,7 @@ impl ArrayBufferRemoteValueBuilder {
 }
 impl NodeListRemoteValue {
     pub fn builder() -> NodeListRemoteValueBuilder {
-        NodeListRemoteValueBuilder::default()
+        <NodeListRemoteValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1275,7 +1275,7 @@ impl NodeListRemoteValueBuilder {
 }
 impl HtmlCollectionRemoteValue {
     pub fn builder() -> HtmlCollectionRemoteValueBuilder {
-        HtmlCollectionRemoteValueBuilder::default()
+        <HtmlCollectionRemoteValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1315,7 +1315,7 @@ impl HtmlCollectionRemoteValueBuilder {
 }
 impl NodeRemoteValue {
     pub fn builder() -> NodeRemoteValueBuilder {
-        NodeRemoteValueBuilder::default()
+        <NodeRemoteValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1361,7 +1361,7 @@ impl NodeRemoteValueBuilder {
 }
 impl NodeProperties {
     pub fn builder() -> NodePropertiesBuilder {
-        NodePropertiesBuilder::default()
+        <NodePropertiesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1451,7 +1451,7 @@ impl NodePropertiesBuilder {
 }
 impl WindowProxyRemoteValue {
     pub fn builder() -> WindowProxyRemoteValueBuilder {
-        WindowProxyRemoteValueBuilder::default()
+        <WindowProxyRemoteValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1493,7 +1493,7 @@ impl WindowProxyRemoteValueBuilder {
 }
 impl WindowProxyProperties {
     pub fn builder() -> WindowProxyPropertiesBuilder {
-        WindowProxyPropertiesBuilder::default()
+        <WindowProxyPropertiesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1518,7 +1518,7 @@ impl WindowProxyPropertiesBuilder {
 }
 impl SerializationOptions {
     pub fn builder() -> SerializationOptionsBuilder {
-        SerializationOptionsBuilder::default()
+        <SerializationOptionsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1553,7 +1553,7 @@ impl SerializationOptionsBuilder {
 }
 impl StackFrame {
     pub fn builder() -> StackFrameBuilder {
-        StackFrameBuilder::default()
+        <StackFrameBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1599,7 +1599,7 @@ impl StackFrameBuilder {
 }
 impl StackTrace {
     pub fn builder() -> StackTraceBuilder {
-        StackTraceBuilder::default()
+        <StackTraceBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1633,7 +1633,7 @@ impl StackTraceBuilder {
 }
 impl RealmTarget {
     pub fn builder() -> RealmTargetBuilder {
-        RealmTargetBuilder::default()
+        <RealmTargetBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1655,7 +1655,7 @@ impl RealmTargetBuilder {
 }
 impl ContextTarget {
     pub fn builder() -> ContextTargetBuilder {
-        ContextTargetBuilder::default()
+        <ContextTargetBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1686,7 +1686,7 @@ impl ContextTargetBuilder {
 }
 impl BaseRealmInfo {
     pub fn builder() -> BaseRealmInfoBuilder {
-        BaseRealmInfoBuilder::default()
+        <BaseRealmInfoBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1716,7 +1716,7 @@ impl BaseRealmInfoBuilder {
 }
 impl WindowRealmInfo {
     pub fn builder() -> WindowRealmInfoBuilder {
-        WindowRealmInfoBuilder::default()
+        <WindowRealmInfoBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1771,7 +1771,7 @@ impl WindowRealmInfoBuilder {
 }
 impl DedicatedWorkerRealmInfo {
     pub fn builder() -> DedicatedWorkerRealmInfoBuilder {
-        DedicatedWorkerRealmInfoBuilder::default()
+        <DedicatedWorkerRealmInfoBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1829,7 +1829,7 @@ impl DedicatedWorkerRealmInfoBuilder {
 }
 impl SharedWorkerRealmInfo {
     pub fn builder() -> SharedWorkerRealmInfoBuilder {
-        SharedWorkerRealmInfoBuilder::default()
+        <SharedWorkerRealmInfoBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1867,7 +1867,7 @@ impl SharedWorkerRealmInfoBuilder {
 }
 impl ServiceWorkerRealmInfo {
     pub fn builder() -> ServiceWorkerRealmInfoBuilder {
-        ServiceWorkerRealmInfoBuilder::default()
+        <ServiceWorkerRealmInfoBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1905,7 +1905,7 @@ impl ServiceWorkerRealmInfoBuilder {
 }
 impl WorkerRealmInfo {
     pub fn builder() -> WorkerRealmInfoBuilder {
-        WorkerRealmInfoBuilder::default()
+        <WorkerRealmInfoBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1943,7 +1943,7 @@ impl WorkerRealmInfoBuilder {
 }
 impl PaintWorkletRealmInfo {
     pub fn builder() -> PaintWorkletRealmInfoBuilder {
-        PaintWorkletRealmInfoBuilder::default()
+        <PaintWorkletRealmInfoBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -1981,7 +1981,7 @@ impl PaintWorkletRealmInfoBuilder {
 }
 impl AudioWorkletRealmInfo {
     pub fn builder() -> AudioWorkletRealmInfoBuilder {
-        AudioWorkletRealmInfoBuilder::default()
+        <AudioWorkletRealmInfoBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -2019,7 +2019,7 @@ impl AudioWorkletRealmInfoBuilder {
 }
 impl WorkletRealmInfo {
     pub fn builder() -> WorkletRealmInfoBuilder {
-        WorkletRealmInfoBuilder::default()
+        <WorkletRealmInfoBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -2057,7 +2057,7 @@ impl WorkletRealmInfoBuilder {
 }
 impl Source {
     pub fn builder() -> SourceBuilder {
-        SourceBuilder::default()
+        <SourceBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -2088,7 +2088,7 @@ impl SourceBuilder {
 }
 impl MessageParameters {
     pub fn builder() -> MessageParametersBuilder {
-        MessageParametersBuilder::default()
+        <MessageParametersBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

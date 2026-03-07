@@ -1,7 +1,7 @@
 use super::commands::*;
 impl GetCookies {
     pub fn builder() -> GetCookiesBuilder {
-        GetCookiesBuilder::default()
+        <GetCookiesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -30,7 +30,7 @@ impl GetCookiesBuilder {
 }
 impl SetCookie {
     pub fn builder() -> SetCookieBuilder {
-        SetCookieBuilder::default()
+        <SetCookieBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -61,7 +61,7 @@ impl SetCookieBuilder {
 }
 impl DeleteCookies {
     pub fn builder() -> DeleteCookiesBuilder {
-        DeleteCookiesBuilder::default()
+        <DeleteCookiesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

@@ -1,7 +1,7 @@
 use super::commands::*;
 impl SetForcedColorsModeThemeOverride {
     pub fn builder() -> SetForcedColorsModeThemeOverrideBuilder {
-        SetForcedColorsModeThemeOverrideBuilder::default()
+        <SetForcedColorsModeThemeOverrideBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -66,7 +66,7 @@ impl SetForcedColorsModeThemeOverrideBuilder {
 }
 impl SetGeolocationOverride {
     pub fn builder() -> SetGeolocationOverrideBuilder {
-        SetGeolocationOverrideBuilder::default()
+        <SetGeolocationOverrideBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -142,7 +142,7 @@ impl SetGeolocationOverrideBuilder {
 }
 impl SetLocaleOverride {
     pub fn builder() -> SetLocaleOverrideBuilder {
-        SetLocaleOverrideBuilder::default()
+        <SetLocaleOverrideBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -207,7 +207,7 @@ impl SetLocaleOverrideBuilder {
 }
 impl SetNetworkConditions {
     pub fn builder() -> SetNetworkConditionsBuilder {
-        SetNetworkConditionsBuilder::default()
+        <SetNetworkConditionsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -275,7 +275,7 @@ impl SetNetworkConditionsBuilder {
 }
 impl SetScreenOrientationOverride {
     pub fn builder() -> SetScreenOrientationOverrideBuilder {
-        SetScreenOrientationOverrideBuilder::default()
+        <SetScreenOrientationOverrideBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -343,7 +343,7 @@ impl SetScreenOrientationOverrideBuilder {
 }
 impl SetUserAgentOverride {
     pub fn builder() -> SetUserAgentOverrideBuilder {
-        SetUserAgentOverrideBuilder::default()
+        <SetUserAgentOverrideBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -408,7 +408,7 @@ impl SetUserAgentOverrideBuilder {
 }
 impl SetScriptingEnabled {
     pub fn builder() -> SetScriptingEnabledBuilder {
-        SetScriptingEnabledBuilder::default()
+        <SetScriptingEnabledBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -473,7 +473,7 @@ impl SetScriptingEnabledBuilder {
 }
 impl SetTimezoneOverride {
     pub fn builder() -> SetTimezoneOverrideBuilder {
-        SetTimezoneOverrideBuilder::default()
+        <SetTimezoneOverrideBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

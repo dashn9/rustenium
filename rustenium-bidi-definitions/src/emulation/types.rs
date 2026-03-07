@@ -6,7 +6,7 @@ pub enum ForcedColorsModeTheme {
     #[serde(rename = "dark")]
     Dark,
 }
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, serde_valid :: Validate)]
 pub struct GeolocationCoordinates {
     #[serde(rename = "latitude")]
     pub latitude: f64,
@@ -15,7 +15,7 @@ pub struct GeolocationCoordinates {
     #[serde(rename = "accuracy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default = "default_geolocation_coordinates_accuracy")]
-    #[serde_valid::validate(minimum = 0f64)]
+    #[validate(minimum = 0f64)]
     pub accuracy: Option<f64>,
     #[serde(rename = "altitude")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -24,7 +24,7 @@ pub struct GeolocationCoordinates {
     #[serde(rename = "altitudeAccuracy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    #[serde_valid::validate(minimum = 0f64)]
+    #[validate(minimum = 0f64)]
     pub altitude_accuracy: Option<f64>,
     #[serde(rename = "heading")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -33,7 +33,7 @@ pub struct GeolocationCoordinates {
     #[serde(rename = "speed")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    #[serde_valid::validate(minimum = 0f64)]
+    #[validate(minimum = 0f64)]
     pub speed: Option<f64>,
 }
 fn default_geolocation_coordinates_accuracy() -> Option<f64> {

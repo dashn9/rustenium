@@ -1,7 +1,7 @@
 use super::commands::*;
 impl Install {
     pub fn builder() -> InstallBuilder {
-        InstallBuilder::default()
+        <InstallBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -29,7 +29,7 @@ impl InstallBuilder {
 }
 impl Uninstall {
     pub fn builder() -> UninstallBuilder {
-        UninstallBuilder::default()
+        <UninstallBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

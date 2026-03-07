@@ -1,7 +1,7 @@
 use super::types::*;
 impl ElementOrigin {
     pub fn builder() -> ElementOriginBuilder {
-        ElementOriginBuilder::default()
+        <ElementOriginBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -31,7 +31,7 @@ impl ElementOriginBuilder {
 }
 impl NoneSourceActions {
     pub fn builder() -> NoneSourceActionsBuilder {
-        NoneSourceActionsBuilder::default()
+        <NoneSourceActionsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -81,7 +81,7 @@ impl NoneSourceActionsBuilder {
 }
 impl KeySourceActions {
     pub fn builder() -> KeySourceActionsBuilder {
-        KeySourceActionsBuilder::default()
+        <KeySourceActionsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -131,7 +131,7 @@ impl KeySourceActionsBuilder {
 }
 impl PointerSourceActions {
     pub fn builder() -> PointerSourceActionsBuilder {
-        PointerSourceActionsBuilder::default()
+        <PointerSourceActionsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -187,7 +187,7 @@ impl PointerSourceActionsBuilder {
 }
 impl PointerParameters {
     pub fn builder() -> PointerParametersBuilder {
-        PointerParametersBuilder::default()
+        <PointerParametersBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -207,7 +207,7 @@ impl PointerParametersBuilder {
 }
 impl WheelSourceActions {
     pub fn builder() -> WheelSourceActionsBuilder {
-        WheelSourceActionsBuilder::default()
+        <WheelSourceActionsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -257,7 +257,7 @@ impl WheelSourceActionsBuilder {
 }
 impl PauseAction {
     pub fn builder() -> PauseActionBuilder {
-        PauseActionBuilder::default()
+        <PauseActionBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -285,7 +285,7 @@ impl PauseActionBuilder {
 }
 impl KeyDownAction {
     pub fn builder() -> KeyDownActionBuilder {
-        KeyDownActionBuilder::default()
+        <KeyDownActionBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -315,7 +315,7 @@ impl KeyDownActionBuilder {
 }
 impl KeyUpAction {
     pub fn builder() -> KeyUpActionBuilder {
-        KeyUpActionBuilder::default()
+        <KeyUpActionBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -345,7 +345,7 @@ impl KeyUpActionBuilder {
 }
 impl PointerUpAction {
     pub fn builder() -> PointerUpActionBuilder {
-        PointerUpActionBuilder::default()
+        <PointerUpActionBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -375,7 +375,7 @@ impl PointerUpActionBuilder {
 }
 impl PointerDownAction {
     pub fn builder() -> PointerDownActionBuilder {
-        PointerDownActionBuilder::default()
+        <PointerDownActionBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -447,7 +447,7 @@ impl PointerDownActionBuilder {
 }
 impl PointerMoveAction {
     pub fn builder() -> PointerMoveActionBuilder {
-        PointerMoveActionBuilder::default()
+        <PointerMoveActionBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -539,7 +539,7 @@ impl PointerMoveActionBuilder {
 }
 impl WheelScrollAction {
     pub fn builder() -> WheelScrollActionBuilder {
-        WheelScrollActionBuilder::default()
+        <WheelScrollActionBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -605,7 +605,7 @@ impl WheelScrollActionBuilder {
 }
 impl PointerCommonProperties {
     pub fn builder() -> PointerCommonPropertiesBuilder {
-        PointerCommonPropertiesBuilder::default()
+        <PointerCommonPropertiesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

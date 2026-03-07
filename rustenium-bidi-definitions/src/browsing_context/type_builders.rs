@@ -1,7 +1,7 @@
 use super::types::*;
 impl AccessibilityLocator {
     pub fn builder() -> AccessibilityLocatorBuilder {
-        AccessibilityLocatorBuilder::default()
+        <AccessibilityLocatorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -35,7 +35,7 @@ impl AccessibilityLocatorBuilder {
 }
 impl CssLocator {
     pub fn builder() -> CssLocatorBuilder {
-        CssLocatorBuilder::default()
+        <CssLocatorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -65,7 +65,7 @@ impl CssLocatorBuilder {
 }
 impl ContextLocator {
     pub fn builder() -> ContextLocatorBuilder {
-        ContextLocatorBuilder::default()
+        <ContextLocatorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -95,7 +95,7 @@ impl ContextLocatorBuilder {
 }
 impl InnerTextLocator {
     pub fn builder() -> InnerTextLocatorBuilder {
-        InnerTextLocatorBuilder::default()
+        <InnerTextLocatorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -143,7 +143,7 @@ impl InnerTextLocatorBuilder {
 }
 impl XPathLocator {
     pub fn builder() -> XPathLocatorBuilder {
-        XPathLocatorBuilder::default()
+        <XPathLocatorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -173,7 +173,7 @@ impl XPathLocatorBuilder {
 }
 impl ImageFormat {
     pub fn builder() -> ImageFormatBuilder {
-        ImageFormatBuilder::default()
+        <ImageFormatBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -201,7 +201,7 @@ impl ImageFormatBuilder {
 }
 impl ElementClipRectangle {
     pub fn builder() -> ElementClipRectangleBuilder {
-        ElementClipRectangleBuilder::default()
+        <ElementClipRectangleBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -231,7 +231,7 @@ impl ElementClipRectangleBuilder {
 }
 impl BoxClipRectangle {
     pub fn builder() -> BoxClipRectangleBuilder {
-        BoxClipRectangleBuilder::default()
+        <BoxClipRectangleBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -285,7 +285,7 @@ impl BoxClipRectangleBuilder {
 }
 impl PrintMarginParameters {
     pub fn builder() -> PrintMarginParametersBuilder {
-        PrintMarginParametersBuilder::default()
+        <PrintMarginParametersBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -323,7 +323,7 @@ impl PrintMarginParametersBuilder {
 }
 impl PrintPageParameters {
     pub fn builder() -> PrintPageParametersBuilder {
-        PrintPageParametersBuilder::default()
+        <PrintPageParametersBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -349,7 +349,7 @@ impl PrintPageParametersBuilder {
 }
 impl Viewport {
     pub fn builder() -> ViewportBuilder {
-        ViewportBuilder::default()
+        <ViewportBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -377,9 +377,79 @@ impl ViewportBuilder {
         })
     }
 }
+impl Info {
+    pub fn builder() -> InfoBuilder {
+        <InfoBuilder as Default>::default()
+    }
+}
+#[derive(Default, Clone)]
+pub struct InfoBuilder {
+    children: Option<InfoList>,
+    client_window: Option<crate::browser::types::ClientWindow>,
+    context: Option<BrowsingContext>,
+    original_opener: Option<BrowsingContext>,
+    url: Option<String>,
+    user_context: Option<crate::browser::types::UserContext>,
+    parent: Option<BrowsingContext>,
+}
+impl InfoBuilder {
+    pub fn children(mut self, children: impl Into<InfoList>) -> Self {
+        self.children = Some(children.into());
+        self
+    }
+    pub fn client_window(
+        mut self,
+        client_window: impl Into<crate::browser::types::ClientWindow>,
+    ) -> Self {
+        self.client_window = Some(client_window.into());
+        self
+    }
+    pub fn context(mut self, context: impl Into<BrowsingContext>) -> Self {
+        self.context = Some(context.into());
+        self
+    }
+    pub fn original_opener(mut self, original_opener: impl Into<BrowsingContext>) -> Self {
+        self.original_opener = Some(original_opener.into());
+        self
+    }
+    pub fn url(mut self, url: impl Into<String>) -> Self {
+        self.url = Some(url.into());
+        self
+    }
+    pub fn user_context(
+        mut self,
+        user_context: impl Into<crate::browser::types::UserContext>,
+    ) -> Self {
+        self.user_context = Some(user_context.into());
+        self
+    }
+    pub fn parent(mut self, parent: impl Into<BrowsingContext>) -> Self {
+        self.parent = Some(parent.into());
+        self
+    }
+    pub fn build(self) -> Result<Info, String> {
+        Ok(Info {
+            children: self.children,
+            client_window: self.client_window.ok_or_else(|| {
+                format!("Field `{}` is mandatory.", std::stringify!(client_window))
+            })?,
+            context: self
+                .context
+                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(context)))?,
+            original_opener: self.original_opener,
+            url: self
+                .url
+                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(url)))?,
+            user_context: self.user_context.ok_or_else(|| {
+                format!("Field `{}` is mandatory.", std::stringify!(user_context))
+            })?,
+            parent: self.parent,
+        })
+    }
+}
 impl BaseNavigationInfo {
     pub fn builder() -> BaseNavigationInfoBuilder {
-        BaseNavigationInfoBuilder::default()
+        <BaseNavigationInfoBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -423,7 +493,7 @@ impl BaseNavigationInfoBuilder {
 }
 impl DownloadCanceledParams {
     pub fn builder() -> DownloadCanceledParamsBuilder {
-        DownloadCanceledParamsBuilder::default()
+        <DownloadCanceledParamsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -475,7 +545,7 @@ impl DownloadCanceledParamsBuilder {
 }
 impl DownloadCompleteParams {
     pub fn builder() -> DownloadCompleteParamsBuilder {
-        DownloadCompleteParamsBuilder::default()
+        <DownloadCompleteParamsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

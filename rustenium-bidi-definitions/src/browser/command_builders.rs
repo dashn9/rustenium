@@ -1,7 +1,7 @@
 use super::commands::*;
 impl CreateUserContext {
     pub fn builder() -> CreateUserContextBuilder {
-        CreateUserContextBuilder::default()
+        <CreateUserContextBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -39,7 +39,7 @@ impl CreateUserContextBuilder {
 }
 impl RemoveUserContext {
     pub fn builder() -> RemoveUserContextBuilder {
-        RemoveUserContextBuilder::default()
+        <RemoveUserContextBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -64,7 +64,7 @@ impl RemoveUserContextBuilder {
 }
 impl SetClientWindowState {
     pub fn builder() -> SetClientWindowStateBuilder {
-        SetClientWindowStateBuilder::default()
+        <SetClientWindowStateBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -89,7 +89,7 @@ impl SetClientWindowStateBuilder {
 }
 impl SetDownloadBehavior {
     pub fn builder() -> SetDownloadBehaviorBuilder {
-        SetDownloadBehaviorBuilder::default()
+        <SetDownloadBehaviorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

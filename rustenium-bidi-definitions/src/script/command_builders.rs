@@ -1,7 +1,7 @@
 use super::commands::*;
 impl AddPreloadScript {
     pub fn builder() -> AddPreloadScriptBuilder {
-        AddPreloadScriptBuilder::default()
+        <AddPreloadScriptBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -95,7 +95,7 @@ impl AddPreloadScriptBuilder {
 }
 impl Disown {
     pub fn builder() -> DisownBuilder {
-        DisownBuilder::default()
+        <DisownBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -140,7 +140,7 @@ impl DisownBuilder {
 }
 impl CallFunction {
     pub fn builder() -> CallFunctionBuilder {
-        CallFunctionBuilder::default()
+        <CallFunctionBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -232,7 +232,7 @@ impl CallFunctionBuilder {
 }
 impl Evaluate {
     pub fn builder() -> EvaluateBuilder {
-        EvaluateBuilder::default()
+        <EvaluateBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -297,7 +297,7 @@ impl EvaluateBuilder {
 }
 impl GetRealms {
     pub fn builder() -> GetRealmsBuilder {
-        GetRealmsBuilder::default()
+        <GetRealmsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -329,7 +329,7 @@ impl GetRealmsBuilder {
 }
 impl RemovePreloadScript {
     pub fn builder() -> RemovePreloadScriptBuilder {
-        RemovePreloadScriptBuilder::default()
+        <RemovePreloadScriptBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

@@ -11,6 +11,13 @@ pub enum Level {
     Error,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum Entry {
+    GenericLogEntry(GenericLogEntry),
+    ConsoleLogEntry(ConsoleLogEntry),
+    JavascriptLogEntry(JavascriptLogEntry),
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BaseLogEntry {
     #[serde(rename = "level")]
     pub level: Level,
@@ -150,4 +157,4 @@ impl JavascriptLogEntry {
 impl JavascriptLogEntry {
     pub const IDENTIFIER: &'static str = "log.JavascriptLogEntry";
 }
-group_enum ! (LogTypes { Level (Level) , BaseLogEntry (BaseLogEntry) , GenericLogEntry (GenericLogEntry) , ConsoleLogEntry (ConsoleLogEntry) , JavascriptLogEntry (JavascriptLogEntry) });
+group_enum ! (LogTypes { Level (Level) , Entry (Entry) , BaseLogEntry (BaseLogEntry) , GenericLogEntry (GenericLogEntry) , ConsoleLogEntry (ConsoleLogEntry) , JavascriptLogEntry (JavascriptLogEntry) });

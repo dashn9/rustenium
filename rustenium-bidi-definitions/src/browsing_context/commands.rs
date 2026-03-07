@@ -224,7 +224,7 @@ pub struct HandleUserPrompt {
 impl crate::CommandResult for HandleUserPrompt {
     type Result = super::results::HandleUserPromptResult;
 }
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, serde_valid :: Validate)]
 pub struct LocateNodesParams {
     #[serde(rename = "context")]
     pub context: super::types::BrowsingContext,
@@ -233,7 +233,7 @@ pub struct LocateNodesParams {
     #[serde(rename = "maxNodeCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    #[serde_valid::validate(minimum = 1f64)]
+    #[validate(minimum = 1u64)]
     pub max_node_count: Option<u64>,
     #[serde(rename = "serializationOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -427,7 +427,7 @@ pub struct Reload {
 impl crate::CommandResult for Reload {
     type Result = super::results::ReloadResult;
 }
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, serde_valid :: Validate)]
 pub struct SetViewportParams {
     #[serde(rename = "context")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -440,7 +440,7 @@ pub struct SetViewportParams {
     #[serde(rename = "devicePixelRatio")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    #[serde_valid::validate(exclusive_minimum = 0f64)]
+    #[validate(exclusive_minimum = 0f64)]
     pub device_pixel_ratio: Option<f64>,
     #[serde(rename = "userContexts")]
     #[serde(skip_serializing_if = "Option::is_none")]

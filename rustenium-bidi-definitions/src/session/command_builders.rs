@@ -1,7 +1,7 @@
 use super::commands::*;
 impl New {
     pub fn builder() -> NewBuilder {
-        NewBuilder::default()
+        <NewBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -29,7 +29,7 @@ impl NewBuilder {
 }
 impl Subscribe {
     pub fn builder() -> SubscribeBuilder {
-        SubscribeBuilder::default()
+        <SubscribeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

@@ -1,7 +1,7 @@
 use super::types::*;
 impl AuthCredentials {
     pub fn builder() -> AuthCredentialsBuilder {
-        AuthCredentialsBuilder::default()
+        <AuthCredentialsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -39,7 +39,7 @@ impl AuthCredentialsBuilder {
 }
 impl StringValue {
     pub fn builder() -> StringValueBuilder {
-        StringValueBuilder::default()
+        <StringValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -69,7 +69,7 @@ impl StringValueBuilder {
 }
 impl Base64Value {
     pub fn builder() -> Base64ValueBuilder {
-        Base64ValueBuilder::default()
+        <Base64ValueBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -99,7 +99,7 @@ impl Base64ValueBuilder {
 }
 impl Cookie {
     pub fn builder() -> CookieBuilder {
-        CookieBuilder::default()
+        <CookieBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -194,7 +194,7 @@ impl CookieBuilder {
 }
 impl CookieHeader {
     pub fn builder() -> CookieHeaderBuilder {
-        CookieHeaderBuilder::default()
+        <CookieHeaderBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -224,7 +224,7 @@ impl CookieHeaderBuilder {
 }
 impl Header {
     pub fn builder() -> HeaderBuilder {
-        HeaderBuilder::default()
+        <HeaderBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -254,7 +254,7 @@ impl HeaderBuilder {
 }
 impl SetCookieHeader {
     pub fn builder() -> SetCookieHeaderBuilder {
-        SetCookieHeaderBuilder::default()
+        <SetCookieHeaderBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -326,7 +326,7 @@ impl SetCookieHeaderBuilder {
 }
 impl UrlPatternPattern {
     pub fn builder() -> UrlPatternPatternBuilder {
-        UrlPatternPatternBuilder::default()
+        <UrlPatternPatternBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -378,7 +378,7 @@ impl UrlPatternPatternBuilder {
 }
 impl UrlPatternString {
     pub fn builder() -> UrlPatternStringBuilder {
-        UrlPatternStringBuilder::default()
+        <UrlPatternStringBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -408,7 +408,7 @@ impl UrlPatternStringBuilder {
 }
 impl ContinueWithAuthCredentials {
     pub fn builder() -> ContinueWithAuthCredentialsBuilder {
-        ContinueWithAuthCredentialsBuilder::default()
+        <ContinueWithAuthCredentialsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -438,7 +438,7 @@ impl ContinueWithAuthCredentialsBuilder {
 }
 impl ContinueWithAuthNoCredentials {
     pub fn builder() -> ContinueWithAuthNoCredentialsBuilder {
-        ContinueWithAuthNoCredentialsBuilder::default()
+        <ContinueWithAuthNoCredentialsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -460,7 +460,7 @@ impl ContinueWithAuthNoCredentialsBuilder {
 }
 impl AuthChallenge {
     pub fn builder() -> AuthChallengeBuilder {
-        AuthChallengeBuilder::default()
+        <AuthChallengeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -490,7 +490,7 @@ impl AuthChallengeBuilder {
 }
 impl BaseParameters {
     pub fn builder() -> BaseParametersBuilder {
-        BaseParametersBuilder::default()
+        <BaseParametersBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -572,7 +572,7 @@ impl BaseParametersBuilder {
 }
 impl FetchTimingInfo {
     pub fn builder() -> FetchTimingInfoBuilder {
-        FetchTimingInfoBuilder::default()
+        <FetchTimingInfoBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -690,7 +690,7 @@ impl FetchTimingInfoBuilder {
 }
 impl Initiator {
     pub fn builder() -> InitiatorBuilder {
-        InitiatorBuilder::default()
+        <InitiatorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -734,7 +734,7 @@ impl InitiatorBuilder {
 }
 impl RequestData {
     pub fn builder() -> RequestDataBuilder {
-        RequestDataBuilder::default()
+        <RequestDataBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -848,7 +848,7 @@ impl RequestDataBuilder {
 }
 impl ResponseContent {
     pub fn builder() -> ResponseContentBuilder {
-        ResponseContentBuilder::default()
+        <ResponseContentBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -870,7 +870,7 @@ impl ResponseContentBuilder {
 }
 impl ResponseData {
     pub fn builder() -> ResponseDataBuilder {
-        ResponseDataBuilder::default()
+        <ResponseDataBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

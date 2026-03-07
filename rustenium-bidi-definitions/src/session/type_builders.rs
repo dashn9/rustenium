@@ -1,7 +1,7 @@
 use super::types::*;
 impl CapabilitiesRequest {
     pub fn builder() -> CapabilitiesRequestBuilder {
-        CapabilitiesRequestBuilder::default()
+        <CapabilitiesRequestBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -39,7 +39,7 @@ impl CapabilitiesRequestBuilder {
 }
 impl CapabilityRequest {
     pub fn builder() -> CapabilityRequestBuilder {
-        CapabilityRequestBuilder::default()
+        <CapabilityRequestBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -103,7 +103,7 @@ impl CapabilityRequestBuilder {
 }
 impl ProxyConfiguration {
     pub fn builder() -> ProxyConfigurationBuilder {
-        ProxyConfigurationBuilder::default()
+        <ProxyConfigurationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -136,7 +136,7 @@ impl ProxyConfigurationBuilder {
 }
 impl AutodetectProxyConfiguration {
     pub fn builder() -> AutodetectProxyConfigurationBuilder {
-        AutodetectProxyConfigurationBuilder::default()
+        <AutodetectProxyConfigurationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -169,7 +169,7 @@ impl AutodetectProxyConfigurationBuilder {
 }
 impl DirectProxyConfiguration {
     pub fn builder() -> DirectProxyConfigurationBuilder {
-        DirectProxyConfigurationBuilder::default()
+        <DirectProxyConfigurationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -202,7 +202,7 @@ impl DirectProxyConfigurationBuilder {
 }
 impl ManualProxyConfiguration {
     pub fn builder() -> ManualProxyConfigurationBuilder {
-        ManualProxyConfigurationBuilder::default()
+        <ManualProxyConfigurationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -265,7 +265,7 @@ impl ManualProxyConfigurationBuilder {
 }
 impl SocksProxyConfiguration {
     pub fn builder() -> SocksProxyConfigurationBuilder {
-        SocksProxyConfigurationBuilder::default()
+        <SocksProxyConfigurationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -295,7 +295,7 @@ impl SocksProxyConfigurationBuilder {
 }
 impl PacProxyConfiguration {
     pub fn builder() -> PacProxyConfigurationBuilder {
-        PacProxyConfigurationBuilder::default()
+        <PacProxyConfigurationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -339,7 +339,7 @@ impl PacProxyConfigurationBuilder {
 }
 impl SystemProxyConfiguration {
     pub fn builder() -> SystemProxyConfigurationBuilder {
-        SystemProxyConfigurationBuilder::default()
+        <SystemProxyConfigurationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -372,7 +372,7 @@ impl SystemProxyConfigurationBuilder {
 }
 impl UserPromptHandler {
     pub fn builder() -> UserPromptHandlerBuilder {
-        UserPromptHandlerBuilder::default()
+        <UserPromptHandlerBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -380,7 +380,7 @@ pub struct UserPromptHandlerBuilder {
     alert: Option<UserPromptHandlerType>,
     before_unload: Option<UserPromptHandlerType>,
     confirm: Option<UserPromptHandlerType>,
-    default: Option<UserPromptHandlerType>,
+    r#default: Option<UserPromptHandlerType>,
     file: Option<UserPromptHandlerType>,
     prompt: Option<UserPromptHandlerType>,
 }
@@ -397,8 +397,8 @@ impl UserPromptHandlerBuilder {
         self.confirm = Some(confirm.into());
         self
     }
-    pub fn default(mut self, default: impl Into<UserPromptHandlerType>) -> Self {
-        self.default = Some(default.into());
+    pub fn r#default(mut self, r#default: impl Into<UserPromptHandlerType>) -> Self {
+        self.r#default = Some(r#default.into());
         self
     }
     pub fn file(mut self, file: impl Into<UserPromptHandlerType>) -> Self {
@@ -414,7 +414,7 @@ impl UserPromptHandlerBuilder {
             alert: self.alert,
             before_unload: self.before_unload,
             confirm: self.confirm,
-            default: self.default,
+            r#default: self.r#default,
             file: self.file,
             prompt: self.prompt,
         }
@@ -422,7 +422,7 @@ impl UserPromptHandlerBuilder {
 }
 impl UnsubscribeByIdRequest {
     pub fn builder() -> UnsubscribeByIdRequestBuilder {
-        UnsubscribeByIdRequestBuilder::default()
+        <UnsubscribeByIdRequestBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -456,7 +456,7 @@ impl UnsubscribeByIdRequestBuilder {
 }
 impl UnsubscribeByAttributesRequest {
     pub fn builder() -> UnsubscribeByAttributesRequestBuilder {
-        UnsubscribeByAttributesRequestBuilder::default()
+        <UnsubscribeByAttributesRequestBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

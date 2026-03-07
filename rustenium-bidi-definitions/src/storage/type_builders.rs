@@ -1,7 +1,7 @@
 use super::types::*;
 impl PartitionKey {
     pub fn builder() -> PartitionKeyBuilder {
-        PartitionKeyBuilder::default()
+        <PartitionKeyBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -38,7 +38,7 @@ impl PartitionKeyBuilder {
 }
 impl CookieFilter {
     pub fn builder() -> CookieFilterBuilder {
-        CookieFilterBuilder::default()
+        <CookieFilterBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -117,7 +117,7 @@ impl CookieFilterBuilder {
 }
 impl BrowsingContextPartitionDescriptor {
     pub fn builder() -> BrowsingContextPartitionDescriptorBuilder {
-        BrowsingContextPartitionDescriptorBuilder::default()
+        <BrowsingContextPartitionDescriptorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -150,7 +150,7 @@ impl BrowsingContextPartitionDescriptorBuilder {
 }
 impl StorageKeyPartitionDescriptor {
     pub fn builder() -> StorageKeyPartitionDescriptorBuilder {
-        StorageKeyPartitionDescriptorBuilder::default()
+        <StorageKeyPartitionDescriptorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -195,7 +195,7 @@ impl StorageKeyPartitionDescriptorBuilder {
 }
 impl PartialCookie {
     pub fn builder() -> PartialCookieBuilder {
-        PartialCookieBuilder::default()
+        <PartialCookieBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

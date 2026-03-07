@@ -1,7 +1,7 @@
 use super::types::*;
 impl GeolocationCoordinates {
     pub fn builder() -> GeolocationCoordinatesBuilder {
-        GeolocationCoordinatesBuilder::default()
+        <GeolocationCoordinatesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -61,7 +61,7 @@ impl GeolocationCoordinatesBuilder {
 }
 impl GeolocationPositionError {
     pub fn builder() -> GeolocationPositionErrorBuilder {
-        GeolocationPositionErrorBuilder::default()
+        <GeolocationPositionErrorBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -83,7 +83,7 @@ impl GeolocationPositionErrorBuilder {
 }
 impl NetworkConditionsOffline {
     pub fn builder() -> NetworkConditionsOfflineBuilder {
-        NetworkConditionsOfflineBuilder::default()
+        <NetworkConditionsOfflineBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -105,7 +105,7 @@ impl NetworkConditionsOfflineBuilder {
 }
 impl ScreenOrientation {
     pub fn builder() -> ScreenOrientationBuilder {
-        ScreenOrientationBuilder::default()
+        <ScreenOrientationBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

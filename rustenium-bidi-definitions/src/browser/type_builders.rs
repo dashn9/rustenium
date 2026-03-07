@@ -1,7 +1,7 @@
 use super::types::*;
 impl ClientWindowInfo {
     pub fn builder() -> ClientWindowInfoBuilder {
-        ClientWindowInfoBuilder::default()
+        <ClientWindowInfoBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -71,7 +71,7 @@ impl ClientWindowInfoBuilder {
 }
 impl UserContextInfo {
     pub fn builder() -> UserContextInfoBuilder {
-        UserContextInfoBuilder::default()
+        <UserContextInfoBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -93,7 +93,7 @@ impl UserContextInfoBuilder {
 }
 impl ClientWindowNamedState {
     pub fn builder() -> ClientWindowNamedStateBuilder {
-        ClientWindowNamedStateBuilder::default()
+        <ClientWindowNamedStateBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -115,7 +115,7 @@ impl ClientWindowNamedStateBuilder {
 }
 impl ClientWindowRectState {
     pub fn builder() -> ClientWindowRectStateBuilder {
-        ClientWindowRectStateBuilder::default()
+        <ClientWindowRectStateBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -161,7 +161,7 @@ impl ClientWindowRectStateBuilder {
 }
 impl DownloadBehaviorAllowed {
     pub fn builder() -> DownloadBehaviorAllowedBuilder {
-        DownloadBehaviorAllowedBuilder::default()
+        <DownloadBehaviorAllowedBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -194,7 +194,7 @@ impl DownloadBehaviorAllowedBuilder {
 }
 impl DownloadBehaviorDenied {
     pub fn builder() -> DownloadBehaviorDeniedBuilder {
-        DownloadBehaviorDeniedBuilder::default()
+        <DownloadBehaviorDeniedBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

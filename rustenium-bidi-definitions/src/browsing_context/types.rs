@@ -283,27 +283,27 @@ pub enum CreateType {
     #[serde(rename = "window")]
     Window,
 }
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, serde_valid :: Validate)]
 pub struct PrintMarginParameters {
     #[serde(rename = "bottom")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default = "default_print_margin_parameters_bottom")]
-    #[serde_valid::validate(minimum = 0f64)]
+    #[validate(minimum = 0f64)]
     pub bottom: Option<f64>,
     #[serde(rename = "left")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default = "default_print_margin_parameters_left")]
-    #[serde_valid::validate(minimum = 0f64)]
+    #[validate(minimum = 0f64)]
     pub left: Option<f64>,
     #[serde(rename = "right")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default = "default_print_margin_parameters_right")]
-    #[serde_valid::validate(minimum = 0f64)]
+    #[validate(minimum = 0f64)]
     pub right: Option<f64>,
     #[serde(rename = "top")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default = "default_print_margin_parameters_top")]
-    #[serde_valid::validate(minimum = 0f64)]
+    #[validate(minimum = 0f64)]
     pub top: Option<f64>,
 }
 fn default_print_margin_parameters_bottom() -> Option<f64> {
@@ -321,17 +321,17 @@ fn default_print_margin_parameters_top() -> Option<f64> {
 impl PrintMarginParameters {
     pub const IDENTIFIER: &'static str = "browsingContext.PrintMarginParameters";
 }
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, serde_valid :: Validate)]
 pub struct PrintPageParameters {
     #[serde(rename = "height")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default = "default_print_page_parameters_height")]
-    #[serde_valid::validate(minimum = 0.0352f64)]
+    #[validate(minimum = 0.0352f64)]
     pub height: Option<f64>,
     #[serde(rename = "width")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default = "default_print_page_parameters_width")]
-    #[serde_valid::validate(minimum = 0.0352f64)]
+    #[validate(minimum = 0.0352f64)]
     pub width: Option<f64>,
 }
 fn default_print_page_parameters_height() -> Option<f64> {
@@ -373,6 +373,50 @@ impl InfoList {
 }
 impl InfoList {
     pub const IDENTIFIER: &'static str = "browsingContext.InfoList";
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Info {
+    #[serde(rename = "children")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
+    pub children: Option<InfoList>,
+    #[serde(rename = "clientWindow")]
+    pub client_window: crate::browser::types::ClientWindow,
+    #[serde(rename = "context")]
+    pub context: BrowsingContext,
+    #[serde(rename = "originalOpener")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
+    pub original_opener: Option<BrowsingContext>,
+    #[serde(rename = "url")]
+    pub url: String,
+    #[serde(rename = "userContext")]
+    pub user_context: crate::browser::types::UserContext,
+    #[serde(rename = "parent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
+    pub parent: Option<BrowsingContext>,
+}
+impl Info {
+    pub fn new(
+        client_window: impl Into<crate::browser::types::ClientWindow>,
+        context: impl Into<BrowsingContext>,
+        url: impl Into<String>,
+        user_context: impl Into<crate::browser::types::UserContext>,
+    ) -> Self {
+        Self {
+            client_window: client_window.into(),
+            context: context.into(),
+            url: url.into(),
+            user_context: user_context.into(),
+            children: None,
+            original_opener: None,
+            parent: None,
+        }
+    }
+}
+impl Info {
+    pub const IDENTIFIER: &'static str = "browsingContext.Info";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BaseNavigationInfo {
@@ -477,4 +521,4 @@ impl DownloadCompleteParams {
 impl DownloadCompleteParams {
     pub const IDENTIFIER: &'static str = "browsingContext.DownloadCompleteParams";
 }
-group_enum ! (BrowsingContextTypes { BrowsingContext (BrowsingContext) , Locator (Locator) , AccessibilityLocator (AccessibilityLocator) , CssLocator (CssLocator) , ContextLocator (ContextLocator) , InnerTextLocator (InnerTextLocator) , XPathLocator (XPathLocator) , Navigation (Navigation) , ReadinessState (ReadinessState) , UserPromptType (UserPromptType) , ImageFormat (ImageFormat) , ClipRectangle (ClipRectangle) , ElementClipRectangle (ElementClipRectangle) , BoxClipRectangle (BoxClipRectangle) , CreateType (CreateType) , PrintMarginParameters (PrintMarginParameters) , PrintPageParameters (PrintPageParameters) , Viewport (Viewport) , InfoList (InfoList) , BaseNavigationInfo (BaseNavigationInfo) , DownloadCanceledParams (DownloadCanceledParams) , DownloadCompleteParams (DownloadCompleteParams) });
+group_enum ! (BrowsingContextTypes { BrowsingContext (BrowsingContext) , Locator (Locator) , AccessibilityLocator (AccessibilityLocator) , CssLocator (CssLocator) , ContextLocator (ContextLocator) , InnerTextLocator (InnerTextLocator) , XPathLocator (XPathLocator) , Navigation (Navigation) , ReadinessState (ReadinessState) , UserPromptType (UserPromptType) , ImageFormat (ImageFormat) , ClipRectangle (ClipRectangle) , ElementClipRectangle (ElementClipRectangle) , BoxClipRectangle (BoxClipRectangle) , CreateType (CreateType) , PrintMarginParameters (PrintMarginParameters) , PrintPageParameters (PrintPageParameters) , Viewport (Viewport) , InfoList (InfoList) , Info (Info) , BaseNavigationInfo (BaseNavigationInfo) , DownloadCanceledParams (DownloadCanceledParams) , DownloadCompleteParams (DownloadCompleteParams) });

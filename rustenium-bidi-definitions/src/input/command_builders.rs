@@ -1,7 +1,7 @@
 use super::commands::*;
 impl PerformActions {
     pub fn builder() -> PerformActionsBuilder {
-        PerformActionsBuilder::default()
+        <PerformActionsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -49,7 +49,7 @@ impl PerformActionsBuilder {
 }
 impl ReleaseActions {
     pub fn builder() -> ReleaseActionsBuilder {
-        ReleaseActionsBuilder::default()
+        <ReleaseActionsBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -77,7 +77,7 @@ impl ReleaseActionsBuilder {
 }
 impl SetFiles {
     pub fn builder() -> SetFilesBuilder {
-        SetFilesBuilder::default()
+        <SetFilesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

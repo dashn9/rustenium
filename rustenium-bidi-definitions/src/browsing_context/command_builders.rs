@@ -1,7 +1,7 @@
 use super::commands::*;
 impl Activate {
     pub fn builder() -> ActivateBuilder {
-        ActivateBuilder::default()
+        <ActivateBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -26,7 +26,7 @@ impl ActivateBuilder {
 }
 impl CaptureScreenshot {
     pub fn builder() -> CaptureScreenshotBuilder {
-        CaptureScreenshotBuilder::default()
+        <CaptureScreenshotBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -69,7 +69,7 @@ impl CaptureScreenshotBuilder {
 }
 impl Close {
     pub fn builder() -> CloseBuilder {
-        CloseBuilder::default()
+        <CloseBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -100,7 +100,7 @@ impl CloseBuilder {
 }
 impl Create {
     pub fn builder() -> CreateBuilder {
-        CreateBuilder::default()
+        <CreateBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -149,7 +149,7 @@ impl CreateBuilder {
 }
 impl GetTree {
     pub fn builder() -> GetTreeBuilder {
-        GetTreeBuilder::default()
+        <GetTreeBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -178,7 +178,7 @@ impl GetTreeBuilder {
 }
 impl HandleUserPrompt {
     pub fn builder() -> HandleUserPromptBuilder {
-        HandleUserPromptBuilder::default()
+        <HandleUserPromptBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -215,7 +215,7 @@ impl HandleUserPromptBuilder {
 }
 impl LocateNodes {
     pub fn builder() -> LocateNodesBuilder {
-        LocateNodesBuilder::default()
+        <LocateNodesBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -284,7 +284,7 @@ impl LocateNodesBuilder {
 }
 impl Navigate {
     pub fn builder() -> NavigateBuilder {
-        NavigateBuilder::default()
+        <NavigateBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -323,7 +323,7 @@ impl NavigateBuilder {
 }
 impl Print {
     pub fn builder() -> PrintBuilder {
-        PrintBuilder::default()
+        <PrintBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -402,7 +402,7 @@ impl PrintBuilder {
 }
 impl Reload {
     pub fn builder() -> ReloadBuilder {
-        ReloadBuilder::default()
+        <ReloadBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -439,7 +439,7 @@ impl ReloadBuilder {
 }
 impl SetViewport {
     pub fn builder() -> SetViewportBuilder {
-        SetViewportBuilder::default()
+        <SetViewportBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]
@@ -495,7 +495,7 @@ impl SetViewportBuilder {
 }
 impl TraverseHistory {
     pub fn builder() -> TraverseHistoryBuilder {
-        TraverseHistoryBuilder::default()
+        <TraverseHistoryBuilder as Default>::default()
     }
 }
 #[derive(Default, Clone)]

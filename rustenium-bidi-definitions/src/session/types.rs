@@ -247,7 +247,7 @@ pub struct UserPromptHandler {
     #[serde(rename = "default")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub default: Option<UserPromptHandlerType>,
+    pub r#default: Option<UserPromptHandlerType>,
     #[serde(rename = "file")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -325,4 +325,17 @@ impl UnsubscribeByAttributesRequest {
 impl UnsubscribeByAttributesRequest {
     pub const IDENTIFIER: &'static str = "session.UnsubscribeByAttributesRequest";
 }
-group_enum ! (SessionTypes { CapabilitiesRequest (CapabilitiesRequest) , CapabilityRequest (CapabilityRequest) , ProxyConfiguration (ProxyConfiguration) , AutodetectProxyConfiguration (AutodetectProxyConfiguration) , DirectProxyConfiguration (DirectProxyConfiguration) , ManualProxyConfiguration (ManualProxyConfiguration) , SocksProxyConfiguration (SocksProxyConfiguration) , PacProxyConfiguration (PacProxyConfiguration) , SystemProxyConfiguration (SystemProxyConfiguration) , UserPromptHandler (UserPromptHandler) , UserPromptHandlerType (UserPromptHandlerType) , Subscription (Subscription) , UnsubscribeByIdRequest (UnsubscribeByIdRequest) , UnsubscribeByAttributesRequest (UnsubscribeByAttributesRequest) });
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct UnsubscribeParameters(serde_json::Value);
+impl UnsubscribeParameters {
+    pub fn new(val: impl Into<serde_json::Value>) -> Self {
+        UnsubscribeParameters(val.into())
+    }
+    pub fn inner(&self) -> &serde_json::Value {
+        &self.0
+    }
+}
+impl UnsubscribeParameters {
+    pub const IDENTIFIER: &'static str = "session.UnsubscribeParameters";
+}
+group_enum ! (SessionTypes { CapabilitiesRequest (CapabilitiesRequest) , CapabilityRequest (CapabilityRequest) , ProxyConfiguration (ProxyConfiguration) , AutodetectProxyConfiguration (AutodetectProxyConfiguration) , DirectProxyConfiguration (DirectProxyConfiguration) , ManualProxyConfiguration (ManualProxyConfiguration) , SocksProxyConfiguration (SocksProxyConfiguration) , PacProxyConfiguration (PacProxyConfiguration) , SystemProxyConfiguration (SystemProxyConfiguration) , UserPromptHandler (UserPromptHandler) , UserPromptHandlerType (UserPromptHandlerType) , Subscription (Subscription) , UnsubscribeByIdRequest (UnsubscribeByIdRequest) , UnsubscribeByAttributesRequest (UnsubscribeByAttributesRequest) , UnsubscribeParameters (UnsubscribeParameters) });

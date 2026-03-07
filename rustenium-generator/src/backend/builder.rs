@@ -234,7 +234,7 @@ impl Builder {
         quote! {
             impl #def_name {
                 pub fn builder() -> #builder {
-                    #builder::default()
+                    <#builder as Default>::default()
                 }
             }
 
@@ -375,7 +375,7 @@ impl Builder {
         quote! {
                impl #name {
                     pub fn builder() -> #builder {
-                        #builder::default()
+                        <#builder as Default>::default()
                     }
                }
 
