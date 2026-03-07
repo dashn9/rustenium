@@ -48,10 +48,6 @@ pub fn parse_cddl(inputs: &[(&str, DomainDirection)]) -> Protocol<'static> {
         .map(|r| (r.name.as_str(), r.body.as_str()))
         .collect();
 
-    let origin_map: HashMap<&str, DomainDirection> = rules
-        .iter()
-        .map(|r| (r.name.as_str(), r.origin))
-        .collect();
 
     // Classify using aggregate groups + name/body heuristics
     let mut commands: HashSet<String> = collect_group_members(&rule_map, "Command");
@@ -373,9 +369,6 @@ fn parse_typedef(full_name: &str, type_name: &str, body: &str, rule_map: &HashMa
             direction: None,
         });
     }
-
-    // Single string literal: "blob" → string type (not an enum)
-    let stripped = body.trim_matches('"');
     if body.starts_with('"')
         && body.ends_with('"')
         && !body[1..body.len() - 1].contains('"')
@@ -568,10 +561,6 @@ fn resolve_params(
             .unwrap_or_default(),
         _ => vec![],
     }
-}
-
-fn parse_struct_fields(body: &str) -> Vec<Param<'static>> {
-    parse_struct_fields_with(body, None)
 }
 
 fn parse_struct_fields_resolved(body: &str, rule_map: &HashMap<&str, &str>) -> Vec<Param<'static>> {

@@ -102,7 +102,7 @@ pub fn parse_pdl<'a>(input: &'a str) -> Result<Protocol<'a>, Error> {
 
         if let Some(caps) = regex!("^(experimental )?(deprecated )?domain (.*)").captures(line) {
             if let Some(module) = protocol.modules.last_mut() {
-                if let Some(mut mod_prop) = mod_prop.take() {
+                if let Some(mod_prop) = mod_prop.take() {
                     add_module_property_to_module(mod_prop, module);
                 }
             }
@@ -142,7 +142,7 @@ pub fn parse_pdl<'a>(input: &'a str) -> Result<Protocol<'a>, Error> {
                 .last_mut()
                 .ok_or_else(|| format_err!("line {}: missing module declaration", line_num))?;
 
-            if let Some(mut mod_prop) = mod_prop.take() {
+            if let Some(mod_prop) = mod_prop.take() {
                 add_module_property_to_module(mod_prop, module);
             }
             let name = borrowed!(caps.get(3)).unwrap();
@@ -169,7 +169,7 @@ pub fn parse_pdl<'a>(input: &'a str) -> Result<Protocol<'a>, Error> {
                 .modules
                 .last_mut()
                 .ok_or_else(|| format_err!("line {}: missing module declaration", line_num))?;
-            if let Some(mut mod_prop) = mod_prop.take() {
+            if let Some(mod_prop) = mod_prop.take() {
                 add_module_property_to_module(mod_prop, module);
             }
             let name = borrowed!(caps.get(4)).unwrap();
@@ -412,7 +412,7 @@ pub fn parse_pdl<'a>(input: &'a str) -> Result<Protocol<'a>, Error> {
     }
 
     if let Some(module) = protocol.modules.last_mut() {
-        if let Some(mut mod_prop) = mod_prop.take() {
+        if let Some(mod_prop) = mod_prop.take() {
             add_module_property_to_module(mod_prop, module);
         }
     }

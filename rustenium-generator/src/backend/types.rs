@@ -284,7 +284,6 @@ pub struct FieldDefinition {
     pub ty: FieldType,
     pub optional: bool,
     pub deprecated: bool,
-    pub is_enum: bool,
     pub serde_skip: bool,
 }
 

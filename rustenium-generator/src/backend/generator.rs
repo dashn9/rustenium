@@ -1,5 +1,5 @@
 use std::borrow::Cow;
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 use std::fs;
 use std::io::{self, Error, ErrorKind};
 use std::ops::Deref;
@@ -19,8 +19,6 @@ pub struct Generator {
     with_experimental: bool,
     with_deprecated: bool,
     out_dir: Option<PathBuf>,
-    /// All enums across modules with qualified names `<module>.<name>`
-    enums: HashSet<String>,
     /// Maps module name (original case, e.g. "Runtime") to protocol snake name (e.g. "js_protocol")
     module_protocol_map: HashMap<String, String>,
 }
@@ -31,7 +29,6 @@ impl Default for Generator {
             with_experimental: true,
             with_deprecated: false,
             out_dir: None,
-            enums: HashSet::new(),
             module_protocol_map: HashMap::new(),
         }
     }
@@ -457,20 +454,12 @@ impl Generator {
                 let mut ty = self.generate_field_type(module, cr.name.as_ref(), param.name.as_ref(), &param.r#type, current_protocol, false);
                 ty.needs_box = ty.needs_box || param.is_circular_dep;
 
-                let is_enum = if let Type::Ref(type_ref) = &param.r#type {
-                    self.enums.contains(type_ref.name.as_ref())
-                        || self.enums.contains(&format!("{}.{}", module.name, type_ref.name.as_ref()))
-                } else {
-                    param.r#type.is_enum()
-                };
-
                 let field = FieldDefinition {
                     name: param.name.to_string(),
                     name_ident: field_name,
                     ty,
                     optional: param.optional,
                     deprecated: param.deprecated,
-                    is_enum,
                     serde_skip: false,
                 };
 
@@ -548,7 +537,7 @@ impl Generator {
 
     fn generate_type(&mut self, module: &Module, dt: &ModuleDatatype, current_protocol: &str, local_same_file: bool) -> (TokenStream, TokenStream) {
         let (def, builder) = if let Some(type_refs) = dt.as_type_choice() {
-            (self.generate_type_choice_enum(module, dt, type_refs, current_protocol, local_same_file), TokenStream::default())
+            (self.generate_type_choice_enum(module, dt, type_refs, local_same_file), TokenStream::default())
         } else if let Some(vars) = dt.as_enum() {
             (self.generate_enum(&Variant::from(dt), vars), TokenStream::default())
         } else {
@@ -672,20 +661,12 @@ impl Generator {
             let mut ty = self.generate_field_type(module, dt.name(), param.name.as_ref(), &param.r#type, current_protocol, local_same_file);
             ty.needs_box = ty.needs_box || param.is_circular_dep;
 
-            let is_enum = if let Type::Ref(type_ref) = &param.r#type {
-                self.enums.contains(type_ref.name.as_ref())
-                    || self.enums.contains(&format!("{}.{}", module.name, type_ref.name.as_ref()))
-            } else {
-                param.r#type.is_enum()
-            };
-
             let field = FieldDefinition {
                 name: param.name.to_string(),
                 name_ident: field_name,
                 ty,
                 optional: param.optional,
                 deprecated: param.deprecated,
-                is_enum,
                 serde_skip: false,
             };
 
@@ -847,7 +828,6 @@ impl Generator {
         module: &Module,
         dt: &ModuleDatatype,
         type_refs: &[TypeRef],
-        current_protocol: &str,
         local_same_file: bool,
     ) -> TokenStream {
         let enum_name = format_ident!("{}", dt.ident_name());
@@ -855,7 +835,7 @@ impl Generator {
 
         let variants: Vec<TokenStream> = type_refs.iter().map(|tr| {
             let variant_name = format_ident!("{}", tr.name.to_upper_camel_case());
-            let ty = self.projected_type(module, tr, current_protocol, local_same_file);
+            let ty = self.projected_type(module, tr, local_same_file);
             quote! { #variant_name(#ty) }
         }).collect();
 
@@ -893,7 +873,7 @@ impl Generator {
             }
             Type::ArrayOf(ty) => {
                 let ty = if let Type::Ref(type_ref) = ty.deref() {
-                    self.projected_type(module, type_ref, current_protocol, local_same_file)
+                    self.projected_type(module, type_ref, local_same_file)
                 } else {
                     let ty = self.generate_field_type(module, parent, param_name, ty, current_protocol, local_same_file);
                     quote! { #ty }
@@ -905,13 +885,13 @@ impl Generator {
                     let ident = format_ident!("{}", type_ref.name.to_upper_camel_case());
                     FieldType::new_box(quote! { #ident })
                 } else {
-                    FieldType::new(self.projected_type(module, type_ref, current_protocol, local_same_file))
+                    FieldType::new(self.projected_type(module, type_ref, local_same_file))
                 }
             }
         }
     }
 
-    fn projected_type(&self, module: &Module, type_ref: &TypeRef, current_protocol: &str, local_same_file: bool) -> TokenStream {
+    fn projected_type(&self, module: &Module, type_ref: &TypeRef, local_same_file: bool) -> TokenStream {
         let ident = format_ident!("{}", type_ref.name.to_upper_camel_case());
 
         let is_local = match &type_ref.module {
