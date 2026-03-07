@@ -35,14 +35,12 @@ pub struct NewResult {
     #[serde(default)]
     pub web_socket_url: Option<String>,
     #[serde(flatten)]
-    #[serde(skip_serializing_if = "std::collections::HashMap::is_empty")]
     #[serde(default)]
     pub extensible: std::collections::HashMap<String, serde_json::Value>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EndResult {
     #[serde(flatten)]
-    #[serde(skip_serializing_if = "std::collections::HashMap::is_empty")]
     #[serde(default)]
     pub extensible: std::collections::HashMap<String, serde_json::Value>,
 }
@@ -54,7 +52,6 @@ pub struct SubscribeResult {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UnsubscribeResult {
     #[serde(flatten)]
-    #[serde(skip_serializing_if = "std::collections::HashMap::is_empty")]
     #[serde(default)]
     pub extensible: std::collections::HashMap<String, serde_json::Value>,
 }

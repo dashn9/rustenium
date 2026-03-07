@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StatusParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum StatusMethod {
@@ -45,7 +45,7 @@ pub struct New {
 impl crate::CommandResult for New {
     type Result = super::results::NewResult;
 }
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EndParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum EndMethod {
@@ -102,7 +102,7 @@ pub struct Subscribe {
 impl crate::CommandResult for Subscribe {
     type Result = super::results::SubscribeResult;
 }
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UnsubscribeParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum UnsubscribeMethod {

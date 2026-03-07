@@ -40,7 +40,6 @@ pub struct CapabilityRequest {
     #[serde(default)]
     pub unhandled_prompt_behavior: Option<UserPromptHandler>,
     #[serde(flatten)]
-    #[serde(skip_serializing_if = "std::collections::HashMap::is_empty")]
     #[serde(default)]
     pub extensible: std::collections::HashMap<String, serde_json::Value>,
 }
@@ -67,7 +66,6 @@ pub struct ProxyConfiguration {
     #[serde(rename = "proxyType")]
     pub proxy_type: String,
     #[serde(flatten)]
-    #[serde(skip_serializing_if = "std::collections::HashMap::is_empty")]
     #[serde(default)]
     pub extensible: std::collections::HashMap<String, serde_json::Value>,
 }
@@ -90,7 +88,6 @@ pub struct AutodetectProxyConfiguration {
     #[serde(rename = "proxyType")]
     pub proxy_type: String,
     #[serde(flatten)]
-    #[serde(skip_serializing_if = "std::collections::HashMap::is_empty")]
     #[serde(default)]
     pub extensible: std::collections::HashMap<String, serde_json::Value>,
 }
@@ -113,7 +110,6 @@ pub struct DirectProxyConfiguration {
     #[serde(rename = "proxyType")]
     pub proxy_type: String,
     #[serde(flatten)]
-    #[serde(skip_serializing_if = "std::collections::HashMap::is_empty")]
     #[serde(default)]
     pub extensible: std::collections::HashMap<String, serde_json::Value>,
 }
@@ -148,7 +144,6 @@ pub struct ManualProxyConfiguration {
     #[serde(default)]
     pub no_proxy: Option<Vec<String>>,
     #[serde(flatten)]
-    #[serde(skip_serializing_if = "std::collections::HashMap::is_empty")]
     #[serde(default)]
     pub extensible: std::collections::HashMap<String, serde_json::Value>,
 }
@@ -194,7 +189,6 @@ pub struct PacProxyConfiguration {
     #[serde(rename = "proxyAutoconfigUrl")]
     pub proxy_autoconfig_url: String,
     #[serde(flatten)]
-    #[serde(skip_serializing_if = "std::collections::HashMap::is_empty")]
     #[serde(default)]
     pub extensible: std::collections::HashMap<String, serde_json::Value>,
 }
@@ -219,7 +213,6 @@ pub struct SystemProxyConfiguration {
     #[serde(rename = "proxyType")]
     pub proxy_type: String,
     #[serde(flatten)]
-    #[serde(skip_serializing_if = "std::collections::HashMap::is_empty")]
     #[serde(default)]
     pub extensible: std::collections::HashMap<String, serde_json::Value>,
 }

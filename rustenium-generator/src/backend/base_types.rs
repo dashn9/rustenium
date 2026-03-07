@@ -2,6 +2,9 @@ use std::borrow::Cow;
 
 use crate::backend::types::ModuleDatatype;
 
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum DomainDirection { Remote, Local, Both }
+
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct Protocol<'a> {
     pub name: Option<&'a str>,
@@ -40,6 +43,7 @@ pub struct TypeDef<'a> {
     pub parameters: Option<Item<'a>>,
     pub raw_name: Cow<'a, str>,
     pub is_circular_dep: bool,
+    pub direction: Option<DomainDirection>,
 }
 
 impl<'a> TypeDef<'a> {
@@ -186,6 +190,7 @@ pub struct Command<'a> {
     pub params: Vec<Param<'a>>,
     pub returns: Vec<&'a str>,
     pub is_circular_dep: bool,
+    pub direction: Option<DomainDirection>,
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -205,6 +210,7 @@ pub struct Event<'a> {
     pub parameters: Vec<Param<'a>>,
     pub raw_name: Cow<'a, str>,
     pub is_circular_dep: bool,
+    pub direction: Option<DomainDirection>,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]

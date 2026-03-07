@@ -54,7 +54,7 @@ impl NoneSourceActions {
 impl NoneSourceActions {
     pub const IDENTIFIER: &'static str = "input.NoneSourceActions";
 }
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NoneSourceAction(PauseAction);
 impl NoneSourceAction {
     pub fn new(val: impl Into<PauseAction>) -> Self {

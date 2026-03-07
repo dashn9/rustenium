@@ -361,7 +361,7 @@ impl Viewport {
 impl Viewport {
     pub const IDENTIFIER: &'static str = "browsingContext.Viewport";
 }
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InfoList(Vec<Info>);
 impl InfoList {
     pub fn new(val: impl Into<Vec<Info>>) -> Self {

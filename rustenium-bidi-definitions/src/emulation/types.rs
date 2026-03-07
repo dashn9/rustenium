@@ -75,7 +75,7 @@ impl<T: Into<String>> From<T> for GeolocationPositionError {
 impl GeolocationPositionError {
     pub const IDENTIFIER: &'static str = "emulation.GeolocationPositionError";
 }
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NetworkConditions(NetworkConditionsOffline);
 impl NetworkConditions {
     pub fn new(val: impl Into<NetworkConditionsOffline>) -> Self {

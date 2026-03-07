@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CloseParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum CloseMethod {
@@ -48,7 +48,7 @@ pub struct CreateUserContext {
 impl crate::CommandResult for CreateUserContext {
     type Result = super::results::CreateUserContextResult;
 }
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetClientWindowsParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum GetClientWindowsMethod {
@@ -66,7 +66,7 @@ pub struct GetClientWindows {
 impl crate::CommandResult for GetClientWindows {
     type Result = super::results::GetClientWindowsResult;
 }
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetUserContextsParams {}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum GetUserContextsMethod {

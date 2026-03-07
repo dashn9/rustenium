@@ -7,7 +7,6 @@ pub struct InstallResult {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UninstallResult {
     #[serde(flatten)]
-    #[serde(skip_serializing_if = "std::collections::HashMap::is_empty")]
     #[serde(default)]
     pub extensible: std::collections::HashMap<String, serde_json::Value>,
 }

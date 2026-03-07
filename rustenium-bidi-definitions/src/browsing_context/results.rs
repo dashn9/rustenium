@@ -2,7 +2,6 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ActivateResult {
     #[serde(flatten)]
-    #[serde(skip_serializing_if = "std::collections::HashMap::is_empty")]
     #[serde(default)]
     pub extensible: std::collections::HashMap<String, serde_json::Value>,
 }
@@ -14,7 +13,6 @@ pub struct CaptureScreenshotResult {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CloseResult {
     #[serde(flatten)]
-    #[serde(skip_serializing_if = "std::collections::HashMap::is_empty")]
     #[serde(default)]
     pub extensible: std::collections::HashMap<String, serde_json::Value>,
 }
@@ -31,7 +29,6 @@ pub struct GetTreeResult {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HandleUserPromptResult {
     #[serde(flatten)]
-    #[serde(skip_serializing_if = "std::collections::HashMap::is_empty")]
     #[serde(default)]
     pub extensible: std::collections::HashMap<String, serde_json::Value>,
 }
@@ -67,14 +64,12 @@ pub struct ReloadResult {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetViewportResult {
     #[serde(flatten)]
-    #[serde(skip_serializing_if = "std::collections::HashMap::is_empty")]
     #[serde(default)]
     pub extensible: std::collections::HashMap<String, serde_json::Value>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TraverseHistoryResult {
     #[serde(flatten)]
-    #[serde(skip_serializing_if = "std::collections::HashMap::is_empty")]
     #[serde(default)]
     pub extensible: std::collections::HashMap<String, serde_json::Value>,
 }

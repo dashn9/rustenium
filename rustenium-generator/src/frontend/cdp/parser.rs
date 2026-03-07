@@ -149,6 +149,7 @@ pub fn parse_pdl<'a>(input: &'a str) -> Result<Protocol<'a>, Error> {
                 name,
                 extends: Type::new(caps.get(5).unwrap().as_str(), caps.get(4).is_some()),
                 parameters: None,
+                direction: None,
             };
             mod_prop = Some(ModuleProperty::Type(ty));
             continue;
@@ -180,6 +181,7 @@ pub fn parse_pdl<'a>(input: &'a str) -> Result<Protocol<'a>, Error> {
                     params: vec![],
                     returns: vec![],
                     is_circular_dep: is_circ,
+                    direction: None,
                 };
                 mod_prop = Some(ModuleProperty::Command(cmd));
             } else {
@@ -191,6 +193,7 @@ pub fn parse_pdl<'a>(input: &'a str) -> Result<Protocol<'a>, Error> {
                     raw_name: Cow::Owned(format!("{}.{}", module.name, name)),
                     is_circular_dep: is_circular_dep(&module.name, name.as_ref()),
                     name,
+                    direction: None,
                 };
                 mod_prop = Some(ModuleProperty::Event(ev));
             };

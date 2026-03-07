@@ -163,7 +163,6 @@ pub struct Cookie {
     #[serde(default)]
     pub expiry: Option<u64>,
     #[serde(flatten)]
-    #[serde(skip_serializing_if = "std::collections::HashMap::is_empty")]
     #[serde(default)]
     pub extensible: std::collections::HashMap<String, serde_json::Value>,
 }

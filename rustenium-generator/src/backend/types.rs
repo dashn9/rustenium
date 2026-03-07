@@ -302,14 +302,12 @@ impl FieldDefinition {
         } else if matches!(&param.r#type, Type::Extensible) && self.name == "extensible" {
             serde_attr.extend(quote! {
                 #[serde(flatten)]
-                #[serde(skip_serializing_if = "std::collections::HashMap::is_empty")]
                 #[serde(default)]
             });
         } else if matches!(&param.r#type, Type::Extensible) {
             let name = &self.name;
             serde_attr.extend(quote! {
                 #[serde(rename = #name)]
-                #[serde(skip_serializing_if = "std::collections::HashMap::is_empty")]
                 #[serde(default)]
             });
         } else {
@@ -355,16 +353,16 @@ impl FieldDefinition {
             for c in constraints {
                 match c {
                     Constraint::Ge(v) => validation_attr.extend(quote! {
-                        #[serde_valid::validate(minimum = #v)]
+                        #[validate(minimum = #v)]
                     }),
                     Constraint::Gt(v) => validation_attr.extend(quote! {
-                        #[serde_valid::validate(exclusive_minimum = #v)]
+                        #[validate(exclusive_minimum = #v)]
                     }),
                     Constraint::Le(v) => validation_attr.extend(quote! {
-                        #[serde_valid::validate(maximum = #v)]
+                        #[validate(maximum = #v)]
                     }),
                     Constraint::Lt(v) => validation_attr.extend(quote! {
-                        #[serde_valid::validate(exclusive_maximum = #v)]
+                        #[validate(exclusive_maximum = #v)]
                     }),
                 }
             }

@@ -210,7 +210,7 @@ impl LocalValue {
 impl LocalValue {
     pub const IDENTIFIER: &'static str = "script.LocalValue";
 }
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ListLocalValue(Vec<LocalValue>);
 impl ListLocalValue {
     pub fn new(val: impl Into<Vec<LocalValue>>) -> Self {
@@ -259,7 +259,7 @@ impl DateLocalValue {
 impl DateLocalValue {
     pub const IDENTIFIER: &'static str = "script.DateLocalValue";
 }
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MappingLocalValue(Vec<Vec<serde_json::Value>>);
 impl MappingLocalValue {
     pub fn new(val: impl Into<Vec<Vec<serde_json::Value>>>) -> Self {
@@ -609,7 +609,6 @@ pub struct SharedReference {
     #[serde(default)]
     pub handle: Option<Handle>,
     #[serde(flatten)]
-    #[serde(skip_serializing_if = "std::collections::HashMap::is_empty")]
     #[serde(default)]
     pub extensible: std::collections::HashMap<String, serde_json::Value>,
 }
@@ -637,7 +636,6 @@ pub struct RemoteObjectReference {
     #[serde(default)]
     pub shared_id: Option<SharedId>,
     #[serde(flatten)]
-    #[serde(skip_serializing_if = "std::collections::HashMap::is_empty")]
     #[serde(default)]
     pub extensible: std::collections::HashMap<String, serde_json::Value>,
 }
@@ -681,7 +679,7 @@ pub enum RemoteValue {
     NodeRemoteValue(NodeRemoteValue),
     WindowProxyRemoteValue(WindowProxyRemoteValue),
 }
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ListRemoteValue(Vec<RemoteValue>);
 impl ListRemoteValue {
     pub fn new(val: impl Into<Vec<RemoteValue>>) -> Self {
@@ -694,7 +692,7 @@ impl ListRemoteValue {
 impl ListRemoteValue {
     pub const IDENTIFIER: &'static str = "script.ListRemoteValue";
 }
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MappingRemoteValue(Vec<Vec<serde_json::Value>>);
 impl MappingRemoteValue {
     pub fn new(val: impl Into<Vec<Vec<serde_json::Value>>>) -> Self {
@@ -1320,7 +1318,6 @@ pub struct NodeProperties {
     #[serde(rename = "childNodeCount")]
     pub child_node_count: u64,
     #[serde(rename = "attributes")]
-    #[serde(skip_serializing_if = "std::collections::HashMap::is_empty")]
     #[serde(default)]
     pub attributes: Option<std::collections::HashMap<String, serde_json::Value>>,
     #[serde(rename = "children")]

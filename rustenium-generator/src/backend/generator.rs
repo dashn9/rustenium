@@ -642,8 +642,12 @@ impl Generator {
         let mut enum_definitions = TokenStream::default();
         let mut default_fns = TokenStream::default();
         let mut builder = Builder::new(name.clone());
+        let mut has_validation = false;
 
         for param in params {
+            if param.validation.is_some() {
+                has_validation = true;
+            }
             if let Type::Enum(vars) = &param.r#type {
                 let enum_ident = Variant {
                     description: param.description.as_deref().map(Cow::Borrowed),
@@ -683,23 +687,28 @@ impl Generator {
             builder.fields.push((field.generate_meta(param, &struct_ident), field));
         }
 
-        let derives = if !builder.has_mandatory_types() {
-            quote! { #[derive(Debug, Clone, PartialEq, Default)] }
+        let serde_derives = if has_validation {
+            quote! { #[derive(Serialize, Deserialize, serde_valid::Validate)] }
         } else {
-            quote! { #[derive(Debug, Clone, PartialEq)] }
+            quote! { #[derive(Serialize, Deserialize)] }
         };
-
-        let serde_derives = quote! { #[derive(Serialize, Deserialize)] };
         let desc = dt.type_description_tokens(module.name.as_ref());
-
-        let mut stream = quote! {
-            #desc
-            #derives
-            #serde_derives
-        };
 
         if builder.fields.is_empty() {
             if let ModuleDatatype::Type(tydef) = dt {
+                // Newtypes: only add Default for primitive/string inner types
+                let derives = if tydef.extends.is_integer() || tydef.extends.is_string()
+                    || matches!(tydef.extends, Type::Number | Type::Boolean | Type::Object | Type::Any) {
+                    quote! { #[derive(Debug, Clone, PartialEq, Default)] }
+                } else {
+                    quote! { #[derive(Debug, Clone, PartialEq)] }
+                };
+
+                let mut stream = quote! {
+                    #desc
+                    #derives
+                    #serde_derives
+                };
                 let wrapped_ty = self.generate_field_type(module, dt.name(), dt.name(), &tydef.extends, current_protocol, local_same_file);
 
                 let struct_def = quote! {
@@ -757,24 +766,36 @@ impl Generator {
                 } else {
                     stream.extend(struct_def);
                 }
+                return (stream, builder);
             } else {
+                let mut stream = quote! { #desc #[derive(Debug, Clone, PartialEq)] #serde_derives };
                 stream.extend(quote! {
                     pub struct #name {}
-                })
+                });
+                return (stream, builder);
             }
+        }
+
+        // Struct with fields
+        let derives = if !builder.has_mandatory_types() {
+            quote! { #[derive(Debug, Clone, PartialEq, Default)] }
         } else {
-            let struct_def = builder.generate_struct_def();
-            stream.extend(quote! {
-                #struct_def
+            quote! { #[derive(Debug, Clone, PartialEq)] }
+        };
 
-                #default_fns
+        let mut stream = quote! { #desc #derives #serde_derives };
 
-                #enum_definitions
-            });
+        let struct_def = builder.generate_struct_def();
+        stream.extend(quote! {
+            #struct_def
 
-            if dt.is_command() || dt.is_type() {
-                stream.extend(builder.generate_constructors());
-            }
+            #default_fns
+
+            #enum_definitions
+        });
+
+        if dt.is_command() || dt.is_type() {
+            stream.extend(builder.generate_constructors());
         }
 
         (stream, builder)
@@ -920,6 +941,7 @@ pub(crate) fn generate_field_name(name: &str) -> String {
         "type" => "r#type".to_string(),
         "mod" => "r#mod".to_string(),
         "override" => "r#override".to_string(),
+        "default" => "r#default".to_string(),
         _ => name,
     }
 }

@@ -1,7 +1,7 @@
 use std::path::Path;
 
 use crate::frontend::bidi::cddl_to_bidi;
-use crate::frontend::bidi::parser::Origin;
+use crate::backend::base_types::DomainDirection;
 use crate::frontend::cdp::pdl_to_cdp;
 
 mod backend;
@@ -24,8 +24,8 @@ pub fn main() {
 
     cddl_to_bidi(
         &[
-            (Path::new("./raw/cddl/remote.cddl"), Origin::Remote),
-            (Path::new("./raw/cddl/local.cddl"), Origin::Local),
+            (Path::new("./raw/cddl/remote.cddl"), DomainDirection::Remote),
+            (Path::new("./raw/cddl/local.cddl"), DomainDirection::Local),
         ],
         Path::new(&bidi_out_dir),
     );

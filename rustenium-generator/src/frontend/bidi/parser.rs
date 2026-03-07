@@ -15,22 +15,15 @@ fn is_valid_variant_name(name: &str) -> bool {
     !camel.is_empty() && camel.starts_with(|c: char| c.is_ascii_alphabetic())
 }
 
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
-pub enum Origin {
-    Remote,
-    Local,
-    Both,
-}
-
 struct RawRule {
     name: String,
     body: String,
-    origin: Origin,
+    origin: DomainDirection,
 }
 
 /// Parse labeled CDDL inputs into a single Protocol.
 /// Each input is `(content, origin)`.
-pub fn parse_cddl(inputs: &[(&str, Origin)]) -> Protocol<'static> {
+pub fn parse_cddl(inputs: &[(&str, DomainDirection)]) -> Protocol<'static> {
     let mut rules: Vec<RawRule> = Vec::new();
     let mut seen: HashMap<String, usize> = HashMap::new();
 
@@ -38,7 +31,7 @@ pub fn parse_cddl(inputs: &[(&str, Origin)]) -> Protocol<'static> {
         for (name, body) in split_rules(content) {
             if let Some(&idx) = seen.get(&name) {
                 // Seen in another file → mark as Both
-                rules[idx].origin = Origin::Both;
+                rules[idx].origin = DomainDirection::Both;
             } else {
                 seen.insert(name.clone(), rules.len());
                 rules.push(RawRule {
@@ -55,7 +48,7 @@ pub fn parse_cddl(inputs: &[(&str, Origin)]) -> Protocol<'static> {
         .map(|r| (r.name.as_str(), r.body.as_str()))
         .collect();
 
-    let origin_map: HashMap<&str, Origin> = rules
+    let origin_map: HashMap<&str, DomainDirection> = rules
         .iter()
         .map(|r| (r.name.as_str(), r.origin))
         .collect();
@@ -84,7 +77,7 @@ pub fn parse_cddl(inputs: &[(&str, Origin)]) -> Protocol<'static> {
             }
             // Remote-origin rules with method → command; local-origin → event
             match rule.origin {
-                Origin::Local => {
+                DomainDirection::Local => {
                     events.insert(name.to_string());
                 }
                 _ => {
@@ -94,12 +87,19 @@ pub fn parse_cddl(inputs: &[(&str, Origin)]) -> Protocol<'static> {
         }
     }
 
-    // Collect param type names from commands and events to exclude from types
+    // Collect param type names from commands and events to exclude from types.
+    // Only exclude types whose body is a struct (starts with '{'), not type choices.
     let mut param_types: HashSet<String> = HashSet::new();
     for name in commands.iter().chain(events.iter()) {
         if let Some(body) = rule_map.get(name.as_str()) {
             if let Some(pt) = extract_value(body, "params:") {
-                param_types.insert(pt);
+                if let Some(pt_body) = rule_map.get(pt.as_str()) {
+                    if pt_body.trim().starts_with('{') {
+                        param_types.insert(pt);
+                    }
+                } else {
+                    param_types.insert(pt);
+                }
             }
         }
     }
@@ -121,12 +121,16 @@ pub fn parse_cddl(inputs: &[(&str, Origin)]) -> Protocol<'static> {
 
         let name = rule.name.as_str();
 
+        let dir = Some(rule.origin);
+
         if commands.contains(name) {
-            if let Some(cmd) = parse_command(name, type_name, &rule.body, &rule_map) {
+            if let Some(mut cmd) = parse_command(name, type_name, &rule.body, &rule_map) {
+                cmd.direction = dir;
                 module.commands.push(cmd);
             }
         } else if events.contains(name) {
-            if let Some(evt) = parse_event(name, type_name, &rule.body, &rule_map) {
+            if let Some(mut evt) = parse_event(name, type_name, &rule.body, &rule_map) {
+                evt.direction = dir;
                 module.events.push(evt);
             }
         } else if results.contains(name) {
@@ -134,7 +138,8 @@ pub fn parse_cddl(inputs: &[(&str, Origin)]) -> Protocol<'static> {
                 module.command_results.push(cr);
             }
         } else if !param_types.contains(name) {
-            if let Some(td) = parse_typedef(name, type_name, &rule.body, &rule_map) {
+            if let Some(mut td) = parse_typedef(name, type_name, &rule.body, &rule_map) {
+                td.direction = dir;
                 module.types.push(td);
             }
         }
@@ -276,6 +281,7 @@ fn parse_command(
         params,
         returns: vec![],
         is_circular_dep: false,
+        direction: None,
     })
 }
 
@@ -297,6 +303,7 @@ fn parse_event(
         parameters,
         raw_name: o(&method_str),
         is_circular_dep: false,
+        direction: None,
     })
 }
 
@@ -340,6 +347,7 @@ fn parse_typedef(full_name: &str, type_name: &str, body: &str, rule_map: &HashMa
             parameters: None,
             raw_name: o(full_name),
             is_circular_dep: false,
+            direction: None,
         });
     }
 
@@ -358,6 +366,7 @@ fn parse_typedef(full_name: &str, type_name: &str, body: &str, rule_map: &HashMa
             parameters: None,
             raw_name: o(full_name),
             is_circular_dep: false,
+            direction: None,
         });
     }
 
@@ -375,6 +384,7 @@ fn parse_typedef(full_name: &str, type_name: &str, body: &str, rule_map: &HashMa
                 parameters: Some(Item::Enum(variants)),
                 raw_name: o(full_name),
                 is_circular_dep: false,
+                direction: None,
             });
         }
         // Invalid variants → fall back to plain string
@@ -387,6 +397,7 @@ fn parse_typedef(full_name: &str, type_name: &str, body: &str, rule_map: &HashMa
             parameters: None,
             raw_name: o(full_name),
             is_circular_dep: false,
+            direction: None,
         });
     }
 
@@ -402,6 +413,7 @@ fn parse_typedef(full_name: &str, type_name: &str, body: &str, rule_map: &HashMa
                 parameters: Some(Item::TypeChoice(type_refs)),
                 raw_name: o(full_name),
                 is_circular_dep: false,
+                direction: None,
             });
         }
 
@@ -419,6 +431,7 @@ fn parse_typedef(full_name: &str, type_name: &str, body: &str, rule_map: &HashMa
             },
             raw_name: o(full_name),
             is_circular_dep: false,
+            direction: None,
         });
     }
 
@@ -433,6 +446,7 @@ fn parse_typedef(full_name: &str, type_name: &str, body: &str, rule_map: &HashMa
             parameters: None,
             raw_name: o(full_name),
             is_circular_dep: false,
+            direction: None,
         });
     }
 
@@ -454,6 +468,7 @@ fn parse_typedef(full_name: &str, type_name: &str, body: &str, rule_map: &HashMa
                 parameters: if params.is_empty() { None } else { Some(Item::Properties(params)) },
                 raw_name: o(full_name),
                 is_circular_dep: false,
+                direction: None,
             });
         }
 
@@ -486,6 +501,7 @@ fn parse_typedef(full_name: &str, type_name: &str, body: &str, rule_map: &HashMa
                     parameters: Some(Item::TypeChoice(refs)),
                     raw_name: o(full_name),
                     is_circular_dep: false,
+                    direction: None,
                 });
             }
         }
@@ -499,6 +515,7 @@ fn parse_typedef(full_name: &str, type_name: &str, body: &str, rule_map: &HashMa
             parameters: None,
             raw_name: o(full_name),
             is_circular_dep: false,
+            direction: None,
         });
     }
 
@@ -513,6 +530,7 @@ fn parse_typedef(full_name: &str, type_name: &str, body: &str, rule_map: &HashMa
         parameters: None,
         raw_name: o(full_name),
         is_circular_dep: false,
+        direction: None,
     })
 }
 

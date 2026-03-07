@@ -2,7 +2,6 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CloseResult {
     #[serde(flatten)]
-    #[serde(skip_serializing_if = "std::collections::HashMap::is_empty")]
     #[serde(default)]
     pub extensible: std::collections::HashMap<String, serde_json::Value>,
 }
@@ -26,7 +25,6 @@ pub struct GetUserContextsResult {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RemoveUserContextResult {
     #[serde(flatten)]
-    #[serde(skip_serializing_if = "std::collections::HashMap::is_empty")]
     #[serde(default)]
     pub extensible: std::collections::HashMap<String, serde_json::Value>,
 }
@@ -61,7 +59,6 @@ pub struct SetClientWindowStateResult {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetDownloadBehaviorResult {
     #[serde(flatten)]
-    #[serde(skip_serializing_if = "std::collections::HashMap::is_empty")]
     #[serde(default)]
     pub extensible: std::collections::HashMap<String, serde_json::Value>,
 }
