@@ -8,7 +8,7 @@ pub enum DisableMethod {
     Disable,
 }
 #[doc = "Disables animation domain notifications.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Animation/#method-disable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
@@ -28,7 +28,7 @@ pub enum EnableMethod {
     Enable,
 }
 #[doc = "Enables animation domain notifications.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Animation/#method-enable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
@@ -62,7 +62,7 @@ pub enum GetCurrentTimeMethod {
     GetCurrentTime,
 }
 #[doc = "Returns the current time of the an animation.\n[getCurrentTime](https://chromedevtools.github.io/devtools-protocol/tot/Animation/#method-getCurrentTime)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetCurrentTime {
     pub method: GetCurrentTimeMethod,
     pub params: GetCurrentTimeParams,
@@ -82,7 +82,7 @@ pub enum GetPlaybackRateMethod {
     GetPlaybackRate,
 }
 #[doc = "Gets the playback rate of the document timeline.\n[getPlaybackRate](https://chromedevtools.github.io/devtools-protocol/tot/Animation/#method-getPlaybackRate)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetPlaybackRate {
     pub method: GetPlaybackRateMethod,
     pub params: GetPlaybackRateParams,
@@ -112,7 +112,7 @@ pub enum ReleaseAnimationsMethod {
     ReleaseAnimations,
 }
 #[doc = "Releases a set of animations to no longer be manipulated.\n[releaseAnimations](https://chromedevtools.github.io/devtools-protocol/tot/Animation/#method-releaseAnimations)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ReleaseAnimations {
     pub method: ReleaseAnimationsMethod,
     pub params: ReleaseAnimationsParams,
@@ -148,7 +148,7 @@ pub enum ResolveAnimationMethod {
     ResolveAnimation,
 }
 #[doc = "Gets the remote object of the Animation.\n[resolveAnimation](https://chromedevtools.github.io/devtools-protocol/tot/Animation/#method-resolveAnimation)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResolveAnimation {
     pub method: ResolveAnimationMethod,
     pub params: ResolveAnimationParams,
@@ -184,7 +184,7 @@ pub enum SeekAnimationsMethod {
     SeekAnimations,
 }
 #[doc = "Seek a set of animations to a particular time within each animation.\n[seekAnimations](https://chromedevtools.github.io/devtools-protocol/tot/Animation/#method-seekAnimations)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SeekAnimations {
     pub method: SeekAnimationsMethod,
     pub params: SeekAnimationsParams,
@@ -220,7 +220,7 @@ pub enum SetPausedMethod {
     SetPaused,
 }
 #[doc = "Sets the paused state of a set of animations.\n[setPaused](https://chromedevtools.github.io/devtools-protocol/tot/Animation/#method-setPaused)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetPaused {
     pub method: SetPausedMethod,
     pub params: SetPausedParams,
@@ -251,7 +251,7 @@ pub enum SetPlaybackRateMethod {
     SetPlaybackRate,
 }
 #[doc = "Sets the playback rate of the document timeline.\n[setPlaybackRate](https://chromedevtools.github.io/devtools-protocol/tot/Animation/#method-setPlaybackRate)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetPlaybackRate {
     pub method: SetPlaybackRateMethod,
     pub params: SetPlaybackRateParams,
@@ -294,7 +294,7 @@ pub enum SetTimingMethod {
     SetTiming,
 }
 #[doc = "Sets the timing of an animation node.\n[setTiming](https://chromedevtools.github.io/devtools-protocol/tot/Animation/#method-setTiming)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetTiming {
     pub method: SetTimingMethod,
     pub params: SetTimingParams,

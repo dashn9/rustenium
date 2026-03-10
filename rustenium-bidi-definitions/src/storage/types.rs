@@ -95,13 +95,18 @@ impl CookieFilter {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BrowsingContextPartitionDescriptor {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: BrowsingContextPartitionDescriptorType,
     #[serde(rename = "context")]
     pub context: crate::browsing_context::types::BrowsingContext,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum BrowsingContextPartitionDescriptorType {
+    #[serde(rename = "context")]
+    Context,
+}
 impl BrowsingContextPartitionDescriptor {
     pub fn new(
-        r#type: impl Into<String>,
+        r#type: impl Into<BrowsingContextPartitionDescriptorType>,
         context: impl Into<crate::browsing_context::types::BrowsingContext>,
     ) -> Self {
         Self {
@@ -117,7 +122,7 @@ impl BrowsingContextPartitionDescriptor {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StorageKeyPartitionDescriptor {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: StorageKeyPartitionDescriptorType,
     #[serde(rename = "userContext")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -130,9 +135,14 @@ pub struct StorageKeyPartitionDescriptor {
     #[serde(default)]
     pub extensible: std::collections::HashMap<String, serde_json::Value>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum StorageKeyPartitionDescriptorType {
+    #[serde(rename = "storageKey")]
+    StorageKey,
+}
 impl StorageKeyPartitionDescriptor {
     pub fn new(
-        r#type: impl Into<String>,
+        r#type: impl Into<StorageKeyPartitionDescriptorType>,
         extensible: impl Into<std::collections::HashMap<String, serde_json::Value>>,
     ) -> Self {
         Self {
@@ -209,4 +219,4 @@ impl PartialCookie {
     pub const IDENTIFIER: &'static str = "storage.PartialCookie";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
-group_enum ! (StorageTypes { PartitionKey (PartitionKey) , CookieFilter (CookieFilter) , BrowsingContextPartitionDescriptor (BrowsingContextPartitionDescriptor) , StorageKeyPartitionDescriptor (StorageKeyPartitionDescriptor) , PartitionDescriptor (PartitionDescriptor) , PartialCookie (PartialCookie) });
+group_enum ! (StorageType { PartitionKey (PartitionKey) , CookieFilter (CookieFilter) , PartitionDescriptor (PartitionDescriptor) , PartialCookie (PartialCookie) });

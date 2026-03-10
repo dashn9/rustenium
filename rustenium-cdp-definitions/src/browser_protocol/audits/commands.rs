@@ -48,7 +48,7 @@ pub enum GetEncodedResponseMethod {
     GetEncodedResponse,
 }
 #[doc = "Returns the response body and size if it were re-encoded with the specified settings. Only\napplies to images.\n[getEncodedResponse](https://chromedevtools.github.io/devtools-protocol/tot/Audits/#method-getEncodedResponse)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetEncodedResponse {
     pub method: GetEncodedResponseMethod,
     pub params: GetEncodedResponseParams,
@@ -68,7 +68,7 @@ pub enum DisableMethod {
     Disable,
 }
 #[doc = "Disables issues domain, prevents further issues from being reported to the client.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Audits/#method-disable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
@@ -88,7 +88,7 @@ pub enum EnableMethod {
     Enable,
 }
 #[doc = "Enables issues domain, sends the issues collected so far to the client by means of the\n`issueAdded` event.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Audits/#method-enable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
@@ -114,7 +114,7 @@ pub enum CheckContrastMethod {
     CheckContrast,
 }
 #[doc = "Runs the contrast check for the target page. Found issues are reported\nusing Audits.issueAdded event.\n[checkContrast](https://chromedevtools.github.io/devtools-protocol/tot/Audits/#method-checkContrast)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CheckContrast {
     pub method: CheckContrastMethod,
     pub params: CheckContrastParams,
@@ -134,7 +134,7 @@ pub enum CheckFormsIssuesMethod {
     CheckFormsIssues,
 }
 #[doc = "Runs the form issues check for the target page. Found issues are reported\nusing Audits.issueAdded event.\n[checkFormsIssues](https://chromedevtools.github.io/devtools-protocol/tot/Audits/#method-checkFormsIssues)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CheckFormsIssues {
     pub method: CheckFormsIssuesMethod,
     pub params: CheckFormsIssuesParams,

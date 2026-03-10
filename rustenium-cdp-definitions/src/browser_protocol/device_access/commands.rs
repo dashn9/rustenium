@@ -8,7 +8,7 @@ pub enum EnableMethod {
     Enable,
 }
 #[doc = "Enable events in this domain.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/DeviceAccess/#method-enable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
@@ -28,7 +28,7 @@ pub enum DisableMethod {
     Disable,
 }
 #[doc = "Disable events in this domain.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/DeviceAccess/#method-disable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
@@ -64,7 +64,7 @@ pub enum SelectPromptMethod {
     SelectPrompt,
 }
 #[doc = "Select a device in response to a DeviceAccess.deviceRequestPrompted event.\n[selectPrompt](https://chromedevtools.github.io/devtools-protocol/tot/DeviceAccess/#method-selectPrompt)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SelectPrompt {
     pub method: SelectPromptMethod,
     pub params: SelectPromptParams,
@@ -92,7 +92,7 @@ pub enum CancelPromptMethod {
     CancelPrompt,
 }
 #[doc = "Cancel a prompt in response to a DeviceAccess.deviceRequestPrompted event.\n[cancelPrompt](https://chromedevtools.github.io/devtools-protocol/tot/DeviceAccess/#method-cancelPrompt)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CancelPrompt {
     pub method: CancelPromptMethod,
     pub params: CancelPromptParams,

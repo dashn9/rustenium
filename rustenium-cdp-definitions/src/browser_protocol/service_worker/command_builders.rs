@@ -43,6 +43,24 @@ impl DeliverPushMessageBuilder {
         })
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct DisableBuilder;
+impl DisableBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Disable {
+        Disable {
+            method: DisableMethod::Disable,
+            params: DisableParams {},
+        }
+    }
+}
+impl Disable {
+    pub fn builder() -> DisableBuilder {
+        DisableBuilder
+    }
+}
 impl DispatchSyncEvent {
     pub fn builder() -> DispatchSyncEventBuilder {
         <DispatchSyncEventBuilder as Default>::default()
@@ -139,6 +157,24 @@ impl DispatchPeriodicSyncEventBuilder {
         })
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct EnableBuilder;
+impl EnableBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Enable {
+        Enable {
+            method: EnableMethod::Enable,
+            params: EnableParams {},
+        }
+    }
+}
+impl Enable {
+    pub fn builder() -> EnableBuilder {
+        EnableBuilder
+    }
+}
 impl SetForceUpdateOnPageLoad {
     pub fn builder() -> SetForceUpdateOnPageLoadBuilder {
         <SetForceUpdateOnPageLoadBuilder as Default>::default()
@@ -215,6 +251,24 @@ impl StartWorkerBuilder {
                 })?,
             },
         })
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct StopAllWorkersBuilder;
+impl StopAllWorkersBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> StopAllWorkers {
+        StopAllWorkers {
+            method: StopAllWorkersMethod::StopAllWorkers,
+            params: StopAllWorkersParams {},
+        }
+    }
+}
+impl StopAllWorkers {
+    pub fn builder() -> StopAllWorkersBuilder {
+        StopAllWorkersBuilder
     }
 }
 impl StopWorker {

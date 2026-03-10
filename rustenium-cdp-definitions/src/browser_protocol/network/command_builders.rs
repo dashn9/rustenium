@@ -36,6 +36,60 @@ impl SetAcceptedEncodingsBuilder {
         })
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct ClearAcceptedEncodingsOverrideBuilder;
+impl ClearAcceptedEncodingsOverrideBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> ClearAcceptedEncodingsOverride {
+        ClearAcceptedEncodingsOverride {
+            method: ClearAcceptedEncodingsOverrideMethod::ClearAcceptedEncodingsOverride,
+            params: ClearAcceptedEncodingsOverrideParams {},
+        }
+    }
+}
+impl ClearAcceptedEncodingsOverride {
+    pub fn builder() -> ClearAcceptedEncodingsOverrideBuilder {
+        ClearAcceptedEncodingsOverrideBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct ClearBrowserCacheBuilder;
+impl ClearBrowserCacheBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> ClearBrowserCache {
+        ClearBrowserCache {
+            method: ClearBrowserCacheMethod::ClearBrowserCache,
+            params: ClearBrowserCacheParams {},
+        }
+    }
+}
+impl ClearBrowserCache {
+    pub fn builder() -> ClearBrowserCacheBuilder {
+        ClearBrowserCacheBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct ClearBrowserCookiesBuilder;
+impl ClearBrowserCookiesBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> ClearBrowserCookies {
+        ClearBrowserCookies {
+            method: ClearBrowserCookiesMethod::ClearBrowserCookies,
+            params: ClearBrowserCookiesParams {},
+        }
+    }
+}
+impl ClearBrowserCookies {
+    pub fn builder() -> ClearBrowserCookiesBuilder {
+        ClearBrowserCookiesBuilder
+    }
+}
 impl DeleteCookies {
     pub fn builder() -> DeleteCookiesBuilder {
         <DeleteCookiesBuilder as Default>::default()
@@ -86,6 +140,24 @@ impl DeleteCookiesBuilder {
                 partition_key: self.partition_key,
             },
         })
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct DisableBuilder;
+impl DisableBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Disable {
+        Disable {
+            method: DisableMethod::Disable,
+            params: DisableParams {},
+        }
+    }
+}
+impl Disable {
+    pub fn builder() -> DisableBuilder {
+        DisableBuilder
     }
 }
 impl EmulateNetworkConditionsByRule {

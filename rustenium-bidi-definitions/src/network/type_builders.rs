@@ -6,12 +6,12 @@ impl AuthCredentials {
 }
 #[derive(Default, Clone)]
 pub struct AuthCredentialsBuilder {
-    r#type: Option<String>,
+    r#type: Option<AuthCredentialsType>,
     username: Option<String>,
     password: Option<String>,
 }
 impl AuthCredentialsBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<AuthCredentialsType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -44,11 +44,11 @@ impl StringValue {
 }
 #[derive(Default, Clone)]
 pub struct StringValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<StringValueType>,
     value: Option<String>,
 }
 impl StringValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<StringValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -74,11 +74,11 @@ impl Base64Value {
 }
 #[derive(Default, Clone)]
 pub struct Base64ValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<Base64ValueType>,
     value: Option<String>,
 }
 impl Base64ValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<Base64ValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -331,7 +331,7 @@ impl UrlPatternPattern {
 }
 #[derive(Default, Clone)]
 pub struct UrlPatternPatternBuilder {
-    r#type: Option<String>,
+    r#type: Option<UrlPatternPatternType>,
     protocol: Option<String>,
     hostname: Option<String>,
     port: Option<String>,
@@ -339,7 +339,7 @@ pub struct UrlPatternPatternBuilder {
     search: Option<String>,
 }
 impl UrlPatternPatternBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<UrlPatternPatternType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -383,11 +383,11 @@ impl UrlPatternString {
 }
 #[derive(Default, Clone)]
 pub struct UrlPatternStringBuilder {
-    r#type: Option<String>,
+    r#type: Option<UrlPatternStringType>,
     pattern: Option<String>,
 }
 impl UrlPatternStringBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<UrlPatternStringType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -413,11 +413,11 @@ impl ContinueWithAuthCredentials {
 }
 #[derive(Default, Clone)]
 pub struct ContinueWithAuthCredentialsBuilder {
-    action: Option<String>,
+    action: Option<ContinueWithAuthCredentialsAction>,
     credentials: Option<AuthCredentials>,
 }
 impl ContinueWithAuthCredentialsBuilder {
-    pub fn action(mut self, action: impl Into<String>) -> Self {
+    pub fn action(mut self, action: impl Into<ContinueWithAuthCredentialsAction>) -> Self {
         self.action = Some(action.into());
         self
     }
@@ -749,6 +749,7 @@ pub struct RequestDataBuilder {
     destination: Option<String>,
     initiator_type: Option<String>,
     timings: Option<FetchTimingInfo>,
+    extensible: Option<std::collections::HashMap<String, serde_json::Value>>,
 }
 impl RequestDataBuilder {
     pub fn request(mut self, request: impl Into<Request>) -> Self {
@@ -815,6 +816,13 @@ impl RequestDataBuilder {
         self.timings = Some(timings.into());
         self
     }
+    pub fn extensible(
+        mut self,
+        extensible: impl Into<std::collections::HashMap<String, serde_json::Value>>,
+    ) -> Self {
+        self.extensible = Some(extensible.into());
+        self
+    }
     pub fn build(self) -> Result<RequestData, String> {
         Ok(RequestData {
             request: self
@@ -843,6 +851,9 @@ impl RequestDataBuilder {
             timings: self
                 .timings
                 .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(timings)))?,
+            extensible: self
+                .extensible
+                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(extensible)))?,
         })
     }
 }

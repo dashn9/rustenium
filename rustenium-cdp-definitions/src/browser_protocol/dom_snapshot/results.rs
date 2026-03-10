@@ -1,8 +1,20 @@
 use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct DisableResult {}
+impl TryFrom<serde_json::Value> for DisableResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct EnableResult {}
+impl TryFrom<serde_json::Value> for EnableResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetSnapshotResult {
     #[doc = "The nodes in the DOM tree. The DOMNode at index 0 corresponds to the root document."]
@@ -18,6 +30,12 @@ pub struct GetSnapshotResult {
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub computed_styles: Vec<super::types::ComputedStyle>,
 }
+impl TryFrom<serde_json::Value> for GetSnapshotResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CaptureSnapshotResult {
     #[doc = "The nodes in the DOM tree. The DOMNode at index 0 corresponds to the root document."]
@@ -28,4 +46,10 @@ pub struct CaptureSnapshotResult {
     #[serde(rename = "strings")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub strings: Vec<String>,
+}
+impl TryFrom<serde_json::Value> for CaptureSnapshotResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
 }

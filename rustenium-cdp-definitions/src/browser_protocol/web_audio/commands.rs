@@ -8,7 +8,7 @@ pub enum EnableMethod {
     Enable,
 }
 #[doc = "Enables the WebAudio domain and starts sending context lifetime events.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#method-enable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
@@ -28,7 +28,7 @@ pub enum DisableMethod {
     Disable,
 }
 #[doc = "Disables the WebAudio domain.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#method-disable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
@@ -58,7 +58,7 @@ pub enum GetRealtimeDataMethod {
     GetRealtimeData,
 }
 #[doc = "Fetch the realtime data from the registered contexts.\n[getRealtimeData](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#method-getRealtimeData)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetRealtimeData {
     pub method: GetRealtimeDataMethod,
     pub params: GetRealtimeDataParams,

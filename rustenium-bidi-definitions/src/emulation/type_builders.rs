@@ -66,10 +66,10 @@ impl GeolocationPositionError {
 }
 #[derive(Default, Clone)]
 pub struct GeolocationPositionErrorBuilder {
-    r#type: Option<String>,
+    r#type: Option<GeolocationPositionErrorType>,
 }
 impl GeolocationPositionErrorBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<GeolocationPositionErrorType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -88,10 +88,10 @@ impl NetworkConditionsOffline {
 }
 #[derive(Default, Clone)]
 pub struct NetworkConditionsOfflineBuilder {
-    r#type: Option<String>,
+    r#type: Option<NetworkConditionsOfflineType>,
 }
 impl NetworkConditionsOfflineBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<NetworkConditionsOfflineType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }

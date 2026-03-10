@@ -122,11 +122,11 @@ impl BrowsingContextPartitionDescriptor {
 }
 #[derive(Default, Clone)]
 pub struct BrowsingContextPartitionDescriptorBuilder {
-    r#type: Option<String>,
+    r#type: Option<BrowsingContextPartitionDescriptorType>,
     context: Option<crate::browsing_context::types::BrowsingContext>,
 }
 impl BrowsingContextPartitionDescriptorBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<BrowsingContextPartitionDescriptorType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -155,13 +155,13 @@ impl StorageKeyPartitionDescriptor {
 }
 #[derive(Default, Clone)]
 pub struct StorageKeyPartitionDescriptorBuilder {
-    r#type: Option<String>,
+    r#type: Option<StorageKeyPartitionDescriptorType>,
     user_context: Option<String>,
     source_origin: Option<String>,
     extensible: Option<std::collections::HashMap<String, serde_json::Value>>,
 }
 impl StorageKeyPartitionDescriptorBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<StorageKeyPartitionDescriptorType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }

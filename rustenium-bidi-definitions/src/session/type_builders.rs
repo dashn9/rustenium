@@ -108,29 +108,82 @@ impl ProxyConfiguration {
 }
 #[derive(Default, Clone)]
 pub struct ProxyConfigurationBuilder {
-    proxy_type: Option<String>,
-    extensible: Option<std::collections::HashMap<String, serde_json::Value>>,
+    autodetect_proxy_configuration: Option<serde_json::Value>,
+    direct_proxy_configuration: Option<serde_json::Value>,
+    manual_proxy_configuration: Option<serde_json::Value>,
+    pac_proxy_configuration: Option<serde_json::Value>,
+    system_proxy_configuration: Option<SystemProxyConfiguration>,
 }
 impl ProxyConfigurationBuilder {
-    pub fn proxy_type(mut self, proxy_type: impl Into<String>) -> Self {
-        self.proxy_type = Some(proxy_type.into());
+    pub fn autodetect_proxy_configuration(
+        mut self,
+        autodetect_proxy_configuration: impl Into<serde_json::Value>,
+    ) -> Self {
+        self.autodetect_proxy_configuration = Some(autodetect_proxy_configuration.into());
         self
     }
-    pub fn extensible(
+    pub fn direct_proxy_configuration(
         mut self,
-        extensible: impl Into<std::collections::HashMap<String, serde_json::Value>>,
+        direct_proxy_configuration: impl Into<serde_json::Value>,
     ) -> Self {
-        self.extensible = Some(extensible.into());
+        self.direct_proxy_configuration = Some(direct_proxy_configuration.into());
+        self
+    }
+    pub fn manual_proxy_configuration(
+        mut self,
+        manual_proxy_configuration: impl Into<serde_json::Value>,
+    ) -> Self {
+        self.manual_proxy_configuration = Some(manual_proxy_configuration.into());
+        self
+    }
+    pub fn pac_proxy_configuration(
+        mut self,
+        pac_proxy_configuration: impl Into<serde_json::Value>,
+    ) -> Self {
+        self.pac_proxy_configuration = Some(pac_proxy_configuration.into());
+        self
+    }
+    pub fn system_proxy_configuration(
+        mut self,
+        system_proxy_configuration: impl Into<SystemProxyConfiguration>,
+    ) -> Self {
+        self.system_proxy_configuration = Some(system_proxy_configuration.into());
         self
     }
     pub fn build(self) -> Result<ProxyConfiguration, String> {
         Ok(ProxyConfiguration {
-            proxy_type: self
-                .proxy_type
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(proxy_type)))?,
-            extensible: self
-                .extensible
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(extensible)))?,
+            autodetect_proxy_configuration: self.autodetect_proxy_configuration.ok_or_else(
+                || {
+                    format!(
+                        "Field `{}` is mandatory.",
+                        std::stringify!(autodetect_proxy_configuration)
+                    )
+                },
+            )?,
+            direct_proxy_configuration: self.direct_proxy_configuration.ok_or_else(|| {
+                format!(
+                    "Field `{}` is mandatory.",
+                    std::stringify!(direct_proxy_configuration)
+                )
+            })?,
+            manual_proxy_configuration: self.manual_proxy_configuration.ok_or_else(|| {
+                format!(
+                    "Field `{}` is mandatory.",
+                    std::stringify!(manual_proxy_configuration)
+                )
+            })?,
+            pac_proxy_configuration: self.pac_proxy_configuration.ok_or_else(|| {
+                format!(
+                    "Field `{}` is mandatory.",
+                    std::stringify!(pac_proxy_configuration)
+                )
+            })?,
+            system_proxy_configuration: self.system_proxy_configuration.ok_or_else(|| {
+                format!(
+                    "Field `{}` is mandatory.",
+                    std::stringify!(system_proxy_configuration)
+                )
+            })?,
         })
     }
 }
@@ -141,11 +194,14 @@ impl AutodetectProxyConfiguration {
 }
 #[derive(Default, Clone)]
 pub struct AutodetectProxyConfigurationBuilder {
-    proxy_type: Option<String>,
+    proxy_type: Option<AutodetectProxyConfigurationProxyType>,
     extensible: Option<std::collections::HashMap<String, serde_json::Value>>,
 }
 impl AutodetectProxyConfigurationBuilder {
-    pub fn proxy_type(mut self, proxy_type: impl Into<String>) -> Self {
+    pub fn proxy_type(
+        mut self,
+        proxy_type: impl Into<AutodetectProxyConfigurationProxyType>,
+    ) -> Self {
         self.proxy_type = Some(proxy_type.into());
         self
     }
@@ -174,11 +230,11 @@ impl DirectProxyConfiguration {
 }
 #[derive(Default, Clone)]
 pub struct DirectProxyConfigurationBuilder {
-    proxy_type: Option<String>,
+    proxy_type: Option<DirectProxyConfigurationProxyType>,
     extensible: Option<std::collections::HashMap<String, serde_json::Value>>,
 }
 impl DirectProxyConfigurationBuilder {
-    pub fn proxy_type(mut self, proxy_type: impl Into<String>) -> Self {
+    pub fn proxy_type(mut self, proxy_type: impl Into<DirectProxyConfigurationProxyType>) -> Self {
         self.proxy_type = Some(proxy_type.into());
         self
     }
@@ -207,14 +263,14 @@ impl ManualProxyConfiguration {
 }
 #[derive(Default, Clone)]
 pub struct ManualProxyConfigurationBuilder {
-    proxy_type: Option<String>,
+    proxy_type: Option<ManualProxyConfigurationProxyType>,
     http_proxy: Option<String>,
     ssl_proxy: Option<String>,
     no_proxy: Option<Vec<String>>,
     extensible: Option<std::collections::HashMap<String, serde_json::Value>>,
 }
 impl ManualProxyConfigurationBuilder {
-    pub fn proxy_type(mut self, proxy_type: impl Into<String>) -> Self {
+    pub fn proxy_type(mut self, proxy_type: impl Into<ManualProxyConfigurationProxyType>) -> Self {
         self.proxy_type = Some(proxy_type.into());
         self
     }
@@ -300,12 +356,12 @@ impl PacProxyConfiguration {
 }
 #[derive(Default, Clone)]
 pub struct PacProxyConfigurationBuilder {
-    proxy_type: Option<String>,
+    proxy_type: Option<PacProxyConfigurationProxyType>,
     proxy_autoconfig_url: Option<String>,
     extensible: Option<std::collections::HashMap<String, serde_json::Value>>,
 }
 impl PacProxyConfigurationBuilder {
-    pub fn proxy_type(mut self, proxy_type: impl Into<String>) -> Self {
+    pub fn proxy_type(mut self, proxy_type: impl Into<PacProxyConfigurationProxyType>) -> Self {
         self.proxy_type = Some(proxy_type.into());
         self
     }
@@ -344,11 +400,11 @@ impl SystemProxyConfiguration {
 }
 #[derive(Default, Clone)]
 pub struct SystemProxyConfigurationBuilder {
-    proxy_type: Option<String>,
+    proxy_type: Option<SystemProxyConfigurationProxyType>,
     extensible: Option<std::collections::HashMap<String, serde_json::Value>>,
 }
 impl SystemProxyConfigurationBuilder {
-    pub fn proxy_type(mut self, proxy_type: impl Into<String>) -> Self {
+    pub fn proxy_type(mut self, proxy_type: impl Into<SystemProxyConfigurationProxyType>) -> Self {
         self.proxy_type = Some(proxy_type.into());
         self
     }

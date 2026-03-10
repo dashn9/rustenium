@@ -1,5 +1,5 @@
 use std::borrow::Cow;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::fs;
 use std::io::{self, Error, ErrorKind};
 use std::ops::Deref;
@@ -104,7 +104,7 @@ impl Generator {
 
             for module in &modules_to_process {
                 let mod_name = module.name.to_snake_case();
-                let parts = self.generate_module_files(module, &protocol_snake);
+                let parts = self.generate_module_files(module, &protocol_snake, flat);
 
                 let module_dir = protocol_dir.join(&mod_name);
                 fs::create_dir_all(&module_dir)
@@ -140,12 +140,14 @@ impl Generator {
                 module_infos.push((mod_name, module.name.to_upper_camel_case(), parts.type_leaves, parts.command_leaves, parts.event_leaves));
             }
 
+            let (ts, cs, es) = if flat { ("Type", "Command", "Event") } else { ("Types", "Commands", "Events") };
+
             let type_entries: Vec<_> = module_infos.iter()
                 .filter(|(_, _, tl, _, _)| !tl.is_empty())
                 .map(|(name, mcamel, _, _, _)| {
                     let mod_id = format_ident!("{}", name);
                     let var_id = format_ident!("{}", mcamel);
-                    let enum_id = format_ident!("{}Type", mcamel);
+                    let enum_id = format_ident!("{}{}", mcamel, ts);
                     (var_id, quote!(#mod_id::types::#enum_id))
                 })
                 .collect();
@@ -155,7 +157,7 @@ impl Generator {
                 .map(|(name, mcamel, _, _, _)| {
                     let mod_id = format_ident!("{}", name);
                     let var_id = format_ident!("{}", mcamel);
-                    let enum_id = format_ident!("{}Command", mcamel);
+                    let enum_id = format_ident!("{}{}", mcamel, cs);
                     (var_id, quote!(#mod_id::commands::#enum_id))
                 })
                 .collect();
@@ -165,7 +167,7 @@ impl Generator {
                 .map(|(name, mcamel, _, _, _)| {
                     let mod_id = format_ident!("{}", name);
                     let var_id = format_ident!("{}", mcamel);
-                    let enum_id = format_ident!("{}Event", mcamel);
+                    let enum_id = format_ident!("{}{}", mcamel, es);
                     (var_id, quote!(#mod_id::events::#enum_id))
                 })
                 .collect();
@@ -174,21 +176,21 @@ impl Generator {
 
             // Build transitive entries: leaf => protocol_enum via module_enum
             let mut proto_transitive: Vec<(TokenStream, TokenStream, TokenStream)> = Vec::new();
-            let proto_type_name = format_ident!("{}Type", protocol_camel);
-            let proto_cmd_name = format_ident!("{}Command", protocol_camel);
-            let proto_evt_name = format_ident!("{}Event", protocol_camel);
+            let proto_type_name = format_ident!("{}{}", protocol_camel, ts);
+            let proto_cmd_name = format_ident!("{}{}", protocol_camel, cs);
+            let proto_evt_name = format_ident!("{}{}", protocol_camel, es);
             for (mod_name, mcamel, type_leaves, cmd_leaves, evt_leaves) in &module_infos {
                 let mod_id = format_ident!("{}", mod_name);
                 for leaf in type_leaves {
-                    let me = format_ident!("{}Type", mcamel);
+                    let me = format_ident!("{}{}", mcamel, ts);
                     proto_transitive.push((quote!(#mod_id::types::#leaf), quote!(#mod_id::types::#me), quote!(#proto_type_name)));
                 }
                 for leaf in cmd_leaves {
-                    let me = format_ident!("{}Command", mcamel);
+                    let me = format_ident!("{}{}", mcamel, cs);
                     proto_transitive.push((quote!(#mod_id::commands::#leaf), quote!(#mod_id::commands::#me), quote!(#proto_cmd_name)));
                 }
                 for leaf in evt_leaves {
-                    let me = format_ident!("{}Event", mcamel);
+                    let me = format_ident!("{}{}", mcamel, es);
                     proto_transitive.push((quote!(#mod_id::events::#leaf), quote!(#mod_id::events::#me), quote!(#proto_evt_name)));
                 }
             }
@@ -261,7 +263,7 @@ impl Generator {
                 .map(|(name, pcamel, _, _)| {
                     let mod_id = format_ident!("{}", name);
                     let var_id = format_ident!("{}", pcamel);
-                    let enum_id = format_ident!("{}Type", pcamel);
+                    let enum_id = format_ident!("{}Types", pcamel);
                     (var_id, quote!(#mod_id::#enum_id))
                 })
                 .collect();
@@ -271,7 +273,7 @@ impl Generator {
                 .map(|(name, pcamel, _, _)| {
                     let mod_id = format_ident!("{}", name);
                     let var_id = format_ident!("{}", pcamel);
-                    let enum_id = format_ident!("{}Command", pcamel);
+                    let enum_id = format_ident!("{}Commands", pcamel);
                     (var_id, quote!(#mod_id::#enum_id))
                 })
                 .collect();
@@ -281,7 +283,7 @@ impl Generator {
                 .map(|(name, pcamel, _, _)| {
                     let mod_id = format_ident!("{}", name);
                     let var_id = format_ident!("{}", pcamel);
-                    let enum_id = format_ident!("{}Event", pcamel);
+                    let enum_id = format_ident!("{}Events", pcamel);
                     (var_id, quote!(#mod_id::#enum_id))
                 })
                 .collect();
@@ -289,24 +291,24 @@ impl Generator {
             let mut top_transitive: Vec<(TokenStream, TokenStream, TokenStream)> = Vec::new();
             for (proto_name, pcamel, modules, _) in &protocol_infos {
                 let proto_id = format_ident!("{}", proto_name);
-                let proto_type_enum = format_ident!("{}Type", pcamel);
-                let proto_cmd_enum = format_ident!("{}Command", pcamel);
-                let proto_evt_enum = format_ident!("{}Event", pcamel);
+                let proto_type_enum = format_ident!("{}Types", pcamel);
+                let proto_cmd_enum = format_ident!("{}Commands", pcamel);
+                let proto_evt_enum = format_ident!("{}Events", pcamel);
 
                 for (mod_name, mcamel, type_leaves, cmd_leaves, evt_leaves) in modules {
                     let mod_id = format_ident!("{}", mod_name);
                     if !type_leaves.is_empty() {
-                        let me = format_ident!("{}Type", mcamel);
+                        let me = format_ident!("{}Types", mcamel);
                         top_transitive.push((quote!(#proto_id::#mod_id::types::#me), quote!(#proto_id::#proto_type_enum), quote!(Type)));
                         for leaf in type_leaves { top_transitive.push((quote!(#proto_id::#mod_id::types::#leaf), quote!(#proto_id::#proto_type_enum), quote!(Type))); }
                     }
                     if !cmd_leaves.is_empty() {
-                        let me = format_ident!("{}Command", mcamel);
+                        let me = format_ident!("{}Commands", mcamel);
                         top_transitive.push((quote!(#proto_id::#mod_id::commands::#me), quote!(#proto_id::#proto_cmd_enum), quote!(Command)));
                         for leaf in cmd_leaves { top_transitive.push((quote!(#proto_id::#mod_id::commands::#leaf), quote!(#proto_id::#proto_cmd_enum), quote!(Command))); }
                     }
                     if !evt_leaves.is_empty() {
-                        let me = format_ident!("{}Event", mcamel);
+                        let me = format_ident!("{}Events", mcamel);
                         top_transitive.push((quote!(#proto_id::#mod_id::events::#me), quote!(#proto_id::#proto_evt_enum), quote!(Event)));
                         for leaf in evt_leaves { top_transitive.push((quote!(#proto_id::#mod_id::events::#leaf), quote!(#proto_id::#proto_evt_enum), quote!(Event))); }
                     }
@@ -376,7 +378,7 @@ impl Generator {
         Ok(())
     }
 
-    pub fn generate_module_files(&mut self, module: &Module, current_protocol: &str) -> ModuleParts {
+    pub fn generate_module_files(&mut self, module: &Module, current_protocol: &str, flat: bool) -> ModuleParts {
         let with_deprecated = self.with_deprecated;
         let with_experimental = self.with_experimental;
 
@@ -397,6 +399,12 @@ impl Generator {
             .filter(|dt| with_experimental || !dt.is_experimental())
             .collect();
 
+        // Collect names that are TypeChoice variants of another type — exclude from group enum
+        let type_choice_variants: HashSet<String> = datatypes.iter()
+            .filter_map(|dt| dt.as_type_choice())
+            .flat_map(|refs| refs.iter().map(|r| r.name.to_string()))
+            .collect();
+
         for dt in datatypes {
             let is_type = dt.is_type();
             let is_command = dt.is_command();
@@ -407,8 +415,10 @@ impl Generator {
             if is_type {
                 types_stream.extend(def);
                 type_builders_stream.extend(builder_tokens);
-                let ident = format_ident!("{}", camel_name);
-                type_idents.push((ident.clone(), ident));
+                if !type_choice_variants.contains(&camel_name) {
+                    let ident = format_ident!("{}", camel_name);
+                    type_idents.push((ident.clone(), ident));
+                }
             } else if is_command {
                 commands_stream.extend(def);
                 command_builders_stream.extend(builder_tokens);
@@ -489,6 +499,15 @@ impl Generator {
                     #default_fns
                 });
             }
+
+            results_stream.extend(quote! {
+                impl TryFrom<serde_json::Value> for #name {
+                    type Error = serde_json::Error;
+                    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+                        serde_json::from_value(value)
+                    }
+                }
+            });
         }
 
         // Group enums
@@ -498,14 +517,15 @@ impl Generator {
 
         let module_camel = module.name.to_upper_camel_case();
 
+        let (ts, cs, es) = if flat { ("Type", "Command", "Event") } else { ("Types", "Commands", "Events") };
         if !type_entries.is_empty() {
-            types_stream.extend(event::group_enum_closed(&format_ident!("{}Type", module_camel), &type_entries));
+            types_stream.extend(event::group_enum_closed(&format_ident!("{}{}", module_camel, ts), &type_entries));
         }
         if !cmd_entries.is_empty() {
-            commands_stream.extend(event::group_enum_closed(&format_ident!("{}Command", module_camel), &cmd_entries));
+            commands_stream.extend(event::group_enum_closed(&format_ident!("{}{}", module_camel, cs), &cmd_entries));
         }
         if !evt_entries.is_empty() {
-            events_stream.extend(event::group_enum_closed(&format_ident!("{}Event", module_camel), &evt_entries));
+            events_stream.extend(event::group_enum_closed(&format_ident!("{}{}", module_camel, es), &evt_entries));
         }
 
         let serde_import = quote! { use serde::{Serialize, Deserialize}; };

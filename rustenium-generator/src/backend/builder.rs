@@ -116,11 +116,28 @@ impl Builder {
         variant_ident: &Ident,
         params_ident: &Ident,
     ) -> TokenStream {
-        if self.fields.is_empty() {
-            return TokenStream::default();
-        }
-
         let builder = format_ident!("{}Builder", def_name);
+
+        if self.fields.is_empty() {
+            return quote! {
+                #[derive(Debug, Clone, Default)]
+                pub struct #builder;
+
+                impl #builder {
+                    pub fn new() -> Self { Self }
+                    pub fn build(self) -> #def_name {
+                        #def_name {
+                            method: #method_ident::#variant_ident,
+                            params: #params_ident {},
+                        }
+                    }
+                }
+
+                impl #def_name {
+                    pub fn builder() -> #builder { #builder }
+                }
+            };
+        }
 
         let mut mandatory_param_name = vec![];
         for field in self.mandatory() {

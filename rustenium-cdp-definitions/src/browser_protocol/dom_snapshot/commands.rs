@@ -8,7 +8,7 @@ pub enum DisableMethod {
     Disable,
 }
 #[doc = "Disables DOM snapshot agent for the given page.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/DOMSnapshot/#method-disable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
@@ -28,7 +28,7 @@ pub enum EnableMethod {
     Enable,
 }
 #[doc = "Enables DOM snapshot agent for the given page.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/DOMSnapshot/#method-enable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
@@ -84,7 +84,7 @@ pub enum CaptureSnapshotMethod {
     CaptureSnapshot,
 }
 #[doc = "Returns a document snapshot, including the full DOM tree of the root node (including iframes,\ntemplate contents, and imported documents) in a flattened array, as well as layout and\nwhite-listed computed style information for the nodes. Shadow DOM in the returned DOM tree is\nflattened.\n[captureSnapshot](https://chromedevtools.github.io/devtools-protocol/tot/DOMSnapshot/#method-captureSnapshot)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CaptureSnapshot {
     pub method: CaptureSnapshotMethod,
     pub params: CaptureSnapshotParams,

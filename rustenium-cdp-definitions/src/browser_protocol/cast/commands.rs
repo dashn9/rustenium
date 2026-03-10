@@ -13,7 +13,7 @@ pub enum EnableMethod {
     Enable,
 }
 #[doc = "Starts observing for sinks that can be used for tab mirroring, and if set,\nsinks compatible with |presentationUrl| as well. When sinks are found, a\n|sinksUpdated| event is fired.\nAlso starts observing for issue messages. When an issue is added or removed,\nan |issueUpdated| event is fired.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Cast/#method-enable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
@@ -33,7 +33,7 @@ pub enum DisableMethod {
     Disable,
 }
 #[doc = "Stops observing for sinks and issues.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Cast/#method-disable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
@@ -68,7 +68,7 @@ pub enum SetSinkToUseMethod {
     SetSinkToUse,
 }
 #[doc = "Sets a sink to be used when the web page requests the browser to choose a\nsink via Presentation API, Remote Playback API, or Cast SDK.\n[setSinkToUse](https://chromedevtools.github.io/devtools-protocol/tot/Cast/#method-setSinkToUse)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetSinkToUse {
     pub method: SetSinkToUseMethod,
     pub params: SetSinkToUseParams,
@@ -103,7 +103,7 @@ pub enum StartDesktopMirroringMethod {
     StartDesktopMirroring,
 }
 #[doc = "Starts mirroring the desktop to the sink.\n[startDesktopMirroring](https://chromedevtools.github.io/devtools-protocol/tot/Cast/#method-startDesktopMirroring)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StartDesktopMirroring {
     pub method: StartDesktopMirroringMethod,
     pub params: StartDesktopMirroringParams,
@@ -138,7 +138,7 @@ pub enum StartTabMirroringMethod {
     StartTabMirroring,
 }
 #[doc = "Starts mirroring the tab to the sink.\n[startTabMirroring](https://chromedevtools.github.io/devtools-protocol/tot/Cast/#method-startTabMirroring)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StartTabMirroring {
     pub method: StartTabMirroringMethod,
     pub params: StartTabMirroringParams,
@@ -173,7 +173,7 @@ pub enum StopCastingMethod {
     StopCasting,
 }
 #[doc = "Stops the active Cast session on the sink.\n[stopCasting](https://chromedevtools.github.io/devtools-protocol/tot/Cast/#method-stopCasting)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StopCasting {
     pub method: StopCastingMethod,
     pub params: StopCastingParams,

@@ -19,7 +19,7 @@ pub enum AddInspectedHeapObjectMethod {
     AddInspectedHeapObject,
 }
 #[doc = "Enables console to refer to the node with given id via $x (see Command Line API for more details\n$x functions).\n[addInspectedHeapObject](https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler/#method-addInspectedHeapObject)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AddInspectedHeapObject {
     pub method: AddInspectedHeapObjectMethod,
     pub params: AddInspectedHeapObjectParams,
@@ -37,7 +37,7 @@ pub enum CollectGarbageMethod {
     #[serde(rename = "HeapProfiler.collectGarbage")]
     CollectGarbage,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CollectGarbage {
     pub method: CollectGarbageMethod,
     pub params: CollectGarbageParams,
@@ -55,7 +55,7 @@ pub enum DisableMethod {
     #[serde(rename = "HeapProfiler.disable")]
     Disable,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
@@ -73,7 +73,7 @@ pub enum EnableMethod {
     #[serde(rename = "HeapProfiler.enable")]
     Enable,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
@@ -102,7 +102,7 @@ pub enum GetHeapObjectIdMethod {
     #[serde(rename = "HeapProfiler.getHeapObjectId")]
     GetHeapObjectId,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetHeapObjectId {
     pub method: GetHeapObjectIdMethod,
     pub params: GetHeapObjectIdParams,
@@ -136,7 +136,7 @@ pub enum GetObjectByHeapObjectIdMethod {
     #[serde(rename = "HeapProfiler.getObjectByHeapObjectId")]
     GetObjectByHeapObjectId,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetObjectByHeapObjectId {
     pub method: GetObjectByHeapObjectIdMethod,
     pub params: GetObjectByHeapObjectIdParams,
@@ -154,7 +154,7 @@ pub enum GetSamplingProfileMethod {
     #[serde(rename = "HeapProfiler.getSamplingProfile")]
     GetSamplingProfile,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetSamplingProfile {
     pub method: GetSamplingProfileMethod,
     pub params: GetSamplingProfileParams,
@@ -193,7 +193,7 @@ pub enum StartSamplingMethod {
     #[serde(rename = "HeapProfiler.startSampling")]
     StartSampling,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StartSampling {
     pub method: StartSamplingMethod,
     pub params: StartSamplingParams,
@@ -216,7 +216,7 @@ pub enum StartTrackingHeapObjectsMethod {
     #[serde(rename = "HeapProfiler.startTrackingHeapObjects")]
     StartTrackingHeapObjects,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StartTrackingHeapObjects {
     pub method: StartTrackingHeapObjectsMethod,
     pub params: StartTrackingHeapObjectsParams,
@@ -234,7 +234,7 @@ pub enum StopSamplingMethod {
     #[serde(rename = "HeapProfiler.stopSampling")]
     StopSampling,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StopSampling {
     pub method: StopSamplingMethod,
     pub params: StopSamplingParams,
@@ -268,7 +268,7 @@ pub enum StopTrackingHeapObjectsMethod {
     #[serde(rename = "HeapProfiler.stopTrackingHeapObjects")]
     StopTrackingHeapObjects,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StopTrackingHeapObjects {
     pub method: StopTrackingHeapObjectsMethod,
     pub params: StopTrackingHeapObjectsParams,
@@ -302,7 +302,7 @@ pub enum TakeHeapSnapshotMethod {
     #[serde(rename = "HeapProfiler.takeHeapSnapshot")]
     TakeHeapSnapshot,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TakeHeapSnapshot {
     pub method: TakeHeapSnapshotMethod,
     pub params: TakeHeapSnapshotParams,

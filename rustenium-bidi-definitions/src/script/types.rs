@@ -31,12 +31,17 @@ impl Channel {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ChannelValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: ChannelValueType,
     #[serde(rename = "value")]
     pub value: ChannelProperties,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum ChannelValueType {
+    #[serde(rename = "channel")]
+    Channel,
+}
 impl ChannelValue {
-    pub fn new(r#type: impl Into<String>, value: impl Into<ChannelProperties>) -> Self {
+    pub fn new(r#type: impl Into<ChannelValueType>, value: impl Into<ChannelProperties>) -> Self {
         Self {
             r#type: r#type.into(),
             value: value.into(),
@@ -76,15 +81,20 @@ impl ChannelProperties {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EvaluateResultSuccess {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: EvaluateResultSuccessType,
     #[serde(rename = "result")]
     pub result: RemoteValue,
     #[serde(rename = "realm")]
     pub realm: Realm,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum EvaluateResultSuccessType {
+    #[serde(rename = "success")]
+    Success,
+}
 impl EvaluateResultSuccess {
     pub fn new(
-        r#type: impl Into<String>,
+        r#type: impl Into<EvaluateResultSuccessType>,
         result: impl Into<RemoteValue>,
         realm: impl Into<Realm>,
     ) -> Self {
@@ -102,15 +112,20 @@ impl EvaluateResultSuccess {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EvaluateResultException {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: EvaluateResultExceptionType,
     #[serde(rename = "exceptionDetails")]
     pub exception_details: ExceptionDetails,
     #[serde(rename = "realm")]
     pub realm: Realm,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum EvaluateResultExceptionType {
+    #[serde(rename = "exception")]
+    Exception,
+}
 impl EvaluateResultException {
     pub fn new(
-        r#type: impl Into<String>,
+        r#type: impl Into<EvaluateResultExceptionType>,
         exception_details: impl Into<ExceptionDetails>,
         realm: impl Into<Realm>,
     ) -> Self {
@@ -236,12 +251,17 @@ impl ListLocalValue {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ArrayLocalValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: ArrayLocalValueType,
     #[serde(rename = "value")]
     pub value: ListLocalValue,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum ArrayLocalValueType {
+    #[serde(rename = "array")]
+    Array,
+}
 impl ArrayLocalValue {
-    pub fn new(r#type: impl Into<String>, value: impl Into<ListLocalValue>) -> Self {
+    pub fn new(r#type: impl Into<ArrayLocalValueType>, value: impl Into<ListLocalValue>) -> Self {
         Self {
             r#type: r#type.into(),
             value: value.into(),
@@ -255,12 +275,17 @@ impl ArrayLocalValue {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DateLocalValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: DateLocalValueType,
     #[serde(rename = "value")]
     pub value: String,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum DateLocalValueType {
+    #[serde(rename = "date")]
+    Date,
+}
 impl DateLocalValue {
-    pub fn new(r#type: impl Into<String>, value: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<DateLocalValueType>, value: impl Into<String>) -> Self {
         Self {
             r#type: r#type.into(),
             value: value.into(),
@@ -288,12 +313,17 @@ impl MappingLocalValue {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MapLocalValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: MapLocalValueType,
     #[serde(rename = "value")]
     pub value: MappingLocalValue,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum MapLocalValueType {
+    #[serde(rename = "map")]
+    Map,
+}
 impl MapLocalValue {
-    pub fn new(r#type: impl Into<String>, value: impl Into<MappingLocalValue>) -> Self {
+    pub fn new(r#type: impl Into<MapLocalValueType>, value: impl Into<MappingLocalValue>) -> Self {
         Self {
             r#type: r#type.into(),
             value: value.into(),
@@ -307,12 +337,20 @@ impl MapLocalValue {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ObjectLocalValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: ObjectLocalValueType,
     #[serde(rename = "value")]
     pub value: MappingLocalValue,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum ObjectLocalValueType {
+    #[serde(rename = "object")]
+    Object,
+}
 impl ObjectLocalValue {
-    pub fn new(r#type: impl Into<String>, value: impl Into<MappingLocalValue>) -> Self {
+    pub fn new(
+        r#type: impl Into<ObjectLocalValueType>,
+        value: impl Into<MappingLocalValue>,
+    ) -> Self {
         Self {
             r#type: r#type.into(),
             value: value.into(),
@@ -352,12 +390,17 @@ impl RegExpValue {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RegExpLocalValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: RegExpLocalValueType,
     #[serde(rename = "value")]
     pub value: RegExpValue,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum RegExpLocalValueType {
+    #[serde(rename = "regexp")]
+    Regexp,
+}
 impl RegExpLocalValue {
-    pub fn new(r#type: impl Into<String>, value: impl Into<RegExpValue>) -> Self {
+    pub fn new(r#type: impl Into<RegExpLocalValueType>, value: impl Into<RegExpValue>) -> Self {
         Self {
             r#type: r#type.into(),
             value: value.into(),
@@ -371,12 +414,17 @@ impl RegExpLocalValue {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetLocalValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: SetLocalValueType,
     #[serde(rename = "value")]
     pub value: ListLocalValue,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum SetLocalValueType {
+    #[serde(rename = "set")]
+    Set,
+}
 impl SetLocalValue {
-    pub fn new(r#type: impl Into<String>, value: impl Into<ListLocalValue>) -> Self {
+    pub fn new(r#type: impl Into<SetLocalValueType>, value: impl Into<ListLocalValue>) -> Self {
         Self {
             r#type: r#type.into(),
             value: value.into(),
@@ -458,18 +506,18 @@ pub enum PrimitiveProtocolValue {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UndefinedValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: UndefinedValueType,
+}
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum UndefinedValueType {
+    #[serde(rename = "undefined")]
+    Undefined,
 }
 impl UndefinedValue {
-    pub fn new(r#type: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<UndefinedValueType>) -> Self {
         Self {
             r#type: r#type.into(),
         }
-    }
-}
-impl<T: Into<String>> From<T> for UndefinedValue {
-    fn from(url: T) -> Self {
-        UndefinedValue::new(url)
     }
 }
 impl UndefinedValue {
@@ -479,18 +527,18 @@ impl UndefinedValue {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NullValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: NullValueType,
+}
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum NullValueType {
+    #[serde(rename = "null")]
+    Null,
 }
 impl NullValue {
-    pub fn new(r#type: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<NullValueType>) -> Self {
         Self {
             r#type: r#type.into(),
         }
-    }
-}
-impl<T: Into<String>> From<T> for NullValue {
-    fn from(url: T) -> Self {
-        NullValue::new(url)
     }
 }
 impl NullValue {
@@ -500,12 +548,17 @@ impl NullValue {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StringValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: StringValueType,
     #[serde(rename = "value")]
     pub value: String,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum StringValueType {
+    #[serde(rename = "string")]
+    String,
+}
 impl StringValue {
-    pub fn new(r#type: impl Into<String>, value: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<StringValueType>, value: impl Into<String>) -> Self {
         Self {
             r#type: r#type.into(),
             value: value.into(),
@@ -548,12 +601,17 @@ impl SpecialNumber {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NumberValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: NumberValueType,
     #[serde(rename = "value")]
     pub value: serde_json::Value,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum NumberValueType {
+    #[serde(rename = "number")]
+    Number,
+}
 impl NumberValue {
-    pub fn new(r#type: impl Into<String>, value: impl Into<serde_json::Value>) -> Self {
+    pub fn new(r#type: impl Into<NumberValueType>, value: impl Into<serde_json::Value>) -> Self {
         Self {
             r#type: r#type.into(),
             value: value.into(),
@@ -567,12 +625,17 @@ impl NumberValue {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BooleanValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: BooleanValueType,
     #[serde(rename = "value")]
     pub value: bool,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum BooleanValueType {
+    #[serde(rename = "boolean")]
+    Boolean,
+}
 impl BooleanValue {
-    pub fn new(r#type: impl Into<String>, value: impl Into<bool>) -> Self {
+    pub fn new(r#type: impl Into<BooleanValueType>, value: impl Into<bool>) -> Self {
         Self {
             r#type: r#type.into(),
             value: value.into(),
@@ -586,12 +649,17 @@ impl BooleanValue {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BigIntValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: BigIntValueType,
     #[serde(rename = "value")]
     pub value: String,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum BigIntValueType {
+    #[serde(rename = "bigint")]
+    Bigint,
+}
 impl BigIntValue {
-    pub fn new(r#type: impl Into<String>, value: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<BigIntValueType>, value: impl Into<String>) -> Self {
         Self {
             r#type: r#type.into(),
             value: value.into(),
@@ -739,7 +807,7 @@ impl MappingRemoteValue {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SymbolRemoteValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: SymbolRemoteValueType,
     #[serde(rename = "handle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -749,18 +817,18 @@ pub struct SymbolRemoteValue {
     #[serde(default)]
     pub internal_id: Option<InternalId>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum SymbolRemoteValueType {
+    #[serde(rename = "symbol")]
+    Symbol,
+}
 impl SymbolRemoteValue {
-    pub fn new(r#type: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<SymbolRemoteValueType>) -> Self {
         Self {
             r#type: r#type.into(),
             handle: None,
             internal_id: None,
         }
-    }
-}
-impl<T: Into<String>> From<T> for SymbolRemoteValue {
-    fn from(url: T) -> Self {
-        SymbolRemoteValue::new(url)
     }
 }
 impl SymbolRemoteValue {
@@ -770,7 +838,7 @@ impl SymbolRemoteValue {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ArrayRemoteValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: ArrayRemoteValueType,
     #[serde(rename = "handle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -784,19 +852,19 @@ pub struct ArrayRemoteValue {
     #[serde(default)]
     pub value: Option<ListRemoteValue>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum ArrayRemoteValueType {
+    #[serde(rename = "array")]
+    Array,
+}
 impl ArrayRemoteValue {
-    pub fn new(r#type: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<ArrayRemoteValueType>) -> Self {
         Self {
             r#type: r#type.into(),
             handle: None,
             internal_id: None,
             value: None,
         }
-    }
-}
-impl<T: Into<String>> From<T> for ArrayRemoteValue {
-    fn from(url: T) -> Self {
-        ArrayRemoteValue::new(url)
     }
 }
 impl ArrayRemoteValue {
@@ -806,7 +874,7 @@ impl ArrayRemoteValue {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ObjectRemoteValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: ObjectRemoteValueType,
     #[serde(rename = "handle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -820,19 +888,19 @@ pub struct ObjectRemoteValue {
     #[serde(default)]
     pub value: Option<MappingRemoteValue>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum ObjectRemoteValueType {
+    #[serde(rename = "object")]
+    Object,
+}
 impl ObjectRemoteValue {
-    pub fn new(r#type: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<ObjectRemoteValueType>) -> Self {
         Self {
             r#type: r#type.into(),
             handle: None,
             internal_id: None,
             value: None,
         }
-    }
-}
-impl<T: Into<String>> From<T> for ObjectRemoteValue {
-    fn from(url: T) -> Self {
-        ObjectRemoteValue::new(url)
     }
 }
 impl ObjectRemoteValue {
@@ -842,7 +910,7 @@ impl ObjectRemoteValue {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FunctionRemoteValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: FunctionRemoteValueType,
     #[serde(rename = "handle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -852,18 +920,18 @@ pub struct FunctionRemoteValue {
     #[serde(default)]
     pub internal_id: Option<InternalId>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum FunctionRemoteValueType {
+    #[serde(rename = "function")]
+    Function,
+}
 impl FunctionRemoteValue {
-    pub fn new(r#type: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<FunctionRemoteValueType>) -> Self {
         Self {
             r#type: r#type.into(),
             handle: None,
             internal_id: None,
         }
-    }
-}
-impl<T: Into<String>> From<T> for FunctionRemoteValue {
-    fn from(url: T) -> Self {
-        FunctionRemoteValue::new(url)
     }
 }
 impl FunctionRemoteValue {
@@ -872,10 +940,9 @@ impl FunctionRemoteValue {
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RegExpRemoteValue {
-    #[serde(rename = "type")]
-    pub r#type: String,
-    #[serde(rename = "value")]
-    pub value: RegExpValue,
+    #[serde(flatten)]
+    #[serde(default)]
+    pub reg_exp_local_value: RegExpLocalValue,
     #[serde(rename = "handle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -886,10 +953,9 @@ pub struct RegExpRemoteValue {
     pub internal_id: Option<InternalId>,
 }
 impl RegExpRemoteValue {
-    pub fn new(r#type: impl Into<String>, value: impl Into<RegExpValue>) -> Self {
+    pub fn new(reg_exp_local_value: impl Into<RegExpLocalValue>) -> Self {
         Self {
-            r#type: r#type.into(),
-            value: value.into(),
+            reg_exp_local_value: reg_exp_local_value.into(),
             handle: None,
             internal_id: None,
         }
@@ -901,10 +967,9 @@ impl RegExpRemoteValue {
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DateRemoteValue {
-    #[serde(rename = "type")]
-    pub r#type: String,
-    #[serde(rename = "value")]
-    pub value: String,
+    #[serde(flatten)]
+    #[serde(default)]
+    pub date_local_value: DateLocalValue,
     #[serde(rename = "handle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -915,10 +980,9 @@ pub struct DateRemoteValue {
     pub internal_id: Option<InternalId>,
 }
 impl DateRemoteValue {
-    pub fn new(r#type: impl Into<String>, value: impl Into<String>) -> Self {
+    pub fn new(date_local_value: impl Into<DateLocalValue>) -> Self {
         Self {
-            r#type: r#type.into(),
-            value: value.into(),
+            date_local_value: date_local_value.into(),
             handle: None,
             internal_id: None,
         }
@@ -931,7 +995,7 @@ impl DateRemoteValue {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MapRemoteValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: MapRemoteValueType,
     #[serde(rename = "handle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -945,19 +1009,19 @@ pub struct MapRemoteValue {
     #[serde(default)]
     pub value: Option<MappingRemoteValue>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum MapRemoteValueType {
+    #[serde(rename = "map")]
+    Map,
+}
 impl MapRemoteValue {
-    pub fn new(r#type: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<MapRemoteValueType>) -> Self {
         Self {
             r#type: r#type.into(),
             handle: None,
             internal_id: None,
             value: None,
         }
-    }
-}
-impl<T: Into<String>> From<T> for MapRemoteValue {
-    fn from(url: T) -> Self {
-        MapRemoteValue::new(url)
     }
 }
 impl MapRemoteValue {
@@ -967,7 +1031,7 @@ impl MapRemoteValue {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetRemoteValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: SetRemoteValueType,
     #[serde(rename = "handle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -981,19 +1045,19 @@ pub struct SetRemoteValue {
     #[serde(default)]
     pub value: Option<ListRemoteValue>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum SetRemoteValueType {
+    #[serde(rename = "set")]
+    Set,
+}
 impl SetRemoteValue {
-    pub fn new(r#type: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<SetRemoteValueType>) -> Self {
         Self {
             r#type: r#type.into(),
             handle: None,
             internal_id: None,
             value: None,
         }
-    }
-}
-impl<T: Into<String>> From<T> for SetRemoteValue {
-    fn from(url: T) -> Self {
-        SetRemoteValue::new(url)
     }
 }
 impl SetRemoteValue {
@@ -1003,7 +1067,7 @@ impl SetRemoteValue {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WeakMapRemoteValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: WeakMapRemoteValueType,
     #[serde(rename = "handle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -1013,18 +1077,18 @@ pub struct WeakMapRemoteValue {
     #[serde(default)]
     pub internal_id: Option<InternalId>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum WeakMapRemoteValueType {
+    #[serde(rename = "weakmap")]
+    Weakmap,
+}
 impl WeakMapRemoteValue {
-    pub fn new(r#type: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<WeakMapRemoteValueType>) -> Self {
         Self {
             r#type: r#type.into(),
             handle: None,
             internal_id: None,
         }
-    }
-}
-impl<T: Into<String>> From<T> for WeakMapRemoteValue {
-    fn from(url: T) -> Self {
-        WeakMapRemoteValue::new(url)
     }
 }
 impl WeakMapRemoteValue {
@@ -1034,7 +1098,7 @@ impl WeakMapRemoteValue {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WeakSetRemoteValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: WeakSetRemoteValueType,
     #[serde(rename = "handle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -1044,18 +1108,18 @@ pub struct WeakSetRemoteValue {
     #[serde(default)]
     pub internal_id: Option<InternalId>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum WeakSetRemoteValueType {
+    #[serde(rename = "weakset")]
+    Weakset,
+}
 impl WeakSetRemoteValue {
-    pub fn new(r#type: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<WeakSetRemoteValueType>) -> Self {
         Self {
             r#type: r#type.into(),
             handle: None,
             internal_id: None,
         }
-    }
-}
-impl<T: Into<String>> From<T> for WeakSetRemoteValue {
-    fn from(url: T) -> Self {
-        WeakSetRemoteValue::new(url)
     }
 }
 impl WeakSetRemoteValue {
@@ -1065,7 +1129,7 @@ impl WeakSetRemoteValue {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GeneratorRemoteValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: GeneratorRemoteValueType,
     #[serde(rename = "handle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -1075,18 +1139,18 @@ pub struct GeneratorRemoteValue {
     #[serde(default)]
     pub internal_id: Option<InternalId>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum GeneratorRemoteValueType {
+    #[serde(rename = "generator")]
+    Generator,
+}
 impl GeneratorRemoteValue {
-    pub fn new(r#type: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<GeneratorRemoteValueType>) -> Self {
         Self {
             r#type: r#type.into(),
             handle: None,
             internal_id: None,
         }
-    }
-}
-impl<T: Into<String>> From<T> for GeneratorRemoteValue {
-    fn from(url: T) -> Self {
-        GeneratorRemoteValue::new(url)
     }
 }
 impl GeneratorRemoteValue {
@@ -1096,7 +1160,7 @@ impl GeneratorRemoteValue {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ErrorRemoteValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: ErrorRemoteValueType,
     #[serde(rename = "handle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -1106,18 +1170,18 @@ pub struct ErrorRemoteValue {
     #[serde(default)]
     pub internal_id: Option<InternalId>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum ErrorRemoteValueType {
+    #[serde(rename = "error")]
+    Error,
+}
 impl ErrorRemoteValue {
-    pub fn new(r#type: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<ErrorRemoteValueType>) -> Self {
         Self {
             r#type: r#type.into(),
             handle: None,
             internal_id: None,
         }
-    }
-}
-impl<T: Into<String>> From<T> for ErrorRemoteValue {
-    fn from(url: T) -> Self {
-        ErrorRemoteValue::new(url)
     }
 }
 impl ErrorRemoteValue {
@@ -1127,7 +1191,7 @@ impl ErrorRemoteValue {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ProxyRemoteValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: ProxyRemoteValueType,
     #[serde(rename = "handle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -1137,18 +1201,18 @@ pub struct ProxyRemoteValue {
     #[serde(default)]
     pub internal_id: Option<InternalId>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum ProxyRemoteValueType {
+    #[serde(rename = "proxy")]
+    Proxy,
+}
 impl ProxyRemoteValue {
-    pub fn new(r#type: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<ProxyRemoteValueType>) -> Self {
         Self {
             r#type: r#type.into(),
             handle: None,
             internal_id: None,
         }
-    }
-}
-impl<T: Into<String>> From<T> for ProxyRemoteValue {
-    fn from(url: T) -> Self {
-        ProxyRemoteValue::new(url)
     }
 }
 impl ProxyRemoteValue {
@@ -1158,7 +1222,7 @@ impl ProxyRemoteValue {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PromiseRemoteValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: PromiseRemoteValueType,
     #[serde(rename = "handle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -1168,18 +1232,18 @@ pub struct PromiseRemoteValue {
     #[serde(default)]
     pub internal_id: Option<InternalId>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum PromiseRemoteValueType {
+    #[serde(rename = "promise")]
+    Promise,
+}
 impl PromiseRemoteValue {
-    pub fn new(r#type: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<PromiseRemoteValueType>) -> Self {
         Self {
             r#type: r#type.into(),
             handle: None,
             internal_id: None,
         }
-    }
-}
-impl<T: Into<String>> From<T> for PromiseRemoteValue {
-    fn from(url: T) -> Self {
-        PromiseRemoteValue::new(url)
     }
 }
 impl PromiseRemoteValue {
@@ -1189,7 +1253,7 @@ impl PromiseRemoteValue {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TypedArrayRemoteValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: TypedArrayRemoteValueType,
     #[serde(rename = "handle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -1199,18 +1263,18 @@ pub struct TypedArrayRemoteValue {
     #[serde(default)]
     pub internal_id: Option<InternalId>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum TypedArrayRemoteValueType {
+    #[serde(rename = "typedarray")]
+    Typedarray,
+}
 impl TypedArrayRemoteValue {
-    pub fn new(r#type: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<TypedArrayRemoteValueType>) -> Self {
         Self {
             r#type: r#type.into(),
             handle: None,
             internal_id: None,
         }
-    }
-}
-impl<T: Into<String>> From<T> for TypedArrayRemoteValue {
-    fn from(url: T) -> Self {
-        TypedArrayRemoteValue::new(url)
     }
 }
 impl TypedArrayRemoteValue {
@@ -1220,7 +1284,7 @@ impl TypedArrayRemoteValue {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ArrayBufferRemoteValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: ArrayBufferRemoteValueType,
     #[serde(rename = "handle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -1230,18 +1294,18 @@ pub struct ArrayBufferRemoteValue {
     #[serde(default)]
     pub internal_id: Option<InternalId>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum ArrayBufferRemoteValueType {
+    #[serde(rename = "arraybuffer")]
+    Arraybuffer,
+}
 impl ArrayBufferRemoteValue {
-    pub fn new(r#type: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<ArrayBufferRemoteValueType>) -> Self {
         Self {
             r#type: r#type.into(),
             handle: None,
             internal_id: None,
         }
-    }
-}
-impl<T: Into<String>> From<T> for ArrayBufferRemoteValue {
-    fn from(url: T) -> Self {
-        ArrayBufferRemoteValue::new(url)
     }
 }
 impl ArrayBufferRemoteValue {
@@ -1251,7 +1315,7 @@ impl ArrayBufferRemoteValue {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NodeListRemoteValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: NodeListRemoteValueType,
     #[serde(rename = "handle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -1265,19 +1329,19 @@ pub struct NodeListRemoteValue {
     #[serde(default)]
     pub value: Option<ListRemoteValue>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum NodeListRemoteValueType {
+    #[serde(rename = "nodelist")]
+    Nodelist,
+}
 impl NodeListRemoteValue {
-    pub fn new(r#type: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<NodeListRemoteValueType>) -> Self {
         Self {
             r#type: r#type.into(),
             handle: None,
             internal_id: None,
             value: None,
         }
-    }
-}
-impl<T: Into<String>> From<T> for NodeListRemoteValue {
-    fn from(url: T) -> Self {
-        NodeListRemoteValue::new(url)
     }
 }
 impl NodeListRemoteValue {
@@ -1287,7 +1351,7 @@ impl NodeListRemoteValue {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HtmlCollectionRemoteValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: HtmlCollectionRemoteValueType,
     #[serde(rename = "handle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -1301,19 +1365,19 @@ pub struct HtmlCollectionRemoteValue {
     #[serde(default)]
     pub value: Option<ListRemoteValue>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum HtmlCollectionRemoteValueType {
+    #[serde(rename = "htmlcollection")]
+    Htmlcollection,
+}
 impl HtmlCollectionRemoteValue {
-    pub fn new(r#type: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<HtmlCollectionRemoteValueType>) -> Self {
         Self {
             r#type: r#type.into(),
             handle: None,
             internal_id: None,
             value: None,
         }
-    }
-}
-impl<T: Into<String>> From<T> for HtmlCollectionRemoteValue {
-    fn from(url: T) -> Self {
-        HtmlCollectionRemoteValue::new(url)
     }
 }
 impl HtmlCollectionRemoteValue {
@@ -1323,7 +1387,7 @@ impl HtmlCollectionRemoteValue {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NodeRemoteValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: NodeRemoteValueType,
     #[serde(rename = "sharedId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -1341,8 +1405,13 @@ pub struct NodeRemoteValue {
     #[serde(default)]
     pub value: Option<Box<NodeProperties>>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum NodeRemoteValueType {
+    #[serde(rename = "node")]
+    Node,
+}
 impl NodeRemoteValue {
-    pub fn new(r#type: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<NodeRemoteValueType>) -> Self {
         Self {
             r#type: r#type.into(),
             shared_id: None,
@@ -1350,11 +1419,6 @@ impl NodeRemoteValue {
             internal_id: None,
             value: None,
         }
-    }
-}
-impl<T: Into<String>> From<T> for NodeRemoteValue {
-    fn from(url: T) -> Self {
-        NodeRemoteValue::new(url)
     }
 }
 impl NodeRemoteValue {
@@ -1424,7 +1488,7 @@ impl NodeProperties {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WindowProxyRemoteValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: WindowProxyRemoteValueType,
     #[serde(rename = "value")]
     pub value: WindowProxyProperties,
     #[serde(rename = "handle")]
@@ -1436,8 +1500,16 @@ pub struct WindowProxyRemoteValue {
     #[serde(default)]
     pub internal_id: Option<InternalId>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum WindowProxyRemoteValueType {
+    #[serde(rename = "window")]
+    Window,
+}
 impl WindowProxyRemoteValue {
-    pub fn new(r#type: impl Into<String>, value: impl Into<WindowProxyProperties>) -> Self {
+    pub fn new(
+        r#type: impl Into<WindowProxyRemoteValueType>,
+        value: impl Into<WindowProxyProperties>,
+    ) -> Self {
         Self {
             r#type: r#type.into(),
             value: value.into(),
@@ -1659,12 +1731,11 @@ impl BaseRealmInfo {
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WindowRealmInfo {
-    #[serde(rename = "realm")]
-    pub realm: Realm,
-    #[serde(rename = "origin")]
-    pub origin: String,
+    #[serde(flatten)]
+    #[serde(default)]
+    pub base_realm_info: BaseRealmInfo,
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: WindowRealmInfoType,
     #[serde(rename = "context")]
     pub context: crate::browsing_context::types::BrowsingContext,
     #[serde(rename = "sandbox")]
@@ -1672,16 +1743,19 @@ pub struct WindowRealmInfo {
     #[serde(default)]
     pub sandbox: Option<String>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum WindowRealmInfoType {
+    #[serde(rename = "window")]
+    Window,
+}
 impl WindowRealmInfo {
     pub fn new(
-        realm: impl Into<Realm>,
-        origin: impl Into<String>,
-        r#type: impl Into<String>,
+        base_realm_info: impl Into<BaseRealmInfo>,
+        r#type: impl Into<WindowRealmInfoType>,
         context: impl Into<crate::browsing_context::types::BrowsingContext>,
     ) -> Self {
         Self {
-            realm: realm.into(),
-            origin: origin.into(),
+            base_realm_info: base_realm_info.into(),
             r#type: r#type.into(),
             context: context.into(),
             sandbox: None,
@@ -1694,26 +1768,28 @@ impl WindowRealmInfo {
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DedicatedWorkerRealmInfo {
-    #[serde(rename = "realm")]
-    pub realm: Realm,
-    #[serde(rename = "origin")]
-    pub origin: String,
+    #[serde(flatten)]
+    #[serde(default)]
+    pub base_realm_info: BaseRealmInfo,
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: DedicatedWorkerRealmInfoType,
     #[serde(rename = "owners")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub owners: Vec<Realm>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum DedicatedWorkerRealmInfoType {
+    #[serde(rename = "dedicated-worker")]
+    DedicatedWorker,
+}
 impl DedicatedWorkerRealmInfo {
     pub fn new(
-        realm: impl Into<Realm>,
-        origin: impl Into<String>,
-        r#type: impl Into<String>,
+        base_realm_info: impl Into<BaseRealmInfo>,
+        r#type: impl Into<DedicatedWorkerRealmInfoType>,
         owners: Vec<Realm>,
     ) -> Self {
         Self {
-            realm: realm.into(),
-            origin: origin.into(),
+            base_realm_info: base_realm_info.into(),
             r#type: r#type.into(),
             owners,
         }
@@ -1725,22 +1801,24 @@ impl DedicatedWorkerRealmInfo {
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SharedWorkerRealmInfo {
-    #[serde(rename = "realm")]
-    pub realm: Realm,
-    #[serde(rename = "origin")]
-    pub origin: String,
+    #[serde(flatten)]
+    #[serde(default)]
+    pub base_realm_info: BaseRealmInfo,
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: SharedWorkerRealmInfoType,
+}
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum SharedWorkerRealmInfoType {
+    #[serde(rename = "shared-worker")]
+    SharedWorker,
 }
 impl SharedWorkerRealmInfo {
     pub fn new(
-        realm: impl Into<Realm>,
-        origin: impl Into<String>,
-        r#type: impl Into<String>,
+        base_realm_info: impl Into<BaseRealmInfo>,
+        r#type: impl Into<SharedWorkerRealmInfoType>,
     ) -> Self {
         Self {
-            realm: realm.into(),
-            origin: origin.into(),
+            base_realm_info: base_realm_info.into(),
             r#type: r#type.into(),
         }
     }
@@ -1751,22 +1829,24 @@ impl SharedWorkerRealmInfo {
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ServiceWorkerRealmInfo {
-    #[serde(rename = "realm")]
-    pub realm: Realm,
-    #[serde(rename = "origin")]
-    pub origin: String,
+    #[serde(flatten)]
+    #[serde(default)]
+    pub base_realm_info: BaseRealmInfo,
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: ServiceWorkerRealmInfoType,
+}
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum ServiceWorkerRealmInfoType {
+    #[serde(rename = "service-worker")]
+    ServiceWorker,
 }
 impl ServiceWorkerRealmInfo {
     pub fn new(
-        realm: impl Into<Realm>,
-        origin: impl Into<String>,
-        r#type: impl Into<String>,
+        base_realm_info: impl Into<BaseRealmInfo>,
+        r#type: impl Into<ServiceWorkerRealmInfoType>,
     ) -> Self {
         Self {
-            realm: realm.into(),
-            origin: origin.into(),
+            base_realm_info: base_realm_info.into(),
             r#type: r#type.into(),
         }
     }
@@ -1777,22 +1857,24 @@ impl ServiceWorkerRealmInfo {
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WorkerRealmInfo {
-    #[serde(rename = "realm")]
-    pub realm: Realm,
-    #[serde(rename = "origin")]
-    pub origin: String,
+    #[serde(flatten)]
+    #[serde(default)]
+    pub base_realm_info: BaseRealmInfo,
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: WorkerRealmInfoType,
+}
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum WorkerRealmInfoType {
+    #[serde(rename = "worker")]
+    Worker,
 }
 impl WorkerRealmInfo {
     pub fn new(
-        realm: impl Into<Realm>,
-        origin: impl Into<String>,
-        r#type: impl Into<String>,
+        base_realm_info: impl Into<BaseRealmInfo>,
+        r#type: impl Into<WorkerRealmInfoType>,
     ) -> Self {
         Self {
-            realm: realm.into(),
-            origin: origin.into(),
+            base_realm_info: base_realm_info.into(),
             r#type: r#type.into(),
         }
     }
@@ -1803,22 +1885,24 @@ impl WorkerRealmInfo {
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PaintWorkletRealmInfo {
-    #[serde(rename = "realm")]
-    pub realm: Realm,
-    #[serde(rename = "origin")]
-    pub origin: String,
+    #[serde(flatten)]
+    #[serde(default)]
+    pub base_realm_info: BaseRealmInfo,
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: PaintWorkletRealmInfoType,
+}
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum PaintWorkletRealmInfoType {
+    #[serde(rename = "paint-worklet")]
+    PaintWorklet,
 }
 impl PaintWorkletRealmInfo {
     pub fn new(
-        realm: impl Into<Realm>,
-        origin: impl Into<String>,
-        r#type: impl Into<String>,
+        base_realm_info: impl Into<BaseRealmInfo>,
+        r#type: impl Into<PaintWorkletRealmInfoType>,
     ) -> Self {
         Self {
-            realm: realm.into(),
-            origin: origin.into(),
+            base_realm_info: base_realm_info.into(),
             r#type: r#type.into(),
         }
     }
@@ -1829,22 +1913,24 @@ impl PaintWorkletRealmInfo {
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AudioWorkletRealmInfo {
-    #[serde(rename = "realm")]
-    pub realm: Realm,
-    #[serde(rename = "origin")]
-    pub origin: String,
+    #[serde(flatten)]
+    #[serde(default)]
+    pub base_realm_info: BaseRealmInfo,
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: AudioWorkletRealmInfoType,
+}
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum AudioWorkletRealmInfoType {
+    #[serde(rename = "audio-worklet")]
+    AudioWorklet,
 }
 impl AudioWorkletRealmInfo {
     pub fn new(
-        realm: impl Into<Realm>,
-        origin: impl Into<String>,
-        r#type: impl Into<String>,
+        base_realm_info: impl Into<BaseRealmInfo>,
+        r#type: impl Into<AudioWorkletRealmInfoType>,
     ) -> Self {
         Self {
-            realm: realm.into(),
-            origin: origin.into(),
+            base_realm_info: base_realm_info.into(),
             r#type: r#type.into(),
         }
     }
@@ -1855,22 +1941,24 @@ impl AudioWorkletRealmInfo {
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WorkletRealmInfo {
-    #[serde(rename = "realm")]
-    pub realm: Realm,
-    #[serde(rename = "origin")]
-    pub origin: String,
+    #[serde(flatten)]
+    #[serde(default)]
+    pub base_realm_info: BaseRealmInfo,
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: WorkletRealmInfoType,
+}
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum WorkletRealmInfoType {
+    #[serde(rename = "worklet")]
+    Worklet,
 }
 impl WorkletRealmInfo {
     pub fn new(
-        realm: impl Into<Realm>,
-        origin: impl Into<String>,
-        r#type: impl Into<String>,
+        base_realm_info: impl Into<BaseRealmInfo>,
+        r#type: impl Into<WorkletRealmInfoType>,
     ) -> Self {
         Self {
-            realm: realm.into(),
-            origin: origin.into(),
+            base_realm_info: base_realm_info.into(),
             r#type: r#type.into(),
         }
     }
@@ -1900,30 +1988,4 @@ impl Source {
     pub const IDENTIFIER: &'static str = "script.Source";
     pub const DOMAIN_DIRECTION: &'static str = "local";
 }
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct MessageParameters {
-    #[serde(rename = "channel")]
-    pub channel: Channel,
-    #[serde(rename = "data")]
-    pub data: RemoteValue,
-    #[serde(rename = "source")]
-    pub source: Source,
-}
-impl MessageParameters {
-    pub fn new(
-        channel: impl Into<Channel>,
-        data: impl Into<RemoteValue>,
-        source: impl Into<Source>,
-    ) -> Self {
-        Self {
-            channel: channel.into(),
-            data: data.into(),
-            source: source.into(),
-        }
-    }
-}
-impl MessageParameters {
-    pub const IDENTIFIER: &'static str = "script.MessageParameters";
-    pub const DOMAIN_DIRECTION: &'static str = "local";
-}
-group_enum ! (ScriptTypes { Channel (Channel) , ChannelValue (ChannelValue) , ChannelProperties (ChannelProperties) , EvaluateResultSuccess (EvaluateResultSuccess) , EvaluateResultException (EvaluateResultException) , ExceptionDetails (ExceptionDetails) , Handle (Handle) , InternalId (InternalId) , LocalValue (LocalValue) , ListLocalValue (ListLocalValue) , ArrayLocalValue (ArrayLocalValue) , DateLocalValue (DateLocalValue) , MappingLocalValue (MappingLocalValue) , MapLocalValue (MapLocalValue) , ObjectLocalValue (ObjectLocalValue) , RegExpValue (RegExpValue) , RegExpLocalValue (RegExpLocalValue) , SetLocalValue (SetLocalValue) , PreloadScript (PreloadScript) , Realm (Realm) , PrimitiveProtocolValue (PrimitiveProtocolValue) , UndefinedValue (UndefinedValue) , NullValue (NullValue) , StringValue (StringValue) , SpecialNumber (SpecialNumber) , NumberValue (NumberValue) , BooleanValue (BooleanValue) , BigIntValue (BigIntValue) , RealmType (RealmType) , RemoteReference (RemoteReference) , SharedReference (SharedReference) , RemoteObjectReference (RemoteObjectReference) , RemoteValue (RemoteValue) , ListRemoteValue (ListRemoteValue) , MappingRemoteValue (MappingRemoteValue) , SymbolRemoteValue (SymbolRemoteValue) , ArrayRemoteValue (ArrayRemoteValue) , ObjectRemoteValue (ObjectRemoteValue) , FunctionRemoteValue (FunctionRemoteValue) , RegExpRemoteValue (RegExpRemoteValue) , DateRemoteValue (DateRemoteValue) , MapRemoteValue (MapRemoteValue) , SetRemoteValue (SetRemoteValue) , WeakMapRemoteValue (WeakMapRemoteValue) , WeakSetRemoteValue (WeakSetRemoteValue) , GeneratorRemoteValue (GeneratorRemoteValue) , ErrorRemoteValue (ErrorRemoteValue) , ProxyRemoteValue (ProxyRemoteValue) , PromiseRemoteValue (PromiseRemoteValue) , TypedArrayRemoteValue (TypedArrayRemoteValue) , ArrayBufferRemoteValue (ArrayBufferRemoteValue) , NodeListRemoteValue (NodeListRemoteValue) , HtmlCollectionRemoteValue (HtmlCollectionRemoteValue) , NodeRemoteValue (NodeRemoteValue) , NodeProperties (NodeProperties) , WindowProxyRemoteValue (WindowProxyRemoteValue) , WindowProxyProperties (WindowProxyProperties) , ResultOwnership (ResultOwnership) , SerializationOptions (SerializationOptions) , SharedId (SharedId) , StackFrame (StackFrame) , StackTrace (StackTrace) , RealmTarget (RealmTarget) , ContextTarget (ContextTarget) , Target (Target) , RealmInfo (RealmInfo) , BaseRealmInfo (BaseRealmInfo) , WindowRealmInfo (WindowRealmInfo) , DedicatedWorkerRealmInfo (DedicatedWorkerRealmInfo) , SharedWorkerRealmInfo (SharedWorkerRealmInfo) , ServiceWorkerRealmInfo (ServiceWorkerRealmInfo) , WorkerRealmInfo (WorkerRealmInfo) , PaintWorkletRealmInfo (PaintWorkletRealmInfo) , AudioWorkletRealmInfo (AudioWorkletRealmInfo) , WorkletRealmInfo (WorkletRealmInfo) , Source (Source) , MessageParameters (MessageParameters) });
+group_enum ! (ScriptType { Channel (Channel) , ChannelValue (ChannelValue) , ChannelProperties (ChannelProperties) , EvaluateResultSuccess (EvaluateResultSuccess) , EvaluateResultException (EvaluateResultException) , ExceptionDetails (ExceptionDetails) , Handle (Handle) , InternalId (InternalId) , LocalValue (LocalValue) , ListLocalValue (ListLocalValue) , ArrayLocalValue (ArrayLocalValue) , DateLocalValue (DateLocalValue) , MappingLocalValue (MappingLocalValue) , MapLocalValue (MapLocalValue) , ObjectLocalValue (ObjectLocalValue) , RegExpValue (RegExpValue) , RegExpLocalValue (RegExpLocalValue) , SetLocalValue (SetLocalValue) , PreloadScript (PreloadScript) , Realm (Realm) , SpecialNumber (SpecialNumber) , RealmType (RealmType) , RemoteReference (RemoteReference) , RemoteValue (RemoteValue) , ListRemoteValue (ListRemoteValue) , MappingRemoteValue (MappingRemoteValue) , HtmlCollectionRemoteValue (HtmlCollectionRemoteValue) , NodeProperties (NodeProperties) , WindowProxyProperties (WindowProxyProperties) , ResultOwnership (ResultOwnership) , SerializationOptions (SerializationOptions) , SharedId (SharedId) , StackFrame (StackFrame) , StackTrace (StackTrace) , Target (Target) , RealmInfo (RealmInfo) , BaseRealmInfo (BaseRealmInfo) , Source (Source) });

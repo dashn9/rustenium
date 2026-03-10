@@ -19,7 +19,7 @@ pub enum SetForcedColorsModeThemeOverrideMethod {
     #[serde(rename = "emulation.setForcedColorsModeThemeOverride")]
     SetForcedColorsModeThemeOverride,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetForcedColorsModeThemeOverride {
     pub method: SetForcedColorsModeThemeOverrideMethod,
     pub params: SetForcedColorsModeThemeOverrideParams,
@@ -33,10 +33,6 @@ impl crate::CommandResult for SetForcedColorsModeThemeOverride {
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetGeolocationOverrideParams {
-    #[serde(rename = "(coordinates")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default)]
-    pub coordinates: Option<super::types::GeolocationCoordinates>,
     #[serde(rename = "(error")]
     pub error: super::types::GeolocationPositionError,
     #[serde(rename = "contexts")]
@@ -52,7 +48,6 @@ impl SetGeolocationOverrideParams {
     pub fn new(error: impl Into<super::types::GeolocationPositionError>) -> Self {
         Self {
             error: error.into(),
-            coordinates: None,
             contexts: None,
             user_contexts: None,
         }
@@ -63,7 +58,7 @@ pub enum SetGeolocationOverrideMethod {
     #[serde(rename = "emulation.setGeolocationOverride")]
     SetGeolocationOverride,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetGeolocationOverride {
     pub method: SetGeolocationOverrideMethod,
     pub params: SetGeolocationOverrideParams,
@@ -95,7 +90,7 @@ pub enum SetLocaleOverrideMethod {
     #[serde(rename = "emulation.setLocaleOverride")]
     SetLocaleOverride,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetLocaleOverride {
     pub method: SetLocaleOverrideMethod,
     pub params: SetLocaleOverrideParams,
@@ -127,7 +122,7 @@ pub enum SetNetworkConditionsMethod {
     #[serde(rename = "emulation.setNetworkConditions")]
     SetNetworkConditions,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetNetworkConditions {
     pub method: SetNetworkConditionsMethod,
     pub params: SetNetworkConditionsParams,
@@ -159,7 +154,7 @@ pub enum SetScreenOrientationOverrideMethod {
     #[serde(rename = "emulation.setScreenOrientationOverride")]
     SetScreenOrientationOverride,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetScreenOrientationOverride {
     pub method: SetScreenOrientationOverrideMethod,
     pub params: SetScreenOrientationOverrideParams,
@@ -191,7 +186,7 @@ pub enum SetUserAgentOverrideMethod {
     #[serde(rename = "emulation.setUserAgentOverride")]
     SetUserAgentOverride,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetUserAgentOverride {
     pub method: SetUserAgentOverrideMethod,
     pub params: SetUserAgentOverrideParams,
@@ -223,7 +218,7 @@ pub enum SetScriptingEnabledMethod {
     #[serde(rename = "emulation.setScriptingEnabled")]
     SetScriptingEnabled,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetScriptingEnabled {
     pub method: SetScriptingEnabledMethod,
     pub params: SetScriptingEnabledParams,
@@ -255,7 +250,7 @@ pub enum SetTimezoneOverrideMethod {
     #[serde(rename = "emulation.setTimezoneOverride")]
     SetTimezoneOverride,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetTimezoneOverride {
     pub method: SetTimezoneOverrideMethod,
     pub params: SetTimezoneOverrideParams,
@@ -267,4 +262,4 @@ impl SetTimezoneOverride {
 impl crate::CommandResult for SetTimezoneOverride {
     type Result = super::results::SetTimezoneOverrideResult;
 }
-group_enum ! (EmulationCommands { SetForcedColorsModeThemeOverride (SetForcedColorsModeThemeOverride) , SetGeolocationOverride (SetGeolocationOverride) , SetLocaleOverride (SetLocaleOverride) , SetNetworkConditions (SetNetworkConditions) , SetScreenOrientationOverride (SetScreenOrientationOverride) , SetUserAgentOverride (SetUserAgentOverride) , SetScriptingEnabled (SetScriptingEnabled) , SetTimezoneOverride (SetTimezoneOverride) });
+group_enum ! (EmulationCommand { SetForcedColorsModeThemeOverride (SetForcedColorsModeThemeOverride) , SetGeolocationOverride (SetGeolocationOverride) , SetLocaleOverride (SetLocaleOverride) , SetNetworkConditions (SetNetworkConditions) , SetScreenOrientationOverride (SetScreenOrientationOverride) , SetUserAgentOverride (SetUserAgentOverride) , SetScriptingEnabled (SetScriptingEnabled) , SetTimezoneOverride (SetTimezoneOverride) });

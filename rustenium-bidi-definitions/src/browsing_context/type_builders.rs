@@ -6,12 +6,12 @@ impl AccessibilityLocator {
 }
 #[derive(Default, Clone)]
 pub struct AccessibilityLocatorBuilder {
-    r#type: Option<String>,
+    r#type: Option<AccessibilityLocatorType>,
     name: Option<String>,
     role: Option<String>,
 }
 impl AccessibilityLocatorBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<AccessibilityLocatorType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -40,11 +40,11 @@ impl CssLocator {
 }
 #[derive(Default, Clone)]
 pub struct CssLocatorBuilder {
-    r#type: Option<String>,
+    r#type: Option<CssLocatorType>,
     value: Option<String>,
 }
 impl CssLocatorBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<CssLocatorType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -70,11 +70,11 @@ impl ContextLocator {
 }
 #[derive(Default, Clone)]
 pub struct ContextLocatorBuilder {
-    r#type: Option<String>,
+    r#type: Option<ContextLocatorType>,
     context: Option<BrowsingContext>,
 }
 impl ContextLocatorBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<ContextLocatorType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -100,14 +100,14 @@ impl InnerTextLocator {
 }
 #[derive(Default, Clone)]
 pub struct InnerTextLocatorBuilder {
-    r#type: Option<String>,
+    r#type: Option<InnerTextLocatorType>,
     value: Option<String>,
     ignore_case: Option<bool>,
     match_type: Option<InnerTextLocatorMatchType>,
     max_depth: Option<u64>,
 }
 impl InnerTextLocatorBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<InnerTextLocatorType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -148,11 +148,11 @@ impl XPathLocator {
 }
 #[derive(Default, Clone)]
 pub struct XPathLocatorBuilder {
-    r#type: Option<String>,
+    r#type: Option<XPathLocatorType>,
     value: Option<String>,
 }
 impl XPathLocatorBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<XPathLocatorType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -206,11 +206,11 @@ impl ElementClipRectangle {
 }
 #[derive(Default, Clone)]
 pub struct ElementClipRectangleBuilder {
-    r#type: Option<String>,
+    r#type: Option<ElementClipRectangleType>,
     element: Option<crate::script::types::SharedReference>,
 }
 impl ElementClipRectangleBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<ElementClipRectangleType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -236,14 +236,14 @@ impl BoxClipRectangle {
 }
 #[derive(Default, Clone)]
 pub struct BoxClipRectangleBuilder {
-    r#type: Option<String>,
+    r#type: Option<BoxClipRectangleType>,
     x: Option<f64>,
     y: Option<f64>,
     width: Option<f64>,
     height: Option<f64>,
 }
 impl BoxClipRectangleBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<BoxClipRectangleType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -498,31 +498,19 @@ impl DownloadCanceledParams {
 }
 #[derive(Default, Clone)]
 pub struct DownloadCanceledParamsBuilder {
-    status: Option<String>,
-    context: Option<BrowsingContext>,
-    navigation: Option<Navigation>,
-    timestamp: Option<u64>,
-    url: Option<String>,
+    status: Option<DownloadCanceledParamsStatus>,
+    base_navigation_info: Option<BaseNavigationInfo>,
 }
 impl DownloadCanceledParamsBuilder {
-    pub fn status(mut self, status: impl Into<String>) -> Self {
+    pub fn status(mut self, status: impl Into<DownloadCanceledParamsStatus>) -> Self {
         self.status = Some(status.into());
         self
     }
-    pub fn context(mut self, context: impl Into<BrowsingContext>) -> Self {
-        self.context = Some(context.into());
-        self
-    }
-    pub fn navigation(mut self, navigation: impl Into<Navigation>) -> Self {
-        self.navigation = Some(navigation.into());
-        self
-    }
-    pub fn timestamp(mut self, timestamp: impl Into<u64>) -> Self {
-        self.timestamp = Some(timestamp.into());
-        self
-    }
-    pub fn url(mut self, url: impl Into<String>) -> Self {
-        self.url = Some(url.into());
+    pub fn base_navigation_info(
+        mut self,
+        base_navigation_info: impl Into<BaseNavigationInfo>,
+    ) -> Self {
+        self.base_navigation_info = Some(base_navigation_info.into());
         self
     }
     pub fn build(self) -> Result<DownloadCanceledParams, String> {
@@ -530,16 +518,12 @@ impl DownloadCanceledParamsBuilder {
             status: self
                 .status
                 .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(status)))?,
-            context: self
-                .context
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(context)))?,
-            navigation: self.navigation,
-            timestamp: self
-                .timestamp
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(timestamp)))?,
-            url: self
-                .url
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(url)))?,
+            base_navigation_info: self.base_navigation_info.ok_or_else(|| {
+                format!(
+                    "Field `{}` is mandatory.",
+                    std::stringify!(base_navigation_info)
+                )
+            })?,
         })
     }
 }
@@ -550,15 +534,12 @@ impl DownloadCompleteParams {
 }
 #[derive(Default, Clone)]
 pub struct DownloadCompleteParamsBuilder {
-    status: Option<String>,
+    status: Option<DownloadCompleteParamsStatus>,
     filepath: Option<String>,
-    context: Option<BrowsingContext>,
-    navigation: Option<Navigation>,
-    timestamp: Option<u64>,
-    url: Option<String>,
+    base_navigation_info: Option<BaseNavigationInfo>,
 }
 impl DownloadCompleteParamsBuilder {
-    pub fn status(mut self, status: impl Into<String>) -> Self {
+    pub fn status(mut self, status: impl Into<DownloadCompleteParamsStatus>) -> Self {
         self.status = Some(status.into());
         self
     }
@@ -566,20 +547,11 @@ impl DownloadCompleteParamsBuilder {
         self.filepath = Some(filepath.into());
         self
     }
-    pub fn context(mut self, context: impl Into<BrowsingContext>) -> Self {
-        self.context = Some(context.into());
-        self
-    }
-    pub fn navigation(mut self, navigation: impl Into<Navigation>) -> Self {
-        self.navigation = Some(navigation.into());
-        self
-    }
-    pub fn timestamp(mut self, timestamp: impl Into<u64>) -> Self {
-        self.timestamp = Some(timestamp.into());
-        self
-    }
-    pub fn url(mut self, url: impl Into<String>) -> Self {
-        self.url = Some(url.into());
+    pub fn base_navigation_info(
+        mut self,
+        base_navigation_info: impl Into<BaseNavigationInfo>,
+    ) -> Self {
+        self.base_navigation_info = Some(base_navigation_info.into());
         self
     }
     pub fn build(self) -> Result<DownloadCompleteParams, String> {
@@ -588,16 +560,12 @@ impl DownloadCompleteParamsBuilder {
                 .status
                 .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(status)))?,
             filepath: self.filepath,
-            context: self
-                .context
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(context)))?,
-            navigation: self.navigation,
-            timestamp: self
-                .timestamp
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(timestamp)))?,
-            url: self
-                .url
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(url)))?,
+            base_navigation_info: self.base_navigation_info.ok_or_else(|| {
+                format!(
+                    "Field `{}` is mandatory.",
+                    std::stringify!(base_navigation_info)
+                )
+            })?,
         })
     }
 }

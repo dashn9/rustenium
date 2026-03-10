@@ -12,7 +12,7 @@ pub enum DetachedMethod {
     Detached,
 }
 #[doc = "Fired when remote debugging connection is about to be terminated. Contains detach reason.\n[detached](https://chromedevtools.github.io/devtools-protocol/tot/Inspector/#event-detached)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Detached {
     pub method: DetachedMethod,
     pub params: DetachedParams,
@@ -29,7 +29,7 @@ pub enum TargetCrashedMethod {
     TargetCrashed,
 }
 #[doc = "Fired when debugging target has crashed\n[targetCrashed](https://chromedevtools.github.io/devtools-protocol/tot/Inspector/#event-targetCrashed)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TargetCrashed {
     pub method: TargetCrashedMethod,
     pub params: TargetCrashedParams,
@@ -46,7 +46,7 @@ pub enum TargetReloadedAfterCrashMethod {
     TargetReloadedAfterCrash,
 }
 #[doc = "Fired when debugging target has reloaded after crash\n[targetReloadedAfterCrash](https://chromedevtools.github.io/devtools-protocol/tot/Inspector/#event-targetReloadedAfterCrash)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TargetReloadedAfterCrash {
     pub method: TargetReloadedAfterCrashMethod,
     pub params: TargetReloadedAfterCrashParams,
@@ -63,7 +63,7 @@ pub enum WorkerScriptLoadedMethod {
     WorkerScriptLoaded,
 }
 #[doc = "Fired on worker targets when main worker script and any imported scripts have been evaluated.\n[workerScriptLoaded](https://chromedevtools.github.io/devtools-protocol/tot/Inspector/#event-workerScriptLoaded)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WorkerScriptLoaded {
     pub method: WorkerScriptLoadedMethod,
     pub params: WorkerScriptLoadedParams,

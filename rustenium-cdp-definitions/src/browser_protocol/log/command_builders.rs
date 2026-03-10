@@ -1,4 +1,58 @@
 use super::commands::*;
+#[derive(Debug, Clone, Default)]
+pub struct ClearBuilder;
+impl ClearBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Clear {
+        Clear {
+            method: ClearMethod::Clear,
+            params: ClearParams {},
+        }
+    }
+}
+impl Clear {
+    pub fn builder() -> ClearBuilder {
+        ClearBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct DisableBuilder;
+impl DisableBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Disable {
+        Disable {
+            method: DisableMethod::Disable,
+            params: DisableParams {},
+        }
+    }
+}
+impl Disable {
+    pub fn builder() -> DisableBuilder {
+        DisableBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct EnableBuilder;
+impl EnableBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Enable {
+        Enable {
+            method: EnableMethod::Enable,
+            params: EnableParams {},
+        }
+    }
+}
+impl Enable {
+    pub fn builder() -> EnableBuilder {
+        EnableBuilder
+    }
+}
 impl StartViolationsReport {
     pub fn builder() -> StartViolationsReportBuilder {
         <StartViolationsReportBuilder as Default>::default()
@@ -34,5 +88,23 @@ impl StartViolationsReportBuilder {
                     .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(config)))?,
             },
         })
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct StopViolationsReportBuilder;
+impl StopViolationsReportBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> StopViolationsReport {
+        StopViolationsReport {
+            method: StopViolationsReportMethod::StopViolationsReport,
+            params: StopViolationsReportParams {},
+        }
+    }
+}
+impl StopViolationsReport {
+    pub fn builder() -> StopViolationsReportBuilder {
+        StopViolationsReportBuilder
     }
 }

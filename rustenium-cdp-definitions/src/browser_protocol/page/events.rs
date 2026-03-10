@@ -9,7 +9,7 @@ pub enum DomContentEventFiredMethod {
     #[serde(rename = "Page.domContentEventFired")]
     DomContentEventFired,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DomContentEventFired {
     pub method: DomContentEventFiredMethod,
     pub params: DomContentEventFiredParams,
@@ -46,7 +46,7 @@ pub enum FileChooserOpenedMethod {
     FileChooserOpened,
 }
 #[doc = "Emitted only when `page.interceptFileChooser` is enabled.\n[fileChooserOpened](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-fileChooserOpened)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FileChooserOpened {
     pub method: FileChooserOpenedMethod,
     pub params: FileChooserOpenedParams,
@@ -75,7 +75,7 @@ pub enum FrameAttachedMethod {
     FrameAttached,
 }
 #[doc = "Fired when frame has been attached to its parent.\n[frameAttached](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-frameAttached)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FrameAttached {
     pub method: FrameAttachedMethod,
     pub params: FrameAttachedParams,
@@ -107,7 +107,7 @@ pub enum FrameDetachedMethod {
     FrameDetached,
 }
 #[doc = "Fired when frame has been detached from its parent.\n[frameDetached](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-frameDetached)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FrameDetached {
     pub method: FrameDetachedMethod,
     pub params: FrameDetachedParams,
@@ -128,7 +128,7 @@ pub enum FrameSubtreeWillBeDetachedMethod {
     FrameSubtreeWillBeDetached,
 }
 #[doc = "Fired before frame subtree is detached. Emitted before any frame of the\nsubtree is actually detached.\n[frameSubtreeWillBeDetached](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-frameSubtreeWillBeDetached)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FrameSubtreeWillBeDetached {
     pub method: FrameSubtreeWillBeDetachedMethod,
     pub params: FrameSubtreeWillBeDetachedParams,
@@ -151,7 +151,7 @@ pub enum FrameNavigatedMethod {
     FrameNavigated,
 }
 #[doc = "Fired once navigation of the frame has completed. Frame is now associated with the new loader.\n[frameNavigated](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-frameNavigated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FrameNavigated {
     pub method: FrameNavigatedMethod,
     pub params: FrameNavigatedParams,
@@ -172,7 +172,7 @@ pub enum DocumentOpenedMethod {
     DocumentOpened,
 }
 #[doc = "Fired when opening document to write to.\n[documentOpened](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-documentOpened)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DocumentOpened {
     pub method: DocumentOpenedMethod,
     pub params: DocumentOpenedParams,
@@ -187,7 +187,7 @@ pub enum FrameResizedMethod {
     #[serde(rename = "Page.frameResized")]
     FrameResized,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FrameResized {
     pub method: FrameResizedMethod,
     pub params: FrameResizedParams,
@@ -235,7 +235,7 @@ pub enum FrameStartedNavigatingMethod {
     FrameStartedNavigating,
 }
 #[doc = "Fired when a navigation starts. This event is fired for both\nrenderer-initiated and browser-initiated navigations. For renderer-initiated\nnavigations, the event is fired after `frameRequestedNavigation`.\nNavigation may still be cancelled after the event is issued. Multiple events\ncan be fired for a single navigation, for example, when a same-document\nnavigation becomes a cross-document navigation (such as in the case of a\nframeset).\n[frameStartedNavigating](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-frameStartedNavigating)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FrameStartedNavigating {
     pub method: FrameStartedNavigatingMethod,
     pub params: FrameStartedNavigatingParams,
@@ -265,7 +265,7 @@ pub enum FrameRequestedNavigationMethod {
     FrameRequestedNavigation,
 }
 #[doc = "Fired when a renderer-initiated navigation is requested.\nNavigation may still be cancelled after the event is issued.\n[frameRequestedNavigation](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-frameRequestedNavigation)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FrameRequestedNavigation {
     pub method: FrameRequestedNavigationMethod,
     pub params: FrameRequestedNavigationParams,
@@ -286,7 +286,7 @@ pub enum FrameStartedLoadingMethod {
     FrameStartedLoading,
 }
 #[doc = "Fired when frame has started loading.\n[frameStartedLoading](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-frameStartedLoading)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FrameStartedLoading {
     pub method: FrameStartedLoadingMethod,
     pub params: FrameStartedLoadingParams,
@@ -307,7 +307,7 @@ pub enum FrameStoppedLoadingMethod {
     FrameStoppedLoading,
 }
 #[doc = "Fired when frame has stopped loading.\n[frameStoppedLoading](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-frameStoppedLoading)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FrameStoppedLoading {
     pub method: FrameStoppedLoadingMethod,
     pub params: FrameStoppedLoadingParams,
@@ -324,7 +324,7 @@ pub enum InterstitialHiddenMethod {
     InterstitialHidden,
 }
 #[doc = "Fired when interstitial page was hidden\n[interstitialHidden](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-interstitialHidden)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InterstitialHidden {
     pub method: InterstitialHiddenMethod,
     pub params: InterstitialHiddenParams,
@@ -341,7 +341,7 @@ pub enum InterstitialShownMethod {
     InterstitialShown,
 }
 #[doc = "Fired when interstitial page was shown\n[interstitialShown](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-interstitialShown)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InterstitialShown {
     pub method: InterstitialShownMethod,
     pub params: InterstitialShownParams,
@@ -368,7 +368,7 @@ pub enum JavascriptDialogClosedMethod {
     JavascriptDialogClosed,
 }
 #[doc = "Fired when a JavaScript initiated dialog (alert, confirm, prompt, or onbeforeunload) has been\nclosed.\n[javascriptDialogClosed](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-javascriptDialogClosed)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct JavascriptDialogClosed {
     pub method: JavascriptDialogClosedMethod,
     pub params: JavascriptDialogClosedParams,
@@ -406,7 +406,7 @@ pub enum JavascriptDialogOpeningMethod {
     JavascriptDialogOpening,
 }
 #[doc = "Fired when a JavaScript initiated dialog (alert, confirm, prompt, or onbeforeunload) is about to\nopen.\n[javascriptDialogOpening](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-javascriptDialogOpening)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct JavascriptDialogOpening {
     pub method: JavascriptDialogOpeningMethod,
     pub params: JavascriptDialogOpeningParams,
@@ -434,7 +434,7 @@ pub enum LifecycleEventMethod {
     LifecycleEvent,
 }
 #[doc = "Fired for lifecycle events (navigation, load, paint, etc) in the current\ntarget (including local frames).\n[lifecycleEvent](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-lifecycleEvent)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LifecycleEvent {
     pub method: LifecycleEventMethod,
     pub params: LifecycleEventParams,
@@ -468,7 +468,7 @@ pub enum BackForwardCacheNotUsedMethod {
     BackForwardCacheNotUsed,
 }
 #[doc = "Fired for failed bfcache history navigations if BackForwardCache feature is enabled. Do\nnot assume any ordering with the Page.frameNavigated event. This event is fired only for\nmain-frame history navigation where the document changes (non-same-document navigations),\nwhen bfcache navigation fails.\n[backForwardCacheNotUsed](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-backForwardCacheNotUsed)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BackForwardCacheNotUsed {
     pub method: BackForwardCacheNotUsedMethod,
     pub params: BackForwardCacheNotUsedParams,
@@ -486,7 +486,7 @@ pub enum LoadEventFiredMethod {
     #[serde(rename = "Page.loadEventFired")]
     LoadEventFired,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LoadEventFired {
     pub method: LoadEventFiredMethod,
     pub params: LoadEventFiredParams,
@@ -526,7 +526,7 @@ pub enum NavigatedWithinDocumentMethod {
     NavigatedWithinDocument,
 }
 #[doc = "Fired when same-document navigation happens, e.g. due to history API usage or anchor navigation.\n[navigatedWithinDocument](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-navigatedWithinDocument)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NavigatedWithinDocument {
     pub method: NavigatedWithinDocumentMethod,
     pub params: NavigatedWithinDocumentParams,
@@ -553,7 +553,7 @@ pub enum ScreencastFrameMethod {
     ScreencastFrame,
 }
 #[doc = "Compressed image data requested by the `startScreencast`.\n[screencastFrame](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-screencastFrame)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ScreencastFrame {
     pub method: ScreencastFrameMethod,
     pub params: ScreencastFrameParams,
@@ -574,7 +574,7 @@ pub enum ScreencastVisibilityChangedMethod {
     ScreencastVisibilityChanged,
 }
 #[doc = "Fired when the page with currently enabled screencast was shown or hidden `.\n[screencastVisibilityChanged](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-screencastVisibilityChanged)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ScreencastVisibilityChanged {
     pub method: ScreencastVisibilityChangedMethod,
     pub params: ScreencastVisibilityChangedParams,
@@ -605,7 +605,7 @@ pub enum WindowOpenMethod {
     WindowOpen,
 }
 #[doc = "Fired when a new window is going to be opened, via window.open(), link click, form submission,\netc.\n[windowOpen](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-windowOpen)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WindowOpen {
     pub method: WindowOpenMethod,
     pub params: WindowOpenParams,
@@ -628,7 +628,7 @@ pub enum CompilationCacheProducedMethod {
     CompilationCacheProduced,
 }
 #[doc = "Issued for every compilation cache generated.\n[compilationCacheProduced](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-compilationCacheProduced)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CompilationCacheProduced {
     pub method: CompilationCacheProducedMethod,
     pub params: CompilationCacheProducedParams,

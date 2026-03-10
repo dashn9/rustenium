@@ -9,7 +9,7 @@ pub enum IssueAddedMethod {
     #[serde(rename = "Audits.issueAdded")]
     IssueAdded,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct IssueAdded {
     pub method: IssueAddedMethod,
     pub params: IssueAddedParams,

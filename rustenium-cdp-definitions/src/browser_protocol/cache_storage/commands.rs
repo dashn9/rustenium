@@ -19,7 +19,7 @@ pub enum DeleteCacheMethod {
     DeleteCache,
 }
 #[doc = "Deletes a cache.\n[deleteCache](https://chromedevtools.github.io/devtools-protocol/tot/CacheStorage/#method-deleteCache)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeleteCache {
     pub method: DeleteCacheMethod,
     pub params: DeleteCacheParams,
@@ -54,7 +54,7 @@ pub enum DeleteEntryMethod {
     DeleteEntry,
 }
 #[doc = "Deletes a cache entry.\n[deleteEntry](https://chromedevtools.github.io/devtools-protocol/tot/CacheStorage/#method-deleteEntry)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeleteEntry {
     pub method: DeleteEntryMethod,
     pub params: DeleteEntryParams,
@@ -90,7 +90,7 @@ pub enum RequestCacheNamesMethod {
     RequestCacheNames,
 }
 #[doc = "Requests cache names.\n[requestCacheNames](https://chromedevtools.github.io/devtools-protocol/tot/CacheStorage/#method-requestCacheNames)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RequestCacheNames {
     pub method: RequestCacheNamesMethod,
     pub params: RequestCacheNamesParams,
@@ -134,7 +134,7 @@ pub enum RequestCachedResponseMethod {
     RequestCachedResponse,
 }
 #[doc = "Fetches cache entry.\n[requestCachedResponse](https://chromedevtools.github.io/devtools-protocol/tot/CacheStorage/#method-requestCachedResponse)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RequestCachedResponse {
     pub method: RequestCachedResponseMethod,
     pub params: RequestCachedResponseParams,
@@ -183,7 +183,7 @@ pub enum RequestEntriesMethod {
     RequestEntries,
 }
 #[doc = "Requests data from cache.\n[requestEntries](https://chromedevtools.github.io/devtools-protocol/tot/CacheStorage/#method-requestEntries)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RequestEntries {
     pub method: RequestEntriesMethod,
     pub params: RequestEntriesParams,

@@ -6,11 +6,11 @@ impl ElementOrigin {
 }
 #[derive(Default, Clone)]
 pub struct ElementOriginBuilder {
-    r#type: Option<String>,
+    r#type: Option<ElementOriginType>,
     element: Option<crate::script::types::SharedReference>,
 }
 impl ElementOriginBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<ElementOriginType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -36,12 +36,12 @@ impl NoneSourceActions {
 }
 #[derive(Default, Clone)]
 pub struct NoneSourceActionsBuilder {
-    r#type: Option<String>,
+    r#type: Option<NoneSourceActionsType>,
     id: Option<String>,
     actions: Option<Vec<NoneSourceAction>>,
 }
 impl NoneSourceActionsBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<NoneSourceActionsType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -86,12 +86,12 @@ impl KeySourceActions {
 }
 #[derive(Default, Clone)]
 pub struct KeySourceActionsBuilder {
-    r#type: Option<String>,
+    r#type: Option<KeySourceActionsType>,
     id: Option<String>,
     actions: Option<Vec<KeySourceAction>>,
 }
 impl KeySourceActionsBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<KeySourceActionsType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -136,13 +136,13 @@ impl PointerSourceActions {
 }
 #[derive(Default, Clone)]
 pub struct PointerSourceActionsBuilder {
-    r#type: Option<String>,
+    r#type: Option<PointerSourceActionsType>,
     id: Option<String>,
     parameters: Option<PointerParameters>,
     actions: Option<Vec<PointerSourceAction>>,
 }
 impl PointerSourceActionsBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<PointerSourceActionsType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -212,12 +212,12 @@ impl WheelSourceActions {
 }
 #[derive(Default, Clone)]
 pub struct WheelSourceActionsBuilder {
-    r#type: Option<String>,
+    r#type: Option<WheelSourceActionsType>,
     id: Option<String>,
     actions: Option<Vec<WheelSourceAction>>,
 }
 impl WheelSourceActionsBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<WheelSourceActionsType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -262,11 +262,11 @@ impl PauseAction {
 }
 #[derive(Default, Clone)]
 pub struct PauseActionBuilder {
-    r#type: Option<String>,
+    r#type: Option<PauseActionType>,
     duration: Option<u64>,
 }
 impl PauseActionBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<PauseActionType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -290,11 +290,11 @@ impl KeyDownAction {
 }
 #[derive(Default, Clone)]
 pub struct KeyDownActionBuilder {
-    r#type: Option<String>,
+    r#type: Option<KeyDownActionType>,
     value: Option<String>,
 }
 impl KeyDownActionBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<KeyDownActionType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -320,11 +320,11 @@ impl KeyUpAction {
 }
 #[derive(Default, Clone)]
 pub struct KeyUpActionBuilder {
-    r#type: Option<String>,
+    r#type: Option<KeyUpActionType>,
     value: Option<String>,
 }
 impl KeyUpActionBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<KeyUpActionType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -350,11 +350,11 @@ impl PointerUpAction {
 }
 #[derive(Default, Clone)]
 pub struct PointerUpActionBuilder {
-    r#type: Option<String>,
+    r#type: Option<PointerUpActionType>,
     button: Option<u64>,
 }
 impl PointerUpActionBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<PointerUpActionType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -380,18 +380,12 @@ impl PointerDownAction {
 }
 #[derive(Default, Clone)]
 pub struct PointerDownActionBuilder {
-    r#type: Option<String>,
+    r#type: Option<PointerDownActionType>,
     button: Option<u64>,
-    width: Option<u64>,
-    height: Option<u64>,
-    pressure: Option<f64>,
-    tangential_pressure: Option<f64>,
-    twist: Option<u64>,
-    altitude_angle: Option<f64>,
-    azimuth_angle: Option<f64>,
+    pointer_common_properties: Option<PointerCommonProperties>,
 }
 impl PointerDownActionBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<PointerDownActionType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -399,32 +393,11 @@ impl PointerDownActionBuilder {
         self.button = Some(button.into());
         self
     }
-    pub fn width(mut self, width: impl Into<u64>) -> Self {
-        self.width = Some(width.into());
-        self
-    }
-    pub fn height(mut self, height: impl Into<u64>) -> Self {
-        self.height = Some(height.into());
-        self
-    }
-    pub fn pressure(mut self, pressure: impl Into<f64>) -> Self {
-        self.pressure = Some(pressure.into());
-        self
-    }
-    pub fn tangential_pressure(mut self, tangential_pressure: impl Into<f64>) -> Self {
-        self.tangential_pressure = Some(tangential_pressure.into());
-        self
-    }
-    pub fn twist(mut self, twist: impl Into<u64>) -> Self {
-        self.twist = Some(twist.into());
-        self
-    }
-    pub fn altitude_angle(mut self, altitude_angle: impl Into<f64>) -> Self {
-        self.altitude_angle = Some(altitude_angle.into());
-        self
-    }
-    pub fn azimuth_angle(mut self, azimuth_angle: impl Into<f64>) -> Self {
-        self.azimuth_angle = Some(azimuth_angle.into());
+    pub fn pointer_common_properties(
+        mut self,
+        pointer_common_properties: impl Into<PointerCommonProperties>,
+    ) -> Self {
+        self.pointer_common_properties = Some(pointer_common_properties.into());
         self
     }
     pub fn build(self) -> Result<PointerDownAction, String> {
@@ -435,13 +408,12 @@ impl PointerDownActionBuilder {
             button: self
                 .button
                 .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(button)))?,
-            width: self.width,
-            height: self.height,
-            pressure: self.pressure,
-            tangential_pressure: self.tangential_pressure,
-            twist: self.twist,
-            altitude_angle: self.altitude_angle,
-            azimuth_angle: self.azimuth_angle,
+            pointer_common_properties: self.pointer_common_properties.ok_or_else(|| {
+                format!(
+                    "Field `{}` is mandatory.",
+                    std::stringify!(pointer_common_properties)
+                )
+            })?,
         })
     }
 }
@@ -452,21 +424,15 @@ impl PointerMoveAction {
 }
 #[derive(Default, Clone)]
 pub struct PointerMoveActionBuilder {
-    r#type: Option<String>,
+    r#type: Option<PointerMoveActionType>,
     x: Option<f64>,
     y: Option<f64>,
     duration: Option<u64>,
     origin: Option<Origin>,
-    width: Option<u64>,
-    height: Option<u64>,
-    pressure: Option<f64>,
-    tangential_pressure: Option<f64>,
-    twist: Option<u64>,
-    altitude_angle: Option<f64>,
-    azimuth_angle: Option<f64>,
+    pointer_common_properties: Option<PointerCommonProperties>,
 }
 impl PointerMoveActionBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<PointerMoveActionType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -486,32 +452,11 @@ impl PointerMoveActionBuilder {
         self.origin = Some(origin.into());
         self
     }
-    pub fn width(mut self, width: impl Into<u64>) -> Self {
-        self.width = Some(width.into());
-        self
-    }
-    pub fn height(mut self, height: impl Into<u64>) -> Self {
-        self.height = Some(height.into());
-        self
-    }
-    pub fn pressure(mut self, pressure: impl Into<f64>) -> Self {
-        self.pressure = Some(pressure.into());
-        self
-    }
-    pub fn tangential_pressure(mut self, tangential_pressure: impl Into<f64>) -> Self {
-        self.tangential_pressure = Some(tangential_pressure.into());
-        self
-    }
-    pub fn twist(mut self, twist: impl Into<u64>) -> Self {
-        self.twist = Some(twist.into());
-        self
-    }
-    pub fn altitude_angle(mut self, altitude_angle: impl Into<f64>) -> Self {
-        self.altitude_angle = Some(altitude_angle.into());
-        self
-    }
-    pub fn azimuth_angle(mut self, azimuth_angle: impl Into<f64>) -> Self {
-        self.azimuth_angle = Some(azimuth_angle.into());
+    pub fn pointer_common_properties(
+        mut self,
+        pointer_common_properties: impl Into<PointerCommonProperties>,
+    ) -> Self {
+        self.pointer_common_properties = Some(pointer_common_properties.into());
         self
     }
     pub fn build(self) -> Result<PointerMoveAction, String> {
@@ -527,13 +472,12 @@ impl PointerMoveActionBuilder {
                 .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(y)))?,
             duration: self.duration,
             origin: self.origin,
-            width: self.width,
-            height: self.height,
-            pressure: self.pressure,
-            tangential_pressure: self.tangential_pressure,
-            twist: self.twist,
-            altitude_angle: self.altitude_angle,
-            azimuth_angle: self.azimuth_angle,
+            pointer_common_properties: self.pointer_common_properties.ok_or_else(|| {
+                format!(
+                    "Field `{}` is mandatory.",
+                    std::stringify!(pointer_common_properties)
+                )
+            })?,
         })
     }
 }
@@ -544,7 +488,7 @@ impl WheelScrollAction {
 }
 #[derive(Default, Clone)]
 pub struct WheelScrollActionBuilder {
-    r#type: Option<String>,
+    r#type: Option<WheelScrollActionType>,
     x: Option<i64>,
     y: Option<i64>,
     delta_x: Option<i64>,
@@ -553,7 +497,7 @@ pub struct WheelScrollActionBuilder {
     origin: Option<Origin>,
 }
 impl WheelScrollActionBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<WheelScrollActionType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }

@@ -120,14 +120,14 @@ impl ClientWindowRectState {
 }
 #[derive(Default, Clone)]
 pub struct ClientWindowRectStateBuilder {
-    state: Option<String>,
+    state: Option<ClientWindowRectStateState>,
     width: Option<u64>,
     height: Option<u64>,
     x: Option<i64>,
     y: Option<i64>,
 }
 impl ClientWindowRectStateBuilder {
-    pub fn state(mut self, state: impl Into<String>) -> Self {
+    pub fn state(mut self, state: impl Into<ClientWindowRectStateState>) -> Self {
         self.state = Some(state.into());
         self
     }
@@ -166,11 +166,11 @@ impl DownloadBehaviorAllowed {
 }
 #[derive(Default, Clone)]
 pub struct DownloadBehaviorAllowedBuilder {
-    r#type: Option<String>,
+    r#type: Option<DownloadBehaviorAllowedType>,
     destination_folder: Option<String>,
 }
 impl DownloadBehaviorAllowedBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<DownloadBehaviorAllowedType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -199,10 +199,10 @@ impl DownloadBehaviorDenied {
 }
 #[derive(Default, Clone)]
 pub struct DownloadBehaviorDeniedBuilder {
-    r#type: Option<String>,
+    r#type: Option<DownloadBehaviorDeniedType>,
 }
 impl DownloadBehaviorDeniedBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<DownloadBehaviorDeniedType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }

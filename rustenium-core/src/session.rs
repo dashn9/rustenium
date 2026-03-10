@@ -1,21 +1,24 @@
-use std::collections::HashMap;
-use std::sync::{Arc, Mutex};
-use std::time::Duration;
-use rand::Rng;
-use tracing;
-use crate::network::NetworkRequestHandledState;
-use rustenium_bidi_commands::{Command, CommandData, ResultData, EmptyParams};
-use rustenium_bidi_commands::session::commands::{New as SessionNew, SessionNewMethod, NewParameters as SessionNewParameters, SessionCommand, SessionResult, End, SessionEndMethod};
-use rustenium_bidi_commands::session::types::CapabilitiesRequest;
-use tokio::sync::oneshot;
-use tokio::time::timeout;
+use crate::error::{ResponseReceiveTimeoutError, SessionSendError};
+use crate::events::{BidiEvent, EventManagement};
 use crate::listeners::CommandResponseState;
+use crate::network::NetworkRequestHandledState;
 use crate::{
     connection::Connection,
     transport::{ConnectionTransport, ConnectionTransportConfig, WebsocketConnectionTransport},
 };
-use crate::error::{ResponseReceiveTimeoutError, SessionSendError};
-use crate::events::{BidiEvent, EventManagement};
+use rand::Rng;
+use rustenium_bidi_definitions::Command;
+use rustenium_bidi_definitions::base::{CommandMessage, CommandResponse};
+use rustenium_bidi_definitions::session::command_builders::{EndBuilder, NewBuilder};
+use rustenium_bidi_definitions::session::results::NewResult;
+use rustenium_bidi_definitions::session::types::CapabilitiesRequest;
+use serde_json;
+use std::collections::HashMap;
+use std::sync::{Arc, Mutex};
+use std::time::Duration;
+use tokio::sync::oneshot;
+use tokio::time::timeout;
+use tracing;
 
 pub struct Session<T: ConnectionTransport> {
     id: Option<String>,
@@ -26,7 +29,7 @@ pub struct Session<T: ConnectionTransport> {
 }
 
 pub enum SessionConnectionType {
-    WebSocket
+    WebSocket,
 }
 
 impl<T: ConnectionTransport> Session<T> {
@@ -46,36 +49,29 @@ impl<T: ConnectionTransport> Session<T> {
         }
     }
 
-    pub async fn create_new_bidi_session(&mut self, connection_type: SessionConnectionType, capabilities: Option<CapabilitiesRequest>) -> () {
+    pub async fn create_new_bidi_session(
+        &mut self,
+        connection_type: SessionConnectionType,
+        capabilities: CapabilitiesRequest,
+    ) -> () {
         match connection_type {
             SessionConnectionType::WebSocket => {
-                let command = SessionNew {
-                    method: SessionNewMethod::SessionNew,
-                    params: SessionNewParameters {
-                        capabilities: capabilities.unwrap_or(CapabilitiesRequest {
-                            always_match: None,
-                            first_match: None,
-                        }),
-                    }
-                };
+                let command = NewBuilder::default()
+                    .capabilities(capabilities)
+                    .build()
+                    .unwrap();
                 let (_, event_tx) = self.event_dispatch().await;
-                self.connection.register_event_listener_channel(event_tx).await;
-                let command_result = self.send(CommandData::SessionCommand(SessionCommand::New(command.clone()))).await;
+                self.connection
+                    .register_event_listener_channel(event_tx)
+                    .await;
+                let command_result = self.send(command).await;
                 match command_result {
                     Ok(command_result) => {
-                            match command_result {
-                            ResultData::SessionResult(session_result) => {
-                                match session_result {
-                                    SessionResult::NewResult(new_session_result) => {
-                                        self.id = Some(new_session_result.session_id);
-                                    }
-                                    _ => panic!("Invalid session result: {:?}", session_result)
-                                }
-                            }
-                            _ => panic!("Invalid command result: {:?}", command_result)
-                        }
+                        let command_result: NewResult = command_result.result.try_into().expect(
+                            format!("Invalid command result: {:?}", command_result).as_str(),
+                        );
                     }
-                    Err(e) => panic!("Error creating new session: {}", e)
+                    Err(e) => panic!("Error creating new session: {}", e),
                 }
             }
         }
@@ -83,21 +79,34 @@ impl<T: ConnectionTransport> Session<T> {
 
     /// Send a command and return the receiver to wait for response
     /// This allows the caller to release locks before waiting for the response
-    pub async fn send_and_get_receiver(&mut self, command_data: CommandData) -> oneshot::Receiver<CommandResponseState> {
+    pub async fn send_and_get_receiver(
+        &mut self,
+        command: impl Into<Command>,
+    ) -> oneshot::Receiver<CommandResponseState> {
         let command_id = loop {
             let id = rand::rng().random::<u32>() as u64;
-            if !self.connection.commands_response_subscriptions.lock().await.contains_key(&id) {
+            if !self
+                .connection
+                .commands_response_subscriptions
+                .lock()
+                .await
+                .contains_key(&id)
+            {
                 break id;
             }
         };
 
-        let command = Command {
-            id : command_id,
-            command_data,
+        let command = CommandMessage {
+            id: command_id,
+            command_data: command.into(),
             extensible: HashMap::new(),
         };
         let (tx, rx) = oneshot::channel::<CommandResponseState>();
-        self.connection.commands_response_subscriptions.lock().await.insert(command_id, tx);
+        self.connection
+            .commands_response_subscriptions
+            .lock()
+            .await
+            .insert(command_id, tx);
         let raw_message = serde_json::to_string(&command).unwrap();
         tracing::debug!(command_id = %command_id, raw_message = %raw_message, "Sending command");
 
@@ -106,26 +115,26 @@ impl<T: ConnectionTransport> Session<T> {
         rx
     }
 
-    pub async fn send(&mut self, command_data: CommandData) -> Result<ResultData, SessionSendError>  {
-        let rx = self.send_and_get_receiver(command_data).await;
+    pub async fn send(
+        &mut self,
+        command: impl Into<Command>,
+    ) -> Result<CommandResponse, SessionSendError> {
+        let rx = self.send_and_get_receiver(command).await;
         match timeout(Duration::from_secs(100), rx).await {
             Ok(Ok(command_result)) => match command_result {
-                CommandResponseState::Success(response) => Ok(response.result),
-                CommandResponseState::Error(err) => Err(SessionSendError::ErrorResponse(err))
-            }
+                CommandResponseState::Success(response) => Ok(response),
+                CommandResponseState::Error(err) => Err(SessionSendError::ErrorResponse(err)),
+            },
             Ok(Err(err)) => panic!("A recv error occurred: {}", err),
             // I might need to remove command from commands response subscriptions
-            Err(_) => Err(SessionSendError::ResponseReceiveTimeoutError(ResponseReceiveTimeoutError))
+            Err(_) => Err(SessionSendError::ResponseReceiveTimeoutError(
+                ResponseReceiveTimeoutError,
+            )),
         }
     }
 
-    pub async fn end_session(&mut self) -> Result<ResultData, SessionSendError> {
-        let command = End {
-            method: SessionEndMethod::SessionEnd,
-            params: EmptyParams { extensible: Default::default() },
-        };
-
-        let result = self.send(CommandData::SessionCommand(SessionCommand::End(command))).await;
+    pub async fn end_session(&mut self) -> Result<CommandResponse, SessionSendError> {
+        let result = self.send(EndBuilder::default().build()).await;
 
         // Close the connection after ending the session
         self.connection.close();
@@ -134,9 +143,9 @@ impl<T: ConnectionTransport> Session<T> {
     }
 }
 
-impl <T: ConnectionTransport>EventManagement for Session<T> {
-    async fn send_event(&mut self, command_data: CommandData) -> Result<ResultData, SessionSendError> {
-        self.send(command_data).await
+impl<T: ConnectionTransport> EventManagement for Session<T> {
+    async fn send_event(&mut self, command: Command) -> Result<CommandResponse, SessionSendError> {
+        self.send(command).await
     }
 
     fn get_bidi_events(&mut self) -> &mut Arc<Mutex<Vec<BidiEvent>>> {

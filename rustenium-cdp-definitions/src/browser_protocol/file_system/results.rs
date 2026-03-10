@@ -5,3 +5,9 @@ pub struct GetDirectoryResult {
     #[serde(rename = "directory")]
     pub directory: super::types::Directory,
 }
+impl TryFrom<serde_json::Value> for GetDirectoryResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}

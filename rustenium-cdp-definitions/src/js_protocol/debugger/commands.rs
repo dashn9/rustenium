@@ -31,7 +31,7 @@ pub enum ContinueToLocationMethod {
     ContinueToLocation,
 }
 #[doc = "Continues execution until specific location is reached.\n[continueToLocation](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-continueToLocation)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ContinueToLocation {
     pub method: ContinueToLocationMethod,
     pub params: ContinueToLocationParams,
@@ -51,7 +51,7 @@ pub enum DisableMethod {
     Disable,
 }
 #[doc = "Disables debugger for given page.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-disable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
@@ -77,7 +77,7 @@ pub enum EnableMethod {
     Enable,
 }
 #[doc = "Enables debugger for the given page. Clients should not assume that the debugging has been\nenabled until the result for this command is received.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-enable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
@@ -157,7 +157,7 @@ pub enum EvaluateOnCallFrameMethod {
     EvaluateOnCallFrame,
 }
 #[doc = "Evaluates expression on a given call frame.\n[evaluateOnCallFrame](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-evaluateOnCallFrame)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EvaluateOnCallFrame {
     pub method: EvaluateOnCallFrameMethod,
     pub params: EvaluateOnCallFrameParams,
@@ -200,7 +200,7 @@ pub enum GetPossibleBreakpointsMethod {
     GetPossibleBreakpoints,
 }
 #[doc = "Returns possible locations for breakpoint. scriptId in start and end range locations should be\nthe same.\n[getPossibleBreakpoints](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-getPossibleBreakpoints)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetPossibleBreakpoints {
     pub method: GetPossibleBreakpointsMethod,
     pub params: GetPossibleBreakpointsParams,
@@ -231,7 +231,7 @@ pub enum GetScriptSourceMethod {
     GetScriptSource,
 }
 #[doc = "Returns source for the script with given id.\n[getScriptSource](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-getScriptSource)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetScriptSource {
     pub method: GetScriptSourceMethod,
     pub params: GetScriptSourceParams,
@@ -260,7 +260,7 @@ pub enum DisassembleWasmModuleMethod {
     #[serde(rename = "Debugger.disassembleWasmModule")]
     DisassembleWasmModule,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DisassembleWasmModule {
     pub method: DisassembleWasmModuleMethod,
     pub params: DisassembleWasmModuleParams,
@@ -295,7 +295,7 @@ pub enum NextWasmDisassemblyChunkMethod {
     NextWasmDisassemblyChunk,
 }
 #[doc = "Disassemble the next chunk of lines for the module corresponding to the\nstream. If disassembly is complete, this API will invalidate the streamId\nand return an empty chunk. Any subsequent calls for the now invalid stream\nwill return errors.\n[nextWasmDisassemblyChunk](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-nextWasmDisassemblyChunk)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NextWasmDisassemblyChunk {
     pub method: NextWasmDisassemblyChunkMethod,
     pub params: NextWasmDisassemblyChunkParams,
@@ -327,7 +327,7 @@ pub enum GetStackTraceMethod {
     GetStackTrace,
 }
 #[doc = "Returns stack trace with given `stackTraceId`.\n[getStackTrace](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-getStackTrace)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetStackTrace {
     pub method: GetStackTraceMethod,
     pub params: GetStackTraceParams,
@@ -347,7 +347,7 @@ pub enum PauseMethod {
     Pause,
 }
 #[doc = "Stops on the next JavaScript statement.\n[pause](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-pause)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Pause {
     pub method: PauseMethod,
     pub params: PauseParams,
@@ -377,7 +377,7 @@ pub enum RemoveBreakpointMethod {
     RemoveBreakpoint,
 }
 #[doc = "Removes JavaScript breakpoint.\n[removeBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-removeBreakpoint)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RemoveBreakpoint {
     pub method: RemoveBreakpointMethod,
     pub params: RemoveBreakpointParams,
@@ -421,7 +421,7 @@ pub enum RestartFrameMethod {
     RestartFrame,
 }
 #[doc = "Restarts particular call frame from the beginning. The old, deprecated\nbehavior of `restartFrame` is to stay paused and allow further CDP commands\nafter a restart was scheduled. This can cause problems with restarting, so\nwe now continue execution immediatly after it has been scheduled until we\nreach the beginning of the restarted frame.\n\nTo stay back-wards compatible, `restartFrame` now expects a `mode`\nparameter to be present. If the `mode` parameter is missing, `restartFrame`\nerrors out.\n\nThe various return values are deprecated and `callFrames` is always empty.\nUse the call frames from the `Debugger#paused` events instead, that fires\nonce V8 pauses at the beginning of the restarted function.\n[restartFrame](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-restartFrame)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RestartFrame {
     pub method: RestartFrameMethod,
     pub params: RestartFrameParams,
@@ -447,7 +447,7 @@ pub enum ResumeMethod {
     Resume,
 }
 #[doc = "Resumes JavaScript execution.\n[resume](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-resume)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Resume {
     pub method: ResumeMethod,
     pub params: ResumeParams,
@@ -497,7 +497,7 @@ pub enum SearchInContentMethod {
     SearchInContent,
 }
 #[doc = "Searches for given string in script content.\n[searchInContent](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-searchInContent)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SearchInContent {
     pub method: SearchInContentMethod,
     pub params: SearchInContentParams,
@@ -528,7 +528,7 @@ pub enum SetAsyncCallStackDepthMethod {
     SetAsyncCallStackDepth,
 }
 #[doc = "Enables or disables async call stacks tracking.\n[setAsyncCallStackDepth](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setAsyncCallStackDepth)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetAsyncCallStackDepth {
     pub method: SetAsyncCallStackDepthMethod,
     pub params: SetAsyncCallStackDepthParams,
@@ -558,7 +558,7 @@ pub enum SetBlackboxExecutionContextsMethod {
     SetBlackboxExecutionContexts,
 }
 #[doc = "Replace previous blackbox execution contexts with passed ones. Forces backend to skip\nstepping/pausing in scripts in these execution contexts. VM will try to leave blackboxed script by\nperforming 'step in' several times, finally resorting to 'step out' if unsuccessful.\n[setBlackboxExecutionContexts](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setBlackboxExecutionContexts)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetBlackboxExecutionContexts {
     pub method: SetBlackboxExecutionContextsMethod,
     pub params: SetBlackboxExecutionContextsParams,
@@ -596,7 +596,7 @@ pub enum SetBlackboxPatternsMethod {
     SetBlackboxPatterns,
 }
 #[doc = "Replace previous blackbox patterns with passed ones. Forces backend to skip stepping/pausing in\nscripts with url matching one of the patterns. VM will try to leave blackboxed script by\nperforming 'step in' several times, finally resorting to 'step out' if unsuccessful.\n[setBlackboxPatterns](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setBlackboxPatterns)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetBlackboxPatterns {
     pub method: SetBlackboxPatternsMethod,
     pub params: SetBlackboxPatternsParams,
@@ -634,7 +634,7 @@ pub enum SetBlackboxedRangesMethod {
     SetBlackboxedRanges,
 }
 #[doc = "Makes backend skip steps in the script in blackboxed ranges. VM will try leave blacklisted\nscripts by performing 'step in' several times, finally resorting to 'step out' if unsuccessful.\nPositions array contains positions where blackbox state is changed. First interval isn't\nblackboxed. Array should be sorted.\n[setBlackboxedRanges](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setBlackboxedRanges)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetBlackboxedRanges {
     pub method: SetBlackboxedRangesMethod,
     pub params: SetBlackboxedRangesParams,
@@ -671,7 +671,7 @@ pub enum SetBreakpointMethod {
     SetBreakpoint,
 }
 #[doc = "Sets JavaScript breakpoint at a given location.\n[setBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setBreakpoint)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetBreakpoint {
     pub method: SetBreakpointMethod,
     pub params: SetBreakpointParams,
@@ -710,7 +710,7 @@ pub enum SetInstrumentationBreakpointMethod {
     SetInstrumentationBreakpoint,
 }
 #[doc = "Sets instrumentation breakpoint.\n[setInstrumentationBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setInstrumentationBreakpoint)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetInstrumentationBreakpoint {
     pub method: SetInstrumentationBreakpointMethod,
     pub params: SetInstrumentationBreakpointParams,
@@ -771,7 +771,7 @@ pub enum SetBreakpointByUrlMethod {
     SetBreakpointByUrl,
 }
 #[doc = "Sets JavaScript breakpoint at given location specified either by URL or URL regex. Once this\ncommand is issued, all existing parsed scripts will have breakpoints resolved and returned in\n`locations` property. Further matching script parsing will result in subsequent\n`breakpointResolved` events issued. This logical breakpoint will survive page reloads.\n[setBreakpointByUrl](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setBreakpointByUrl)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetBreakpointByUrl {
     pub method: SetBreakpointByUrlMethod,
     pub params: SetBreakpointByUrlParams,
@@ -808,7 +808,7 @@ pub enum SetBreakpointOnFunctionCallMethod {
     SetBreakpointOnFunctionCall,
 }
 #[doc = "Sets JavaScript breakpoint before each call to the given function.\nIf another function was created from the same source as a given one,\ncalling it will also trigger the breakpoint.\n[setBreakpointOnFunctionCall](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setBreakpointOnFunctionCall)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetBreakpointOnFunctionCall {
     pub method: SetBreakpointOnFunctionCallMethod,
     pub params: SetBreakpointOnFunctionCallParams,
@@ -839,7 +839,7 @@ pub enum SetBreakpointsActiveMethod {
     SetBreakpointsActive,
 }
 #[doc = "Activates / deactivates all breakpoints on the page.\n[setBreakpointsActive](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setBreakpointsActive)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetBreakpointsActive {
     pub method: SetBreakpointsActiveMethod,
     pub params: SetBreakpointsActiveParams,
@@ -882,7 +882,7 @@ pub enum SetPauseOnExceptionsMethod {
     SetPauseOnExceptions,
 }
 #[doc = "Defines pause on exceptions state. Can be set to stop on all exceptions, uncaught exceptions,\nor caught exceptions, no exceptions. Initial pause on exceptions state is `none`.\n[setPauseOnExceptions](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setPauseOnExceptions)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetPauseOnExceptions {
     pub method: SetPauseOnExceptionsMethod,
     pub params: SetPauseOnExceptionsParams,
@@ -913,7 +913,7 @@ pub enum SetReturnValueMethod {
     SetReturnValue,
 }
 #[doc = "Changes return value in top frame. Available only at return break position.\n[setReturnValue](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setReturnValue)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetReturnValue {
     pub method: SetReturnValueMethod,
     pub params: SetReturnValueParams,
@@ -963,7 +963,7 @@ pub enum SetScriptSourceMethod {
     SetScriptSource,
 }
 #[doc = "Edits JavaScript source live.\n\nIn general, functions that are currently on the stack can not be edited with\na single exception: If the edited function is the top-most stack frame and\nthat is the only activation of that function on the stack. In this case\nthe live edit will be successful and a `Debugger.restartFrame` for the\ntop-most function is automatically triggered.\n[setScriptSource](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setScriptSource)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetScriptSource {
     pub method: SetScriptSourceMethod,
     pub params: SetScriptSourceParams,
@@ -992,7 +992,7 @@ pub enum SetSkipAllPausesMethod {
     SetSkipAllPauses,
 }
 #[doc = "Makes page not interrupt on any pauses (breakpoint, exception, dom exception etc).\n[setSkipAllPauses](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setSkipAllPauses)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetSkipAllPauses {
     pub method: SetSkipAllPausesMethod,
     pub params: SetSkipAllPausesParams,
@@ -1040,7 +1040,7 @@ pub enum SetVariableValueMethod {
     SetVariableValue,
 }
 #[doc = "Changes value of variable in a callframe. Object-based scopes are not supported and must be\nmutated manually.\n[setVariableValue](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-setVariableValue)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetVariableValue {
     pub method: SetVariableValueMethod,
     pub params: SetVariableValueParams,
@@ -1071,7 +1071,7 @@ pub enum StepIntoMethod {
     StepInto,
 }
 #[doc = "Steps into the function call.\n[stepInto](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-stepInto)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StepInto {
     pub method: StepIntoMethod,
     pub params: StepIntoParams,
@@ -1091,7 +1091,7 @@ pub enum StepOutMethod {
     StepOut,
 }
 #[doc = "Steps out of the function call.\n[stepOut](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-stepOut)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StepOut {
     pub method: StepOutMethod,
     pub params: StepOutParams,
@@ -1117,7 +1117,7 @@ pub enum StepOverMethod {
     StepOver,
 }
 #[doc = "Steps over the statement.\n[stepOver](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#method-stepOver)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StepOver {
     pub method: StepOverMethod,
     pub params: StepOverParams,

@@ -33,6 +33,24 @@ impl ContinueToLocationBuilder {
         })
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct DisableBuilder;
+impl DisableBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Disable {
+        Disable {
+            method: DisableMethod::Disable,
+            params: DisableParams {},
+        }
+    }
+}
+impl Disable {
+    pub fn builder() -> DisableBuilder {
+        DisableBuilder
+    }
+}
 impl Enable {
     pub fn builder() -> EnableBuilder {
         <EnableBuilder as Default>::default()
@@ -278,6 +296,24 @@ impl GetStackTraceBuilder {
                 })?,
             },
         })
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct PauseBuilder;
+impl PauseBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Pause {
+        Pause {
+            method: PauseMethod::Pause,
+            params: PauseParams {},
+        }
+    }
+}
+impl Pause {
+    pub fn builder() -> PauseBuilder {
+        PauseBuilder
     }
 }
 impl RemoveBreakpoint {
@@ -950,6 +986,24 @@ impl StepIntoBuilder {
                 skip_list: self.skip_list,
             },
         }
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct StepOutBuilder;
+impl StepOutBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> StepOut {
+        StepOut {
+            method: StepOutMethod::StepOut,
+            params: StepOutParams {},
+        }
+    }
+}
+impl StepOut {
+    pub fn builder() -> StepOutBuilder {
+        StepOutBuilder
     }
 }
 impl StepOver {

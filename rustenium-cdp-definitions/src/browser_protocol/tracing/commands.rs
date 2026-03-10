@@ -8,7 +8,7 @@ pub enum EndMethod {
     End,
 }
 #[doc = "Stop trace events collection.\n[end](https://chromedevtools.github.io/devtools-protocol/tot/Tracing/#method-end)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct End {
     pub method: EndMethod,
     pub params: EndParams,
@@ -28,7 +28,7 @@ pub enum GetCategoriesMethod {
     GetCategories,
 }
 #[doc = "Gets supported tracing categories.\n[getCategories](https://chromedevtools.github.io/devtools-protocol/tot/Tracing/#method-getCategories)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetCategories {
     pub method: GetCategoriesMethod,
     pub params: GetCategoriesParams,
@@ -48,7 +48,7 @@ pub enum GetTrackEventDescriptorMethod {
     GetTrackEventDescriptor,
 }
 #[doc = "Return a descriptor for all available tracing categories.\n[getTrackEventDescriptor](https://chromedevtools.github.io/devtools-protocol/tot/Tracing/#method-getTrackEventDescriptor)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetTrackEventDescriptor {
     pub method: GetTrackEventDescriptorMethod,
     pub params: GetTrackEventDescriptorParams,
@@ -84,7 +84,7 @@ pub enum RecordClockSyncMarkerMethod {
     RecordClockSyncMarker,
 }
 #[doc = "Record a clock sync marker in the trace.\n[recordClockSyncMarker](https://chromedevtools.github.io/devtools-protocol/tot/Tracing/#method-recordClockSyncMarker)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RecordClockSyncMarker {
     pub method: RecordClockSyncMarkerMethod,
     pub params: RecordClockSyncMarkerParams,
@@ -115,7 +115,7 @@ pub enum RequestMemoryDumpMethod {
     RequestMemoryDump,
 }
 #[doc = "Request a global memory dump.\n[requestMemoryDump](https://chromedevtools.github.io/devtools-protocol/tot/Tracing/#method-requestMemoryDump)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RequestMemoryDump {
     pub method: RequestMemoryDumpMethod,
     pub params: RequestMemoryDumpParams,
@@ -178,7 +178,7 @@ pub enum StartMethod {
     Start,
 }
 #[doc = "Start trace events collection.\n[start](https://chromedevtools.github.io/devtools-protocol/tot/Tracing/#method-start)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Start {
     pub method: StartMethod,
     pub params: StartParams,

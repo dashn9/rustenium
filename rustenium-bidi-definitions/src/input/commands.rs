@@ -23,7 +23,7 @@ pub enum PerformActionsMethod {
     #[serde(rename = "input.performActions")]
     PerformActions,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PerformActions {
     pub method: PerformActionsMethod,
     pub params: PerformActionsParams,
@@ -52,7 +52,7 @@ pub enum ReleaseActionsMethod {
     #[serde(rename = "input.releaseActions")]
     ReleaseActions,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ReleaseActions {
     pub method: ReleaseActionsMethod,
     pub params: ReleaseActionsParams,
@@ -92,7 +92,7 @@ pub enum SetFilesMethod {
     #[serde(rename = "input.setFiles")]
     SetFiles,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetFiles {
     pub method: SetFilesMethod,
     pub params: SetFilesParams,
@@ -104,4 +104,4 @@ impl SetFiles {
 impl crate::CommandResult for SetFiles {
     type Result = super::results::SetFilesResult;
 }
-group_enum ! (InputCommands { PerformActions (PerformActions) , ReleaseActions (ReleaseActions) , SetFiles (SetFiles) });
+group_enum ! (InputCommand { PerformActions (PerformActions) , ReleaseActions (ReleaseActions) , SetFiles (SetFiles) });

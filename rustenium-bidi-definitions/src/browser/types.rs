@@ -106,6 +106,12 @@ impl UserContextInfo {
     pub const DOMAIN_DIRECTION: &'static str = "all";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum ClientWindowNamedStateClientWindowRectStateUnion {
+    ClientWindowNamedState(ClientWindowNamedState),
+    ClientWindowRectState(ClientWindowRectState),
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClientWindowNamedState {
     #[serde(rename = "state")]
     pub state: ClientWindowNamedStateState,
@@ -133,7 +139,7 @@ impl ClientWindowNamedState {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClientWindowRectState {
     #[serde(rename = "state")]
-    pub state: String,
+    pub state: ClientWindowRectStateState,
     #[serde(rename = "width")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -151,8 +157,13 @@ pub struct ClientWindowRectState {
     #[serde(default)]
     pub y: Option<i64>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum ClientWindowRectStateState {
+    #[serde(rename = "normal")]
+    Normal,
+}
 impl ClientWindowRectState {
-    pub fn new(state: impl Into<String>) -> Self {
+    pub fn new(state: impl Into<ClientWindowRectStateState>) -> Self {
         Self {
             state: state.into(),
             width: None,
@@ -160,11 +171,6 @@ impl ClientWindowRectState {
             x: None,
             y: None,
         }
-    }
-}
-impl<T: Into<String>> From<T> for ClientWindowRectState {
-    fn from(url: T) -> Self {
-        ClientWindowRectState::new(url)
     }
 }
 impl ClientWindowRectState {
@@ -180,12 +186,20 @@ pub enum DownloadBehavior {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DownloadBehaviorAllowed {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: DownloadBehaviorAllowedType,
     #[serde(rename = "destinationFolder")]
     pub destination_folder: String,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum DownloadBehaviorAllowedType {
+    #[serde(rename = "allowed")]
+    Allowed,
+}
 impl DownloadBehaviorAllowed {
-    pub fn new(r#type: impl Into<String>, destination_folder: impl Into<String>) -> Self {
+    pub fn new(
+        r#type: impl Into<DownloadBehaviorAllowedType>,
+        destination_folder: impl Into<String>,
+    ) -> Self {
         Self {
             r#type: r#type.into(),
             destination_folder: destination_folder.into(),
@@ -199,22 +213,22 @@ impl DownloadBehaviorAllowed {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DownloadBehaviorDenied {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: DownloadBehaviorDeniedType,
+}
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum DownloadBehaviorDeniedType {
+    #[serde(rename = "denied")]
+    Denied,
 }
 impl DownloadBehaviorDenied {
-    pub fn new(r#type: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<DownloadBehaviorDeniedType>) -> Self {
         Self {
             r#type: r#type.into(),
         }
-    }
-}
-impl<T: Into<String>> From<T> for DownloadBehaviorDenied {
-    fn from(url: T) -> Self {
-        DownloadBehaviorDenied::new(url)
     }
 }
 impl DownloadBehaviorDenied {
     pub const IDENTIFIER: &'static str = "browser.DownloadBehaviorDenied";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
-group_enum ! (BrowserTypes { ClientWindow (ClientWindow) , ClientWindowInfo (ClientWindowInfo) , UserContext (UserContext) , UserContextInfo (UserContextInfo) , ClientWindowNamedState (ClientWindowNamedState) , ClientWindowRectState (ClientWindowRectState) , DownloadBehavior (DownloadBehavior) , DownloadBehaviorAllowed (DownloadBehaviorAllowed) , DownloadBehaviorDenied (DownloadBehaviorDenied) });
+group_enum ! (BrowserType { ClientWindow (ClientWindow) , ClientWindowInfo (ClientWindowInfo) , UserContext (UserContext) , UserContextInfo (UserContextInfo) , ClientWindowNamedStateClientWindowRectStateUnion (ClientWindowNamedStateClientWindowRectStateUnion) , DownloadBehavior (DownloadBehavior) });

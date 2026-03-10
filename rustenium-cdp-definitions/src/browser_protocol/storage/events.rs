@@ -21,7 +21,7 @@ pub enum CacheStorageContentUpdatedMethod {
     CacheStorageContentUpdated,
 }
 #[doc = "A cache's contents have been modified.\n[cacheStorageContentUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-cacheStorageContentUpdated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CacheStorageContentUpdated {
     pub method: CacheStorageContentUpdatedMethod,
     pub params: CacheStorageContentUpdatedParams,
@@ -48,7 +48,7 @@ pub enum CacheStorageListUpdatedMethod {
     CacheStorageListUpdated,
 }
 #[doc = "A cache has been added/deleted.\n[cacheStorageListUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-cacheStorageListUpdated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CacheStorageListUpdated {
     pub method: CacheStorageListUpdatedMethod,
     pub params: CacheStorageListUpdatedParams,
@@ -81,7 +81,7 @@ pub enum IndexedDbContentUpdatedMethod {
     IndexedDbContentUpdated,
 }
 #[doc = "The origin's IndexedDB object store has been modified.\n[indexedDBContentUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-indexedDBContentUpdated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct IndexedDbContentUpdated {
     pub method: IndexedDbContentUpdatedMethod,
     pub params: IndexedDbContentUpdatedParams,
@@ -108,7 +108,7 @@ pub enum IndexedDbListUpdatedMethod {
     IndexedDbListUpdated,
 }
 #[doc = "The origin's IndexedDB database list has been modified.\n[indexedDBListUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-indexedDBListUpdated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct IndexedDbListUpdated {
     pub method: IndexedDbListUpdatedMethod,
     pub params: IndexedDbListUpdatedParams,
@@ -153,7 +153,7 @@ pub enum InterestGroupAccessedMethod {
     InterestGroupAccessed,
 }
 #[doc = "One of the interest groups was accessed. Note that these events are global\nto all targets sharing an interest group store.\n[interestGroupAccessed](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-interestGroupAccessed)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InterestGroupAccessed {
     pub method: InterestGroupAccessedMethod,
     pub params: InterestGroupAccessedParams,
@@ -187,7 +187,7 @@ pub enum InterestGroupAuctionEventOccurredMethod {
     InterestGroupAuctionEventOccurred,
 }
 #[doc = "An auction involving interest groups is taking place. These events are\ntarget-specific.\n[interestGroupAuctionEventOccurred](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-interestGroupAuctionEventOccurred)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InterestGroupAuctionEventOccurred {
     pub method: InterestGroupAuctionEventOccurredMethod,
     pub params: InterestGroupAuctionEventOccurredParams,
@@ -213,7 +213,7 @@ pub enum InterestGroupAuctionNetworkRequestCreatedMethod {
     InterestGroupAuctionNetworkRequestCreated,
 }
 #[doc = "Specifies which auctions a particular network fetch may be related to, and\nin what role. Note that it is not ordered with respect to\nNetwork.requestWillBeSent (but will happen before loadingFinished\nloadingFailed).\n[interestGroupAuctionNetworkRequestCreated](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-interestGroupAuctionNetworkRequestCreated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InterestGroupAuctionNetworkRequestCreated {
     pub method: InterestGroupAuctionNetworkRequestCreatedMethod,
     pub params: InterestGroupAuctionNetworkRequestCreatedParams,
@@ -252,7 +252,7 @@ pub enum SharedStorageAccessedMethod {
     SharedStorageAccessed,
 }
 #[doc = "Shared storage was accessed by the associated page.\nThe following parameters are included in all events.\n[sharedStorageAccessed](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-sharedStorageAccessed)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SharedStorageAccessed {
     pub method: SharedStorageAccessedMethod,
     pub params: SharedStorageAccessedParams,
@@ -291,7 +291,7 @@ pub enum SharedStorageWorkletOperationExecutionFinishedMethod {
     SharedStorageWorkletOperationExecutionFinished,
 }
 #[doc = "A shared storage run or selectURL operation finished its execution.\nThe following parameters are included in all events.\n[sharedStorageWorkletOperationExecutionFinished](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-sharedStorageWorkletOperationExecutionFinished)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SharedStorageWorkletOperationExecutionFinished {
     pub method: SharedStorageWorkletOperationExecutionFinishedMethod,
     pub params: SharedStorageWorkletOperationExecutionFinishedParams,
@@ -309,7 +309,7 @@ pub enum StorageBucketCreatedOrUpdatedMethod {
     #[serde(rename = "Storage.storageBucketCreatedOrUpdated")]
     StorageBucketCreatedOrUpdated,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StorageBucketCreatedOrUpdated {
     pub method: StorageBucketCreatedOrUpdatedMethod,
     pub params: StorageBucketCreatedOrUpdatedParams,
@@ -327,7 +327,7 @@ pub enum StorageBucketDeletedMethod {
     #[serde(rename = "Storage.storageBucketDeleted")]
     StorageBucketDeleted,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StorageBucketDeleted {
     pub method: StorageBucketDeletedMethod,
     pub params: StorageBucketDeletedParams,
@@ -347,7 +347,7 @@ pub enum AttributionReportingSourceRegisteredMethod {
     #[serde(rename = "Storage.attributionReportingSourceRegistered")]
     AttributionReportingSourceRegistered,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributionReportingSourceRegistered {
     pub method: AttributionReportingSourceRegisteredMethod,
     pub params: AttributionReportingSourceRegisteredParams,
@@ -369,7 +369,7 @@ pub enum AttributionReportingTriggerRegisteredMethod {
     #[serde(rename = "Storage.attributionReportingTriggerRegistered")]
     AttributionReportingTriggerRegistered,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributionReportingTriggerRegistered {
     pub method: AttributionReportingTriggerRegisteredMethod,
     pub params: AttributionReportingTriggerRegisteredParams,
@@ -404,7 +404,7 @@ pub enum AttributionReportingReportSentMethod {
     #[serde(rename = "Storage.attributionReportingReportSent")]
     AttributionReportingReportSent,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributionReportingReportSent {
     pub method: AttributionReportingReportSentMethod,
     pub params: AttributionReportingReportSentParams,
@@ -438,7 +438,7 @@ pub enum AttributionReportingVerboseDebugReportSentMethod {
     #[serde(rename = "Storage.attributionReportingVerboseDebugReportSent")]
     AttributionReportingVerboseDebugReportSent,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributionReportingVerboseDebugReportSent {
     pub method: AttributionReportingVerboseDebugReportSentMethod,
     pub params: AttributionReportingVerboseDebugReportSentParams,

@@ -41,7 +41,7 @@ pub enum AddScriptToEvaluateOnNewDocumentMethod {
     AddScriptToEvaluateOnNewDocument,
 }
 #[doc = "Evaluates given script in every frame upon creation (before loading frame's scripts).\n[addScriptToEvaluateOnNewDocument](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-addScriptToEvaluateOnNewDocument)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AddScriptToEvaluateOnNewDocument {
     pub method: AddScriptToEvaluateOnNewDocumentMethod,
     pub params: AddScriptToEvaluateOnNewDocumentParams,
@@ -61,7 +61,7 @@ pub enum BringToFrontMethod {
     BringToFront,
 }
 #[doc = "Brings page to front (activates tab).\n[bringToFront](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-bringToFront)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BringToFront {
     pub method: BringToFrontMethod,
     pub params: BringToFrontParams,
@@ -122,7 +122,7 @@ pub enum CaptureScreenshotMethod {
     CaptureScreenshot,
 }
 #[doc = "Capture page screenshot.\n[captureScreenshot](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-captureScreenshot)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CaptureScreenshot {
     pub method: CaptureScreenshotMethod,
     pub params: CaptureScreenshotParams,
@@ -154,7 +154,7 @@ pub enum CaptureSnapshotMethod {
     CaptureSnapshot,
 }
 #[doc = "Returns a snapshot of the page as a string. For MHTML format, the serialization includes\niframes, shadow DOM, external resources, and element-inline styles.\n[captureSnapshot](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-captureSnapshot)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CaptureSnapshot {
     pub method: CaptureSnapshotMethod,
     pub params: CaptureSnapshotParams,
@@ -197,7 +197,7 @@ pub enum CreateIsolatedWorldMethod {
     CreateIsolatedWorld,
 }
 #[doc = "Creates an isolated world for the given frame.\n[createIsolatedWorld](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-createIsolatedWorld)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CreateIsolatedWorld {
     pub method: CreateIsolatedWorldMethod,
     pub params: CreateIsolatedWorldParams,
@@ -217,7 +217,7 @@ pub enum DisableMethod {
     Disable,
 }
 #[doc = "Disables page domain notifications.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-disable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
@@ -243,7 +243,7 @@ pub enum EnableMethod {
     Enable,
 }
 #[doc = "Enables page domain notifications.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-enable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
@@ -268,7 +268,7 @@ pub enum GetAppManifestMethod {
     GetAppManifest,
 }
 #[doc = "Gets the processed manifest for this current document.\nThis API always waits for the manifest to be loaded.\nIf manifestId is provided, and it does not match the manifest of the\ncurrent document, this API errors out.\nIf there is not a loaded page, this API errors out immediately.\n[getAppManifest](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getAppManifest)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetAppManifest {
     pub method: GetAppManifestMethod,
     pub params: GetAppManifestParams,
@@ -286,7 +286,7 @@ pub enum GetInstallabilityErrorsMethod {
     #[serde(rename = "Page.getInstallabilityErrors")]
     GetInstallabilityErrors,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetInstallabilityErrors {
     pub method: GetInstallabilityErrorsMethod,
     pub params: GetInstallabilityErrorsParams,
@@ -306,7 +306,7 @@ pub enum GetAppIdMethod {
     GetAppId,
 }
 #[doc = "Returns the unique (PWA) app id.\nOnly returns values if the feature flag 'WebAppEnableManifestId' is enabled\n[getAppId](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getAppId)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetAppId {
     pub method: GetAppIdMethod,
     pub params: GetAppIdParams,
@@ -334,7 +334,7 @@ pub enum GetAdScriptAncestryMethod {
     #[serde(rename = "Page.getAdScriptAncestry")]
     GetAdScriptAncestry,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetAdScriptAncestry {
     pub method: GetAdScriptAncestryMethod,
     pub params: GetAdScriptAncestryParams,
@@ -354,7 +354,7 @@ pub enum GetFrameTreeMethod {
     GetFrameTree,
 }
 #[doc = "Returns present frame tree structure.\n[getFrameTree](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getFrameTree)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetFrameTree {
     pub method: GetFrameTreeMethod,
     pub params: GetFrameTreeParams,
@@ -374,7 +374,7 @@ pub enum GetLayoutMetricsMethod {
     GetLayoutMetrics,
 }
 #[doc = "Returns metrics relating to the layouting of the page, such as viewport bounds/scale.\n[getLayoutMetrics](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getLayoutMetrics)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetLayoutMetrics {
     pub method: GetLayoutMetricsMethod,
     pub params: GetLayoutMetricsParams,
@@ -394,7 +394,7 @@ pub enum GetNavigationHistoryMethod {
     GetNavigationHistory,
 }
 #[doc = "Returns navigation history for the current page.\n[getNavigationHistory](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getNavigationHistory)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetNavigationHistory {
     pub method: GetNavigationHistoryMethod,
     pub params: GetNavigationHistoryParams,
@@ -414,7 +414,7 @@ pub enum ResetNavigationHistoryMethod {
     ResetNavigationHistory,
 }
 #[doc = "Resets navigation history for the current page.\n[resetNavigationHistory](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-resetNavigationHistory)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResetNavigationHistory {
     pub method: ResetNavigationHistoryMethod,
     pub params: ResetNavigationHistoryParams,
@@ -449,7 +449,7 @@ pub enum GetResourceContentMethod {
     GetResourceContent,
 }
 #[doc = "Returns content of the given resource.\n[getResourceContent](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getResourceContent)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetResourceContent {
     pub method: GetResourceContentMethod,
     pub params: GetResourceContentParams,
@@ -469,7 +469,7 @@ pub enum GetResourceTreeMethod {
     GetResourceTree,
 }
 #[doc = "Returns present frame / resource tree structure.\n[getResourceTree](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getResourceTree)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetResourceTree {
     pub method: GetResourceTreeMethod,
     pub params: GetResourceTreeParams,
@@ -506,7 +506,7 @@ pub enum HandleJavaScriptDialogMethod {
     HandleJavaScriptDialog,
 }
 #[doc = "Accepts or dismisses a JavaScript initiated dialog (alert, confirm, prompt, or onbeforeunload).\n[handleJavaScriptDialog](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-handleJavaScriptDialog)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HandleJavaScriptDialog {
     pub method: HandleJavaScriptDialogMethod,
     pub params: HandleJavaScriptDialogParams,
@@ -566,7 +566,7 @@ pub enum NavigateMethod {
     Navigate,
 }
 #[doc = "Navigates current page to the given URL.\n[navigate](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-navigate)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Navigate {
     pub method: NavigateMethod,
     pub params: NavigateParams,
@@ -597,7 +597,7 @@ pub enum NavigateToHistoryEntryMethod {
     NavigateToHistoryEntry,
 }
 #[doc = "Navigates current page to the given history entry.\n[navigateToHistoryEntry](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-navigateToHistoryEntry)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NavigateToHistoryEntry {
     pub method: NavigateToHistoryEntryMethod,
     pub params: NavigateToHistoryEntryParams,
@@ -711,7 +711,7 @@ pub enum PrintToPdfMethod {
     PrintToPdf,
 }
 #[doc = "Print page as PDF.\n[printToPDF](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-printToPDF)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PrintToPdf {
     pub method: PrintToPdfMethod,
     pub params: PrintToPdfParams,
@@ -747,7 +747,7 @@ pub enum ReloadMethod {
     Reload,
 }
 #[doc = "Reloads given page optionally ignoring the cache.\n[reload](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-reload)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Reload {
     pub method: ReloadMethod,
     pub params: ReloadParams,
@@ -777,7 +777,7 @@ pub enum RemoveScriptToEvaluateOnNewDocumentMethod {
     RemoveScriptToEvaluateOnNewDocument,
 }
 #[doc = "Removes given script from the list.\n[removeScriptToEvaluateOnNewDocument](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-removeScriptToEvaluateOnNewDocument)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RemoveScriptToEvaluateOnNewDocument {
     pub method: RemoveScriptToEvaluateOnNewDocumentMethod,
     pub params: RemoveScriptToEvaluateOnNewDocumentParams,
@@ -808,7 +808,7 @@ pub enum ScreencastFrameAckMethod {
     ScreencastFrameAck,
 }
 #[doc = "Acknowledges that a screencast frame has been received by the frontend.\n[screencastFrameAck](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-screencastFrameAck)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ScreencastFrameAck {
     pub method: ScreencastFrameAckMethod,
     pub params: ScreencastFrameAckParams,
@@ -863,7 +863,7 @@ pub enum SearchInResourceMethod {
     SearchInResource,
 }
 #[doc = "Searches for given string in resource content.\n[searchInResource](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-searchInResource)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SearchInResource {
     pub method: SearchInResourceMethod,
     pub params: SearchInResourceParams,
@@ -894,7 +894,7 @@ pub enum SetAdBlockingEnabledMethod {
     SetAdBlockingEnabled,
 }
 #[doc = "Enable Chrome's experimental ad filter on all sites.\n[setAdBlockingEnabled](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setAdBlockingEnabled)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetAdBlockingEnabled {
     pub method: SetAdBlockingEnabledMethod,
     pub params: SetAdBlockingEnabledParams,
@@ -925,7 +925,7 @@ pub enum SetBypassCspMethod {
     SetBypassCsp,
 }
 #[doc = "Enable page Content Security Policy by-passing.\n[setBypassCSP](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setBypassCSP)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetBypassCsp {
     pub method: SetBypassCspMethod,
     pub params: SetBypassCspParams,
@@ -955,7 +955,7 @@ pub enum GetPermissionsPolicyStateMethod {
     GetPermissionsPolicyState,
 }
 #[doc = "Get Permissions Policy state on given frame.\n[getPermissionsPolicyState](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getPermissionsPolicyState)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetPermissionsPolicyState {
     pub method: GetPermissionsPolicyStateMethod,
     pub params: GetPermissionsPolicyStateParams,
@@ -985,7 +985,7 @@ pub enum GetOriginTrialsMethod {
     GetOriginTrials,
 }
 #[doc = "Get Origin Trials on given frame.\n[getOriginTrials](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getOriginTrials)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetOriginTrials {
     pub method: GetOriginTrialsMethod,
     pub params: GetOriginTrialsParams,
@@ -1022,7 +1022,7 @@ pub enum SetFontFamiliesMethod {
     SetFontFamilies,
 }
 #[doc = "Set generic font families.\n[setFontFamilies](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setFontFamilies)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetFontFamilies {
     pub method: SetFontFamiliesMethod,
     pub params: SetFontFamiliesParams,
@@ -1053,7 +1053,7 @@ pub enum SetFontSizesMethod {
     SetFontSizes,
 }
 #[doc = "Set default font sizes.\n[setFontSizes](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setFontSizes)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetFontSizes {
     pub method: SetFontSizesMethod,
     pub params: SetFontSizesParams,
@@ -1088,7 +1088,7 @@ pub enum SetDocumentContentMethod {
     SetDocumentContent,
 }
 #[doc = "Sets given markup as the document's HTML.\n[setDocumentContent](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setDocumentContent)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetDocumentContent {
     pub method: SetDocumentContentMethod,
     pub params: SetDocumentContentParams,
@@ -1119,7 +1119,7 @@ pub enum SetLifecycleEventsEnabledMethod {
     SetLifecycleEventsEnabled,
 }
 #[doc = "Controls whether page will emit lifecycle events.\n[setLifecycleEventsEnabled](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setLifecycleEventsEnabled)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetLifecycleEventsEnabled {
     pub method: SetLifecycleEventsEnabledMethod,
     pub params: SetLifecycleEventsEnabledParams,
@@ -1173,7 +1173,7 @@ pub enum StartScreencastMethod {
     StartScreencast,
 }
 #[doc = "Starts sending each frame using the `screencastFrame` event.\n[startScreencast](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-startScreencast)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StartScreencast {
     pub method: StartScreencastMethod,
     pub params: StartScreencastParams,
@@ -1193,7 +1193,7 @@ pub enum StopLoadingMethod {
     StopLoading,
 }
 #[doc = "Force the page stop all navigations and pending resource fetches.\n[stopLoading](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-stopLoading)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StopLoading {
     pub method: StopLoadingMethod,
     pub params: StopLoadingParams,
@@ -1213,7 +1213,7 @@ pub enum CrashMethod {
     Crash,
 }
 #[doc = "Crashes renderer on the IO thread, generates minidumps.\n[crash](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-crash)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Crash {
     pub method: CrashMethod,
     pub params: CrashParams,
@@ -1233,7 +1233,7 @@ pub enum CloseMethod {
     Close,
 }
 #[doc = "Tries to close page, running its beforeunload hooks, if any.\n[close](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-close)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Close {
     pub method: CloseMethod,
     pub params: CloseParams,
@@ -1272,7 +1272,7 @@ pub enum SetWebLifecycleStateMethod {
     SetWebLifecycleState,
 }
 #[doc = "Tries to update the web lifecycle state of the page.\nIt will transition the page to the given state according to:\nhttps://github.com/WICG/web-lifecycle/\n[setWebLifecycleState](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setWebLifecycleState)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetWebLifecycleState {
     pub method: SetWebLifecycleStateMethod,
     pub params: SetWebLifecycleStateParams,
@@ -1292,7 +1292,7 @@ pub enum StopScreencastMethod {
     StopScreencast,
 }
 #[doc = "Stops sending each frame in the `screencastFrame`.\n[stopScreencast](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-stopScreencast)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StopScreencast {
     pub method: StopScreencastMethod,
     pub params: StopScreencastParams,
@@ -1321,7 +1321,7 @@ pub enum ProduceCompilationCacheMethod {
     ProduceCompilationCache,
 }
 #[doc = "Requests backend to produce compilation cache for the specified scripts.\n`scripts` are appended to the list of scripts for which the cache\nwould be produced. The list may be reset during page navigation.\nWhen script with a matching URL is encountered, the cache is optionally\nproduced upon backend discretion, based on internal heuristics.\nSee also: `Page.compilationCacheProduced`.\n[produceCompilationCache](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-produceCompilationCache)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ProduceCompilationCache {
     pub method: ProduceCompilationCacheMethod,
     pub params: ProduceCompilationCacheParams,
@@ -1355,7 +1355,7 @@ pub enum AddCompilationCacheMethod {
     AddCompilationCache,
 }
 #[doc = "Seeds compilation cache for given url. Compilation cache does not survive\ncross-process navigation.\n[addCompilationCache](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-addCompilationCache)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AddCompilationCache {
     pub method: AddCompilationCacheMethod,
     pub params: AddCompilationCacheParams,
@@ -1375,7 +1375,7 @@ pub enum ClearCompilationCacheMethod {
     ClearCompilationCache,
 }
 #[doc = "Clears seeded compilation cache.\n[clearCompilationCache](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-clearCompilationCache)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClearCompilationCache {
     pub method: ClearCompilationCacheMethod,
     pub params: ClearCompilationCacheParams,
@@ -1416,7 +1416,7 @@ pub enum SetSpcTransactionModeMethod {
     SetSpcTransactionMode,
 }
 #[doc = "Sets the Secure Payment Confirmation transaction mode.\nhttps://w3c.github.io/secure-payment-confirmation/#sctn-automation-set-spc-transaction-mode\n[setSPCTransactionMode](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setSPCTransactionMode)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetSpcTransactionMode {
     pub method: SetSpcTransactionModeMethod,
     pub params: SetSpcTransactionModeParams,
@@ -1453,7 +1453,7 @@ pub enum SetRphRegistrationModeMethod {
     SetRphRegistrationMode,
 }
 #[doc = "Extensions for Custom Handlers API:\nhttps://html.spec.whatwg.org/multipage/system-state.html#rph-automation\n[setRPHRegistrationMode](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setRPHRegistrationMode)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetRphRegistrationMode {
     pub method: SetRphRegistrationModeMethod,
     pub params: SetRphRegistrationModeParams,
@@ -1495,7 +1495,7 @@ pub enum GenerateTestReportMethod {
     GenerateTestReport,
 }
 #[doc = "Generates a report for testing.\n[generateTestReport](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-generateTestReport)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GenerateTestReport {
     pub method: GenerateTestReportMethod,
     pub params: GenerateTestReportParams,
@@ -1515,7 +1515,7 @@ pub enum WaitForDebuggerMethod {
     WaitForDebugger,
 }
 #[doc = "Pauses page execution. Can be resumed using generic Runtime.runIfWaitingForDebugger.\n[waitForDebugger](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-waitForDebugger)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WaitForDebugger {
     pub method: WaitForDebuggerMethod,
     pub params: WaitForDebuggerParams,
@@ -1551,7 +1551,7 @@ pub enum SetInterceptFileChooserDialogMethod {
     SetInterceptFileChooserDialog,
 }
 #[doc = "Intercept file chooser requests and transfer control to protocol clients.\nWhen file chooser interception is enabled, native file chooser dialog is not shown.\nInstead, a protocol event `Page.fileChooserOpened` is emitted.\n[setInterceptFileChooserDialog](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setInterceptFileChooserDialog)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetInterceptFileChooserDialog {
     pub method: SetInterceptFileChooserDialogMethod,
     pub params: SetInterceptFileChooserDialogParams,
@@ -1581,7 +1581,7 @@ pub enum SetPrerenderingAllowedMethod {
     SetPrerenderingAllowed,
 }
 #[doc = "Enable/disable prerendering manually.\n\nThis command is a short-term solution for https://crbug.com/1440085.\nSee https://docs.google.com/document/d/12HVmFxYj5Jc-eJr5OmWsa2bqTJsbgGLKI6ZIyx0_wpA\nfor more details.\n\nTODO(https://crbug.com/1440085): Remove this once Puppeteer supports tab targets.\n[setPrerenderingAllowed](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-setPrerenderingAllowed)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetPrerenderingAllowed {
     pub method: SetPrerenderingAllowedMethod,
     pub params: SetPrerenderingAllowedParams,
@@ -1607,7 +1607,7 @@ pub enum GetAnnotatedPageContentMethod {
     GetAnnotatedPageContent,
 }
 #[doc = "Get the annotated page content for the main frame.\nThis is an experimental command that is subject to change.\n[getAnnotatedPageContent](https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-getAnnotatedPageContent)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetAnnotatedPageContent {
     pub method: GetAnnotatedPageContentMethod,
     pub params: GetAnnotatedPageContentParams,

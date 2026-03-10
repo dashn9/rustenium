@@ -6,7 +6,7 @@ pub enum StatusMethod {
     #[serde(rename = "session.status")]
     Status,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Status {
     pub method: StatusMethod,
     pub params: StatusParams,
@@ -35,7 +35,7 @@ pub enum NewMethod {
     #[serde(rename = "session.new")]
     New,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct New {
     pub method: NewMethod,
     pub params: NewParams,
@@ -54,7 +54,7 @@ pub enum EndMethod {
     #[serde(rename = "session.end")]
     End,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct End {
     pub method: EndMethod,
     pub params: EndParams,
@@ -94,7 +94,7 @@ pub enum SubscribeMethod {
     #[serde(rename = "session.subscribe")]
     Subscribe,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Subscribe {
     pub method: SubscribeMethod,
     pub params: SubscribeParams,
@@ -107,13 +107,24 @@ impl crate::CommandResult for Subscribe {
     type Result = super::results::SubscribeResult;
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct UnsubscribeParams {}
+pub struct UnsubscribeParams {
+    #[serde(flatten)]
+    #[serde(default)]
+    pub unsubscribe_parameters: super::types::UnsubscribeParameters,
+}
+impl UnsubscribeParams {
+    pub fn new(unsubscribe_parameters: impl Into<super::types::UnsubscribeParameters>) -> Self {
+        Self {
+            unsubscribe_parameters: unsubscribe_parameters.into(),
+        }
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum UnsubscribeMethod {
     #[serde(rename = "session.unsubscribe")]
     Unsubscribe,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Unsubscribe {
     pub method: UnsubscribeMethod,
     pub params: UnsubscribeParams,
@@ -125,4 +136,4 @@ impl Unsubscribe {
 impl crate::CommandResult for Unsubscribe {
     type Result = super::results::UnsubscribeResult;
 }
-group_enum ! (SessionCommands { Status (Status) , New (New) , End (End) , Subscribe (Subscribe) , Unsubscribe (Unsubscribe) });
+group_enum ! (SessionCommand { Status (Status) , New (New) , End (End) , Subscribe (Subscribe) , Unsubscribe (Unsubscribe) });

@@ -26,7 +26,7 @@ pub enum DeliverPushMessageMethod {
     #[serde(rename = "ServiceWorker.deliverPushMessage")]
     DeliverPushMessage,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeliverPushMessage {
     pub method: DeliverPushMessageMethod,
     pub params: DeliverPushMessageParams,
@@ -44,7 +44,7 @@ pub enum DisableMethod {
     #[serde(rename = "ServiceWorker.disable")]
     Disable,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
@@ -86,7 +86,7 @@ pub enum DispatchSyncEventMethod {
     #[serde(rename = "ServiceWorker.dispatchSyncEvent")]
     DispatchSyncEvent,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DispatchSyncEvent {
     pub method: DispatchSyncEventMethod,
     pub params: DispatchSyncEventParams,
@@ -124,7 +124,7 @@ pub enum DispatchPeriodicSyncEventMethod {
     #[serde(rename = "ServiceWorker.dispatchPeriodicSyncEvent")]
     DispatchPeriodicSyncEvent,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DispatchPeriodicSyncEvent {
     pub method: DispatchPeriodicSyncEventMethod,
     pub params: DispatchPeriodicSyncEventParams,
@@ -142,7 +142,7 @@ pub enum EnableMethod {
     #[serde(rename = "ServiceWorker.enable")]
     Enable,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
@@ -170,7 +170,7 @@ pub enum SetForceUpdateOnPageLoadMethod {
     #[serde(rename = "ServiceWorker.setForceUpdateOnPageLoad")]
     SetForceUpdateOnPageLoad,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetForceUpdateOnPageLoad {
     pub method: SetForceUpdateOnPageLoadMethod,
     pub params: SetForceUpdateOnPageLoadParams,
@@ -203,7 +203,7 @@ pub enum SkipWaitingMethod {
     #[serde(rename = "ServiceWorker.skipWaiting")]
     SkipWaiting,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SkipWaiting {
     pub method: SkipWaitingMethod,
     pub params: SkipWaitingParams,
@@ -236,7 +236,7 @@ pub enum StartWorkerMethod {
     #[serde(rename = "ServiceWorker.startWorker")]
     StartWorker,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StartWorker {
     pub method: StartWorkerMethod,
     pub params: StartWorkerParams,
@@ -254,7 +254,7 @@ pub enum StopAllWorkersMethod {
     #[serde(rename = "ServiceWorker.stopAllWorkers")]
     StopAllWorkers,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StopAllWorkers {
     pub method: StopAllWorkersMethod,
     pub params: StopAllWorkersParams,
@@ -287,7 +287,7 @@ pub enum StopWorkerMethod {
     #[serde(rename = "ServiceWorker.stopWorker")]
     StopWorker,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StopWorker {
     pub method: StopWorkerMethod,
     pub params: StopWorkerParams,
@@ -320,7 +320,7 @@ pub enum UnregisterMethod {
     #[serde(rename = "ServiceWorker.unregister")]
     Unregister,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Unregister {
     pub method: UnregisterMethod,
     pub params: UnregisterParams,
@@ -353,7 +353,7 @@ pub enum UpdateRegistrationMethod {
     #[serde(rename = "ServiceWorker.updateRegistration")]
     UpdateRegistration,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UpdateRegistration {
     pub method: UpdateRegistrationMethod,
     pub params: UpdateRegistrationParams,

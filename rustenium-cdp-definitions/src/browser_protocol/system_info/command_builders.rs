@@ -1,4 +1,22 @@
 use super::commands::*;
+#[derive(Debug, Clone, Default)]
+pub struct GetInfoBuilder;
+impl GetInfoBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> GetInfo {
+        GetInfo {
+            method: GetInfoMethod::GetInfo,
+            params: GetInfoParams {},
+        }
+    }
+}
+impl GetInfo {
+    pub fn builder() -> GetInfoBuilder {
+        GetInfoBuilder
+    }
+}
 impl GetFeatureState {
     pub fn builder() -> GetFeatureStateBuilder {
         <GetFeatureStateBuilder as Default>::default()
@@ -22,5 +40,23 @@ impl GetFeatureStateBuilder {
                 })?,
             },
         })
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct GetProcessInfoBuilder;
+impl GetProcessInfoBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> GetProcessInfo {
+        GetProcessInfo {
+            method: GetProcessInfoMethod::GetProcessInfo,
+            params: GetProcessInfoParams {},
+        }
+    }
+}
+impl GetProcessInfo {
+    pub fn builder() -> GetProcessInfoBuilder {
+        GetProcessInfoBuilder
     }
 }

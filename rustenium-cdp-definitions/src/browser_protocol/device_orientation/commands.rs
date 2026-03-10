@@ -8,7 +8,7 @@ pub enum ClearDeviceOrientationOverrideMethod {
     ClearDeviceOrientationOverride,
 }
 #[doc = "Clears the overridden Device Orientation.\n[clearDeviceOrientationOverride](https://chromedevtools.github.io/devtools-protocol/tot/DeviceOrientation/#method-clearDeviceOrientationOverride)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClearDeviceOrientationOverride {
     pub method: ClearDeviceOrientationOverrideMethod,
     pub params: ClearDeviceOrientationOverrideParams,
@@ -47,7 +47,7 @@ pub enum SetDeviceOrientationOverrideMethod {
     SetDeviceOrientationOverride,
 }
 #[doc = "Overrides the Device Orientation.\n[setDeviceOrientationOverride](https://chromedevtools.github.io/devtools-protocol/tot/DeviceOrientation/#method-setDeviceOrientationOverride)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetDeviceOrientationOverride {
     pub method: SetDeviceOrientationOverrideMethod,
     pub params: SetDeviceOrientationOverrideParams,

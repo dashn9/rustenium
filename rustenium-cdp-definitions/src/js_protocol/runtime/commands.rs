@@ -31,7 +31,7 @@ pub enum AwaitPromiseMethod {
     AwaitPromise,
 }
 #[doc = "Add handler to promise with given promise object id.\n[awaitPromise](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-awaitPromise)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AwaitPromise {
     pub method: AwaitPromiseMethod,
     pub params: AwaitPromiseParams,
@@ -139,7 +139,7 @@ pub enum CallFunctionOnMethod {
     CallFunctionOn,
 }
 #[doc = "Calls function with given declaration on the given object. Object group of the result is\ninherited from the target object.\n[callFunctionOn](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-callFunctionOn)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CallFunctionOn {
     pub method: CallFunctionOnMethod,
     pub params: CallFunctionOnParams,
@@ -188,7 +188,7 @@ pub enum CompileScriptMethod {
     CompileScript,
 }
 #[doc = "Compiles expression.\n[compileScript](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-compileScript)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CompileScript {
     pub method: CompileScriptMethod,
     pub params: CompileScriptParams,
@@ -208,7 +208,7 @@ pub enum DisableMethod {
     Disable,
 }
 #[doc = "Disables reporting of execution contexts creation.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-disable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
@@ -228,7 +228,7 @@ pub enum DiscardConsoleEntriesMethod {
     DiscardConsoleEntries,
 }
 #[doc = "Discards collected exceptions and console API calls.\n[discardConsoleEntries](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-discardConsoleEntries)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DiscardConsoleEntries {
     pub method: DiscardConsoleEntriesMethod,
     pub params: DiscardConsoleEntriesParams,
@@ -248,7 +248,7 @@ pub enum EnableMethod {
     Enable,
 }
 #[doc = "Enables reporting of execution contexts creation by means of `executionContextCreated` event.\nWhen the reporting gets enabled the event will be sent immediately for each existing execution\ncontext.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-enable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
@@ -374,7 +374,7 @@ pub enum EvaluateMethod {
     Evaluate,
 }
 #[doc = "Evaluates expression on global object.\n[evaluate](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-evaluate)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Evaluate {
     pub method: EvaluateMethod,
     pub params: EvaluateParams,
@@ -394,7 +394,7 @@ pub enum GetIsolateIdMethod {
     GetIsolateId,
 }
 #[doc = "Returns the isolate id.\n[getIsolateId](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-getIsolateId)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetIsolateId {
     pub method: GetIsolateIdMethod,
     pub params: GetIsolateIdParams,
@@ -414,7 +414,7 @@ pub enum GetHeapUsageMethod {
     GetHeapUsage,
 }
 #[doc = "Returns the JavaScript heap usage.\nIt is the total usage of the corresponding isolate not scoped to a particular Runtime.\n[getHeapUsage](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-getHeapUsage)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetHeapUsage {
     pub method: GetHeapUsageMethod,
     pub params: GetHeapUsageParams,
@@ -469,7 +469,7 @@ pub enum GetPropertiesMethod {
     GetProperties,
 }
 #[doc = "Returns properties of a given object. Object group of the result is inherited from the target\nobject.\n[getProperties](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-getProperties)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetProperties {
     pub method: GetPropertiesMethod,
     pub params: GetPropertiesParams,
@@ -495,7 +495,7 @@ pub enum GlobalLexicalScopeNamesMethod {
     GlobalLexicalScopeNames,
 }
 #[doc = "Returns all let, const and class variables from global scope.\n[globalLexicalScopeNames](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-globalLexicalScopeNames)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GlobalLexicalScopeNames {
     pub method: GlobalLexicalScopeNamesMethod,
     pub params: GlobalLexicalScopeNamesParams,
@@ -530,7 +530,7 @@ pub enum QueryObjectsMethod {
     #[serde(rename = "Runtime.queryObjects")]
     QueryObjects,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct QueryObjects {
     pub method: QueryObjectsMethod,
     pub params: QueryObjectsParams,
@@ -561,7 +561,7 @@ pub enum ReleaseObjectMethod {
     ReleaseObject,
 }
 #[doc = "Releases remote object with given id.\n[releaseObject](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-releaseObject)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ReleaseObject {
     pub method: ReleaseObjectMethod,
     pub params: ReleaseObjectParams,
@@ -597,7 +597,7 @@ pub enum ReleaseObjectGroupMethod {
     ReleaseObjectGroup,
 }
 #[doc = "Releases all remote objects that belong to a given group.\n[releaseObjectGroup](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-releaseObjectGroup)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ReleaseObjectGroup {
     pub method: ReleaseObjectGroupMethod,
     pub params: ReleaseObjectGroupParams,
@@ -617,7 +617,7 @@ pub enum RunIfWaitingForDebuggerMethod {
     RunIfWaitingForDebugger,
 }
 #[doc = "Tells inspected instance to run if it was waiting for debugger to attach.\n[runIfWaitingForDebugger](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-runIfWaitingForDebugger)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RunIfWaitingForDebugger {
     pub method: RunIfWaitingForDebuggerMethod,
     pub params: RunIfWaitingForDebuggerParams,
@@ -690,7 +690,7 @@ pub enum RunScriptMethod {
     RunScript,
 }
 #[doc = "Runs script with given id in a given context.\n[runScript](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-runScript)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RunScript {
     pub method: RunScriptMethod,
     pub params: RunScriptParams,
@@ -721,7 +721,7 @@ pub enum SetAsyncCallStackDepthMethod {
     SetAsyncCallStackDepth,
 }
 #[doc = "Enables or disables async call stacks tracking.\n[setAsyncCallStackDepth](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-setAsyncCallStackDepth)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetAsyncCallStackDepth {
     pub method: SetAsyncCallStackDepthMethod,
     pub params: SetAsyncCallStackDepthParams,
@@ -749,7 +749,7 @@ pub enum SetCustomObjectFormatterEnabledMethod {
     #[serde(rename = "Runtime.setCustomObjectFormatterEnabled")]
     SetCustomObjectFormatterEnabled,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetCustomObjectFormatterEnabled {
     pub method: SetCustomObjectFormatterEnabledMethod,
     pub params: SetCustomObjectFormatterEnabledParams,
@@ -775,7 +775,7 @@ pub enum SetMaxCallStackSizeToCaptureMethod {
     #[serde(rename = "Runtime.setMaxCallStackSizeToCapture")]
     SetMaxCallStackSizeToCapture,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetMaxCallStackSizeToCapture {
     pub method: SetMaxCallStackSizeToCaptureMethod,
     pub params: SetMaxCallStackSizeToCaptureParams,
@@ -795,7 +795,7 @@ pub enum TerminateExecutionMethod {
     TerminateExecution,
 }
 #[doc = "Terminate current or next JavaScript execution.\nWill cancel the termination when the outer-most script execution ends.\n[terminateExecution](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-terminateExecution)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TerminateExecution {
     pub method: TerminateExecutionMethod,
     pub params: TerminateExecutionParams,
@@ -836,7 +836,7 @@ pub enum AddBindingMethod {
     AddBinding,
 }
 #[doc = "If executionContextId is empty, adds binding with the given name on the\nglobal objects of all inspected contexts, including those created later,\nbindings survive reloads.\nBinding function takes exactly one argument, this argument should be string,\nin case of any other input, function throws an exception.\nEach binding function call produces Runtime.bindingCalled notification.\n[addBinding](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-addBinding)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AddBinding {
     pub method: AddBindingMethod,
     pub params: AddBindingParams,
@@ -869,7 +869,7 @@ pub enum RemoveBindingMethod {
     RemoveBinding,
 }
 #[doc = "This method does not remove binding function from global object but\nunsubscribes current runtime agent from Runtime.bindingCalled notifications.\n[removeBinding](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-removeBinding)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RemoveBinding {
     pub method: RemoveBindingMethod,
     pub params: RemoveBindingParams,
@@ -900,7 +900,7 @@ pub enum GetExceptionDetailsMethod {
     GetExceptionDetails,
 }
 #[doc = "This method tries to lookup and populate exception details for a\nJavaScript Error object.\nNote that the stackTrace portion of the resulting exceptionDetails will\nonly be populated if the Runtime domain was enabled at the time when the\nError was thrown.\n[getExceptionDetails](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#method-getExceptionDetails)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetExceptionDetails {
     pub method: GetExceptionDetailsMethod,
     pub params: GetExceptionDetailsParams,

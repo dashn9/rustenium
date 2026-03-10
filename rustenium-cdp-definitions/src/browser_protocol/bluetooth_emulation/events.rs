@@ -13,7 +13,7 @@ pub enum GattOperationReceivedMethod {
     GattOperationReceived,
 }
 #[doc = "Event for when a GATT operation of |type| to the peripheral with |address|\nhappened.\n[gattOperationReceived](https://chromedevtools.github.io/devtools-protocol/tot/BluetoothEmulation/#event-gattOperationReceived)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GattOperationReceived {
     pub method: GattOperationReceivedMethod,
     pub params: GattOperationReceivedParams,
@@ -43,7 +43,7 @@ pub enum CharacteristicOperationReceivedMethod {
     CharacteristicOperationReceived,
 }
 #[doc = "Event for when a characteristic operation of |type| to the characteristic\nrespresented by |characteristicId| happened. |data| and |writeType| is\nexpected to exist when |type| is write.\n[characteristicOperationReceived](https://chromedevtools.github.io/devtools-protocol/tot/BluetoothEmulation/#event-characteristicOperationReceived)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CharacteristicOperationReceived {
     pub method: CharacteristicOperationReceivedMethod,
     pub params: CharacteristicOperationReceivedParams,
@@ -69,7 +69,7 @@ pub enum DescriptorOperationReceivedMethod {
     DescriptorOperationReceived,
 }
 #[doc = "Event for when a descriptor operation of |type| to the descriptor\nrespresented by |descriptorId| happened. |data| is expected to exist when\n|type| is write.\n[descriptorOperationReceived](https://chromedevtools.github.io/devtools-protocol/tot/BluetoothEmulation/#event-descriptorOperationReceived)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DescriptorOperationReceived {
     pub method: DescriptorOperationReceivedMethod,
     pub params: DescriptorOperationReceivedParams,

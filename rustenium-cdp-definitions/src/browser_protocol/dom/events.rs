@@ -18,7 +18,7 @@ pub enum AttributeModifiedMethod {
     AttributeModified,
 }
 #[doc = "Fired when `Element`'s attribute is modified.\n[attributeModified](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-attributeModified)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributeModified {
     pub method: AttributeModifiedMethod,
     pub params: AttributeModifiedParams,
@@ -43,7 +43,7 @@ pub enum AdoptedStyleSheetsModifiedMethod {
     AdoptedStyleSheetsModified,
 }
 #[doc = "Fired when `Element`'s adoptedStyleSheets are modified.\n[adoptedStyleSheetsModified](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-adoptedStyleSheetsModified)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AdoptedStyleSheetsModified {
     pub method: AdoptedStyleSheetsModifiedMethod,
     pub params: AdoptedStyleSheetsModifiedParams,
@@ -67,7 +67,7 @@ pub enum AttributeRemovedMethod {
     AttributeRemoved,
 }
 #[doc = "Fired when `Element`'s attribute is removed.\n[attributeRemoved](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-attributeRemoved)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributeRemoved {
     pub method: AttributeRemovedMethod,
     pub params: AttributeRemovedParams,
@@ -91,7 +91,7 @@ pub enum CharacterDataModifiedMethod {
     CharacterDataModified,
 }
 #[doc = "Mirrors `DOMCharacterDataModified` event.\n[characterDataModified](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-characterDataModified)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CharacterDataModified {
     pub method: CharacterDataModifiedMethod,
     pub params: CharacterDataModifiedParams,
@@ -115,7 +115,7 @@ pub enum ChildNodeCountUpdatedMethod {
     ChildNodeCountUpdated,
 }
 #[doc = "Fired when `Container`'s child node count has changed.\n[childNodeCountUpdated](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-childNodeCountUpdated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ChildNodeCountUpdated {
     pub method: ChildNodeCountUpdatedMethod,
     pub params: ChildNodeCountUpdatedParams,
@@ -142,7 +142,7 @@ pub enum ChildNodeInsertedMethod {
     ChildNodeInserted,
 }
 #[doc = "Mirrors `DOMNodeInserted` event.\n[childNodeInserted](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-childNodeInserted)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ChildNodeInserted {
     pub method: ChildNodeInsertedMethod,
     pub params: ChildNodeInsertedParams,
@@ -166,7 +166,7 @@ pub enum ChildNodeRemovedMethod {
     ChildNodeRemoved,
 }
 #[doc = "Mirrors `DOMNodeRemoved` event.\n[childNodeRemoved](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-childNodeRemoved)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ChildNodeRemoved {
     pub method: ChildNodeRemovedMethod,
     pub params: ChildNodeRemovedParams,
@@ -191,7 +191,7 @@ pub enum DistributedNodesUpdatedMethod {
     DistributedNodesUpdated,
 }
 #[doc = "Called when distribution is changed.\n[distributedNodesUpdated](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-distributedNodesUpdated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DistributedNodesUpdated {
     pub method: DistributedNodesUpdatedMethod,
     pub params: DistributedNodesUpdatedParams,
@@ -208,7 +208,7 @@ pub enum DocumentUpdatedMethod {
     DocumentUpdated,
 }
 #[doc = "Fired when `Document` has been totally updated. Node ids are no longer valid.\n[documentUpdated](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-documentUpdated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DocumentUpdated {
     pub method: DocumentUpdatedMethod,
     pub params: DocumentUpdatedParams,
@@ -230,7 +230,7 @@ pub enum InlineStyleInvalidatedMethod {
     InlineStyleInvalidated,
 }
 #[doc = "Fired when `Element`'s inline style is modified via a CSS property modification.\n[inlineStyleInvalidated](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-inlineStyleInvalidated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InlineStyleInvalidated {
     pub method: InlineStyleInvalidatedMethod,
     pub params: InlineStyleInvalidatedParams,
@@ -254,7 +254,7 @@ pub enum PseudoElementAddedMethod {
     PseudoElementAdded,
 }
 #[doc = "Called when a pseudo element is added to an element.\n[pseudoElementAdded](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-pseudoElementAdded)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PseudoElementAdded {
     pub method: PseudoElementAddedMethod,
     pub params: PseudoElementAddedParams,
@@ -271,7 +271,7 @@ pub enum TopLayerElementsUpdatedMethod {
     TopLayerElementsUpdated,
 }
 #[doc = "Called when top layer elements are changed.\n[topLayerElementsUpdated](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-topLayerElementsUpdated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TopLayerElementsUpdated {
     pub method: TopLayerElementsUpdatedMethod,
     pub params: TopLayerElementsUpdatedParams,
@@ -295,7 +295,7 @@ pub enum ScrollableFlagUpdatedMethod {
     ScrollableFlagUpdated,
 }
 #[doc = "Fired when a node's scrollability state changes.\n[scrollableFlagUpdated](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-scrollableFlagUpdated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ScrollableFlagUpdated {
     pub method: ScrollableFlagUpdatedMethod,
     pub params: ScrollableFlagUpdatedParams,
@@ -319,7 +319,7 @@ pub enum AdRelatedStateUpdatedMethod {
     AdRelatedStateUpdated,
 }
 #[doc = "Fired when a node's ad related state changes.\n[adRelatedStateUpdated](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-adRelatedStateUpdated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AdRelatedStateUpdated {
     pub method: AdRelatedStateUpdatedMethod,
     pub params: AdRelatedStateUpdatedParams,
@@ -343,7 +343,7 @@ pub enum AffectedByStartingStylesFlagUpdatedMethod {
     AffectedByStartingStylesFlagUpdated,
 }
 #[doc = "Fired when a node's starting styles changes.\n[affectedByStartingStylesFlagUpdated](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-affectedByStartingStylesFlagUpdated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AffectedByStartingStylesFlagUpdated {
     pub method: AffectedByStartingStylesFlagUpdatedMethod,
     pub params: AffectedByStartingStylesFlagUpdatedParams,
@@ -367,7 +367,7 @@ pub enum PseudoElementRemovedMethod {
     PseudoElementRemoved,
 }
 #[doc = "Called when a pseudo element is removed from an element.\n[pseudoElementRemoved](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-pseudoElementRemoved)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PseudoElementRemoved {
     pub method: PseudoElementRemovedMethod,
     pub params: PseudoElementRemovedParams,
@@ -392,7 +392,7 @@ pub enum SetChildNodesMethod {
     SetChildNodes,
 }
 #[doc = "Fired when backend wants to provide client with the missing DOM structure. This happens upon\nmost of the calls requesting node ids.\n[setChildNodes](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-setChildNodes)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetChildNodes {
     pub method: SetChildNodesMethod,
     pub params: SetChildNodesParams,
@@ -416,7 +416,7 @@ pub enum ShadowRootPoppedMethod {
     ShadowRootPopped,
 }
 #[doc = "Called when shadow root is popped from the element.\n[shadowRootPopped](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-shadowRootPopped)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ShadowRootPopped {
     pub method: ShadowRootPoppedMethod,
     pub params: ShadowRootPoppedParams,
@@ -440,7 +440,7 @@ pub enum ShadowRootPushedMethod {
     ShadowRootPushed,
 }
 #[doc = "Called when shadow root is pushed into the element.\n[shadowRootPushed](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-shadowRootPushed)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ShadowRootPushed {
     pub method: ShadowRootPushedMethod,
     pub params: ShadowRootPushedParams,

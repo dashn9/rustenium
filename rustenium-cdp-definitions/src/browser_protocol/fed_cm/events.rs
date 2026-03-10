@@ -21,7 +21,7 @@ pub enum DialogShownMethod {
     #[serde(rename = "FedCm.dialogShown")]
     DialogShown,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DialogShown {
     pub method: DialogShownMethod,
     pub params: DialogShownParams,
@@ -41,7 +41,7 @@ pub enum DialogClosedMethod {
     DialogClosed,
 }
 #[doc = "Triggered when a dialog is closed, either by user action, JS abort,\nor a command below.\n[dialogClosed](https://chromedevtools.github.io/devtools-protocol/tot/FedCm/#event-dialogClosed)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DialogClosed {
     pub method: DialogClosedMethod,
     pub params: DialogClosedParams,

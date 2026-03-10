@@ -42,6 +42,24 @@ impl AddScriptToEvaluateOnNewDocumentBuilder {
         })
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct BringToFrontBuilder;
+impl BringToFrontBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> BringToFront {
+        BringToFront {
+            method: BringToFrontMethod::BringToFront,
+            params: BringToFrontParams {},
+        }
+    }
+}
+impl BringToFront {
+    pub fn builder() -> BringToFrontBuilder {
+        BringToFrontBuilder
+    }
+}
 impl CaptureScreenshot {
     pub fn builder() -> CaptureScreenshotBuilder {
         <CaptureScreenshotBuilder as Default>::default()
@@ -155,6 +173,24 @@ impl CreateIsolatedWorldBuilder {
         })
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct DisableBuilder;
+impl DisableBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Disable {
+        Disable {
+            method: DisableMethod::Disable,
+            params: DisableParams {},
+        }
+    }
+}
+impl Disable {
+    pub fn builder() -> DisableBuilder {
+        DisableBuilder
+    }
+}
 impl Enable {
     pub fn builder() -> EnableBuilder {
         <EnableBuilder as Default>::default()
@@ -204,6 +240,42 @@ impl GetAppManifestBuilder {
         }
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct GetInstallabilityErrorsBuilder;
+impl GetInstallabilityErrorsBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> GetInstallabilityErrors {
+        GetInstallabilityErrors {
+            method: GetInstallabilityErrorsMethod::GetInstallabilityErrors,
+            params: GetInstallabilityErrorsParams {},
+        }
+    }
+}
+impl GetInstallabilityErrors {
+    pub fn builder() -> GetInstallabilityErrorsBuilder {
+        GetInstallabilityErrorsBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct GetAppIdBuilder;
+impl GetAppIdBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> GetAppId {
+        GetAppId {
+            method: GetAppIdMethod::GetAppId,
+            params: GetAppIdParams {},
+        }
+    }
+}
+impl GetAppId {
+    pub fn builder() -> GetAppIdBuilder {
+        GetAppIdBuilder
+    }
+}
 impl GetAdScriptAncestry {
     pub fn builder() -> GetAdScriptAncestryBuilder {
         <GetAdScriptAncestryBuilder as Default>::default()
@@ -227,6 +299,78 @@ impl GetAdScriptAncestryBuilder {
                 })?),
             },
         })
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct GetFrameTreeBuilder;
+impl GetFrameTreeBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> GetFrameTree {
+        GetFrameTree {
+            method: GetFrameTreeMethod::GetFrameTree,
+            params: GetFrameTreeParams {},
+        }
+    }
+}
+impl GetFrameTree {
+    pub fn builder() -> GetFrameTreeBuilder {
+        GetFrameTreeBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct GetLayoutMetricsBuilder;
+impl GetLayoutMetricsBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> GetLayoutMetrics {
+        GetLayoutMetrics {
+            method: GetLayoutMetricsMethod::GetLayoutMetrics,
+            params: GetLayoutMetricsParams {},
+        }
+    }
+}
+impl GetLayoutMetrics {
+    pub fn builder() -> GetLayoutMetricsBuilder {
+        GetLayoutMetricsBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct GetNavigationHistoryBuilder;
+impl GetNavigationHistoryBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> GetNavigationHistory {
+        GetNavigationHistory {
+            method: GetNavigationHistoryMethod::GetNavigationHistory,
+            params: GetNavigationHistoryParams {},
+        }
+    }
+}
+impl GetNavigationHistory {
+    pub fn builder() -> GetNavigationHistoryBuilder {
+        GetNavigationHistoryBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct ResetNavigationHistoryBuilder;
+impl ResetNavigationHistoryBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> ResetNavigationHistory {
+        ResetNavigationHistory {
+            method: ResetNavigationHistoryMethod::ResetNavigationHistory,
+            params: ResetNavigationHistoryParams {},
+        }
+    }
+}
+impl ResetNavigationHistory {
+    pub fn builder() -> ResetNavigationHistoryBuilder {
+        ResetNavigationHistoryBuilder
     }
 }
 impl GetResourceContent {
@@ -260,6 +404,24 @@ impl GetResourceContentBuilder {
                     .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(url)))?,
             },
         })
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct GetResourceTreeBuilder;
+impl GetResourceTreeBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> GetResourceTree {
+        GetResourceTree {
+            method: GetResourceTreeMethod::GetResourceTree,
+            params: GetResourceTreeParams {},
+        }
+    }
+}
+impl GetResourceTree {
+    pub fn builder() -> GetResourceTreeBuilder {
+        GetResourceTreeBuilder
     }
 }
 impl HandleJavaScriptDialog {
@@ -909,6 +1071,60 @@ impl StartScreencastBuilder {
         }
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct StopLoadingBuilder;
+impl StopLoadingBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> StopLoading {
+        StopLoading {
+            method: StopLoadingMethod::StopLoading,
+            params: StopLoadingParams {},
+        }
+    }
+}
+impl StopLoading {
+    pub fn builder() -> StopLoadingBuilder {
+        StopLoadingBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct CrashBuilder;
+impl CrashBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Crash {
+        Crash {
+            method: CrashMethod::Crash,
+            params: CrashParams {},
+        }
+    }
+}
+impl Crash {
+    pub fn builder() -> CrashBuilder {
+        CrashBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct CloseBuilder;
+impl CloseBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Close {
+        Close {
+            method: CloseMethod::Close,
+            params: CloseParams {},
+        }
+    }
+}
+impl Close {
+    pub fn builder() -> CloseBuilder {
+        CloseBuilder
+    }
+}
 impl SetWebLifecycleState {
     pub fn builder() -> SetWebLifecycleStateBuilder {
         <SetWebLifecycleStateBuilder as Default>::default()
@@ -932,6 +1148,24 @@ impl SetWebLifecycleStateBuilder {
                     .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(state)))?,
             },
         })
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct StopScreencastBuilder;
+impl StopScreencastBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> StopScreencast {
+        StopScreencast {
+            method: StopScreencastMethod::StopScreencast,
+            params: StopScreencastParams {},
+        }
+    }
+}
+impl StopScreencast {
+    pub fn builder() -> StopScreencastBuilder {
+        StopScreencastBuilder
     }
 }
 impl ProduceCompilationCache {
@@ -1002,6 +1236,24 @@ impl AddCompilationCacheBuilder {
                     .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(data)))?,
             },
         })
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct ClearCompilationCacheBuilder;
+impl ClearCompilationCacheBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> ClearCompilationCache {
+        ClearCompilationCache {
+            method: ClearCompilationCacheMethod::ClearCompilationCache,
+            params: ClearCompilationCacheParams {},
+        }
+    }
+}
+impl ClearCompilationCache {
+    pub fn builder() -> ClearCompilationCacheBuilder {
+        ClearCompilationCacheBuilder
     }
 }
 impl SetSpcTransactionMode {
@@ -1083,6 +1335,24 @@ impl GenerateTestReportBuilder {
                 group: self.group,
             },
         })
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct WaitForDebuggerBuilder;
+impl WaitForDebuggerBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> WaitForDebugger {
+        WaitForDebugger {
+            method: WaitForDebuggerMethod::WaitForDebugger,
+            params: WaitForDebuggerParams {},
+        }
+    }
+}
+impl WaitForDebugger {
+    pub fn builder() -> WaitForDebuggerBuilder {
+        WaitForDebuggerBuilder
     }
 }
 impl SetInterceptFileChooserDialog {

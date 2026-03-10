@@ -18,7 +18,7 @@ pub enum StartObservingMethod {
     StartObserving,
 }
 #[doc = "Enables event updates for the service.\n[startObserving](https://chromedevtools.github.io/devtools-protocol/tot/BackgroundService/#method-startObserving)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StartObserving {
     pub method: StartObservingMethod,
     pub params: StartObservingParams,
@@ -48,7 +48,7 @@ pub enum StopObservingMethod {
     StopObserving,
 }
 #[doc = "Disables event updates for the service.\n[stopObserving](https://chromedevtools.github.io/devtools-protocol/tot/BackgroundService/#method-stopObserving)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StopObserving {
     pub method: StopObservingMethod,
     pub params: StopObservingParams,
@@ -84,7 +84,7 @@ pub enum SetRecordingMethod {
     SetRecording,
 }
 #[doc = "Set the recording state for the service.\n[setRecording](https://chromedevtools.github.io/devtools-protocol/tot/BackgroundService/#method-setRecording)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetRecording {
     pub method: SetRecordingMethod,
     pub params: SetRecordingParams,
@@ -114,7 +114,7 @@ pub enum ClearEventsMethod {
     ClearEvents,
 }
 #[doc = "Clears all stored data for the service.\n[clearEvents](https://chromedevtools.github.io/devtools-protocol/tot/BackgroundService/#method-clearEvents)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClearEvents {
     pub method: ClearEventsMethod,
     pub params: ClearEventsParams,

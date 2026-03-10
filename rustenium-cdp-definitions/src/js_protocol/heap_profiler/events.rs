@@ -9,7 +9,7 @@ pub enum AddHeapSnapshotChunkMethod {
     #[serde(rename = "HeapProfiler.addHeapSnapshotChunk")]
     AddHeapSnapshotChunk,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AddHeapSnapshotChunk {
     pub method: AddHeapSnapshotChunkMethod,
     pub params: AddHeapSnapshotChunkParams,
@@ -31,7 +31,7 @@ pub enum HeapStatsUpdateMethod {
     HeapStatsUpdate,
 }
 #[doc = "If heap objects tracking has been started then backend may send update for one or more fragments\n[heapStatsUpdate](https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler/#event-heapStatsUpdate)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HeapStatsUpdate {
     pub method: HeapStatsUpdateMethod,
     pub params: HeapStatsUpdateParams,
@@ -53,7 +53,7 @@ pub enum LastSeenObjectIdMethod {
     LastSeenObjectId,
 }
 #[doc = "If heap objects tracking has been started then backend regularly sends a current value for last\nseen object id and corresponding timestamp. If the were changes in the heap since last event\nthen one or more heapStatsUpdate events will be sent before a new lastSeenObjectId event.\n[lastSeenObjectId](https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler/#event-lastSeenObjectId)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LastSeenObjectId {
     pub method: LastSeenObjectIdMethod,
     pub params: LastSeenObjectIdParams,
@@ -77,7 +77,7 @@ pub enum ReportHeapSnapshotProgressMethod {
     #[serde(rename = "HeapProfiler.reportHeapSnapshotProgress")]
     ReportHeapSnapshotProgress,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ReportHeapSnapshotProgress {
     pub method: ReportHeapSnapshotProgressMethod,
     pub params: ReportHeapSnapshotProgressParams,
@@ -92,7 +92,7 @@ pub enum ResetProfilesMethod {
     #[serde(rename = "HeapProfiler.resetProfiles")]
     ResetProfiles,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResetProfiles {
     pub method: ResetProfilesMethod,
     pub params: ResetProfilesParams,

@@ -1,4 +1,40 @@
 use super::commands::*;
+#[derive(Debug, Clone, Default)]
+pub struct DisableBuilder;
+impl DisableBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Disable {
+        Disable {
+            method: DisableMethod::Disable,
+            params: DisableParams {},
+        }
+    }
+}
+impl Disable {
+    pub fn builder() -> DisableBuilder {
+        DisableBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct EnableBuilder;
+impl EnableBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Enable {
+        Enable {
+            method: EnableMethod::Enable,
+            params: EnableParams {},
+        }
+    }
+}
+impl Enable {
+    pub fn builder() -> EnableBuilder {
+        EnableBuilder
+    }
+}
 impl GetHighlightObjectForTest {
     pub fn builder() -> GetHighlightObjectForTestBuilder {
         <GetHighlightObjectForTestBuilder as Default>::default()
@@ -118,6 +154,24 @@ impl GetSourceOrderHighlightObjectForTestBuilder {
                     .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_id)))?,
             },
         })
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct HideHighlightBuilder;
+impl HideHighlightBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> HideHighlight {
+        HideHighlight {
+            method: HideHighlightMethod::HideHighlight,
+            params: HideHighlightParams {},
+        }
+    }
+}
+impl HideHighlight {
+    pub fn builder() -> HideHighlightBuilder {
+        HideHighlightBuilder
     }
 }
 impl HighlightNode {

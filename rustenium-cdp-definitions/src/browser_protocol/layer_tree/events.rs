@@ -13,7 +13,7 @@ pub enum LayerPaintedMethod {
     #[serde(rename = "LayerTree.layerPainted")]
     LayerPainted,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LayerPainted {
     pub method: LayerPaintedMethod,
     pub params: LayerPaintedParams,
@@ -34,7 +34,7 @@ pub enum LayerTreeDidChangeMethod {
     #[serde(rename = "LayerTree.layerTreeDidChange")]
     LayerTreeDidChange,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LayerTreeDidChange {
     pub method: LayerTreeDidChangeMethod,
     pub params: LayerTreeDidChangeParams,

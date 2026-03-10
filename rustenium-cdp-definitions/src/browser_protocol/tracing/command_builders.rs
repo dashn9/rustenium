@@ -1,4 +1,58 @@
 use super::commands::*;
+#[derive(Debug, Clone, Default)]
+pub struct EndBuilder;
+impl EndBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> End {
+        End {
+            method: EndMethod::End,
+            params: EndParams {},
+        }
+    }
+}
+impl End {
+    pub fn builder() -> EndBuilder {
+        EndBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct GetCategoriesBuilder;
+impl GetCategoriesBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> GetCategories {
+        GetCategories {
+            method: GetCategoriesMethod::GetCategories,
+            params: GetCategoriesParams {},
+        }
+    }
+}
+impl GetCategories {
+    pub fn builder() -> GetCategoriesBuilder {
+        GetCategoriesBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct GetTrackEventDescriptorBuilder;
+impl GetTrackEventDescriptorBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> GetTrackEventDescriptor {
+        GetTrackEventDescriptor {
+            method: GetTrackEventDescriptorMethod::GetTrackEventDescriptor,
+            params: GetTrackEventDescriptorParams {},
+        }
+    }
+}
+impl GetTrackEventDescriptor {
+    pub fn builder() -> GetTrackEventDescriptorBuilder {
+        GetTrackEventDescriptorBuilder
+    }
+}
 impl RecordClockSyncMarker {
     pub fn builder() -> RecordClockSyncMarkerBuilder {
         <RecordClockSyncMarkerBuilder as Default>::default()

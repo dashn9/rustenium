@@ -13,7 +13,7 @@ pub enum DomStorageItemAddedMethod {
     #[serde(rename = "DOMStorage.domStorageItemAdded")]
     DomStorageItemAdded,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DomStorageItemAdded {
     pub method: DomStorageItemAddedMethod,
     pub params: DomStorageItemAddedParams,
@@ -33,7 +33,7 @@ pub enum DomStorageItemRemovedMethod {
     #[serde(rename = "DOMStorage.domStorageItemRemoved")]
     DomStorageItemRemoved,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DomStorageItemRemoved {
     pub method: DomStorageItemRemovedMethod,
     pub params: DomStorageItemRemovedParams,
@@ -57,7 +57,7 @@ pub enum DomStorageItemUpdatedMethod {
     #[serde(rename = "DOMStorage.domStorageItemUpdated")]
     DomStorageItemUpdated,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DomStorageItemUpdated {
     pub method: DomStorageItemUpdatedMethod,
     pub params: DomStorageItemUpdatedParams,
@@ -75,7 +75,7 @@ pub enum DomStorageItemsClearedMethod {
     #[serde(rename = "DOMStorage.domStorageItemsCleared")]
     DomStorageItemsCleared,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DomStorageItemsCleared {
     pub method: DomStorageItemsClearedMethod,
     pub params: DomStorageItemsClearedParams,

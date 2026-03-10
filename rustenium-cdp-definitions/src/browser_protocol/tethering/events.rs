@@ -15,7 +15,7 @@ pub enum AcceptedMethod {
     Accepted,
 }
 #[doc = "Informs that port was successfully bound and got a specified connection id.\n[accepted](https://chromedevtools.github.io/devtools-protocol/tot/Tethering/#event-accepted)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Accepted {
     pub method: AcceptedMethod,
     pub params: AcceptedParams,

@@ -65,22 +65,21 @@ impl CapabilityRequest {
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ProxyConfiguration {
-    #[serde(rename = "proxyType")]
-    pub proxy_type: String,
     #[serde(flatten)]
     #[serde(default)]
-    pub extensible: std::collections::HashMap<String, serde_json::Value>,
-}
-impl ProxyConfiguration {
-    pub fn new(
-        proxy_type: impl Into<String>,
-        extensible: impl Into<std::collections::HashMap<String, serde_json::Value>>,
-    ) -> Self {
-        Self {
-            proxy_type: proxy_type.into(),
-            extensible: extensible.into(),
-        }
-    }
+    pub autodetect_proxy_configuration: serde_json::Value,
+    #[serde(flatten)]
+    #[serde(default)]
+    pub direct_proxy_configuration: serde_json::Value,
+    #[serde(flatten)]
+    #[serde(default)]
+    pub manual_proxy_configuration: serde_json::Value,
+    #[serde(flatten)]
+    #[serde(default)]
+    pub pac_proxy_configuration: serde_json::Value,
+    #[serde(flatten)]
+    #[serde(default)]
+    pub system_proxy_configuration: SystemProxyConfiguration,
 }
 impl ProxyConfiguration {
     pub const IDENTIFIER: &'static str = "session.ProxyConfiguration";
@@ -89,14 +88,19 @@ impl ProxyConfiguration {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AutodetectProxyConfiguration {
     #[serde(rename = "proxyType")]
-    pub proxy_type: String,
+    pub proxy_type: AutodetectProxyConfigurationProxyType,
     #[serde(flatten)]
     #[serde(default)]
     pub extensible: std::collections::HashMap<String, serde_json::Value>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum AutodetectProxyConfigurationProxyType {
+    #[serde(rename = "autodetect")]
+    Autodetect,
+}
 impl AutodetectProxyConfiguration {
     pub fn new(
-        proxy_type: impl Into<String>,
+        proxy_type: impl Into<AutodetectProxyConfigurationProxyType>,
         extensible: impl Into<std::collections::HashMap<String, serde_json::Value>>,
     ) -> Self {
         Self {
@@ -112,14 +116,19 @@ impl AutodetectProxyConfiguration {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DirectProxyConfiguration {
     #[serde(rename = "proxyType")]
-    pub proxy_type: String,
+    pub proxy_type: DirectProxyConfigurationProxyType,
     #[serde(flatten)]
     #[serde(default)]
     pub extensible: std::collections::HashMap<String, serde_json::Value>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum DirectProxyConfigurationProxyType {
+    #[serde(rename = "direct")]
+    Direct,
+}
 impl DirectProxyConfiguration {
     pub fn new(
-        proxy_type: impl Into<String>,
+        proxy_type: impl Into<DirectProxyConfigurationProxyType>,
         extensible: impl Into<std::collections::HashMap<String, serde_json::Value>>,
     ) -> Self {
         Self {
@@ -135,7 +144,7 @@ impl DirectProxyConfiguration {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ManualProxyConfiguration {
     #[serde(rename = "proxyType")]
-    pub proxy_type: String,
+    pub proxy_type: ManualProxyConfigurationProxyType,
     #[serde(rename = "httpProxy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -152,9 +161,14 @@ pub struct ManualProxyConfiguration {
     #[serde(default)]
     pub extensible: std::collections::HashMap<String, serde_json::Value>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum ManualProxyConfigurationProxyType {
+    #[serde(rename = "manual")]
+    Manual,
+}
 impl ManualProxyConfiguration {
     pub fn new(
-        proxy_type: impl Into<String>,
+        proxy_type: impl Into<ManualProxyConfigurationProxyType>,
         extensible: impl Into<std::collections::HashMap<String, serde_json::Value>>,
     ) -> Self {
         Self {
@@ -192,16 +206,21 @@ impl SocksProxyConfiguration {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PacProxyConfiguration {
     #[serde(rename = "proxyType")]
-    pub proxy_type: String,
+    pub proxy_type: PacProxyConfigurationProxyType,
     #[serde(rename = "proxyAutoconfigUrl")]
     pub proxy_autoconfig_url: String,
     #[serde(flatten)]
     #[serde(default)]
     pub extensible: std::collections::HashMap<String, serde_json::Value>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum PacProxyConfigurationProxyType {
+    #[serde(rename = "pac")]
+    Pac,
+}
 impl PacProxyConfiguration {
     pub fn new(
-        proxy_type: impl Into<String>,
+        proxy_type: impl Into<PacProxyConfigurationProxyType>,
         proxy_autoconfig_url: impl Into<String>,
         extensible: impl Into<std::collections::HashMap<String, serde_json::Value>>,
     ) -> Self {
@@ -219,14 +238,19 @@ impl PacProxyConfiguration {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SystemProxyConfiguration {
     #[serde(rename = "proxyType")]
-    pub proxy_type: String,
+    pub proxy_type: SystemProxyConfigurationProxyType,
     #[serde(flatten)]
     #[serde(default)]
     pub extensible: std::collections::HashMap<String, serde_json::Value>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum SystemProxyConfigurationProxyType {
+    #[serde(rename = "system")]
+    System,
+}
 impl SystemProxyConfiguration {
     pub fn new(
-        proxy_type: impl Into<String>,
+        proxy_type: impl Into<SystemProxyConfigurationProxyType>,
         extensible: impl Into<std::collections::HashMap<String, serde_json::Value>>,
     ) -> Self {
         Self {
@@ -338,18 +362,10 @@ impl UnsubscribeByAttributesRequest {
     pub const IDENTIFIER: &'static str = "session.UnsubscribeByAttributesRequest";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct UnsubscribeParameters(serde_json::Value);
-impl UnsubscribeParameters {
-    pub fn new(val: impl Into<serde_json::Value>) -> Self {
-        UnsubscribeParameters(val.into())
-    }
-    pub fn inner(&self) -> &serde_json::Value {
-        &self.0
-    }
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum UnsubscribeParameters {
+    UnsubscribeByAttributesRequest(UnsubscribeByAttributesRequest),
+    UnsubscribeByIdRequest(UnsubscribeByIdRequest),
 }
-impl UnsubscribeParameters {
-    pub const IDENTIFIER: &'static str = "session.UnsubscribeParameters";
-    pub const DOMAIN_DIRECTION: &'static str = "remote";
-}
-group_enum ! (SessionTypes { CapabilitiesRequest (CapabilitiesRequest) , CapabilityRequest (CapabilityRequest) , ProxyConfiguration (ProxyConfiguration) , AutodetectProxyConfiguration (AutodetectProxyConfiguration) , DirectProxyConfiguration (DirectProxyConfiguration) , ManualProxyConfiguration (ManualProxyConfiguration) , SocksProxyConfiguration (SocksProxyConfiguration) , PacProxyConfiguration (PacProxyConfiguration) , SystemProxyConfiguration (SystemProxyConfiguration) , UserPromptHandler (UserPromptHandler) , UserPromptHandlerType (UserPromptHandlerType) , Subscription (Subscription) , UnsubscribeByIdRequest (UnsubscribeByIdRequest) , UnsubscribeByAttributesRequest (UnsubscribeByAttributesRequest) , UnsubscribeParameters (UnsubscribeParameters) });
+group_enum ! (SessionType { CapabilitiesRequest (CapabilitiesRequest) , CapabilityRequest (CapabilityRequest) , ProxyConfiguration (ProxyConfiguration) , AutodetectProxyConfiguration (AutodetectProxyConfiguration) , DirectProxyConfiguration (DirectProxyConfiguration) , ManualProxyConfiguration (ManualProxyConfiguration) , SocksProxyConfiguration (SocksProxyConfiguration) , PacProxyConfiguration (PacProxyConfiguration) , SystemProxyConfiguration (SystemProxyConfiguration) , UserPromptHandler (UserPromptHandler) , UserPromptHandlerType (UserPromptHandlerType) , Subscription (Subscription) , UnsubscribeByIdRequest (UnsubscribeByIdRequest) , UnsubscribeParameters (UnsubscribeParameters) });

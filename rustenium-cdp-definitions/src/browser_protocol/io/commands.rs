@@ -19,7 +19,7 @@ pub enum CloseMethod {
     Close,
 }
 #[doc = "Close the stream, discard any temporary backing storage.\n[close](https://chromedevtools.github.io/devtools-protocol/tot/IO/#method-close)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Close {
     pub method: CloseMethod,
     pub params: CloseParams,
@@ -62,7 +62,7 @@ pub enum ReadMethod {
     Read,
 }
 #[doc = "Read a chunk of the stream\n[read](https://chromedevtools.github.io/devtools-protocol/tot/IO/#method-read)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Read {
     pub method: ReadMethod,
     pub params: ReadParams,
@@ -93,7 +93,7 @@ pub enum ResolveBlobMethod {
     ResolveBlob,
 }
 #[doc = "Return UUID of Blob object specified by a remote object id.\n[resolveBlob](https://chromedevtools.github.io/devtools-protocol/tot/IO/#method-resolveBlob)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResolveBlob {
     pub method: ResolveBlobMethod,
     pub params: ResolveBlobParams,

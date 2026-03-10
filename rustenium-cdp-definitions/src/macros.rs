@@ -1,6 +1,7 @@
 macro_rules! group_enum {
     ($name:ident { $( $variant:ident($ty:ty) ),* $(,)? } + other) => {
-        #[derive(Debug, Clone, PartialEq)]
+        #[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+        #[serde(untagged)]
         pub enum $name {
             $( $variant($ty), )*
             Other(serde_json::Value),
@@ -28,7 +29,8 @@ macro_rules! group_enum {
     };
 
     ($name:ident { $( $variant:ident($ty:ty) ),* $(,)? }) => {
-        #[derive(Debug, Clone, PartialEq)]
+        #[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+        #[serde(untagged)]
         pub enum $name {
             $( $variant($ty), )*
         }

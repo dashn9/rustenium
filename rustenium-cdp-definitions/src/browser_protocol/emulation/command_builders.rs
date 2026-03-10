@@ -1,4 +1,58 @@
 use super::commands::*;
+#[derive(Debug, Clone, Default)]
+pub struct ClearDeviceMetricsOverrideBuilder;
+impl ClearDeviceMetricsOverrideBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> ClearDeviceMetricsOverride {
+        ClearDeviceMetricsOverride {
+            method: ClearDeviceMetricsOverrideMethod::ClearDeviceMetricsOverride,
+            params: ClearDeviceMetricsOverrideParams {},
+        }
+    }
+}
+impl ClearDeviceMetricsOverride {
+    pub fn builder() -> ClearDeviceMetricsOverrideBuilder {
+        ClearDeviceMetricsOverrideBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct ClearGeolocationOverrideBuilder;
+impl ClearGeolocationOverrideBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> ClearGeolocationOverride {
+        ClearGeolocationOverride {
+            method: ClearGeolocationOverrideMethod::ClearGeolocationOverride,
+            params: ClearGeolocationOverrideParams {},
+        }
+    }
+}
+impl ClearGeolocationOverride {
+    pub fn builder() -> ClearGeolocationOverrideBuilder {
+        ClearGeolocationOverrideBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct ResetPageScaleFactorBuilder;
+impl ResetPageScaleFactorBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> ResetPageScaleFactor {
+        ResetPageScaleFactor {
+            method: ResetPageScaleFactorMethod::ResetPageScaleFactor,
+            params: ResetPageScaleFactorParams {},
+        }
+    }
+}
+impl ResetPageScaleFactor {
+    pub fn builder() -> ResetPageScaleFactorBuilder {
+        ResetPageScaleFactorBuilder
+    }
+}
 impl SetFocusEmulationEnabled {
     pub fn builder() -> SetFocusEmulationEnabledBuilder {
         <SetFocusEmulationEnabledBuilder as Default>::default()
@@ -258,6 +312,24 @@ impl SetDevicePostureOverrideBuilder {
         })
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct ClearDevicePostureOverrideBuilder;
+impl ClearDevicePostureOverrideBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> ClearDevicePostureOverride {
+        ClearDevicePostureOverride {
+            method: ClearDevicePostureOverrideMethod::ClearDevicePostureOverride,
+            params: ClearDevicePostureOverrideParams {},
+        }
+    }
+}
+impl ClearDevicePostureOverride {
+    pub fn builder() -> ClearDevicePostureOverrideBuilder {
+        ClearDevicePostureOverrideBuilder
+    }
+}
 impl SetDisplayFeaturesOverride {
     pub fn builder() -> SetDisplayFeaturesOverrideBuilder {
         <SetDisplayFeaturesOverrideBuilder as Default>::default()
@@ -293,6 +365,24 @@ impl SetDisplayFeaturesOverrideBuilder {
                 })?,
             },
         })
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct ClearDisplayFeaturesOverrideBuilder;
+impl ClearDisplayFeaturesOverrideBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> ClearDisplayFeaturesOverride {
+        ClearDisplayFeaturesOverride {
+            method: ClearDisplayFeaturesOverrideMethod::ClearDisplayFeaturesOverride,
+            params: ClearDisplayFeaturesOverrideParams {},
+        }
+    }
+}
+impl ClearDisplayFeaturesOverride {
+    pub fn builder() -> ClearDisplayFeaturesOverrideBuilder {
+        ClearDisplayFeaturesOverrideBuilder
     }
 }
 impl SetScrollbarsHidden {
@@ -769,6 +859,24 @@ impl SetIdleOverrideBuilder {
         })
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct ClearIdleOverrideBuilder;
+impl ClearIdleOverrideBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> ClearIdleOverride {
+        ClearIdleOverride {
+            method: ClearIdleOverrideMethod::ClearIdleOverride,
+            params: ClearIdleOverrideParams {},
+        }
+    }
+}
+impl ClearIdleOverride {
+    pub fn builder() -> ClearIdleOverrideBuilder {
+        ClearIdleOverrideBuilder
+    }
+}
 impl SetPageScaleFactor {
     pub fn builder() -> SetPageScaleFactorBuilder {
         <SetPageScaleFactorBuilder as Default>::default()
@@ -1126,6 +1234,24 @@ impl SetSmallViewportHeightDifferenceOverrideBuilder {
     }
     pub fn build(self) -> Result<SetSmallViewportHeightDifferenceOverride, String> {
         Ok (SetSmallViewportHeightDifferenceOverride { method : SetSmallViewportHeightDifferenceOverrideMethod :: SetSmallViewportHeightDifferenceOverride , params : SetSmallViewportHeightDifferenceOverrideParams { difference : self . difference . ok_or_else (|| format ! ("Field `{}` is mandatory." , std :: stringify ! (difference))) ? , } , })
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct GetScreenInfosBuilder;
+impl GetScreenInfosBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> GetScreenInfos {
+        GetScreenInfos {
+            method: GetScreenInfosMethod::GetScreenInfos,
+            params: GetScreenInfosParams {},
+        }
+    }
+}
+impl GetScreenInfos {
+    pub fn builder() -> GetScreenInfosBuilder {
+        GetScreenInfosBuilder
     }
 }
 impl AddScreen {

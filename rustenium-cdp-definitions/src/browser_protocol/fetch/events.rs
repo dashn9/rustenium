@@ -51,7 +51,7 @@ pub enum RequestPausedMethod {
     RequestPaused,
 }
 #[doc = "Issued when the domain is enabled and the request URL matches the\nspecified filter. The request is paused until the client responds\nwith one of continueRequest, failRequest or fulfillRequest.\nThe stage of the request can be determined by presence of responseErrorReason\nand responseStatusCode -- the request is at the response stage if either\nof these fields is present and in the request stage otherwise.\nRedirect responses and subsequent requests are reported similarly to regular\nresponses and requests. Redirect responses may be distinguished by the value\nof `responseStatusCode` (which is one of 301, 302, 303, 307, 308) along with\npresence of the `location` header. Requests resulting from a redirect will\nhave `redirectedRequestId` field set.\n[requestPaused](https://chromedevtools.github.io/devtools-protocol/tot/Fetch/#event-requestPaused)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RequestPaused {
     pub method: RequestPausedMethod,
     pub params: RequestPausedParams,
@@ -84,7 +84,7 @@ pub enum AuthRequiredMethod {
     AuthRequired,
 }
 #[doc = "Issued when the domain is enabled with handleAuthRequests set to true.\nThe request is paused until client responds with continueWithAuth.\n[authRequired](https://chromedevtools.github.io/devtools-protocol/tot/Fetch/#event-authRequired)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AuthRequired {
     pub method: AuthRequiredMethod,
     pub params: AuthRequiredParams,

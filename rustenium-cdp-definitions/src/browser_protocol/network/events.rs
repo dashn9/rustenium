@@ -26,7 +26,7 @@ pub enum DataReceivedMethod {
     DataReceived,
 }
 #[doc = "Fired when data chunk was received over the network.\n[dataReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-dataReceived)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DataReceived {
     pub method: DataReceivedMethod,
     pub params: DataReceivedParams,
@@ -59,7 +59,7 @@ pub enum EventSourceMessageReceivedMethod {
     EventSourceMessageReceived,
 }
 #[doc = "Fired when EventSource message is received.\n[eventSourceMessageReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-eventSourceMessageReceived)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EventSourceMessageReceived {
     pub method: EventSourceMessageReceivedMethod,
     pub params: EventSourceMessageReceivedParams,
@@ -104,7 +104,7 @@ pub enum LoadingFailedMethod {
     LoadingFailed,
 }
 #[doc = "Fired when HTTP request has failed to load.\n[loadingFailed](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-loadingFailed)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LoadingFailed {
     pub method: LoadingFailedMethod,
     pub params: LoadingFailedParams,
@@ -131,7 +131,7 @@ pub enum LoadingFinishedMethod {
     LoadingFinished,
 }
 #[doc = "Fired when HTTP request has finished loading.\n[loadingFinished](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-loadingFinished)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LoadingFinished {
     pub method: LoadingFinishedMethod,
     pub params: LoadingFinishedParams,
@@ -152,7 +152,7 @@ pub enum RequestServedFromCacheMethod {
     RequestServedFromCache,
 }
 #[doc = "Fired if request ended up loading from cache.\n[requestServedFromCache](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-requestServedFromCache)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RequestServedFromCache {
     pub method: RequestServedFromCacheMethod,
     pub params: RequestServedFromCacheParams,
@@ -219,7 +219,7 @@ pub enum RequestWillBeSentMethod {
     RequestWillBeSent,
 }
 #[doc = "Fired when page is about to send HTTP request.\n[requestWillBeSent](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-requestWillBeSent)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RequestWillBeSent {
     pub method: RequestWillBeSentMethod,
     pub params: RequestWillBeSentParams,
@@ -246,7 +246,7 @@ pub enum ResourceChangedPriorityMethod {
     ResourceChangedPriority,
 }
 #[doc = "Fired when resource loading priority is changed\n[resourceChangedPriority](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-resourceChangedPriority)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResourceChangedPriority {
     pub method: ResourceChangedPriorityMethod,
     pub params: ResourceChangedPriorityParams,
@@ -270,7 +270,7 @@ pub enum SignedExchangeReceivedMethod {
     SignedExchangeReceived,
 }
 #[doc = "Fired when a signed exchange was received over the network\n[signedExchangeReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-signedExchangeReceived)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SignedExchangeReceived {
     pub method: SignedExchangeReceivedMethod,
     pub params: SignedExchangeReceivedParams,
@@ -311,7 +311,7 @@ pub enum ResponseReceivedMethod {
     ResponseReceived,
 }
 #[doc = "Fired when HTTP response is available.\n[responseReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-responseReceived)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResponseReceived {
     pub method: ResponseReceivedMethod,
     pub params: ResponseReceivedParams,
@@ -335,7 +335,7 @@ pub enum WebSocketClosedMethod {
     WebSocketClosed,
 }
 #[doc = "Fired when WebSocket is closed.\n[webSocketClosed](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webSocketClosed)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WebSocketClosed {
     pub method: WebSocketClosedMethod,
     pub params: WebSocketClosedParams,
@@ -364,7 +364,7 @@ pub enum WebSocketCreatedMethod {
     WebSocketCreated,
 }
 #[doc = "Fired upon WebSocket creation.\n[webSocketCreated](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webSocketCreated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WebSocketCreated {
     pub method: WebSocketCreatedMethod,
     pub params: WebSocketCreatedParams,
@@ -391,7 +391,7 @@ pub enum WebSocketFrameErrorMethod {
     WebSocketFrameError,
 }
 #[doc = "Fired when WebSocket message error occurs.\n[webSocketFrameError](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webSocketFrameError)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WebSocketFrameError {
     pub method: WebSocketFrameErrorMethod,
     pub params: WebSocketFrameErrorParams,
@@ -418,7 +418,7 @@ pub enum WebSocketFrameReceivedMethod {
     WebSocketFrameReceived,
 }
 #[doc = "Fired when WebSocket message is received.\n[webSocketFrameReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webSocketFrameReceived)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WebSocketFrameReceived {
     pub method: WebSocketFrameReceivedMethod,
     pub params: WebSocketFrameReceivedParams,
@@ -445,7 +445,7 @@ pub enum WebSocketFrameSentMethod {
     WebSocketFrameSent,
 }
 #[doc = "Fired when WebSocket message is sent.\n[webSocketFrameSent](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webSocketFrameSent)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WebSocketFrameSent {
     pub method: WebSocketFrameSentMethod,
     pub params: WebSocketFrameSentParams,
@@ -472,7 +472,7 @@ pub enum WebSocketHandshakeResponseReceivedMethod {
     WebSocketHandshakeResponseReceived,
 }
 #[doc = "Fired when WebSocket handshake response becomes available.\n[webSocketHandshakeResponseReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webSocketHandshakeResponseReceived)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WebSocketHandshakeResponseReceived {
     pub method: WebSocketHandshakeResponseReceivedMethod,
     pub params: WebSocketHandshakeResponseReceivedParams,
@@ -502,7 +502,7 @@ pub enum WebSocketWillSendHandshakeRequestMethod {
     WebSocketWillSendHandshakeRequest,
 }
 #[doc = "Fired when WebSocket is about to initiate handshake.\n[webSocketWillSendHandshakeRequest](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webSocketWillSendHandshakeRequest)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WebSocketWillSendHandshakeRequest {
     pub method: WebSocketWillSendHandshakeRequestMethod,
     pub params: WebSocketWillSendHandshakeRequestParams,
@@ -534,7 +534,7 @@ pub enum WebTransportCreatedMethod {
     WebTransportCreated,
 }
 #[doc = "Fired upon WebTransport creation.\n[webTransportCreated](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webTransportCreated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WebTransportCreated {
     pub method: WebTransportCreatedMethod,
     pub params: WebTransportCreatedParams,
@@ -558,7 +558,7 @@ pub enum WebTransportConnectionEstablishedMethod {
     WebTransportConnectionEstablished,
 }
 #[doc = "Fired when WebTransport handshake is finished.\n[webTransportConnectionEstablished](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webTransportConnectionEstablished)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WebTransportConnectionEstablished {
     pub method: WebTransportConnectionEstablishedMethod,
     pub params: WebTransportConnectionEstablishedParams,
@@ -582,7 +582,7 @@ pub enum WebTransportClosedMethod {
     WebTransportClosed,
 }
 #[doc = "Fired when WebTransport is disposed.\n[webTransportClosed](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webTransportClosed)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WebTransportClosed {
     pub method: WebTransportClosedMethod,
     pub params: WebTransportClosedParams,
@@ -615,7 +615,7 @@ pub enum DirectTcpSocketCreatedMethod {
     DirectTcpSocketCreated,
 }
 #[doc = "Fired upon direct_socket.TCPSocket creation.\n[directTCPSocketCreated](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directTCPSocketCreated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DirectTcpSocketCreated {
     pub method: DirectTcpSocketCreatedMethod,
     pub params: DirectTcpSocketCreatedParams,
@@ -651,7 +651,7 @@ pub enum DirectTcpSocketOpenedMethod {
     DirectTcpSocketOpened,
 }
 #[doc = "Fired when direct_socket.TCPSocket connection is opened.\n[directTCPSocketOpened](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directTCPSocketOpened)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DirectTcpSocketOpened {
     pub method: DirectTcpSocketOpenedMethod,
     pub params: DirectTcpSocketOpenedParams,
@@ -675,7 +675,7 @@ pub enum DirectTcpSocketAbortedMethod {
     DirectTcpSocketAborted,
 }
 #[doc = "Fired when direct_socket.TCPSocket is aborted.\n[directTCPSocketAborted](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directTCPSocketAborted)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DirectTcpSocketAborted {
     pub method: DirectTcpSocketAbortedMethod,
     pub params: DirectTcpSocketAbortedParams,
@@ -697,7 +697,7 @@ pub enum DirectTcpSocketClosedMethod {
     DirectTcpSocketClosed,
 }
 #[doc = "Fired when direct_socket.TCPSocket is closed.\n[directTCPSocketClosed](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directTCPSocketClosed)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DirectTcpSocketClosed {
     pub method: DirectTcpSocketClosedMethod,
     pub params: DirectTcpSocketClosedParams,
@@ -721,7 +721,7 @@ pub enum DirectTcpSocketChunkSentMethod {
     DirectTcpSocketChunkSent,
 }
 #[doc = "Fired when data is sent to tcp direct socket stream.\n[directTCPSocketChunkSent](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directTCPSocketChunkSent)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DirectTcpSocketChunkSent {
     pub method: DirectTcpSocketChunkSentMethod,
     pub params: DirectTcpSocketChunkSentParams,
@@ -745,7 +745,7 @@ pub enum DirectTcpSocketChunkReceivedMethod {
     DirectTcpSocketChunkReceived,
 }
 #[doc = "Fired when data is received from tcp direct socket stream.\n[directTCPSocketChunkReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directTCPSocketChunkReceived)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DirectTcpSocketChunkReceived {
     pub method: DirectTcpSocketChunkReceivedMethod,
     pub params: DirectTcpSocketChunkReceivedParams,
@@ -765,7 +765,7 @@ pub enum DirectUdpSocketJoinedMulticastGroupMethod {
     #[serde(rename = "Network.directUDPSocketJoinedMulticastGroup")]
     DirectUdpSocketJoinedMulticastGroup,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DirectUdpSocketJoinedMulticastGroup {
     pub method: DirectUdpSocketJoinedMulticastGroupMethod,
     pub params: DirectUdpSocketJoinedMulticastGroupParams,
@@ -785,7 +785,7 @@ pub enum DirectUdpSocketLeftMulticastGroupMethod {
     #[serde(rename = "Network.directUDPSocketLeftMulticastGroup")]
     DirectUdpSocketLeftMulticastGroup,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DirectUdpSocketLeftMulticastGroup {
     pub method: DirectUdpSocketLeftMulticastGroupMethod,
     pub params: DirectUdpSocketLeftMulticastGroupParams,
@@ -813,7 +813,7 @@ pub enum DirectUdpSocketCreatedMethod {
     DirectUdpSocketCreated,
 }
 #[doc = "Fired upon direct_socket.UDPSocket creation.\n[directUDPSocketCreated](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directUDPSocketCreated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DirectUdpSocketCreated {
     pub method: DirectUdpSocketCreatedMethod,
     pub params: DirectUdpSocketCreatedParams,
@@ -849,7 +849,7 @@ pub enum DirectUdpSocketOpenedMethod {
     DirectUdpSocketOpened,
 }
 #[doc = "Fired when direct_socket.UDPSocket connection is opened.\n[directUDPSocketOpened](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directUDPSocketOpened)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DirectUdpSocketOpened {
     pub method: DirectUdpSocketOpenedMethod,
     pub params: DirectUdpSocketOpenedParams,
@@ -873,7 +873,7 @@ pub enum DirectUdpSocketAbortedMethod {
     DirectUdpSocketAborted,
 }
 #[doc = "Fired when direct_socket.UDPSocket is aborted.\n[directUDPSocketAborted](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directUDPSocketAborted)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DirectUdpSocketAborted {
     pub method: DirectUdpSocketAbortedMethod,
     pub params: DirectUdpSocketAbortedParams,
@@ -895,7 +895,7 @@ pub enum DirectUdpSocketClosedMethod {
     DirectUdpSocketClosed,
 }
 #[doc = "Fired when direct_socket.UDPSocket is closed.\n[directUDPSocketClosed](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directUDPSocketClosed)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DirectUdpSocketClosed {
     pub method: DirectUdpSocketClosedMethod,
     pub params: DirectUdpSocketClosedParams,
@@ -919,7 +919,7 @@ pub enum DirectUdpSocketChunkSentMethod {
     DirectUdpSocketChunkSent,
 }
 #[doc = "Fired when message is sent to udp direct socket stream.\n[directUDPSocketChunkSent](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directUDPSocketChunkSent)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DirectUdpSocketChunkSent {
     pub method: DirectUdpSocketChunkSentMethod,
     pub params: DirectUdpSocketChunkSentParams,
@@ -943,7 +943,7 @@ pub enum DirectUdpSocketChunkReceivedMethod {
     DirectUdpSocketChunkReceived,
 }
 #[doc = "Fired when message is received from udp direct socket stream.\n[directUDPSocketChunkReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directUDPSocketChunkReceived)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DirectUdpSocketChunkReceived {
     pub method: DirectUdpSocketChunkReceivedMethod,
     pub params: DirectUdpSocketChunkReceivedParams,
@@ -994,7 +994,7 @@ pub enum RequestWillBeSentExtraInfoMethod {
     RequestWillBeSentExtraInfo,
 }
 #[doc = "Fired when additional information about a requestWillBeSent event is available from the\nnetwork stack. Not every requestWillBeSent event will have an additional\nrequestWillBeSentExtraInfo fired for it, and there is no guarantee whether requestWillBeSent\nor requestWillBeSentExtraInfo will be fired first for the same request.\n[requestWillBeSentExtraInfo](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-requestWillBeSentExtraInfo)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RequestWillBeSentExtraInfo {
     pub method: RequestWillBeSentExtraInfoMethod,
     pub params: RequestWillBeSentExtraInfoParams,
@@ -1048,7 +1048,7 @@ pub enum ResponseReceivedExtraInfoMethod {
     ResponseReceivedExtraInfo,
 }
 #[doc = "Fired when additional information about a responseReceived event is available from the network\nstack. Not every responseReceived event will have an additional responseReceivedExtraInfo for\nit, and responseReceivedExtraInfo may be fired before or after responseReceived.\n[responseReceivedExtraInfo](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-responseReceivedExtraInfo)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResponseReceivedExtraInfo {
     pub method: ResponseReceivedExtraInfoMethod,
     pub params: ResponseReceivedExtraInfoParams,
@@ -1072,7 +1072,7 @@ pub enum ResponseReceivedEarlyHintsMethod {
     ResponseReceivedEarlyHints,
 }
 #[doc = "Fired when 103 Early Hints headers is received in addition to the common response.\nNot every responseReceived event will have an responseReceivedEarlyHints fired.\nOnly one responseReceivedEarlyHints may be fired for eached responseReceived event.\n[responseReceivedEarlyHints](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-responseReceivedEarlyHints)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResponseReceivedEarlyHints {
     pub method: ResponseReceivedEarlyHintsMethod,
     pub params: ResponseReceivedEarlyHintsParams,
@@ -1142,7 +1142,7 @@ pub enum TrustTokenOperationDoneMethod {
     TrustTokenOperationDone,
 }
 #[doc = "Fired exactly once for each Trust Token operation. Depending on\nthe type of the operation and whether the operation succeeded or\nfailed, the event is fired before the corresponding request was sent\nor after the response was received.\n[trustTokenOperationDone](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-trustTokenOperationDone)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TrustTokenOperationDone {
     pub method: TrustTokenOperationDoneMethod,
     pub params: TrustTokenOperationDoneParams,
@@ -1159,7 +1159,7 @@ pub enum PolicyUpdatedMethod {
     PolicyUpdated,
 }
 #[doc = "Fired once security policy has been updated.\n[policyUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-policyUpdated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PolicyUpdated {
     pub method: PolicyUpdatedMethod,
     pub params: PolicyUpdatedParams,
@@ -1179,7 +1179,7 @@ pub enum ReportingApiReportAddedMethod {
     ReportingApiReportAdded,
 }
 #[doc = "Is sent whenever a new report is added.\nAnd after 'enableReportingApi' for all existing reports.\n[reportingApiReportAdded](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-reportingApiReportAdded)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ReportingApiReportAdded {
     pub method: ReportingApiReportAddedMethod,
     pub params: ReportingApiReportAddedParams,
@@ -1197,7 +1197,7 @@ pub enum ReportingApiReportUpdatedMethod {
     #[serde(rename = "Network.reportingApiReportUpdated")]
     ReportingApiReportUpdated,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ReportingApiReportUpdated {
     pub method: ReportingApiReportUpdatedMethod,
     pub params: ReportingApiReportUpdatedParams,
@@ -1219,7 +1219,7 @@ pub enum ReportingApiEndpointsChangedForOriginMethod {
     #[serde(rename = "Network.reportingApiEndpointsChangedForOrigin")]
     ReportingApiEndpointsChangedForOrigin,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ReportingApiEndpointsChangedForOrigin {
     pub method: ReportingApiEndpointsChangedForOriginMethod,
     pub params: ReportingApiEndpointsChangedForOriginParams,
@@ -1241,7 +1241,7 @@ pub enum DeviceBoundSessionsAddedMethod {
     DeviceBoundSessionsAdded,
 }
 #[doc = "Triggered when the initial set of device bound sessions is added.\n[deviceBoundSessionsAdded](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-deviceBoundSessionsAdded)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeviceBoundSessionsAdded {
     pub method: DeviceBoundSessionsAddedMethod,
     pub params: DeviceBoundSessionsAddedParams,
@@ -1290,7 +1290,7 @@ pub enum DeviceBoundSessionEventOccurredMethod {
     DeviceBoundSessionEventOccurred,
 }
 #[doc = "Triggered when a device bound session event occurs.\n[deviceBoundSessionEventOccurred](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-deviceBoundSessionEventOccurred)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeviceBoundSessionEventOccurred {
     pub method: DeviceBoundSessionEventOccurredMethod,
     pub params: DeviceBoundSessionEventOccurredParams,

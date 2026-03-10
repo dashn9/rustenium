@@ -12,7 +12,7 @@ pub enum VisibleSecurityStateChangedMethod {
     VisibleSecurityStateChanged,
 }
 #[doc = "The security state of the page changed.\n[visibleSecurityStateChanged](https://chromedevtools.github.io/devtools-protocol/tot/Security/#event-visibleSecurityStateChanged)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VisibleSecurityStateChanged {
     pub method: VisibleSecurityStateChangedMethod,
     pub params: VisibleSecurityStateChangedParams,

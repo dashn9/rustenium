@@ -210,6 +210,60 @@ impl CompileScriptBuilder {
         })
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct DisableBuilder;
+impl DisableBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Disable {
+        Disable {
+            method: DisableMethod::Disable,
+            params: DisableParams {},
+        }
+    }
+}
+impl Disable {
+    pub fn builder() -> DisableBuilder {
+        DisableBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct DiscardConsoleEntriesBuilder;
+impl DiscardConsoleEntriesBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> DiscardConsoleEntries {
+        DiscardConsoleEntries {
+            method: DiscardConsoleEntriesMethod::DiscardConsoleEntries,
+            params: DiscardConsoleEntriesParams {},
+        }
+    }
+}
+impl DiscardConsoleEntries {
+    pub fn builder() -> DiscardConsoleEntriesBuilder {
+        DiscardConsoleEntriesBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct EnableBuilder;
+impl EnableBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Enable {
+        Enable {
+            method: EnableMethod::Enable,
+            params: EnableParams {},
+        }
+    }
+}
+impl Enable {
+    pub fn builder() -> EnableBuilder {
+        EnableBuilder
+    }
+}
 impl Evaluate {
     pub fn builder() -> EvaluateBuilder {
         <EvaluateBuilder as Default>::default()
@@ -329,6 +383,42 @@ impl EvaluateBuilder {
                 serialization_options: self.serialization_options,
             },
         })
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct GetIsolateIdBuilder;
+impl GetIsolateIdBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> GetIsolateId {
+        GetIsolateId {
+            method: GetIsolateIdMethod::GetIsolateId,
+            params: GetIsolateIdParams {},
+        }
+    }
+}
+impl GetIsolateId {
+    pub fn builder() -> GetIsolateIdBuilder {
+        GetIsolateIdBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct GetHeapUsageBuilder;
+impl GetHeapUsageBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> GetHeapUsage {
+        GetHeapUsage {
+            method: GetHeapUsageMethod::GetHeapUsage,
+            params: GetHeapUsageParams {},
+        }
+    }
+}
+impl GetHeapUsage {
+    pub fn builder() -> GetHeapUsageBuilder {
+        GetHeapUsageBuilder
     }
 }
 impl GetProperties {
@@ -496,6 +586,24 @@ impl ReleaseObjectGroupBuilder {
         })
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct RunIfWaitingForDebuggerBuilder;
+impl RunIfWaitingForDebuggerBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> RunIfWaitingForDebugger {
+        RunIfWaitingForDebugger {
+            method: RunIfWaitingForDebuggerMethod::RunIfWaitingForDebugger,
+            params: RunIfWaitingForDebuggerParams {},
+        }
+    }
+}
+impl RunIfWaitingForDebugger {
+    pub fn builder() -> RunIfWaitingForDebuggerBuilder {
+        RunIfWaitingForDebuggerBuilder
+    }
+}
 impl RunScript {
     pub fn builder() -> RunScriptBuilder {
         <RunScriptBuilder as Default>::default()
@@ -639,6 +747,24 @@ impl SetMaxCallStackSizeToCaptureBuilder {
                     .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(size)))?,
             },
         })
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct TerminateExecutionBuilder;
+impl TerminateExecutionBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> TerminateExecution {
+        TerminateExecution {
+            method: TerminateExecutionMethod::TerminateExecution,
+            params: TerminateExecutionParams {},
+        }
+    }
+}
+impl TerminateExecution {
+    pub fn builder() -> TerminateExecutionBuilder {
+        TerminateExecutionBuilder
     }
 }
 impl AddBinding {

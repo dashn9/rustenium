@@ -14,7 +14,7 @@ pub enum FontsUpdatedMethod {
     FontsUpdated,
 }
 #[doc = "Fires whenever a web font is updated.  A non-empty font parameter indicates a successfully loaded\nweb font.\n[fontsUpdated](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#event-fontsUpdated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FontsUpdated {
     pub method: FontsUpdatedMethod,
     pub params: FontsUpdatedParams,
@@ -31,7 +31,7 @@ pub enum MediaQueryResultChangedMethod {
     MediaQueryResultChanged,
 }
 #[doc = "Fires whenever a MediaQuery result changes (for example, after a browser window has been\nresized.) The current implementation considers only viewport-dependent media features.\n[mediaQueryResultChanged](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#event-mediaQueryResultChanged)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MediaQueryResultChanged {
     pub method: MediaQueryResultChangedMethod,
     pub params: MediaQueryResultChangedParams,
@@ -52,7 +52,7 @@ pub enum StyleSheetAddedMethod {
     StyleSheetAdded,
 }
 #[doc = "Fired whenever an active document stylesheet is added.\n[styleSheetAdded](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#event-styleSheetAdded)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StyleSheetAdded {
     pub method: StyleSheetAddedMethod,
     pub params: StyleSheetAddedParams,
@@ -72,7 +72,7 @@ pub enum StyleSheetChangedMethod {
     StyleSheetChanged,
 }
 #[doc = "Fired whenever a stylesheet is changed as a result of the client operation.\n[styleSheetChanged](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#event-styleSheetChanged)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StyleSheetChanged {
     pub method: StyleSheetChangedMethod,
     pub params: StyleSheetChangedParams,
@@ -93,7 +93,7 @@ pub enum StyleSheetRemovedMethod {
     StyleSheetRemoved,
 }
 #[doc = "Fired whenever an active document stylesheet is removed.\n[styleSheetRemoved](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#event-styleSheetRemoved)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StyleSheetRemoved {
     pub method: StyleSheetRemovedMethod,
     pub params: StyleSheetRemovedParams,
@@ -112,7 +112,7 @@ pub enum ComputedStyleUpdatedMethod {
     #[serde(rename = "CSS.computedStyleUpdated")]
     ComputedStyleUpdated,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ComputedStyleUpdated {
     pub method: ComputedStyleUpdatedMethod,
     pub params: ComputedStyleUpdatedParams,

@@ -707,7 +707,7 @@ dependencies = [
  "hyper-util",
  "rand 0.9.1",
  "regex",
- "rustenium-bidi-commands",
+ "rustenium-bidi-definitions",
  "serde",
  "serde_json",
  "thiserror 2.0.17",

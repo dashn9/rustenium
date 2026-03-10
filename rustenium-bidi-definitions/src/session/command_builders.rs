@@ -1,4 +1,22 @@
 use super::commands::*;
+#[derive(Debug, Clone, Default)]
+pub struct StatusBuilder;
+impl StatusBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Status {
+        Status {
+            method: StatusMethod::Status,
+            params: StatusParams {},
+        }
+    }
+}
+impl Status {
+    pub fn builder() -> StatusBuilder {
+        StatusBuilder
+    }
+}
 impl New {
     pub fn builder() -> NewBuilder {
         <NewBuilder as Default>::default()
@@ -25,6 +43,24 @@ impl NewBuilder {
                 })?,
             },
         })
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct EndBuilder;
+impl EndBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> End {
+        End {
+            method: EndMethod::End,
+            params: EndParams {},
+        }
+    }
+}
+impl End {
+    pub fn builder() -> EndBuilder {
+        EndBuilder
     }
 }
 impl Subscribe {
@@ -102,6 +138,37 @@ impl SubscribeBuilder {
                     .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(events)))?,
                 contexts: self.contexts,
                 user_contexts: self.user_contexts,
+            },
+        })
+    }
+}
+impl Unsubscribe {
+    pub fn builder() -> UnsubscribeBuilder {
+        <UnsubscribeBuilder as Default>::default()
+    }
+}
+#[derive(Default, Clone)]
+pub struct UnsubscribeBuilder {
+    unsubscribe_parameters: Option<super::types::UnsubscribeParameters>,
+}
+impl UnsubscribeBuilder {
+    pub fn unsubscribe_parameters(
+        mut self,
+        unsubscribe_parameters: impl Into<super::types::UnsubscribeParameters>,
+    ) -> Self {
+        self.unsubscribe_parameters = Some(unsubscribe_parameters.into());
+        self
+    }
+    pub fn build(self) -> Result<Unsubscribe, String> {
+        Ok(Unsubscribe {
+            method: UnsubscribeMethod::Unsubscribe,
+            params: UnsubscribeParams {
+                unsubscribe_parameters: self.unsubscribe_parameters.ok_or_else(|| {
+                    format!(
+                        "Field `{}` is mandatory.",
+                        std::stringify!(unsubscribe_parameters)
+                    )
+                })?,
             },
         })
     }

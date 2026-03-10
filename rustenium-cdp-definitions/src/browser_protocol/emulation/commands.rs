@@ -8,7 +8,7 @@ pub enum ClearDeviceMetricsOverrideMethod {
     ClearDeviceMetricsOverride,
 }
 #[doc = "Clears the overridden device metrics.\n[clearDeviceMetricsOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-clearDeviceMetricsOverride)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClearDeviceMetricsOverride {
     pub method: ClearDeviceMetricsOverrideMethod,
     pub params: ClearDeviceMetricsOverrideParams,
@@ -28,7 +28,7 @@ pub enum ClearGeolocationOverrideMethod {
     ClearGeolocationOverride,
 }
 #[doc = "Clears the overridden Geolocation Position and Error.\n[clearGeolocationOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-clearGeolocationOverride)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClearGeolocationOverride {
     pub method: ClearGeolocationOverrideMethod,
     pub params: ClearGeolocationOverrideParams,
@@ -48,7 +48,7 @@ pub enum ResetPageScaleFactorMethod {
     ResetPageScaleFactor,
 }
 #[doc = "Requests that page scale factor is reset to initial values.\n[resetPageScaleFactor](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-resetPageScaleFactor)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResetPageScaleFactor {
     pub method: ResetPageScaleFactorMethod,
     pub params: ResetPageScaleFactorParams,
@@ -79,7 +79,7 @@ pub enum SetFocusEmulationEnabledMethod {
     SetFocusEmulationEnabled,
 }
 #[doc = "Enables or disables simulating a focused and active page.\n[setFocusEmulationEnabled](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setFocusEmulationEnabled)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetFocusEmulationEnabled {
     pub method: SetFocusEmulationEnabledMethod,
     pub params: SetFocusEmulationEnabledParams,
@@ -105,7 +105,7 @@ pub enum SetAutoDarkModeOverrideMethod {
     SetAutoDarkModeOverride,
 }
 #[doc = "Automatically render all web contents using a dark theme.\n[setAutoDarkModeOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setAutoDarkModeOverride)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetAutoDarkModeOverride {
     pub method: SetAutoDarkModeOverrideMethod,
     pub params: SetAutoDarkModeOverrideParams,
@@ -134,7 +134,7 @@ pub enum SetCpuThrottlingRateMethod {
     SetCpuThrottlingRate,
 }
 #[doc = "Enables CPU throttling to emulate slow CPUs.\n[setCPUThrottlingRate](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setCPUThrottlingRate)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetCpuThrottlingRate {
     pub method: SetCpuThrottlingRateMethod,
     pub params: SetCpuThrottlingRateParams,
@@ -160,7 +160,7 @@ pub enum SetDefaultBackgroundColorOverrideMethod {
     SetDefaultBackgroundColorOverride,
 }
 #[doc = "Sets or clears an override of the default background color of the frame. This override is used\nif the content does not specify one.\n[setDefaultBackgroundColorOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setDefaultBackgroundColorOverride)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetDefaultBackgroundColorOverride {
     pub method: SetDefaultBackgroundColorOverrideMethod,
     pub params: SetDefaultBackgroundColorOverrideParams,
@@ -190,7 +190,7 @@ pub enum SetSafeAreaInsetsOverrideMethod {
     SetSafeAreaInsetsOverride,
 }
 #[doc = "Overrides the values for env(safe-area-inset-*) and env(safe-area-max-inset-*). Unset values will cause the\nrespective variables to be undefined, even if previously overridden.\n[setSafeAreaInsetsOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setSafeAreaInsetsOverride)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetSafeAreaInsetsOverride {
     pub method: SetSafeAreaInsetsOverrideMethod,
     pub params: SetSafeAreaInsetsOverrideParams,
@@ -302,7 +302,7 @@ pub enum SetDeviceMetricsOverrideMethod {
     SetDeviceMetricsOverride,
 }
 #[doc = "Overrides the values of device screen dimensions (window.screen.width, window.screen.height,\nwindow.innerWidth, window.innerHeight, and \"device-width\"/\"device-height\"-related CSS media\nquery results).\n[setDeviceMetricsOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setDeviceMetricsOverride)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetDeviceMetricsOverride {
     pub method: SetDeviceMetricsOverrideMethod,
     pub params: SetDeviceMetricsOverrideParams,
@@ -332,7 +332,7 @@ pub enum SetDevicePostureOverrideMethod {
     SetDevicePostureOverride,
 }
 #[doc = "Start reporting the given posture value to the Device Posture API.\nThis override can also be set in setDeviceMetricsOverride().\n[setDevicePostureOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setDevicePostureOverride)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetDevicePostureOverride {
     pub method: SetDevicePostureOverrideMethod,
     pub params: SetDevicePostureOverrideParams,
@@ -352,7 +352,7 @@ pub enum ClearDevicePostureOverrideMethod {
     ClearDevicePostureOverride,
 }
 #[doc = "Clears a device posture override set with either setDeviceMetricsOverride()\nor setDevicePostureOverride() and starts using posture information from the\nplatform again.\nDoes nothing if no override is set.\n[clearDevicePostureOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-clearDevicePostureOverride)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClearDevicePostureOverride {
     pub method: ClearDevicePostureOverrideMethod,
     pub params: ClearDevicePostureOverrideParams,
@@ -381,7 +381,7 @@ pub enum SetDisplayFeaturesOverrideMethod {
     SetDisplayFeaturesOverride,
 }
 #[doc = "Start using the given display features to pupulate the Viewport Segments API.\nThis override can also be set in setDeviceMetricsOverride().\n[setDisplayFeaturesOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setDisplayFeaturesOverride)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetDisplayFeaturesOverride {
     pub method: SetDisplayFeaturesOverrideMethod,
     pub params: SetDisplayFeaturesOverrideParams,
@@ -401,7 +401,7 @@ pub enum ClearDisplayFeaturesOverrideMethod {
     ClearDisplayFeaturesOverride,
 }
 #[doc = "Clears the display features override set with either setDeviceMetricsOverride()\nor setDisplayFeaturesOverride() and starts using display features from the\nplatform again.\nDoes nothing if no override is set.\n[clearDisplayFeaturesOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-clearDisplayFeaturesOverride)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClearDisplayFeaturesOverride {
     pub method: ClearDisplayFeaturesOverrideMethod,
     pub params: ClearDisplayFeaturesOverrideParams,
@@ -430,7 +430,7 @@ pub enum SetScrollbarsHiddenMethod {
     #[serde(rename = "Emulation.setScrollbarsHidden")]
     SetScrollbarsHidden,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetScrollbarsHidden {
     pub method: SetScrollbarsHiddenMethod,
     pub params: SetScrollbarsHiddenParams,
@@ -459,7 +459,7 @@ pub enum SetDocumentCookieDisabledMethod {
     #[serde(rename = "Emulation.setDocumentCookieDisabled")]
     SetDocumentCookieDisabled,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetDocumentCookieDisabled {
     pub method: SetDocumentCookieDisabledMethod,
     pub params: SetDocumentCookieDisabledParams,
@@ -502,7 +502,7 @@ pub enum SetEmitTouchEventsForMouseMethod {
     #[serde(rename = "Emulation.setEmitTouchEventsForMouse")]
     SetEmitTouchEventsForMouse,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetEmitTouchEventsForMouse {
     pub method: SetEmitTouchEventsForMouseMethod,
     pub params: SetEmitTouchEventsForMouseParams,
@@ -533,7 +533,7 @@ pub enum SetEmulatedMediaMethod {
     SetEmulatedMedia,
 }
 #[doc = "Emulates the given media type or media feature for CSS media queries.\n[setEmulatedMedia](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setEmulatedMedia)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetEmulatedMedia {
     pub method: SetEmulatedMediaMethod,
     pub params: SetEmulatedMediaParams,
@@ -582,7 +582,7 @@ pub enum SetEmulatedVisionDeficiencyMethod {
     SetEmulatedVisionDeficiency,
 }
 #[doc = "Emulates the given vision deficiency.\n[setEmulatedVisionDeficiency](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setEmulatedVisionDeficiency)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetEmulatedVisionDeficiency {
     pub method: SetEmulatedVisionDeficiencyMethod,
     pub params: SetEmulatedVisionDeficiencyParams,
@@ -607,7 +607,7 @@ pub enum SetEmulatedOsTextScaleMethod {
     SetEmulatedOsTextScale,
 }
 #[doc = "Emulates the given OS text scale.\n[setEmulatedOSTextScale](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setEmulatedOSTextScale)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetEmulatedOsTextScale {
     pub method: SetEmulatedOsTextScaleMethod,
     pub params: SetEmulatedOsTextScaleParams,
@@ -663,7 +663,7 @@ pub enum SetGeolocationOverrideMethod {
     SetGeolocationOverride,
 }
 #[doc = "Overrides the Geolocation Position or Error. Omitting latitude, longitude or\naccuracy emulates position unavailable.\n[setGeolocationOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setGeolocationOverride)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetGeolocationOverride {
     pub method: SetGeolocationOverrideMethod,
     pub params: SetGeolocationOverrideParams,
@@ -691,7 +691,7 @@ pub enum GetOverriddenSensorInformationMethod {
     #[serde(rename = "Emulation.getOverriddenSensorInformation")]
     GetOverriddenSensorInformation,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetOverriddenSensorInformation {
     pub method: GetOverriddenSensorInformationMethod,
     pub params: GetOverriddenSensorInformationParams,
@@ -729,7 +729,7 @@ pub enum SetSensorOverrideEnabledMethod {
     SetSensorOverrideEnabled,
 }
 #[doc = "Overrides a platform sensor of a given type. If |enabled| is true, calls to\nSensor.start() will use a virtual sensor as backend rather than fetching\ndata from a real hardware sensor. Otherwise, existing virtual\nsensor-backend Sensor objects will fire an error event and new calls to\nSensor.start() will attempt to use a real sensor instead.\n[setSensorOverrideEnabled](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setSensorOverrideEnabled)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetSensorOverrideEnabled {
     pub method: SetSensorOverrideEnabledMethod,
     pub params: SetSensorOverrideEnabledParams,
@@ -765,7 +765,7 @@ pub enum SetSensorOverrideReadingsMethod {
     SetSensorOverrideReadings,
 }
 #[doc = "Updates the sensor readings reported by a sensor type previously overridden\nby setSensorOverrideEnabled.\n[setSensorOverrideReadings](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setSensorOverrideReadings)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetSensorOverrideReadings {
     pub method: SetSensorOverrideReadingsMethod,
     pub params: SetSensorOverrideReadingsParams,
@@ -803,7 +803,7 @@ pub enum SetPressureSourceOverrideEnabledMethod {
     SetPressureSourceOverrideEnabled,
 }
 #[doc = "Overrides a pressure source of a given type, as used by the Compute\nPressure API, so that updates to PressureObserver.observe() are provided\nvia setPressureStateOverride instead of being retrieved from\nplatform-provided telemetry data.\n[setPressureSourceOverrideEnabled](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setPressureSourceOverrideEnabled)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetPressureSourceOverrideEnabled {
     pub method: SetPressureSourceOverrideEnabledMethod,
     pub params: SetPressureSourceOverrideEnabledParams,
@@ -839,7 +839,7 @@ pub enum SetPressureStateOverrideMethod {
     SetPressureStateOverride,
 }
 #[doc = "TODO: OBSOLETE: To remove when setPressureDataOverride is merged.\nProvides a given pressure state that will be processed and eventually be\ndelivered to PressureObserver users. |source| must have been previously\noverridden by setPressureSourceOverrideEnabled.\n[setPressureStateOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setPressureStateOverride)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetPressureStateOverride {
     pub method: SetPressureStateOverrideMethod,
     pub params: SetPressureStateOverrideParams,
@@ -880,7 +880,7 @@ pub enum SetPressureDataOverrideMethod {
     SetPressureDataOverride,
 }
 #[doc = "Provides a given pressure data set that will be processed and eventually be\ndelivered to PressureObserver users. |source| must have been previously\noverridden by setPressureSourceOverrideEnabled.\n[setPressureDataOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setPressureDataOverride)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetPressureDataOverride {
     pub method: SetPressureDataOverrideMethod,
     pub params: SetPressureDataOverrideParams,
@@ -915,7 +915,7 @@ pub enum SetIdleOverrideMethod {
     SetIdleOverride,
 }
 #[doc = "Overrides the Idle state.\n[setIdleOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setIdleOverride)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetIdleOverride {
     pub method: SetIdleOverrideMethod,
     pub params: SetIdleOverrideParams,
@@ -935,7 +935,7 @@ pub enum ClearIdleOverrideMethod {
     ClearIdleOverride,
 }
 #[doc = "Clears Idle state overrides.\n[clearIdleOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-clearIdleOverride)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClearIdleOverride {
     pub method: ClearIdleOverrideMethod,
     pub params: ClearIdleOverrideParams,
@@ -966,7 +966,7 @@ pub enum SetPageScaleFactorMethod {
     SetPageScaleFactor,
 }
 #[doc = "Sets a specified page scale factor.\n[setPageScaleFactor](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setPageScaleFactor)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetPageScaleFactor {
     pub method: SetPageScaleFactorMethod,
     pub params: SetPageScaleFactorParams,
@@ -997,7 +997,7 @@ pub enum SetScriptExecutionDisabledMethod {
     SetScriptExecutionDisabled,
 }
 #[doc = "Switches script execution in the page.\n[setScriptExecutionDisabled](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setScriptExecutionDisabled)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetScriptExecutionDisabled {
     pub method: SetScriptExecutionDisabledMethod,
     pub params: SetScriptExecutionDisabledParams,
@@ -1034,7 +1034,7 @@ pub enum SetTouchEmulationEnabledMethod {
     SetTouchEmulationEnabled,
 }
 #[doc = "Enables touch on platforms which do not support them.\n[setTouchEmulationEnabled](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setTouchEmulationEnabled)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetTouchEmulationEnabled {
     pub method: SetTouchEmulationEnabledMethod,
     pub params: SetTouchEmulationEnabledParams,
@@ -1082,7 +1082,7 @@ pub enum SetVirtualTimePolicyMethod {
     SetVirtualTimePolicy,
 }
 #[doc = "Turns on virtual time for all frames (replacing real-time with a synthetic time source) and sets\nthe current virtual time policy.  Note this supersedes any previous time budget.\n[setVirtualTimePolicy](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setVirtualTimePolicy)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetVirtualTimePolicy {
     pub method: SetVirtualTimePolicyMethod,
     pub params: SetVirtualTimePolicyParams,
@@ -1108,7 +1108,7 @@ pub enum SetLocaleOverrideMethod {
     SetLocaleOverride,
 }
 #[doc = "Overrides default host system locale with the specified one.\n[setLocaleOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setLocaleOverride)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetLocaleOverride {
     pub method: SetLocaleOverrideMethod,
     pub params: SetLocaleOverrideParams,
@@ -1144,7 +1144,7 @@ pub enum SetTimezoneOverrideMethod {
     SetTimezoneOverride,
 }
 #[doc = "Overrides default host system timezone with the specified one.\n[setTimezoneOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setTimezoneOverride)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetTimezoneOverride {
     pub method: SetTimezoneOverrideMethod,
     pub params: SetTimezoneOverrideParams,
@@ -1172,7 +1172,7 @@ pub enum SetDisabledImageTypesMethod {
     #[serde(rename = "Emulation.setDisabledImageTypes")]
     SetDisabledImageTypes,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetDisabledImageTypes {
     pub method: SetDisabledImageTypesMethod,
     pub params: SetDisabledImageTypesParams,
@@ -1198,7 +1198,7 @@ pub enum SetDataSaverOverrideMethod {
     SetDataSaverOverride,
 }
 #[doc = "Override the value of navigator.connection.saveData\n[setDataSaverOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setDataSaverOverride)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetDataSaverOverride {
     pub method: SetDataSaverOverrideMethod,
     pub params: SetDataSaverOverrideParams,
@@ -1227,7 +1227,7 @@ pub enum SetHardwareConcurrencyOverrideMethod {
     #[serde(rename = "Emulation.setHardwareConcurrencyOverride")]
     SetHardwareConcurrencyOverride,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetHardwareConcurrencyOverride {
     pub method: SetHardwareConcurrencyOverrideMethod,
     pub params: SetHardwareConcurrencyOverrideParams,
@@ -1281,7 +1281,7 @@ pub enum SetUserAgentOverrideMethod {
     SetUserAgentOverride,
 }
 #[doc = "Allows overriding user agent with the given string.\n`userAgentMetadata` must be set for Client Hint headers to be sent.\n[setUserAgentOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setUserAgentOverride)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetUserAgentOverride {
     pub method: SetUserAgentOverrideMethod,
     pub params: SetUserAgentOverrideParams,
@@ -1312,7 +1312,7 @@ pub enum SetAutomationOverrideMethod {
     SetAutomationOverride,
 }
 #[doc = "Allows overriding the automation flag.\n[setAutomationOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setAutomationOverride)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetAutomationOverride {
     pub method: SetAutomationOverrideMethod,
     pub params: SetAutomationOverrideParams,
@@ -1343,7 +1343,7 @@ pub enum SetSmallViewportHeightDifferenceOverrideMethod {
     SetSmallViewportHeightDifferenceOverride,
 }
 #[doc = "Allows overriding the difference between the small and large viewport sizes, which determine the\nvalue of the `svh` and `lvh` unit, respectively. Only supported for top-level frames.\n[setSmallViewportHeightDifferenceOverride](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-setSmallViewportHeightDifferenceOverride)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetSmallViewportHeightDifferenceOverride {
     pub method: SetSmallViewportHeightDifferenceOverrideMethod,
     pub params: SetSmallViewportHeightDifferenceOverrideParams,
@@ -1363,7 +1363,7 @@ pub enum GetScreenInfosMethod {
     GetScreenInfos,
 }
 #[doc = "Returns device's screen configuration. In headful mode, the physical screens configuration is returned,\nwhereas in headless mode, a virtual headless screen configuration is provided instead.\n[getScreenInfos](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-getScreenInfos)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetScreenInfos {
     pub method: GetScreenInfosMethod,
     pub params: GetScreenInfosParams,
@@ -1447,7 +1447,7 @@ pub enum AddScreenMethod {
     AddScreen,
 }
 #[doc = "Add a new screen to the device. Only supported in headless mode.\n[addScreen](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-addScreen)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AddScreen {
     pub method: AddScreenMethod,
     pub params: AddScreenParams,
@@ -1477,7 +1477,7 @@ pub enum RemoveScreenMethod {
     RemoveScreen,
 }
 #[doc = "Remove screen from the device. Only supported in headless mode.\n[removeScreen](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#method-removeScreen)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RemoveScreen {
     pub method: RemoveScreenMethod,
     pub params: RemoveScreenParams,

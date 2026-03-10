@@ -41,7 +41,7 @@ pub enum ClearObjectStoreMethod {
     ClearObjectStore,
 }
 #[doc = "Clears all entries from an object store.\n[clearObjectStore](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-clearObjectStore)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClearObjectStore {
     pub method: ClearObjectStoreMethod,
     pub params: ClearObjectStoreParams,
@@ -95,7 +95,7 @@ pub enum DeleteDatabaseMethod {
     DeleteDatabase,
 }
 #[doc = "Deletes a database.\n[deleteDatabase](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-deleteDatabase)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeleteDatabase {
     pub method: DeleteDatabaseMethod,
     pub params: DeleteDatabaseParams,
@@ -154,7 +154,7 @@ pub enum DeleteObjectStoreEntriesMethod {
     DeleteObjectStoreEntries,
 }
 #[doc = "Delete a range of entries from an object store\n[deleteObjectStoreEntries](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-deleteObjectStoreEntries)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeleteObjectStoreEntries {
     pub method: DeleteObjectStoreEntriesMethod,
     pub params: DeleteObjectStoreEntriesParams,
@@ -174,7 +174,7 @@ pub enum DisableMethod {
     Disable,
 }
 #[doc = "Disables events from backend.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-disable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
@@ -194,7 +194,7 @@ pub enum EnableMethod {
     Enable,
 }
 #[doc = "Enables events from backend.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-enable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
@@ -272,7 +272,7 @@ pub enum RequestDataMethod {
     RequestData,
 }
 #[doc = "Requests data from object store or index.\n[requestData](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-requestData)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RequestData {
     pub method: RequestDataMethod,
     pub params: RequestDataParams,
@@ -325,7 +325,7 @@ pub enum GetMetadataMethod {
     GetMetadata,
 }
 #[doc = "Gets metadata of an object store.\n[getMetadata](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-getMetadata)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetMetadata {
     pub method: GetMetadataMethod,
     pub params: GetMetadataParams,
@@ -379,7 +379,7 @@ pub enum RequestDatabaseMethod {
     RequestDatabase,
 }
 #[doc = "Requests database with given name in given frame.\n[requestDatabase](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-requestDatabase)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RequestDatabase {
     pub method: RequestDatabaseMethod,
     pub params: RequestDatabaseParams,
@@ -415,7 +415,7 @@ pub enum RequestDatabaseNamesMethod {
     RequestDatabaseNames,
 }
 #[doc = "Requests database names for given security origin.\n[requestDatabaseNames](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#method-requestDatabaseNames)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RequestDatabaseNames {
     pub method: RequestDatabaseNamesMethod,
     pub params: RequestDatabaseNamesParams,

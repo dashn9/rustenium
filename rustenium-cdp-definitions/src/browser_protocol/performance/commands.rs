@@ -8,7 +8,7 @@ pub enum DisableMethod {
     Disable,
 }
 #[doc = "Disable collecting and reporting metrics.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Performance/#method-disable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
@@ -44,7 +44,7 @@ pub enum EnableMethod {
     Enable,
 }
 #[doc = "Enable collecting and reporting metrics.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Performance/#method-enable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
@@ -64,7 +64,7 @@ pub enum GetMetricsMethod {
     GetMetrics,
 }
 #[doc = "Retrieve current values of run-time metrics.\n[getMetrics](https://chromedevtools.github.io/devtools-protocol/tot/Performance/#method-getMetrics)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetMetrics {
     pub method: GetMetricsMethod,
     pub params: GetMetricsParams,

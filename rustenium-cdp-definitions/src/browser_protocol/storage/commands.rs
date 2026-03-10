@@ -13,7 +13,7 @@ pub enum GetStorageKeyMethod {
     GetStorageKey,
 }
 #[doc = "Returns storage key for the given frame. If no frame ID is provided,\nthe storage key of the target executing this command is returned.\n[getStorageKey](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-getStorageKey)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetStorageKey {
     pub method: GetStorageKeyMethod,
     pub params: GetStorageKeyParams,
@@ -48,7 +48,7 @@ pub enum ClearDataForOriginMethod {
     ClearDataForOrigin,
 }
 #[doc = "Clears storage for origin.\n[clearDataForOrigin](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-clearDataForOrigin)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClearDataForOrigin {
     pub method: ClearDataForOriginMethod,
     pub params: ClearDataForOriginParams,
@@ -83,7 +83,7 @@ pub enum ClearDataForStorageKeyMethod {
     ClearDataForStorageKey,
 }
 #[doc = "Clears storage for storage key.\n[clearDataForStorageKey](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-clearDataForStorageKey)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClearDataForStorageKey {
     pub method: ClearDataForStorageKeyMethod,
     pub params: ClearDataForStorageKeyParams,
@@ -109,7 +109,7 @@ pub enum GetCookiesMethod {
     GetCookies,
 }
 #[doc = "Returns all browser cookies.\n[getCookies](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-getCookies)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetCookies {
     pub method: GetCookiesMethod,
     pub params: GetCookiesParams,
@@ -147,7 +147,7 @@ pub enum SetCookiesMethod {
     SetCookies,
 }
 #[doc = "Sets given cookies.\n[setCookies](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-setCookies)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetCookies {
     pub method: SetCookiesMethod,
     pub params: SetCookiesParams,
@@ -173,7 +173,7 @@ pub enum ClearCookiesMethod {
     ClearCookies,
 }
 #[doc = "Clears cookies.\n[clearCookies](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-clearCookies)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClearCookies {
     pub method: ClearCookiesMethod,
     pub params: ClearCookiesParams,
@@ -209,7 +209,7 @@ pub enum GetUsageAndQuotaMethod {
     GetUsageAndQuota,
 }
 #[doc = "Returns usage and quota in bytes.\n[getUsageAndQuota](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-getUsageAndQuota)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetUsageAndQuota {
     pub method: GetUsageAndQuotaMethod,
     pub params: GetUsageAndQuotaParams,
@@ -251,7 +251,7 @@ pub enum OverrideQuotaForOriginMethod {
     OverrideQuotaForOrigin,
 }
 #[doc = "Override quota for the specified origin\n[overrideQuotaForOrigin](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-overrideQuotaForOrigin)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct OverrideQuotaForOrigin {
     pub method: OverrideQuotaForOriginMethod,
     pub params: OverrideQuotaForOriginParams,
@@ -287,7 +287,7 @@ pub enum TrackCacheStorageForOriginMethod {
     TrackCacheStorageForOrigin,
 }
 #[doc = "Registers origin to be notified when an update occurs to its cache storage list.\n[trackCacheStorageForOrigin](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-trackCacheStorageForOrigin)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TrackCacheStorageForOrigin {
     pub method: TrackCacheStorageForOriginMethod,
     pub params: TrackCacheStorageForOriginParams,
@@ -323,7 +323,7 @@ pub enum TrackCacheStorageForStorageKeyMethod {
     TrackCacheStorageForStorageKey,
 }
 #[doc = "Registers storage key to be notified when an update occurs to its cache storage list.\n[trackCacheStorageForStorageKey](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-trackCacheStorageForStorageKey)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TrackCacheStorageForStorageKey {
     pub method: TrackCacheStorageForStorageKeyMethod,
     pub params: TrackCacheStorageForStorageKeyParams,
@@ -359,7 +359,7 @@ pub enum TrackIndexedDbForOriginMethod {
     TrackIndexedDbForOrigin,
 }
 #[doc = "Registers origin to be notified when an update occurs to its IndexedDB.\n[trackIndexedDBForOrigin](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-trackIndexedDBForOrigin)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TrackIndexedDbForOrigin {
     pub method: TrackIndexedDbForOriginMethod,
     pub params: TrackIndexedDbForOriginParams,
@@ -395,7 +395,7 @@ pub enum TrackIndexedDbForStorageKeyMethod {
     TrackIndexedDbForStorageKey,
 }
 #[doc = "Registers storage key to be notified when an update occurs to its IndexedDB.\n[trackIndexedDBForStorageKey](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-trackIndexedDBForStorageKey)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TrackIndexedDbForStorageKey {
     pub method: TrackIndexedDbForStorageKeyMethod,
     pub params: TrackIndexedDbForStorageKeyParams,
@@ -431,7 +431,7 @@ pub enum UntrackCacheStorageForOriginMethod {
     UntrackCacheStorageForOrigin,
 }
 #[doc = "Unregisters origin from receiving notifications for cache storage.\n[untrackCacheStorageForOrigin](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-untrackCacheStorageForOrigin)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UntrackCacheStorageForOrigin {
     pub method: UntrackCacheStorageForOriginMethod,
     pub params: UntrackCacheStorageForOriginParams,
@@ -467,7 +467,7 @@ pub enum UntrackCacheStorageForStorageKeyMethod {
     UntrackCacheStorageForStorageKey,
 }
 #[doc = "Unregisters storage key from receiving notifications for cache storage.\n[untrackCacheStorageForStorageKey](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-untrackCacheStorageForStorageKey)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UntrackCacheStorageForStorageKey {
     pub method: UntrackCacheStorageForStorageKeyMethod,
     pub params: UntrackCacheStorageForStorageKeyParams,
@@ -503,7 +503,7 @@ pub enum UntrackIndexedDbForOriginMethod {
     UntrackIndexedDbForOrigin,
 }
 #[doc = "Unregisters origin from receiving notifications for IndexedDB.\n[untrackIndexedDBForOrigin](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-untrackIndexedDBForOrigin)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UntrackIndexedDbForOrigin {
     pub method: UntrackIndexedDbForOriginMethod,
     pub params: UntrackIndexedDbForOriginParams,
@@ -539,7 +539,7 @@ pub enum UntrackIndexedDbForStorageKeyMethod {
     UntrackIndexedDbForStorageKey,
 }
 #[doc = "Unregisters storage key from receiving notifications for IndexedDB.\n[untrackIndexedDBForStorageKey](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-untrackIndexedDBForStorageKey)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UntrackIndexedDbForStorageKey {
     pub method: UntrackIndexedDbForStorageKeyMethod,
     pub params: UntrackIndexedDbForStorageKeyParams,
@@ -559,7 +559,7 @@ pub enum GetTrustTokensMethod {
     GetTrustTokens,
 }
 #[doc = "Returns the number of stored Trust Tokens per issuer for the\ncurrent browsing context.\n[getTrustTokens](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-getTrustTokens)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetTrustTokens {
     pub method: GetTrustTokensMethod,
     pub params: GetTrustTokensParams,
@@ -594,7 +594,7 @@ pub enum ClearTrustTokensMethod {
     ClearTrustTokens,
 }
 #[doc = "Removes all Trust Tokens issued by the provided issuerOrigin.\nLeaves other stored data, including the issuer's Redemption Records, intact.\n[clearTrustTokens](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-clearTrustTokens)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClearTrustTokens {
     pub method: ClearTrustTokensMethod,
     pub params: ClearTrustTokensParams,
@@ -627,7 +627,7 @@ pub enum GetInterestGroupDetailsMethod {
     GetInterestGroupDetails,
 }
 #[doc = "Gets details for a named interest group.\n[getInterestGroupDetails](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-getInterestGroupDetails)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetInterestGroupDetails {
     pub method: GetInterestGroupDetailsMethod,
     pub params: GetInterestGroupDetailsParams,
@@ -657,7 +657,7 @@ pub enum SetInterestGroupTrackingMethod {
     SetInterestGroupTracking,
 }
 #[doc = "Enables/Disables issuing of interestGroupAccessed events.\n[setInterestGroupTracking](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-setInterestGroupTracking)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetInterestGroupTracking {
     pub method: SetInterestGroupTrackingMethod,
     pub params: SetInterestGroupTrackingParams,
@@ -687,7 +687,7 @@ pub enum SetInterestGroupAuctionTrackingMethod {
     SetInterestGroupAuctionTracking,
 }
 #[doc = "Enables/Disables issuing of interestGroupAuctionEventOccurred and\ninterestGroupAuctionNetworkRequestCreated.\n[setInterestGroupAuctionTracking](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-setInterestGroupAuctionTracking)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetInterestGroupAuctionTracking {
     pub method: SetInterestGroupAuctionTrackingMethod,
     pub params: SetInterestGroupAuctionTrackingParams,
@@ -722,7 +722,7 @@ pub enum GetSharedStorageMetadataMethod {
     GetSharedStorageMetadata,
 }
 #[doc = "Gets metadata for an origin's shared storage.\n[getSharedStorageMetadata](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-getSharedStorageMetadata)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetSharedStorageMetadata {
     pub method: GetSharedStorageMetadataMethod,
     pub params: GetSharedStorageMetadataParams,
@@ -757,7 +757,7 @@ pub enum GetSharedStorageEntriesMethod {
     GetSharedStorageEntries,
 }
 #[doc = "Gets the entries in an given origin's shared storage.\n[getSharedStorageEntries](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-getSharedStorageEntries)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetSharedStorageEntries {
     pub method: GetSharedStorageEntriesMethod,
     pub params: GetSharedStorageEntriesParams,
@@ -803,7 +803,7 @@ pub enum SetSharedStorageEntryMethod {
     SetSharedStorageEntry,
 }
 #[doc = "Sets entry with `key` and `value` for a given origin's shared storage.\n[setSharedStorageEntry](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-setSharedStorageEntry)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetSharedStorageEntry {
     pub method: SetSharedStorageEntryMethod,
     pub params: SetSharedStorageEntryParams,
@@ -836,7 +836,7 @@ pub enum DeleteSharedStorageEntryMethod {
     DeleteSharedStorageEntry,
 }
 #[doc = "Deletes entry for `key` (if it exists) for a given origin's shared storage.\n[deleteSharedStorageEntry](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-deleteSharedStorageEntry)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeleteSharedStorageEntry {
     pub method: DeleteSharedStorageEntryMethod,
     pub params: DeleteSharedStorageEntryParams,
@@ -871,7 +871,7 @@ pub enum ClearSharedStorageEntriesMethod {
     ClearSharedStorageEntries,
 }
 #[doc = "Clears all entries for a given origin's shared storage.\n[clearSharedStorageEntries](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-clearSharedStorageEntries)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClearSharedStorageEntries {
     pub method: ClearSharedStorageEntriesMethod,
     pub params: ClearSharedStorageEntriesParams,
@@ -906,7 +906,7 @@ pub enum ResetSharedStorageBudgetMethod {
     ResetSharedStorageBudget,
 }
 #[doc = "Resets the budget for `ownerOrigin` by clearing all budget withdrawals.\n[resetSharedStorageBudget](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-resetSharedStorageBudget)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResetSharedStorageBudget {
     pub method: ResetSharedStorageBudgetMethod,
     pub params: ResetSharedStorageBudgetParams,
@@ -936,7 +936,7 @@ pub enum SetSharedStorageTrackingMethod {
     SetSharedStorageTracking,
 }
 #[doc = "Enables/disables issuing of sharedStorageAccessed events.\n[setSharedStorageTracking](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-setSharedStorageTracking)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetSharedStorageTracking {
     pub method: SetSharedStorageTrackingMethod,
     pub params: SetSharedStorageTrackingParams,
@@ -969,7 +969,7 @@ pub enum SetStorageBucketTrackingMethod {
     SetStorageBucketTracking,
 }
 #[doc = "Set tracking for a storage key's buckets.\n[setStorageBucketTracking](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-setStorageBucketTracking)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetStorageBucketTracking {
     pub method: SetStorageBucketTrackingMethod,
     pub params: SetStorageBucketTrackingParams,
@@ -999,7 +999,7 @@ pub enum DeleteStorageBucketMethod {
     DeleteStorageBucket,
 }
 #[doc = "Deletes the Storage Bucket with the given storage key and bucket name.\n[deleteStorageBucket](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-deleteStorageBucket)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeleteStorageBucket {
     pub method: DeleteStorageBucketMethod,
     pub params: DeleteStorageBucketParams,
@@ -1019,7 +1019,7 @@ pub enum RunBounceTrackingMitigationsMethod {
     RunBounceTrackingMitigations,
 }
 #[doc = "Deletes state for sites identified as potential bounce trackers, immediately.\n[runBounceTrackingMitigations](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-runBounceTrackingMitigations)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RunBounceTrackingMitigations {
     pub method: RunBounceTrackingMitigationsMethod,
     pub params: RunBounceTrackingMitigationsParams,
@@ -1050,7 +1050,7 @@ pub enum SetAttributionReportingLocalTestingModeMethod {
     SetAttributionReportingLocalTestingMode,
 }
 #[doc = "https://wicg.github.io/attribution-reporting-api/\n[setAttributionReportingLocalTestingMode](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-setAttributionReportingLocalTestingMode)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetAttributionReportingLocalTestingMode {
     pub method: SetAttributionReportingLocalTestingModeMethod,
     pub params: SetAttributionReportingLocalTestingModeParams,
@@ -1080,7 +1080,7 @@ pub enum SetAttributionReportingTrackingMethod {
     SetAttributionReportingTracking,
 }
 #[doc = "Enables/disables issuing of Attribution Reporting events.\n[setAttributionReportingTracking](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-setAttributionReportingTracking)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetAttributionReportingTracking {
     pub method: SetAttributionReportingTrackingMethod,
     pub params: SetAttributionReportingTrackingParams,
@@ -1100,7 +1100,7 @@ pub enum SendPendingAttributionReportsMethod {
     SendPendingAttributionReports,
 }
 #[doc = "Sends all pending Attribution Reports immediately, regardless of their\nscheduled report time.\n[sendPendingAttributionReports](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-sendPendingAttributionReports)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SendPendingAttributionReports {
     pub method: SendPendingAttributionReportsMethod,
     pub params: SendPendingAttributionReportsParams,
@@ -1120,7 +1120,7 @@ pub enum GetRelatedWebsiteSetsMethod {
     GetRelatedWebsiteSets,
 }
 #[doc = "Returns the effective Related Website Sets in use by this profile for the browser\nsession. The effective Related Website Sets will not change during a browser session.\n[getRelatedWebsiteSets](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-getRelatedWebsiteSets)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetRelatedWebsiteSets {
     pub method: GetRelatedWebsiteSetsMethod,
     pub params: GetRelatedWebsiteSetsParams,
@@ -1156,7 +1156,7 @@ pub enum GetAffectedUrlsForThirdPartyCookieMetadataMethod {
     GetAffectedUrlsForThirdPartyCookieMetadata,
 }
 #[doc = "Returns the list of URLs from a page and its embedded resources that match\nexisting grace period URL pattern rules.\nhttps://developers.google.com/privacy-sandbox/cookies/temporary-exceptions/grace-period\n[getAffectedUrlsForThirdPartyCookieMetadata](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#method-getAffectedUrlsForThirdPartyCookieMetadata)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetAffectedUrlsForThirdPartyCookieMetadata {
     pub method: GetAffectedUrlsForThirdPartyCookieMetadataMethod,
     pub params: GetAffectedUrlsForThirdPartyCookieMetadataParams,
@@ -1195,7 +1195,7 @@ pub enum SetProtectedAudienceKAnonymityMethod {
     #[serde(rename = "Storage.setProtectedAudienceKAnonymity")]
     SetProtectedAudienceKAnonymity,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetProtectedAudienceKAnonymity {
     pub method: SetProtectedAudienceKAnonymityMethod,
     pub params: SetProtectedAudienceKAnonymityParams,

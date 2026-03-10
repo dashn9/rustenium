@@ -59,18 +59,18 @@ impl GeolocationCoordinates {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GeolocationPositionError {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: GeolocationPositionErrorType,
+}
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum GeolocationPositionErrorType {
+    #[serde(rename = "positionUnavailable")]
+    PositionUnavailable,
 }
 impl GeolocationPositionError {
-    pub fn new(r#type: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<GeolocationPositionErrorType>) -> Self {
         Self {
             r#type: r#type.into(),
         }
-    }
-}
-impl<T: Into<String>> From<T> for GeolocationPositionError {
-    fn from(url: T) -> Self {
-        GeolocationPositionError::new(url)
     }
 }
 impl GeolocationPositionError {
@@ -94,18 +94,18 @@ impl NetworkConditions {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NetworkConditionsOffline {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: NetworkConditionsOfflineType,
+}
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum NetworkConditionsOfflineType {
+    #[serde(rename = "offline")]
+    Offline,
 }
 impl NetworkConditionsOffline {
-    pub fn new(r#type: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<NetworkConditionsOfflineType>) -> Self {
         Self {
             r#type: r#type.into(),
         }
-    }
-}
-impl<T: Into<String>> From<T> for NetworkConditionsOffline {
-    fn from(url: T) -> Self {
-        NetworkConditionsOffline::new(url)
     }
 }
 impl NetworkConditionsOffline {
@@ -152,4 +152,4 @@ impl ScreenOrientation {
     pub const IDENTIFIER: &'static str = "emulation.ScreenOrientation";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
-group_enum ! (EmulationTypes { ForcedColorsModeTheme (ForcedColorsModeTheme) , GeolocationCoordinates (GeolocationCoordinates) , GeolocationPositionError (GeolocationPositionError) , NetworkConditions (NetworkConditions) , NetworkConditionsOffline (NetworkConditionsOffline) , ScreenOrientationNatural (ScreenOrientationNatural) , ScreenOrientationType (ScreenOrientationType) , ScreenOrientation (ScreenOrientation) });
+group_enum ! (EmulationType { ForcedColorsModeTheme (ForcedColorsModeTheme) , GeolocationCoordinates (GeolocationCoordinates) , GeolocationPositionError (GeolocationPositionError) , NetworkConditions (NetworkConditions) , NetworkConditionsOffline (NetworkConditionsOffline) , ScreenOrientationNatural (ScreenOrientationNatural) , ScreenOrientationType (ScreenOrientationType) , ScreenOrientation (ScreenOrientation) });

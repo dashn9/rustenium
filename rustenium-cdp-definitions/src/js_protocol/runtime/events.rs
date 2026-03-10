@@ -16,7 +16,7 @@ pub enum BindingCalledMethod {
     BindingCalled,
 }
 #[doc = "Notification is issued every time when binding is called.\n[bindingCalled](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-bindingCalled)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BindingCalled {
     pub method: BindingCalledMethod,
     pub params: BindingCalledParams,
@@ -97,7 +97,7 @@ pub enum ConsoleApiCalledMethod {
     ConsoleApiCalled,
 }
 #[doc = "Issued when console API was called.\n[consoleAPICalled](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-consoleAPICalled)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ConsoleApiCalled {
     pub method: ConsoleApiCalledMethod,
     pub params: ConsoleApiCalledParams,
@@ -121,7 +121,7 @@ pub enum ExceptionRevokedMethod {
     ExceptionRevoked,
 }
 #[doc = "Issued when unhandled exception was revoked.\n[exceptionRevoked](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-exceptionRevoked)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ExceptionRevoked {
     pub method: ExceptionRevokedMethod,
     pub params: ExceptionRevokedParams,
@@ -144,7 +144,7 @@ pub enum ExceptionThrownMethod {
     ExceptionThrown,
 }
 #[doc = "Issued when exception was thrown and unhandled.\n[exceptionThrown](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-exceptionThrown)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ExceptionThrown {
     pub method: ExceptionThrownMethod,
     pub params: ExceptionThrownParams,
@@ -165,7 +165,7 @@ pub enum ExecutionContextCreatedMethod {
     ExecutionContextCreated,
 }
 #[doc = "Issued when new execution context is created.\n[executionContextCreated](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-executionContextCreated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ExecutionContextCreated {
     pub method: ExecutionContextCreatedMethod,
     pub params: ExecutionContextCreatedParams,
@@ -186,7 +186,7 @@ pub enum ExecutionContextDestroyedMethod {
     ExecutionContextDestroyed,
 }
 #[doc = "Issued when execution context is destroyed.\n[executionContextDestroyed](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-executionContextDestroyed)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ExecutionContextDestroyed {
     pub method: ExecutionContextDestroyedMethod,
     pub params: ExecutionContextDestroyedParams,
@@ -203,7 +203,7 @@ pub enum ExecutionContextsClearedMethod {
     ExecutionContextsCleared,
 }
 #[doc = "Issued when all executionContexts were cleared in browser\n[executionContextsCleared](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-executionContextsCleared)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ExecutionContextsCleared {
     pub method: ExecutionContextsClearedMethod,
     pub params: ExecutionContextsClearedParams,
@@ -230,7 +230,7 @@ pub enum InspectRequestedMethod {
     InspectRequested,
 }
 #[doc = "Issued when object should be inspected (for example, as a result of inspect() command line API\ncall).\n[inspectRequested](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-inspectRequested)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InspectRequested {
     pub method: InspectRequestedMethod,
     pub params: InspectRequestedParams,

@@ -16,7 +16,7 @@ pub enum AttachedToTargetMethod {
     AttachedToTarget,
 }
 #[doc = "Issued when attached to target because of auto-attach or `attachToTarget` command.\n[attachedToTarget](https://chromedevtools.github.io/devtools-protocol/tot/Target/#event-attachedToTarget)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttachedToTarget {
     pub method: AttachedToTargetMethod,
     pub params: AttachedToTargetParams,
@@ -37,7 +37,7 @@ pub enum DetachedFromTargetMethod {
     DetachedFromTarget,
 }
 #[doc = "Issued when detached from target for any reason (including `detachFromTarget` command). Can be\nissued multiple times per target if multiple sessions have been attached to it.\n[detachedFromTarget](https://chromedevtools.github.io/devtools-protocol/tot/Target/#event-detachedFromTarget)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DetachedFromTarget {
     pub method: DetachedFromTargetMethod,
     pub params: DetachedFromTargetParams,
@@ -60,7 +60,7 @@ pub enum ReceivedMessageFromTargetMethod {
     ReceivedMessageFromTarget,
 }
 #[doc = "Notifies about a new protocol message received from the session (as reported in\n`attachedToTarget` event).\n[receivedMessageFromTarget](https://chromedevtools.github.io/devtools-protocol/tot/Target/#event-receivedMessageFromTarget)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ReceivedMessageFromTarget {
     pub method: ReceivedMessageFromTargetMethod,
     pub params: ReceivedMessageFromTargetParams,
@@ -80,7 +80,7 @@ pub enum TargetCreatedMethod {
     TargetCreated,
 }
 #[doc = "Issued when a possible inspection target is created.\n[targetCreated](https://chromedevtools.github.io/devtools-protocol/tot/Target/#event-targetCreated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TargetCreated {
     pub method: TargetCreatedMethod,
     pub params: TargetCreatedParams,
@@ -100,7 +100,7 @@ pub enum TargetDestroyedMethod {
     TargetDestroyed,
 }
 #[doc = "Issued when a target is destroyed.\n[targetDestroyed](https://chromedevtools.github.io/devtools-protocol/tot/Target/#event-targetDestroyed)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TargetDestroyed {
     pub method: TargetDestroyedMethod,
     pub params: TargetDestroyedParams,
@@ -126,7 +126,7 @@ pub enum TargetCrashedMethod {
     TargetCrashed,
 }
 #[doc = "Issued when a target has crashed.\n[targetCrashed](https://chromedevtools.github.io/devtools-protocol/tot/Target/#event-targetCrashed)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TargetCrashed {
     pub method: TargetCrashedMethod,
     pub params: TargetCrashedParams,
@@ -146,7 +146,7 @@ pub enum TargetInfoChangedMethod {
     TargetInfoChanged,
 }
 #[doc = "Issued when some information about a target has changed. This only happens between\n`targetCreated` and `targetDestroyed`.\n[targetInfoChanged](https://chromedevtools.github.io/devtools-protocol/tot/Target/#event-targetInfoChanged)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TargetInfoChanged {
     pub method: TargetInfoChangedMethod,
     pub params: TargetInfoChangedParams,

@@ -18,7 +18,7 @@ pub enum SetAcceptedEncodingsMethod {
     SetAcceptedEncodings,
 }
 #[doc = "Sets a list of content encodings that will be accepted. Empty list means no encoding is accepted.\n[setAcceptedEncodings](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-setAcceptedEncodings)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetAcceptedEncodings {
     pub method: SetAcceptedEncodingsMethod,
     pub params: SetAcceptedEncodingsParams,
@@ -38,7 +38,7 @@ pub enum ClearAcceptedEncodingsOverrideMethod {
     ClearAcceptedEncodingsOverride,
 }
 #[doc = "Clears accepted encodings set by setAcceptedEncodings\n[clearAcceptedEncodingsOverride](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-clearAcceptedEncodingsOverride)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClearAcceptedEncodingsOverride {
     pub method: ClearAcceptedEncodingsOverrideMethod,
     pub params: ClearAcceptedEncodingsOverrideParams,
@@ -58,7 +58,7 @@ pub enum ClearBrowserCacheMethod {
     ClearBrowserCache,
 }
 #[doc = "Clears browser cache.\n[clearBrowserCache](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-clearBrowserCache)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClearBrowserCache {
     pub method: ClearBrowserCacheMethod,
     pub params: ClearBrowserCacheParams,
@@ -78,7 +78,7 @@ pub enum ClearBrowserCookiesMethod {
     ClearBrowserCookies,
 }
 #[doc = "Clears browser cookies.\n[clearBrowserCookies](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-clearBrowserCookies)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClearBrowserCookies {
     pub method: ClearBrowserCookiesMethod,
     pub params: ClearBrowserCookiesParams,
@@ -138,7 +138,7 @@ pub enum DeleteCookiesMethod {
     DeleteCookies,
 }
 #[doc = "Deletes browser cookies with matching name and url or domain/path/partitionKey pair.\n[deleteCookies](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-deleteCookies)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeleteCookies {
     pub method: DeleteCookiesMethod,
     pub params: DeleteCookiesParams,
@@ -158,7 +158,7 @@ pub enum DisableMethod {
     Disable,
 }
 #[doc = "Disables network tracking, prevents network events from being sent to the client.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-disable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
@@ -197,7 +197,7 @@ pub enum EmulateNetworkConditionsByRuleMethod {
     EmulateNetworkConditionsByRule,
 }
 #[doc = "Activates emulation of network conditions for individual requests using URL match patterns. Unlike the deprecated\nNetwork.emulateNetworkConditions this method does not affect `navigator` state. Use Network.overrideNetworkState to\nexplicitly modify `navigator` behavior.\n[emulateNetworkConditionsByRule](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-emulateNetworkConditionsByRule)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EmulateNetworkConditionsByRule {
     pub method: EmulateNetworkConditionsByRuleMethod,
     pub params: EmulateNetworkConditionsByRuleParams,
@@ -251,7 +251,7 @@ pub enum OverrideNetworkStateMethod {
     OverrideNetworkState,
 }
 #[doc = "Override the state of navigator.onLine and navigator.connection.\n[overrideNetworkState](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-overrideNetworkState)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct OverrideNetworkState {
     pub method: OverrideNetworkStateMethod,
     pub params: OverrideNetworkStateParams,
@@ -297,7 +297,7 @@ pub enum EnableMethod {
     Enable,
 }
 #[doc = "Enables network tracking, network events will now be delivered to the client.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-enable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
@@ -328,7 +328,7 @@ pub enum ConfigureDurableMessagesMethod {
     ConfigureDurableMessages,
 }
 #[doc = "Configures storing response bodies outside of renderer, so that these survive\na cross-process navigation.\nIf maxTotalBufferSize is not set, durable messages are disabled.\n[configureDurableMessages](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-configureDurableMessages)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ConfigureDurableMessages {
     pub method: ConfigureDurableMessagesMethod,
     pub params: ConfigureDurableMessagesParams,
@@ -364,7 +364,7 @@ pub enum GetCertificateMethod {
     GetCertificate,
 }
 #[doc = "Returns the DER-encoded certificate.\n[getCertificate](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-getCertificate)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetCertificate {
     pub method: GetCertificateMethod,
     pub params: GetCertificateParams,
@@ -390,7 +390,7 @@ pub enum GetCookiesMethod {
     GetCookies,
 }
 #[doc = "Returns all browser cookies for the current URL. Depending on the backend support, will return\ndetailed cookie information in the `cookies` field.\n[getCookies](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-getCookies)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetCookies {
     pub method: GetCookiesMethod,
     pub params: GetCookiesParams,
@@ -421,7 +421,7 @@ pub enum GetResponseBodyMethod {
     GetResponseBody,
 }
 #[doc = "Returns content served for the given request.\n[getResponseBody](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-getResponseBody)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetResponseBody {
     pub method: GetResponseBodyMethod,
     pub params: GetResponseBodyParams,
@@ -452,7 +452,7 @@ pub enum GetRequestPostDataMethod {
     GetRequestPostData,
 }
 #[doc = "Returns post data sent with the request. Returns an error when no data was sent with the request.\n[getRequestPostData](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-getRequestPostData)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetRequestPostData {
     pub method: GetRequestPostDataMethod,
     pub params: GetRequestPostDataParams,
@@ -483,7 +483,7 @@ pub enum GetResponseBodyForInterceptionMethod {
     GetResponseBodyForInterception,
 }
 #[doc = "Returns content served for the given currently intercepted request.\n[getResponseBodyForInterception](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-getResponseBodyForInterception)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetResponseBodyForInterception {
     pub method: GetResponseBodyForInterceptionMethod,
     pub params: GetResponseBodyForInterceptionParams,
@@ -513,7 +513,7 @@ pub enum TakeResponseBodyForInterceptionAsStreamMethod {
     TakeResponseBodyForInterceptionAsStream,
 }
 #[doc = "Returns a handle to the stream representing the response body. Note that after this command,\nthe intercepted request can't be continued as is -- you either need to cancel it or to provide\nthe response body. The stream only supports sequential read, IO.read will fail if the position\nis specified.\n[takeResponseBodyForInterceptionAsStream](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-takeResponseBodyForInterceptionAsStream)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TakeResponseBodyForInterceptionAsStream {
     pub method: TakeResponseBodyForInterceptionAsStreamMethod,
     pub params: TakeResponseBodyForInterceptionAsStreamParams,
@@ -544,7 +544,7 @@ pub enum ReplayXhrMethod {
     ReplayXhr,
 }
 #[doc = "This method sends a new XMLHttpRequest which is identical to the original one. The following\nparameters should be identical: method, url, async, request body, extra headers, withCredentials\nattribute, user, password.\n[replayXHR](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-replayXHR)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ReplayXhr {
     pub method: ReplayXhrMethod,
     pub params: ReplayXhrParams,
@@ -591,7 +591,7 @@ pub enum SearchInResponseBodyMethod {
     SearchInResponseBody,
 }
 #[doc = "Searches for given string in response content.\n[searchInResponseBody](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-searchInResponseBody)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SearchInResponseBody {
     pub method: SearchInResponseBodyMethod,
     pub params: SearchInResponseBodyParams,
@@ -617,7 +617,7 @@ pub enum SetBlockedUrLsMethod {
     SetBlockedUrLs,
 }
 #[doc = "Blocks URLs from loading.\n[setBlockedURLs](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-setBlockedURLs)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetBlockedUrLs {
     pub method: SetBlockedUrLsMethod,
     pub params: SetBlockedUrLsParams,
@@ -648,7 +648,7 @@ pub enum SetBypassServiceWorkerMethod {
     SetBypassServiceWorker,
 }
 #[doc = "Toggles ignoring of service worker for each request.\n[setBypassServiceWorker](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-setBypassServiceWorker)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetBypassServiceWorker {
     pub method: SetBypassServiceWorkerMethod,
     pub params: SetBypassServiceWorkerParams,
@@ -679,7 +679,7 @@ pub enum SetCacheDisabledMethod {
     SetCacheDisabled,
 }
 #[doc = "Toggles ignoring cache for each request. If `true`, cache will not be used.\n[setCacheDisabled](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-setCacheDisabled)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetCacheDisabled {
     pub method: SetCacheDisabledMethod,
     pub params: SetCacheDisabledParams,
@@ -780,7 +780,7 @@ pub enum SetCookieMethod {
     SetCookie,
 }
 #[doc = "Sets a cookie with the given cookie data; may overwrite equivalent cookies if they exist.\n[setCookie](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-setCookie)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetCookie {
     pub method: SetCookieMethod,
     pub params: SetCookieParams,
@@ -810,7 +810,7 @@ pub enum SetCookiesMethod {
     SetCookies,
 }
 #[doc = "Sets given cookies.\n[setCookies](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-setCookies)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetCookies {
     pub method: SetCookiesMethod,
     pub params: SetCookiesParams,
@@ -841,7 +841,7 @@ pub enum SetExtraHttpHeadersMethod {
     SetExtraHttpHeaders,
 }
 #[doc = "Specifies whether to always send extra HTTP headers with the requests from this page.\n[setExtraHTTPHeaders](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-setExtraHTTPHeaders)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetExtraHttpHeaders {
     pub method: SetExtraHttpHeadersMethod,
     pub params: SetExtraHttpHeadersParams,
@@ -872,7 +872,7 @@ pub enum SetAttachDebugStackMethod {
     SetAttachDebugStack,
 }
 #[doc = "Specifies whether to attach a page script stack id in requests\n[setAttachDebugStack](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-setAttachDebugStack)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetAttachDebugStack {
     pub method: SetAttachDebugStackMethod,
     pub params: SetAttachDebugStackParams,
@@ -926,7 +926,7 @@ pub enum SetUserAgentOverrideMethod {
     SetUserAgentOverride,
 }
 #[doc = "Allows overriding user agent with the given string.\n[setUserAgentOverride](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-setUserAgentOverride)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetUserAgentOverride {
     pub method: SetUserAgentOverrideMethod,
     pub params: SetUserAgentOverrideParams,
@@ -957,7 +957,7 @@ pub enum StreamResourceContentMethod {
     StreamResourceContent,
 }
 #[doc = "Enables streaming of the response for the given requestId.\nIf enabled, the dataReceived event contains the data that was received during streaming.\n[streamResourceContent](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-streamResourceContent)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StreamResourceContent {
     pub method: StreamResourceContentMethod,
     pub params: StreamResourceContentParams,
@@ -983,7 +983,7 @@ pub enum GetSecurityIsolationStatusMethod {
     GetSecurityIsolationStatus,
 }
 #[doc = "Returns information about the COEP/COOP isolation status.\n[getSecurityIsolationStatus](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-getSecurityIsolationStatus)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetSecurityIsolationStatus {
     pub method: GetSecurityIsolationStatusMethod,
     pub params: GetSecurityIsolationStatusParams,
@@ -1014,7 +1014,7 @@ pub enum EnableReportingApiMethod {
     EnableReportingApi,
 }
 #[doc = "Enables tracking for the Reporting API, events generated by the Reporting API will now be delivered to the client.\nEnabling triggers 'reportingApiReportAdded' for all existing reports.\n[enableReportingApi](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-enableReportingApi)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EnableReportingApi {
     pub method: EnableReportingApiMethod,
     pub params: EnableReportingApiParams,
@@ -1045,7 +1045,7 @@ pub enum EnableDeviceBoundSessionsMethod {
     EnableDeviceBoundSessions,
 }
 #[doc = "Sets up tracking device bound sessions and fetching of initial set of sessions.\n[enableDeviceBoundSessions](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-enableDeviceBoundSessions)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EnableDeviceBoundSessions {
     pub method: EnableDeviceBoundSessionsMethod,
     pub params: EnableDeviceBoundSessionsParams,
@@ -1081,7 +1081,7 @@ pub enum FetchSchemefulSiteMethod {
     FetchSchemefulSite,
 }
 #[doc = "Fetches the schemeful site for a specific origin.\n[fetchSchemefulSite](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-fetchSchemefulSite)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FetchSchemefulSite {
     pub method: FetchSchemefulSiteMethod,
     pub params: FetchSchemefulSiteParams,
@@ -1125,7 +1125,7 @@ pub enum LoadNetworkResourceMethod {
     LoadNetworkResource,
 }
 #[doc = "Fetches the resource and returns the content.\n[loadNetworkResource](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-loadNetworkResource)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LoadNetworkResource {
     pub method: LoadNetworkResourceMethod,
     pub params: LoadNetworkResourceParams,
@@ -1168,7 +1168,7 @@ pub enum SetCookieControlsMethod {
     SetCookieControls,
 }
 #[doc = "Sets Controls for third-party cookie access\nPage reload is required before the new cookie behavior will be observed\n[setCookieControls](https://chromedevtools.github.io/devtools-protocol/tot/Network/#method-setCookieControls)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetCookieControls {
     pub method: SetCookieControlsMethod,
     pub params: SetCookieControlsParams,

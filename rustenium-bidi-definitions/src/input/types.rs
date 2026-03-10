@@ -2,13 +2,18 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ElementOrigin {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: ElementOriginType,
     #[serde(rename = "element")]
     pub element: crate::script::types::SharedReference,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum ElementOriginType {
+    #[serde(rename = "element")]
+    Element,
+}
 impl ElementOrigin {
     pub fn new(
-        r#type: impl Into<String>,
+        r#type: impl Into<ElementOriginType>,
         element: impl Into<crate::script::types::SharedReference>,
     ) -> Self {
         Self {
@@ -32,16 +37,21 @@ pub enum SourceActions {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NoneSourceActions {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: NoneSourceActionsType,
     #[serde(rename = "id")]
     pub id: String,
     #[serde(rename = "actions")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub actions: Vec<NoneSourceAction>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum NoneSourceActionsType {
+    #[serde(rename = "none")]
+    None,
+}
 impl NoneSourceActions {
     pub fn new(
-        r#type: impl Into<String>,
+        r#type: impl Into<NoneSourceActionsType>,
         id: impl Into<String>,
         actions: Vec<NoneSourceAction>,
     ) -> Self {
@@ -73,16 +83,21 @@ impl NoneSourceAction {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct KeySourceActions {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: KeySourceActionsType,
     #[serde(rename = "id")]
     pub id: String,
     #[serde(rename = "actions")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub actions: Vec<KeySourceAction>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum KeySourceActionsType {
+    #[serde(rename = "key")]
+    Key,
+}
 impl KeySourceActions {
     pub fn new(
-        r#type: impl Into<String>,
+        r#type: impl Into<KeySourceActionsType>,
         id: impl Into<String>,
         actions: Vec<KeySourceAction>,
     ) -> Self {
@@ -107,7 +122,7 @@ pub enum KeySourceAction {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PointerSourceActions {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: PointerSourceActionsType,
     #[serde(rename = "id")]
     pub id: String,
     #[serde(rename = "parameters")]
@@ -118,9 +133,14 @@ pub struct PointerSourceActions {
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub actions: Vec<PointerSourceAction>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum PointerSourceActionsType {
+    #[serde(rename = "pointer")]
+    Pointer,
+}
 impl PointerSourceActions {
     pub fn new(
-        r#type: impl Into<String>,
+        r#type: impl Into<PointerSourceActionsType>,
         id: impl Into<String>,
         actions: Vec<PointerSourceAction>,
     ) -> Self {
@@ -167,16 +187,21 @@ pub enum PointerSourceAction {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WheelSourceActions {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: WheelSourceActionsType,
     #[serde(rename = "id")]
     pub id: String,
     #[serde(rename = "actions")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub actions: Vec<WheelSourceAction>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum WheelSourceActionsType {
+    #[serde(rename = "wheel")]
+    Wheel,
+}
 impl WheelSourceActions {
     pub fn new(
-        r#type: impl Into<String>,
+        r#type: impl Into<WheelSourceActionsType>,
         id: impl Into<String>,
         actions: Vec<WheelSourceAction>,
     ) -> Self {
@@ -200,23 +225,23 @@ pub enum WheelSourceAction {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PauseAction {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: PauseActionType,
     #[serde(rename = "duration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
     pub duration: Option<u64>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum PauseActionType {
+    #[serde(rename = "pause")]
+    Pause,
+}
 impl PauseAction {
-    pub fn new(r#type: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<PauseActionType>) -> Self {
         Self {
             r#type: r#type.into(),
             duration: None,
         }
-    }
-}
-impl<T: Into<String>> From<T> for PauseAction {
-    fn from(url: T) -> Self {
-        PauseAction::new(url)
     }
 }
 impl PauseAction {
@@ -226,12 +251,17 @@ impl PauseAction {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct KeyDownAction {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: KeyDownActionType,
     #[serde(rename = "value")]
     pub value: String,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum KeyDownActionType {
+    #[serde(rename = "keyDown")]
+    KeyDown,
+}
 impl KeyDownAction {
-    pub fn new(r#type: impl Into<String>, value: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<KeyDownActionType>, value: impl Into<String>) -> Self {
         Self {
             r#type: r#type.into(),
             value: value.into(),
@@ -245,12 +275,17 @@ impl KeyDownAction {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct KeyUpAction {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: KeyUpActionType,
     #[serde(rename = "value")]
     pub value: String,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum KeyUpActionType {
+    #[serde(rename = "keyUp")]
+    KeyUp,
+}
 impl KeyUpAction {
-    pub fn new(r#type: impl Into<String>, value: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<KeyUpActionType>, value: impl Into<String>) -> Self {
         Self {
             r#type: r#type.into(),
             value: value.into(),
@@ -264,12 +299,17 @@ impl KeyUpAction {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PointerUpAction {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: PointerUpActionType,
     #[serde(rename = "button")]
     pub button: u64,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum PointerUpActionType {
+    #[serde(rename = "pointerUp")]
+    PointerUp,
+}
 impl PointerUpAction {
-    pub fn new(r#type: impl Into<String>, button: impl Into<u64>) -> Self {
+    pub fn new(r#type: impl Into<PointerUpActionType>, button: impl Into<u64>) -> Self {
         Self {
             r#type: r#type.into(),
             button: button.into(),
@@ -283,71 +323,28 @@ impl PointerUpAction {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PointerDownAction {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: PointerDownActionType,
     #[serde(rename = "button")]
     pub button: u64,
-    #[serde(rename = "width")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default = "default_pointer_down_action_width")]
-    pub width: Option<u64>,
-    #[serde(rename = "height")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default = "default_pointer_down_action_height")]
-    pub height: Option<u64>,
-    #[serde(rename = "pressure")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default = "default_pointer_down_action_pressure")]
-    pub pressure: Option<f64>,
-    #[serde(rename = "tangentialPressure")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default = "default_pointer_down_action_tangential_pressure")]
-    pub tangential_pressure: Option<f64>,
-    #[serde(rename = "twist")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default = "default_pointer_down_action_twist")]
-    pub twist: Option<u64>,
-    #[serde(rename = "altitudeAngle")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default = "default_pointer_down_action_altitude_angle")]
-    pub altitude_angle: Option<f64>,
-    #[serde(rename = "azimuthAngle")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default = "default_pointer_down_action_azimuth_angle")]
-    pub azimuth_angle: Option<f64>,
+    #[serde(flatten)]
+    #[serde(default)]
+    pub pointer_common_properties: PointerCommonProperties,
 }
-fn default_pointer_down_action_width() -> Option<u64> {
-    Some(1u64)
-}
-fn default_pointer_down_action_height() -> Option<u64> {
-    Some(1u64)
-}
-fn default_pointer_down_action_pressure() -> Option<f64> {
-    Some(0f64)
-}
-fn default_pointer_down_action_tangential_pressure() -> Option<f64> {
-    Some(0f64)
-}
-fn default_pointer_down_action_twist() -> Option<u64> {
-    Some(0u64)
-}
-fn default_pointer_down_action_altitude_angle() -> Option<f64> {
-    Some(0f64)
-}
-fn default_pointer_down_action_azimuth_angle() -> Option<f64> {
-    Some(0f64)
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum PointerDownActionType {
+    #[serde(rename = "pointerDown")]
+    PointerDown,
 }
 impl PointerDownAction {
-    pub fn new(r#type: impl Into<String>, button: impl Into<u64>) -> Self {
+    pub fn new(
+        r#type: impl Into<PointerDownActionType>,
+        button: impl Into<u64>,
+        pointer_common_properties: impl Into<PointerCommonProperties>,
+    ) -> Self {
         Self {
             r#type: r#type.into(),
             button: button.into(),
-            width: None,
-            height: None,
-            pressure: None,
-            tangential_pressure: None,
-            twist: None,
-            altitude_angle: None,
-            azimuth_angle: None,
+            pointer_common_properties: pointer_common_properties.into(),
         }
     }
 }
@@ -358,7 +355,7 @@ impl PointerDownAction {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PointerMoveAction {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: PointerMoveActionType,
     #[serde(rename = "x")]
     pub x: f64,
     #[serde(rename = "y")]
@@ -371,71 +368,29 @@ pub struct PointerMoveAction {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
     pub origin: Option<Origin>,
-    #[serde(rename = "width")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default = "default_pointer_move_action_width")]
-    pub width: Option<u64>,
-    #[serde(rename = "height")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default = "default_pointer_move_action_height")]
-    pub height: Option<u64>,
-    #[serde(rename = "pressure")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default = "default_pointer_move_action_pressure")]
-    pub pressure: Option<f64>,
-    #[serde(rename = "tangentialPressure")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default = "default_pointer_move_action_tangential_pressure")]
-    pub tangential_pressure: Option<f64>,
-    #[serde(rename = "twist")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default = "default_pointer_move_action_twist")]
-    pub twist: Option<u64>,
-    #[serde(rename = "altitudeAngle")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default = "default_pointer_move_action_altitude_angle")]
-    pub altitude_angle: Option<f64>,
-    #[serde(rename = "azimuthAngle")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default = "default_pointer_move_action_azimuth_angle")]
-    pub azimuth_angle: Option<f64>,
+    #[serde(flatten)]
+    #[serde(default)]
+    pub pointer_common_properties: PointerCommonProperties,
 }
-fn default_pointer_move_action_width() -> Option<u64> {
-    Some(1u64)
-}
-fn default_pointer_move_action_height() -> Option<u64> {
-    Some(1u64)
-}
-fn default_pointer_move_action_pressure() -> Option<f64> {
-    Some(0f64)
-}
-fn default_pointer_move_action_tangential_pressure() -> Option<f64> {
-    Some(0f64)
-}
-fn default_pointer_move_action_twist() -> Option<u64> {
-    Some(0u64)
-}
-fn default_pointer_move_action_altitude_angle() -> Option<f64> {
-    Some(0f64)
-}
-fn default_pointer_move_action_azimuth_angle() -> Option<f64> {
-    Some(0f64)
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum PointerMoveActionType {
+    #[serde(rename = "pointerMove")]
+    PointerMove,
 }
 impl PointerMoveAction {
-    pub fn new(r#type: impl Into<String>, x: impl Into<f64>, y: impl Into<f64>) -> Self {
+    pub fn new(
+        r#type: impl Into<PointerMoveActionType>,
+        x: impl Into<f64>,
+        y: impl Into<f64>,
+        pointer_common_properties: impl Into<PointerCommonProperties>,
+    ) -> Self {
         Self {
             r#type: r#type.into(),
             x: x.into(),
             y: y.into(),
+            pointer_common_properties: pointer_common_properties.into(),
             duration: None,
             origin: None,
-            width: None,
-            height: None,
-            pressure: None,
-            tangential_pressure: None,
-            twist: None,
-            altitude_angle: None,
-            azimuth_angle: None,
         }
     }
 }
@@ -446,7 +401,7 @@ impl PointerMoveAction {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WheelScrollAction {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: WheelScrollActionType,
     #[serde(rename = "x")]
     pub x: i64,
     #[serde(rename = "y")]
@@ -463,6 +418,11 @@ pub struct WheelScrollAction {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
     pub origin: Option<Origin>,
+}
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum WheelScrollActionType {
+    #[serde(rename = "scroll")]
+    Scroll,
 }
 impl WheelScrollAction {
     pub const IDENTIFIER: &'static str = "input.WheelScrollAction";
@@ -531,4 +491,4 @@ pub enum Origin {
     #[serde(rename = "pointer")]
     Pointer,
 }
-group_enum ! (InputTypes { ElementOrigin (ElementOrigin) , SourceActions (SourceActions) , NoneSourceActions (NoneSourceActions) , NoneSourceAction (NoneSourceAction) , KeySourceActions (KeySourceActions) , KeySourceAction (KeySourceAction) , PointerSourceActions (PointerSourceActions) , PointerType (PointerType) , PointerParameters (PointerParameters) , PointerSourceAction (PointerSourceAction) , WheelSourceActions (WheelSourceActions) , WheelSourceAction (WheelSourceAction) , PauseAction (PauseAction) , KeyDownAction (KeyDownAction) , KeyUpAction (KeyUpAction) , PointerUpAction (PointerUpAction) , PointerDownAction (PointerDownAction) , PointerMoveAction (PointerMoveAction) , WheelScrollAction (WheelScrollAction) , PointerCommonProperties (PointerCommonProperties) , Origin (Origin) });
+group_enum ! (InputType { ElementOrigin (ElementOrigin) , SourceActions (SourceActions) , NoneSourceAction (NoneSourceAction) , KeySourceAction (KeySourceAction) , PointerType (PointerType) , PointerParameters (PointerParameters) , PointerSourceAction (PointerSourceAction) , WheelSourceAction (WheelSourceAction) , PointerCommonProperties (PointerCommonProperties) , Origin (Origin) });

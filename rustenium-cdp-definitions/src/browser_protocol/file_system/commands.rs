@@ -18,7 +18,7 @@ pub enum GetDirectoryMethod {
     #[serde(rename = "FileSystem.getDirectory")]
     GetDirectory,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetDirectory {
     pub method: GetDirectoryMethod,
     pub params: GetDirectoryParams,

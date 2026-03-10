@@ -53,7 +53,7 @@ pub enum DispatchDragEventMethod {
     DispatchDragEvent,
 }
 #[doc = "Dispatches a drag event into the page.\n[dispatchDragEvent](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-dispatchDragEvent)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DispatchDragEvent {
     pub method: DispatchDragEventMethod,
     pub params: DispatchDragEventParams,
@@ -180,7 +180,7 @@ pub enum DispatchKeyEventMethod {
     DispatchKeyEvent,
 }
 #[doc = "Dispatches a key event to the page.\n[dispatchKeyEvent](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-dispatchKeyEvent)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DispatchKeyEvent {
     pub method: DispatchKeyEventMethod,
     pub params: DispatchKeyEventParams,
@@ -214,7 +214,7 @@ pub enum InsertTextMethod {
     InsertText,
 }
 #[doc = "This method emulates inserting text that doesn't come from a key press,\nfor example an emoji keyboard or an IME.\n[insertText](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-insertText)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InsertText {
     pub method: InsertTextMethod,
     pub params: InsertTextParams,
@@ -269,7 +269,7 @@ pub enum ImeSetCompositionMethod {
     ImeSetComposition,
 }
 #[doc = "This method sets the current candidate text for IME.\nUse imeCommitComposition to commit the final text.\nUse imeSetComposition with empty string as text to cancel composition.\n[imeSetComposition](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-imeSetComposition)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ImeSetComposition {
     pub method: ImeSetCompositionMethod,
     pub params: ImeSetCompositionParams,
@@ -410,7 +410,7 @@ pub enum DispatchMouseEventMethod {
     DispatchMouseEvent,
 }
 #[doc = "Dispatches a mouse event to the page.\n[dispatchMouseEvent](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-dispatchMouseEvent)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DispatchMouseEvent {
     pub method: DispatchMouseEventMethod,
     pub params: DispatchMouseEventParams,
@@ -473,7 +473,7 @@ pub enum DispatchTouchEventMethod {
     DispatchTouchEvent,
 }
 #[doc = "Dispatches a touch event to the page.\n[dispatchTouchEvent](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-dispatchTouchEvent)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DispatchTouchEvent {
     pub method: DispatchTouchEventMethod,
     pub params: DispatchTouchEventParams,
@@ -493,7 +493,7 @@ pub enum CancelDraggingMethod {
     CancelDragging,
 }
 #[doc = "Cancels any active dragging in the page.\n[cancelDragging](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-cancelDragging)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CancelDragging {
     pub method: CancelDraggingMethod,
     pub params: CancelDraggingParams,
@@ -583,7 +583,7 @@ pub enum EmulateTouchFromMouseEventMethod {
     EmulateTouchFromMouseEvent,
 }
 #[doc = "Emulates touch event from the mouse event parameters.\n[emulateTouchFromMouseEvent](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-emulateTouchFromMouseEvent)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EmulateTouchFromMouseEvent {
     pub method: EmulateTouchFromMouseEventMethod,
     pub params: EmulateTouchFromMouseEventParams,
@@ -614,7 +614,7 @@ pub enum SetIgnoreInputEventsMethod {
     SetIgnoreInputEvents,
 }
 #[doc = "Ignores input events (useful while auditing page).\n[setIgnoreInputEvents](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-setIgnoreInputEvents)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetIgnoreInputEvents {
     pub method: SetIgnoreInputEventsMethod,
     pub params: SetIgnoreInputEventsParams,
@@ -644,7 +644,7 @@ pub enum SetInterceptDragsMethod {
     SetInterceptDrags,
 }
 #[doc = "Prevents default drag and drop behavior and instead emits `Input.dragIntercepted` events.\nDrag and drop behavior can be directly controlled via `Input.dispatchDragEvent`.\n[setInterceptDrags](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-setInterceptDrags)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetInterceptDrags {
     pub method: SetInterceptDragsMethod,
     pub params: SetInterceptDragsParams,
@@ -695,7 +695,7 @@ pub enum SynthesizePinchGestureMethod {
     SynthesizePinchGesture,
 }
 #[doc = "Synthesizes a pinch gesture over a time period by issuing appropriate touch events.\n[synthesizePinchGesture](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-synthesizePinchGesture)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SynthesizePinchGesture {
     pub method: SynthesizePinchGestureMethod,
     pub params: SynthesizePinchGestureParams,
@@ -790,7 +790,7 @@ pub enum SynthesizeScrollGestureMethod {
     SynthesizeScrollGesture,
 }
 #[doc = "Synthesizes a scroll gesture over a time period by issuing appropriate touch events.\n[synthesizeScrollGesture](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-synthesizeScrollGesture)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SynthesizeScrollGesture {
     pub method: SynthesizeScrollGestureMethod,
     pub params: SynthesizeScrollGestureParams,
@@ -843,7 +843,7 @@ pub enum SynthesizeTapGestureMethod {
     SynthesizeTapGesture,
 }
 #[doc = "Synthesizes a tap gesture over a time period by issuing appropriate touch events.\n[synthesizeTapGesture](https://chromedevtools.github.io/devtools-protocol/tot/Input/#method-synthesizeTapGesture)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SynthesizeTapGesture {
     pub method: SynthesizeTapGestureMethod,
     pub params: SynthesizeTapGestureParams,

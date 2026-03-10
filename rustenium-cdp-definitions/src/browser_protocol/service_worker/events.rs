@@ -9,7 +9,7 @@ pub enum WorkerErrorReportedMethod {
     #[serde(rename = "ServiceWorker.workerErrorReported")]
     WorkerErrorReported,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WorkerErrorReported {
     pub method: WorkerErrorReportedMethod,
     pub params: WorkerErrorReportedParams,
@@ -28,7 +28,7 @@ pub enum WorkerRegistrationUpdatedMethod {
     #[serde(rename = "ServiceWorker.workerRegistrationUpdated")]
     WorkerRegistrationUpdated,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WorkerRegistrationUpdated {
     pub method: WorkerRegistrationUpdatedMethod,
     pub params: WorkerRegistrationUpdatedParams,
@@ -47,7 +47,7 @@ pub enum WorkerVersionUpdatedMethod {
     #[serde(rename = "ServiceWorker.workerVersionUpdated")]
     WorkerVersionUpdated,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WorkerVersionUpdated {
     pub method: WorkerVersionUpdatedMethod,
     pub params: WorkerVersionUpdatedParams,

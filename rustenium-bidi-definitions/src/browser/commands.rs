@@ -6,7 +6,7 @@ pub enum CloseMethod {
     #[serde(rename = "browser.close")]
     Close,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Close {
     pub method: CloseMethod,
     pub params: CloseParams,
@@ -38,7 +38,7 @@ pub enum CreateUserContextMethod {
     #[serde(rename = "browser.createUserContext")]
     CreateUserContext,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CreateUserContext {
     pub method: CreateUserContextMethod,
     pub params: CreateUserContextParams,
@@ -57,7 +57,7 @@ pub enum GetClientWindowsMethod {
     #[serde(rename = "browser.getClientWindows")]
     GetClientWindows,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetClientWindows {
     pub method: GetClientWindowsMethod,
     pub params: GetClientWindowsParams,
@@ -76,7 +76,7 @@ pub enum GetUserContextsMethod {
     #[serde(rename = "browser.getUserContexts")]
     GetUserContexts,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetUserContexts {
     pub method: GetUserContextsMethod,
     pub params: GetUserContextsParams,
@@ -105,7 +105,7 @@ pub enum RemoveUserContextMethod {
     #[serde(rename = "browser.removeUserContext")]
     RemoveUserContext,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RemoveUserContext {
     pub method: RemoveUserContextMethod,
     pub params: RemoveUserContextParams,
@@ -121,11 +121,22 @@ impl crate::CommandResult for RemoveUserContext {
 pub struct SetClientWindowStateParams {
     #[serde(rename = "clientWindow")]
     pub client_window: super::types::ClientWindow,
+    #[serde(flatten)]
+    #[serde(default)]
+    pub client_window_named_state_client_window_rect_state_union:
+        super::types::ClientWindowNamedStateClientWindowRectStateUnion,
 }
 impl SetClientWindowStateParams {
-    pub fn new(client_window: impl Into<super::types::ClientWindow>) -> Self {
+    pub fn new(
+        client_window: impl Into<super::types::ClientWindow>,
+        client_window_named_state_client_window_rect_state_union: impl Into<
+            super::types::ClientWindowNamedStateClientWindowRectStateUnion,
+        >,
+    ) -> Self {
         Self {
             client_window: client_window.into(),
+            client_window_named_state_client_window_rect_state_union:
+                client_window_named_state_client_window_rect_state_union.into(),
         }
     }
 }
@@ -134,7 +145,7 @@ pub enum SetClientWindowStateMethod {
     #[serde(rename = "browser.setClientWindowState")]
     SetClientWindowState,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetClientWindowState {
     pub method: SetClientWindowStateMethod,
     pub params: SetClientWindowStateParams,
@@ -162,7 +173,7 @@ pub enum SetDownloadBehaviorMethod {
     #[serde(rename = "browser.setDownloadBehavior")]
     SetDownloadBehavior,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetDownloadBehavior {
     pub method: SetDownloadBehaviorMethod,
     pub params: SetDownloadBehaviorParams,
@@ -174,4 +185,4 @@ impl SetDownloadBehavior {
 impl crate::CommandResult for SetDownloadBehavior {
     type Result = super::results::SetDownloadBehaviorResult;
 }
-group_enum ! (BrowserCommands { Close (Close) , CreateUserContext (CreateUserContext) , GetClientWindows (GetClientWindows) , GetUserContexts (GetUserContexts) , RemoveUserContext (RemoveUserContext) , SetClientWindowState (SetClientWindowState) , SetDownloadBehavior (SetDownloadBehavior) });
+group_enum ! (BrowserCommand { Close (Close) , CreateUserContext (CreateUserContext) , GetClientWindows (GetClientWindows) , GetUserContexts (GetUserContexts) , RemoveUserContext (RemoveUserContext) , SetClientWindowState (SetClientWindowState) , SetDownloadBehavior (SetDownloadBehavior) });

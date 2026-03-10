@@ -6,7 +6,7 @@ pub enum DisableMethod {
     #[serde(rename = "Profiler.disable")]
     Disable,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
@@ -24,7 +24,7 @@ pub enum EnableMethod {
     #[serde(rename = "Profiler.enable")]
     Enable,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
@@ -44,7 +44,7 @@ pub enum GetBestEffortCoverageMethod {
     GetBestEffortCoverage,
 }
 #[doc = "Collect coverage data for the current isolate. The coverage data may be incomplete due to\ngarbage collection.\n[getBestEffortCoverage](https://chromedevtools.github.io/devtools-protocol/tot/Profiler/#method-getBestEffortCoverage)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetBestEffortCoverage {
     pub method: GetBestEffortCoverageMethod,
     pub params: GetBestEffortCoverageParams,
@@ -75,7 +75,7 @@ pub enum SetSamplingIntervalMethod {
     SetSamplingInterval,
 }
 #[doc = "Changes CPU profiler sampling interval. Must be called before CPU profiles recording started.\n[setSamplingInterval](https://chromedevtools.github.io/devtools-protocol/tot/Profiler/#method-setSamplingInterval)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetSamplingInterval {
     pub method: SetSamplingIntervalMethod,
     pub params: SetSamplingIntervalParams,
@@ -93,7 +93,7 @@ pub enum StartMethod {
     #[serde(rename = "Profiler.start")]
     Start,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Start {
     pub method: StartMethod,
     pub params: StartParams,
@@ -129,7 +129,7 @@ pub enum StartPreciseCoverageMethod {
     StartPreciseCoverage,
 }
 #[doc = "Enable precise code coverage. Coverage data for JavaScript executed before enabling precise code\ncoverage may be incomplete. Enabling prevents running optimized code and resets execution\ncounters.\n[startPreciseCoverage](https://chromedevtools.github.io/devtools-protocol/tot/Profiler/#method-startPreciseCoverage)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StartPreciseCoverage {
     pub method: StartPreciseCoverageMethod,
     pub params: StartPreciseCoverageParams,
@@ -147,7 +147,7 @@ pub enum StopMethod {
     #[serde(rename = "Profiler.stop")]
     Stop,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Stop {
     pub method: StopMethod,
     pub params: StopParams,
@@ -167,7 +167,7 @@ pub enum StopPreciseCoverageMethod {
     StopPreciseCoverage,
 }
 #[doc = "Disable precise code coverage. Disabling releases unnecessary execution count records and allows\nexecuting optimized code.\n[stopPreciseCoverage](https://chromedevtools.github.io/devtools-protocol/tot/Profiler/#method-stopPreciseCoverage)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StopPreciseCoverage {
     pub method: StopPreciseCoverageMethod,
     pub params: StopPreciseCoverageParams,
@@ -187,7 +187,7 @@ pub enum TakePreciseCoverageMethod {
     TakePreciseCoverage,
 }
 #[doc = "Collect coverage data for the current isolate, and resets execution counters. Precise code\ncoverage needs to have started.\n[takePreciseCoverage](https://chromedevtools.github.io/devtools-protocol/tot/Profiler/#method-takePreciseCoverage)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TakePreciseCoverage {
     pub method: TakePreciseCoverageMethod,
     pub params: TakePreciseCoverageParams,

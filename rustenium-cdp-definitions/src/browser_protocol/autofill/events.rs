@@ -16,7 +16,7 @@ pub enum AddressFormFilledMethod {
     AddressFormFilled,
 }
 #[doc = "Emitted when an address form is filled.\n[addressFormFilled](https://chromedevtools.github.io/devtools-protocol/tot/Autofill/#event-addressFormFilled)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AddressFormFilled {
     pub method: AddressFormFilledMethod,
     pub params: AddressFormFilledParams,

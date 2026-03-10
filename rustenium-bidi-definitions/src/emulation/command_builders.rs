@@ -71,19 +71,11 @@ impl SetGeolocationOverride {
 }
 #[derive(Default, Clone)]
 pub struct SetGeolocationOverrideBuilder {
-    coordinates: Option<super::types::GeolocationCoordinates>,
     error: Option<super::types::GeolocationPositionError>,
     contexts: Option<Vec<crate::browsing_context::types::BrowsingContext>>,
     user_contexts: Option<Vec<crate::browser::types::UserContext>>,
 }
 impl SetGeolocationOverrideBuilder {
-    pub fn coordinates(
-        mut self,
-        coordinates: impl Into<super::types::GeolocationCoordinates>,
-    ) -> Self {
-        self.coordinates = Some(coordinates.into());
-        self
-    }
     pub fn error(mut self, error: impl Into<super::types::GeolocationPositionError>) -> Self {
         self.error = Some(error.into());
         self
@@ -130,7 +122,6 @@ impl SetGeolocationOverrideBuilder {
         Ok(SetGeolocationOverride {
             method: SetGeolocationOverrideMethod::SetGeolocationOverride,
             params: SetGeolocationOverrideParams {
-                coordinates: self.coordinates,
                 error: self
                     .error
                     .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(error)))?,

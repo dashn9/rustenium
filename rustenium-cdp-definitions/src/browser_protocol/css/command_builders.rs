@@ -114,6 +114,42 @@ impl CreateStyleSheetBuilder {
         })
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct DisableBuilder;
+impl DisableBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Disable {
+        Disable {
+            method: DisableMethod::Disable,
+            params: DisableParams {},
+        }
+    }
+}
+impl Disable {
+    pub fn builder() -> DisableBuilder {
+        DisableBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct EnableBuilder;
+impl EnableBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Enable {
+        Enable {
+            method: EnableMethod::Enable,
+            params: EnableParams {},
+        }
+    }
+}
+impl Enable {
+    pub fn builder() -> EnableBuilder {
+        EnableBuilder
+    }
+}
 impl ForcePseudoState {
     pub fn builder() -> ForcePseudoStateBuilder {
         <ForcePseudoStateBuilder as Default>::default()
@@ -443,6 +479,42 @@ impl GetMatchedStylesForNodeBuilder {
         })
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct GetEnvironmentVariablesBuilder;
+impl GetEnvironmentVariablesBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> GetEnvironmentVariables {
+        GetEnvironmentVariables {
+            method: GetEnvironmentVariablesMethod::GetEnvironmentVariables,
+            params: GetEnvironmentVariablesParams {},
+        }
+    }
+}
+impl GetEnvironmentVariables {
+    pub fn builder() -> GetEnvironmentVariablesBuilder {
+        GetEnvironmentVariablesBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct GetMediaQueriesBuilder;
+impl GetMediaQueriesBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> GetMediaQueries {
+        GetMediaQueries {
+            method: GetMediaQueriesMethod::GetMediaQueries,
+            params: GetMediaQueriesParams {},
+        }
+    }
+}
+impl GetMediaQueries {
+    pub fn builder() -> GetMediaQueriesBuilder {
+        GetMediaQueriesBuilder
+    }
+}
 impl GetPlatformFontsForNode {
     pub fn builder() -> GetPlatformFontsForNodeBuilder {
         <GetPlatformFontsForNodeBuilder as Default>::default()
@@ -630,6 +702,24 @@ impl TrackComputedStyleUpdatesBuilder {
                 })?,
             },
         })
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct TakeComputedStyleUpdatesBuilder;
+impl TakeComputedStyleUpdatesBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> TakeComputedStyleUpdates {
+        TakeComputedStyleUpdates {
+            method: TakeComputedStyleUpdatesMethod::TakeComputedStyleUpdates,
+            params: TakeComputedStyleUpdatesParams {},
+        }
+    }
+}
+impl TakeComputedStyleUpdates {
+    pub fn builder() -> TakeComputedStyleUpdatesBuilder {
+        TakeComputedStyleUpdatesBuilder
     }
 }
 impl SetEffectivePropertyValueForNode {
@@ -1064,6 +1154,60 @@ impl SetStyleTextsBuilder {
                 node_for_property_syntax_validation: self.node_for_property_syntax_validation,
             },
         })
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct StartRuleUsageTrackingBuilder;
+impl StartRuleUsageTrackingBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> StartRuleUsageTracking {
+        StartRuleUsageTracking {
+            method: StartRuleUsageTrackingMethod::StartRuleUsageTracking,
+            params: StartRuleUsageTrackingParams {},
+        }
+    }
+}
+impl StartRuleUsageTracking {
+    pub fn builder() -> StartRuleUsageTrackingBuilder {
+        StartRuleUsageTrackingBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct StopRuleUsageTrackingBuilder;
+impl StopRuleUsageTrackingBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> StopRuleUsageTracking {
+        StopRuleUsageTracking {
+            method: StopRuleUsageTrackingMethod::StopRuleUsageTracking,
+            params: StopRuleUsageTrackingParams {},
+        }
+    }
+}
+impl StopRuleUsageTracking {
+    pub fn builder() -> StopRuleUsageTrackingBuilder {
+        StopRuleUsageTrackingBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct TakeCoverageDeltaBuilder;
+impl TakeCoverageDeltaBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> TakeCoverageDelta {
+        TakeCoverageDelta {
+            method: TakeCoverageDeltaMethod::TakeCoverageDelta,
+            params: TakeCoverageDeltaParams {},
+        }
+    }
+}
+impl TakeCoverageDelta {
+    pub fn builder() -> TakeCoverageDeltaBuilder {
+        TakeCoverageDeltaBuilder
     }
 }
 impl SetLocalFontsEnabled {

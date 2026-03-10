@@ -22,6 +22,24 @@ impl EnableBuilder {
         }
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct DisableBuilder;
+impl DisableBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Disable {
+        Disable {
+            method: DisableMethod::Disable,
+            params: DisableParams {},
+        }
+    }
+}
+impl Disable {
+    pub fn builder() -> DisableBuilder {
+        DisableBuilder
+    }
+}
 impl SetSinkToUse {
     pub fn builder() -> SetSinkToUseBuilder {
         <SetSinkToUseBuilder as Default>::default()

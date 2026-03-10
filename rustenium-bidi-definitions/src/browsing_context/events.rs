@@ -27,7 +27,7 @@ pub enum ContextCreatedMethod {
     #[serde(rename = "browsingContext.contextCreated")]
     ContextCreated,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ContextCreated {
     pub method: ContextCreatedMethod,
     pub params: ContextCreatedParams,
@@ -64,7 +64,7 @@ pub enum ContextDestroyedMethod {
     #[serde(rename = "browsingContext.contextDestroyed")]
     ContextDestroyed,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ContextDestroyed {
     pub method: ContextDestroyedMethod,
     pub params: ContextDestroyedParams,
@@ -75,23 +75,16 @@ impl ContextDestroyed {
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NavigationStartedParams {
-    #[serde(rename = "context")]
-    pub context: super::types::BrowsingContext,
-    #[serde(rename = "navigation")]
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(flatten)]
     #[serde(default)]
-    pub navigation: Option<super::types::Navigation>,
-    #[serde(rename = "timestamp")]
-    pub timestamp: u64,
-    #[serde(rename = "url")]
-    pub url: String,
+    pub base_navigation_info: super::types::BaseNavigationInfo,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum NavigationStartedMethod {
     #[serde(rename = "browsingContext.navigationStarted")]
     NavigationStarted,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NavigationStarted {
     pub method: NavigationStartedMethod,
     pub params: NavigationStartedParams,
@@ -102,23 +95,16 @@ impl NavigationStarted {
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FragmentNavigatedParams {
-    #[serde(rename = "context")]
-    pub context: super::types::BrowsingContext,
-    #[serde(rename = "navigation")]
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(flatten)]
     #[serde(default)]
-    pub navigation: Option<super::types::Navigation>,
-    #[serde(rename = "timestamp")]
-    pub timestamp: u64,
-    #[serde(rename = "url")]
-    pub url: String,
+    pub base_navigation_info: super::types::BaseNavigationInfo,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum FragmentNavigatedMethod {
     #[serde(rename = "browsingContext.fragmentNavigated")]
     FragmentNavigated,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FragmentNavigated {
     pub method: FragmentNavigatedMethod,
     pub params: FragmentNavigatedParams,
@@ -141,7 +127,7 @@ pub enum HistoryUpdatedMethod {
     #[serde(rename = "browsingContext.historyUpdated")]
     HistoryUpdated,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HistoryUpdated {
     pub method: HistoryUpdatedMethod,
     pub params: HistoryUpdatedParams,
@@ -152,23 +138,16 @@ impl HistoryUpdated {
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DomContentLoadedParams {
-    #[serde(rename = "context")]
-    pub context: super::types::BrowsingContext,
-    #[serde(rename = "navigation")]
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(flatten)]
     #[serde(default)]
-    pub navigation: Option<super::types::Navigation>,
-    #[serde(rename = "timestamp")]
-    pub timestamp: u64,
-    #[serde(rename = "url")]
-    pub url: String,
+    pub base_navigation_info: super::types::BaseNavigationInfo,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum DomContentLoadedMethod {
     #[serde(rename = "browsingContext.domContentLoaded")]
     DomContentLoaded,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DomContentLoaded {
     pub method: DomContentLoadedMethod,
     pub params: DomContentLoadedParams,
@@ -179,23 +158,16 @@ impl DomContentLoaded {
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LoadParams {
-    #[serde(rename = "context")]
-    pub context: super::types::BrowsingContext,
-    #[serde(rename = "navigation")]
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(flatten)]
     #[serde(default)]
-    pub navigation: Option<super::types::Navigation>,
-    #[serde(rename = "timestamp")]
-    pub timestamp: u64,
-    #[serde(rename = "url")]
-    pub url: String,
+    pub base_navigation_info: super::types::BaseNavigationInfo,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum LoadMethod {
     #[serde(rename = "browsingContext.load")]
     Load,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Load {
     pub method: LoadMethod,
     pub params: LoadParams,
@@ -208,23 +180,16 @@ impl Load {
 pub struct DownloadWillBeginParams {
     #[serde(rename = "suggestedFilename")]
     pub suggested_filename: String,
-    #[serde(rename = "context")]
-    pub context: super::types::BrowsingContext,
-    #[serde(rename = "navigation")]
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(flatten)]
     #[serde(default)]
-    pub navigation: Option<super::types::Navigation>,
-    #[serde(rename = "timestamp")]
-    pub timestamp: u64,
-    #[serde(rename = "url")]
-    pub url: String,
+    pub base_navigation_info: super::types::BaseNavigationInfo,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum DownloadWillBeginMethod {
     #[serde(rename = "browsingContext.downloadWillBegin")]
     DownloadWillBegin,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DownloadWillBegin {
     pub method: DownloadWillBeginMethod,
     pub params: DownloadWillBeginParams,
@@ -235,29 +200,17 @@ impl DownloadWillBegin {
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DownloadEndParams {
-    #[serde(rename = "status")]
-    pub status: String,
-    #[serde(rename = "filepath")]
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(flatten)]
     #[serde(default)]
-    pub filepath: Option<String>,
-    #[serde(rename = "context")]
-    pub context: super::types::BrowsingContext,
-    #[serde(rename = "navigation")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default)]
-    pub navigation: Option<super::types::Navigation>,
-    #[serde(rename = "timestamp")]
-    pub timestamp: u64,
-    #[serde(rename = "url")]
-    pub url: String,
+    pub download_canceled_params_download_complete_params_union:
+        super::types::DownloadCanceledParamsDownloadCompleteParamsUnion,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum DownloadEndMethod {
     #[serde(rename = "browsingContext.downloadEnd")]
     DownloadEnd,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DownloadEnd {
     pub method: DownloadEndMethod,
     pub params: DownloadEndParams,
@@ -268,23 +221,16 @@ impl DownloadEnd {
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NavigationAbortedParams {
-    #[serde(rename = "context")]
-    pub context: super::types::BrowsingContext,
-    #[serde(rename = "navigation")]
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(flatten)]
     #[serde(default)]
-    pub navigation: Option<super::types::Navigation>,
-    #[serde(rename = "timestamp")]
-    pub timestamp: u64,
-    #[serde(rename = "url")]
-    pub url: String,
+    pub base_navigation_info: super::types::BaseNavigationInfo,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum NavigationAbortedMethod {
     #[serde(rename = "browsingContext.navigationAborted")]
     NavigationAborted,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NavigationAborted {
     pub method: NavigationAbortedMethod,
     pub params: NavigationAbortedParams,
@@ -295,23 +241,16 @@ impl NavigationAborted {
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NavigationCommittedParams {
-    #[serde(rename = "context")]
-    pub context: super::types::BrowsingContext,
-    #[serde(rename = "navigation")]
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(flatten)]
     #[serde(default)]
-    pub navigation: Option<super::types::Navigation>,
-    #[serde(rename = "timestamp")]
-    pub timestamp: u64,
-    #[serde(rename = "url")]
-    pub url: String,
+    pub base_navigation_info: super::types::BaseNavigationInfo,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum NavigationCommittedMethod {
     #[serde(rename = "browsingContext.navigationCommitted")]
     NavigationCommitted,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NavigationCommitted {
     pub method: NavigationCommittedMethod,
     pub params: NavigationCommittedParams,
@@ -322,23 +261,16 @@ impl NavigationCommitted {
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NavigationFailedParams {
-    #[serde(rename = "context")]
-    pub context: super::types::BrowsingContext,
-    #[serde(rename = "navigation")]
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(flatten)]
     #[serde(default)]
-    pub navigation: Option<super::types::Navigation>,
-    #[serde(rename = "timestamp")]
-    pub timestamp: u64,
-    #[serde(rename = "url")]
-    pub url: String,
+    pub base_navigation_info: super::types::BaseNavigationInfo,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum NavigationFailedMethod {
     #[serde(rename = "browsingContext.navigationFailed")]
     NavigationFailed,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NavigationFailed {
     pub method: NavigationFailedMethod,
     pub params: NavigationFailedParams,
@@ -365,7 +297,7 @@ pub enum UserPromptClosedMethod {
     #[serde(rename = "browsingContext.userPromptClosed")]
     UserPromptClosed,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UserPromptClosed {
     pub method: UserPromptClosedMethod,
     pub params: UserPromptClosedParams,
@@ -394,7 +326,7 @@ pub enum UserPromptOpenedMethod {
     #[serde(rename = "browsingContext.userPromptOpened")]
     UserPromptOpened,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UserPromptOpened {
     pub method: UserPromptOpenedMethod,
     pub params: UserPromptOpenedParams,
@@ -403,4 +335,4 @@ impl UserPromptOpened {
     pub const IDENTIFIER: &'static str = "browsingContext.userPromptOpened";
     pub const DOMAIN_DIRECTION: &'static str = "local";
 }
-group_enum ! (BrowsingContextEvents { ContextCreated (ContextCreated) , ContextDestroyed (ContextDestroyed) , NavigationStarted (NavigationStarted) , FragmentNavigated (FragmentNavigated) , HistoryUpdated (HistoryUpdated) , DomContentLoaded (DomContentLoaded) , Load (Load) , DownloadWillBegin (DownloadWillBegin) , DownloadEnd (DownloadEnd) , NavigationAborted (NavigationAborted) , NavigationCommitted (NavigationCommitted) , NavigationFailed (NavigationFailed) , UserPromptClosed (UserPromptClosed) , UserPromptOpened (UserPromptOpened) });
+group_enum ! (BrowsingContextEvent { ContextCreated (ContextCreated) , ContextDestroyed (ContextDestroyed) , NavigationStarted (NavigationStarted) , FragmentNavigated (FragmentNavigated) , HistoryUpdated (HistoryUpdated) , DomContentLoaded (DomContentLoaded) , Load (Load) , DownloadWillBegin (DownloadWillBegin) , DownloadEnd (DownloadEnd) , NavigationAborted (NavigationAborted) , NavigationCommitted (NavigationCommitted) , NavigationFailed (NavigationFailed) , UserPromptClosed (UserPromptClosed) , UserPromptOpened (UserPromptOpened) });

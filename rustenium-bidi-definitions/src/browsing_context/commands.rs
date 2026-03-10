@@ -16,7 +16,7 @@ pub enum ActivateMethod {
     #[serde(rename = "browsingContext.activate")]
     Activate,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Activate {
     pub method: ActivateMethod,
     pub params: ActivateParams,
@@ -67,7 +67,7 @@ pub enum CaptureScreenshotMethod {
     #[serde(rename = "browsingContext.captureScreenshot")]
     CaptureScreenshot,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CaptureScreenshot {
     pub method: CaptureScreenshotMethod,
     pub params: CaptureScreenshotParams,
@@ -104,7 +104,7 @@ pub enum CloseMethod {
     #[serde(rename = "browsingContext.close")]
     Close,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Close {
     pub method: CloseMethod,
     pub params: CloseParams,
@@ -151,7 +151,7 @@ pub enum CreateMethod {
     #[serde(rename = "browsingContext.create")]
     Create,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Create {
     pub method: CreateMethod,
     pub params: CreateParams,
@@ -179,7 +179,7 @@ pub enum GetTreeMethod {
     #[serde(rename = "browsingContext.getTree")]
     GetTree,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetTree {
     pub method: GetTreeMethod,
     pub params: GetTreeParams,
@@ -218,7 +218,7 @@ pub enum HandleUserPromptMethod {
     #[serde(rename = "browsingContext.handleUserPrompt")]
     HandleUserPrompt,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HandleUserPrompt {
     pub method: HandleUserPromptMethod,
     pub params: HandleUserPromptParams,
@@ -269,7 +269,7 @@ pub enum LocateNodesMethod {
     #[serde(rename = "browsingContext.locateNodes")]
     LocateNodes,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LocateNodes {
     pub method: LocateNodesMethod,
     pub params: LocateNodesParams,
@@ -306,7 +306,7 @@ pub enum NavigateMethod {
     #[serde(rename = "browsingContext.navigate")]
     Navigate,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Navigate {
     pub method: NavigateMethod,
     pub params: NavigateParams,
@@ -386,7 +386,7 @@ pub enum PrintMethod {
     #[serde(rename = "browsingContext.print")]
     Print,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Print {
     pub method: PrintMethod,
     pub params: PrintParams,
@@ -425,7 +425,7 @@ pub enum ReloadMethod {
     #[serde(rename = "browsingContext.reload")]
     Reload,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Reload {
     pub method: ReloadMethod,
     pub params: ReloadParams,
@@ -462,7 +462,7 @@ pub enum SetViewportMethod {
     #[serde(rename = "browsingContext.setViewport")]
     SetViewport,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetViewport {
     pub method: SetViewportMethod,
     pub params: SetViewportParams,
@@ -494,7 +494,7 @@ pub enum TraverseHistoryMethod {
     #[serde(rename = "browsingContext.traverseHistory")]
     TraverseHistory,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TraverseHistory {
     pub method: TraverseHistoryMethod,
     pub params: TraverseHistoryParams,
@@ -506,4 +506,4 @@ impl TraverseHistory {
 impl crate::CommandResult for TraverseHistory {
     type Result = super::results::TraverseHistoryResult;
 }
-group_enum ! (BrowsingContextCommands { Activate (Activate) , CaptureScreenshot (CaptureScreenshot) , Close (Close) , Create (Create) , GetTree (GetTree) , HandleUserPrompt (HandleUserPrompt) , LocateNodes (LocateNodes) , Navigate (Navigate) , Print (Print) , Reload (Reload) , SetViewport (SetViewport) , TraverseHistory (TraverseHistory) });
+group_enum ! (BrowsingContextCommand { Activate (Activate) , CaptureScreenshot (CaptureScreenshot) , Close (Close) , Create (Create) , GetTree (GetTree) , HandleUserPrompt (HandleUserPrompt) , LocateNodes (LocateNodes) , Navigate (Navigate) , Print (Print) , Reload (Reload) , SetViewport (SetViewport) , TraverseHistory (TraverseHistory) });

@@ -1,4 +1,22 @@
 use super::commands::*;
+#[derive(Debug, Clone, Default)]
+pub struct CloseBuilder;
+impl CloseBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Close {
+        Close {
+            method: CloseMethod::Close,
+            params: CloseParams {},
+        }
+    }
+}
+impl Close {
+    pub fn builder() -> CloseBuilder {
+        CloseBuilder
+    }
+}
 impl CreateUserContext {
     pub fn builder() -> CreateUserContextBuilder {
         <CreateUserContextBuilder as Default>::default()
@@ -37,6 +55,42 @@ impl CreateUserContextBuilder {
         }
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct GetClientWindowsBuilder;
+impl GetClientWindowsBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> GetClientWindows {
+        GetClientWindows {
+            method: GetClientWindowsMethod::GetClientWindows,
+            params: GetClientWindowsParams {},
+        }
+    }
+}
+impl GetClientWindows {
+    pub fn builder() -> GetClientWindowsBuilder {
+        GetClientWindowsBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct GetUserContextsBuilder;
+impl GetUserContextsBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> GetUserContexts {
+        GetUserContexts {
+            method: GetUserContextsMethod::GetUserContexts,
+            params: GetUserContextsParams {},
+        }
+    }
+}
+impl GetUserContexts {
+    pub fn builder() -> GetUserContextsBuilder {
+        GetUserContextsBuilder
+    }
+}
 impl RemoveUserContext {
     pub fn builder() -> RemoveUserContextBuilder {
         <RemoveUserContextBuilder as Default>::default()
@@ -70,10 +124,22 @@ impl SetClientWindowState {
 #[derive(Default, Clone)]
 pub struct SetClientWindowStateBuilder {
     client_window: Option<super::types::ClientWindow>,
+    client_window_named_state_client_window_rect_state_union:
+        Option<super::types::ClientWindowNamedStateClientWindowRectStateUnion>,
 }
 impl SetClientWindowStateBuilder {
     pub fn client_window(mut self, client_window: impl Into<super::types::ClientWindow>) -> Self {
         self.client_window = Some(client_window.into());
+        self
+    }
+    pub fn client_window_named_state_client_window_rect_state_union(
+        mut self,
+        client_window_named_state_client_window_rect_state_union: impl Into<
+            super::types::ClientWindowNamedStateClientWindowRectStateUnion,
+        >,
+    ) -> Self {
+        self.client_window_named_state_client_window_rect_state_union =
+            Some(client_window_named_state_client_window_rect_state_union.into());
         self
     }
     pub fn build(self) -> Result<SetClientWindowState, String> {
@@ -83,6 +149,16 @@ impl SetClientWindowStateBuilder {
                 client_window: self.client_window.ok_or_else(|| {
                     format!("Field `{}` is mandatory.", std::stringify!(client_window))
                 })?,
+                client_window_named_state_client_window_rect_state_union: self
+                    .client_window_named_state_client_window_rect_state_union
+                    .ok_or_else(|| {
+                        format!(
+                            "Field `{}` is mandatory.",
+                            std::stringify!(
+                                client_window_named_state_client_window_rect_state_union
+                            )
+                        )
+                    })?,
             },
         })
     }

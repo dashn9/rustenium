@@ -12,7 +12,7 @@ pub enum EntryAddedMethod {
     EntryAdded,
 }
 #[doc = "Issued when new message was logged.\n[entryAdded](https://chromedevtools.github.io/devtools-protocol/tot/Log/#event-entryAdded)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EntryAdded {
     pub method: EntryAddedMethod,
     pub params: EntryAddedParams,

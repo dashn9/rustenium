@@ -1,4 +1,22 @@
 use super::commands::*;
+#[derive(Debug, Clone, Default)]
+pub struct ClearDeviceOrientationOverrideBuilder;
+impl ClearDeviceOrientationOverrideBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> ClearDeviceOrientationOverride {
+        ClearDeviceOrientationOverride {
+            method: ClearDeviceOrientationOverrideMethod::ClearDeviceOrientationOverride,
+            params: ClearDeviceOrientationOverrideParams {},
+        }
+    }
+}
+impl ClearDeviceOrientationOverride {
+    pub fn builder() -> ClearDeviceOrientationOverrideBuilder {
+        ClearDeviceOrientationOverrideBuilder
+    }
+}
 impl SetDeviceOrientationOverride {
     pub fn builder() -> SetDeviceOrientationOverrideBuilder {
         <SetDeviceOrientationOverrideBuilder as Default>::default()

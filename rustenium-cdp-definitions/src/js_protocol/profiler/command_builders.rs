@@ -1,4 +1,58 @@
 use super::commands::*;
+#[derive(Debug, Clone, Default)]
+pub struct DisableBuilder;
+impl DisableBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Disable {
+        Disable {
+            method: DisableMethod::Disable,
+            params: DisableParams {},
+        }
+    }
+}
+impl Disable {
+    pub fn builder() -> DisableBuilder {
+        DisableBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct EnableBuilder;
+impl EnableBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Enable {
+        Enable {
+            method: EnableMethod::Enable,
+            params: EnableParams {},
+        }
+    }
+}
+impl Enable {
+    pub fn builder() -> EnableBuilder {
+        EnableBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct GetBestEffortCoverageBuilder;
+impl GetBestEffortCoverageBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> GetBestEffortCoverage {
+        GetBestEffortCoverage {
+            method: GetBestEffortCoverageMethod::GetBestEffortCoverage,
+            params: GetBestEffortCoverageParams {},
+        }
+    }
+}
+impl GetBestEffortCoverage {
+    pub fn builder() -> GetBestEffortCoverageBuilder {
+        GetBestEffortCoverageBuilder
+    }
+}
 impl SetSamplingInterval {
     pub fn builder() -> SetSamplingIntervalBuilder {
         <SetSamplingIntervalBuilder as Default>::default()
@@ -22,6 +76,24 @@ impl SetSamplingIntervalBuilder {
                 })?,
             },
         })
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct StartBuilder;
+impl StartBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Start {
+        Start {
+            method: StartMethod::Start,
+            params: StartParams {},
+        }
+    }
+}
+impl Start {
+    pub fn builder() -> StartBuilder {
+        StartBuilder
     }
 }
 impl StartPreciseCoverage {
@@ -57,5 +129,59 @@ impl StartPreciseCoverageBuilder {
                 allow_triggered_updates: self.allow_triggered_updates,
             },
         }
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct StopBuilder;
+impl StopBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Stop {
+        Stop {
+            method: StopMethod::Stop,
+            params: StopParams {},
+        }
+    }
+}
+impl Stop {
+    pub fn builder() -> StopBuilder {
+        StopBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct StopPreciseCoverageBuilder;
+impl StopPreciseCoverageBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> StopPreciseCoverage {
+        StopPreciseCoverage {
+            method: StopPreciseCoverageMethod::StopPreciseCoverage,
+            params: StopPreciseCoverageParams {},
+        }
+    }
+}
+impl StopPreciseCoverage {
+    pub fn builder() -> StopPreciseCoverageBuilder {
+        StopPreciseCoverageBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct TakePreciseCoverageBuilder;
+impl TakePreciseCoverageBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> TakePreciseCoverage {
+        TakePreciseCoverage {
+            method: TakePreciseCoverageMethod::TakePreciseCoverage,
+            params: TakePreciseCoverageParams {},
+        }
+    }
+}
+impl TakePreciseCoverage {
+    pub fn builder() -> TakePreciseCoverageBuilder {
+        TakePreciseCoverageBuilder
     }
 }

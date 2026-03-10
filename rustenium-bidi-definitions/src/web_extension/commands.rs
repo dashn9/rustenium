@@ -16,7 +16,7 @@ pub enum InstallMethod {
     #[serde(rename = "webExtension.install")]
     Install,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Install {
     pub method: InstallMethod,
     pub params: InstallParams,
@@ -45,7 +45,7 @@ pub enum UninstallMethod {
     #[serde(rename = "webExtension.uninstall")]
     Uninstall,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Uninstall {
     pub method: UninstallMethod,
     pub params: UninstallParams,
@@ -57,4 +57,4 @@ impl Uninstall {
 impl crate::CommandResult for Uninstall {
     type Result = super::results::UninstallResult;
 }
-group_enum ! (WebExtensionCommands { Install (Install) , Uninstall (Uninstall) });
+group_enum ! (WebExtensionCommand { Install (Install) , Uninstall (Uninstall) });

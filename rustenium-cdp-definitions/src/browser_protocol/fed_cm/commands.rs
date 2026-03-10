@@ -12,7 +12,7 @@ pub enum EnableMethod {
     #[serde(rename = "FedCm.enable")]
     Enable,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
@@ -30,7 +30,7 @@ pub enum DisableMethod {
     #[serde(rename = "FedCm.disable")]
     Disable,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
@@ -61,7 +61,7 @@ pub enum SelectAccountMethod {
     #[serde(rename = "FedCm.selectAccount")]
     SelectAccount,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SelectAccount {
     pub method: SelectAccountMethod,
     pub params: SelectAccountParams,
@@ -95,7 +95,7 @@ pub enum ClickDialogButtonMethod {
     #[serde(rename = "FedCm.clickDialogButton")]
     ClickDialogButton,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClickDialogButton {
     pub method: ClickDialogButtonMethod,
     pub params: ClickDialogButtonParams,
@@ -133,7 +133,7 @@ pub enum OpenUrlMethod {
     #[serde(rename = "FedCm.openUrl")]
     OpenUrl,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct OpenUrl {
     pub method: OpenUrlMethod,
     pub params: OpenUrlParams,
@@ -171,7 +171,7 @@ pub enum DismissDialogMethod {
     #[serde(rename = "FedCm.dismissDialog")]
     DismissDialog,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DismissDialog {
     pub method: DismissDialogMethod,
     pub params: DismissDialogParams,
@@ -191,7 +191,7 @@ pub enum ResetCooldownMethod {
     ResetCooldown,
 }
 #[doc = "Resets the cooldown time, if any, to allow the next FedCM call to show\na dialog even if one was recently dismissed by the user.\n[resetCooldown](https://chromedevtools.github.io/devtools-protocol/tot/FedCm/#method-resetCooldown)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResetCooldown {
     pub method: ResetCooldownMethod,
     pub params: ResetCooldownParams,

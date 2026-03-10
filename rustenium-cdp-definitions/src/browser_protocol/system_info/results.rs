@@ -14,10 +14,22 @@ pub struct GetInfoResult {
     #[serde(rename = "commandLine")]
     pub command_line: String,
 }
+impl TryFrom<serde_json::Value> for GetInfoResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetFeatureStateResult {
     #[serde(rename = "featureEnabled")]
     pub feature_enabled: bool,
+}
+impl TryFrom<serde_json::Value> for GetFeatureStateResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetProcessInfoResult {
@@ -25,4 +37,10 @@ pub struct GetProcessInfoResult {
     #[serde(rename = "processInfo")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub process_info: Vec<super::types::ProcessInfo>,
+}
+impl TryFrom<serde_json::Value> for GetProcessInfoResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
 }

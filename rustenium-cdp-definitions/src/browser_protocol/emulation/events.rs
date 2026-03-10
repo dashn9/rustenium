@@ -8,7 +8,7 @@ pub enum VirtualTimeBudgetExpiredMethod {
     VirtualTimeBudgetExpired,
 }
 #[doc = "Notification sent after the virtual time budget for the current VirtualTimePolicy has run out.\n[virtualTimeBudgetExpired](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#event-virtualTimeBudgetExpired)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VirtualTimeBudgetExpired {
     pub method: VirtualTimeBudgetExpiredMethod,
     pub params: VirtualTimeBudgetExpiredParams,

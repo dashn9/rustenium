@@ -448,6 +448,24 @@ impl UntrackIndexedDbForStorageKeyBuilder {
         })
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct GetTrustTokensBuilder;
+impl GetTrustTokensBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> GetTrustTokens {
+        GetTrustTokens {
+            method: GetTrustTokensMethod::GetTrustTokens,
+            params: GetTrustTokensParams {},
+        }
+    }
+}
+impl GetTrustTokens {
+    pub fn builder() -> GetTrustTokensBuilder {
+        GetTrustTokensBuilder
+    }
+}
 impl ClearTrustTokens {
     pub fn builder() -> ClearTrustTokensBuilder {
         <ClearTrustTokensBuilder as Default>::default()
@@ -819,6 +837,24 @@ impl DeleteStorageBucketBuilder {
         })
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct RunBounceTrackingMitigationsBuilder;
+impl RunBounceTrackingMitigationsBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> RunBounceTrackingMitigations {
+        RunBounceTrackingMitigations {
+            method: RunBounceTrackingMitigationsMethod::RunBounceTrackingMitigations,
+            params: RunBounceTrackingMitigationsParams {},
+        }
+    }
+}
+impl RunBounceTrackingMitigations {
+    pub fn builder() -> RunBounceTrackingMitigationsBuilder {
+        RunBounceTrackingMitigationsBuilder
+    }
+}
 impl SetAttributionReportingLocalTestingMode {
     pub fn builder() -> SetAttributionReportingLocalTestingModeBuilder {
         <SetAttributionReportingLocalTestingModeBuilder as Default>::default()
@@ -860,6 +896,42 @@ impl SetAttributionReportingTrackingBuilder {
                     .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(enable)))?,
             },
         })
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct SendPendingAttributionReportsBuilder;
+impl SendPendingAttributionReportsBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> SendPendingAttributionReports {
+        SendPendingAttributionReports {
+            method: SendPendingAttributionReportsMethod::SendPendingAttributionReports,
+            params: SendPendingAttributionReportsParams {},
+        }
+    }
+}
+impl SendPendingAttributionReports {
+    pub fn builder() -> SendPendingAttributionReportsBuilder {
+        SendPendingAttributionReportsBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct GetRelatedWebsiteSetsBuilder;
+impl GetRelatedWebsiteSetsBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> GetRelatedWebsiteSets {
+        GetRelatedWebsiteSets {
+            method: GetRelatedWebsiteSetsMethod::GetRelatedWebsiteSets,
+            params: GetRelatedWebsiteSetsParams {},
+        }
+    }
+}
+impl GetRelatedWebsiteSets {
+    pub fn builder() -> GetRelatedWebsiteSetsBuilder {
+        GetRelatedWebsiteSetsBuilder
     }
 }
 impl GetAffectedUrlsForThirdPartyCookieMetadata {

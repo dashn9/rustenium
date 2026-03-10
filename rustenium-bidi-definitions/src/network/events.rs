@@ -1,26 +1,9 @@
 use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AuthRequiredParams {
-    #[serde(rename = "context")]
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(flatten)]
     #[serde(default)]
-    pub context: Option<crate::browsing_context::types::BrowsingContext>,
-    #[serde(rename = "isBlocked")]
-    pub is_blocked: bool,
-    #[serde(rename = "navigation")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default)]
-    pub navigation: Option<crate::browsing_context::types::Navigation>,
-    #[serde(rename = "redirectCount")]
-    pub redirect_count: u64,
-    #[serde(rename = "request")]
-    pub request: super::types::RequestData,
-    #[serde(rename = "timestamp")]
-    pub timestamp: u64,
-    #[serde(rename = "intercepts")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default)]
-    pub intercepts: Option<Vec<super::types::Intercept>>,
+    pub base_parameters: super::types::BaseParameters,
     #[serde(rename = "response")]
     pub response: super::types::ResponseData,
 }
@@ -29,7 +12,7 @@ pub enum AuthRequiredMethod {
     #[serde(rename = "network.authRequired")]
     AuthRequired,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AuthRequired {
     pub method: AuthRequiredMethod,
     pub params: AuthRequiredParams,
@@ -39,161 +22,93 @@ impl AuthRequired {
     pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct AuthRequiredParametersParams {
-    #[serde(rename = "context")]
-    #[serde(skip_serializing_if = "Option::is_none")]
+pub struct BeforeRequestSentParams {
+    #[serde(flatten)]
     #[serde(default)]
-    pub context: Option<crate::browsing_context::types::BrowsingContext>,
-    #[serde(rename = "isBlocked")]
-    pub is_blocked: bool,
-    #[serde(rename = "navigation")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default)]
-    pub navigation: Option<crate::browsing_context::types::Navigation>,
-    #[serde(rename = "redirectCount")]
-    pub redirect_count: u64,
-    #[serde(rename = "request")]
-    pub request: super::types::RequestData,
-    #[serde(rename = "timestamp")]
-    pub timestamp: u64,
-    #[serde(rename = "intercepts")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default)]
-    pub intercepts: Option<Vec<super::types::Intercept>>,
+    pub base_parameters: super::types::BaseParameters,
     #[serde(rename = "initiator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
     pub initiator: Option<super::types::Initiator>,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub enum AuthRequiredParametersMethod {
+pub enum BeforeRequestSentMethod {
     #[serde(rename = "network.beforeRequestSent")]
-    AuthRequiredParameters,
+    BeforeRequestSent,
 }
-#[derive(Debug, Clone, PartialEq)]
-pub struct AuthRequiredParameters {
-    pub method: AuthRequiredParametersMethod,
-    pub params: AuthRequiredParametersParams,
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct BeforeRequestSent {
+    pub method: BeforeRequestSentMethod,
+    pub params: BeforeRequestSentParams,
 }
-impl AuthRequiredParameters {
+impl BeforeRequestSent {
     pub const IDENTIFIER: &'static str = "network.beforeRequestSent";
     pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct BeforeRequestSentParametersParams {
-    #[serde(rename = "context")]
-    #[serde(skip_serializing_if = "Option::is_none")]
+pub struct FetchErrorParams {
+    #[serde(flatten)]
     #[serde(default)]
-    pub context: Option<crate::browsing_context::types::BrowsingContext>,
-    #[serde(rename = "isBlocked")]
-    pub is_blocked: bool,
-    #[serde(rename = "navigation")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default)]
-    pub navigation: Option<crate::browsing_context::types::Navigation>,
-    #[serde(rename = "redirectCount")]
-    pub redirect_count: u64,
-    #[serde(rename = "request")]
-    pub request: super::types::RequestData,
-    #[serde(rename = "timestamp")]
-    pub timestamp: u64,
-    #[serde(rename = "intercepts")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default)]
-    pub intercepts: Option<Vec<super::types::Intercept>>,
+    pub base_parameters: super::types::BaseParameters,
     #[serde(rename = "errorText")]
     pub error_text: String,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub enum BeforeRequestSentParametersMethod {
+pub enum FetchErrorMethod {
     #[serde(rename = "network.fetchError")]
-    BeforeRequestSentParameters,
+    FetchError,
 }
-#[derive(Debug, Clone, PartialEq)]
-pub struct BeforeRequestSentParameters {
-    pub method: BeforeRequestSentParametersMethod,
-    pub params: BeforeRequestSentParametersParams,
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct FetchError {
+    pub method: FetchErrorMethod,
+    pub params: FetchErrorParams,
 }
-impl BeforeRequestSentParameters {
+impl FetchError {
     pub const IDENTIFIER: &'static str = "network.fetchError";
     pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct FetchErrorParametersParams {
-    #[serde(rename = "context")]
-    #[serde(skip_serializing_if = "Option::is_none")]
+pub struct ResponseCompletedParams {
+    #[serde(flatten)]
     #[serde(default)]
-    pub context: Option<crate::browsing_context::types::BrowsingContext>,
-    #[serde(rename = "isBlocked")]
-    pub is_blocked: bool,
-    #[serde(rename = "navigation")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default)]
-    pub navigation: Option<crate::browsing_context::types::Navigation>,
-    #[serde(rename = "redirectCount")]
-    pub redirect_count: u64,
-    #[serde(rename = "request")]
-    pub request: super::types::RequestData,
-    #[serde(rename = "timestamp")]
-    pub timestamp: u64,
-    #[serde(rename = "intercepts")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default)]
-    pub intercepts: Option<Vec<super::types::Intercept>>,
+    pub base_parameters: super::types::BaseParameters,
     #[serde(rename = "response")]
     pub response: super::types::ResponseData,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub enum FetchErrorParametersMethod {
+pub enum ResponseCompletedMethod {
     #[serde(rename = "network.responseCompleted")]
-    FetchErrorParameters,
+    ResponseCompleted,
 }
-#[derive(Debug, Clone, PartialEq)]
-pub struct FetchErrorParameters {
-    pub method: FetchErrorParametersMethod,
-    pub params: FetchErrorParametersParams,
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ResponseCompleted {
+    pub method: ResponseCompletedMethod,
+    pub params: ResponseCompletedParams,
 }
-impl FetchErrorParameters {
+impl ResponseCompleted {
     pub const IDENTIFIER: &'static str = "network.responseCompleted";
     pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct ResponseCompletedParametersParams {
-    #[serde(rename = "context")]
-    #[serde(skip_serializing_if = "Option::is_none")]
+pub struct ResponseStartedParams {
+    #[serde(flatten)]
     #[serde(default)]
-    pub context: Option<crate::browsing_context::types::BrowsingContext>,
-    #[serde(rename = "isBlocked")]
-    pub is_blocked: bool,
-    #[serde(rename = "navigation")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default)]
-    pub navigation: Option<crate::browsing_context::types::Navigation>,
-    #[serde(rename = "redirectCount")]
-    pub redirect_count: u64,
-    #[serde(rename = "request")]
-    pub request: super::types::RequestData,
-    #[serde(rename = "timestamp")]
-    pub timestamp: u64,
-    #[serde(rename = "intercepts")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default)]
-    pub intercepts: Option<Vec<super::types::Intercept>>,
+    pub base_parameters: super::types::BaseParameters,
     #[serde(rename = "response")]
     pub response: super::types::ResponseData,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub enum ResponseCompletedParametersMethod {
+pub enum ResponseStartedMethod {
     #[serde(rename = "network.responseStarted")]
-    ResponseCompletedParameters,
+    ResponseStarted,
 }
-#[derive(Debug, Clone, PartialEq)]
-pub struct ResponseCompletedParameters {
-    pub method: ResponseCompletedParametersMethod,
-    pub params: ResponseCompletedParametersParams,
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ResponseStarted {
+    pub method: ResponseStartedMethod,
+    pub params: ResponseStartedParams,
 }
-impl ResponseCompletedParameters {
+impl ResponseStarted {
     pub const IDENTIFIER: &'static str = "network.responseStarted";
     pub const DOMAIN_DIRECTION: &'static str = "local";
 }
-group_enum ! (NetworkEvents { AuthRequired (AuthRequired) , AuthRequiredParameters (AuthRequiredParameters) , BeforeRequestSentParameters (BeforeRequestSentParameters) , FetchErrorParameters (FetchErrorParameters) , ResponseCompletedParameters (ResponseCompletedParameters) });
+group_enum ! (NetworkEvent { AuthRequired (AuthRequired) , BeforeRequestSent (BeforeRequestSent) , FetchError (FetchError) , ResponseCompleted (ResponseCompleted) , ResponseStarted (ResponseStarted) });

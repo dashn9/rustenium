@@ -38,12 +38,17 @@ pub enum ExtensionData {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ExtensionPath {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: ExtensionPathType,
     #[serde(rename = "path")]
     pub path: String,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum ExtensionPathType {
+    #[serde(rename = "path")]
+    Path,
+}
 impl ExtensionPath {
-    pub fn new(r#type: impl Into<String>, path: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<ExtensionPathType>, path: impl Into<String>) -> Self {
         Self {
             r#type: r#type.into(),
             path: path.into(),
@@ -57,12 +62,17 @@ impl ExtensionPath {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ExtensionArchivePath {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: ExtensionArchivePathType,
     #[serde(rename = "path")]
     pub path: String,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum ExtensionArchivePathType {
+    #[serde(rename = "archivePath")]
+    ArchivePath,
+}
 impl ExtensionArchivePath {
-    pub fn new(r#type: impl Into<String>, path: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<ExtensionArchivePathType>, path: impl Into<String>) -> Self {
         Self {
             r#type: r#type.into(),
             path: path.into(),
@@ -76,12 +86,17 @@ impl ExtensionArchivePath {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ExtensionBase64Encoded {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: ExtensionBase64EncodedType,
     #[serde(rename = "value")]
     pub value: String,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum ExtensionBase64EncodedType {
+    #[serde(rename = "base64")]
+    Base64,
+}
 impl ExtensionBase64Encoded {
-    pub fn new(r#type: impl Into<String>, value: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<ExtensionBase64EncodedType>, value: impl Into<String>) -> Self {
         Self {
             r#type: r#type.into(),
             value: value.into(),
@@ -92,4 +107,4 @@ impl ExtensionBase64Encoded {
     pub const IDENTIFIER: &'static str = "webExtension.ExtensionBase64Encoded";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
-group_enum ! (WebExtensionTypes { Extension (Extension) , ExtensionData (ExtensionData) , ExtensionPath (ExtensionPath) , ExtensionArchivePath (ExtensionArchivePath) , ExtensionBase64Encoded (ExtensionBase64Encoded) });
+group_enum ! (WebExtensionType { Extension (Extension) , ExtensionData (ExtensionData) });

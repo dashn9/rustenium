@@ -57,6 +57,24 @@ impl SetSimulatedCentralStateBuilder {
         })
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct DisableBuilder;
+impl DisableBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Disable {
+        Disable {
+            method: DisableMethod::Disable,
+            params: DisableParams {},
+        }
+    }
+}
+impl Disable {
+    pub fn builder() -> DisableBuilder {
+        DisableBuilder
+    }
+}
 impl SimulatePreconnectedPeripheral {
     pub fn builder() -> SimulatePreconnectedPeripheralBuilder {
         <SimulatePreconnectedPeripheralBuilder as Default>::default()

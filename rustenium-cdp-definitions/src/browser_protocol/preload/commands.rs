@@ -6,7 +6,7 @@ pub enum EnableMethod {
     #[serde(rename = "Preload.enable")]
     Enable,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
@@ -24,7 +24,7 @@ pub enum DisableMethod {
     #[serde(rename = "Preload.disable")]
     Disable,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,

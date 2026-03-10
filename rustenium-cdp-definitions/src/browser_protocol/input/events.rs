@@ -11,7 +11,7 @@ pub enum DragInterceptedMethod {
     DragIntercepted,
 }
 #[doc = "Emitted only when `Input.setInterceptDrags` is enabled. Use this data with `Input.dispatchDragEvent` to\nrestore normal drag and drop behavior.\n[dragIntercepted](https://chromedevtools.github.io/devtools-protocol/tot/Input/#event-dragIntercepted)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DragIntercepted {
     pub method: DragInterceptedMethod,
     pub params: DragInterceptedParams,

@@ -19,7 +19,7 @@ pub enum ConsoleProfileFinishedMethod {
     #[serde(rename = "Profiler.consoleProfileFinished")]
     ConsoleProfileFinished,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ConsoleProfileFinished {
     pub method: ConsoleProfileFinishedMethod,
     pub params: ConsoleProfileFinishedParams,
@@ -47,7 +47,7 @@ pub enum ConsoleProfileStartedMethod {
     ConsoleProfileStarted,
 }
 #[doc = "Sent when new profile recording is started using console.profile() call.\n[consoleProfileStarted](https://chromedevtools.github.io/devtools-protocol/tot/Profiler/#event-consoleProfileStarted)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ConsoleProfileStarted {
     pub method: ConsoleProfileStartedMethod,
     pub params: ConsoleProfileStartedParams,
@@ -75,7 +75,7 @@ pub enum PreciseCoverageDeltaUpdateMethod {
     PreciseCoverageDeltaUpdate,
 }
 #[doc = "Reports coverage delta since the last poll (either from an event like this, or from\n`takePreciseCoverage` for the current isolate. May only be sent if precise code\ncoverage has been started. This event can be trigged by the embedder to, for example,\ntrigger collection of coverage data immediately at a certain point in time.\n[preciseCoverageDeltaUpdate](https://chromedevtools.github.io/devtools-protocol/tot/Profiler/#event-preciseCoverageDeltaUpdate)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PreciseCoverageDeltaUpdate {
     pub method: PreciseCoverageDeltaUpdateMethod,
     pub params: PreciseCoverageDeltaUpdateParams,

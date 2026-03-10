@@ -16,7 +16,7 @@ pub enum ClearMethod {
     #[serde(rename = "DOMStorage.clear")]
     Clear,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Clear {
     pub method: ClearMethod,
     pub params: ClearParams,
@@ -36,7 +36,7 @@ pub enum DisableMethod {
     Disable,
 }
 #[doc = "Disables storage tracking, prevents storage events from being sent to the client.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/DOMStorage/#method-disable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
@@ -56,7 +56,7 @@ pub enum EnableMethod {
     Enable,
 }
 #[doc = "Enables storage tracking, storage events will now be delivered to the client.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/DOMStorage/#method-enable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
@@ -84,7 +84,7 @@ pub enum GetDomStorageItemsMethod {
     #[serde(rename = "DOMStorage.getDOMStorageItems")]
     GetDomStorageItems,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetDomStorageItems {
     pub method: GetDomStorageItemsMethod,
     pub params: GetDomStorageItemsParams,
@@ -115,7 +115,7 @@ pub enum RemoveDomStorageItemMethod {
     #[serde(rename = "DOMStorage.removeDOMStorageItem")]
     RemoveDomStorageItem,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RemoveDomStorageItem {
     pub method: RemoveDomStorageItemMethod,
     pub params: RemoveDomStorageItemParams,
@@ -153,7 +153,7 @@ pub enum SetDomStorageItemMethod {
     #[serde(rename = "DOMStorage.setDOMStorageItem")]
     SetDomStorageItem,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetDomStorageItem {
     pub method: SetDomStorageItemMethod,
     pub params: SetDomStorageItemParams,

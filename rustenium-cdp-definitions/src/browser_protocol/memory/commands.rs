@@ -8,7 +8,7 @@ pub enum GetDomCountersMethod {
     GetDomCounters,
 }
 #[doc = "Retruns current DOM object counters.\n[getDOMCounters](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-getDOMCounters)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetDomCounters {
     pub method: GetDomCountersMethod,
     pub params: GetDomCountersParams,
@@ -28,7 +28,7 @@ pub enum GetDomCountersForLeakDetectionMethod {
     GetDomCountersForLeakDetection,
 }
 #[doc = "Retruns DOM object counters after preparing renderer for leak detection.\n[getDOMCountersForLeakDetection](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-getDOMCountersForLeakDetection)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetDomCountersForLeakDetection {
     pub method: GetDomCountersForLeakDetectionMethod,
     pub params: GetDomCountersForLeakDetectionParams,
@@ -48,7 +48,7 @@ pub enum PrepareForLeakDetectionMethod {
     PrepareForLeakDetection,
 }
 #[doc = "Prepares for leak detection by terminating workers, stopping spellcheckers,\ndropping non-essential internal caches, running garbage collections, etc.\n[prepareForLeakDetection](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-prepareForLeakDetection)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PrepareForLeakDetection {
     pub method: PrepareForLeakDetectionMethod,
     pub params: PrepareForLeakDetectionParams,
@@ -68,7 +68,7 @@ pub enum ForciblyPurgeJavaScriptMemoryMethod {
     ForciblyPurgeJavaScriptMemory,
 }
 #[doc = "Simulate OomIntervention by purging V8 memory.\n[forciblyPurgeJavaScriptMemory](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-forciblyPurgeJavaScriptMemory)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ForciblyPurgeJavaScriptMemory {
     pub method: ForciblyPurgeJavaScriptMemoryMethod,
     pub params: ForciblyPurgeJavaScriptMemoryParams,
@@ -99,7 +99,7 @@ pub enum SetPressureNotificationsSuppressedMethod {
     SetPressureNotificationsSuppressed,
 }
 #[doc = "Enable/disable suppressing memory pressure notifications in all processes.\n[setPressureNotificationsSuppressed](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-setPressureNotificationsSuppressed)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetPressureNotificationsSuppressed {
     pub method: SetPressureNotificationsSuppressedMethod,
     pub params: SetPressureNotificationsSuppressedParams,
@@ -130,7 +130,7 @@ pub enum SimulatePressureNotificationMethod {
     SimulatePressureNotification,
 }
 #[doc = "Simulate a memory pressure notification in all processes.\n[simulatePressureNotification](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-simulatePressureNotification)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SimulatePressureNotification {
     pub method: SimulatePressureNotificationMethod,
     pub params: SimulatePressureNotificationParams,
@@ -161,7 +161,7 @@ pub enum StartSamplingMethod {
     StartSampling,
 }
 #[doc = "Start collecting native memory profile.\n[startSampling](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-startSampling)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StartSampling {
     pub method: StartSamplingMethod,
     pub params: StartSamplingParams,
@@ -181,7 +181,7 @@ pub enum StopSamplingMethod {
     StopSampling,
 }
 #[doc = "Stop collecting native memory profile.\n[stopSampling](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-stopSampling)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StopSampling {
     pub method: StopSamplingMethod,
     pub params: StopSamplingParams,
@@ -201,7 +201,7 @@ pub enum GetAllTimeSamplingProfileMethod {
     GetAllTimeSamplingProfile,
 }
 #[doc = "Retrieve native memory allocations profile\ncollected since renderer process startup.\n[getAllTimeSamplingProfile](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-getAllTimeSamplingProfile)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetAllTimeSamplingProfile {
     pub method: GetAllTimeSamplingProfileMethod,
     pub params: GetAllTimeSamplingProfileParams,
@@ -221,7 +221,7 @@ pub enum GetBrowserSamplingProfileMethod {
     GetBrowserSamplingProfile,
 }
 #[doc = "Retrieve native memory allocations profile\ncollected since browser process startup.\n[getBrowserSamplingProfile](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-getBrowserSamplingProfile)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetBrowserSamplingProfile {
     pub method: GetBrowserSamplingProfileMethod,
     pub params: GetBrowserSamplingProfileParams,
@@ -241,7 +241,7 @@ pub enum GetSamplingProfileMethod {
     GetSamplingProfile,
 }
 #[doc = "Retrieve native memory allocations profile collected since last\n`startSampling` call.\n[getSamplingProfile](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#method-getSamplingProfile)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetSamplingProfile {
     pub method: GetSamplingProfileMethod,
     pub params: GetSamplingProfileParams,

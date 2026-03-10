@@ -8,7 +8,7 @@ pub enum DisableMethod {
     Disable,
 }
 #[doc = "Disables tracking security state changes.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Security/#method-disable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
@@ -28,7 +28,7 @@ pub enum EnableMethod {
     Enable,
 }
 #[doc = "Enables tracking security state changes.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Security/#method-enable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
@@ -59,7 +59,7 @@ pub enum SetIgnoreCertificateErrorsMethod {
     SetIgnoreCertificateErrors,
 }
 #[doc = "Enable/disable whether all certificate errors should be ignored.\n[setIgnoreCertificateErrors](https://chromedevtools.github.io/devtools-protocol/tot/Security/#method-setIgnoreCertificateErrors)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetIgnoreCertificateErrors {
     pub method: SetIgnoreCertificateErrorsMethod,
     pub params: SetIgnoreCertificateErrorsParams,

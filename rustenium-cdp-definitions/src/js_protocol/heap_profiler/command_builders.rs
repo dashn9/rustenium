@@ -27,6 +27,60 @@ impl AddInspectedHeapObjectBuilder {
         })
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct CollectGarbageBuilder;
+impl CollectGarbageBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> CollectGarbage {
+        CollectGarbage {
+            method: CollectGarbageMethod::CollectGarbage,
+            params: CollectGarbageParams {},
+        }
+    }
+}
+impl CollectGarbage {
+    pub fn builder() -> CollectGarbageBuilder {
+        CollectGarbageBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct DisableBuilder;
+impl DisableBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Disable {
+        Disable {
+            method: DisableMethod::Disable,
+            params: DisableParams {},
+        }
+    }
+}
+impl Disable {
+    pub fn builder() -> DisableBuilder {
+        DisableBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct EnableBuilder;
+impl EnableBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Enable {
+        Enable {
+            method: EnableMethod::Enable,
+            params: EnableParams {},
+        }
+    }
+}
+impl Enable {
+    pub fn builder() -> EnableBuilder {
+        EnableBuilder
+    }
+}
 impl GetHeapObjectId {
     pub fn builder() -> GetHeapObjectIdBuilder {
         <GetHeapObjectIdBuilder as Default>::default()
@@ -84,6 +138,24 @@ impl GetObjectByHeapObjectIdBuilder {
                 object_group: self.object_group,
             },
         })
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct GetSamplingProfileBuilder;
+impl GetSamplingProfileBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> GetSamplingProfile {
+        GetSamplingProfile {
+            method: GetSamplingProfileMethod::GetSamplingProfile,
+            params: GetSamplingProfileParams {},
+        }
+    }
+}
+impl GetSamplingProfile {
+    pub fn builder() -> GetSamplingProfileBuilder {
+        GetSamplingProfileBuilder
     }
 }
 impl StartSampling {
@@ -156,6 +228,24 @@ impl StartTrackingHeapObjectsBuilder {
                 track_allocations: self.track_allocations,
             },
         }
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct StopSamplingBuilder;
+impl StopSamplingBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> StopSampling {
+        StopSampling {
+            method: StopSamplingMethod::StopSampling,
+            params: StopSamplingParams {},
+        }
+    }
+}
+impl StopSampling {
+    pub fn builder() -> StopSamplingBuilder {
+        StopSamplingBuilder
     }
 }
 impl StopTrackingHeapObjects {

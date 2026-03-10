@@ -6,11 +6,11 @@ impl ChannelValue {
 }
 #[derive(Default, Clone)]
 pub struct ChannelValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<ChannelValueType>,
     value: Option<ChannelProperties>,
 }
 impl ChannelValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<ChannelValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -73,12 +73,12 @@ impl EvaluateResultSuccess {
 }
 #[derive(Default, Clone)]
 pub struct EvaluateResultSuccessBuilder {
-    r#type: Option<String>,
+    r#type: Option<EvaluateResultSuccessType>,
     result: Option<RemoteValue>,
     realm: Option<Realm>,
 }
 impl EvaluateResultSuccessBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<EvaluateResultSuccessType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -111,12 +111,12 @@ impl EvaluateResultException {
 }
 #[derive(Default, Clone)]
 pub struct EvaluateResultExceptionBuilder {
-    r#type: Option<String>,
+    r#type: Option<EvaluateResultExceptionType>,
     exception_details: Option<ExceptionDetails>,
     realm: Option<Realm>,
 }
 impl EvaluateResultExceptionBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<EvaluateResultExceptionType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -206,11 +206,11 @@ impl ArrayLocalValue {
 }
 #[derive(Default, Clone)]
 pub struct ArrayLocalValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<ArrayLocalValueType>,
     value: Option<ListLocalValue>,
 }
 impl ArrayLocalValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<ArrayLocalValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -236,11 +236,11 @@ impl DateLocalValue {
 }
 #[derive(Default, Clone)]
 pub struct DateLocalValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<DateLocalValueType>,
     value: Option<String>,
 }
 impl DateLocalValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<DateLocalValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -266,11 +266,11 @@ impl MapLocalValue {
 }
 #[derive(Default, Clone)]
 pub struct MapLocalValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<MapLocalValueType>,
     value: Option<MappingLocalValue>,
 }
 impl MapLocalValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<MapLocalValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -296,11 +296,11 @@ impl ObjectLocalValue {
 }
 #[derive(Default, Clone)]
 pub struct ObjectLocalValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<ObjectLocalValueType>,
     value: Option<MappingLocalValue>,
 }
 impl ObjectLocalValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<ObjectLocalValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -354,11 +354,11 @@ impl RegExpLocalValue {
 }
 #[derive(Default, Clone)]
 pub struct RegExpLocalValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<RegExpLocalValueType>,
     value: Option<RegExpValue>,
 }
 impl RegExpLocalValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<RegExpLocalValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -384,11 +384,11 @@ impl SetLocalValue {
 }
 #[derive(Default, Clone)]
 pub struct SetLocalValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<SetLocalValueType>,
     value: Option<ListLocalValue>,
 }
 impl SetLocalValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<SetLocalValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -414,10 +414,10 @@ impl UndefinedValue {
 }
 #[derive(Default, Clone)]
 pub struct UndefinedValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<UndefinedValueType>,
 }
 impl UndefinedValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<UndefinedValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -436,10 +436,10 @@ impl NullValue {
 }
 #[derive(Default, Clone)]
 pub struct NullValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<NullValueType>,
 }
 impl NullValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<NullValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -458,11 +458,11 @@ impl StringValue {
 }
 #[derive(Default, Clone)]
 pub struct StringValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<StringValueType>,
     value: Option<String>,
 }
 impl StringValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<StringValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -488,11 +488,11 @@ impl NumberValue {
 }
 #[derive(Default, Clone)]
 pub struct NumberValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<NumberValueType>,
     value: Option<serde_json::Value>,
 }
 impl NumberValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<NumberValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -518,11 +518,11 @@ impl BooleanValue {
 }
 #[derive(Default, Clone)]
 pub struct BooleanValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<BooleanValueType>,
     value: Option<bool>,
 }
 impl BooleanValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<BooleanValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -548,11 +548,11 @@ impl BigIntValue {
 }
 #[derive(Default, Clone)]
 pub struct BigIntValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<BigIntValueType>,
     value: Option<String>,
 }
 impl BigIntValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<BigIntValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -656,12 +656,12 @@ impl SymbolRemoteValue {
 }
 #[derive(Default, Clone)]
 pub struct SymbolRemoteValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<SymbolRemoteValueType>,
     handle: Option<Handle>,
     internal_id: Option<InternalId>,
 }
 impl SymbolRemoteValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<SymbolRemoteValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -690,13 +690,13 @@ impl ArrayRemoteValue {
 }
 #[derive(Default, Clone)]
 pub struct ArrayRemoteValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<ArrayRemoteValueType>,
     handle: Option<Handle>,
     internal_id: Option<InternalId>,
     value: Option<ListRemoteValue>,
 }
 impl ArrayRemoteValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<ArrayRemoteValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -730,13 +730,13 @@ impl ObjectRemoteValue {
 }
 #[derive(Default, Clone)]
 pub struct ObjectRemoteValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<ObjectRemoteValueType>,
     handle: Option<Handle>,
     internal_id: Option<InternalId>,
     value: Option<MappingRemoteValue>,
 }
 impl ObjectRemoteValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<ObjectRemoteValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -770,12 +770,12 @@ impl FunctionRemoteValue {
 }
 #[derive(Default, Clone)]
 pub struct FunctionRemoteValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<FunctionRemoteValueType>,
     handle: Option<Handle>,
     internal_id: Option<InternalId>,
 }
 impl FunctionRemoteValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<FunctionRemoteValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -804,18 +804,13 @@ impl RegExpRemoteValue {
 }
 #[derive(Default, Clone)]
 pub struct RegExpRemoteValueBuilder {
-    r#type: Option<String>,
-    value: Option<RegExpValue>,
+    reg_exp_local_value: Option<RegExpLocalValue>,
     handle: Option<Handle>,
     internal_id: Option<InternalId>,
 }
 impl RegExpRemoteValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
-        self.r#type = Some(r#type.into());
-        self
-    }
-    pub fn value(mut self, value: impl Into<RegExpValue>) -> Self {
-        self.value = Some(value.into());
+    pub fn reg_exp_local_value(mut self, reg_exp_local_value: impl Into<RegExpLocalValue>) -> Self {
+        self.reg_exp_local_value = Some(reg_exp_local_value.into());
         self
     }
     pub fn handle(mut self, handle: impl Into<Handle>) -> Self {
@@ -828,12 +823,12 @@ impl RegExpRemoteValueBuilder {
     }
     pub fn build(self) -> Result<RegExpRemoteValue, String> {
         Ok(RegExpRemoteValue {
-            r#type: self
-                .r#type
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(r#type)))?,
-            value: self
-                .value
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(value)))?,
+            reg_exp_local_value: self.reg_exp_local_value.ok_or_else(|| {
+                format!(
+                    "Field `{}` is mandatory.",
+                    std::stringify!(reg_exp_local_value)
+                )
+            })?,
             handle: self.handle,
             internal_id: self.internal_id,
         })
@@ -846,18 +841,13 @@ impl DateRemoteValue {
 }
 #[derive(Default, Clone)]
 pub struct DateRemoteValueBuilder {
-    r#type: Option<String>,
-    value: Option<String>,
+    date_local_value: Option<DateLocalValue>,
     handle: Option<Handle>,
     internal_id: Option<InternalId>,
 }
 impl DateRemoteValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
-        self.r#type = Some(r#type.into());
-        self
-    }
-    pub fn value(mut self, value: impl Into<String>) -> Self {
-        self.value = Some(value.into());
+    pub fn date_local_value(mut self, date_local_value: impl Into<DateLocalValue>) -> Self {
+        self.date_local_value = Some(date_local_value.into());
         self
     }
     pub fn handle(mut self, handle: impl Into<Handle>) -> Self {
@@ -870,12 +860,12 @@ impl DateRemoteValueBuilder {
     }
     pub fn build(self) -> Result<DateRemoteValue, String> {
         Ok(DateRemoteValue {
-            r#type: self
-                .r#type
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(r#type)))?,
-            value: self
-                .value
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(value)))?,
+            date_local_value: self.date_local_value.ok_or_else(|| {
+                format!(
+                    "Field `{}` is mandatory.",
+                    std::stringify!(date_local_value)
+                )
+            })?,
             handle: self.handle,
             internal_id: self.internal_id,
         })
@@ -888,13 +878,13 @@ impl MapRemoteValue {
 }
 #[derive(Default, Clone)]
 pub struct MapRemoteValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<MapRemoteValueType>,
     handle: Option<Handle>,
     internal_id: Option<InternalId>,
     value: Option<MappingRemoteValue>,
 }
 impl MapRemoteValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<MapRemoteValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -928,13 +918,13 @@ impl SetRemoteValue {
 }
 #[derive(Default, Clone)]
 pub struct SetRemoteValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<SetRemoteValueType>,
     handle: Option<Handle>,
     internal_id: Option<InternalId>,
     value: Option<ListRemoteValue>,
 }
 impl SetRemoteValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<SetRemoteValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -968,12 +958,12 @@ impl WeakMapRemoteValue {
 }
 #[derive(Default, Clone)]
 pub struct WeakMapRemoteValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<WeakMapRemoteValueType>,
     handle: Option<Handle>,
     internal_id: Option<InternalId>,
 }
 impl WeakMapRemoteValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<WeakMapRemoteValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -1002,12 +992,12 @@ impl WeakSetRemoteValue {
 }
 #[derive(Default, Clone)]
 pub struct WeakSetRemoteValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<WeakSetRemoteValueType>,
     handle: Option<Handle>,
     internal_id: Option<InternalId>,
 }
 impl WeakSetRemoteValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<WeakSetRemoteValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -1036,12 +1026,12 @@ impl GeneratorRemoteValue {
 }
 #[derive(Default, Clone)]
 pub struct GeneratorRemoteValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<GeneratorRemoteValueType>,
     handle: Option<Handle>,
     internal_id: Option<InternalId>,
 }
 impl GeneratorRemoteValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<GeneratorRemoteValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -1070,12 +1060,12 @@ impl ErrorRemoteValue {
 }
 #[derive(Default, Clone)]
 pub struct ErrorRemoteValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<ErrorRemoteValueType>,
     handle: Option<Handle>,
     internal_id: Option<InternalId>,
 }
 impl ErrorRemoteValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<ErrorRemoteValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -1104,12 +1094,12 @@ impl ProxyRemoteValue {
 }
 #[derive(Default, Clone)]
 pub struct ProxyRemoteValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<ProxyRemoteValueType>,
     handle: Option<Handle>,
     internal_id: Option<InternalId>,
 }
 impl ProxyRemoteValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<ProxyRemoteValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -1138,12 +1128,12 @@ impl PromiseRemoteValue {
 }
 #[derive(Default, Clone)]
 pub struct PromiseRemoteValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<PromiseRemoteValueType>,
     handle: Option<Handle>,
     internal_id: Option<InternalId>,
 }
 impl PromiseRemoteValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<PromiseRemoteValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -1172,12 +1162,12 @@ impl TypedArrayRemoteValue {
 }
 #[derive(Default, Clone)]
 pub struct TypedArrayRemoteValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<TypedArrayRemoteValueType>,
     handle: Option<Handle>,
     internal_id: Option<InternalId>,
 }
 impl TypedArrayRemoteValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<TypedArrayRemoteValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -1206,12 +1196,12 @@ impl ArrayBufferRemoteValue {
 }
 #[derive(Default, Clone)]
 pub struct ArrayBufferRemoteValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<ArrayBufferRemoteValueType>,
     handle: Option<Handle>,
     internal_id: Option<InternalId>,
 }
 impl ArrayBufferRemoteValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<ArrayBufferRemoteValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -1240,13 +1230,13 @@ impl NodeListRemoteValue {
 }
 #[derive(Default, Clone)]
 pub struct NodeListRemoteValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<NodeListRemoteValueType>,
     handle: Option<Handle>,
     internal_id: Option<InternalId>,
     value: Option<ListRemoteValue>,
 }
 impl NodeListRemoteValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<NodeListRemoteValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -1280,13 +1270,13 @@ impl HtmlCollectionRemoteValue {
 }
 #[derive(Default, Clone)]
 pub struct HtmlCollectionRemoteValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<HtmlCollectionRemoteValueType>,
     handle: Option<Handle>,
     internal_id: Option<InternalId>,
     value: Option<ListRemoteValue>,
 }
 impl HtmlCollectionRemoteValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<HtmlCollectionRemoteValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -1320,14 +1310,14 @@ impl NodeRemoteValue {
 }
 #[derive(Default, Clone)]
 pub struct NodeRemoteValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<NodeRemoteValueType>,
     shared_id: Option<SharedId>,
     handle: Option<Handle>,
     internal_id: Option<InternalId>,
     value: Option<NodeProperties>,
 }
 impl NodeRemoteValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<NodeRemoteValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -1456,13 +1446,13 @@ impl WindowProxyRemoteValue {
 }
 #[derive(Default, Clone)]
 pub struct WindowProxyRemoteValueBuilder {
-    r#type: Option<String>,
+    r#type: Option<WindowProxyRemoteValueType>,
     value: Option<WindowProxyProperties>,
     handle: Option<Handle>,
     internal_id: Option<InternalId>,
 }
 impl WindowProxyRemoteValueBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<WindowProxyRemoteValueType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -1721,22 +1711,17 @@ impl WindowRealmInfo {
 }
 #[derive(Default, Clone)]
 pub struct WindowRealmInfoBuilder {
-    realm: Option<Realm>,
-    origin: Option<String>,
-    r#type: Option<String>,
+    base_realm_info: Option<BaseRealmInfo>,
+    r#type: Option<WindowRealmInfoType>,
     context: Option<crate::browsing_context::types::BrowsingContext>,
     sandbox: Option<String>,
 }
 impl WindowRealmInfoBuilder {
-    pub fn realm(mut self, realm: impl Into<Realm>) -> Self {
-        self.realm = Some(realm.into());
+    pub fn base_realm_info(mut self, base_realm_info: impl Into<BaseRealmInfo>) -> Self {
+        self.base_realm_info = Some(base_realm_info.into());
         self
     }
-    pub fn origin(mut self, origin: impl Into<String>) -> Self {
-        self.origin = Some(origin.into());
-        self
-    }
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<WindowRealmInfoType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -1753,12 +1738,9 @@ impl WindowRealmInfoBuilder {
     }
     pub fn build(self) -> Result<WindowRealmInfo, String> {
         Ok(WindowRealmInfo {
-            realm: self
-                .realm
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(realm)))?,
-            origin: self
-                .origin
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(origin)))?,
+            base_realm_info: self.base_realm_info.ok_or_else(|| {
+                format!("Field `{}` is mandatory.", std::stringify!(base_realm_info))
+            })?,
             r#type: self
                 .r#type
                 .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(r#type)))?,
@@ -1776,21 +1758,16 @@ impl DedicatedWorkerRealmInfo {
 }
 #[derive(Default, Clone)]
 pub struct DedicatedWorkerRealmInfoBuilder {
-    realm: Option<Realm>,
-    origin: Option<String>,
-    r#type: Option<String>,
+    base_realm_info: Option<BaseRealmInfo>,
+    r#type: Option<DedicatedWorkerRealmInfoType>,
     owners: Option<Vec<Realm>>,
 }
 impl DedicatedWorkerRealmInfoBuilder {
-    pub fn realm(mut self, realm: impl Into<Realm>) -> Self {
-        self.realm = Some(realm.into());
+    pub fn base_realm_info(mut self, base_realm_info: impl Into<BaseRealmInfo>) -> Self {
+        self.base_realm_info = Some(base_realm_info.into());
         self
     }
-    pub fn origin(mut self, origin: impl Into<String>) -> Self {
-        self.origin = Some(origin.into());
-        self
-    }
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<DedicatedWorkerRealmInfoType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -1812,12 +1789,9 @@ impl DedicatedWorkerRealmInfoBuilder {
     }
     pub fn build(self) -> Result<DedicatedWorkerRealmInfo, String> {
         Ok(DedicatedWorkerRealmInfo {
-            realm: self
-                .realm
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(realm)))?,
-            origin: self
-                .origin
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(origin)))?,
+            base_realm_info: self.base_realm_info.ok_or_else(|| {
+                format!("Field `{}` is mandatory.", std::stringify!(base_realm_info))
+            })?,
             r#type: self
                 .r#type
                 .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(r#type)))?,
@@ -1834,31 +1808,23 @@ impl SharedWorkerRealmInfo {
 }
 #[derive(Default, Clone)]
 pub struct SharedWorkerRealmInfoBuilder {
-    realm: Option<Realm>,
-    origin: Option<String>,
-    r#type: Option<String>,
+    base_realm_info: Option<BaseRealmInfo>,
+    r#type: Option<SharedWorkerRealmInfoType>,
 }
 impl SharedWorkerRealmInfoBuilder {
-    pub fn realm(mut self, realm: impl Into<Realm>) -> Self {
-        self.realm = Some(realm.into());
+    pub fn base_realm_info(mut self, base_realm_info: impl Into<BaseRealmInfo>) -> Self {
+        self.base_realm_info = Some(base_realm_info.into());
         self
     }
-    pub fn origin(mut self, origin: impl Into<String>) -> Self {
-        self.origin = Some(origin.into());
-        self
-    }
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<SharedWorkerRealmInfoType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
     pub fn build(self) -> Result<SharedWorkerRealmInfo, String> {
         Ok(SharedWorkerRealmInfo {
-            realm: self
-                .realm
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(realm)))?,
-            origin: self
-                .origin
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(origin)))?,
+            base_realm_info: self.base_realm_info.ok_or_else(|| {
+                format!("Field `{}` is mandatory.", std::stringify!(base_realm_info))
+            })?,
             r#type: self
                 .r#type
                 .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(r#type)))?,
@@ -1872,31 +1838,23 @@ impl ServiceWorkerRealmInfo {
 }
 #[derive(Default, Clone)]
 pub struct ServiceWorkerRealmInfoBuilder {
-    realm: Option<Realm>,
-    origin: Option<String>,
-    r#type: Option<String>,
+    base_realm_info: Option<BaseRealmInfo>,
+    r#type: Option<ServiceWorkerRealmInfoType>,
 }
 impl ServiceWorkerRealmInfoBuilder {
-    pub fn realm(mut self, realm: impl Into<Realm>) -> Self {
-        self.realm = Some(realm.into());
+    pub fn base_realm_info(mut self, base_realm_info: impl Into<BaseRealmInfo>) -> Self {
+        self.base_realm_info = Some(base_realm_info.into());
         self
     }
-    pub fn origin(mut self, origin: impl Into<String>) -> Self {
-        self.origin = Some(origin.into());
-        self
-    }
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<ServiceWorkerRealmInfoType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
     pub fn build(self) -> Result<ServiceWorkerRealmInfo, String> {
         Ok(ServiceWorkerRealmInfo {
-            realm: self
-                .realm
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(realm)))?,
-            origin: self
-                .origin
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(origin)))?,
+            base_realm_info: self.base_realm_info.ok_or_else(|| {
+                format!("Field `{}` is mandatory.", std::stringify!(base_realm_info))
+            })?,
             r#type: self
                 .r#type
                 .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(r#type)))?,
@@ -1910,31 +1868,23 @@ impl WorkerRealmInfo {
 }
 #[derive(Default, Clone)]
 pub struct WorkerRealmInfoBuilder {
-    realm: Option<Realm>,
-    origin: Option<String>,
-    r#type: Option<String>,
+    base_realm_info: Option<BaseRealmInfo>,
+    r#type: Option<WorkerRealmInfoType>,
 }
 impl WorkerRealmInfoBuilder {
-    pub fn realm(mut self, realm: impl Into<Realm>) -> Self {
-        self.realm = Some(realm.into());
+    pub fn base_realm_info(mut self, base_realm_info: impl Into<BaseRealmInfo>) -> Self {
+        self.base_realm_info = Some(base_realm_info.into());
         self
     }
-    pub fn origin(mut self, origin: impl Into<String>) -> Self {
-        self.origin = Some(origin.into());
-        self
-    }
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<WorkerRealmInfoType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
     pub fn build(self) -> Result<WorkerRealmInfo, String> {
         Ok(WorkerRealmInfo {
-            realm: self
-                .realm
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(realm)))?,
-            origin: self
-                .origin
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(origin)))?,
+            base_realm_info: self.base_realm_info.ok_or_else(|| {
+                format!("Field `{}` is mandatory.", std::stringify!(base_realm_info))
+            })?,
             r#type: self
                 .r#type
                 .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(r#type)))?,
@@ -1948,31 +1898,23 @@ impl PaintWorkletRealmInfo {
 }
 #[derive(Default, Clone)]
 pub struct PaintWorkletRealmInfoBuilder {
-    realm: Option<Realm>,
-    origin: Option<String>,
-    r#type: Option<String>,
+    base_realm_info: Option<BaseRealmInfo>,
+    r#type: Option<PaintWorkletRealmInfoType>,
 }
 impl PaintWorkletRealmInfoBuilder {
-    pub fn realm(mut self, realm: impl Into<Realm>) -> Self {
-        self.realm = Some(realm.into());
+    pub fn base_realm_info(mut self, base_realm_info: impl Into<BaseRealmInfo>) -> Self {
+        self.base_realm_info = Some(base_realm_info.into());
         self
     }
-    pub fn origin(mut self, origin: impl Into<String>) -> Self {
-        self.origin = Some(origin.into());
-        self
-    }
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<PaintWorkletRealmInfoType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
     pub fn build(self) -> Result<PaintWorkletRealmInfo, String> {
         Ok(PaintWorkletRealmInfo {
-            realm: self
-                .realm
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(realm)))?,
-            origin: self
-                .origin
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(origin)))?,
+            base_realm_info: self.base_realm_info.ok_or_else(|| {
+                format!("Field `{}` is mandatory.", std::stringify!(base_realm_info))
+            })?,
             r#type: self
                 .r#type
                 .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(r#type)))?,
@@ -1986,31 +1928,23 @@ impl AudioWorkletRealmInfo {
 }
 #[derive(Default, Clone)]
 pub struct AudioWorkletRealmInfoBuilder {
-    realm: Option<Realm>,
-    origin: Option<String>,
-    r#type: Option<String>,
+    base_realm_info: Option<BaseRealmInfo>,
+    r#type: Option<AudioWorkletRealmInfoType>,
 }
 impl AudioWorkletRealmInfoBuilder {
-    pub fn realm(mut self, realm: impl Into<Realm>) -> Self {
-        self.realm = Some(realm.into());
+    pub fn base_realm_info(mut self, base_realm_info: impl Into<BaseRealmInfo>) -> Self {
+        self.base_realm_info = Some(base_realm_info.into());
         self
     }
-    pub fn origin(mut self, origin: impl Into<String>) -> Self {
-        self.origin = Some(origin.into());
-        self
-    }
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<AudioWorkletRealmInfoType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
     pub fn build(self) -> Result<AudioWorkletRealmInfo, String> {
         Ok(AudioWorkletRealmInfo {
-            realm: self
-                .realm
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(realm)))?,
-            origin: self
-                .origin
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(origin)))?,
+            base_realm_info: self.base_realm_info.ok_or_else(|| {
+                format!("Field `{}` is mandatory.", std::stringify!(base_realm_info))
+            })?,
             r#type: self
                 .r#type
                 .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(r#type)))?,
@@ -2024,31 +1958,23 @@ impl WorkletRealmInfo {
 }
 #[derive(Default, Clone)]
 pub struct WorkletRealmInfoBuilder {
-    realm: Option<Realm>,
-    origin: Option<String>,
-    r#type: Option<String>,
+    base_realm_info: Option<BaseRealmInfo>,
+    r#type: Option<WorkletRealmInfoType>,
 }
 impl WorkletRealmInfoBuilder {
-    pub fn realm(mut self, realm: impl Into<Realm>) -> Self {
-        self.realm = Some(realm.into());
+    pub fn base_realm_info(mut self, base_realm_info: impl Into<BaseRealmInfo>) -> Self {
+        self.base_realm_info = Some(base_realm_info.into());
         self
     }
-    pub fn origin(mut self, origin: impl Into<String>) -> Self {
-        self.origin = Some(origin.into());
-        self
-    }
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<WorkletRealmInfoType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
     pub fn build(self) -> Result<WorkletRealmInfo, String> {
         Ok(WorkletRealmInfo {
-            realm: self
-                .realm
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(realm)))?,
-            origin: self
-                .origin
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(origin)))?,
+            base_realm_info: self.base_realm_info.ok_or_else(|| {
+                format!("Field `{}` is mandatory.", std::stringify!(base_realm_info))
+            })?,
             r#type: self
                 .r#type
                 .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(r#type)))?,
@@ -2083,44 +2009,6 @@ impl SourceBuilder {
                 .realm
                 .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(realm)))?,
             context: self.context,
-        })
-    }
-}
-impl MessageParameters {
-    pub fn builder() -> MessageParametersBuilder {
-        <MessageParametersBuilder as Default>::default()
-    }
-}
-#[derive(Default, Clone)]
-pub struct MessageParametersBuilder {
-    channel: Option<Channel>,
-    data: Option<RemoteValue>,
-    source: Option<Source>,
-}
-impl MessageParametersBuilder {
-    pub fn channel(mut self, channel: impl Into<Channel>) -> Self {
-        self.channel = Some(channel.into());
-        self
-    }
-    pub fn data(mut self, data: impl Into<RemoteValue>) -> Self {
-        self.data = Some(data.into());
-        self
-    }
-    pub fn source(mut self, source: impl Into<Source>) -> Self {
-        self.source = Some(source.into());
-        self
-    }
-    pub fn build(self) -> Result<MessageParameters, String> {
-        Ok(MessageParameters {
-            channel: self
-                .channel
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(channel)))?,
-            data: self
-                .data
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(data)))?,
-            source: self
-                .source
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(source)))?,
         })
     }
 }

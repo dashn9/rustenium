@@ -159,6 +159,96 @@ impl CancelDownloadBuilder {
         })
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct CloseBuilder;
+impl CloseBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Close {
+        Close {
+            method: CloseMethod::Close,
+            params: CloseParams {},
+        }
+    }
+}
+impl Close {
+    pub fn builder() -> CloseBuilder {
+        CloseBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct CrashBuilder;
+impl CrashBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Crash {
+        Crash {
+            method: CrashMethod::Crash,
+            params: CrashParams {},
+        }
+    }
+}
+impl Crash {
+    pub fn builder() -> CrashBuilder {
+        CrashBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct CrashGpuProcessBuilder;
+impl CrashGpuProcessBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> CrashGpuProcess {
+        CrashGpuProcess {
+            method: CrashGpuProcessMethod::CrashGpuProcess,
+            params: CrashGpuProcessParams {},
+        }
+    }
+}
+impl CrashGpuProcess {
+    pub fn builder() -> CrashGpuProcessBuilder {
+        CrashGpuProcessBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct GetVersionBuilder;
+impl GetVersionBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> GetVersion {
+        GetVersion {
+            method: GetVersionMethod::GetVersion,
+            params: GetVersionParams {},
+        }
+    }
+}
+impl GetVersion {
+    pub fn builder() -> GetVersionBuilder {
+        GetVersionBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct GetBrowserCommandLineBuilder;
+impl GetBrowserCommandLineBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> GetBrowserCommandLine {
+        GetBrowserCommandLine {
+            method: GetBrowserCommandLineMethod::GetBrowserCommandLine,
+            params: GetBrowserCommandLineParams {},
+        }
+    }
+}
+impl GetBrowserCommandLine {
+    pub fn builder() -> GetBrowserCommandLineBuilder {
+        GetBrowserCommandLineBuilder
+    }
+}
 impl GetHistograms {
     pub fn builder() -> GetHistogramsBuilder {
         <GetHistogramsBuilder as Default>::default()

@@ -55,6 +55,24 @@ impl AttachToTargetBuilder {
         })
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct AttachToBrowserTargetBuilder;
+impl AttachToBrowserTargetBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> AttachToBrowserTarget {
+        AttachToBrowserTarget {
+            method: AttachToBrowserTargetMethod::AttachToBrowserTarget,
+            params: AttachToBrowserTargetParams {},
+        }
+    }
+}
+impl AttachToBrowserTarget {
+    pub fn builder() -> AttachToBrowserTargetBuilder {
+        AttachToBrowserTargetBuilder
+    }
+}
 impl CloseTarget {
     pub fn builder() -> CloseTargetBuilder {
         <CloseTargetBuilder as Default>::default()
@@ -178,6 +196,24 @@ impl CreateBrowserContextBuilder {
                 origins_with_universal_network_access: self.origins_with_universal_network_access,
             },
         }
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct GetBrowserContextsBuilder;
+impl GetBrowserContextsBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> GetBrowserContexts {
+        GetBrowserContexts {
+            method: GetBrowserContextsMethod::GetBrowserContexts,
+            params: GetBrowserContextsParams {},
+        }
+    }
+}
+impl GetBrowserContexts {
+    pub fn builder() -> GetBrowserContextsBuilder {
+        GetBrowserContextsBuilder
     }
 }
 impl CreateTarget {

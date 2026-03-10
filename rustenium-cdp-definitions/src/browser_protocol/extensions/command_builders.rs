@@ -63,6 +63,24 @@ impl LoadUnpackedBuilder {
         })
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct GetExtensionsBuilder;
+impl GetExtensionsBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> GetExtensions {
+        GetExtensions {
+            method: GetExtensionsMethod::GetExtensions,
+            params: GetExtensionsParams {},
+        }
+    }
+}
+impl GetExtensions {
+    pub fn builder() -> GetExtensionsBuilder {
+        GetExtensionsBuilder
+    }
+}
 impl Uninstall {
     pub fn builder() -> UninstallBuilder {
         <UninstallBuilder as Default>::default()

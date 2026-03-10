@@ -22,6 +22,24 @@ impl EnableBuilder {
         }
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct DisableBuilder;
+impl DisableBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Disable {
+        Disable {
+            method: DisableMethod::Disable,
+            params: DisableParams {},
+        }
+    }
+}
+impl Disable {
+    pub fn builder() -> DisableBuilder {
+        DisableBuilder
+    }
+}
 impl SelectAccount {
     pub fn builder() -> SelectAccountBuilder {
         <SelectAccountBuilder as Default>::default()
@@ -164,5 +182,23 @@ impl DismissDialogBuilder {
                 trigger_cooldown: self.trigger_cooldown,
             },
         })
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct ResetCooldownBuilder;
+impl ResetCooldownBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> ResetCooldown {
+        ResetCooldown {
+            method: ResetCooldownMethod::ResetCooldown,
+            params: ResetCooldownParams {},
+        }
+    }
+}
+impl ResetCooldown {
+    pub fn builder() -> ResetCooldownBuilder {
+        ResetCooldownBuilder
     }
 }

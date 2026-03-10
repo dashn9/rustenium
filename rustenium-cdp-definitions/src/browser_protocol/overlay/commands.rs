@@ -8,7 +8,7 @@ pub enum DisableMethod {
     Disable,
 }
 #[doc = "Disables domain notifications.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-disable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
@@ -28,7 +28,7 @@ pub enum EnableMethod {
     Enable,
 }
 #[doc = "Enables domain notifications.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-enable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
@@ -83,7 +83,7 @@ pub enum GetHighlightObjectForTestMethod {
     GetHighlightObjectForTest,
 }
 #[doc = "For testing.\n[getHighlightObjectForTest](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-getHighlightObjectForTest)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetHighlightObjectForTest {
     pub method: GetHighlightObjectForTestMethod,
     pub params: GetHighlightObjectForTestParams,
@@ -113,7 +113,7 @@ pub enum GetGridHighlightObjectsForTestMethod {
     GetGridHighlightObjectsForTest,
 }
 #[doc = "For Persistent Grid testing.\n[getGridHighlightObjectsForTest](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-getGridHighlightObjectsForTest)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetGridHighlightObjectsForTest {
     pub method: GetGridHighlightObjectsForTestMethod,
     pub params: GetGridHighlightObjectsForTestParams,
@@ -144,7 +144,7 @@ pub enum GetSourceOrderHighlightObjectForTestMethod {
     GetSourceOrderHighlightObjectForTest,
 }
 #[doc = "For Source Order Viewer testing.\n[getSourceOrderHighlightObjectForTest](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-getSourceOrderHighlightObjectForTest)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetSourceOrderHighlightObjectForTest {
     pub method: GetSourceOrderHighlightObjectForTestMethod,
     pub params: GetSourceOrderHighlightObjectForTestParams,
@@ -164,7 +164,7 @@ pub enum HideHighlightMethod {
     HideHighlight,
 }
 #[doc = "Hides any highlight.\n[hideHighlight](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-hideHighlight)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HideHighlight {
     pub method: HideHighlightMethod,
     pub params: HideHighlightParams,
@@ -219,7 +219,7 @@ pub enum HighlightNodeMethod {
     HighlightNode,
 }
 #[doc = "Highlights DOM node with given id or with the given JavaScript object wrapper. Either nodeId or\nobjectId must be specified.\n[highlightNode](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-highlightNode)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HighlightNode {
     pub method: HighlightNodeMethod,
     pub params: HighlightNodeParams,
@@ -262,7 +262,7 @@ pub enum HighlightQuadMethod {
     HighlightQuad,
 }
 #[doc = "Highlights given quad. Coordinates are absolute with respect to the main frame viewport.\n[highlightQuad](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-highlightQuad)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HighlightQuad {
     pub method: HighlightQuadMethod,
     pub params: HighlightQuadParams,
@@ -322,7 +322,7 @@ pub enum HighlightRectMethod {
     HighlightRect,
 }
 #[doc = "Highlights given rectangle. Coordinates are absolute with respect to the main frame viewport.\nIssue: the method does not handle device pixel ratio (DPR) correctly.\nThe coordinates currently have to be adjusted by the client\nif DPR is not 1 (see crbug.com/437807128).\n[highlightRect](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-highlightRect)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HighlightRect {
     pub method: HighlightRectMethod,
     pub params: HighlightRectParams,
@@ -371,7 +371,7 @@ pub enum HighlightSourceOrderMethod {
     HighlightSourceOrder,
 }
 #[doc = "Highlights the source order of the children of the DOM node with given id or with the given\nJavaScript object wrapper. Either nodeId or objectId must be specified.\n[highlightSourceOrder](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-highlightSourceOrder)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HighlightSourceOrder {
     pub method: HighlightSourceOrderMethod,
     pub params: HighlightSourceOrderParams,
@@ -408,7 +408,7 @@ pub enum SetInspectModeMethod {
     SetInspectMode,
 }
 #[doc = "Enters the 'inspect' mode. In this mode, elements that user is hovering over are highlighted.\nBackend then generates 'inspectNodeRequested' event upon element selection.\n[setInspectMode](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setInspectMode)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetInspectMode {
     pub method: SetInspectModeMethod,
     pub params: SetInspectModeParams,
@@ -437,7 +437,7 @@ pub enum SetShowAdHighlightsMethod {
     SetShowAdHighlights,
 }
 #[doc = "Highlights owner element of all frames detected to be ads.\n[setShowAdHighlights](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowAdHighlights)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetShowAdHighlights {
     pub method: SetShowAdHighlightsMethod,
     pub params: SetShowAdHighlightsParams,
@@ -461,7 +461,7 @@ pub enum SetPausedInDebuggerMessageMethod {
     #[serde(rename = "Overlay.setPausedInDebuggerMessage")]
     SetPausedInDebuggerMessage,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetPausedInDebuggerMessage {
     pub method: SetPausedInDebuggerMessageMethod,
     pub params: SetPausedInDebuggerMessageParams,
@@ -490,7 +490,7 @@ pub enum SetShowDebugBordersMethod {
     SetShowDebugBorders,
 }
 #[doc = "Requests that backend shows debug borders on layers\n[setShowDebugBorders](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowDebugBorders)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetShowDebugBorders {
     pub method: SetShowDebugBordersMethod,
     pub params: SetShowDebugBordersParams,
@@ -519,7 +519,7 @@ pub enum SetShowFpsCounterMethod {
     SetShowFpsCounter,
 }
 #[doc = "Requests that backend shows the FPS counter\n[setShowFPSCounter](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowFPSCounter)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetShowFpsCounter {
     pub method: SetShowFpsCounterMethod,
     pub params: SetShowFpsCounterParams,
@@ -551,7 +551,7 @@ pub enum SetShowGridOverlaysMethod {
     SetShowGridOverlays,
 }
 #[doc = "Highlight multiple elements with the CSS Grid overlay.\n[setShowGridOverlays](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowGridOverlays)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetShowGridOverlays {
     pub method: SetShowGridOverlaysMethod,
     pub params: SetShowGridOverlaysParams,
@@ -581,7 +581,7 @@ pub enum SetShowFlexOverlaysMethod {
     #[serde(rename = "Overlay.setShowFlexOverlays")]
     SetShowFlexOverlays,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetShowFlexOverlays {
     pub method: SetShowFlexOverlaysMethod,
     pub params: SetShowFlexOverlaysParams,
@@ -613,7 +613,7 @@ pub enum SetShowScrollSnapOverlaysMethod {
     #[serde(rename = "Overlay.setShowScrollSnapOverlays")]
     SetShowScrollSnapOverlays,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetShowScrollSnapOverlays {
     pub method: SetShowScrollSnapOverlaysMethod,
     pub params: SetShowScrollSnapOverlaysParams,
@@ -645,7 +645,7 @@ pub enum SetShowContainerQueryOverlaysMethod {
     #[serde(rename = "Overlay.setShowContainerQueryOverlays")]
     SetShowContainerQueryOverlays,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetShowContainerQueryOverlays {
     pub method: SetShowContainerQueryOverlaysMethod,
     pub params: SetShowContainerQueryOverlaysParams,
@@ -676,7 +676,7 @@ pub enum SetShowInspectedElementAnchorMethod {
     #[serde(rename = "Overlay.setShowInspectedElementAnchor")]
     SetShowInspectedElementAnchor,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetShowInspectedElementAnchor {
     pub method: SetShowInspectedElementAnchorMethod,
     pub params: SetShowInspectedElementAnchorParams,
@@ -707,7 +707,7 @@ pub enum SetShowPaintRectsMethod {
     SetShowPaintRects,
 }
 #[doc = "Requests that backend shows paint rectangles\n[setShowPaintRects](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowPaintRects)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetShowPaintRects {
     pub method: SetShowPaintRectsMethod,
     pub params: SetShowPaintRectsParams,
@@ -738,7 +738,7 @@ pub enum SetShowLayoutShiftRegionsMethod {
     SetShowLayoutShiftRegions,
 }
 #[doc = "Requests that backend shows layout shift regions\n[setShowLayoutShiftRegions](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowLayoutShiftRegions)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetShowLayoutShiftRegions {
     pub method: SetShowLayoutShiftRegionsMethod,
     pub params: SetShowLayoutShiftRegionsParams,
@@ -767,7 +767,7 @@ pub enum SetShowScrollBottleneckRectsMethod {
     SetShowScrollBottleneckRects,
 }
 #[doc = "Requests that backend shows scroll bottleneck rects\n[setShowScrollBottleneckRects](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowScrollBottleneckRects)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetShowScrollBottleneckRects {
     pub method: SetShowScrollBottleneckRectsMethod,
     pub params: SetShowScrollBottleneckRectsParams,
@@ -796,7 +796,7 @@ pub enum SetShowViewportSizeOnResizeMethod {
     SetShowViewportSizeOnResize,
 }
 #[doc = "Paints viewport size upon main frame resize.\n[setShowViewportSizeOnResize](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowViewportSizeOnResize)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetShowViewportSizeOnResize {
     pub method: SetShowViewportSizeOnResizeMethod,
     pub params: SetShowViewportSizeOnResizeParams,
@@ -822,7 +822,7 @@ pub enum SetShowHingeMethod {
     SetShowHinge,
 }
 #[doc = "Add a dual screen device hinge\n[setShowHinge](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowHinge)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetShowHinge {
     pub method: SetShowHingeMethod,
     pub params: SetShowHingeParams,
@@ -856,7 +856,7 @@ pub enum SetShowIsolatedElementsMethod {
     SetShowIsolatedElements,
 }
 #[doc = "Show elements in isolation mode with overlays.\n[setShowIsolatedElements](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowIsolatedElements)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetShowIsolatedElements {
     pub method: SetShowIsolatedElementsMethod,
     pub params: SetShowIsolatedElementsParams,
@@ -882,7 +882,7 @@ pub enum SetShowWindowControlsOverlayMethod {
     SetShowWindowControlsOverlay,
 }
 #[doc = "Show Window Controls Overlay for PWA\n[setShowWindowControlsOverlay](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#method-setShowWindowControlsOverlay)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetShowWindowControlsOverlay {
     pub method: SetShowWindowControlsOverlayMethod,
     pub params: SetShowWindowControlsOverlayParams,

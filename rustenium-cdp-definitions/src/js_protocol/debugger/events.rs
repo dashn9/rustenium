@@ -66,7 +66,7 @@ pub enum PausedMethod {
     Paused,
 }
 #[doc = "Fired when the virtual machine stopped on breakpoint or exception or any other stop criteria.\n[paused](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#event-paused)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Paused {
     pub method: PausedMethod,
     pub params: PausedParams,
@@ -83,7 +83,7 @@ pub enum ResumedMethod {
     Resumed,
 }
 #[doc = "Fired when the virtual machine resumed execution.\n[resumed](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#event-resumed)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Resumed {
     pub method: ResumedMethod,
     pub params: ResumedParams,
@@ -173,7 +173,7 @@ pub enum ScriptFailedToParseMethod {
     ScriptFailedToParse,
 }
 #[doc = "Fired when virtual machine fails to parse the script.\n[scriptFailedToParse](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#event-scriptFailedToParse)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ScriptFailedToParse {
     pub method: ScriptFailedToParseMethod,
     pub params: ScriptFailedToParseParams,
@@ -278,7 +278,7 @@ pub enum ScriptParsedMethod {
     ScriptParsed,
 }
 #[doc = "Fired when virtual machine parses script. This event is also fired for all known and uncollected\nscripts upon enabling debugger.\n[scriptParsed](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#event-scriptParsed)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ScriptParsed {
     pub method: ScriptParsedMethod,
     pub params: ScriptParsedParams,

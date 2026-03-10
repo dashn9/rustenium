@@ -14,7 +14,7 @@ pub enum DeviceRequestPromptedMethod {
     DeviceRequestPrompted,
 }
 #[doc = "A device request opened a user prompt to select a device. Respond with the\nselectPrompt or cancelPrompt command.\n[deviceRequestPrompted](https://chromedevtools.github.io/devtools-protocol/tot/DeviceAccess/#event-deviceRequestPrompted)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeviceRequestPrompted {
     pub method: DeviceRequestPromptedMethod,
     pub params: DeviceRequestPromptedParams,

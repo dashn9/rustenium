@@ -8,7 +8,7 @@ pub enum ClearMethod {
     Clear,
 }
 #[doc = "Clears the log.\n[clear](https://chromedevtools.github.io/devtools-protocol/tot/Log/#method-clear)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Clear {
     pub method: ClearMethod,
     pub params: ClearParams,
@@ -28,7 +28,7 @@ pub enum DisableMethod {
     Disable,
 }
 #[doc = "Disables log domain, prevents further log entries from being reported to the client.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Log/#method-disable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
@@ -48,7 +48,7 @@ pub enum EnableMethod {
     Enable,
 }
 #[doc = "Enables log domain, sends the entries collected so far to the client by means of the\n`entryAdded` notification.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Log/#method-enable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
@@ -78,7 +78,7 @@ pub enum StartViolationsReportMethod {
     StartViolationsReport,
 }
 #[doc = "start violation reporting.\n[startViolationsReport](https://chromedevtools.github.io/devtools-protocol/tot/Log/#method-startViolationsReport)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StartViolationsReport {
     pub method: StartViolationsReportMethod,
     pub params: StartViolationsReportParams,
@@ -98,7 +98,7 @@ pub enum StopViolationsReportMethod {
     StopViolationsReport,
 }
 #[doc = "Stop violation reporting.\n[stopViolationsReport](https://chromedevtools.github.io/devtools-protocol/tot/Log/#method-stopViolationsReport)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StopViolationsReport {
     pub method: StopViolationsReportMethod,
     pub params: StopViolationsReportParams,

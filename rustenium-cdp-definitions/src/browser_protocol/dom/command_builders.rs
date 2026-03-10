@@ -166,6 +166,24 @@ impl ScrollIntoViewIfNeededBuilder {
         }
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct DisableBuilder;
+impl DisableBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Disable {
+        Disable {
+            method: DisableMethod::Disable,
+            params: DisableParams {},
+        }
+    }
+}
+impl Disable {
+    pub fn builder() -> DisableBuilder {
+        DisableBuilder
+    }
+}
 impl DiscardSearchResults {
     pub fn builder() -> DiscardSearchResultsBuilder {
         <DiscardSearchResultsBuilder as Default>::default()
@@ -612,6 +630,78 @@ impl GetSearchResultsBuilder {
         })
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct HideHighlightBuilder;
+impl HideHighlightBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> HideHighlight {
+        HideHighlight {
+            method: HideHighlightMethod::HideHighlight,
+            params: HideHighlightParams {},
+        }
+    }
+}
+impl HideHighlight {
+    pub fn builder() -> HideHighlightBuilder {
+        HideHighlightBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct HighlightNodeBuilder;
+impl HighlightNodeBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> HighlightNode {
+        HighlightNode {
+            method: HighlightNodeMethod::HighlightNode,
+            params: HighlightNodeParams {},
+        }
+    }
+}
+impl HighlightNode {
+    pub fn builder() -> HighlightNodeBuilder {
+        HighlightNodeBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct HighlightRectBuilder;
+impl HighlightRectBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> HighlightRect {
+        HighlightRect {
+            method: HighlightRectMethod::HighlightRect,
+            params: HighlightRectParams {},
+        }
+    }
+}
+impl HighlightRect {
+    pub fn builder() -> HighlightRectBuilder {
+        HighlightRectBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct MarkUndoableStateBuilder;
+impl MarkUndoableStateBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> MarkUndoableState {
+        MarkUndoableState {
+            method: MarkUndoableStateMethod::MarkUndoableState,
+            params: MarkUndoableStateParams {},
+        }
+    }
+}
+impl MarkUndoableState {
+    pub fn builder() -> MarkUndoableStateBuilder {
+        MarkUndoableStateBuilder
+    }
+}
 impl MoveTo {
     pub fn builder() -> MoveToBuilder {
         <MoveToBuilder as Default>::default()
@@ -822,6 +912,24 @@ impl QuerySelectorAllBuilder {
         })
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct GetTopLayerElementsBuilder;
+impl GetTopLayerElementsBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> GetTopLayerElements {
+        GetTopLayerElements {
+            method: GetTopLayerElementsMethod::GetTopLayerElements,
+            params: GetTopLayerElementsParams {},
+        }
+    }
+}
+impl GetTopLayerElements {
+    pub fn builder() -> GetTopLayerElementsBuilder {
+        GetTopLayerElementsBuilder
+    }
+}
 impl GetElementByRelation {
     pub fn builder() -> GetElementByRelationBuilder {
         <GetElementByRelationBuilder as Default>::default()
@@ -853,6 +961,24 @@ impl GetElementByRelationBuilder {
                 })?,
             },
         })
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct RedoBuilder;
+impl RedoBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Redo {
+        Redo {
+            method: RedoMethod::Redo,
+            params: RedoParams {},
+        }
+    }
+}
+impl Redo {
+    pub fn builder() -> RedoBuilder {
+        RedoBuilder
     }
 }
 impl RemoveAttribute {
@@ -1244,6 +1370,24 @@ impl GetFileInfoBuilder {
         })
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct GetDetachedDomNodesBuilder;
+impl GetDetachedDomNodesBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> GetDetachedDomNodes {
+        GetDetachedDomNodes {
+            method: GetDetachedDomNodesMethod::GetDetachedDomNodes,
+            params: GetDetachedDomNodesParams {},
+        }
+    }
+}
+impl GetDetachedDomNodes {
+    pub fn builder() -> GetDetachedDomNodesBuilder {
+        GetDetachedDomNodesBuilder
+    }
+}
 impl SetInspectedNode {
     pub fn builder() -> SetInspectedNodeBuilder {
         <SetInspectedNodeBuilder as Default>::default()
@@ -1366,6 +1510,24 @@ impl SetOuterHtmlBuilder {
                 })?,
             },
         })
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct UndoBuilder;
+impl UndoBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Undo {
+        Undo {
+            method: UndoMethod::Undo,
+            params: UndoParams {},
+        }
+    }
+}
+impl Undo {
+    pub fn builder() -> UndoBuilder {
+        UndoBuilder
     }
 }
 impl GetFrameOwner {

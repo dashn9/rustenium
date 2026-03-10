@@ -9,6 +9,14 @@ fn o(s: impl Into<String>) -> Cow<'static, str> {
     Cow::Owned(s.into())
 }
 
+fn type_ref(s: &str) -> TypeRef<'static> {
+    if let Some((module, name)) = s.split_once('.') {
+        TypeRef { module: Some(o(module)), name: o(name) }
+    } else {
+        TypeRef { module: None, name: o(s) }
+    }
+}
+
 /// Check if a variant name will produce a valid Rust identifier after case conversion.
 fn is_valid_variant_name(name: &str) -> bool {
     let camel = name.to_upper_camel_case();
@@ -442,22 +450,22 @@ fn parse_typedef(full_name: &str, type_name: &str, body: &str, rule_map: &HashMa
                 .filter(|p| !p.is_empty())
                 .collect();
             if parts.len() >= 2 && parts.iter().all(|p| !p.contains(':') && !p.contains('{')) {
-                let refs: Vec<TypeRef<'static>> = parts
-                    .iter()
-                    .map(|p| {
-                        let p = p.trim();
-                        if let Some((module, name)) = p.split_once('.') {
-                            TypeRef { module: Some(o(module)), name: o(name) }
-                        } else {
-                            TypeRef { module: None, name: o(p) }
-                        }
-                    })
-                    .collect();
+                let refs: Vec<TypeRef<'static>> = parts.into_iter().map(type_ref).collect();
                 return Some(td(Type::Object, Some(Item::TypeChoice(refs))));
             }
         }
 
         return Some(td(Type::Object, None));
+    }
+
+    // Bare type union: A / B or A // B (without parens or braces)
+    if body.contains('/') && !body.contains('"') {
+        let separator = if body.contains("//") { "//" } else { "/" };
+        let parts: Vec<&str> = body.split(separator).map(|p| p.trim()).filter(|p| !p.is_empty()).collect();
+        if parts.len() >= 2 && parts.iter().all(|p| !p.contains(':') && !p.contains('{')) {
+            let refs: Vec<TypeRef<'static>> = parts.into_iter().map(type_ref).collect();
+            return Some(td(Type::Object, Some(Item::TypeChoice(refs))));
+        }
     }
 
     // Type alias
@@ -469,10 +477,27 @@ fn resolve_params(
     rule_map: &HashMap<&str, &str>,
 ) -> (Vec<Param<'static>>, Vec<TypeDef<'static>>) {
     match params_type {
-        Some(pt) if pt != "EmptyParams" => rule_map
-            .get(pt.as_str())
-            .map(|b| parse_struct_fields_resolved(b, rule_map))
-            .unwrap_or_default(),
+        Some(pt) if pt != "EmptyParams" => {
+            if let Some(body) = rule_map.get(pt.as_str()) {
+                let body = body.trim();
+                if body.starts_with('{') || body.starts_with('(') {
+                    parse_struct_fields_resolved(body, rule_map)
+                } else {
+                    // Non-struct params (e.g., union type alias) → single flattened param
+                    let ty = parse_type(pt);
+                    let field_name = pt.rsplit('.').next().unwrap_or(pt);
+                    let field_snake = heck::ToSnakeCase::to_snake_case(field_name);
+                    (vec![Param {
+                        description: None, experimental: false, deprecated: false,
+                        optional: false, r#type: ty, name: o(&field_snake),
+                        raw_name: o(pt.as_str()), is_circular_dep: false,
+                        default_value: None, validation: None, flatten: true,
+                    }], vec![])
+                }
+            } else {
+                Default::default()
+            }
+        }
         _ => Default::default(),
     }
 }
@@ -831,18 +856,15 @@ fn parse_type(raw: &str) -> Type<'static> {
         "js-uint" => Type::UnsignedInteger,
         "js-int" => Type::Integer,
         "any" => Type::Any,
-        _ if s.starts_with('"') && s.ends_with('"') => Type::String,
-        _ if s.contains('.') => {
-            let (module, name) = s.split_once('.').unwrap();
-            Type::Ref(TypeRef {
-                module: Some(o(module)),
-                name: o(name),
-            })
+        _ if s.starts_with('"') && s.ends_with('"') => {
+            let val = &s[1..s.len() - 1];
+            if is_valid_variant_name(val) {
+                Type::Enum(vec![Variant { description: None, name: o(val) }])
+            } else {
+                Type::String
+            }
         }
-        _ => Type::Ref(TypeRef {
-            module: None,
-            name: o(s),
-        }),
+        _ => Type::Ref(type_ref(s)),
     }
 }
 
@@ -936,23 +958,7 @@ fn parse_inner_type_choice(body: &str) -> Option<Vec<TypeRef<'static>>> {
         return None;
     }
 
-    let refs: Vec<TypeRef<'static>> = parts.iter()
-        .map(|p| {
-            if let Some((module, name)) = p.split_once('.') {
-                TypeRef {
-                    module: Some(o(module)),
-                    name: o(name),
-                }
-            } else {
-                TypeRef {
-                    module: None,
-                    name: o(*p),
-                }
-            }
-        })
-        .collect();
-
-    Some(refs)
+    Some(parts.into_iter().map(type_ref).collect())
 }
 
 /// Parse inline choice group `(A // B)` inside a struct body.
@@ -1033,16 +1039,7 @@ fn parse_inline_choice(s: &str) -> Option<(Param<'static>, TypeDef<'static>)> {
     }
 
     // Simple type choice: (A // B) — type refs only
-    let refs: Vec<TypeRef<'static>> = parts.iter()
-        .map(|p| {
-            let p = p.trim();
-            if let Some((module, name)) = p.split_once('.') {
-                TypeRef { module: Some(o(module)), name: o(name) }
-            } else {
-                TypeRef { module: None, name: o(p) }
-            }
-        })
-        .collect();
+    let refs: Vec<TypeRef<'static>> = parts.into_iter().map(type_ref).collect();
 
     let union_name: String = refs.iter()
         .map(|r| r.name.as_ref().to_string())

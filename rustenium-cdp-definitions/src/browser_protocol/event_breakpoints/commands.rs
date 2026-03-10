@@ -24,7 +24,7 @@ pub enum SetInstrumentationBreakpointMethod {
     SetInstrumentationBreakpoint,
 }
 #[doc = "Sets breakpoint on particular native event.\n[setInstrumentationBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/EventBreakpoints/#method-setInstrumentationBreakpoint)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetInstrumentationBreakpoint {
     pub method: SetInstrumentationBreakpointMethod,
     pub params: SetInstrumentationBreakpointParams,
@@ -60,7 +60,7 @@ pub enum RemoveInstrumentationBreakpointMethod {
     RemoveInstrumentationBreakpoint,
 }
 #[doc = "Removes breakpoint on particular native event.\n[removeInstrumentationBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/EventBreakpoints/#method-removeInstrumentationBreakpoint)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RemoveInstrumentationBreakpoint {
     pub method: RemoveInstrumentationBreakpointMethod,
     pub params: RemoveInstrumentationBreakpointParams,
@@ -80,7 +80,7 @@ pub enum DisableMethod {
     Disable,
 }
 #[doc = "Removes all breakpoints\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/EventBreakpoints/#method-disable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,

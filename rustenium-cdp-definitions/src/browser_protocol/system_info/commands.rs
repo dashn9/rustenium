@@ -8,7 +8,7 @@ pub enum GetInfoMethod {
     GetInfo,
 }
 #[doc = "Returns information about the system.\n[getInfo](https://chromedevtools.github.io/devtools-protocol/tot/SystemInfo/#method-getInfo)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetInfo {
     pub method: GetInfoMethod,
     pub params: GetInfoParams,
@@ -43,7 +43,7 @@ pub enum GetFeatureStateMethod {
     GetFeatureState,
 }
 #[doc = "Returns information about the feature state.\n[getFeatureState](https://chromedevtools.github.io/devtools-protocol/tot/SystemInfo/#method-getFeatureState)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetFeatureState {
     pub method: GetFeatureStateMethod,
     pub params: GetFeatureStateParams,
@@ -63,7 +63,7 @@ pub enum GetProcessInfoMethod {
     GetProcessInfo,
 }
 #[doc = "Returns information about all running processes.\n[getProcessInfo](https://chromedevtools.github.io/devtools-protocol/tot/SystemInfo/#method-getProcessInfo)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetProcessInfo {
     pub method: GetProcessInfoMethod,
     pub params: GetProcessInfoParams,

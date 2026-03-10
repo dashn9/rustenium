@@ -15,7 +15,7 @@ pub enum FileDialogOpenedMethod {
     #[serde(rename = "input.fileDialogOpened")]
     FileDialogOpened,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FileDialogOpened {
     pub method: FileDialogOpenedMethod,
     pub params: FileDialogOpenedParams,
@@ -24,4 +24,4 @@ impl FileDialogOpened {
     pub const IDENTIFIER: &'static str = "input.fileDialogOpened";
     pub const DOMAIN_DIRECTION: &'static str = "all";
 }
-group_enum ! (InputEvents { FileDialogOpened (FileDialogOpened) });
+group_enum ! (InputEvent { FileDialogOpened (FileDialogOpened) });

@@ -40,7 +40,7 @@ pub enum Locator {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AccessibilityLocator {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: AccessibilityLocatorType,
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -50,18 +50,18 @@ pub struct AccessibilityLocator {
     #[serde(default)]
     pub role: Option<String>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum AccessibilityLocatorType {
+    #[serde(rename = "accessibility")]
+    Accessibility,
+}
 impl AccessibilityLocator {
-    pub fn new(r#type: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<AccessibilityLocatorType>) -> Self {
         Self {
             r#type: r#type.into(),
             name: None,
             role: None,
         }
-    }
-}
-impl<T: Into<String>> From<T> for AccessibilityLocator {
-    fn from(url: T) -> Self {
-        AccessibilityLocator::new(url)
     }
 }
 impl AccessibilityLocator {
@@ -71,12 +71,17 @@ impl AccessibilityLocator {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CssLocator {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: CssLocatorType,
     #[serde(rename = "value")]
     pub value: String,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum CssLocatorType {
+    #[serde(rename = "css")]
+    Css,
+}
 impl CssLocator {
-    pub fn new(r#type: impl Into<String>, value: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<CssLocatorType>, value: impl Into<String>) -> Self {
         Self {
             r#type: r#type.into(),
             value: value.into(),
@@ -90,12 +95,17 @@ impl CssLocator {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ContextLocator {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: ContextLocatorType,
     #[serde(rename = "context")]
     pub context: BrowsingContext,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum ContextLocatorType {
+    #[serde(rename = "context")]
+    Context,
+}
 impl ContextLocator {
-    pub fn new(r#type: impl Into<String>, context: impl Into<BrowsingContext>) -> Self {
+    pub fn new(r#type: impl Into<ContextLocatorType>, context: impl Into<BrowsingContext>) -> Self {
         Self {
             r#type: r#type.into(),
             context: context.into(),
@@ -109,7 +119,7 @@ impl ContextLocator {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InnerTextLocator {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: InnerTextLocatorType,
     #[serde(rename = "value")]
     pub value: String,
     #[serde(rename = "ignoreCase")]
@@ -126,6 +136,11 @@ pub struct InnerTextLocator {
     pub max_depth: Option<u64>,
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum InnerTextLocatorType {
+    #[serde(rename = "innerText")]
+    InnerText,
+}
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum InnerTextLocatorMatchType {
     #[serde(rename = "full")]
     Full,
@@ -133,7 +148,7 @@ pub enum InnerTextLocatorMatchType {
     Partial,
 }
 impl InnerTextLocator {
-    pub fn new(r#type: impl Into<String>, value: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<InnerTextLocatorType>, value: impl Into<String>) -> Self {
         Self {
             r#type: r#type.into(),
             value: value.into(),
@@ -150,12 +165,17 @@ impl InnerTextLocator {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct XPathLocator {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: XPathLocatorType,
     #[serde(rename = "value")]
     pub value: String,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum XPathLocatorType {
+    #[serde(rename = "xpath")]
+    Xpath,
+}
 impl XPathLocator {
-    pub fn new(r#type: impl Into<String>, value: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<XPathLocatorType>, value: impl Into<String>) -> Self {
         Self {
             r#type: r#type.into(),
             value: value.into(),
@@ -250,13 +270,18 @@ pub enum ClipRectangle {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ElementClipRectangle {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: ElementClipRectangleType,
     #[serde(rename = "element")]
     pub element: crate::script::types::SharedReference,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum ElementClipRectangleType {
+    #[serde(rename = "element")]
+    Element,
+}
 impl ElementClipRectangle {
     pub fn new(
-        r#type: impl Into<String>,
+        r#type: impl Into<ElementClipRectangleType>,
         element: impl Into<crate::script::types::SharedReference>,
     ) -> Self {
         Self {
@@ -272,7 +297,7 @@ impl ElementClipRectangle {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BoxClipRectangle {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: BoxClipRectangleType,
     #[serde(rename = "x")]
     pub x: f64,
     #[serde(rename = "y")]
@@ -281,6 +306,11 @@ pub struct BoxClipRectangle {
     pub width: f64,
     #[serde(rename = "height")]
     pub height: f64,
+}
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum BoxClipRectangleType {
+    #[serde(rename = "box")]
+    Box,
 }
 impl BoxClipRectangle {
     pub const IDENTIFIER: &'static str = "browsingContext.BoxClipRectangle";
@@ -465,33 +495,32 @@ impl BaseNavigationInfo {
     pub const DOMAIN_DIRECTION: &'static str = "local";
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum DownloadCanceledParamsDownloadCompleteParamsUnion {
+    DownloadCanceledParams(DownloadCanceledParams),
+    DownloadCompleteParams(DownloadCompleteParams),
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DownloadCanceledParams {
     #[serde(rename = "status")]
-    pub status: String,
-    #[serde(rename = "context")]
-    pub context: BrowsingContext,
-    #[serde(rename = "navigation")]
-    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: DownloadCanceledParamsStatus,
+    #[serde(flatten)]
     #[serde(default)]
-    pub navigation: Option<Navigation>,
-    #[serde(rename = "timestamp")]
-    pub timestamp: u64,
-    #[serde(rename = "url")]
-    pub url: String,
+    pub base_navigation_info: BaseNavigationInfo,
+}
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum DownloadCanceledParamsStatus {
+    #[serde(rename = "canceled")]
+    Canceled,
 }
 impl DownloadCanceledParams {
     pub fn new(
-        status: impl Into<String>,
-        context: impl Into<BrowsingContext>,
-        timestamp: impl Into<u64>,
-        url: impl Into<String>,
+        status: impl Into<DownloadCanceledParamsStatus>,
+        base_navigation_info: impl Into<BaseNavigationInfo>,
     ) -> Self {
         Self {
             status: status.into(),
-            context: context.into(),
-            timestamp: timestamp.into(),
-            url: url.into(),
-            navigation: None,
+            base_navigation_info: base_navigation_info.into(),
         }
     }
 }
@@ -502,36 +531,29 @@ impl DownloadCanceledParams {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DownloadCompleteParams {
     #[serde(rename = "status")]
-    pub status: String,
+    pub status: DownloadCompleteParamsStatus,
     #[serde(rename = "filepath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
     pub filepath: Option<String>,
-    #[serde(rename = "context")]
-    pub context: BrowsingContext,
-    #[serde(rename = "navigation")]
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(flatten)]
     #[serde(default)]
-    pub navigation: Option<Navigation>,
-    #[serde(rename = "timestamp")]
-    pub timestamp: u64,
-    #[serde(rename = "url")]
-    pub url: String,
+    pub base_navigation_info: BaseNavigationInfo,
+}
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum DownloadCompleteParamsStatus {
+    #[serde(rename = "complete")]
+    Complete,
 }
 impl DownloadCompleteParams {
     pub fn new(
-        status: impl Into<String>,
-        context: impl Into<BrowsingContext>,
-        timestamp: impl Into<u64>,
-        url: impl Into<String>,
+        status: impl Into<DownloadCompleteParamsStatus>,
+        base_navigation_info: impl Into<BaseNavigationInfo>,
     ) -> Self {
         Self {
             status: status.into(),
-            context: context.into(),
-            timestamp: timestamp.into(),
-            url: url.into(),
+            base_navigation_info: base_navigation_info.into(),
             filepath: None,
-            navigation: None,
         }
     }
 }
@@ -539,4 +561,4 @@ impl DownloadCompleteParams {
     pub const IDENTIFIER: &'static str = "browsingContext.DownloadCompleteParams";
     pub const DOMAIN_DIRECTION: &'static str = "local";
 }
-group_enum ! (BrowsingContextTypes { BrowsingContext (BrowsingContext) , Locator (Locator) , AccessibilityLocator (AccessibilityLocator) , CssLocator (CssLocator) , ContextLocator (ContextLocator) , InnerTextLocator (InnerTextLocator) , XPathLocator (XPathLocator) , Navigation (Navigation) , ReadinessState (ReadinessState) , UserPromptType (UserPromptType) , ImageFormat (ImageFormat) , ClipRectangle (ClipRectangle) , ElementClipRectangle (ElementClipRectangle) , BoxClipRectangle (BoxClipRectangle) , CreateType (CreateType) , PrintMarginParameters (PrintMarginParameters) , PrintPageParameters (PrintPageParameters) , Viewport (Viewport) , InfoList (InfoList) , Info (Info) , BaseNavigationInfo (BaseNavigationInfo) , DownloadCanceledParams (DownloadCanceledParams) , DownloadCompleteParams (DownloadCompleteParams) });
+group_enum ! (BrowsingContextType { BrowsingContext (BrowsingContext) , Locator (Locator) , Navigation (Navigation) , ReadinessState (ReadinessState) , UserPromptType (UserPromptType) , ImageFormat (ImageFormat) , ClipRectangle (ClipRectangle) , CreateType (CreateType) , PrintMarginParameters (PrintMarginParameters) , PrintPageParameters (PrintPageParameters) , Viewport (Viewport) , InfoList (InfoList) , Info (Info) , BaseNavigationInfo (BaseNavigationInfo) , DownloadCanceledParamsDownloadCompleteParamsUnion (DownloadCanceledParamsDownloadCompleteParamsUnion) });

@@ -6,11 +6,11 @@ impl ExtensionPath {
 }
 #[derive(Default, Clone)]
 pub struct ExtensionPathBuilder {
-    r#type: Option<String>,
+    r#type: Option<ExtensionPathType>,
     path: Option<String>,
 }
 impl ExtensionPathBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<ExtensionPathType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -36,11 +36,11 @@ impl ExtensionArchivePath {
 }
 #[derive(Default, Clone)]
 pub struct ExtensionArchivePathBuilder {
-    r#type: Option<String>,
+    r#type: Option<ExtensionArchivePathType>,
     path: Option<String>,
 }
 impl ExtensionArchivePathBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<ExtensionArchivePathType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
@@ -66,11 +66,11 @@ impl ExtensionBase64Encoded {
 }
 #[derive(Default, Clone)]
 pub struct ExtensionBase64EncodedBuilder {
-    r#type: Option<String>,
+    r#type: Option<ExtensionBase64EncodedType>,
     value: Option<String>,
 }
 impl ExtensionBase64EncodedBuilder {
-    pub fn r#type(mut self, r#type: impl Into<String>) -> Self {
+    pub fn r#type(mut self, r#type: impl Into<ExtensionBase64EncodedType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }

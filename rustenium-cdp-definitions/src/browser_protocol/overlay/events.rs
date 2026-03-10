@@ -12,7 +12,7 @@ pub enum InspectNodeRequestedMethod {
     InspectNodeRequested,
 }
 #[doc = "Fired when the node should be inspected. This happens after call to `setInspectMode` or when\nuser manually inspects an element.\n[inspectNodeRequested](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#event-inspectNodeRequested)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InspectNodeRequested {
     pub method: InspectNodeRequestedMethod,
     pub params: InspectNodeRequestedParams,
@@ -32,7 +32,7 @@ pub enum NodeHighlightRequestedMethod {
     NodeHighlightRequested,
 }
 #[doc = "Fired when the node should be highlighted. This happens after call to `setInspectMode`.\n[nodeHighlightRequested](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#event-nodeHighlightRequested)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NodeHighlightRequested {
     pub method: NodeHighlightRequestedMethod,
     pub params: NodeHighlightRequestedParams,
@@ -53,7 +53,7 @@ pub enum ScreenshotRequestedMethod {
     ScreenshotRequested,
 }
 #[doc = "Fired when user asks to capture screenshot of some area on the page.\n[screenshotRequested](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#event-screenshotRequested)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ScreenshotRequested {
     pub method: ScreenshotRequestedMethod,
     pub params: ScreenshotRequestedParams,
@@ -74,7 +74,7 @@ pub enum InspectPanelShowRequestedMethod {
     InspectPanelShowRequested,
 }
 #[doc = "Fired when user asks to show the Inspect panel.\n[inspectPanelShowRequested](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#event-inspectPanelShowRequested)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InspectPanelShowRequested {
     pub method: InspectPanelShowRequestedMethod,
     pub params: InspectPanelShowRequestedParams,
@@ -95,7 +95,7 @@ pub enum InspectedElementWindowRestoredMethod {
     InspectedElementWindowRestored,
 }
 #[doc = "Fired when user asks to restore the Inspected Element floating window.\n[inspectedElementWindowRestored](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#event-inspectedElementWindowRestored)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InspectedElementWindowRestored {
     pub method: InspectedElementWindowRestoredMethod,
     pub params: InspectedElementWindowRestoredParams,
@@ -112,7 +112,7 @@ pub enum InspectModeCanceledMethod {
     InspectModeCanceled,
 }
 #[doc = "Fired when user cancels the inspect mode.\n[inspectModeCanceled](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#event-inspectModeCanceled)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InspectModeCanceled {
     pub method: InspectModeCanceledMethod,
     pub params: InspectModeCanceledParams,

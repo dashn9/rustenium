@@ -21,7 +21,7 @@ pub enum DownloadWillBeginMethod {
     DownloadWillBegin,
 }
 #[doc = "Fired when page is about to start a download.\n[downloadWillBegin](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#event-downloadWillBegin)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DownloadWillBegin {
     pub method: DownloadWillBeginMethod,
     pub params: DownloadWillBeginParams,
@@ -66,7 +66,7 @@ pub enum DownloadProgressMethod {
     DownloadProgress,
 }
 #[doc = "Fired when download makes progress. Last call has |done| == true.\n[downloadProgress](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#event-downloadProgress)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DownloadProgress {
     pub method: DownloadProgressMethod,
     pub params: DownloadProgressParams,

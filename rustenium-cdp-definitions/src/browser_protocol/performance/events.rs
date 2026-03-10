@@ -16,7 +16,7 @@ pub enum MetricsMethod {
     Metrics,
 }
 #[doc = "Current values of the metrics.\n[metrics](https://chromedevtools.github.io/devtools-protocol/tot/Performance/#event-metrics)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Metrics {
     pub method: MetricsMethod,
     pub params: MetricsParams,

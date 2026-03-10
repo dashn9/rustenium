@@ -31,7 +31,7 @@ pub enum GetEventListenersMethod {
     GetEventListeners,
 }
 #[doc = "Returns event listeners of the given object.\n[getEventListeners](https://chromedevtools.github.io/devtools-protocol/tot/DOMDebugger/#method-getEventListeners)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetEventListeners {
     pub method: GetEventListenersMethod,
     pub params: GetEventListenersParams,
@@ -69,7 +69,7 @@ pub enum RemoveDomBreakpointMethod {
     RemoveDomBreakpoint,
 }
 #[doc = "Removes DOM breakpoint that was set using `setDOMBreakpoint`.\n[removeDOMBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/DOMDebugger/#method-removeDOMBreakpoint)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RemoveDomBreakpoint {
     pub method: RemoveDomBreakpointMethod,
     pub params: RemoveDomBreakpointParams,
@@ -111,7 +111,7 @@ pub enum RemoveEventListenerBreakpointMethod {
     RemoveEventListenerBreakpoint,
 }
 #[doc = "Removes breakpoint on particular DOM event.\n[removeEventListenerBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/DOMDebugger/#method-removeEventListenerBreakpoint)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RemoveEventListenerBreakpoint {
     pub method: RemoveEventListenerBreakpointMethod,
     pub params: RemoveEventListenerBreakpointParams,
@@ -145,7 +145,7 @@ pub enum RemoveXhrBreakpointMethod {
     RemoveXhrBreakpoint,
 }
 #[doc = "Removes breakpoint from XMLHttpRequest.\n[removeXHRBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/DOMDebugger/#method-removeXHRBreakpoint)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RemoveXhrBreakpoint {
     pub method: RemoveXhrBreakpointMethod,
     pub params: RemoveXhrBreakpointParams,
@@ -175,7 +175,7 @@ pub enum SetBreakOnCspViolationMethod {
     SetBreakOnCspViolation,
 }
 #[doc = "Sets breakpoint on particular CSP violations.\n[setBreakOnCSPViolation](https://chromedevtools.github.io/devtools-protocol/tot/DOMDebugger/#method-setBreakOnCSPViolation)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetBreakOnCspViolation {
     pub method: SetBreakOnCspViolationMethod,
     pub params: SetBreakOnCspViolationParams,
@@ -213,7 +213,7 @@ pub enum SetDomBreakpointMethod {
     SetDomBreakpoint,
 }
 #[doc = "Sets breakpoint on particular operation with DOM.\n[setDOMBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/DOMDebugger/#method-setDOMBreakpoint)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetDomBreakpoint {
     pub method: SetDomBreakpointMethod,
     pub params: SetDomBreakpointParams,
@@ -255,7 +255,7 @@ pub enum SetEventListenerBreakpointMethod {
     SetEventListenerBreakpoint,
 }
 #[doc = "Sets breakpoint on particular DOM event.\n[setEventListenerBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/DOMDebugger/#method-setEventListenerBreakpoint)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetEventListenerBreakpoint {
     pub method: SetEventListenerBreakpointMethod,
     pub params: SetEventListenerBreakpointParams,
@@ -289,7 +289,7 @@ pub enum SetXhrBreakpointMethod {
     SetXhrBreakpoint,
 }
 #[doc = "Sets breakpoint on XMLHttpRequest.\n[setXHRBreakpoint](https://chromedevtools.github.io/devtools-protocol/tot/DOMDebugger/#method-setXHRBreakpoint)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetXhrBreakpoint {
     pub method: SetXhrBreakpointMethod,
     pub params: SetXhrBreakpointParams,

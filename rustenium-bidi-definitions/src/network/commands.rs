@@ -38,7 +38,7 @@ pub enum AddDataCollectorMethod {
     #[serde(rename = "network.addDataCollector")]
     AddDataCollector,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AddDataCollector {
     pub method: AddDataCollectorMethod,
     pub params: AddDataCollectorParams,
@@ -78,7 +78,7 @@ pub enum AddInterceptMethod {
     #[serde(rename = "network.addIntercept")]
     AddIntercept,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AddIntercept {
     pub method: AddInterceptMethod,
     pub params: AddInterceptParams,
@@ -132,7 +132,7 @@ pub enum ContinueRequestMethod {
     #[serde(rename = "network.continueRequest")]
     ContinueRequest,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ContinueRequest {
     pub method: ContinueRequestMethod,
     pub params: ContinueRequestParams,
@@ -186,7 +186,7 @@ pub enum ContinueResponseMethod {
     #[serde(rename = "network.continueResponse")]
     ContinueResponse,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ContinueResponse {
     pub method: ContinueResponseMethod,
     pub params: ContinueResponseParams,
@@ -202,11 +202,22 @@ impl crate::CommandResult for ContinueResponse {
 pub struct ContinueWithAuthParams {
     #[serde(rename = "request")]
     pub request: super::types::Request,
+    #[serde(flatten)]
+    #[serde(default)]
+    pub continue_with_auth_credentials_continue_with_auth_no_credentials_union:
+        super::types::ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion,
 }
 impl ContinueWithAuthParams {
-    pub fn new(request: impl Into<super::types::Request>) -> Self {
+    pub fn new(
+        request: impl Into<super::types::Request>,
+        continue_with_auth_credentials_continue_with_auth_no_credentials_union: impl Into<
+            super::types::ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion,
+        >,
+    ) -> Self {
         Self {
             request: request.into(),
+            continue_with_auth_credentials_continue_with_auth_no_credentials_union:
+                continue_with_auth_credentials_continue_with_auth_no_credentials_union.into(),
         }
     }
 }
@@ -215,7 +226,7 @@ pub enum ContinueWithAuthMethod {
     #[serde(rename = "network.continueWithAuth")]
     ContinueWithAuth,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ContinueWithAuth {
     pub method: ContinueWithAuthMethod,
     pub params: ContinueWithAuthParams,
@@ -254,7 +265,7 @@ pub enum DisownDataMethod {
     #[serde(rename = "network.disownData")]
     DisownData,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DisownData {
     pub method: DisownDataMethod,
     pub params: DisownDataParams,
@@ -283,7 +294,7 @@ pub enum FailRequestMethod {
     #[serde(rename = "network.failRequest")]
     FailRequest,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FailRequest {
     pub method: FailRequestMethod,
     pub params: FailRequestParams,
@@ -331,7 +342,7 @@ pub enum GetDataMethod {
     #[serde(rename = "network.getData")]
     GetData,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetData {
     pub method: GetDataMethod,
     pub params: GetDataParams,
@@ -385,7 +396,7 @@ pub enum ProvideResponseMethod {
     #[serde(rename = "network.provideResponse")]
     ProvideResponse,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ProvideResponse {
     pub method: ProvideResponseMethod,
     pub params: ProvideResponseParams,
@@ -414,7 +425,7 @@ pub enum RemoveDataCollectorMethod {
     #[serde(rename = "network.removeDataCollector")]
     RemoveDataCollector,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RemoveDataCollector {
     pub method: RemoveDataCollectorMethod,
     pub params: RemoveDataCollectorParams,
@@ -443,7 +454,7 @@ pub enum RemoveInterceptMethod {
     #[serde(rename = "network.removeIntercept")]
     RemoveIntercept,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RemoveIntercept {
     pub method: RemoveInterceptMethod,
     pub params: RemoveInterceptParams,
@@ -484,7 +495,7 @@ pub enum SetCacheBehaviorMethod {
     #[serde(rename = "network.setCacheBehavior")]
     SetCacheBehavior,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetCacheBehavior {
     pub method: SetCacheBehaviorMethod,
     pub params: SetCacheBehaviorParams,
@@ -524,7 +535,7 @@ pub enum SetExtraHeadersMethod {
     #[serde(rename = "network.setExtraHeaders")]
     SetExtraHeaders,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetExtraHeaders {
     pub method: SetExtraHeadersMethod,
     pub params: SetExtraHeadersParams,
@@ -536,4 +547,4 @@ impl SetExtraHeaders {
 impl crate::CommandResult for SetExtraHeaders {
     type Result = super::results::SetExtraHeadersResult;
 }
-group_enum ! (NetworkCommands { AddDataCollector (AddDataCollector) , AddIntercept (AddIntercept) , ContinueRequest (ContinueRequest) , ContinueResponse (ContinueResponse) , ContinueWithAuth (ContinueWithAuth) , DisownData (DisownData) , FailRequest (FailRequest) , GetData (GetData) , ProvideResponse (ProvideResponse) , RemoveDataCollector (RemoveDataCollector) , RemoveIntercept (RemoveIntercept) , SetCacheBehavior (SetCacheBehavior) , SetExtraHeaders (SetExtraHeaders) });
+group_enum ! (NetworkCommand { AddDataCollector (AddDataCollector) , AddIntercept (AddIntercept) , ContinueRequest (ContinueRequest) , ContinueResponse (ContinueResponse) , ContinueWithAuth (ContinueWithAuth) , DisownData (DisownData) , FailRequest (FailRequest) , GetData (GetData) , ProvideResponse (ProvideResponse) , RemoveDataCollector (RemoveDataCollector) , RemoveIntercept (RemoveIntercept) , SetCacheBehavior (SetCacheBehavior) , SetExtraHeaders (SetExtraHeaders) });

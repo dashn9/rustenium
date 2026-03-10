@@ -15,7 +15,7 @@ pub enum GetCookiesMethod {
     #[serde(rename = "storage.getCookies")]
     GetCookies,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetCookies {
     pub method: GetCookiesMethod,
     pub params: GetCookiesParams,
@@ -49,7 +49,7 @@ pub enum SetCookieMethod {
     #[serde(rename = "storage.setCookie")]
     SetCookie,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetCookie {
     pub method: SetCookieMethod,
     pub params: SetCookieParams,
@@ -77,7 +77,7 @@ pub enum DeleteCookiesMethod {
     #[serde(rename = "storage.deleteCookies")]
     DeleteCookies,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeleteCookies {
     pub method: DeleteCookiesMethod,
     pub params: DeleteCookiesParams,
@@ -89,4 +89,4 @@ impl DeleteCookies {
 impl crate::CommandResult for DeleteCookies {
     type Result = super::results::DeleteCookiesResult;
 }
-group_enum ! (StorageCommands { GetCookies (GetCookies) , SetCookie (SetCookie) , DeleteCookies (DeleteCookies) });
+group_enum ! (StorageCommand { GetCookies (GetCookies) , SetCookie (SetCookie) , DeleteCookies (DeleteCookies) });

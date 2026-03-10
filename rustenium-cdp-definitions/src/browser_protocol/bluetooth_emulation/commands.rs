@@ -26,7 +26,7 @@ pub enum EnableMethod {
     Enable,
 }
 #[doc = "Enable the BluetoothEmulation domain.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/BluetoothEmulation/#method-enable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
@@ -57,7 +57,7 @@ pub enum SetSimulatedCentralStateMethod {
     SetSimulatedCentralState,
 }
 #[doc = "Set the state of the simulated central.\n[setSimulatedCentralState](https://chromedevtools.github.io/devtools-protocol/tot/BluetoothEmulation/#method-setSimulatedCentralState)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetSimulatedCentralState {
     pub method: SetSimulatedCentralStateMethod,
     pub params: SetSimulatedCentralStateParams,
@@ -77,7 +77,7 @@ pub enum DisableMethod {
     Disable,
 }
 #[doc = "Disable the BluetoothEmulation domain.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/BluetoothEmulation/#method-disable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
@@ -123,7 +123,7 @@ pub enum SimulatePreconnectedPeripheralMethod {
     SimulatePreconnectedPeripheral,
 }
 #[doc = "Simulates a peripheral with |address|, |name| and |knownServiceUuids|\nthat has already been connected to the system.\n[simulatePreconnectedPeripheral](https://chromedevtools.github.io/devtools-protocol/tot/BluetoothEmulation/#method-simulatePreconnectedPeripheral)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SimulatePreconnectedPeripheral {
     pub method: SimulatePreconnectedPeripheralMethod,
     pub params: SimulatePreconnectedPeripheralParams,
@@ -153,7 +153,7 @@ pub enum SimulateAdvertisementMethod {
     SimulateAdvertisement,
 }
 #[doc = "Simulates an advertisement packet described in |entry| being received by\nthe central.\n[simulateAdvertisement](https://chromedevtools.github.io/devtools-protocol/tot/BluetoothEmulation/#method-simulateAdvertisement)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SimulateAdvertisement {
     pub method: SimulateAdvertisementMethod,
     pub params: SimulateAdvertisementParams,
@@ -193,7 +193,7 @@ pub enum SimulateGattOperationResponseMethod {
     SimulateGattOperationResponse,
 }
 #[doc = "Simulates the response code from the peripheral with |address| for a\nGATT operation of |type|. The |code| value follows the HCI Error Codes from\nBluetooth Core Specification Vol 2 Part D 1.3 List Of Error Codes.\n[simulateGATTOperationResponse](https://chromedevtools.github.io/devtools-protocol/tot/BluetoothEmulation/#method-simulateGATTOperationResponse)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SimulateGattOperationResponse {
     pub method: SimulateGattOperationResponseMethod,
     pub params: SimulateGattOperationResponseParams,
@@ -238,7 +238,7 @@ pub enum SimulateCharacteristicOperationResponseMethod {
     SimulateCharacteristicOperationResponse,
 }
 #[doc = "Simulates the response from the characteristic with |characteristicId| for a\ncharacteristic operation of |type|. The |code| value follows the Error\nCodes from Bluetooth Core Specification Vol 3 Part F 3.4.1.1 Error Response.\nThe |data| is expected to exist when simulating a successful read operation\nresponse.\n[simulateCharacteristicOperationResponse](https://chromedevtools.github.io/devtools-protocol/tot/BluetoothEmulation/#method-simulateCharacteristicOperationResponse)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SimulateCharacteristicOperationResponse {
     pub method: SimulateCharacteristicOperationResponseMethod,
     pub params: SimulateCharacteristicOperationResponseParams,
@@ -284,7 +284,7 @@ pub enum SimulateDescriptorOperationResponseMethod {
     SimulateDescriptorOperationResponse,
 }
 #[doc = "Simulates the response from the descriptor with |descriptorId| for a\ndescriptor operation of |type|. The |code| value follows the Error\nCodes from Bluetooth Core Specification Vol 3 Part F 3.4.1.1 Error Response.\nThe |data| is expected to exist when simulating a successful read operation\nresponse.\n[simulateDescriptorOperationResponse](https://chromedevtools.github.io/devtools-protocol/tot/BluetoothEmulation/#method-simulateDescriptorOperationResponse)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SimulateDescriptorOperationResponse {
     pub method: SimulateDescriptorOperationResponseMethod,
     pub params: SimulateDescriptorOperationResponseParams,
@@ -317,7 +317,7 @@ pub enum AddServiceMethod {
     AddService,
 }
 #[doc = "Adds a service with |serviceUuid| to the peripheral with |address|.\n[addService](https://chromedevtools.github.io/devtools-protocol/tot/BluetoothEmulation/#method-addService)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AddService {
     pub method: AddServiceMethod,
     pub params: AddServiceParams,
@@ -352,7 +352,7 @@ pub enum RemoveServiceMethod {
     RemoveService,
 }
 #[doc = "Removes the service respresented by |serviceId| from the simulated central.\n[removeService](https://chromedevtools.github.io/devtools-protocol/tot/BluetoothEmulation/#method-removeService)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RemoveService {
     pub method: RemoveServiceMethod,
     pub params: RemoveServiceParams,
@@ -392,7 +392,7 @@ pub enum AddCharacteristicMethod {
     AddCharacteristic,
 }
 #[doc = "Adds a characteristic with |characteristicUuid| and |properties| to the\nservice represented by |serviceId|.\n[addCharacteristic](https://chromedevtools.github.io/devtools-protocol/tot/BluetoothEmulation/#method-addCharacteristic)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AddCharacteristic {
     pub method: AddCharacteristicMethod,
     pub params: AddCharacteristicParams,
@@ -427,7 +427,7 @@ pub enum RemoveCharacteristicMethod {
     RemoveCharacteristic,
 }
 #[doc = "Removes the characteristic respresented by |characteristicId| from the\nsimulated central.\n[removeCharacteristic](https://chromedevtools.github.io/devtools-protocol/tot/BluetoothEmulation/#method-removeCharacteristic)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RemoveCharacteristic {
     pub method: RemoveCharacteristicMethod,
     pub params: RemoveCharacteristicParams,
@@ -460,7 +460,7 @@ pub enum AddDescriptorMethod {
     AddDescriptor,
 }
 #[doc = "Adds a descriptor with |descriptorUuid| to the characteristic respresented\nby |characteristicId|.\n[addDescriptor](https://chromedevtools.github.io/devtools-protocol/tot/BluetoothEmulation/#method-addDescriptor)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AddDescriptor {
     pub method: AddDescriptorMethod,
     pub params: AddDescriptorParams,
@@ -495,7 +495,7 @@ pub enum RemoveDescriptorMethod {
     RemoveDescriptor,
 }
 #[doc = "Removes the descriptor with |descriptorId| from the simulated central.\n[removeDescriptor](https://chromedevtools.github.io/devtools-protocol/tot/BluetoothEmulation/#method-removeDescriptor)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RemoveDescriptor {
     pub method: RemoveDescriptorMethod,
     pub params: RemoveDescriptorParams,
@@ -530,7 +530,7 @@ pub enum SimulateGattDisconnectionMethod {
     SimulateGattDisconnection,
 }
 #[doc = "Simulates a GATT disconnection from the peripheral with |address|.\n[simulateGATTDisconnection](https://chromedevtools.github.io/devtools-protocol/tot/BluetoothEmulation/#method-simulateGATTDisconnection)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SimulateGattDisconnection {
     pub method: SimulateGattDisconnectionMethod,
     pub params: SimulateGattDisconnectionParams,

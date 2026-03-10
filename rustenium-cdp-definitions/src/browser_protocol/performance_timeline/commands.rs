@@ -18,7 +18,7 @@ pub enum EnableMethod {
     Enable,
 }
 #[doc = "Previously buffered events would be reported before method returns.\nSee also: timelineEventAdded\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/PerformanceTimeline/#method-enable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,

@@ -13,7 +13,7 @@ pub enum RecordingStateChangedMethod {
     RecordingStateChanged,
 }
 #[doc = "Called when the recording state for the service has been updated.\n[recordingStateChanged](https://chromedevtools.github.io/devtools-protocol/tot/BackgroundService/#event-recordingStateChanged)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RecordingStateChanged {
     pub method: RecordingStateChangedMethod,
     pub params: RecordingStateChangedParams,
@@ -33,7 +33,7 @@ pub enum BackgroundServiceEventReceivedMethod {
     BackgroundServiceEventReceived,
 }
 #[doc = "Called with all existing backgroundServiceEvents when enabled, and all new\nevents afterwards if enabled and recording.\n[backgroundServiceEventReceived](https://chromedevtools.github.io/devtools-protocol/tot/BackgroundService/#event-backgroundServiceEventReceived)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BackgroundServiceEventReceived {
     pub method: BackgroundServiceEventReceivedMethod,
     pub params: BackgroundServiceEventReceivedParams,

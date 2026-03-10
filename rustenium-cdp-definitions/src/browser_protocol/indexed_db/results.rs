@@ -1,14 +1,44 @@
 use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ClearObjectStoreResult {}
+impl TryFrom<serde_json::Value> for ClearObjectStoreResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct DeleteDatabaseResult {}
+impl TryFrom<serde_json::Value> for DeleteDatabaseResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct DeleteObjectStoreEntriesResult {}
+impl TryFrom<serde_json::Value> for DeleteObjectStoreEntriesResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct DisableResult {}
+impl TryFrom<serde_json::Value> for DisableResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct EnableResult {}
+impl TryFrom<serde_json::Value> for EnableResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RequestDataResult {
     #[doc = "Array of object store data entries."]
@@ -19,6 +49,12 @@ pub struct RequestDataResult {
     #[serde(rename = "hasMore")]
     pub has_more: bool,
 }
+impl TryFrom<serde_json::Value> for RequestDataResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetMetadataResult {
     #[doc = "the entries count"]
@@ -28,11 +64,23 @@ pub struct GetMetadataResult {
     #[serde(rename = "keyGeneratorValue")]
     pub key_generator_value: f64,
 }
+impl TryFrom<serde_json::Value> for GetMetadataResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RequestDatabaseResult {
     #[doc = "Database with an array of object stores."]
     #[serde(rename = "databaseWithObjectStores")]
     pub database_with_object_stores: super::types::DatabaseWithObjectStores,
+}
+impl TryFrom<serde_json::Value> for RequestDatabaseResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RequestDatabaseNamesResult {
@@ -40,4 +88,10 @@ pub struct RequestDatabaseNamesResult {
     #[serde(rename = "databaseNames")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub database_names: Vec<String>,
+}
+impl TryFrom<serde_json::Value> for RequestDatabaseNamesResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
 }

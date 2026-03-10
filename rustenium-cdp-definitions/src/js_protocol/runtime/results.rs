@@ -10,6 +10,12 @@ pub struct AwaitPromiseResult {
     #[serde(default)]
     pub exception_details: Option<super::types::ExceptionDetails>,
 }
+impl TryFrom<serde_json::Value> for AwaitPromiseResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CallFunctionOnResult {
     #[doc = "Call result."]
@@ -20,6 +26,12 @@ pub struct CallFunctionOnResult {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
     pub exception_details: Option<super::types::ExceptionDetails>,
+}
+impl TryFrom<serde_json::Value> for CallFunctionOnResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct CompileScriptResult {
@@ -34,12 +46,36 @@ pub struct CompileScriptResult {
     #[serde(default)]
     pub exception_details: Option<super::types::ExceptionDetails>,
 }
+impl TryFrom<serde_json::Value> for CompileScriptResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct DisableResult {}
+impl TryFrom<serde_json::Value> for DisableResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct DiscardConsoleEntriesResult {}
+impl TryFrom<serde_json::Value> for DiscardConsoleEntriesResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct EnableResult {}
+impl TryFrom<serde_json::Value> for EnableResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EvaluateResult {
     #[doc = "Evaluation result."]
@@ -51,11 +87,23 @@ pub struct EvaluateResult {
     #[serde(default)]
     pub exception_details: Option<super::types::ExceptionDetails>,
 }
+impl TryFrom<serde_json::Value> for EvaluateResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetIsolateIdResult {
     #[doc = "The isolate id."]
     #[serde(rename = "id")]
     pub id: String,
+}
+impl TryFrom<serde_json::Value> for GetIsolateIdResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetHeapUsageResult {
@@ -71,6 +119,12 @@ pub struct GetHeapUsageResult {
     #[doc = "Size in bytes of backing storage for array buffers and external strings."]
     #[serde(rename = "backingStorageSize")]
     pub backing_storage_size: f64,
+}
+impl TryFrom<serde_json::Value> for GetHeapUsageResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetPropertiesResult {
@@ -94,11 +148,23 @@ pub struct GetPropertiesResult {
     #[serde(default)]
     pub exception_details: Option<super::types::ExceptionDetails>,
 }
+impl TryFrom<serde_json::Value> for GetPropertiesResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GlobalLexicalScopeNamesResult {
     #[serde(rename = "names")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub names: Vec<String>,
+}
+impl TryFrom<serde_json::Value> for GlobalLexicalScopeNamesResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct QueryObjectsResult {
@@ -106,12 +172,36 @@ pub struct QueryObjectsResult {
     #[serde(rename = "objects")]
     pub objects: super::types::RemoteObject,
 }
+impl TryFrom<serde_json::Value> for QueryObjectsResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ReleaseObjectResult {}
+impl TryFrom<serde_json::Value> for ReleaseObjectResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ReleaseObjectGroupResult {}
+impl TryFrom<serde_json::Value> for ReleaseObjectGroupResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct RunIfWaitingForDebuggerResult {}
+impl TryFrom<serde_json::Value> for RunIfWaitingForDebuggerResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RunScriptResult {
     #[doc = "Run result."]
@@ -123,22 +213,70 @@ pub struct RunScriptResult {
     #[serde(default)]
     pub exception_details: Option<super::types::ExceptionDetails>,
 }
+impl TryFrom<serde_json::Value> for RunScriptResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetAsyncCallStackDepthResult {}
+impl TryFrom<serde_json::Value> for SetAsyncCallStackDepthResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetCustomObjectFormatterEnabledResult {}
+impl TryFrom<serde_json::Value> for SetCustomObjectFormatterEnabledResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetMaxCallStackSizeToCaptureResult {}
+impl TryFrom<serde_json::Value> for SetMaxCallStackSizeToCaptureResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct TerminateExecutionResult {}
+impl TryFrom<serde_json::Value> for TerminateExecutionResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct AddBindingResult {}
+impl TryFrom<serde_json::Value> for AddBindingResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct RemoveBindingResult {}
+impl TryFrom<serde_json::Value> for RemoveBindingResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct GetExceptionDetailsResult {
     #[serde(rename = "exceptionDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
     pub exception_details: Option<super::types::ExceptionDetails>,
+}
+impl TryFrom<serde_json::Value> for GetExceptionDetailsResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
 }

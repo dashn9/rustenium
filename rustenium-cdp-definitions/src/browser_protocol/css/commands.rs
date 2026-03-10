@@ -37,7 +37,7 @@ pub enum AddRuleMethod {
     AddRule,
 }
 #[doc = "Inserts a new rule with the given `ruleText` in a stylesheet with given `styleSheetId`, at the\nposition specified by `location`.\n[addRule](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-addRule)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AddRule {
     pub method: AddRuleMethod,
     pub params: AddRuleParams,
@@ -69,7 +69,7 @@ pub enum CollectClassNamesMethod {
     CollectClassNames,
 }
 #[doc = "Returns all class names from specified stylesheet.\n[collectClassNames](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-collectClassNames)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CollectClassNames {
     pub method: CollectClassNamesMethod,
     pub params: CollectClassNamesParams,
@@ -106,7 +106,7 @@ pub enum CreateStyleSheetMethod {
     CreateStyleSheet,
 }
 #[doc = "Creates a new special \"via-inspector\" stylesheet in the frame with given `frameId`.\n[createStyleSheet](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-createStyleSheet)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CreateStyleSheet {
     pub method: CreateStyleSheetMethod,
     pub params: CreateStyleSheetParams,
@@ -126,7 +126,7 @@ pub enum DisableMethod {
     Disable,
 }
 #[doc = "Disables the CSS agent for the given page.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-disable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
@@ -146,7 +146,7 @@ pub enum EnableMethod {
     Enable,
 }
 #[doc = "Enables the CSS agent for the given page. Clients should not assume that the CSS agent has been\nenabled until the result of this command is received.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-enable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
@@ -185,7 +185,7 @@ pub enum ForcePseudoStateMethod {
     ForcePseudoState,
 }
 #[doc = "Ensures that the given node will have specified pseudo-classes whenever its style is computed by\nthe browser.\n[forcePseudoState](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-forcePseudoState)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ForcePseudoState {
     pub method: ForcePseudoStateMethod,
     pub params: ForcePseudoStateParams,
@@ -223,7 +223,7 @@ pub enum ForceStartingStyleMethod {
     ForceStartingStyle,
 }
 #[doc = "Ensures that the given node is in its starting-style state.\n[forceStartingStyle](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-forceStartingStyle)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ForceStartingStyle {
     pub method: ForceStartingStyleMethod,
     pub params: ForceStartingStyleParams,
@@ -252,7 +252,7 @@ pub enum GetBackgroundColorsMethod {
     #[serde(rename = "CSS.getBackgroundColors")]
     GetBackgroundColors,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetBackgroundColors {
     pub method: GetBackgroundColorsMethod,
     pub params: GetBackgroundColorsParams,
@@ -282,7 +282,7 @@ pub enum GetComputedStyleForNodeMethod {
     GetComputedStyleForNode,
 }
 #[doc = "Returns the computed style for a DOM node identified by `nodeId`.\n[getComputedStyleForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getComputedStyleForNode)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetComputedStyleForNode {
     pub method: GetComputedStyleForNodeMethod,
     pub params: GetComputedStyleForNodeParams,
@@ -339,7 +339,7 @@ pub enum ResolveValuesMethod {
     ResolveValues,
 }
 #[doc = "Resolve the specified values in the context of the provided element.\nFor example, a value of '1em' is evaluated according to the computed\n'font-size' of the element and a value 'calc(1px + 2px)' will be\nresolved to '3px'.\nIf the `propertyName` was specified the `values` are resolved as if\nthey were property's declaration. If a value cannot be parsed according\nto the provided property syntax, the value is parsed using combined\nsyntax as if null `propertyName` was provided. If the value cannot be\nresolved even then, return the provided value without any changes.\nNote: this function currently does not resolve CSS random() function,\nit returns unmodified random() function parts.`\n[resolveValues](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-resolveValues)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResolveValues {
     pub method: ResolveValuesMethod,
     pub params: ResolveValuesParams,
@@ -370,7 +370,7 @@ pub enum GetLonghandPropertiesMethod {
     #[serde(rename = "CSS.getLonghandProperties")]
     GetLonghandProperties,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetLonghandProperties {
     pub method: GetLonghandPropertiesMethod,
     pub params: GetLonghandPropertiesParams,
@@ -400,7 +400,7 @@ pub enum GetInlineStylesForNodeMethod {
     GetInlineStylesForNode,
 }
 #[doc = "Returns the styles defined inline (explicitly in the \"style\" attribute and implicitly, using DOM\nattributes) for a DOM node identified by `nodeId`.\n[getInlineStylesForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getInlineStylesForNode)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetInlineStylesForNode {
     pub method: GetInlineStylesForNodeMethod,
     pub params: GetInlineStylesForNodeParams,
@@ -430,7 +430,7 @@ pub enum GetAnimatedStylesForNodeMethod {
     GetAnimatedStylesForNode,
 }
 #[doc = "Returns the styles coming from animations & transitions\nincluding the animation & transition styles coming from inheritance chain.\n[getAnimatedStylesForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getAnimatedStylesForNode)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetAnimatedStylesForNode {
     pub method: GetAnimatedStylesForNodeMethod,
     pub params: GetAnimatedStylesForNodeParams,
@@ -460,7 +460,7 @@ pub enum GetMatchedStylesForNodeMethod {
     GetMatchedStylesForNode,
 }
 #[doc = "Returns requested styles for a DOM node identified by `nodeId`.\n[getMatchedStylesForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getMatchedStylesForNode)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetMatchedStylesForNode {
     pub method: GetMatchedStylesForNodeMethod,
     pub params: GetMatchedStylesForNodeParams,
@@ -480,7 +480,7 @@ pub enum GetEnvironmentVariablesMethod {
     GetEnvironmentVariables,
 }
 #[doc = "Returns the values of the default UA-defined environment variables used in env()\n[getEnvironmentVariables](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getEnvironmentVariables)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetEnvironmentVariables {
     pub method: GetEnvironmentVariablesMethod,
     pub params: GetEnvironmentVariablesParams,
@@ -500,7 +500,7 @@ pub enum GetMediaQueriesMethod {
     GetMediaQueries,
 }
 #[doc = "Returns all media queries parsed by the rendering engine.\n[getMediaQueries](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getMediaQueries)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetMediaQueries {
     pub method: GetMediaQueriesMethod,
     pub params: GetMediaQueriesParams,
@@ -530,7 +530,7 @@ pub enum GetPlatformFontsForNodeMethod {
     GetPlatformFontsForNode,
 }
 #[doc = "Requests information about platform fonts which we used to render child TextNodes in the given\nnode.\n[getPlatformFontsForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getPlatformFontsForNode)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetPlatformFontsForNode {
     pub method: GetPlatformFontsForNodeMethod,
     pub params: GetPlatformFontsForNodeParams,
@@ -562,7 +562,7 @@ pub enum GetStyleSheetTextMethod {
     GetStyleSheetText,
 }
 #[doc = "Returns the current textual content for a stylesheet.\n[getStyleSheetText](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getStyleSheetText)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetStyleSheetText {
     pub method: GetStyleSheetTextMethod,
     pub params: GetStyleSheetTextParams,
@@ -592,7 +592,7 @@ pub enum GetLayersForNodeMethod {
     GetLayersForNode,
 }
 #[doc = "Returns all layers parsed by the rendering engine for the tree scope of a node.\nGiven a DOM element identified by nodeId, getLayersForNode returns the root\nlayer for the nearest ancestor document or shadow root. The layer root contains\nthe full layer tree for the tree scope and their ordering.\n[getLayersForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getLayersForNode)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetLayersForNode {
     pub method: GetLayersForNodeMethod,
     pub params: GetLayersForNodeParams,
@@ -628,7 +628,7 @@ pub enum GetLocationForSelectorMethod {
     GetLocationForSelector,
 }
 #[doc = "Given a CSS selector text and a style sheet ID, getLocationForSelector\nreturns an array of locations of the CSS selector in the style sheet.\n[getLocationForSelector](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getLocationForSelector)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetLocationForSelector {
     pub method: GetLocationForSelectorMethod,
     pub params: GetLocationForSelectorParams,
@@ -653,7 +653,7 @@ pub enum TrackComputedStyleUpdatesForNodeMethod {
     TrackComputedStyleUpdatesForNode,
 }
 #[doc = "Starts tracking the given node for the computed style updates\nand whenever the computed style is updated for node, it queues\na `computedStyleUpdated` event with throttling.\nThere can only be 1 node tracked for computed style updates\nso passing a new node id removes tracking from the previous node.\nPass `undefined` to disable tracking.\n[trackComputedStyleUpdatesForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-trackComputedStyleUpdatesForNode)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TrackComputedStyleUpdatesForNode {
     pub method: TrackComputedStyleUpdatesForNodeMethod,
     pub params: TrackComputedStyleUpdatesForNodeParams,
@@ -684,7 +684,7 @@ pub enum TrackComputedStyleUpdatesMethod {
     TrackComputedStyleUpdates,
 }
 #[doc = "Starts tracking the given computed styles for updates. The specified array of properties\nreplaces the one previously specified. Pass empty array to disable tracking.\nUse takeComputedStyleUpdates to retrieve the list of nodes that had properties modified.\nThe changes to computed style properties are only tracked for nodes pushed to the front-end\nby the DOM agent. If no changes to the tracked properties occur after the node has been pushed\nto the front-end, no updates will be issued for the node.\n[trackComputedStyleUpdates](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-trackComputedStyleUpdates)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TrackComputedStyleUpdates {
     pub method: TrackComputedStyleUpdatesMethod,
     pub params: TrackComputedStyleUpdatesParams,
@@ -704,7 +704,7 @@ pub enum TakeComputedStyleUpdatesMethod {
     TakeComputedStyleUpdates,
 }
 #[doc = "Polls the next batch of computed style updates.\n[takeComputedStyleUpdates](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-takeComputedStyleUpdates)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TakeComputedStyleUpdates {
     pub method: TakeComputedStyleUpdatesMethod,
     pub params: TakeComputedStyleUpdatesParams,
@@ -745,7 +745,7 @@ pub enum SetEffectivePropertyValueForNodeMethod {
     SetEffectivePropertyValueForNode,
 }
 #[doc = "Find a rule with the given active property for the given node and set the new value for this\nproperty\n[setEffectivePropertyValueForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setEffectivePropertyValueForNode)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetEffectivePropertyValueForNode {
     pub method: SetEffectivePropertyValueForNodeMethod,
     pub params: SetEffectivePropertyValueForNodeParams,
@@ -785,7 +785,7 @@ pub enum SetPropertyRulePropertyNameMethod {
     SetPropertyRulePropertyName,
 }
 #[doc = "Modifies the property rule property name.\n[setPropertyRulePropertyName](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setPropertyRulePropertyName)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetPropertyRulePropertyName {
     pub method: SetPropertyRulePropertyNameMethod,
     pub params: SetPropertyRulePropertyNameParams,
@@ -825,7 +825,7 @@ pub enum SetKeyframeKeyMethod {
     SetKeyframeKey,
 }
 #[doc = "Modifies the keyframe rule key text.\n[setKeyframeKey](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setKeyframeKey)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetKeyframeKey {
     pub method: SetKeyframeKeyMethod,
     pub params: SetKeyframeKeyParams,
@@ -865,7 +865,7 @@ pub enum SetMediaTextMethod {
     SetMediaText,
 }
 #[doc = "Modifies the rule selector.\n[setMediaText](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setMediaText)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetMediaText {
     pub method: SetMediaTextMethod,
     pub params: SetMediaTextParams,
@@ -905,7 +905,7 @@ pub enum SetContainerQueryTextMethod {
     SetContainerQueryText,
 }
 #[doc = "Modifies the expression of a container query.\n[setContainerQueryText](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setContainerQueryText)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetContainerQueryText {
     pub method: SetContainerQueryTextMethod,
     pub params: SetContainerQueryTextParams,
@@ -945,7 +945,7 @@ pub enum SetSupportsTextMethod {
     SetSupportsText,
 }
 #[doc = "Modifies the expression of a supports at-rule.\n[setSupportsText](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setSupportsText)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetSupportsText {
     pub method: SetSupportsTextMethod,
     pub params: SetSupportsTextParams,
@@ -985,7 +985,7 @@ pub enum SetScopeTextMethod {
     SetScopeText,
 }
 #[doc = "Modifies the expression of a scope at-rule.\n[setScopeText](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setScopeText)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetScopeText {
     pub method: SetScopeTextMethod,
     pub params: SetScopeTextParams,
@@ -1025,7 +1025,7 @@ pub enum SetRuleSelectorMethod {
     SetRuleSelector,
 }
 #[doc = "Modifies the rule selector.\n[setRuleSelector](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setRuleSelector)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetRuleSelector {
     pub method: SetRuleSelectorMethod,
     pub params: SetRuleSelectorParams,
@@ -1061,7 +1061,7 @@ pub enum SetStyleSheetTextMethod {
     SetStyleSheetText,
 }
 #[doc = "Sets the new stylesheet text.\n[setStyleSheetText](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setStyleSheetText)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetStyleSheetText {
     pub method: SetStyleSheetTextMethod,
     pub params: SetStyleSheetTextParams,
@@ -1098,7 +1098,7 @@ pub enum SetStyleTextsMethod {
     SetStyleTexts,
 }
 #[doc = "Applies specified style edits one after another in the given order.\n[setStyleTexts](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setStyleTexts)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetStyleTexts {
     pub method: SetStyleTextsMethod,
     pub params: SetStyleTextsParams,
@@ -1118,7 +1118,7 @@ pub enum StartRuleUsageTrackingMethod {
     StartRuleUsageTracking,
 }
 #[doc = "Enables the selector recording.\n[startRuleUsageTracking](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-startRuleUsageTracking)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StartRuleUsageTracking {
     pub method: StartRuleUsageTrackingMethod,
     pub params: StartRuleUsageTrackingParams,
@@ -1138,7 +1138,7 @@ pub enum StopRuleUsageTrackingMethod {
     StopRuleUsageTracking,
 }
 #[doc = "Stop tracking rule usage and return the list of rules that were used since last call to\n`takeCoverageDelta` (or since start of coverage instrumentation).\n[stopRuleUsageTracking](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-stopRuleUsageTracking)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StopRuleUsageTracking {
     pub method: StopRuleUsageTrackingMethod,
     pub params: StopRuleUsageTrackingParams,
@@ -1158,7 +1158,7 @@ pub enum TakeCoverageDeltaMethod {
     TakeCoverageDelta,
 }
 #[doc = "Obtain list of rules that became used since last call to this method (or since start of coverage\ninstrumentation).\n[takeCoverageDelta](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-takeCoverageDelta)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TakeCoverageDelta {
     pub method: TakeCoverageDeltaMethod,
     pub params: TakeCoverageDeltaParams,
@@ -1189,7 +1189,7 @@ pub enum SetLocalFontsEnabledMethod {
     SetLocalFontsEnabled,
 }
 #[doc = "Enables/disables rendering of local CSS fonts (enabled by default).\n[setLocalFontsEnabled](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-setLocalFontsEnabled)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetLocalFontsEnabled {
     pub method: SetLocalFontsEnabledMethod,
     pub params: SetLocalFontsEnabledParams,

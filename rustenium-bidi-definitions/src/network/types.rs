@@ -2,15 +2,20 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AuthCredentials {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: AuthCredentialsType,
     #[serde(rename = "username")]
     pub username: String,
     #[serde(rename = "password")]
     pub password: String,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum AuthCredentialsType {
+    #[serde(rename = "password")]
+    Password,
+}
 impl AuthCredentials {
     pub fn new(
-        r#type: impl Into<String>,
+        r#type: impl Into<AuthCredentialsType>,
         username: impl Into<String>,
         password: impl Into<String>,
     ) -> Self {
@@ -25,29 +30,26 @@ impl AuthCredentials {
     pub const IDENTIFIER: &'static str = "network.AuthCredentials";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
 }
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct BytesValue(serde_json::Value);
-impl BytesValue {
-    pub fn new(val: impl Into<serde_json::Value>) -> Self {
-        BytesValue(val.into())
-    }
-    pub fn inner(&self) -> &serde_json::Value {
-        &self.0
-    }
-}
-impl BytesValue {
-    pub const IDENTIFIER: &'static str = "network.BytesValue";
-    pub const DOMAIN_DIRECTION: &'static str = "all";
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum BytesValue {
+    StringValue(StringValue),
+    Base64Value(Base64Value),
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StringValue {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: StringValueType,
     #[serde(rename = "value")]
     pub value: String,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum StringValueType {
+    #[serde(rename = "string")]
+    String,
+}
 impl StringValue {
-    pub fn new(r#type: impl Into<String>, value: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<StringValueType>, value: impl Into<String>) -> Self {
         Self {
             r#type: r#type.into(),
             value: value.into(),
@@ -61,12 +63,17 @@ impl StringValue {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Base64Value {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: Base64ValueType,
     #[serde(rename = "value")]
     pub value: String,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum Base64ValueType {
+    #[serde(rename = "base64")]
+    Base64,
+}
 impl Base64Value {
-    pub fn new(r#type: impl Into<String>, value: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<Base64ValueType>, value: impl Into<String>) -> Self {
         Self {
             r#type: r#type.into(),
             value: value.into(),
@@ -342,7 +349,7 @@ pub enum UrlPattern {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UrlPatternPattern {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: UrlPatternPatternType,
     #[serde(rename = "protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -364,8 +371,13 @@ pub struct UrlPatternPattern {
     #[serde(default)]
     pub search: Option<String>,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum UrlPatternPatternType {
+    #[serde(rename = "pattern")]
+    Pattern,
+}
 impl UrlPatternPattern {
-    pub fn new(r#type: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<UrlPatternPatternType>) -> Self {
         Self {
             r#type: r#type.into(),
             protocol: None,
@@ -376,11 +388,6 @@ impl UrlPatternPattern {
         }
     }
 }
-impl<T: Into<String>> From<T> for UrlPatternPattern {
-    fn from(url: T) -> Self {
-        UrlPatternPattern::new(url)
-    }
-}
 impl UrlPatternPattern {
     pub const IDENTIFIER: &'static str = "network.UrlPatternPattern";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
@@ -388,12 +395,17 @@ impl UrlPatternPattern {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UrlPatternString {
     #[serde(rename = "type")]
-    pub r#type: String,
+    pub r#type: UrlPatternStringType,
     #[serde(rename = "pattern")]
     pub pattern: String,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum UrlPatternStringType {
+    #[serde(rename = "string")]
+    String,
+}
 impl UrlPatternString {
-    pub fn new(r#type: impl Into<String>, pattern: impl Into<String>) -> Self {
+    pub fn new(r#type: impl Into<UrlPatternStringType>, pattern: impl Into<String>) -> Self {
         Self {
             r#type: r#type.into(),
             pattern: pattern.into(),
@@ -414,14 +426,28 @@ pub enum InterceptPhase {
     AuthRequired,
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion {
+    ContinueWithAuthCredentials(ContinueWithAuthCredentials),
+    ContinueWithAuthNoCredentials(ContinueWithAuthNoCredentials),
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ContinueWithAuthCredentials {
     #[serde(rename = "action")]
-    pub action: String,
+    pub action: ContinueWithAuthCredentialsAction,
     #[serde(rename = "credentials")]
     pub credentials: AuthCredentials,
 }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum ContinueWithAuthCredentialsAction {
+    #[serde(rename = "provideCredentials")]
+    ProvideCredentials,
+}
 impl ContinueWithAuthCredentials {
-    pub fn new(action: impl Into<String>, credentials: impl Into<AuthCredentials>) -> Self {
+    pub fn new(
+        action: impl Into<ContinueWithAuthCredentialsAction>,
+        credentials: impl Into<AuthCredentials>,
+    ) -> Self {
         Self {
             action: action.into(),
             credentials: credentials.into(),
@@ -618,6 +644,9 @@ pub struct RequestData {
     pub initiator_type: Option<String>,
     #[serde(rename = "timings")]
     pub timings: FetchTimingInfo,
+    #[serde(flatten)]
+    #[serde(default)]
+    pub extensible: std::collections::HashMap<String, serde_json::Value>,
 }
 impl RequestData {
     pub const IDENTIFIER: &'static str = "network.RequestData";
@@ -675,4 +704,4 @@ impl ResponseData {
     pub const IDENTIFIER: &'static str = "network.ResponseData";
     pub const DOMAIN_DIRECTION: &'static str = "local";
 }
-group_enum ! (NetworkTypes { AuthCredentials (AuthCredentials) , BytesValue (BytesValue) , StringValue (StringValue) , Base64Value (Base64Value) , Collector (Collector) , CollectorType (CollectorType) , SameSite (SameSite) , Cookie (Cookie) , CookieHeader (CookieHeader) , DataType (DataType) , Header (Header) , Intercept (Intercept) , Request (Request) , SetCookieHeader (SetCookieHeader) , UrlPattern (UrlPattern) , UrlPatternPattern (UrlPatternPattern) , UrlPatternString (UrlPatternString) , InterceptPhase (InterceptPhase) , ContinueWithAuthCredentials (ContinueWithAuthCredentials) , ContinueWithAuthNoCredentials (ContinueWithAuthNoCredentials) , AuthChallenge (AuthChallenge) , BaseParameters (BaseParameters) , FetchTimingInfo (FetchTimingInfo) , Initiator (Initiator) , RequestData (RequestData) , ResponseContent (ResponseContent) , ResponseData (ResponseData) });
+group_enum ! (NetworkType { AuthCredentials (AuthCredentials) , BytesValue (BytesValue) , Collector (Collector) , CollectorType (CollectorType) , SameSite (SameSite) , Cookie (Cookie) , CookieHeader (CookieHeader) , DataType (DataType) , Header (Header) , Intercept (Intercept) , Request (Request) , SetCookieHeader (SetCookieHeader) , UrlPattern (UrlPattern) , InterceptPhase (InterceptPhase) , ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion (ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion) , AuthChallenge (AuthChallenge) , BaseParameters (BaseParameters) , FetchTimingInfo (FetchTimingInfo) , Initiator (Initiator) , RequestData (RequestData) , ResponseContent (ResponseContent) , ResponseData (ResponseData) });

@@ -44,7 +44,7 @@ pub enum SetPermissionMethod {
     SetPermission,
 }
 #[doc = "Set permission settings for given embedding and embedded origins.\n[setPermission](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-setPermission)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetPermission {
     pub method: SetPermissionMethod,
     pub params: SetPermissionParams,
@@ -70,7 +70,7 @@ pub enum ResetPermissionsMethod {
     ResetPermissions,
 }
 #[doc = "Reset all permission management for all origins.\n[resetPermissions](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-resetPermissions)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResetPermissions {
     pub method: ResetPermissionsMethod,
     pub params: ResetPermissionsParams,
@@ -131,7 +131,7 @@ pub enum SetDownloadBehaviorMethod {
     SetDownloadBehavior,
 }
 #[doc = "Set the behavior when downloading a file.\n[setDownloadBehavior](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-setDownloadBehavior)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetDownloadBehavior {
     pub method: SetDownloadBehaviorMethod,
     pub params: SetDownloadBehaviorParams,
@@ -173,7 +173,7 @@ pub enum CancelDownloadMethod {
     CancelDownload,
 }
 #[doc = "Cancel a download if in progress\n[cancelDownload](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-cancelDownload)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CancelDownload {
     pub method: CancelDownloadMethod,
     pub params: CancelDownloadParams,
@@ -193,7 +193,7 @@ pub enum CloseMethod {
     Close,
 }
 #[doc = "Close browser gracefully.\n[close](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-close)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Close {
     pub method: CloseMethod,
     pub params: CloseParams,
@@ -213,7 +213,7 @@ pub enum CrashMethod {
     Crash,
 }
 #[doc = "Crashes browser on the main thread.\n[crash](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-crash)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Crash {
     pub method: CrashMethod,
     pub params: CrashParams,
@@ -233,7 +233,7 @@ pub enum CrashGpuProcessMethod {
     CrashGpuProcess,
 }
 #[doc = "Crashes GPU process.\n[crashGpuProcess](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-crashGpuProcess)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CrashGpuProcess {
     pub method: CrashGpuProcessMethod,
     pub params: CrashGpuProcessParams,
@@ -253,7 +253,7 @@ pub enum GetVersionMethod {
     GetVersion,
 }
 #[doc = "Returns version information.\n[getVersion](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-getVersion)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetVersion {
     pub method: GetVersionMethod,
     pub params: GetVersionParams,
@@ -273,7 +273,7 @@ pub enum GetBrowserCommandLineMethod {
     GetBrowserCommandLine,
 }
 #[doc = "Returns the command line switches for the browser process if, and only if\n--enable-automation is on the commandline.\n[getBrowserCommandLine](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-getBrowserCommandLine)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetBrowserCommandLine {
     pub method: GetBrowserCommandLineMethod,
     pub params: GetBrowserCommandLineParams,
@@ -304,7 +304,7 @@ pub enum GetHistogramsMethod {
     GetHistograms,
 }
 #[doc = "Get Chrome histograms.\n[getHistograms](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-getHistograms)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetHistograms {
     pub method: GetHistogramsMethod,
     pub params: GetHistogramsParams,
@@ -346,7 +346,7 @@ pub enum GetHistogramMethod {
     GetHistogram,
 }
 #[doc = "Get a Chrome histogram by name.\n[getHistogram](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-getHistogram)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetHistogram {
     pub method: GetHistogramMethod,
     pub params: GetHistogramParams,
@@ -377,7 +377,7 @@ pub enum GetWindowBoundsMethod {
     GetWindowBounds,
 }
 #[doc = "Get position and size of the browser window.\n[getWindowBounds](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-getWindowBounds)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetWindowBounds {
     pub method: GetWindowBoundsMethod,
     pub params: GetWindowBoundsParams,
@@ -403,7 +403,7 @@ pub enum GetWindowForTargetMethod {
     GetWindowForTarget,
 }
 #[doc = "Get the browser window that contains the devtools target.\n[getWindowForTarget](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-getWindowForTarget)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetWindowForTarget {
     pub method: GetWindowForTargetMethod,
     pub params: GetWindowForTargetParams,
@@ -441,7 +441,7 @@ pub enum SetWindowBoundsMethod {
     SetWindowBounds,
 }
 #[doc = "Set position and/or size of the browser window.\n[setWindowBounds](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-setWindowBounds)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetWindowBounds {
     pub method: SetWindowBoundsMethod,
     pub params: SetWindowBoundsParams,
@@ -484,7 +484,7 @@ pub enum SetContentsSizeMethod {
     SetContentsSize,
 }
 #[doc = "Set size of the browser contents resizing browser window as necessary.\n[setContentsSize](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-setContentsSize)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetContentsSize {
     pub method: SetContentsSizeMethod,
     pub params: SetContentsSizeParams,
@@ -514,7 +514,7 @@ pub enum SetDockTileMethod {
     SetDockTile,
 }
 #[doc = "Set dock tile details, platform-specific.\n[setDockTile](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-setDockTile)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetDockTile {
     pub method: SetDockTileMethod,
     pub params: SetDockTileParams,
@@ -544,7 +544,7 @@ pub enum ExecuteBrowserCommandMethod {
     ExecuteBrowserCommand,
 }
 #[doc = "Invoke custom browser commands used by telemetry.\n[executeBrowserCommand](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-executeBrowserCommand)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ExecuteBrowserCommand {
     pub method: ExecuteBrowserCommandMethod,
     pub params: ExecuteBrowserCommandParams,
@@ -577,7 +577,7 @@ pub enum AddPrivacySandboxEnrollmentOverrideMethod {
     AddPrivacySandboxEnrollmentOverride,
 }
 #[doc = "Allows a site to use privacy sandbox features that require enrollment\nwithout the site actually being enrolled. Only supported on page targets.\n[addPrivacySandboxEnrollmentOverride](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-addPrivacySandboxEnrollmentOverride)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AddPrivacySandboxEnrollmentOverride {
     pub method: AddPrivacySandboxEnrollmentOverrideMethod,
     pub params: AddPrivacySandboxEnrollmentOverrideParams,
@@ -623,7 +623,7 @@ pub enum AddPrivacySandboxCoordinatorKeyConfigMethod {
     AddPrivacySandboxCoordinatorKeyConfig,
 }
 #[doc = "Configures encryption keys used with a given privacy sandbox API to talk\nto a trusted coordinator.  Since this is intended for test automation only,\ncoordinatorOrigin must be a .test domain. No existing coordinator\nconfiguration for the origin may exist.\n[addPrivacySandboxCoordinatorKeyConfig](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#method-addPrivacySandboxCoordinatorKeyConfig)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AddPrivacySandboxCoordinatorKeyConfig {
     pub method: AddPrivacySandboxCoordinatorKeyConfigMethod,
     pub params: AddPrivacySandboxCoordinatorKeyConfigParams,

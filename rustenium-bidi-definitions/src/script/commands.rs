@@ -41,7 +41,7 @@ pub enum AddPreloadScriptMethod {
     #[serde(rename = "script.addPreloadScript")]
     AddPreloadScript,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AddPreloadScript {
     pub method: AddPreloadScriptMethod,
     pub params: AddPreloadScriptParams,
@@ -77,7 +77,7 @@ pub enum DisownMethod {
     #[serde(rename = "script.disown")]
     Disown,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disown {
     pub method: DisownMethod,
     pub params: DisownParams,
@@ -144,7 +144,7 @@ pub enum CallFunctionMethod {
     #[serde(rename = "script.callFunction")]
     CallFunction,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CallFunction {
     pub method: CallFunctionMethod,
     pub params: CallFunctionParams,
@@ -201,7 +201,7 @@ pub enum EvaluateMethod {
     #[serde(rename = "script.evaluate")]
     Evaluate,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Evaluate {
     pub method: EvaluateMethod,
     pub params: EvaluateParams,
@@ -229,7 +229,7 @@ pub enum GetRealmsMethod {
     #[serde(rename = "script.getRealms")]
     GetRealms,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetRealms {
     pub method: GetRealmsMethod,
     pub params: GetRealmsParams,
@@ -258,7 +258,7 @@ pub enum RemovePreloadScriptMethod {
     #[serde(rename = "script.removePreloadScript")]
     RemovePreloadScript,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RemovePreloadScript {
     pub method: RemovePreloadScriptMethod,
     pub params: RemovePreloadScriptParams,
@@ -270,4 +270,4 @@ impl RemovePreloadScript {
 impl crate::CommandResult for RemovePreloadScript {
     type Result = super::results::RemovePreloadScriptResult;
 }
-group_enum ! (ScriptCommands { AddPreloadScript (AddPreloadScript) , Disown (Disown) , CallFunction (CallFunction) , Evaluate (Evaluate) , GetRealms (GetRealms) , RemovePreloadScript (RemovePreloadScript) });
+group_enum ! (ScriptCommand { AddPreloadScript (AddPreloadScript) , Disown (Disown) , CallFunction (CallFunction) , Evaluate (Evaluate) , GetRealms (GetRealms) , RemovePreloadScript (RemovePreloadScript) });

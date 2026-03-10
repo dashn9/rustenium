@@ -14,7 +14,7 @@ pub enum PlayerPropertiesChangedMethod {
     PlayerPropertiesChanged,
 }
 #[doc = "This can be called multiple times, and can be used to set / override /\nremove player properties. A null propValue indicates removal.\n[playerPropertiesChanged](https://chromedevtools.github.io/devtools-protocol/tot/Media/#event-playerPropertiesChanged)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PlayerPropertiesChanged {
     pub method: PlayerPropertiesChangedMethod,
     pub params: PlayerPropertiesChangedParams,
@@ -37,7 +37,7 @@ pub enum PlayerEventsAddedMethod {
     PlayerEventsAdded,
 }
 #[doc = "Send events as a list, allowing them to be batched on the browser for less\ncongestion. If batched, events must ALWAYS be in chronological order.\n[playerEventsAdded](https://chromedevtools.github.io/devtools-protocol/tot/Media/#event-playerEventsAdded)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PlayerEventsAdded {
     pub method: PlayerEventsAddedMethod,
     pub params: PlayerEventsAddedParams,
@@ -60,7 +60,7 @@ pub enum PlayerMessagesLoggedMethod {
     PlayerMessagesLogged,
 }
 #[doc = "Send a list of any messages that need to be delivered.\n[playerMessagesLogged](https://chromedevtools.github.io/devtools-protocol/tot/Media/#event-playerMessagesLogged)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PlayerMessagesLogged {
     pub method: PlayerMessagesLoggedMethod,
     pub params: PlayerMessagesLoggedParams,
@@ -83,7 +83,7 @@ pub enum PlayerErrorsRaisedMethod {
     PlayerErrorsRaised,
 }
 #[doc = "Send a list of any errors that need to be delivered.\n[playerErrorsRaised](https://chromedevtools.github.io/devtools-protocol/tot/Media/#event-playerErrorsRaised)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PlayerErrorsRaised {
     pub method: PlayerErrorsRaisedMethod,
     pub params: PlayerErrorsRaisedParams,
@@ -103,7 +103,7 @@ pub enum PlayerCreatedMethod {
     PlayerCreated,
 }
 #[doc = "Called whenever a player is created, or when a new agent joins and receives\na list of active players. If an agent is restored, it will receive one\nevent for each active player.\n[playerCreated](https://chromedevtools.github.io/devtools-protocol/tot/Media/#event-playerCreated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PlayerCreated {
     pub method: PlayerCreatedMethod,
     pub params: PlayerCreatedParams,

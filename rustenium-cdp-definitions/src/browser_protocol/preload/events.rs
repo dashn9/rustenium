@@ -11,7 +11,7 @@ pub enum RuleSetUpdatedMethod {
     RuleSetUpdated,
 }
 #[doc = "Upsert. Currently, it is only emitted when a rule set added.\n[ruleSetUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Preload/#event-ruleSetUpdated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RuleSetUpdated {
     pub method: RuleSetUpdatedMethod,
     pub params: RuleSetUpdatedParams,
@@ -29,7 +29,7 @@ pub enum RuleSetRemovedMethod {
     #[serde(rename = "Preload.ruleSetRemoved")]
     RuleSetRemoved,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RuleSetRemoved {
     pub method: RuleSetRemovedMethod,
     pub params: RuleSetRemovedParams,
@@ -57,7 +57,7 @@ pub enum PreloadEnabledStateUpdatedMethod {
     PreloadEnabledStateUpdated,
 }
 #[doc = "Fired when a preload enabled state is updated.\n[preloadEnabledStateUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Preload/#event-preloadEnabledStateUpdated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PreloadEnabledStateUpdated {
     pub method: PreloadEnabledStateUpdatedMethod,
     pub params: PreloadEnabledStateUpdatedParams,
@@ -90,7 +90,7 @@ pub enum PrefetchStatusUpdatedMethod {
     PrefetchStatusUpdated,
 }
 #[doc = "Fired when a prefetch attempt is updated.\n[prefetchStatusUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Preload/#event-prefetchStatusUpdated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PrefetchStatusUpdated {
     pub method: PrefetchStatusUpdatedMethod,
     pub params: PrefetchStatusUpdatedParams,
@@ -127,7 +127,7 @@ pub enum PrerenderStatusUpdatedMethod {
     PrerenderStatusUpdated,
 }
 #[doc = "Fired when a prerender attempt is updated.\n[prerenderStatusUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Preload/#event-prerenderStatusUpdated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PrerenderStatusUpdated {
     pub method: PrerenderStatusUpdatedMethod,
     pub params: PrerenderStatusUpdatedParams,
@@ -150,7 +150,7 @@ pub enum PreloadingAttemptSourcesUpdatedMethod {
     PreloadingAttemptSourcesUpdated,
 }
 #[doc = "Send a list of sources for all preloading attempts in a document.\n[preloadingAttemptSourcesUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Preload/#event-preloadingAttemptSourcesUpdated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PreloadingAttemptSourcesUpdated {
     pub method: PreloadingAttemptSourcesUpdatedMethod,
     pub params: PreloadingAttemptSourcesUpdatedParams,

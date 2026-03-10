@@ -1,6 +1,6 @@
 use std::{collections::HashMap, sync::{Arc}};
 
-use rustenium_bidi_commands::{CommandResponse, ErrorResponse, Event, Message};
+use rustenium_bidi_definitions::base::{CommandResponse, ErrorResponse, Event, Message};
 use serde::{Deserialize, Serialize};
 use tokio::sync::{mpsc::{UnboundedReceiver, UnboundedSender}, oneshot, Mutex};
 use tokio::task::JoinHandle;

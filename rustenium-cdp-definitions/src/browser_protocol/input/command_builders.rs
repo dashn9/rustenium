@@ -429,6 +429,24 @@ impl DispatchTouchEventBuilder {
         })
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct CancelDraggingBuilder;
+impl CancelDraggingBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> CancelDragging {
+        CancelDragging {
+            method: CancelDraggingMethod::CancelDragging,
+            params: CancelDraggingParams {},
+        }
+    }
+}
+impl CancelDragging {
+    pub fn builder() -> CancelDraggingBuilder {
+        CancelDraggingBuilder
+    }
+}
 impl EmulateTouchFromMouseEvent {
     pub fn builder() -> EmulateTouchFromMouseEventBuilder {
         <EmulateTouchFromMouseEventBuilder as Default>::default()

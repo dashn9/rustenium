@@ -13,7 +13,7 @@ pub enum CredentialAddedMethod {
     CredentialAdded,
 }
 #[doc = "Triggered when a credential is added to an authenticator.\n[credentialAdded](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#event-credentialAdded)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CredentialAdded {
     pub method: CredentialAddedMethod,
     pub params: CredentialAddedParams,
@@ -35,7 +35,7 @@ pub enum CredentialDeletedMethod {
     CredentialDeleted,
 }
 #[doc = "Triggered when a credential is deleted, e.g. through\nPublicKeyCredential.signalUnknownCredential().\n[credentialDeleted](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#event-credentialDeleted)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CredentialDeleted {
     pub method: CredentialDeletedMethod,
     pub params: CredentialDeletedParams,
@@ -57,7 +57,7 @@ pub enum CredentialUpdatedMethod {
     CredentialUpdated,
 }
 #[doc = "Triggered when a credential is updated, e.g. through\nPublicKeyCredential.signalCurrentUserDetails().\n[credentialUpdated](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#event-credentialUpdated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CredentialUpdated {
     pub method: CredentialUpdatedMethod,
     pub params: CredentialUpdatedParams,
@@ -79,7 +79,7 @@ pub enum CredentialAssertedMethod {
     CredentialAsserted,
 }
 #[doc = "Triggered when a credential is used in a webauthn assertion.\n[credentialAsserted](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#event-credentialAsserted)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CredentialAsserted {
     pub method: CredentialAssertedMethod,
     pub params: CredentialAssertedParams,

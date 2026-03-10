@@ -47,6 +47,42 @@ impl GetEncodedResponseBuilder {
         })
     }
 }
+#[derive(Debug, Clone, Default)]
+pub struct DisableBuilder;
+impl DisableBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Disable {
+        Disable {
+            method: DisableMethod::Disable,
+            params: DisableParams {},
+        }
+    }
+}
+impl Disable {
+    pub fn builder() -> DisableBuilder {
+        DisableBuilder
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct EnableBuilder;
+impl EnableBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> Enable {
+        Enable {
+            method: EnableMethod::Enable,
+            params: EnableParams {},
+        }
+    }
+}
+impl Enable {
+    pub fn builder() -> EnableBuilder {
+        EnableBuilder
+    }
+}
 impl CheckContrast {
     pub fn builder() -> CheckContrastBuilder {
         <CheckContrastBuilder as Default>::default()
@@ -68,5 +104,23 @@ impl CheckContrastBuilder {
                 report_aaa: self.report_aaa,
             },
         }
+    }
+}
+#[derive(Debug, Clone, Default)]
+pub struct CheckFormsIssuesBuilder;
+impl CheckFormsIssuesBuilder {
+    pub fn new() -> Self {
+        Self
+    }
+    pub fn build(self) -> CheckFormsIssues {
+        CheckFormsIssues {
+            method: CheckFormsIssuesMethod::CheckFormsIssues,
+            params: CheckFormsIssuesParams {},
+        }
+    }
+}
+impl CheckFormsIssues {
+    pub fn builder() -> CheckFormsIssuesBuilder {
+        CheckFormsIssuesBuilder
     }
 }

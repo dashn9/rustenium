@@ -1,13 +1,31 @@
 use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ContinueToLocationResult {}
+impl TryFrom<serde_json::Value> for ContinueToLocationResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct DisableResult {}
+impl TryFrom<serde_json::Value> for DisableResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EnableResult {
     #[doc = "Unique identifier of the debugger."]
     #[serde(rename = "debuggerId")]
     pub debugger_id: crate::js_protocol::runtime::types::UniqueDebuggerId,
+}
+impl TryFrom<serde_json::Value> for EnableResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EvaluateOnCallFrameResult {
@@ -20,12 +38,24 @@ pub struct EvaluateOnCallFrameResult {
     #[serde(default)]
     pub exception_details: Option<crate::js_protocol::runtime::types::ExceptionDetails>,
 }
+impl TryFrom<serde_json::Value> for EvaluateOnCallFrameResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetPossibleBreakpointsResult {
     #[doc = "List of the possible breakpoint locations."]
     #[serde(rename = "locations")]
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub locations: Vec<super::types::BreakLocation>,
+}
+impl TryFrom<serde_json::Value> for GetPossibleBreakpointsResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetScriptSourceResult {
@@ -37,6 +67,12 @@ pub struct GetScriptSourceResult {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
     pub bytecode: Option<crate::Binary>,
+}
+impl TryFrom<serde_json::Value> for GetScriptSourceResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DisassembleWasmModuleResult {
@@ -56,11 +92,23 @@ pub struct DisassembleWasmModuleResult {
     #[serde(rename = "chunk")]
     pub chunk: super::types::WasmDisassemblyChunk,
 }
+impl TryFrom<serde_json::Value> for DisassembleWasmModuleResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NextWasmDisassemblyChunkResult {
     #[doc = "The next chunk of disassembly."]
     #[serde(rename = "chunk")]
     pub chunk: super::types::WasmDisassemblyChunk,
+}
+impl TryFrom<serde_json::Value> for NextWasmDisassemblyChunkResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetWasmBytecodeResult {
@@ -68,21 +116,63 @@ pub struct GetWasmBytecodeResult {
     #[serde(rename = "bytecode")]
     pub bytecode: crate::Binary,
 }
+impl TryFrom<serde_json::Value> for GetWasmBytecodeResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetStackTraceResult {
     #[serde(rename = "stackTrace")]
     pub stack_trace: crate::js_protocol::runtime::types::StackTrace,
 }
+impl TryFrom<serde_json::Value> for GetStackTraceResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct PauseResult {}
+impl TryFrom<serde_json::Value> for PauseResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct PauseOnAsyncCallResult {}
+impl TryFrom<serde_json::Value> for PauseOnAsyncCallResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct RemoveBreakpointResult {}
+impl TryFrom<serde_json::Value> for RemoveBreakpointResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct RestartFrameResult {}
+impl TryFrom<serde_json::Value> for RestartFrameResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ResumeResult {}
+impl TryFrom<serde_json::Value> for ResumeResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SearchInContentResult {
     #[doc = "List of search matches."]
@@ -90,14 +180,44 @@ pub struct SearchInContentResult {
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub result: Vec<super::types::SearchMatch>,
 }
+impl TryFrom<serde_json::Value> for SearchInContentResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetAsyncCallStackDepthResult {}
+impl TryFrom<serde_json::Value> for SetAsyncCallStackDepthResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetBlackboxExecutionContextsResult {}
+impl TryFrom<serde_json::Value> for SetBlackboxExecutionContextsResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetBlackboxPatternsResult {}
+impl TryFrom<serde_json::Value> for SetBlackboxPatternsResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetBlackboxedRangesResult {}
+impl TryFrom<serde_json::Value> for SetBlackboxedRangesResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetBreakpointResult {
     #[doc = "Id of the created breakpoint for further reference."]
@@ -107,11 +227,23 @@ pub struct SetBreakpointResult {
     #[serde(rename = "actualLocation")]
     pub actual_location: super::types::Location,
 }
+impl TryFrom<serde_json::Value> for SetBreakpointResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetInstrumentationBreakpointResult {
     #[doc = "Id of the created breakpoint for further reference."]
     #[serde(rename = "breakpointId")]
     pub breakpoint_id: super::types::BreakpointId,
+}
+impl TryFrom<serde_json::Value> for SetInstrumentationBreakpointResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetBreakpointByUrlResult {
@@ -123,18 +255,48 @@ pub struct SetBreakpointByUrlResult {
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub locations: Vec<super::types::Location>,
 }
+impl TryFrom<serde_json::Value> for SetBreakpointByUrlResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetBreakpointOnFunctionCallResult {
     #[doc = "Id of the created breakpoint for further reference."]
     #[serde(rename = "breakpointId")]
     pub breakpoint_id: super::types::BreakpointId,
 }
+impl TryFrom<serde_json::Value> for SetBreakpointOnFunctionCallResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetBreakpointsActiveResult {}
+impl TryFrom<serde_json::Value> for SetBreakpointsActiveResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetPauseOnExceptionsResult {}
+impl TryFrom<serde_json::Value> for SetPauseOnExceptionsResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetReturnValueResult {}
+impl TryFrom<serde_json::Value> for SetReturnValueResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[doc = "Whether the operation was successful or not. Only `Ok` denotes a\nsuccessful live edit while the other enum variants denote why\nthe live edit failed."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum SetScriptSourceResultStatus {
@@ -160,13 +322,49 @@ pub struct SetScriptSourceResult {
     #[serde(default)]
     pub exception_details: Option<crate::js_protocol::runtime::types::ExceptionDetails>,
 }
+impl TryFrom<serde_json::Value> for SetScriptSourceResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetSkipAllPausesResult {}
+impl TryFrom<serde_json::Value> for SetSkipAllPausesResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetVariableValueResult {}
+impl TryFrom<serde_json::Value> for SetVariableValueResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct StepIntoResult {}
+impl TryFrom<serde_json::Value> for StepIntoResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct StepOutResult {}
+impl TryFrom<serde_json::Value> for StepOutResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct StepOverResult {}
+impl TryFrom<serde_json::Value> for StepOverResult {
+    type Error = serde_json::Error;
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        serde_json::from_value(value)
+    }
+}

@@ -340,21 +340,26 @@ impl ContinueWithAuth {
 #[derive(Default, Clone)]
 pub struct ContinueWithAuthBuilder {
     request: Option<super::types::Request>,
+    continue_with_auth_credentials_continue_with_auth_no_credentials_union:
+        Option<super::types::ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion>,
 }
 impl ContinueWithAuthBuilder {
     pub fn request(mut self, request: impl Into<super::types::Request>) -> Self {
         self.request = Some(request.into());
         self
     }
+    pub fn continue_with_auth_credentials_continue_with_auth_no_credentials_union(
+        mut self,
+        continue_with_auth_credentials_continue_with_auth_no_credentials_union: impl Into<
+            super::types::ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion,
+        >,
+    ) -> Self {
+        self.continue_with_auth_credentials_continue_with_auth_no_credentials_union =
+            Some(continue_with_auth_credentials_continue_with_auth_no_credentials_union.into());
+        self
+    }
     pub fn build(self) -> Result<ContinueWithAuth, String> {
-        Ok(ContinueWithAuth {
-            method: ContinueWithAuthMethod::ContinueWithAuth,
-            params: ContinueWithAuthParams {
-                request: self
-                    .request
-                    .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(request)))?,
-            },
-        })
+        Ok (ContinueWithAuth { method : ContinueWithAuthMethod :: ContinueWithAuth , params : ContinueWithAuthParams { request : self . request . ok_or_else (|| format ! ("Field `{}` is mandatory." , std :: stringify ! (request))) ? , continue_with_auth_credentials_continue_with_auth_no_credentials_union : self . continue_with_auth_credentials_continue_with_auth_no_credentials_union . ok_or_else (|| format ! ("Field `{}` is mandatory." , std :: stringify ! (continue_with_auth_credentials_continue_with_auth_no_credentials_union))) ? , } , })
     }
 }
 impl DisownData {

@@ -37,7 +37,7 @@ pub enum TriggerMethod {
     Trigger,
 }
 #[doc = "Trigger autofill on a form identified by the fieldId.\nIf the field and related form cannot be autofilled, returns an error.\n[trigger](https://chromedevtools.github.io/devtools-protocol/tot/Autofill/#method-trigger)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Trigger {
     pub method: TriggerMethod,
     pub params: TriggerParams,
@@ -67,7 +67,7 @@ pub enum SetAddressesMethod {
     SetAddresses,
 }
 #[doc = "Set addresses so that developers can verify their forms implementation.\n[setAddresses](https://chromedevtools.github.io/devtools-protocol/tot/Autofill/#method-setAddresses)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetAddresses {
     pub method: SetAddressesMethod,
     pub params: SetAddressesParams,
@@ -87,7 +87,7 @@ pub enum DisableMethod {
     Disable,
 }
 #[doc = "Disables autofill domain notifications.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Autofill/#method-disable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
@@ -107,7 +107,7 @@ pub enum EnableMethod {
     Enable,
 }
 #[doc = "Enables autofill domain notifications.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Autofill/#method-enable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,

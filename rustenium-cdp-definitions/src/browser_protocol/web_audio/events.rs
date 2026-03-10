@@ -11,7 +11,7 @@ pub enum ContextCreatedMethod {
     ContextCreated,
 }
 #[doc = "Notifies that a new BaseAudioContext has been created.\n[contextCreated](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-contextCreated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ContextCreated {
     pub method: ContextCreatedMethod,
     pub params: ContextCreatedParams,
@@ -31,7 +31,7 @@ pub enum ContextWillBeDestroyedMethod {
     ContextWillBeDestroyed,
 }
 #[doc = "Notifies that an existing BaseAudioContext will be destroyed.\n[contextWillBeDestroyed](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-contextWillBeDestroyed)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ContextWillBeDestroyed {
     pub method: ContextWillBeDestroyedMethod,
     pub params: ContextWillBeDestroyedParams,
@@ -51,7 +51,7 @@ pub enum ContextChangedMethod {
     ContextChanged,
 }
 #[doc = "Notifies that existing BaseAudioContext has changed some properties (id stays the same)..\n[contextChanged](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-contextChanged)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ContextChanged {
     pub method: ContextChangedMethod,
     pub params: ContextChangedParams,
@@ -71,7 +71,7 @@ pub enum AudioListenerCreatedMethod {
     AudioListenerCreated,
 }
 #[doc = "Notifies that the construction of an AudioListener has finished.\n[audioListenerCreated](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-audioListenerCreated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AudioListenerCreated {
     pub method: AudioListenerCreatedMethod,
     pub params: AudioListenerCreatedParams,
@@ -93,7 +93,7 @@ pub enum AudioListenerWillBeDestroyedMethod {
     AudioListenerWillBeDestroyed,
 }
 #[doc = "Notifies that a new AudioListener has been created.\n[audioListenerWillBeDestroyed](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-audioListenerWillBeDestroyed)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AudioListenerWillBeDestroyed {
     pub method: AudioListenerWillBeDestroyedMethod,
     pub params: AudioListenerWillBeDestroyedParams,
@@ -113,7 +113,7 @@ pub enum AudioNodeCreatedMethod {
     AudioNodeCreated,
 }
 #[doc = "Notifies that a new AudioNode has been created.\n[audioNodeCreated](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-audioNodeCreated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AudioNodeCreated {
     pub method: AudioNodeCreatedMethod,
     pub params: AudioNodeCreatedParams,
@@ -135,7 +135,7 @@ pub enum AudioNodeWillBeDestroyedMethod {
     AudioNodeWillBeDestroyed,
 }
 #[doc = "Notifies that an existing AudioNode has been destroyed.\n[audioNodeWillBeDestroyed](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-audioNodeWillBeDestroyed)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AudioNodeWillBeDestroyed {
     pub method: AudioNodeWillBeDestroyedMethod,
     pub params: AudioNodeWillBeDestroyedParams,
@@ -155,7 +155,7 @@ pub enum AudioParamCreatedMethod {
     AudioParamCreated,
 }
 #[doc = "Notifies that a new AudioParam has been created.\n[audioParamCreated](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-audioParamCreated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AudioParamCreated {
     pub method: AudioParamCreatedMethod,
     pub params: AudioParamCreatedParams,
@@ -179,7 +179,7 @@ pub enum AudioParamWillBeDestroyedMethod {
     AudioParamWillBeDestroyed,
 }
 #[doc = "Notifies that an existing AudioParam has been destroyed.\n[audioParamWillBeDestroyed](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-audioParamWillBeDestroyed)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AudioParamWillBeDestroyed {
     pub method: AudioParamWillBeDestroyedMethod,
     pub params: AudioParamWillBeDestroyedParams,
@@ -211,7 +211,7 @@ pub enum NodesConnectedMethod {
     NodesConnected,
 }
 #[doc = "Notifies that two AudioNodes are connected.\n[nodesConnected](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-nodesConnected)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NodesConnected {
     pub method: NodesConnectedMethod,
     pub params: NodesConnectedParams,
@@ -243,7 +243,7 @@ pub enum NodesDisconnectedMethod {
     NodesDisconnected,
 }
 #[doc = "Notifies that AudioNodes are disconnected. The destination can be null, and it means all the outgoing connections from the source are disconnected.\n[nodesDisconnected](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-nodesDisconnected)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NodesDisconnected {
     pub method: NodesDisconnectedMethod,
     pub params: NodesDisconnectedParams,
@@ -271,7 +271,7 @@ pub enum NodeParamConnectedMethod {
     NodeParamConnected,
 }
 #[doc = "Notifies that an AudioNode is connected to an AudioParam.\n[nodeParamConnected](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-nodeParamConnected)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NodeParamConnected {
     pub method: NodeParamConnectedMethod,
     pub params: NodeParamConnectedParams,
@@ -299,7 +299,7 @@ pub enum NodeParamDisconnectedMethod {
     NodeParamDisconnected,
 }
 #[doc = "Notifies that an AudioNode is disconnected to an AudioParam.\n[nodeParamDisconnected](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-nodeParamDisconnected)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NodeParamDisconnected {
     pub method: NodeParamDisconnectedMethod,
     pub params: NodeParamDisconnectedParams,

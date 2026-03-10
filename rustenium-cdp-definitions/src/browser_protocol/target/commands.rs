@@ -18,7 +18,7 @@ pub enum ActivateTargetMethod {
     ActivateTarget,
 }
 #[doc = "Activates (focuses) the target.\n[activateTarget](https://chromedevtools.github.io/devtools-protocol/tot/Target/#method-activateTarget)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ActivateTarget {
     pub method: ActivateTargetMethod,
     pub params: ActivateTargetParams,
@@ -54,7 +54,7 @@ pub enum AttachToTargetMethod {
     AttachToTarget,
 }
 #[doc = "Attaches to the target with given id.\n[attachToTarget](https://chromedevtools.github.io/devtools-protocol/tot/Target/#method-attachToTarget)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttachToTarget {
     pub method: AttachToTargetMethod,
     pub params: AttachToTargetParams,
@@ -74,7 +74,7 @@ pub enum AttachToBrowserTargetMethod {
     AttachToBrowserTarget,
 }
 #[doc = "Attaches to the browser target, only uses flat sessionId mode.\n[attachToBrowserTarget](https://chromedevtools.github.io/devtools-protocol/tot/Target/#method-attachToBrowserTarget)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttachToBrowserTarget {
     pub method: AttachToBrowserTargetMethod,
     pub params: AttachToBrowserTargetParams,
@@ -104,7 +104,7 @@ pub enum CloseTargetMethod {
     CloseTarget,
 }
 #[doc = "Closes the target. If the target is a page that gets closed too.\n[closeTarget](https://chromedevtools.github.io/devtools-protocol/tot/Target/#method-closeTarget)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CloseTarget {
     pub method: CloseTargetMethod,
     pub params: CloseTargetParams,
@@ -146,7 +146,7 @@ pub enum ExposeDevToolsProtocolMethod {
     ExposeDevToolsProtocol,
 }
 #[doc = "Inject object to the target's main frame that provides a communication\nchannel with browser target.\n\nInjected object will be available as `window[bindingName]`.\n\nThe object has the following API:\n- `binding.send(json)` - a method to send messages over the remote debugging protocol\n- `binding.onmessage = json => handleMessage(json)` - a callback that will be called for the protocol notifications and command responses.\n[exposeDevToolsProtocol](https://chromedevtools.github.io/devtools-protocol/tot/Target/#method-exposeDevToolsProtocol)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ExposeDevToolsProtocol {
     pub method: ExposeDevToolsProtocolMethod,
     pub params: ExposeDevToolsProtocolParams,
@@ -187,7 +187,7 @@ pub enum CreateBrowserContextMethod {
     CreateBrowserContext,
 }
 #[doc = "Creates a new empty BrowserContext. Similar to an incognito profile but you can have more than\none.\n[createBrowserContext](https://chromedevtools.github.io/devtools-protocol/tot/Target/#method-createBrowserContext)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CreateBrowserContext {
     pub method: CreateBrowserContextMethod,
     pub params: CreateBrowserContextParams,
@@ -207,7 +207,7 @@ pub enum GetBrowserContextsMethod {
     GetBrowserContexts,
 }
 #[doc = "Returns all browser contexts created with `Target.createBrowserContext` method.\n[getBrowserContexts](https://chromedevtools.github.io/devtools-protocol/tot/Target/#method-getBrowserContexts)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetBrowserContexts {
     pub method: GetBrowserContextsMethod,
     pub params: GetBrowserContextsParams,
@@ -315,7 +315,7 @@ pub enum CreateTargetMethod {
     CreateTarget,
 }
 #[doc = "Creates a new page.\n[createTarget](https://chromedevtools.github.io/devtools-protocol/tot/Target/#method-createTarget)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CreateTarget {
     pub method: CreateTargetMethod,
     pub params: CreateTargetParams,
@@ -341,7 +341,7 @@ pub enum DetachFromTargetMethod {
     DetachFromTarget,
 }
 #[doc = "Detaches session with given id.\n[detachFromTarget](https://chromedevtools.github.io/devtools-protocol/tot/Target/#method-detachFromTarget)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DetachFromTarget {
     pub method: DetachFromTargetMethod,
     pub params: DetachFromTargetParams,
@@ -373,7 +373,7 @@ pub enum DisposeBrowserContextMethod {
     DisposeBrowserContext,
 }
 #[doc = "Deletes a BrowserContext. All the belonging pages will be closed without calling their\nbeforeunload hooks.\n[disposeBrowserContext](https://chromedevtools.github.io/devtools-protocol/tot/Target/#method-disposeBrowserContext)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DisposeBrowserContext {
     pub method: DisposeBrowserContextMethod,
     pub params: DisposeBrowserContextParams,
@@ -398,7 +398,7 @@ pub enum GetTargetInfoMethod {
     GetTargetInfo,
 }
 #[doc = "Returns information about a target.\n[getTargetInfo](https://chromedevtools.github.io/devtools-protocol/tot/Target/#method-getTargetInfo)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetTargetInfo {
     pub method: GetTargetInfoMethod,
     pub params: GetTargetInfoParams,
@@ -424,7 +424,7 @@ pub enum GetTargetsMethod {
     GetTargets,
 }
 #[doc = "Retrieves a list of available targets.\n[getTargets](https://chromedevtools.github.io/devtools-protocol/tot/Target/#method-getTargets)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetTargets {
     pub method: GetTargetsMethod,
     pub params: GetTargetsParams,
@@ -471,7 +471,7 @@ pub enum SetAutoAttachMethod {
     SetAutoAttach,
 }
 #[doc = "Controls whether to automatically attach to new targets which are considered\nto be directly related to this one (for example, iframes or workers).\nWhen turned on, attaches to all existing related targets as well. When turned off,\nautomatically detaches from all currently attached targets.\nThis also clears all targets added by `autoAttachRelated` from the list of targets to watch\nfor creation of related targets.\nYou might want to call this recursively for auto-attached targets to attach\nto all available targets.\n[setAutoAttach](https://chromedevtools.github.io/devtools-protocol/tot/Target/#method-setAutoAttach)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetAutoAttach {
     pub method: SetAutoAttachMethod,
     pub params: SetAutoAttachParams,
@@ -514,7 +514,7 @@ pub enum AutoAttachRelatedMethod {
     AutoAttachRelated,
 }
 #[doc = "Adds the specified target to the list of targets that will be monitored for any related target\ncreation (such as child frames, child workers and new versions of service worker) and reported\nthrough `attachedToTarget`. The specified target is also auto-attached.\nThis cancels the effect of any previous `setAutoAttach` and is also cancelled by subsequent\n`setAutoAttach`. Only available at the Browser target.\n[autoAttachRelated](https://chromedevtools.github.io/devtools-protocol/tot/Target/#method-autoAttachRelated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AutoAttachRelated {
     pub method: AutoAttachRelatedMethod,
     pub params: AutoAttachRelatedParams,
@@ -551,7 +551,7 @@ pub enum SetDiscoverTargetsMethod {
     SetDiscoverTargets,
 }
 #[doc = "Controls whether to discover available targets and notify via\n`targetCreated/targetInfoChanged/targetDestroyed` events.\n[setDiscoverTargets](https://chromedevtools.github.io/devtools-protocol/tot/Target/#method-setDiscoverTargets)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetDiscoverTargets {
     pub method: SetDiscoverTargetsMethod,
     pub params: SetDiscoverTargetsParams,
@@ -581,7 +581,7 @@ pub enum SetRemoteLocationsMethod {
     SetRemoteLocations,
 }
 #[doc = "Enables target discovery for the specified locations, when `setDiscoverTargets` was set to\n`true`.\n[setRemoteLocations](https://chromedevtools.github.io/devtools-protocol/tot/Target/#method-setRemoteLocations)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetRemoteLocations {
     pub method: SetRemoteLocationsMethod,
     pub params: SetRemoteLocationsParams,
@@ -612,7 +612,7 @@ pub enum GetDevToolsTargetMethod {
     GetDevToolsTarget,
 }
 #[doc = "Gets the targetId of the DevTools page target opened for the given target\n(if any).\n[getDevToolsTarget](https://chromedevtools.github.io/devtools-protocol/tot/Target/#method-getDevToolsTarget)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetDevToolsTarget {
     pub method: GetDevToolsTargetMethod,
     pub params: GetDevToolsTargetParams,
@@ -649,7 +649,7 @@ pub enum OpenDevToolsMethod {
     OpenDevTools,
 }
 #[doc = "Opens a DevTools window for the target.\n[openDevTools](https://chromedevtools.github.io/devtools-protocol/tot/Target/#method-openDevTools)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct OpenDevTools {
     pub method: OpenDevToolsMethod,
     pub params: OpenDevToolsParams,

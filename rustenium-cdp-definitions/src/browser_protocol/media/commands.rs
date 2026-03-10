@@ -8,7 +8,7 @@ pub enum EnableMethod {
     Enable,
 }
 #[doc = "Enables the Media domain\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Media/#method-enable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
@@ -28,7 +28,7 @@ pub enum DisableMethod {
     Disable,
 }
 #[doc = "Disables the Media domain.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Media/#method-disable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,

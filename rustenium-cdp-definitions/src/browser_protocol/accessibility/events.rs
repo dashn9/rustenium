@@ -12,7 +12,7 @@ pub enum LoadCompleteMethod {
     LoadComplete,
 }
 #[doc = "The loadComplete event mirrors the load complete event sent by the browser to assistive\ntechnology when the web page has finished loading.\n[loadComplete](https://chromedevtools.github.io/devtools-protocol/tot/Accessibility/#event-loadComplete)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LoadComplete {
     pub method: LoadCompleteMethod,
     pub params: LoadCompleteParams,
@@ -34,7 +34,7 @@ pub enum NodesUpdatedMethod {
     NodesUpdated,
 }
 #[doc = "The nodesUpdated event is sent every time a previously requested node has changed the in tree.\n[nodesUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Accessibility/#event-nodesUpdated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NodesUpdated {
     pub method: NodesUpdatedMethod,
     pub params: NodesUpdatedParams,

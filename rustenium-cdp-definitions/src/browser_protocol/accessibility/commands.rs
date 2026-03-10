@@ -8,7 +8,7 @@ pub enum DisableMethod {
     Disable,
 }
 #[doc = "Disables the accessibility domain.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/Accessibility/#method-disable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
@@ -28,7 +28,7 @@ pub enum EnableMethod {
     Enable,
 }
 #[doc = "Enables the accessibility domain which causes `AXNodeId`s to remain consistent between method calls.\nThis turns on accessibility for the page, which can impact performance until accessibility is disabled.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/Accessibility/#method-enable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
@@ -69,7 +69,7 @@ pub enum GetPartialAxTreeMethod {
     GetPartialAxTree,
 }
 #[doc = "Fetches the accessibility node and partial accessibility tree for this DOM node, if it exists.\n[getPartialAXTree](https://chromedevtools.github.io/devtools-protocol/tot/Accessibility/#method-getPartialAXTree)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetPartialAxTree {
     pub method: GetPartialAxTreeMethod,
     pub params: GetPartialAxTreeParams,
@@ -100,7 +100,7 @@ pub enum GetFullAxTreeMethod {
     GetFullAxTree,
 }
 #[doc = "Fetches the entire accessibility tree for the root Document\n[getFullAXTree](https://chromedevtools.github.io/devtools-protocol/tot/Accessibility/#method-getFullAXTree)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetFullAxTree {
     pub method: GetFullAxTreeMethod,
     pub params: GetFullAxTreeParams,
@@ -126,7 +126,7 @@ pub enum GetRootAxNodeMethod {
     GetRootAxNode,
 }
 #[doc = "Fetches the root node.\nRequires `enable()` to have been called previously.\n[getRootAXNode](https://chromedevtools.github.io/devtools-protocol/tot/Accessibility/#method-getRootAXNode)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetRootAxNode {
     pub method: GetRootAxNodeMethod,
     pub params: GetRootAxNodeParams,
@@ -162,7 +162,7 @@ pub enum GetAxNodeAndAncestorsMethod {
     GetAxNodeAndAncestors,
 }
 #[doc = "Fetches a node and all ancestors up to and including the root.\nRequires `enable()` to have been called previously.\n[getAXNodeAndAncestors](https://chromedevtools.github.io/devtools-protocol/tot/Accessibility/#method-getAXNodeAndAncestors)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetAxNodeAndAncestors {
     pub method: GetAxNodeAndAncestorsMethod,
     pub params: GetAxNodeAndAncestorsParams,
@@ -198,7 +198,7 @@ pub enum GetChildAxNodesMethod {
     GetChildAxNodes,
 }
 #[doc = "Fetches a particular accessibility node by AXNodeId.\nRequires `enable()` to have been called previously.\n[getChildAXNodes](https://chromedevtools.github.io/devtools-protocol/tot/Accessibility/#method-getChildAXNodes)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetChildAxNodes {
     pub method: GetChildAxNodesMethod,
     pub params: GetChildAxNodesParams,
@@ -244,7 +244,7 @@ pub enum QueryAxTreeMethod {
     QueryAxTree,
 }
 #[doc = "Query a DOM node's accessibility subtree for accessible name and role.\nThis command computes the name and role for all nodes in the subtree, including those that are\nignored for accessibility, and returns those that match the specified name and role. If no DOM\nnode is specified, or the DOM node does not exist, the command returns an error. If neither\n`accessibleName` or `role` is specified, it returns all the accessibility nodes in the subtree.\n[queryAXTree](https://chromedevtools.github.io/devtools-protocol/tot/Accessibility/#method-queryAXTree)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct QueryAxTree {
     pub method: QueryAxTreeMethod,
     pub params: QueryAxTreeParams,

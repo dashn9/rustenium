@@ -19,7 +19,7 @@ pub enum CollectClassNamesFromSubtreeMethod {
     CollectClassNamesFromSubtree,
 }
 #[doc = "Collects class names for the node with given id and all of it's child nodes.\n[collectClassNamesFromSubtree](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-collectClassNamesFromSubtree)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CollectClassNamesFromSubtree {
     pub method: CollectClassNamesFromSubtreeMethod,
     pub params: CollectClassNamesFromSubtreeParams,
@@ -63,7 +63,7 @@ pub enum CopyToMethod {
     CopyTo,
 }
 #[doc = "Creates a deep copy of the specified node and places it into the target container before the\ngiven anchor.\n[copyTo](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-copyTo)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CopyTo {
     pub method: CopyToMethod,
     pub params: CopyToParams,
@@ -109,7 +109,7 @@ pub enum DescribeNodeMethod {
     DescribeNode,
 }
 #[doc = "Describes node given its id, does not require domain to be enabled. Does not start tracking any\nobjects, can be used for automation.\n[describeNode](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-describeNode)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DescribeNode {
     pub method: DescribeNodeMethod,
     pub params: DescribeNodeParams,
@@ -150,7 +150,7 @@ pub enum ScrollIntoViewIfNeededMethod {
     ScrollIntoViewIfNeeded,
 }
 #[doc = "Scrolls the specified rect of the given node into view if not already visible.\nNote: exactly one between nodeId, backendNodeId and objectId should be passed\nto identify the node.\n[scrollIntoViewIfNeeded](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-scrollIntoViewIfNeeded)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ScrollIntoViewIfNeeded {
     pub method: ScrollIntoViewIfNeededMethod,
     pub params: ScrollIntoViewIfNeededParams,
@@ -170,7 +170,7 @@ pub enum DisableMethod {
     Disable,
 }
 #[doc = "Disables DOM agent for the given page.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-disable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
@@ -206,7 +206,7 @@ pub enum DiscardSearchResultsMethod {
     DiscardSearchResults,
 }
 #[doc = "Discards search results from the session with the given id. `getSearchResults` should no longer\nbe called for that search.\n[discardSearchResults](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-discardSearchResults)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DiscardSearchResults {
     pub method: DiscardSearchResultsMethod,
     pub params: DiscardSearchResultsParams,
@@ -242,7 +242,7 @@ pub enum EnableMethod {
     Enable,
 }
 #[doc = "Enables DOM agent for the given page.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-enable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
@@ -278,7 +278,7 @@ pub enum FocusMethod {
     Focus,
 }
 #[doc = "Focuses the given element.\n[focus](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-focus)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Focus {
     pub method: FocusMethod,
     pub params: FocusParams,
@@ -309,7 +309,7 @@ pub enum GetAttributesMethod {
     GetAttributes,
 }
 #[doc = "Returns attributes for the specified node.\n[getAttributes](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-getAttributes)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetAttributes {
     pub method: GetAttributesMethod,
     pub params: GetAttributesParams,
@@ -345,7 +345,7 @@ pub enum GetBoxModelMethod {
     GetBoxModel,
 }
 #[doc = "Returns boxes for the given node.\n[getBoxModel](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-getBoxModel)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetBoxModel {
     pub method: GetBoxModelMethod,
     pub params: GetBoxModelParams,
@@ -381,7 +381,7 @@ pub enum GetContentQuadsMethod {
     GetContentQuads,
 }
 #[doc = "Returns quads that describe node position on the page. This method\nmight return multiple quads for inline nodes.\n[getContentQuads](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-getContentQuads)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetContentQuads {
     pub method: GetContentQuadsMethod,
     pub params: GetContentQuadsParams,
@@ -412,7 +412,7 @@ pub enum GetDocumentMethod {
     GetDocument,
 }
 #[doc = "Returns the root DOM node (and optionally the subtree) to the caller.\nImplicitly enables the DOM domain events for the current target.\n[getDocument](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-getDocument)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetDocument {
     pub method: GetDocumentMethod,
     pub params: GetDocumentParams,
@@ -457,7 +457,7 @@ pub enum GetNodesForSubtreeByStyleMethod {
     GetNodesForSubtreeByStyle,
 }
 #[doc = "Finds nodes with a given computed style in a subtree.\n[getNodesForSubtreeByStyle](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-getNodesForSubtreeByStyle)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetNodesForSubtreeByStyle {
     pub method: GetNodesForSubtreeByStyleMethod,
     pub params: GetNodesForSubtreeByStyleParams,
@@ -504,7 +504,7 @@ pub enum GetNodeForLocationMethod {
     GetNodeForLocation,
 }
 #[doc = "Returns node id at given location. Depending on whether DOM domain is enabled, nodeId is\neither returned or not.\n[getNodeForLocation](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-getNodeForLocation)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetNodeForLocation {
     pub method: GetNodeForLocationMethod,
     pub params: GetNodeForLocationParams,
@@ -545,7 +545,7 @@ pub enum GetOuterHtmlMethod {
     GetOuterHtml,
 }
 #[doc = "Returns node's HTML markup.\n[getOuterHTML](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-getOuterHTML)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetOuterHtml {
     pub method: GetOuterHtmlMethod,
     pub params: GetOuterHtmlParams,
@@ -576,7 +576,7 @@ pub enum GetRelayoutBoundaryMethod {
     GetRelayoutBoundary,
 }
 #[doc = "Returns the id of the nearest ancestor that is a relayout boundary.\n[getRelayoutBoundary](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-getRelayoutBoundary)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetRelayoutBoundary {
     pub method: GetRelayoutBoundaryMethod,
     pub params: GetRelayoutBoundaryParams,
@@ -619,7 +619,7 @@ pub enum GetSearchResultsMethod {
     GetSearchResults,
 }
 #[doc = "Returns search results from given `fromIndex` to given `toIndex` from the search with the given\nidentifier.\n[getSearchResults](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-getSearchResults)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetSearchResults {
     pub method: GetSearchResultsMethod,
     pub params: GetSearchResultsParams,
@@ -639,7 +639,7 @@ pub enum HideHighlightMethod {
     HideHighlight,
 }
 #[doc = "Hides any highlight.\n[hideHighlight](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-hideHighlight)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HideHighlight {
     pub method: HideHighlightMethod,
     pub params: HideHighlightParams,
@@ -659,7 +659,7 @@ pub enum HighlightNodeMethod {
     HighlightNode,
 }
 #[doc = "Highlights DOM node.\n[highlightNode](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-highlightNode)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HighlightNode {
     pub method: HighlightNodeMethod,
     pub params: HighlightNodeParams,
@@ -679,7 +679,7 @@ pub enum HighlightRectMethod {
     HighlightRect,
 }
 #[doc = "Highlights given rectangle.\n[highlightRect](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-highlightRect)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HighlightRect {
     pub method: HighlightRectMethod,
     pub params: HighlightRectParams,
@@ -699,7 +699,7 @@ pub enum MarkUndoableStateMethod {
     MarkUndoableState,
 }
 #[doc = "Marks last undoable state.\n[markUndoableState](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-markUndoableState)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MarkUndoableState {
     pub method: MarkUndoableStateMethod,
     pub params: MarkUndoableStateParams,
@@ -743,7 +743,7 @@ pub enum MoveToMethod {
     MoveTo,
 }
 #[doc = "Moves node into the new container, places it before the given anchor.\n[moveTo](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-moveTo)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MoveTo {
     pub method: MoveToMethod,
     pub params: MoveToParams,
@@ -785,7 +785,7 @@ pub enum PerformSearchMethod {
     PerformSearch,
 }
 #[doc = "Searches for a given string in the DOM tree. Use `getSearchResults` to access search results or\n`cancelSearch` to end this search session.\n[performSearch](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-performSearch)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PerformSearch {
     pub method: PerformSearchMethod,
     pub params: PerformSearchParams,
@@ -819,7 +819,7 @@ pub enum PushNodeByPathToFrontendMethod {
     PushNodeByPathToFrontend,
 }
 #[doc = "Requests that the node is sent to the caller given its path. // FIXME, use XPath\n[pushNodeByPathToFrontend](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-pushNodeByPathToFrontend)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PushNodeByPathToFrontend {
     pub method: PushNodeByPathToFrontendMethod,
     pub params: PushNodeByPathToFrontendParams,
@@ -849,7 +849,7 @@ pub enum PushNodesByBackendIdsToFrontendMethod {
     PushNodesByBackendIdsToFrontend,
 }
 #[doc = "Requests that a batch of nodes is sent to the caller given their backend node ids.\n[pushNodesByBackendIdsToFrontend](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-pushNodesByBackendIdsToFrontend)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PushNodesByBackendIdsToFrontend {
     pub method: PushNodesByBackendIdsToFrontendMethod,
     pub params: PushNodesByBackendIdsToFrontendParams,
@@ -884,7 +884,7 @@ pub enum QuerySelectorMethod {
     QuerySelector,
 }
 #[doc = "Executes `querySelector` on a given node.\n[querySelector](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-querySelector)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct QuerySelector {
     pub method: QuerySelectorMethod,
     pub params: QuerySelectorParams,
@@ -919,7 +919,7 @@ pub enum QuerySelectorAllMethod {
     QuerySelectorAll,
 }
 #[doc = "Executes `querySelectorAll` on a given node.\n[querySelectorAll](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-querySelectorAll)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct QuerySelectorAll {
     pub method: QuerySelectorAllMethod,
     pub params: QuerySelectorAllParams,
@@ -939,7 +939,7 @@ pub enum GetTopLayerElementsMethod {
     GetTopLayerElements,
 }
 #[doc = "Returns NodeIds of current top layer elements.\nTop layer is rendered closest to the user within a viewport, therefore its elements always\nappear on top of all other content.\n[getTopLayerElements](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-getTopLayerElements)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetTopLayerElements {
     pub method: GetTopLayerElementsMethod,
     pub params: GetTopLayerElementsParams,
@@ -990,7 +990,7 @@ pub enum GetElementByRelationMethod {
     GetElementByRelation,
 }
 #[doc = "Returns the NodeId of the matched element according to certain relations.\n[getElementByRelation](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-getElementByRelation)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetElementByRelation {
     pub method: GetElementByRelationMethod,
     pub params: GetElementByRelationParams,
@@ -1010,7 +1010,7 @@ pub enum RedoMethod {
     Redo,
 }
 #[doc = "Re-does the last undone action.\n[redo](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-redo)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Redo {
     pub method: RedoMethod,
     pub params: RedoParams,
@@ -1045,7 +1045,7 @@ pub enum RemoveAttributeMethod {
     RemoveAttribute,
 }
 #[doc = "Removes attribute with given name from an element with given id.\n[removeAttribute](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-removeAttribute)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RemoveAttribute {
     pub method: RemoveAttributeMethod,
     pub params: RemoveAttributeParams,
@@ -1076,7 +1076,7 @@ pub enum RemoveNodeMethod {
     RemoveNode,
 }
 #[doc = "Removes node with given id.\n[removeNode](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-removeNode)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RemoveNode {
     pub method: RemoveNodeMethod,
     pub params: RemoveNodeParams,
@@ -1119,7 +1119,7 @@ pub enum RequestChildNodesMethod {
     RequestChildNodes,
 }
 #[doc = "Requests that children of the node with given id are returned to the caller in form of\n`setChildNodes` events where not only immediate children are retrieved, but all children down to\nthe specified depth.\n[requestChildNodes](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-requestChildNodes)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RequestChildNodes {
     pub method: RequestChildNodesMethod,
     pub params: RequestChildNodesParams,
@@ -1150,7 +1150,7 @@ pub enum RequestNodeMethod {
     RequestNode,
 }
 #[doc = "Requests that the node is sent to the caller given the JavaScript node object reference. All\nnodes that form the path from the node to the root are also sent to the client as a series of\n`setChildNodes` notifications.\n[requestNode](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-requestNode)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RequestNode {
     pub method: RequestNodeMethod,
     pub params: RequestNodeParams,
@@ -1191,7 +1191,7 @@ pub enum ResolveNodeMethod {
     ResolveNode,
 }
 #[doc = "Resolves the JavaScript node object for a given NodeId or BackendNodeId.\n[resolveNode](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-resolveNode)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResolveNode {
     pub method: ResolveNodeMethod,
     pub params: ResolveNodeParams,
@@ -1234,7 +1234,7 @@ pub enum SetAttributeValueMethod {
     SetAttributeValue,
 }
 #[doc = "Sets attribute for an element with given id.\n[setAttributeValue](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-setAttributeValue)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetAttributeValue {
     pub method: SetAttributeValueMethod,
     pub params: SetAttributeValueParams,
@@ -1275,7 +1275,7 @@ pub enum SetAttributesAsTextMethod {
     SetAttributesAsText,
 }
 #[doc = "Sets attributes on element with given id. This method is useful when user edits some existing\nattribute value and types in several attribute name/value pairs.\n[setAttributesAsText](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-setAttributesAsText)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetAttributesAsText {
     pub method: SetAttributesAsTextMethod,
     pub params: SetAttributesAsTextParams,
@@ -1325,7 +1325,7 @@ pub enum SetFileInputFilesMethod {
     SetFileInputFiles,
 }
 #[doc = "Sets files for the given file input element.\n[setFileInputFiles](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-setFileInputFiles)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetFileInputFiles {
     pub method: SetFileInputFilesMethod,
     pub params: SetFileInputFilesParams,
@@ -1356,7 +1356,7 @@ pub enum SetNodeStackTracesEnabledMethod {
     SetNodeStackTracesEnabled,
 }
 #[doc = "Sets if stack traces should be captured for Nodes. See `Node.getNodeStackTraces`. Default is disabled.\n[setNodeStackTracesEnabled](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-setNodeStackTracesEnabled)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetNodeStackTracesEnabled {
     pub method: SetNodeStackTracesEnabledMethod,
     pub params: SetNodeStackTracesEnabledParams,
@@ -1387,7 +1387,7 @@ pub enum GetNodeStackTracesMethod {
     GetNodeStackTraces,
 }
 #[doc = "Gets stack traces associated with a Node. As of now, only provides stack trace for Node creation.\n[getNodeStackTraces](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-getNodeStackTraces)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetNodeStackTraces {
     pub method: GetNodeStackTracesMethod,
     pub params: GetNodeStackTracesParams,
@@ -1418,7 +1418,7 @@ pub enum GetFileInfoMethod {
     GetFileInfo,
 }
 #[doc = "Returns file information for the given\nFile wrapper.\n[getFileInfo](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-getFileInfo)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetFileInfo {
     pub method: GetFileInfoMethod,
     pub params: GetFileInfoParams,
@@ -1438,7 +1438,7 @@ pub enum GetDetachedDomNodesMethod {
     GetDetachedDomNodes,
 }
 #[doc = "Returns list of detached nodes\n[getDetachedDomNodes](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-getDetachedDomNodes)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetDetachedDomNodes {
     pub method: GetDetachedDomNodesMethod,
     pub params: GetDetachedDomNodesParams,
@@ -1469,7 +1469,7 @@ pub enum SetInspectedNodeMethod {
     SetInspectedNode,
 }
 #[doc = "Enables console to refer to the node with given id via $x (see Command Line API for more details\n$x functions).\n[setInspectedNode](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-setInspectedNode)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetInspectedNode {
     pub method: SetInspectedNodeMethod,
     pub params: SetInspectedNodeParams,
@@ -1504,7 +1504,7 @@ pub enum SetNodeNameMethod {
     SetNodeName,
 }
 #[doc = "Sets node name for a node with given id.\n[setNodeName](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-setNodeName)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetNodeName {
     pub method: SetNodeNameMethod,
     pub params: SetNodeNameParams,
@@ -1539,7 +1539,7 @@ pub enum SetNodeValueMethod {
     SetNodeValue,
 }
 #[doc = "Sets node value for a node with given id.\n[setNodeValue](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-setNodeValue)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetNodeValue {
     pub method: SetNodeValueMethod,
     pub params: SetNodeValueParams,
@@ -1574,7 +1574,7 @@ pub enum SetOuterHtmlMethod {
     SetOuterHtml,
 }
 #[doc = "Sets node HTML markup, returns new node id.\n[setOuterHTML](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-setOuterHTML)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetOuterHtml {
     pub method: SetOuterHtmlMethod,
     pub params: SetOuterHtmlParams,
@@ -1594,7 +1594,7 @@ pub enum UndoMethod {
     Undo,
 }
 #[doc = "Undoes the last performed action.\n[undo](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-undo)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Undo {
     pub method: UndoMethod,
     pub params: UndoParams,
@@ -1624,7 +1624,7 @@ pub enum GetFrameOwnerMethod {
     GetFrameOwner,
 }
 #[doc = "Returns iframe node that owns iframe with the given domain.\n[getFrameOwner](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-getFrameOwner)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetFrameOwner {
     pub method: GetFrameOwnerMethod,
     pub params: GetFrameOwnerParams,
@@ -1679,7 +1679,7 @@ pub enum GetContainerForNodeMethod {
     GetContainerForNode,
 }
 #[doc = "Returns the query container of the given node based on container query\nconditions: containerName, physical and logical axes, and whether it queries\nscroll-state or anchored elements. If no axes are provided and\nqueriesScrollState is false, the style container is returned, which is the\ndirect parent or the closest element with a matching container-name.\n[getContainerForNode](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-getContainerForNode)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetContainerForNode {
     pub method: GetContainerForNodeMethod,
     pub params: GetContainerForNodeParams,
@@ -1710,7 +1710,7 @@ pub enum GetQueryingDescendantsForContainerMethod {
     GetQueryingDescendantsForContainer,
 }
 #[doc = "Returns the descendants of a container query container that have\ncontainer queries against this container.\n[getQueryingDescendantsForContainer](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-getQueryingDescendantsForContainer)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetQueryingDescendantsForContainer {
     pub method: GetQueryingDescendantsForContainerMethod,
     pub params: GetQueryingDescendantsForContainerParams,
@@ -1747,7 +1747,7 @@ pub enum GetAnchorElementMethod {
     GetAnchorElement,
 }
 #[doc = "Returns the target anchor element of the given anchor query according to\nhttps://www.w3.org/TR/css-anchor-position-1/#target.\n[getAnchorElement](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-getAnchorElement)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetAnchorElement {
     pub method: GetAnchorElementMethod,
     pub params: GetAnchorElementParams,
@@ -1782,7 +1782,7 @@ pub enum ForceShowPopoverMethod {
     ForceShowPopover,
 }
 #[doc = "When enabling, this API force-opens the popover identified by nodeId\nand keeps it open until disabled.\n[forceShowPopover](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#method-forceShowPopover)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ForceShowPopover {
     pub method: ForceShowPopoverMethod,
     pub params: ForceShowPopoverParams,

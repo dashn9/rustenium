@@ -12,7 +12,7 @@ pub enum AnimationCanceledMethod {
     AnimationCanceled,
 }
 #[doc = "Event for when an animation has been cancelled.\n[animationCanceled](https://chromedevtools.github.io/devtools-protocol/tot/Animation/#event-animationCanceled)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AnimationCanceled {
     pub method: AnimationCanceledMethod,
     pub params: AnimationCanceledParams,
@@ -33,7 +33,7 @@ pub enum AnimationCreatedMethod {
     AnimationCreated,
 }
 #[doc = "Event for each animation that has been created.\n[animationCreated](https://chromedevtools.github.io/devtools-protocol/tot/Animation/#event-animationCreated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AnimationCreated {
     pub method: AnimationCreatedMethod,
     pub params: AnimationCreatedParams,
@@ -54,7 +54,7 @@ pub enum AnimationStartedMethod {
     AnimationStarted,
 }
 #[doc = "Event for animation that has been started.\n[animationStarted](https://chromedevtools.github.io/devtools-protocol/tot/Animation/#event-animationStarted)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AnimationStarted {
     pub method: AnimationStartedMethod,
     pub params: AnimationStartedParams,
@@ -75,7 +75,7 @@ pub enum AnimationUpdatedMethod {
     AnimationUpdated,
 }
 #[doc = "Event for animation that has been updated.\n[animationUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Animation/#event-animationUpdated)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AnimationUpdated {
     pub method: AnimationUpdatedMethod,
     pub params: AnimationUpdatedParams,

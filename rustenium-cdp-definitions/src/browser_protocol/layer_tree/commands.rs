@@ -19,7 +19,7 @@ pub enum CompositingReasonsMethod {
     CompositingReasons,
 }
 #[doc = "Provides the reasons why the given layer was composited.\n[compositingReasons](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#method-compositingReasons)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CompositingReasons {
     pub method: CompositingReasonsMethod,
     pub params: CompositingReasonsParams,
@@ -39,7 +39,7 @@ pub enum DisableMethod {
     Disable,
 }
 #[doc = "Disables compositing tree inspection.\n[disable](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#method-disable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Disable {
     pub method: DisableMethod,
     pub params: DisableParams,
@@ -59,7 +59,7 @@ pub enum EnableMethod {
     Enable,
 }
 #[doc = "Enables compositing tree inspection.\n[enable](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#method-enable)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Enable {
     pub method: EnableMethod,
     pub params: EnableParams,
@@ -89,7 +89,7 @@ pub enum LoadSnapshotMethod {
     LoadSnapshot,
 }
 #[doc = "Returns the snapshot identifier.\n[loadSnapshot](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#method-loadSnapshot)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LoadSnapshot {
     pub method: LoadSnapshotMethod,
     pub params: LoadSnapshotParams,
@@ -120,7 +120,7 @@ pub enum MakeSnapshotMethod {
     MakeSnapshot,
 }
 #[doc = "Returns the layer snapshot identifier.\n[makeSnapshot](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#method-makeSnapshot)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MakeSnapshot {
     pub method: MakeSnapshotMethod,
     pub params: MakeSnapshotParams,
@@ -167,7 +167,7 @@ pub enum ProfileSnapshotMethod {
     #[serde(rename = "LayerTree.profileSnapshot")]
     ProfileSnapshot,
 }
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ProfileSnapshot {
     pub method: ProfileSnapshotMethod,
     pub params: ProfileSnapshotParams,
@@ -198,7 +198,7 @@ pub enum ReleaseSnapshotMethod {
     ReleaseSnapshot,
 }
 #[doc = "Releases layer snapshot captured by the back-end.\n[releaseSnapshot](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#method-releaseSnapshot)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ReleaseSnapshot {
     pub method: ReleaseSnapshotMethod,
     pub params: ReleaseSnapshotParams,
@@ -247,7 +247,7 @@ pub enum ReplaySnapshotMethod {
     ReplaySnapshot,
 }
 #[doc = "Replays the layer snapshot and returns the resulting bitmap.\n[replaySnapshot](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#method-replaySnapshot)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ReplaySnapshot {
     pub method: ReplaySnapshotMethod,
     pub params: ReplaySnapshotParams,
@@ -278,7 +278,7 @@ pub enum SnapshotCommandLogMethod {
     SnapshotCommandLog,
 }
 #[doc = "Replays the layer snapshot and returns canvas log.\n[snapshotCommandLog](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#method-snapshotCommandLog)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SnapshotCommandLog {
     pub method: SnapshotCommandLogMethod,
     pub params: SnapshotCommandLogParams,

@@ -17,7 +17,7 @@ pub enum BindMethod {
     Bind,
 }
 #[doc = "Request browser port binding.\n[bind](https://chromedevtools.github.io/devtools-protocol/tot/Tethering/#method-bind)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Bind {
     pub method: BindMethod,
     pub params: BindParams,
@@ -46,7 +46,7 @@ pub enum UnbindMethod {
     Unbind,
 }
 #[doc = "Request browser port unbinding.\n[unbind](https://chromedevtools.github.io/devtools-protocol/tot/Tethering/#method-unbind)"]
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Unbind {
     pub method: UnbindMethod,
     pub params: UnbindParams,

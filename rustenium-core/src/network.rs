@@ -2,6 +2,14 @@ use crate::error::{PostDataError, SessionSendError};
 use crate::transport::ConnectionTransport;
 use crate::{CommandResponseState, Session};
 use form_urlencoded;
+use rustenium_bidi_definitions::Command;
+use rustenium_bidi_definitions::network::command_builders::{
+    ContinueRequestBuilder, ContinueWithAuthBuilder, FailRequestBuilder, ProvideResponseBuilder
+};
+use rustenium_bidi_definitions::network::events::{AuthRequiredParams, BeforeRequestSentParams
+};
+use rustenium_bidi_definitions::network::type_builders::{ContinueWithAuthCredentialsBuilder, ContinueWithAuthNoCredentialsBuilder};
+use rustenium_bidi_definitions::network::types::{AuthCredentials, BaseParameters, ContinueWithAuthCredentialsAction, ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion, ContinueWithAuthNoCredentialsAction, Header, Request};
 use tokio::sync::oneshot;
 
 /// How a network request was handled
@@ -14,27 +22,13 @@ pub enum NetworkRequestHandledState {
     /// Request was responded with a custom response
     Responded,
 }
-use rustenium_bidi_commands::network::commands::{
-    ContinueRequest, ContinueRequestParameters, ContinueWithAuth, ContinueWithAuthParameters,
-    FailRequest, NetworkFailRequestMethod, FailRequestParameters, NetworkContinueRequestMethod,
-    NetworkContinueWithAuthMethod, ProvideResponse, NetworkProvideResponseMethod,
-    ProvideResponseParameters,
-};
-use rustenium_bidi_commands::network::types::{
-    AuthRequiredParameters, BaseParameters, BeforeRequestSentParameters,
-    ContinueWithAuthCredentials, ContinueWithAuthNoCredentials,
-    ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion,
-    ContinueWithAuthNoCredentialsactionUnion, ProvideCredentialsEnum,
-};
-use rustenium_bidi_commands::network::types::{BytesValue, CookieHeader, SetCookieHeader, Header};
-use rustenium_bidi_commands::{CommandData, NetworkCommand};
 use serde_json;
 use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::sync::Mutex;
 
 /// Represents a network request that can be intercepted
-pub struct  NetworkRequest<T: ConnectionTransport> {
+pub struct NetworkRequest<T: ConnectionTransport> {
     pub base: BaseParameters,
     session: Arc<Mutex<Session<T>>>,
 }
@@ -49,22 +43,22 @@ impl<T: ConnectionTransport> std::fmt::Debug for NetworkRequest<T> {
 }
 
 impl<T: ConnectionTransport> NetworkRequest<T> {
-    pub fn new(params: BeforeRequestSentParameters, session: Arc<Mutex<Session<T>>>) -> Self {
+    pub fn new(params: BeforeRequestSentParams, session: Arc<Mutex<Session<T>>>) -> Self {
         NetworkRequest {
             base: params.base_parameters,
-            session
+            session,
         }
     }
 
-    pub fn from_auth_required(params: AuthRequiredParameters, session: Arc<Mutex<Session<T>>>) -> Self {
+    pub fn from_auth_required(params: AuthRequiredParams, session: Arc<Mutex<Session<T>>>) -> Self {
         NetworkRequest {
             base: params.base_parameters,
-            session
+            session,
         }
     }
 
     /// Get the request ID
-    pub fn request_id(&self) -> &str {
+    pub fn request_id(&self) -> &Request {
         &self.base.request.request
     }
 
@@ -104,13 +98,15 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
 
     /// Parse the POST data as JSON (Chrome-specific)
     /// Returns an error if POST data is missing, not valid JSON, or not a JSON object
-    pub fn post_data_json(&self) -> Result<serde_json::Map<String, serde_json::Value>, PostDataError> {
-        let data = self.post_data()
-            .ok_or(PostDataError::NoPostData)?;
+    pub fn post_data_json(
+        &self,
+    ) -> Result<serde_json::Map<String, serde_json::Value>, PostDataError> {
+        let data = self.post_data().ok_or(PostDataError::NoPostData)?;
 
         let value: serde_json::Value = serde_json::from_str(data)?;
 
-        value.as_object()
+        value
+            .as_object()
             .cloned()
             .ok_or(PostDataError::NotJsonObject)
     }
@@ -118,8 +114,7 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
     /// Parse the POST data as URL-encoded form data (Chrome-specific)
     /// Returns an error if POST data is missing
     pub fn post_data_form(&self) -> Result<HashMap<String, String>, PostDataError> {
-        let data = self.post_data()
-            .ok_or(PostDataError::NoPostData)?;
+        let data = self.post_data().ok_or(PostDataError::NoPostData)?;
 
         let parsed: HashMap<String, String> = form_urlencoded::parse(data.as_bytes())
             .into_owned()
@@ -130,19 +125,24 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
 
     /// Check if this request has already been handled
     pub async fn is_handled(&self) -> bool {
-        self.session.lock().await.handled_network_requests
+        self.session
+            .lock()
+            .await
+            .handled_network_requests
             .lock()
             .unwrap()
-            .contains_key(&self.base.request.request)
+            .contains_key(self.request_id().as_ref())
     }
 
     /// Get the handled state if the request was already handled
     pub async fn get_handled_state(&self) -> Option<NetworkRequestHandledState> {
-        self.session.lock().await
+        self.session
+            .lock()
+            .await
             .handled_network_requests
             .lock()
             .unwrap()
-            .get(&self.base.request.request)
+            .get(self.request_id().as_ref())
             .cloned()
     }
 
@@ -153,69 +153,57 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
             .handled_network_requests
             .lock()
             .unwrap()
-            .insert(
-                self.base.request.request.clone(),
-                state,
-            );
+            .insert(self.base.request.request.clone().into(), state);
     }
 
     /// Continue the request without modifications
     pub async fn continue_(&self) -> oneshot::Receiver<CommandResponseState> {
-        let command =
-            CommandData::NetworkCommand(NetworkCommand::ContinueRequest(ContinueRequest {
-                method: NetworkContinueRequestMethod::NetworkContinueRequest,
-                params: ContinueRequestParameters {
-                    request: self.base.request.request.clone(),
-                    body: None,
-                    cookies: None,
-                    headers: None,
-                    method: None,
-                    url: None,
-                },
-            }));
+        let command: Command = ContinueRequestBuilder::default()
+            .request(self.base.request.request.clone())
+            .build()
+            .unwrap()
+            .into(); // This should never result in an error
 
-        let rx = self.session.lock().await.send_and_get_receiver(command).await;
-        self.mark_handled(NetworkRequestHandledState::Continued).await;
+        let rx = self
+            .session
+            .lock()
+            .await
+            .send_and_get_receiver(command)
+            .await;
+        self.mark_handled(NetworkRequestHandledState::Continued)
+            .await;
         rx
     }
 
     /// Continue the request with modifications
     pub async fn continue_with(
         &self,
-        headers: Option<Vec<Header>>,
-        cookies: Option<Vec<CookieHeader>>,
-        url: Option<String>,
-        method: Option<String>,
-        body: Option<BytesValue>,
+        continue_request: ContinueRequestBuilder,
     ) -> oneshot::Receiver<CommandResponseState> {
-        let command =
-            CommandData::NetworkCommand(NetworkCommand::ContinueRequest(ContinueRequest {
-                method: NetworkContinueRequestMethod::NetworkContinueRequest,
-                params: ContinueRequestParameters {
-                    request: self.base.request.request.clone(),
-                    body,
-                    cookies,
-                    headers,
-                    method,
-                    url,
-                },
-            }));
-
-        let rx = self.session.lock().await.send_and_get_receiver(command).await;
-        self.mark_handled(NetworkRequestHandledState::Continued).await;
+        let continue_request = continue_request.request(self.base.request.request.clone()).build().unwrap();
+        let rx = self
+            .session
+            .lock()
+            .await
+            .send_and_get_receiver(continue_request)
+            .await;
+        self.mark_handled(NetworkRequestHandledState::Continued)
+            .await;
         rx
     }
 
     /// Abort/fail the request
     pub async fn abort(&self) -> oneshot::Receiver<CommandResponseState> {
-        let command = CommandData::NetworkCommand(NetworkCommand::FailRequest(FailRequest {
-            method: NetworkFailRequestMethod::NetworkFailRequest,
-            params: FailRequestParameters {
-                request: self.base.request.request.clone(),
-            },
-        }));
+        let command = FailRequestBuilder::default()
+            .request(self.base.request.request.clone())
+            .build().unwrap();
 
-        let rx = self.session.lock().await.send_and_get_receiver(command).await;
+        let rx = self
+            .session
+            .lock()
+            .await
+            .send_and_get_receiver(command)
+            .await;
         self.mark_handled(NetworkRequestHandledState::Aborted).await;
         rx
     }
@@ -223,60 +211,39 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
     /// Provide a custom response
     pub async fn respond(
         &self,
-        status_code: Option<u64>,
-        reason_phrase: Option<String>,
-        headers: Option<Vec<Header>>,
-        cookies: Option<Vec<SetCookieHeader>>,
-        body: Option<BytesValue>,
+        provide_response_builder: ProvideResponseBuilder
     ) -> oneshot::Receiver<CommandResponseState> {
-        let command =
-            CommandData::NetworkCommand(NetworkCommand::ProvideResponse(ProvideResponse {
-                method: NetworkProvideResponseMethod::NetworkProvideResponse,
-                params: ProvideResponseParameters {
-                    request: self.base.request.request.clone(),
-                    body,
-                    cookies,
-                    headers,
-                    reason_phrase,
-                    status_code,
-                },
-            }));
+        let command = provide_response_builder.request(self.request_id().clone()).build().unwrap();
 
-        let rx = self.session.lock().await.send_and_get_receiver(command).await;
-        self.mark_handled(NetworkRequestHandledState::Responded).await;
+        let rx = self
+            .session
+            .lock()
+            .await
+            .send_and_get_receiver(command)
+            .await;
+        self.mark_handled(NetworkRequestHandledState::Responded)
+            .await;
         rx
     }
 
     /// Continue with HTTP authentication
-    pub async fn continue_with_auth(&self, credentials: Option<rustenium_bidi_commands::network::types::AuthCredentials>) -> Result<(), SessionSendError> {
-        let auth_union = match credentials {
-            Some(credentials) => {
-                ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion::ContinueWithAuthCredentials(
-                    ContinueWithAuthCredentials {
-                        action: ProvideCredentialsEnum::ProvideCredentials,
-                        credentials,
-                    }
-                )
-            },
-            None => {
-                ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion::ContinueWithAuthNoCredentials(
-                    ContinueWithAuthNoCredentials {
-                        action: ContinueWithAuthNoCredentialsactionUnion::Default,
-                    }
-                )
-            }
-        };
+    pub async fn continue_with_auth(
+        &self,
+        credentials: AuthCredentials,
+    ) -> Result<(), SessionSendError> {
+        let command = 
+                ContinueWithAuthBuilder::default().continue_with_auth_credentials_continue_with_auth_no_credentials_union(ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion::ContinueWithAuthCredentials(
+                    ContinueWithAuthCredentialsBuilder::default().action(ContinueWithAuthCredentialsAction::ProvideCredentials).credentials(
+                        credentials).build().unwrap())).request(self.request_id().clone()).build().unwrap();
 
-        let command = CommandData::NetworkCommand(
-            NetworkCommand::ContinueWithAuth(ContinueWithAuth {
-                method: NetworkContinueWithAuthMethod::NetworkContinueWithAuth,
-                params: ContinueWithAuthParameters {
-                    request: self.base.request.request.clone(),
-                    continue_with_auth_credentials_continue_with_auth_no_credentials_union: auth_union,
-                },
-            })
-        );
+        self.session.lock().await.send(command).await.map(|_| ())
+    }
+    pub async fn continue_with_no_auth(&self, action: ContinueWithAuthNoCredentialsAction) -> Result<(), SessionSendError> {
+        let command = ContinueWithAuthBuilder::default().continue_with_auth_credentials_continue_with_auth_no_credentials_union(ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion::ContinueWithAuthNoCredentials(
+                    ContinueWithAuthNoCredentialsBuilder::default().action(action).build().unwrap()
+                )).request(self.request_id().clone()).build().unwrap();
 
+                
         self.session.lock().await.send(command).await.map(|_| ())
     }
 }
