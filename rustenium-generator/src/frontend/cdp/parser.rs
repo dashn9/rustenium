@@ -228,6 +228,7 @@ pub fn parse_pdl<'a>(input: &'a str) -> Result<Protocol<'a>, Error> {
                 r#type: Type::new(caps.get(5).unwrap().as_str(), caps.get(4).is_some()),
                 default_value: None,
                 validation: None,
+                flatten: false,
             };
             add_param_to_module_property(
                 mod_prop.as_mut().ok_or_else(|| {

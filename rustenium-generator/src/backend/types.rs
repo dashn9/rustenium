@@ -306,7 +306,7 @@ impl FieldDefinition {
 
         if self.serde_skip {
             serde_attr.extend(quote! {#[serde(skip)]})
-        } else if matches!(&param.r#type, Type::Extensible) && self.name == "extensible" {
+        } else if param.flatten {
             serde_attr.extend(quote! {
                 #[serde(flatten)]
                 #[serde(default)]

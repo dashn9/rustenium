@@ -145,7 +145,7 @@ impl Generator {
                 .map(|(name, mcamel, _, _, _)| {
                     let mod_id = format_ident!("{}", name);
                     let var_id = format_ident!("{}", mcamel);
-                    let enum_id = format_ident!("{}Types", mcamel);
+                    let enum_id = format_ident!("{}Type", mcamel);
                     (var_id, quote!(#mod_id::types::#enum_id))
                 })
                 .collect();
@@ -155,7 +155,7 @@ impl Generator {
                 .map(|(name, mcamel, _, _, _)| {
                     let mod_id = format_ident!("{}", name);
                     let var_id = format_ident!("{}", mcamel);
-                    let enum_id = format_ident!("{}Commands", mcamel);
+                    let enum_id = format_ident!("{}Command", mcamel);
                     (var_id, quote!(#mod_id::commands::#enum_id))
                 })
                 .collect();
@@ -165,7 +165,7 @@ impl Generator {
                 .map(|(name, mcamel, _, _, _)| {
                     let mod_id = format_ident!("{}", name);
                     let var_id = format_ident!("{}", mcamel);
-                    let enum_id = format_ident!("{}Events", mcamel);
+                    let enum_id = format_ident!("{}Event", mcamel);
                     (var_id, quote!(#mod_id::events::#enum_id))
                 })
                 .collect();
@@ -174,21 +174,21 @@ impl Generator {
 
             // Build transitive entries: leaf => protocol_enum via module_enum
             let mut proto_transitive: Vec<(TokenStream, TokenStream, TokenStream)> = Vec::new();
-            let proto_type_name = format_ident!("{}Types", protocol_camel);
-            let proto_cmd_name = format_ident!("{}Commands", protocol_camel);
-            let proto_evt_name = format_ident!("{}Events", protocol_camel);
+            let proto_type_name = format_ident!("{}Type", protocol_camel);
+            let proto_cmd_name = format_ident!("{}Command", protocol_camel);
+            let proto_evt_name = format_ident!("{}Event", protocol_camel);
             for (mod_name, mcamel, type_leaves, cmd_leaves, evt_leaves) in &module_infos {
                 let mod_id = format_ident!("{}", mod_name);
                 for leaf in type_leaves {
-                    let me = format_ident!("{}Types", mcamel);
+                    let me = format_ident!("{}Type", mcamel);
                     proto_transitive.push((quote!(#mod_id::types::#leaf), quote!(#mod_id::types::#me), quote!(#proto_type_name)));
                 }
                 for leaf in cmd_leaves {
-                    let me = format_ident!("{}Commands", mcamel);
+                    let me = format_ident!("{}Command", mcamel);
                     proto_transitive.push((quote!(#mod_id::commands::#leaf), quote!(#mod_id::commands::#me), quote!(#proto_cmd_name)));
                 }
                 for leaf in evt_leaves {
-                    let me = format_ident!("{}Events", mcamel);
+                    let me = format_ident!("{}Event", mcamel);
                     proto_transitive.push((quote!(#mod_id::events::#leaf), quote!(#mod_id::events::#me), quote!(#proto_evt_name)));
                 }
             }
@@ -232,6 +232,7 @@ impl Generator {
 
                 #[macro_use]
                 mod macros;
+                pub mod base;
 
                 #[derive(Debug, Clone, PartialEq, Eq, Default, Serialize, Deserialize)]
                 pub struct Binary(String);
@@ -260,7 +261,7 @@ impl Generator {
                 .map(|(name, pcamel, _, _)| {
                     let mod_id = format_ident!("{}", name);
                     let var_id = format_ident!("{}", pcamel);
-                    let enum_id = format_ident!("{}Types", pcamel);
+                    let enum_id = format_ident!("{}Type", pcamel);
                     (var_id, quote!(#mod_id::#enum_id))
                 })
                 .collect();
@@ -270,7 +271,7 @@ impl Generator {
                 .map(|(name, pcamel, _, _)| {
                     let mod_id = format_ident!("{}", name);
                     let var_id = format_ident!("{}", pcamel);
-                    let enum_id = format_ident!("{}Commands", pcamel);
+                    let enum_id = format_ident!("{}Command", pcamel);
                     (var_id, quote!(#mod_id::#enum_id))
                 })
                 .collect();
@@ -280,7 +281,7 @@ impl Generator {
                 .map(|(name, pcamel, _, _)| {
                     let mod_id = format_ident!("{}", name);
                     let var_id = format_ident!("{}", pcamel);
-                    let enum_id = format_ident!("{}Events", pcamel);
+                    let enum_id = format_ident!("{}Event", pcamel);
                     (var_id, quote!(#mod_id::#enum_id))
                 })
                 .collect();
@@ -288,24 +289,24 @@ impl Generator {
             let mut top_transitive: Vec<(TokenStream, TokenStream, TokenStream)> = Vec::new();
             for (proto_name, pcamel, modules, _) in &protocol_infos {
                 let proto_id = format_ident!("{}", proto_name);
-                let proto_type_enum = format_ident!("{}Types", pcamel);
-                let proto_cmd_enum = format_ident!("{}Commands", pcamel);
-                let proto_evt_enum = format_ident!("{}Events", pcamel);
+                let proto_type_enum = format_ident!("{}Type", pcamel);
+                let proto_cmd_enum = format_ident!("{}Command", pcamel);
+                let proto_evt_enum = format_ident!("{}Event", pcamel);
 
                 for (mod_name, mcamel, type_leaves, cmd_leaves, evt_leaves) in modules {
                     let mod_id = format_ident!("{}", mod_name);
                     if !type_leaves.is_empty() {
-                        let me = format_ident!("{}Types", mcamel);
+                        let me = format_ident!("{}Type", mcamel);
                         top_transitive.push((quote!(#proto_id::#mod_id::types::#me), quote!(#proto_id::#proto_type_enum), quote!(Type)));
                         for leaf in type_leaves { top_transitive.push((quote!(#proto_id::#mod_id::types::#leaf), quote!(#proto_id::#proto_type_enum), quote!(Type))); }
                     }
                     if !cmd_leaves.is_empty() {
-                        let me = format_ident!("{}Commands", mcamel);
+                        let me = format_ident!("{}Command", mcamel);
                         top_transitive.push((quote!(#proto_id::#mod_id::commands::#me), quote!(#proto_id::#proto_cmd_enum), quote!(Command)));
                         for leaf in cmd_leaves { top_transitive.push((quote!(#proto_id::#mod_id::commands::#leaf), quote!(#proto_id::#proto_cmd_enum), quote!(Command))); }
                     }
                     if !evt_leaves.is_empty() {
-                        let me = format_ident!("{}Events", mcamel);
+                        let me = format_ident!("{}Event", mcamel);
                         top_transitive.push((quote!(#proto_id::#mod_id::events::#me), quote!(#proto_id::#proto_evt_enum), quote!(Event)));
                         for leaf in evt_leaves { top_transitive.push((quote!(#proto_id::#mod_id::events::#leaf), quote!(#proto_id::#proto_evt_enum), quote!(Event))); }
                     }
@@ -498,13 +499,13 @@ impl Generator {
         let module_camel = module.name.to_upper_camel_case();
 
         if !type_entries.is_empty() {
-            types_stream.extend(event::group_enum_closed(&format_ident!("{}Types", module_camel), &type_entries));
+            types_stream.extend(event::group_enum_closed(&format_ident!("{}Type", module_camel), &type_entries));
         }
         if !cmd_entries.is_empty() {
-            commands_stream.extend(event::group_enum_closed(&format_ident!("{}Commands", module_camel), &cmd_entries));
+            commands_stream.extend(event::group_enum_closed(&format_ident!("{}Command", module_camel), &cmd_entries));
         }
         if !evt_entries.is_empty() {
-            events_stream.extend(event::group_enum_closed(&format_ident!("{}Events", module_camel), &evt_entries));
+            events_stream.extend(event::group_enum_closed(&format_ident!("{}Event", module_camel), &evt_entries));
         }
 
         let serde_import = quote! { use serde::{Serialize, Deserialize}; };
@@ -573,7 +574,7 @@ impl Generator {
                     }
 
                     #desc
-                    #[derive(Debug, Clone, PartialEq)]
+                    #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
                     pub struct #def_ident {
                         pub method: #method_ident,
                         pub params: #params_ident,

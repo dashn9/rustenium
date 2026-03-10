@@ -172,6 +172,7 @@ pub struct Param<'a> {
     pub is_circular_dep: bool,
     pub default_value: Option<String>,
     pub validation: Option<Vec<Constraint>>,
+    pub flatten: bool,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
