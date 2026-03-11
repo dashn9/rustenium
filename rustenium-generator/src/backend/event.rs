@@ -143,22 +143,6 @@ pub fn group_enum_closed_identifiable(enum_name: &Ident, entries: &[(Ident, Toke
     }
 }
 
-/// Generate an open `group_enum!` invocation (with `Other(serde_json::Value)` catch-all).
-pub fn group_enum_open(enum_name: &Ident, entries: &[(Ident, TokenStream)]) -> TokenStream {
-    if entries.is_empty() {
-        return TokenStream::default();
-    }
-
-    let variants: Vec<_> = entries
-        .iter()
-        .map(|(var, ty)| quote! { #var(#ty) })
-        .collect();
-
-    quote! {
-        group_enum!(#enum_name { #(#variants),* } + other);
-    }
-}
-
 /// Generate an open `group_enum!` with `identifier()` method.
 pub fn group_enum_open_identifiable(enum_name: &Ident, entries: &[(Ident, TokenStream)]) -> TokenStream {
     if entries.is_empty() {
