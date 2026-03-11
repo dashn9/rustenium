@@ -113,4 +113,4 @@ impl ResolveBlob {
 impl crate::CommandResult for ResolveBlob {
     type Result = super::results::ResolveBlobResult;
 }
-group_enum ! (IoCommands { Close (Close) , Read (Read) , ResolveBlob (ResolveBlob) });
+group_enum ! (IoCommands { Close (Close) , Read (Read) , ResolveBlob (ResolveBlob) } + identifiable);

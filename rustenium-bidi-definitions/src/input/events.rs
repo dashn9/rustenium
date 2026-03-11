@@ -27,4 +27,4 @@ impl FileDialogOpened {
         Self::IDENTIFIER
     }
 }
-group_enum ! (InputEvent { FileDialogOpened (FileDialogOpened) });
+group_enum ! (InputEvent { FileDialogOpened (FileDialogOpened) } + identifiable);

@@ -207,4 +207,4 @@ impl Start {
 impl crate::CommandResult for Start {
     type Result = super::results::StartResult;
 }
-group_enum ! (TracingCommands { End (End) , GetCategories (GetCategories) , GetTrackEventDescriptor (GetTrackEventDescriptor) , RecordClockSyncMarker (RecordClockSyncMarker) , RequestMemoryDump (RequestMemoryDump) , Start (Start) });
+group_enum ! (TracingCommands { End (End) , GetCategories (GetCategories) , GetTrackEventDescriptor (GetTrackEventDescriptor) , RecordClockSyncMarker (RecordClockSyncMarker) , RequestMemoryDump (RequestMemoryDump) , Start (Start) } + identifiable);

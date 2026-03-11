@@ -95,4 +95,4 @@ impl AnimationUpdated {
         Self::IDENTIFIER
     }
 }
-group_enum ! (AnimationEvents { AnimationCanceled (AnimationCanceled) , AnimationCreated (AnimationCreated) , AnimationStarted (AnimationStarted) , AnimationUpdated (AnimationUpdated) });
+group_enum ! (AnimationEvents { AnimationCanceled (AnimationCanceled) , AnimationCreated (AnimationCreated) , AnimationStarted (AnimationStarted) , AnimationUpdated (AnimationUpdated) } + identifiable);

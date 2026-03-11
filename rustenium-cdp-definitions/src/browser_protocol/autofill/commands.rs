@@ -130,4 +130,4 @@ impl Enable {
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
 }
-group_enum ! (AutofillCommands { Trigger (Trigger) , SetAddresses (SetAddresses) , Disable (Disable) , Enable (Enable) });
+group_enum ! (AutofillCommands { Trigger (Trigger) , SetAddresses (SetAddresses) , Disable (Disable) , Enable (Enable) } + identifiable);

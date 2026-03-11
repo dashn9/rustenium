@@ -79,4 +79,4 @@ impl SetIgnoreCertificateErrors {
 impl crate::CommandResult for SetIgnoreCertificateErrors {
     type Result = super::results::SetIgnoreCertificateErrorsResult;
 }
-group_enum ! (SecurityCommands { Disable (Disable) , Enable (Enable) , SetIgnoreCertificateErrors (SetIgnoreCertificateErrors) });
+group_enum ! (SecurityCommands { Disable (Disable) , Enable (Enable) , SetIgnoreCertificateErrors (SetIgnoreCertificateErrors) } + identifiable);

@@ -400,4 +400,4 @@ impl UpdateRegistration {
 impl crate::CommandResult for UpdateRegistration {
     type Result = super::results::UpdateRegistrationResult;
 }
-group_enum ! (ServiceWorkerCommands { DeliverPushMessage (DeliverPushMessage) , Disable (Disable) , DispatchSyncEvent (DispatchSyncEvent) , DispatchPeriodicSyncEvent (DispatchPeriodicSyncEvent) , Enable (Enable) , SetForceUpdateOnPageLoad (SetForceUpdateOnPageLoad) , SkipWaiting (SkipWaiting) , StartWorker (StartWorker) , StopAllWorkers (StopAllWorkers) , StopWorker (StopWorker) , Unregister (Unregister) , UpdateRegistration (UpdateRegistration) });
+group_enum ! (ServiceWorkerCommands { DeliverPushMessage (DeliverPushMessage) , Disable (Disable) , DispatchSyncEvent (DispatchSyncEvent) , DispatchPeriodicSyncEvent (DispatchPeriodicSyncEvent) , Enable (Enable) , SetForceUpdateOnPageLoad (SetForceUpdateOnPageLoad) , SkipWaiting (SkipWaiting) , StartWorker (StartWorker) , StopAllWorkers (StopAllWorkers) , StopWorker (StopWorker) , Unregister (Unregister) , UpdateRegistration (UpdateRegistration) } + identifiable);

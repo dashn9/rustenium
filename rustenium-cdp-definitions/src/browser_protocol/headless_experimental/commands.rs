@@ -43,4 +43,4 @@ impl BeginFrame {
 impl crate::CommandResult for BeginFrame {
     type Result = super::results::BeginFrameResult;
 }
-group_enum ! (HeadlessExperimentalCommands { BeginFrame (BeginFrame) });
+group_enum ! (HeadlessExperimentalCommands { BeginFrame (BeginFrame) } + identifiable);

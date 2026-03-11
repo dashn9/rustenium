@@ -41,4 +41,4 @@ impl Disable {
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
 }
-group_enum ! (PreloadCommands { Enable (Enable) , Disable (Disable) });
+group_enum ! (PreloadCommands { Enable (Enable) , Disable (Disable) } + identifiable);

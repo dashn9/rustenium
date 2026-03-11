@@ -115,4 +115,4 @@ impl CancelPrompt {
 impl crate::CommandResult for CancelPrompt {
     type Result = super::results::CancelPromptResult;
 }
-group_enum ! (DeviceAccessCommands { Enable (Enable) , Disable (Disable) , SelectPrompt (SelectPrompt) , CancelPrompt (CancelPrompt) });
+group_enum ! (DeviceAccessCommands { Enable (Enable) , Disable (Disable) , SelectPrompt (SelectPrompt) , CancelPrompt (CancelPrompt) } + identifiable);

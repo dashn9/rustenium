@@ -32,4 +32,4 @@ impl GetDirectory {
 impl crate::CommandResult for GetDirectory {
     type Result = super::results::GetDirectoryResult;
 }
-group_enum ! (FileSystemCommands { GetDirectory (GetDirectory) });
+group_enum ! (FileSystemCommands { GetDirectory (GetDirectory) } + identifiable);

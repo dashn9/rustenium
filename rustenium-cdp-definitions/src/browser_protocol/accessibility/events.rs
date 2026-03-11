@@ -48,4 +48,4 @@ impl NodesUpdated {
         Self::IDENTIFIER
     }
 }
-group_enum ! (AccessibilityEvents { LoadComplete (LoadComplete) , NodesUpdated (NodesUpdated) });
+group_enum ! (AccessibilityEvents { LoadComplete (LoadComplete) , NodesUpdated (NodesUpdated) } + identifiable);

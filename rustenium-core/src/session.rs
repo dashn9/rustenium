@@ -67,9 +67,10 @@ impl<T: ConnectionTransport> BidiSession<T> {
                 let command_result = self.send(command).await;
                 match command_result {
                     Ok(command_result) => {
-                        let command_result: NewResult = command_result.result.try_into().expect(
+                        let command_result: NewResult = command_result.result.clone().try_into().expect(
                             format!("Invalid command result: {:?}", command_result).as_str(),
                         );
+                        self.id = Option::from(command_result.session_id);
                     }
                     Err(e) => panic!("Error creating new session: {}", e),
                 }

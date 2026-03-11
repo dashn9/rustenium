@@ -26,4 +26,4 @@ impl Accepted {
         Self::IDENTIFIER
     }
 }
-group_enum ! (TetheringEvents { Accepted (Accepted) });
+group_enum ! (TetheringEvents { Accepted (Accepted) } + identifiable);

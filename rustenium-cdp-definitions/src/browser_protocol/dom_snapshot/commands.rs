@@ -104,4 +104,4 @@ impl CaptureSnapshot {
 impl crate::CommandResult for CaptureSnapshot {
     type Result = super::results::CaptureSnapshotResult;
 }
-group_enum ! (DomSnapshotCommands { Disable (Disable) , Enable (Enable) , CaptureSnapshot (CaptureSnapshot) });
+group_enum ! (DomSnapshotCommands { Disable (Disable) , Enable (Enable) , CaptureSnapshot (CaptureSnapshot) } + identifiable);

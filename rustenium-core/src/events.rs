@@ -11,7 +11,6 @@ use rustenium_bidi_definitions::session::type_builders::UnsubscribeByAttributesR
 use rustenium_bidi_definitions::session::type_builders::UnsubscribeByIdRequestBuilder;
 use rustenium_bidi_definitions::session::types::Subscription;
 use rustenium_bidi_definitions::session::types::UnsubscribeParameters;
-use serde_json;
 use std::collections::HashSet;
 use std::fmt;
 use std::future::Future;
@@ -101,32 +100,38 @@ pub trait BidiEventManagement {
     // I don't know what to do with UserContexts yet
     fn subscribe_events(
         &mut self,
-        bidi_event: BidiEvent,
+        mut bidi_event: BidiEvent,
     ) -> impl Future<Output = Result<Option<SubscribeResult>, CommandResultError>> {
         async move {
-            self.push_event(bidi_event);
+            let mut subscribe_event_command_builder =
+                SubscribeBuilder::default().events(bidi_event.events.clone());
 
-            let subscribe_event_command = SubscribeBuilder::default()
-                .events(bidi_event.events)
-                .contexts(bidi_event.browsing_contexts.into())
-                .user_contexts(bidi_event.user_contexts.into())
-                .build()
-                .unwrap();
+            if let Some(browsing_contexts) = bidi_event.browsing_contexts.clone() {
+                subscribe_event_command_builder =
+                    subscribe_event_command_builder.contexts(browsing_contexts);
+            }
 
-            let event_response = self.send_event(subscribe_event_command).await;
+            if let Some(user_contexts) = bidi_event.user_contexts.clone() {
+                subscribe_event_command_builder =
+                    subscribe_event_command_builder.contexts(user_contexts);
+            }
+
+            let event_response = self
+                .send_event(subscribe_event_command_builder.build().unwrap())
+                .await;
             match event_response {
                 Ok(response) => {
-                    let subscribe_result: SubscribeResult = response.result.try_into().map_err(|_| {
-                        // Remove on failure
-                        let mut bidi_events = self.get_events().lock().unwrap();
-                        bidi_events.retain(|e| e.id != bidi_event.id);
-                        CommandResultError::InvalidResultTypeError(response.result)
-                    })?;
-                    // Update temp ID with actual subscription ID
-                    let mut bidi_events = self.get_events().lock().unwrap();
-                    if let Some(event) = bidi_events.iter_mut().find(|e| e.id == bidi_event.id) {
-                        event.id = subscribe_result.subscription.into();
-                    }
+                    let subscribe_result: SubscribeResult =
+                        response.result.clone().try_into().map_err(|_| {
+                            // Remove on failure
+                            let mut bidi_events = self.get_events().lock().unwrap();
+                            bidi_events.retain(|e| e.id != bidi_event.id);
+                            CommandResultError::InvalidResultTypeError(response.result)
+                        })?;
+
+                    bidi_event.id = subscribe_result.subscription.clone().into();
+
+                    self.push_event(bidi_event);
                     Ok(Some(subscribe_result))
                 }
                 Err(e) => {
@@ -177,7 +182,7 @@ pub trait BidiEventManagement {
             let unsubscribe_command = UnsubscribeBuilder::default()
                 .unsubscribe_parameters(UnsubscribeParameters::UnsubscribeByAttributesRequest(
                     UnsubscribeByAttributesRequestBuilder::default()
-                        .events(events.into())
+                        .events(events.clone().into_iter())
                         .build()
                         .unwrap(),
                 ))
@@ -188,7 +193,7 @@ pub trait BidiEventManagement {
             match event_result {
                 Ok(unsubscribe_response) => {
                     let unsubscribe_result: UnsubscribeResult =
-                        unsubscribe_response.result.try_into().map_err(|_| {
+                        unsubscribe_response.result.clone().try_into().map_err(|_| {
                             CommandResultError::InvalidResultTypeError(unsubscribe_response.result)
                         })?;
                     // Remove the event names from BidiEvents and clean up empty ones
@@ -224,14 +229,19 @@ pub trait BidiEventManagement {
                 ))
                 .build()
                 .unwrap();
-            
+
             let event_result = self.send_event(unsubscribe_command).await;
             match event_result {
-                Ok(unsubscribe_result) => {
-                    let unsubscribe_result: UnsubscribeResult = unsubscribe_result.try_into().map_err(|_| CommandResultError::InvalidResultTypeError(unsubscribe_result))?;
+                Ok(response) => {
+                    let unsubscribe_result: UnsubscribeResult = response
+                        .result
+                        .clone()
+                        .try_into()
+                        .map_err(|_| CommandResultError::InvalidResultTypeError(response.result))?;
                     // Remove the subscriptions from our local tracking
                     let mut bidi_events = self.get_events().lock().unwrap();
-                    bidi_events.retain(|bidi_event| !subscription_ids.contains(&bidi_event.id.into()));
+                    bidi_events
+                        .retain(|bidi_event| !subscription_ids.contains(&bidi_event.id.clone().into()));
                     Ok(unsubscribe_result)
                 }
                 Err(e) => Err(CommandResultError::SessionSendError(e)),
@@ -239,7 +249,9 @@ pub trait BidiEventManagement {
         }
     }
 
-    fn event_dispatch(&mut self) -> impl Future<Output = (JoinHandle<()>, UnboundedSender<Event>)> {
+    fn event_dispatch(
+        &mut self,
+    ) -> impl Future<Output = (JoinHandle<()>, UnboundedSender<EventResponse>)> {
         async move {
             let (tx, mut rx) = unbounded_channel::<EventResponse>();
             let bidi_events = self.get_events().clone();

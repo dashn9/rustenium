@@ -23,4 +23,4 @@ impl VisibleSecurityStateChanged {
         Self::IDENTIFIER
     }
 }
-group_enum ! (SecurityEvents { VisibleSecurityStateChanged (VisibleSecurityStateChanged) });
+group_enum ! (SecurityEvents { VisibleSecurityStateChanged (VisibleSecurityStateChanged) } + identifiable);

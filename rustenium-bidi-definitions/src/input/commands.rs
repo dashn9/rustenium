@@ -113,4 +113,4 @@ impl SetFiles {
 impl crate::CommandResult for SetFiles {
     type Result = super::results::SetFilesResult;
 }
-group_enum ! (InputCommand { PerformActions (PerformActions) , ReleaseActions (ReleaseActions) , SetFiles (SetFiles) });
+group_enum ! (InputCommand { PerformActions (PerformActions) , ReleaseActions (ReleaseActions) , SetFiles (SetFiles) } + identifiable);

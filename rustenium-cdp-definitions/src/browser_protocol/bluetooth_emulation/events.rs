@@ -86,4 +86,4 @@ impl DescriptorOperationReceived {
         Self::IDENTIFIER
     }
 }
-group_enum ! (BluetoothEmulationEvents { GattOperationReceived (GattOperationReceived) , CharacteristicOperationReceived (CharacteristicOperationReceived) , DescriptorOperationReceived (DescriptorOperationReceived) });
+group_enum ! (BluetoothEmulationEvents { GattOperationReceived (GattOperationReceived) , CharacteristicOperationReceived (CharacteristicOperationReceived) , DescriptorOperationReceived (DescriptorOperationReceived) } + identifiable);

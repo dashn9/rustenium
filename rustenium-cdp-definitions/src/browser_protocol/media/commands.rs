@@ -45,4 +45,4 @@ impl Disable {
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
 }
-group_enum ! (MediaCommands { Enable (Enable) , Disable (Disable) });
+group_enum ! (MediaCommands { Enable (Enable) , Disable (Disable) } + identifiable);

@@ -18,4 +18,4 @@ impl EntryAdded {
         Self::IDENTIFIER
     }
 }
-group_enum ! (LogEvent { EntryAdded (EntryAdded) });
+group_enum ! (LogEvent { EntryAdded (EntryAdded) } + identifiable);

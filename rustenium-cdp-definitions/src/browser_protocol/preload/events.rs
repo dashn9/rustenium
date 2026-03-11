@@ -176,4 +176,4 @@ impl PreloadingAttemptSourcesUpdated {
         Self::IDENTIFIER
     }
 }
-group_enum ! (PreloadEvents { RuleSetUpdated (RuleSetUpdated) , RuleSetRemoved (RuleSetRemoved) , PreloadEnabledStateUpdated (PreloadEnabledStateUpdated) , PrefetchStatusUpdated (PrefetchStatusUpdated) , PrerenderStatusUpdated (PrerenderStatusUpdated) , PreloadingAttemptSourcesUpdated (PreloadingAttemptSourcesUpdated) });
+group_enum ! (PreloadEvents { RuleSetUpdated (RuleSetUpdated) , RuleSetRemoved (RuleSetRemoved) , PreloadEnabledStateUpdated (PreloadEnabledStateUpdated) , PrefetchStatusUpdated (PrefetchStatusUpdated) , PrerenderStatusUpdated (PrerenderStatusUpdated) , PreloadingAttemptSourcesUpdated (PreloadingAttemptSourcesUpdated) } + identifiable);

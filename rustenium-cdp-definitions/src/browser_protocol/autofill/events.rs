@@ -27,4 +27,4 @@ impl AddressFormFilled {
         Self::IDENTIFIER
     }
 }
-group_enum ! (AutofillEvents { AddressFormFilled (AddressFormFilled) });
+group_enum ! (AutofillEvents { AddressFormFilled (AddressFormFilled) } + identifiable);

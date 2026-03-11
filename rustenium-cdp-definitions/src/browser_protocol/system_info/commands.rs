@@ -83,4 +83,4 @@ impl GetProcessInfo {
 impl crate::CommandResult for GetProcessInfo {
     type Result = super::results::GetProcessInfoResult;
 }
-group_enum ! (SystemInfoCommands { GetInfo (GetInfo) , GetFeatureState (GetFeatureState) , GetProcessInfo (GetProcessInfo) });
+group_enum ! (SystemInfoCommands { GetInfo (GetInfo) , GetFeatureState (GetFeatureState) , GetProcessInfo (GetProcessInfo) } + identifiable);

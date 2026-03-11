@@ -124,4 +124,4 @@ impl StopViolationsReport {
 impl crate::CommandResult for StopViolationsReport {
     type Result = super::results::StopViolationsReportResult;
 }
-group_enum ! (LogCommands { Clear (Clear) , Disable (Disable) , Enable (Enable) , StartViolationsReport (StartViolationsReport) , StopViolationsReport (StopViolationsReport) });
+group_enum ! (LogCommands { Clear (Clear) , Disable (Disable) , Enable (Enable) , StartViolationsReport (StartViolationsReport) , StopViolationsReport (StopViolationsReport) } + identifiable);

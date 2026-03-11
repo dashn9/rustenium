@@ -262,4 +262,4 @@ impl InspectRequested {
         Self::IDENTIFIER
     }
 }
-group_enum ! (RuntimeEvents { BindingCalled (BindingCalled) , ConsoleApiCalled (ConsoleApiCalled) , ExceptionRevoked (ExceptionRevoked) , ExceptionThrown (ExceptionThrown) , ExecutionContextCreated (ExecutionContextCreated) , ExecutionContextDestroyed (ExecutionContextDestroyed) , ExecutionContextsCleared (ExecutionContextsCleared) , InspectRequested (InspectRequested) });
+group_enum ! (RuntimeEvents { BindingCalled (BindingCalled) , ConsoleApiCalled (ConsoleApiCalled) , ExceptionRevoked (ExceptionRevoked) , ExceptionThrown (ExceptionThrown) , ExecutionContextCreated (ExecutionContextCreated) , ExecutionContextDestroyed (ExecutionContextDestroyed) , ExecutionContextsCleared (ExecutionContextsCleared) , InspectRequested (InspectRequested) } + identifiable);

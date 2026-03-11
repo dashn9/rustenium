@@ -92,4 +92,4 @@ impl PreciseCoverageDeltaUpdate {
         Self::IDENTIFIER
     }
 }
-group_enum ! (ProfilerEvents { ConsoleProfileFinished (ConsoleProfileFinished) , ConsoleProfileStarted (ConsoleProfileStarted) , PreciseCoverageDeltaUpdate (PreciseCoverageDeltaUpdate) });
+group_enum ! (ProfilerEvents { ConsoleProfileFinished (ConsoleProfileFinished) , ConsoleProfileStarted (ConsoleProfileStarted) , PreciseCoverageDeltaUpdate (PreciseCoverageDeltaUpdate) } + identifiable);

@@ -95,4 +95,4 @@ impl DomStorageItemsCleared {
         Self::IDENTIFIER
     }
 }
-group_enum ! (DomStorageEvents { DomStorageItemAdded (DomStorageItemAdded) , DomStorageItemRemoved (DomStorageItemRemoved) , DomStorageItemUpdated (DomStorageItemUpdated) , DomStorageItemsCleared (DomStorageItemsCleared) });
+group_enum ! (DomStorageEvents { DomStorageItemAdded (DomStorageItemAdded) , DomStorageItemRemoved (DomStorageItemRemoved) , DomStorageItemUpdated (DomStorageItemUpdated) , DomStorageItemsCleared (DomStorageItemsCleared) } + identifiable);

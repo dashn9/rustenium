@@ -182,4 +182,4 @@ impl SetDomStorageItem {
 impl crate::CommandResult for SetDomStorageItem {
     type Result = super::results::SetDomStorageItemResult;
 }
-group_enum ! (DomStorageCommands { Clear (Clear) , Disable (Disable) , Enable (Enable) , GetDomStorageItems (GetDomStorageItems) , RemoveDomStorageItem (RemoveDomStorageItem) , SetDomStorageItem (SetDomStorageItem) });
+group_enum ! (DomStorageCommands { Clear (Clear) , Disable (Disable) , Enable (Enable) , GetDomStorageItems (GetDomStorageItems) , RemoveDomStorageItem (RemoveDomStorageItem) , SetDomStorageItem (SetDomStorageItem) } + identifiable);

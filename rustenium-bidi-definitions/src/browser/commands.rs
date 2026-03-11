@@ -206,4 +206,4 @@ impl SetDownloadBehavior {
 impl crate::CommandResult for SetDownloadBehavior {
     type Result = super::results::SetDownloadBehaviorResult;
 }
-group_enum ! (BrowserCommand { Close (Close) , CreateUserContext (CreateUserContext) , GetClientWindows (GetClientWindows) , GetUserContexts (GetUserContexts) , RemoveUserContext (RemoveUserContext) , SetClientWindowState (SetClientWindowState) , SetDownloadBehavior (SetDownloadBehavior) });
+group_enum ! (BrowserCommand { Close (Close) , CreateUserContext (CreateUserContext) , GetClientWindows (GetClientWindows) , GetUserContexts (GetUserContexts) , RemoveUserContext (RemoveUserContext) , SetClientWindowState (SetClientWindowState) , SetDownloadBehavior (SetDownloadBehavior) } + identifiable);

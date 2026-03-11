@@ -279,4 +279,4 @@ impl QueryAxTree {
 impl crate::CommandResult for QueryAxTree {
     type Result = super::results::QueryAxTreeResult;
 }
-group_enum ! (AccessibilityCommands { Disable (Disable) , Enable (Enable) , GetPartialAxTree (GetPartialAxTree) , GetFullAxTree (GetFullAxTree) , GetRootAxNode (GetRootAxNode) , GetAxNodeAndAncestors (GetAxNodeAndAncestors) , GetChildAxNodes (GetChildAxNodes) , QueryAxTree (QueryAxTree) });
+group_enum ! (AccessibilityCommands { Disable (Disable) , Enable (Enable) , GetPartialAxTree (GetPartialAxTree) , GetFullAxTree (GetFullAxTree) , GetRootAxNode (GetRootAxNode) , GetAxNodeAndAncestors (GetAxNodeAndAncestors) , GetChildAxNodes (GetChildAxNodes) , QueryAxTree (QueryAxTree) } + identifiable);

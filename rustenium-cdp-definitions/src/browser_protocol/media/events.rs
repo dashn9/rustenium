@@ -126,4 +126,4 @@ impl PlayerCreated {
         Self::IDENTIFIER
     }
 }
-group_enum ! (MediaEvents { PlayerPropertiesChanged (PlayerPropertiesChanged) , PlayerEventsAdded (PlayerEventsAdded) , PlayerMessagesLogged (PlayerMessagesLogged) , PlayerErrorsRaised (PlayerErrorsRaised) , PlayerCreated (PlayerCreated) });
+group_enum ! (MediaEvents { PlayerPropertiesChanged (PlayerPropertiesChanged) , PlayerEventsAdded (PlayerEventsAdded) , PlayerMessagesLogged (PlayerMessagesLogged) , PlayerErrorsRaised (PlayerErrorsRaised) , PlayerCreated (PlayerCreated) } + identifiable);

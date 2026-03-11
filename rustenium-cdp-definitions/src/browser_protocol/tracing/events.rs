@@ -96,4 +96,4 @@ impl TracingComplete {
         Self::IDENTIFIER
     }
 }
-group_enum ! (TracingEvents { BufferUsage (BufferUsage) , DataCollected (DataCollected) , TracingComplete (TracingComplete) });
+group_enum ! (TracingEvents { BufferUsage (BufferUsage) , DataCollected (DataCollected) , TracingComplete (TracingComplete) } + identifiable);

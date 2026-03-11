@@ -22,4 +22,4 @@ impl DragIntercepted {
         Self::IDENTIFIER
     }
 }
-group_enum ! (InputEvents { DragIntercepted (DragIntercepted) });
+group_enum ! (InputEvents { DragIntercepted (DragIntercepted) } + identifiable);

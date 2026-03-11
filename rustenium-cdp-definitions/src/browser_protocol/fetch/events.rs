@@ -98,4 +98,4 @@ impl AuthRequired {
         Self::IDENTIFIER
     }
 }
-group_enum ! (FetchEvents { RequestPaused (RequestPaused) , AuthRequired (AuthRequired) });
+group_enum ! (FetchEvents { RequestPaused (RequestPaused) , AuthRequired (AuthRequired) } + identifiable);

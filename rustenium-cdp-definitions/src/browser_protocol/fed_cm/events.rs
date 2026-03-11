@@ -55,4 +55,4 @@ impl DialogClosed {
         Self::IDENTIFIER
     }
 }
-group_enum ! (FedCmEvents { DialogShown (DialogShown) , DialogClosed (DialogClosed) });
+group_enum ! (FedCmEvents { DialogShown (DialogShown) , DialogClosed (DialogClosed) } + identifiable);

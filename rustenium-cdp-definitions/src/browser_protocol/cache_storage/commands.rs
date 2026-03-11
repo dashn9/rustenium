@@ -209,4 +209,4 @@ impl RequestEntries {
 impl crate::CommandResult for RequestEntries {
     type Result = super::results::RequestEntriesResult;
 }
-group_enum ! (CacheStorageCommands { DeleteCache (DeleteCache) , DeleteEntry (DeleteEntry) , RequestCacheNames (RequestCacheNames) , RequestCachedResponse (RequestCachedResponse) , RequestEntries (RequestEntries) });
+group_enum ! (CacheStorageCommands { DeleteCache (DeleteCache) , DeleteEntry (DeleteEntry) , RequestCacheNames (RequestCacheNames) , RequestCachedResponse (RequestCachedResponse) , RequestEntries (RequestEntries) } + identifiable);

@@ -335,4 +335,4 @@ impl SetTiming {
 impl crate::CommandResult for SetTiming {
     type Result = super::results::SetTimingResult;
 }
-group_enum ! (AnimationCommands { Disable (Disable) , Enable (Enable) , GetCurrentTime (GetCurrentTime) , GetPlaybackRate (GetPlaybackRate) , ReleaseAnimations (ReleaseAnimations) , ResolveAnimation (ResolveAnimation) , SeekAnimations (SeekAnimations) , SetPaused (SetPaused) , SetPlaybackRate (SetPlaybackRate) , SetTiming (SetTiming) });
+group_enum ! (AnimationCommands { Disable (Disable) , Enable (Enable) , GetCurrentTime (GetCurrentTime) , GetPlaybackRate (GetPlaybackRate) , ReleaseAnimations (ReleaseAnimations) , ResolveAnimation (ResolveAnimation) , SeekAnimations (SeekAnimations) , SetPaused (SetPaused) , SetPlaybackRate (SetPlaybackRate) , SetTiming (SetTiming) } + identifiable);

@@ -377,4 +377,4 @@ impl UserPromptOpened {
         Self::IDENTIFIER
     }
 }
-group_enum ! (BrowsingContextEvent { ContextCreated (ContextCreated) , ContextDestroyed (ContextDestroyed) , NavigationStarted (NavigationStarted) , FragmentNavigated (FragmentNavigated) , HistoryUpdated (HistoryUpdated) , DomContentLoaded (DomContentLoaded) , Load (Load) , DownloadWillBegin (DownloadWillBegin) , DownloadEnd (DownloadEnd) , NavigationAborted (NavigationAborted) , NavigationCommitted (NavigationCommitted) , NavigationFailed (NavigationFailed) , UserPromptClosed (UserPromptClosed) , UserPromptOpened (UserPromptOpened) });
+group_enum ! (BrowsingContextEvent { ContextCreated (ContextCreated) , ContextDestroyed (ContextDestroyed) , NavigationStarted (NavigationStarted) , FragmentNavigated (FragmentNavigated) , HistoryUpdated (HistoryUpdated) , DomContentLoaded (DomContentLoaded) , Load (Load) , DownloadWillBegin (DownloadWillBegin) , DownloadEnd (DownloadEnd) , NavigationAborted (NavigationAborted) , NavigationCommitted (NavigationCommitted) , NavigationFailed (NavigationFailed) , UserPromptClosed (UserPromptClosed) , UserPromptOpened (UserPromptOpened) } + identifiable);

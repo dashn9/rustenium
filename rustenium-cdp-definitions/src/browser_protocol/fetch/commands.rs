@@ -392,4 +392,4 @@ impl TakeResponseBodyAsStream {
 impl crate::CommandResult for TakeResponseBodyAsStream {
     type Result = super::results::TakeResponseBodyAsStreamResult;
 }
-group_enum ! (FetchCommands { Disable (Disable) , Enable (Enable) , FailRequest (FailRequest) , FulfillRequest (FulfillRequest) , ContinueRequest (ContinueRequest) , ContinueWithAuth (ContinueWithAuth) , ContinueResponse (ContinueResponse) , GetResponseBody (GetResponseBody) , TakeResponseBodyAsStream (TakeResponseBodyAsStream) });
+group_enum ! (FetchCommands { Disable (Disable) , Enable (Enable) , FailRequest (FailRequest) , FulfillRequest (FulfillRequest) , ContinueRequest (ContinueRequest) , ContinueWithAuth (ContinueWithAuth) , ContinueResponse (ContinueResponse) , GetResponseBody (GetResponseBody) , TakeResponseBodyAsStream (TakeResponseBodyAsStream) } + identifiable);

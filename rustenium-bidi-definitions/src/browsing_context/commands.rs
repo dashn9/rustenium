@@ -542,4 +542,4 @@ impl TraverseHistory {
 impl crate::CommandResult for TraverseHistory {
     type Result = super::results::TraverseHistoryResult;
 }
-group_enum ! (BrowsingContextCommand { Activate (Activate) , CaptureScreenshot (CaptureScreenshot) , Close (Close) , Create (Create) , GetTree (GetTree) , HandleUserPrompt (HandleUserPrompt) , LocateNodes (LocateNodes) , Navigate (Navigate) , Print (Print) , Reload (Reload) , SetViewport (SetViewport) , TraverseHistory (TraverseHistory) });
+group_enum ! (BrowsingContextCommand { Activate (Activate) , CaptureScreenshot (CaptureScreenshot) , Close (Close) , Create (Create) , GetTree (GetTree) , HandleUserPrompt (HandleUserPrompt) , LocateNodes (LocateNodes) , Navigate (Navigate) , Print (Print) , Reload (Reload) , SetViewport (SetViewport) , TraverseHistory (TraverseHistory) } + identifiable);

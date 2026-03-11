@@ -64,4 +64,4 @@ impl SetDeviceOrientationOverride {
 impl crate::CommandResult for SetDeviceOrientationOverride {
     type Result = super::results::SetDeviceOrientationOverrideResult;
 }
-group_enum ! (DeviceOrientationCommands { ClearDeviceOrientationOverride (ClearDeviceOrientationOverride) , SetDeviceOrientationOverride (SetDeviceOrientationOverride) });
+group_enum ! (DeviceOrientationCommands { ClearDeviceOrientationOverride (ClearDeviceOrientationOverride) , SetDeviceOrientationOverride (SetDeviceOrientationOverride) } + identifiable);

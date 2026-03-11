@@ -286,4 +286,4 @@ impl SetTimezoneOverride {
 impl crate::CommandResult for SetTimezoneOverride {
     type Result = super::results::SetTimezoneOverrideResult;
 }
-group_enum ! (EmulationCommand { SetForcedColorsModeThemeOverride (SetForcedColorsModeThemeOverride) , SetGeolocationOverride (SetGeolocationOverride) , SetLocaleOverride (SetLocaleOverride) , SetNetworkConditions (SetNetworkConditions) , SetScreenOrientationOverride (SetScreenOrientationOverride) , SetUserAgentOverride (SetUserAgentOverride) , SetScriptingEnabled (SetScriptingEnabled) , SetTimezoneOverride (SetTimezoneOverride) });
+group_enum ! (EmulationCommand { SetForcedColorsModeThemeOverride (SetForcedColorsModeThemeOverride) , SetGeolocationOverride (SetGeolocationOverride) , SetLocaleOverride (SetLocaleOverride) , SetNetworkConditions (SetNetworkConditions) , SetScreenOrientationOverride (SetScreenOrientationOverride) , SetUserAgentOverride (SetUserAgentOverride) , SetScriptingEnabled (SetScriptingEnabled) , SetTimezoneOverride (SetTimezoneOverride) } + identifiable);

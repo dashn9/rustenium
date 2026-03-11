@@ -63,4 +63,4 @@ impl Uninstall {
 impl crate::CommandResult for Uninstall {
     type Result = super::results::UninstallResult;
 }
-group_enum ! (WebExtensionCommand { Install (Install) , Uninstall (Uninstall) });
+group_enum ! (WebExtensionCommand { Install (Install) , Uninstall (Uninstall) } + identifiable);

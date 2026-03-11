@@ -20,4 +20,4 @@ impl IssueAdded {
         Self::IDENTIFIER
     }
 }
-group_enum ! (AuditsEvents { IssueAdded (IssueAdded) });
+group_enum ! (AuditsEvents { IssueAdded (IssueAdded) } + identifiable);

@@ -1,3 +1,5 @@
+#[deprecated(note = "Please use rustenium-bidi-definitions")]
+
 use serde::{Serialize, Deserialize};
 use std::collections::HashMap;
 

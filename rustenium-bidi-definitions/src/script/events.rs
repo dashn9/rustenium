@@ -66,4 +66,4 @@ impl RealmDestroyed {
         Self::IDENTIFIER
     }
 }
-group_enum ! (ScriptEvent { Message (Message) , RealmCreated (RealmCreated) , RealmDestroyed (RealmDestroyed) });
+group_enum ! (ScriptEvent { Message (Message) , RealmCreated (RealmCreated) , RealmDestroyed (RealmDestroyed) } + identifiable);

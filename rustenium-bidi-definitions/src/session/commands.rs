@@ -151,4 +151,4 @@ impl Unsubscribe {
 impl crate::CommandResult for Unsubscribe {
     type Result = super::results::UnsubscribeResult;
 }
-group_enum ! (SessionCommand { Status (Status) , New (New) , End (End) , Subscribe (Subscribe) , Unsubscribe (Unsubscribe) });
+group_enum ! (SessionCommand { Status (Status) , New (New) , End (End) , Subscribe (Subscribe) , Unsubscribe (Unsubscribe) } + identifiable);

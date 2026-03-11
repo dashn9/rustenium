@@ -8,16 +8,16 @@ use crate::error::CommandResultError;
 use crate::session::BidiSession;
 use crate::transport::ConnectionTransport;
 
-#[derive(Clone)]
+
 pub struct CreateBrowsingContext<'a, T: ConnectionTransport> {
-    session: &'a BidiSession<T>,
+    session: &'a mut BidiSession<T>,
     r#type: CreateType,
     reference_context: Option<&'a BrowsingContext>,
     background: bool,
 }
 
 impl<'a, T: ConnectionTransport> CreateBrowsingContext<'a, T> {
-    fn new(session: &'a mut BidiSession<T>) -> Self {
+    pub fn new(session: &'a mut BidiSession<T>) -> Self {
         Self {
             session,
             r#type: CreateType::Tab,
@@ -42,20 +42,21 @@ impl<'a, T: ConnectionTransport> CreateBrowsingContext<'a, T> {
     }
 
     pub async fn create(self) -> Result<BrowsingContext, CommandResultError> {
-        let create_browsing_context_command = CreateBuilder::default()
+        let mut create_browsing_context_command_builder = CreateBuilder::default()
             .r#type(self.r#type.clone())
             .background(self.background);
         if let Some(reference_context) = self.reference_context {
-            create_browsing_context_command.reference_context(reference_context.into());
+            create_browsing_context_command_builder = create_browsing_context_command_builder.reference_context(reference_context.id.clone());
         }
         let context = self
             .session
-            .send(create_browsing_context_command.build().unwrap())
+            .send(create_browsing_context_command_builder.build().unwrap())
             .await;
         match context {
             Ok(response) => {
                 let result: CreateResult = response
                     .result
+                    .clone()
                     .try_into()
                     .map_err(|_| CommandResultError::InvalidResultTypeError(response.result))?;
                 Ok(BrowsingContext {

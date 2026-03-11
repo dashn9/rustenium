@@ -100,4 +100,4 @@ impl Disable {
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
 }
-group_enum ! (EventBreakpointsCommands { SetInstrumentationBreakpoint (SetInstrumentationBreakpoint) , RemoveInstrumentationBreakpoint (RemoveInstrumentationBreakpoint) , Disable (Disable) });
+group_enum ! (EventBreakpointsCommands { SetInstrumentationBreakpoint (SetInstrumentationBreakpoint) , RemoveInstrumentationBreakpoint (RemoveInstrumentationBreakpoint) , Disable (Disable) } + identifiable);

@@ -115,4 +115,4 @@ impl ResetProfiles {
         Self::IDENTIFIER
     }
 }
-group_enum ! (HeapProfilerEvents { AddHeapSnapshotChunk (AddHeapSnapshotChunk) , HeapStatsUpdate (HeapStatsUpdate) , LastSeenObjectId (LastSeenObjectId) , ReportHeapSnapshotProgress (ReportHeapSnapshotProgress) , ResetProfiles (ResetProfiles) });
+group_enum ! (HeapProfilerEvents { AddHeapSnapshotChunk (AddHeapSnapshotChunk) , HeapStatsUpdate (HeapStatsUpdate) , LastSeenObjectId (LastSeenObjectId) , ReportHeapSnapshotProgress (ReportHeapSnapshotProgress) , ResetProfiles (ResetProfiles) } + identifiable);

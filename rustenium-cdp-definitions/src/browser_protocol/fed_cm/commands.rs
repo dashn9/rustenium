@@ -223,4 +223,4 @@ impl ResetCooldown {
 impl crate::CommandResult for ResetCooldown {
     type Result = super::results::ResetCooldownResult;
 }
-group_enum ! (FedCmCommands { Enable (Enable) , Disable (Disable) , SelectAccount (SelectAccount) , ClickDialogButton (ClickDialogButton) , OpenUrl (OpenUrl) , DismissDialog (DismissDialog) , ResetCooldown (ResetCooldown) });
+group_enum ! (FedCmCommands { Enable (Enable) , Disable (Disable) , SelectAccount (SelectAccount) , ClickDialogButton (ClickDialogButton) , OpenUrl (OpenUrl) , DismissDialog (DismissDialog) , ResetCooldown (ResetCooldown) } + identifiable);

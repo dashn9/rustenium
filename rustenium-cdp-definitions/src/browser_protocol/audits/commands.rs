@@ -160,4 +160,4 @@ impl CheckFormsIssues {
 impl crate::CommandResult for CheckFormsIssues {
     type Result = super::results::CheckFormsIssuesResult;
 }
-group_enum ! (AuditsCommands { GetEncodedResponse (GetEncodedResponse) , Disable (Disable) , Enable (Enable) , CheckContrast (CheckContrast) , CheckFormsIssues (CheckFormsIssues) });
+group_enum ! (AuditsCommands { GetEncodedResponse (GetEncodedResponse) , Disable (Disable) , Enable (Enable) , CheckContrast (CheckContrast) , CheckFormsIssues (CheckFormsIssues) } + identifiable);

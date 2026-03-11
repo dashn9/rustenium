@@ -298,4 +298,4 @@ impl ScriptParsed {
         Self::IDENTIFIER
     }
 }
-group_enum ! (DebuggerEvents { Paused (Paused) , Resumed (Resumed) , ScriptFailedToParse (ScriptFailedToParse) , ScriptParsed (ScriptParsed) });
+group_enum ! (DebuggerEvents { Paused (Paused) , Resumed (Resumed) , ScriptFailedToParse (ScriptFailedToParse) , ScriptParsed (ScriptParsed) } + identifiable);

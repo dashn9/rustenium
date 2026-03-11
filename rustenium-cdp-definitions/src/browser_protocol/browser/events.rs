@@ -80,4 +80,4 @@ impl DownloadProgress {
         Self::IDENTIFIER
     }
 }
-group_enum ! (BrowserEvents { DownloadWillBegin (DownloadWillBegin) , DownloadProgress (DownloadProgress) });
+group_enum ! (BrowserEvents { DownloadWillBegin (DownloadWillBegin) , DownloadProgress (DownloadProgress) } + identifiable);

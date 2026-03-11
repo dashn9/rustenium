@@ -32,4 +32,4 @@ impl Enable {
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
 }
-group_enum ! (PerformanceTimelineCommands { Enable (Enable) });
+group_enum ! (PerformanceTimelineCommands { Enable (Enable) } + identifiable);

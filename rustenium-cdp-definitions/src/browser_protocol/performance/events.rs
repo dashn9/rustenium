@@ -27,4 +27,4 @@ impl Metrics {
         Self::IDENTIFIER
     }
 }
-group_enum ! (PerformanceEvents { Metrics (Metrics) });
+group_enum ! (PerformanceEvents { Metrics (Metrics) } + identifiable);

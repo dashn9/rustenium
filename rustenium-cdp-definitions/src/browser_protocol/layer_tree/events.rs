@@ -48,4 +48,4 @@ impl LayerTreeDidChange {
         Self::IDENTIFIER
     }
 }
-group_enum ! (LayerTreeEvents { LayerPainted (LayerPainted) , LayerTreeDidChange (LayerTreeDidChange) });
+group_enum ! (LayerTreeEvents { LayerPainted (LayerPainted) , LayerTreeDidChange (LayerTreeDidChange) } + identifiable);

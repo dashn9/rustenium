@@ -175,4 +175,4 @@ impl TargetInfoChanged {
         Self::IDENTIFIER
     }
 }
-group_enum ! (TargetEvents { AttachedToTarget (AttachedToTarget) , DetachedFromTarget (DetachedFromTarget) , ReceivedMessageFromTarget (ReceivedMessageFromTarget) , TargetCreated (TargetCreated) , TargetDestroyed (TargetDestroyed) , TargetCrashed (TargetCrashed) , TargetInfoChanged (TargetInfoChanged) });
+group_enum ! (TargetEvents { AttachedToTarget (AttachedToTarget) , DetachedFromTarget (DetachedFromTarget) , ReceivedMessageFromTarget (ReceivedMessageFromTarget) , TargetCreated (TargetCreated) , TargetDestroyed (TargetDestroyed) , TargetCrashed (TargetCrashed) , TargetInfoChanged (TargetInfoChanged) } + identifiable);

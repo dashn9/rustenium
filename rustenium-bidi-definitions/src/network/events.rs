@@ -126,4 +126,4 @@ impl ResponseStarted {
         Self::IDENTIFIER
     }
 }
-group_enum ! (NetworkEvent { AuthRequired (AuthRequired) , BeforeRequestSent (BeforeRequestSent) , FetchError (FetchError) , ResponseCompleted (ResponseCompleted) , ResponseStarted (ResponseStarted) });
+group_enum ! (NetworkEvent { AuthRequired (AuthRequired) , BeforeRequestSent (BeforeRequestSent) , FetchError (FetchError) , ResponseCompleted (ResponseCompleted) , ResponseStarted (ResponseStarted) } + identifiable);

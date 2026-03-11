@@ -99,4 +99,4 @@ impl CredentialAsserted {
         Self::IDENTIFIER
     }
 }
-group_enum ! (WebAuthnEvents { CredentialAdded (CredentialAdded) , CredentialDeleted (CredentialDeleted) , CredentialUpdated (CredentialUpdated) , CredentialAsserted (CredentialAsserted) });
+group_enum ! (WebAuthnEvents { CredentialAdded (CredentialAdded) , CredentialDeleted (CredentialDeleted) , CredentialUpdated (CredentialUpdated) , CredentialAsserted (CredentialAsserted) } + identifiable);

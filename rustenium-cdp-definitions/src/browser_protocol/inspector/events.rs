@@ -83,4 +83,4 @@ impl WorkerScriptLoaded {
         Self::IDENTIFIER
     }
 }
-group_enum ! (InspectorEvents { Detached (Detached) , TargetCrashed (TargetCrashed) , TargetReloadedAfterCrash (TargetReloadedAfterCrash) , WorkerScriptLoaded (WorkerScriptLoaded) });
+group_enum ! (InspectorEvents { Detached (Detached) , TargetCrashed (TargetCrashed) , TargetReloadedAfterCrash (TargetReloadedAfterCrash) , WorkerScriptLoaded (WorkerScriptLoaded) } + identifiable);

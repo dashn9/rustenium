@@ -287,4 +287,4 @@ impl ChangeAppUserSettings {
 impl crate::CommandResult for ChangeAppUserSettings {
     type Result = super::results::ChangeAppUserSettingsResult;
 }
-group_enum ! (PwaCommands { GetOsAppState (GetOsAppState) , Install (Install) , Uninstall (Uninstall) , Launch (Launch) , LaunchFilesInApp (LaunchFilesInApp) , OpenCurrentPageInApp (OpenCurrentPageInApp) , ChangeAppUserSettings (ChangeAppUserSettings) });
+group_enum ! (PwaCommands { GetOsAppState (GetOsAppState) , Install (Install) , Uninstall (Uninstall) , Launch (Launch) , LaunchFilesInApp (LaunchFilesInApp) , OpenCurrentPageInApp (OpenCurrentPageInApp) , ChangeAppUserSettings (ChangeAppUserSettings) } + identifiable);

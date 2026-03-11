@@ -317,4 +317,4 @@ impl SetStorageItems {
 impl crate::CommandResult for SetStorageItems {
     type Result = super::results::SetStorageItemsResult;
 }
-group_enum ! (ExtensionsCommands { TriggerAction (TriggerAction) , LoadUnpacked (LoadUnpacked) , GetExtensions (GetExtensions) , Uninstall (Uninstall) , GetStorageItems (GetStorageItems) , RemoveStorageItems (RemoveStorageItems) , ClearStorageItems (ClearStorageItems) , SetStorageItems (SetStorageItems) });
+group_enum ! (ExtensionsCommands { TriggerAction (TriggerAction) , LoadUnpacked (LoadUnpacked) , GetExtensions (GetExtensions) , Uninstall (Uninstall) , GetStorageItems (GetStorageItems) , RemoveStorageItems (RemoveStorageItems) , ClearStorageItems (ClearStorageItems) , SetStorageItems (SetStorageItems) } + identifiable);

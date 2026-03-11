@@ -84,4 +84,4 @@ impl GetMetrics {
 impl crate::CommandResult for GetMetrics {
     type Result = super::results::GetMetricsResult;
 }
-group_enum ! (PerformanceCommands { Disable (Disable) , Enable (Enable) , GetMetrics (GetMetrics) });
+group_enum ! (PerformanceCommands { Disable (Disable) , Enable (Enable) , GetMetrics (GetMetrics) } + identifiable);

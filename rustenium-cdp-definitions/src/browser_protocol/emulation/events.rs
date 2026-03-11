@@ -19,4 +19,4 @@ impl VirtualTimeBudgetExpired {
         Self::IDENTIFIER
     }
 }
-group_enum ! (EmulationEvents { VirtualTimeBudgetExpired (VirtualTimeBudgetExpired) });
+group_enum ! (EmulationEvents { VirtualTimeBudgetExpired (VirtualTimeBudgetExpired) } + identifiable);

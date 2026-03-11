@@ -453,4 +453,4 @@ impl RequestDatabaseNames {
 impl crate::CommandResult for RequestDatabaseNames {
     type Result = super::results::RequestDatabaseNamesResult;
 }
-group_enum ! (IndexedDbCommands { ClearObjectStore (ClearObjectStore) , DeleteDatabase (DeleteDatabase) , DeleteObjectStoreEntries (DeleteObjectStoreEntries) , Disable (Disable) , Enable (Enable) , RequestData (RequestData) , GetMetadata (GetMetadata) , RequestDatabase (RequestDatabase) , RequestDatabaseNames (RequestDatabaseNames) });
+group_enum ! (IndexedDbCommands { ClearObjectStore (ClearObjectStore) , DeleteDatabase (DeleteDatabase) , DeleteObjectStoreEntries (DeleteObjectStoreEntries) , Disable (Disable) , Enable (Enable) , RequestData (RequestData) , GetMetadata (GetMetadata) , RequestDatabase (RequestDatabase) , RequestDatabaseNames (RequestDatabaseNames) } + identifiable);

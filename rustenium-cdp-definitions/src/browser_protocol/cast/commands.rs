@@ -202,4 +202,4 @@ impl StopCasting {
 impl crate::CommandResult for StopCasting {
     type Result = super::results::StopCastingResult;
 }
-group_enum ! (CastCommands { Enable (Enable) , Disable (Disable) , SetSinkToUse (SetSinkToUse) , StartDesktopMirroring (StartDesktopMirroring) , StartTabMirroring (StartTabMirroring) , StopCasting (StopCasting) });
+group_enum ! (CastCommands { Enable (Enable) , Disable (Disable) , SetSinkToUse (SetSinkToUse) , StartDesktopMirroring (StartDesktopMirroring) , StartTabMirroring (StartTabMirroring) , StopCasting (StopCasting) } + identifiable);

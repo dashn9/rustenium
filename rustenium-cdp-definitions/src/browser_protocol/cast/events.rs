@@ -46,4 +46,4 @@ impl IssueUpdated {
         Self::IDENTIFIER
     }
 }
-group_enum ! (CastEvents { SinksUpdated (SinksUpdated) , IssueUpdated (IssueUpdated) });
+group_enum ! (CastEvents { SinksUpdated (SinksUpdated) , IssueUpdated (IssueUpdated) } + identifiable);

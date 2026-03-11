@@ -47,4 +47,4 @@ impl BackgroundServiceEventReceived {
         Self::IDENTIFIER
     }
 }
-group_enum ! (BackgroundServiceEvents { RecordingStateChanged (RecordingStateChanged) , BackgroundServiceEventReceived (BackgroundServiceEventReceived) });
+group_enum ! (BackgroundServiceEvents { RecordingStateChanged (RecordingStateChanged) , BackgroundServiceEventReceived (BackgroundServiceEventReceived) } + identifiable);

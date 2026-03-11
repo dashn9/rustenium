@@ -137,4 +137,4 @@ impl ClearEvents {
 impl crate::CommandResult for ClearEvents {
     type Result = super::results::ClearEventsResult;
 }
-group_enum ! (BackgroundServiceCommands { StartObserving (StartObserving) , StopObserving (StopObserving) , SetRecording (SetRecording) , ClearEvents (ClearEvents) });
+group_enum ! (BackgroundServiceCommands { StartObserving (StartObserving) , StopObserving (StopObserving) , SetRecording (SetRecording) , ClearEvents (ClearEvents) } + identifiable);

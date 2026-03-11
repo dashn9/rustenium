@@ -98,4 +98,4 @@ impl DeleteCookies {
 impl crate::CommandResult for DeleteCookies {
     type Result = super::results::DeleteCookiesResult;
 }
-group_enum ! (StorageCommand { GetCookies (GetCookies) , SetCookie (SetCookie) , DeleteCookies (DeleteCookies) });
+group_enum ! (StorageCommand { GetCookies (GetCookies) , SetCookie (SetCookie) , DeleteCookies (DeleteCookies) } + identifiable);

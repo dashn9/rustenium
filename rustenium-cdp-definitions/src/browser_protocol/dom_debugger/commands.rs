@@ -324,4 +324,4 @@ impl SetXhrBreakpoint {
 impl crate::CommandResult for SetXhrBreakpoint {
     type Result = super::results::SetXhrBreakpointResult;
 }
-group_enum ! (DomDebuggerCommands { GetEventListeners (GetEventListeners) , RemoveDomBreakpoint (RemoveDomBreakpoint) , RemoveEventListenerBreakpoint (RemoveEventListenerBreakpoint) , RemoveXhrBreakpoint (RemoveXhrBreakpoint) , SetBreakOnCspViolation (SetBreakOnCspViolation) , SetDomBreakpoint (SetDomBreakpoint) , SetEventListenerBreakpoint (SetEventListenerBreakpoint) , SetXhrBreakpoint (SetXhrBreakpoint) });
+group_enum ! (DomDebuggerCommands { GetEventListeners (GetEventListeners) , RemoveDomBreakpoint (RemoveDomBreakpoint) , RemoveEventListenerBreakpoint (RemoveEventListenerBreakpoint) , RemoveXhrBreakpoint (RemoveXhrBreakpoint) , SetBreakOnCspViolation (SetBreakOnCspViolation) , SetDomBreakpoint (SetDomBreakpoint) , SetEventListenerBreakpoint (SetEventListenerBreakpoint) , SetXhrBreakpoint (SetXhrBreakpoint) } + identifiable);

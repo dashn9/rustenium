@@ -45,4 +45,4 @@ impl Enable {
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
 }
-group_enum ! (InspectorCommands { Disable (Disable) , Enable (Enable) });
+group_enum ! (InspectorCommands { Disable (Disable) , Enable (Enable) } + identifiable);

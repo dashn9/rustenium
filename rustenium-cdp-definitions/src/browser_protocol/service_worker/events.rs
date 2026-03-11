@@ -64,4 +64,4 @@ impl WorkerVersionUpdated {
         Self::IDENTIFIER
     }
 }
-group_enum ! (ServiceWorkerEvents { WorkerErrorReported (WorkerErrorReported) , WorkerRegistrationUpdated (WorkerRegistrationUpdated) , WorkerVersionUpdated (WorkerVersionUpdated) });
+group_enum ! (ServiceWorkerEvents { WorkerErrorReported (WorkerErrorReported) , WorkerRegistrationUpdated (WorkerRegistrationUpdated) , WorkerVersionUpdated (WorkerVersionUpdated) } + identifiable);

@@ -78,4 +78,4 @@ impl GetRealtimeData {
 impl crate::CommandResult for GetRealtimeData {
     type Result = super::results::GetRealtimeDataResult;
 }
-group_enum ! (WebAudioCommands { Enable (Enable) , Disable (Disable) , GetRealtimeData (GetRealtimeData) });
+group_enum ! (WebAudioCommands { Enable (Enable) , Disable (Disable) , GetRealtimeData (GetRealtimeData) } + identifiable);

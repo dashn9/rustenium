@@ -63,4 +63,4 @@ impl Unbind {
 impl crate::CommandResult for Unbind {
     type Result = super::results::UnbindResult;
 }
-group_enum ! (TetheringCommands { Bind (Bind) , Unbind (Unbind) });
+group_enum ! (TetheringCommands { Bind (Bind) , Unbind (Unbind) } + identifiable);

@@ -288,4 +288,4 @@ impl RemovePreloadScript {
 impl crate::CommandResult for RemovePreloadScript {
     type Result = super::results::RemovePreloadScriptResult;
 }
-group_enum ! (ScriptCommand { AddPreloadScript (AddPreloadScript) , Disown (Disown) , CallFunction (CallFunction) , Evaluate (Evaluate) , GetRealms (GetRealms) , RemovePreloadScript (RemovePreloadScript) });
+group_enum ! (ScriptCommand { AddPreloadScript (AddPreloadScript) , Disown (Disown) , CallFunction (CallFunction) , Evaluate (Evaluate) , GetRealms (GetRealms) , RemovePreloadScript (RemovePreloadScript) } + identifiable);

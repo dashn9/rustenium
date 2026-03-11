@@ -138,4 +138,4 @@ impl ComputedStyleUpdated {
         Self::IDENTIFIER
     }
 }
-group_enum ! (CssEvents { FontsUpdated (FontsUpdated) , MediaQueryResultChanged (MediaQueryResultChanged) , StyleSheetAdded (StyleSheetAdded) , StyleSheetChanged (StyleSheetChanged) , StyleSheetRemoved (StyleSheetRemoved) , ComputedStyleUpdated (ComputedStyleUpdated) });
+group_enum ! (CssEvents { FontsUpdated (FontsUpdated) , MediaQueryResultChanged (MediaQueryResultChanged) , StyleSheetAdded (StyleSheetAdded) , StyleSheetChanged (StyleSheetChanged) , StyleSheetRemoved (StyleSheetRemoved) , ComputedStyleUpdated (ComputedStyleUpdated) } + identifiable);

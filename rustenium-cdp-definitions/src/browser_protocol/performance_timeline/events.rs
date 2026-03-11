@@ -22,4 +22,4 @@ impl TimelineEventAdded {
         Self::IDENTIFIER
     }
 }
-group_enum ! (PerformanceTimelineEvents { TimelineEventAdded (TimelineEventAdded) });
+group_enum ! (PerformanceTimelineEvents { TimelineEventAdded (TimelineEventAdded) } + identifiable);

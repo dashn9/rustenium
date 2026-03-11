@@ -25,4 +25,4 @@ impl DeviceRequestPrompted {
         Self::IDENTIFIER
     }
 }
-group_enum ! (DeviceAccessEvents { DeviceRequestPrompted (DeviceRequestPrompted) });
+group_enum ! (DeviceAccessEvents { DeviceRequestPrompted (DeviceRequestPrompted) } + identifiable);

@@ -586,4 +586,4 @@ impl SetExtraHeaders {
 impl crate::CommandResult for SetExtraHeaders {
     type Result = super::results::SetExtraHeadersResult;
 }
-group_enum ! (NetworkCommand { AddDataCollector (AddDataCollector) , AddIntercept (AddIntercept) , ContinueRequest (ContinueRequest) , ContinueResponse (ContinueResponse) , ContinueWithAuth (ContinueWithAuth) , DisownData (DisownData) , FailRequest (FailRequest) , GetData (GetData) , ProvideResponse (ProvideResponse) , RemoveDataCollector (RemoveDataCollector) , RemoveIntercept (RemoveIntercept) , SetCacheBehavior (SetCacheBehavior) , SetExtraHeaders (SetExtraHeaders) });
+group_enum ! (NetworkCommand { AddDataCollector (AddDataCollector) , AddIntercept (AddIntercept) , ContinueRequest (ContinueRequest) , ContinueResponse (ContinueResponse) , ContinueWithAuth (ContinueWithAuth) , DisownData (DisownData) , FailRequest (FailRequest) , GetData (GetData) , ProvideResponse (ProvideResponse) , RemoveDataCollector (RemoveDataCollector) , RemoveIntercept (RemoveIntercept) , SetCacheBehavior (SetCacheBehavior) , SetExtraHeaders (SetExtraHeaders) } + identifiable);

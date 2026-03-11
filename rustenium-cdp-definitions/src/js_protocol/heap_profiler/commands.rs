@@ -349,4 +349,4 @@ impl TakeHeapSnapshot {
 impl crate::CommandResult for TakeHeapSnapshot {
     type Result = super::results::TakeHeapSnapshotResult;
 }
-group_enum ! (HeapProfilerCommands { AddInspectedHeapObject (AddInspectedHeapObject) , CollectGarbage (CollectGarbage) , Disable (Disable) , Enable (Enable) , GetHeapObjectId (GetHeapObjectId) , GetObjectByHeapObjectId (GetObjectByHeapObjectId) , GetSamplingProfile (GetSamplingProfile) , StartSampling (StartSampling) , StartTrackingHeapObjects (StartTrackingHeapObjects) , StopSampling (StopSampling) , StopTrackingHeapObjects (StopTrackingHeapObjects) , TakeHeapSnapshot (TakeHeapSnapshot) });
+group_enum ! (HeapProfilerCommands { AddInspectedHeapObject (AddInspectedHeapObject) , CollectGarbage (CollectGarbage) , Disable (Disable) , Enable (Enable) , GetHeapObjectId (GetHeapObjectId) , GetObjectByHeapObjectId (GetObjectByHeapObjectId) , GetSamplingProfile (GetSamplingProfile) , StartSampling (StartSampling) , StartTrackingHeapObjects (StartTrackingHeapObjects) , StopSampling (StopSampling) , StopTrackingHeapObjects (StopTrackingHeapObjects) , TakeHeapSnapshot (TakeHeapSnapshot) } + identifiable);

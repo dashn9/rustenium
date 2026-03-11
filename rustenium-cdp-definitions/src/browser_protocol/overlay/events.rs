@@ -138,4 +138,4 @@ impl InspectModeCanceled {
         Self::IDENTIFIER
     }
 }
-group_enum ! (OverlayEvents { InspectNodeRequested (InspectNodeRequested) , NodeHighlightRequested (NodeHighlightRequested) , ScreenshotRequested (ScreenshotRequested) , InspectPanelShowRequested (InspectPanelShowRequested) , InspectedElementWindowRestored (InspectedElementWindowRestored) , InspectModeCanceled (InspectModeCanceled) });
+group_enum ! (OverlayEvents { InspectNodeRequested (InspectNodeRequested) , NodeHighlightRequested (NodeHighlightRequested) , ScreenshotRequested (ScreenshotRequested) , InspectPanelShowRequested (InspectPanelShowRequested) , InspectedElementWindowRestored (InspectedElementWindowRestored) , InspectModeCanceled (InspectModeCanceled) } + identifiable);
