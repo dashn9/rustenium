@@ -32,5 +32,8 @@ pub struct ExtensionInfo {
 }
 impl ExtensionInfo {
     pub const IDENTIFIER: &'static str = "Extensions.ExtensionInfo";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (ExtensionsTypes { StorageArea (StorageArea) , ExtensionInfo (ExtensionInfo) });

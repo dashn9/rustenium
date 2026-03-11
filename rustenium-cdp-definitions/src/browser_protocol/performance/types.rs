@@ -19,5 +19,8 @@ impl Metric {
 }
 impl Metric {
     pub const IDENTIFIER: &'static str = "Performance.Metric";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (PerformanceTypes { Metric (Metric) });

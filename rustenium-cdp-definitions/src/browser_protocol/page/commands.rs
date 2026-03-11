@@ -48,6 +48,9 @@ pub struct AddScriptToEvaluateOnNewDocument {
 }
 impl AddScriptToEvaluateOnNewDocument {
     pub const IDENTIFIER: &'static str = "Page.addScriptToEvaluateOnNewDocument";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for AddScriptToEvaluateOnNewDocument {
     type Result = super::results::AddScriptToEvaluateOnNewDocumentResult;
@@ -68,6 +71,9 @@ pub struct BringToFront {
 }
 impl BringToFront {
     pub const IDENTIFIER: &'static str = "Page.bringToFront";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for BringToFront {
     type Result = super::results::BringToFrontResult;
@@ -129,6 +135,9 @@ pub struct CaptureScreenshot {
 }
 impl CaptureScreenshot {
     pub const IDENTIFIER: &'static str = "Page.captureScreenshot";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for CaptureScreenshot {
     type Result = super::results::CaptureScreenshotResult;
@@ -161,6 +170,9 @@ pub struct CaptureSnapshot {
 }
 impl CaptureSnapshot {
     pub const IDENTIFIER: &'static str = "Page.captureSnapshot";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for CaptureSnapshot {
     type Result = super::results::CaptureSnapshotResult;
@@ -204,6 +216,9 @@ pub struct CreateIsolatedWorld {
 }
 impl CreateIsolatedWorld {
     pub const IDENTIFIER: &'static str = "Page.createIsolatedWorld";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for CreateIsolatedWorld {
     type Result = super::results::CreateIsolatedWorldResult;
@@ -224,6 +239,9 @@ pub struct Disable {
 }
 impl Disable {
     pub const IDENTIFIER: &'static str = "Page.disable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -250,6 +268,9 @@ pub struct Enable {
 }
 impl Enable {
     pub const IDENTIFIER: &'static str = "Page.enable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -275,6 +296,9 @@ pub struct GetAppManifest {
 }
 impl GetAppManifest {
     pub const IDENTIFIER: &'static str = "Page.getAppManifest";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetAppManifest {
     type Result = super::results::GetAppManifestResult;
@@ -293,6 +317,9 @@ pub struct GetInstallabilityErrors {
 }
 impl GetInstallabilityErrors {
     pub const IDENTIFIER: &'static str = "Page.getInstallabilityErrors";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetInstallabilityErrors {
     type Result = super::results::GetInstallabilityErrorsResult;
@@ -313,6 +340,9 @@ pub struct GetAppId {
 }
 impl GetAppId {
     pub const IDENTIFIER: &'static str = "Page.getAppId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetAppId {
     type Result = super::results::GetAppIdResult;
@@ -341,6 +371,9 @@ pub struct GetAdScriptAncestry {
 }
 impl GetAdScriptAncestry {
     pub const IDENTIFIER: &'static str = "Page.getAdScriptAncestry";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetAdScriptAncestry {
     type Result = super::results::GetAdScriptAncestryResult;
@@ -361,6 +394,9 @@ pub struct GetFrameTree {
 }
 impl GetFrameTree {
     pub const IDENTIFIER: &'static str = "Page.getFrameTree";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetFrameTree {
     type Result = super::results::GetFrameTreeResult;
@@ -381,6 +417,9 @@ pub struct GetLayoutMetrics {
 }
 impl GetLayoutMetrics {
     pub const IDENTIFIER: &'static str = "Page.getLayoutMetrics";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetLayoutMetrics {
     type Result = super::results::GetLayoutMetricsResult;
@@ -401,6 +440,9 @@ pub struct GetNavigationHistory {
 }
 impl GetNavigationHistory {
     pub const IDENTIFIER: &'static str = "Page.getNavigationHistory";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetNavigationHistory {
     type Result = super::results::GetNavigationHistoryResult;
@@ -421,6 +463,9 @@ pub struct ResetNavigationHistory {
 }
 impl ResetNavigationHistory {
     pub const IDENTIFIER: &'static str = "Page.resetNavigationHistory";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ResetNavigationHistory {
     type Result = super::results::ResetNavigationHistoryResult;
@@ -456,6 +501,9 @@ pub struct GetResourceContent {
 }
 impl GetResourceContent {
     pub const IDENTIFIER: &'static str = "Page.getResourceContent";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetResourceContent {
     type Result = super::results::GetResourceContentResult;
@@ -476,6 +524,9 @@ pub struct GetResourceTree {
 }
 impl GetResourceTree {
     pub const IDENTIFIER: &'static str = "Page.getResourceTree";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetResourceTree {
     type Result = super::results::GetResourceTreeResult;
@@ -513,6 +564,9 @@ pub struct HandleJavaScriptDialog {
 }
 impl HandleJavaScriptDialog {
     pub const IDENTIFIER: &'static str = "Page.handleJavaScriptDialog";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for HandleJavaScriptDialog {
     type Result = super::results::HandleJavaScriptDialogResult;
@@ -573,6 +627,9 @@ pub struct Navigate {
 }
 impl Navigate {
     pub const IDENTIFIER: &'static str = "Page.navigate";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Navigate {
     type Result = super::results::NavigateResult;
@@ -604,6 +661,9 @@ pub struct NavigateToHistoryEntry {
 }
 impl NavigateToHistoryEntry {
     pub const IDENTIFIER: &'static str = "Page.navigateToHistoryEntry";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for NavigateToHistoryEntry {
     type Result = super::results::NavigateToHistoryEntryResult;
@@ -718,6 +778,9 @@ pub struct PrintToPdf {
 }
 impl PrintToPdf {
     pub const IDENTIFIER: &'static str = "Page.printToPDF";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for PrintToPdf {
     type Result = super::results::PrintToPdfResult;
@@ -754,6 +817,9 @@ pub struct Reload {
 }
 impl Reload {
     pub const IDENTIFIER: &'static str = "Page.reload";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Reload {
     type Result = super::results::ReloadResult;
@@ -784,6 +850,9 @@ pub struct RemoveScriptToEvaluateOnNewDocument {
 }
 impl RemoveScriptToEvaluateOnNewDocument {
     pub const IDENTIFIER: &'static str = "Page.removeScriptToEvaluateOnNewDocument";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RemoveScriptToEvaluateOnNewDocument {
     type Result = super::results::RemoveScriptToEvaluateOnNewDocumentResult;
@@ -815,6 +884,9 @@ pub struct ScreencastFrameAck {
 }
 impl ScreencastFrameAck {
     pub const IDENTIFIER: &'static str = "Page.screencastFrameAck";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ScreencastFrameAck {
     type Result = super::results::ScreencastFrameAckResult;
@@ -870,6 +942,9 @@ pub struct SearchInResource {
 }
 impl SearchInResource {
     pub const IDENTIFIER: &'static str = "Page.searchInResource";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SearchInResource {
     type Result = super::results::SearchInResourceResult;
@@ -901,6 +976,9 @@ pub struct SetAdBlockingEnabled {
 }
 impl SetAdBlockingEnabled {
     pub const IDENTIFIER: &'static str = "Page.setAdBlockingEnabled";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetAdBlockingEnabled {
     type Result = super::results::SetAdBlockingEnabledResult;
@@ -932,6 +1010,9 @@ pub struct SetBypassCsp {
 }
 impl SetBypassCsp {
     pub const IDENTIFIER: &'static str = "Page.setBypassCSP";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetBypassCsp {
     type Result = super::results::SetBypassCspResult;
@@ -962,6 +1043,9 @@ pub struct GetPermissionsPolicyState {
 }
 impl GetPermissionsPolicyState {
     pub const IDENTIFIER: &'static str = "Page.getPermissionsPolicyState";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetPermissionsPolicyState {
     type Result = super::results::GetPermissionsPolicyStateResult;
@@ -992,6 +1076,9 @@ pub struct GetOriginTrials {
 }
 impl GetOriginTrials {
     pub const IDENTIFIER: &'static str = "Page.getOriginTrials";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetOriginTrials {
     type Result = super::results::GetOriginTrialsResult;
@@ -1029,6 +1116,9 @@ pub struct SetFontFamilies {
 }
 impl SetFontFamilies {
     pub const IDENTIFIER: &'static str = "Page.setFontFamilies";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetFontFamilies {
     type Result = super::results::SetFontFamiliesResult;
@@ -1060,6 +1150,9 @@ pub struct SetFontSizes {
 }
 impl SetFontSizes {
     pub const IDENTIFIER: &'static str = "Page.setFontSizes";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetFontSizes {
     type Result = super::results::SetFontSizesResult;
@@ -1095,6 +1188,9 @@ pub struct SetDocumentContent {
 }
 impl SetDocumentContent {
     pub const IDENTIFIER: &'static str = "Page.setDocumentContent";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetDocumentContent {
     type Result = super::results::SetDocumentContentResult;
@@ -1126,6 +1222,9 @@ pub struct SetLifecycleEventsEnabled {
 }
 impl SetLifecycleEventsEnabled {
     pub const IDENTIFIER: &'static str = "Page.setLifecycleEventsEnabled";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetLifecycleEventsEnabled {
     type Result = super::results::SetLifecycleEventsEnabledResult;
@@ -1180,6 +1279,9 @@ pub struct StartScreencast {
 }
 impl StartScreencast {
     pub const IDENTIFIER: &'static str = "Page.startScreencast";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for StartScreencast {
     type Result = super::results::StartScreencastResult;
@@ -1200,6 +1302,9 @@ pub struct StopLoading {
 }
 impl StopLoading {
     pub const IDENTIFIER: &'static str = "Page.stopLoading";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for StopLoading {
     type Result = super::results::StopLoadingResult;
@@ -1220,6 +1325,9 @@ pub struct Crash {
 }
 impl Crash {
     pub const IDENTIFIER: &'static str = "Page.crash";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Crash {
     type Result = super::results::CrashResult;
@@ -1240,6 +1348,9 @@ pub struct Close {
 }
 impl Close {
     pub const IDENTIFIER: &'static str = "Page.close";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Close {
     type Result = super::results::CloseResult;
@@ -1279,6 +1390,9 @@ pub struct SetWebLifecycleState {
 }
 impl SetWebLifecycleState {
     pub const IDENTIFIER: &'static str = "Page.setWebLifecycleState";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetWebLifecycleState {
     type Result = super::results::SetWebLifecycleStateResult;
@@ -1299,6 +1413,9 @@ pub struct StopScreencast {
 }
 impl StopScreencast {
     pub const IDENTIFIER: &'static str = "Page.stopScreencast";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for StopScreencast {
     type Result = super::results::StopScreencastResult;
@@ -1328,6 +1445,9 @@ pub struct ProduceCompilationCache {
 }
 impl ProduceCompilationCache {
     pub const IDENTIFIER: &'static str = "Page.produceCompilationCache";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ProduceCompilationCache {
     type Result = super::results::ProduceCompilationCacheResult;
@@ -1362,6 +1482,9 @@ pub struct AddCompilationCache {
 }
 impl AddCompilationCache {
     pub const IDENTIFIER: &'static str = "Page.addCompilationCache";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for AddCompilationCache {
     type Result = super::results::AddCompilationCacheResult;
@@ -1382,6 +1505,9 @@ pub struct ClearCompilationCache {
 }
 impl ClearCompilationCache {
     pub const IDENTIFIER: &'static str = "Page.clearCompilationCache";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ClearCompilationCache {
     type Result = super::results::ClearCompilationCacheResult;
@@ -1423,6 +1549,9 @@ pub struct SetSpcTransactionMode {
 }
 impl SetSpcTransactionMode {
     pub const IDENTIFIER: &'static str = "Page.setSPCTransactionMode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetSpcTransactionMode {
     type Result = super::results::SetSpcTransactionModeResult;
@@ -1460,6 +1589,9 @@ pub struct SetRphRegistrationMode {
 }
 impl SetRphRegistrationMode {
     pub const IDENTIFIER: &'static str = "Page.setRPHRegistrationMode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetRphRegistrationMode {
     type Result = super::results::SetRphRegistrationModeResult;
@@ -1502,6 +1634,9 @@ pub struct GenerateTestReport {
 }
 impl GenerateTestReport {
     pub const IDENTIFIER: &'static str = "Page.generateTestReport";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GenerateTestReport {
     type Result = super::results::GenerateTestReportResult;
@@ -1522,6 +1657,9 @@ pub struct WaitForDebugger {
 }
 impl WaitForDebugger {
     pub const IDENTIFIER: &'static str = "Page.waitForDebugger";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for WaitForDebugger {
     type Result = super::results::WaitForDebuggerResult;
@@ -1558,6 +1696,9 @@ pub struct SetInterceptFileChooserDialog {
 }
 impl SetInterceptFileChooserDialog {
     pub const IDENTIFIER: &'static str = "Page.setInterceptFileChooserDialog";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetInterceptFileChooserDialog {
     type Result = super::results::SetInterceptFileChooserDialogResult;
@@ -1588,6 +1729,9 @@ pub struct SetPrerenderingAllowed {
 }
 impl SetPrerenderingAllowed {
     pub const IDENTIFIER: &'static str = "Page.setPrerenderingAllowed";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetPrerenderingAllowed {
     type Result = super::results::SetPrerenderingAllowedResult;
@@ -1614,6 +1758,9 @@ pub struct GetAnnotatedPageContent {
 }
 impl GetAnnotatedPageContent {
     pub const IDENTIFIER: &'static str = "Page.getAnnotatedPageContent";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetAnnotatedPageContent {
     type Result = super::results::GetAnnotatedPageContentResult;

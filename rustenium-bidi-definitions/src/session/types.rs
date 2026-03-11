@@ -13,6 +13,9 @@ pub struct CapabilitiesRequest {
 impl CapabilitiesRequest {
     pub const IDENTIFIER: &'static str = "session.CapabilitiesRequest";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CapabilityRequest {
@@ -62,6 +65,9 @@ impl CapabilityRequest {
 impl CapabilityRequest {
     pub const IDENTIFIER: &'static str = "session.CapabilityRequest";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ProxyConfiguration {
@@ -84,6 +90,9 @@ pub struct ProxyConfiguration {
 impl ProxyConfiguration {
     pub const IDENTIFIER: &'static str = "session.ProxyConfiguration";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AutodetectProxyConfiguration {
@@ -112,6 +121,9 @@ impl AutodetectProxyConfiguration {
 impl AutodetectProxyConfiguration {
     pub const IDENTIFIER: &'static str = "session.AutodetectProxyConfiguration";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DirectProxyConfiguration {
@@ -140,6 +152,9 @@ impl DirectProxyConfiguration {
 impl DirectProxyConfiguration {
     pub const IDENTIFIER: &'static str = "session.DirectProxyConfiguration";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ManualProxyConfiguration {
@@ -183,6 +198,9 @@ impl ManualProxyConfiguration {
 impl ManualProxyConfiguration {
     pub const IDENTIFIER: &'static str = "session.ManualProxyConfiguration";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SocksProxyConfiguration {
@@ -202,6 +220,9 @@ impl SocksProxyConfiguration {
 impl SocksProxyConfiguration {
     pub const IDENTIFIER: &'static str = "session.SocksProxyConfiguration";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PacProxyConfiguration {
@@ -234,6 +255,9 @@ impl PacProxyConfiguration {
 impl PacProxyConfiguration {
     pub const IDENTIFIER: &'static str = "session.PacProxyConfiguration";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SystemProxyConfiguration {
@@ -262,6 +286,9 @@ impl SystemProxyConfiguration {
 impl SystemProxyConfiguration {
     pub const IDENTIFIER: &'static str = "session.SystemProxyConfiguration";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct UserPromptHandler {
@@ -293,6 +320,9 @@ pub struct UserPromptHandler {
 impl UserPromptHandler {
     pub const IDENTIFIER: &'static str = "session.UserPromptHandler";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum UserPromptHandlerType {
@@ -331,6 +361,9 @@ impl From<String> for Subscription {
 impl Subscription {
     pub const IDENTIFIER: &'static str = "session.Subscription";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UnsubscribeByIdRequest {
@@ -346,6 +379,9 @@ impl UnsubscribeByIdRequest {
 impl UnsubscribeByIdRequest {
     pub const IDENTIFIER: &'static str = "session.UnsubscribeByIDRequest";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UnsubscribeByAttributesRequest {
@@ -361,6 +397,9 @@ impl UnsubscribeByAttributesRequest {
 impl UnsubscribeByAttributesRequest {
     pub const IDENTIFIER: &'static str = "session.UnsubscribeByAttributesRequest";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]

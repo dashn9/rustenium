@@ -1,6 +1,6 @@
 use crate::error::{PostDataError, SessionSendError};
 use crate::transport::ConnectionTransport;
-use crate::{CommandResponseState, Session};
+use crate::{BidiSession, CommandResponseState};
 use form_urlencoded;
 use rustenium_bidi_definitions::Command;
 use rustenium_bidi_definitions::network::command_builders::{
@@ -30,7 +30,7 @@ use tokio::sync::Mutex;
 /// Represents a network request that can be intercepted
 pub struct NetworkRequest<T: ConnectionTransport> {
     pub base: BaseParameters,
-    session: Arc<Mutex<Session<T>>>,
+    session: Arc<Mutex<BidiSession<T>>>,
 }
 
 impl<T: ConnectionTransport> std::fmt::Debug for NetworkRequest<T> {
@@ -43,14 +43,14 @@ impl<T: ConnectionTransport> std::fmt::Debug for NetworkRequest<T> {
 }
 
 impl<T: ConnectionTransport> NetworkRequest<T> {
-    pub fn new(params: BeforeRequestSentParams, session: Arc<Mutex<Session<T>>>) -> Self {
+    pub fn new(params: BeforeRequestSentParams, session: Arc<Mutex<BidiSession<T>>>) -> Self {
         NetworkRequest {
             base: params.base_parameters,
             session,
         }
     }
 
-    pub fn from_auth_required(params: AuthRequiredParams, session: Arc<Mutex<Session<T>>>) -> Self {
+    pub fn from_auth_required(params: AuthRequiredParams, session: Arc<Mutex<BidiSession<T>>>) -> Self {
         NetworkRequest {
             base: params.base_parameters,
             session,

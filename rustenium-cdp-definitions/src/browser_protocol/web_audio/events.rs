@@ -18,6 +18,9 @@ pub struct ContextCreated {
 }
 impl ContextCreated {
     pub const IDENTIFIER: &'static str = "WebAudio.contextCreated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Notifies that an existing BaseAudioContext will be destroyed.\n[contextWillBeDestroyed](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-contextWillBeDestroyed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -38,6 +41,9 @@ pub struct ContextWillBeDestroyed {
 }
 impl ContextWillBeDestroyed {
     pub const IDENTIFIER: &'static str = "WebAudio.contextWillBeDestroyed";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Notifies that existing BaseAudioContext has changed some properties (id stays the same)..\n[contextChanged](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-contextChanged)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -58,6 +64,9 @@ pub struct ContextChanged {
 }
 impl ContextChanged {
     pub const IDENTIFIER: &'static str = "WebAudio.contextChanged";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Notifies that the construction of an AudioListener has finished.\n[audioListenerCreated](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-audioListenerCreated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -78,6 +87,9 @@ pub struct AudioListenerCreated {
 }
 impl AudioListenerCreated {
     pub const IDENTIFIER: &'static str = "WebAudio.audioListenerCreated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Notifies that a new AudioListener has been created.\n[audioListenerWillBeDestroyed](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-audioListenerWillBeDestroyed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -100,6 +112,9 @@ pub struct AudioListenerWillBeDestroyed {
 }
 impl AudioListenerWillBeDestroyed {
     pub const IDENTIFIER: &'static str = "WebAudio.audioListenerWillBeDestroyed";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Notifies that a new AudioNode has been created.\n[audioNodeCreated](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-audioNodeCreated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -120,6 +135,9 @@ pub struct AudioNodeCreated {
 }
 impl AudioNodeCreated {
     pub const IDENTIFIER: &'static str = "WebAudio.audioNodeCreated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Notifies that an existing AudioNode has been destroyed.\n[audioNodeWillBeDestroyed](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-audioNodeWillBeDestroyed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -142,6 +160,9 @@ pub struct AudioNodeWillBeDestroyed {
 }
 impl AudioNodeWillBeDestroyed {
     pub const IDENTIFIER: &'static str = "WebAudio.audioNodeWillBeDestroyed";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Notifies that a new AudioParam has been created.\n[audioParamCreated](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-audioParamCreated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -162,6 +183,9 @@ pub struct AudioParamCreated {
 }
 impl AudioParamCreated {
     pub const IDENTIFIER: &'static str = "WebAudio.audioParamCreated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Notifies that an existing AudioParam has been destroyed.\n[audioParamWillBeDestroyed](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-audioParamWillBeDestroyed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -186,6 +210,9 @@ pub struct AudioParamWillBeDestroyed {
 }
 impl AudioParamWillBeDestroyed {
     pub const IDENTIFIER: &'static str = "WebAudio.audioParamWillBeDestroyed";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Notifies that two AudioNodes are connected.\n[nodesConnected](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-nodesConnected)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -218,6 +245,9 @@ pub struct NodesConnected {
 }
 impl NodesConnected {
     pub const IDENTIFIER: &'static str = "WebAudio.nodesConnected";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Notifies that AudioNodes are disconnected. The destination can be null, and it means all the outgoing connections from the source are disconnected.\n[nodesDisconnected](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-nodesDisconnected)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -250,6 +280,9 @@ pub struct NodesDisconnected {
 }
 impl NodesDisconnected {
     pub const IDENTIFIER: &'static str = "WebAudio.nodesDisconnected";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Notifies that an AudioNode is connected to an AudioParam.\n[nodeParamConnected](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-nodeParamConnected)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -278,6 +311,9 @@ pub struct NodeParamConnected {
 }
 impl NodeParamConnected {
     pub const IDENTIFIER: &'static str = "WebAudio.nodeParamConnected";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Notifies that an AudioNode is disconnected to an AudioParam.\n[nodeParamDisconnected](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#event-nodeParamDisconnected)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -306,5 +342,8 @@ pub struct NodeParamDisconnected {
 }
 impl NodeParamDisconnected {
     pub const IDENTIFIER: &'static str = "WebAudio.nodeParamDisconnected";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (WebAudioEvents { ContextCreated (ContextCreated) , ContextWillBeDestroyed (ContextWillBeDestroyed) , ContextChanged (ContextChanged) , AudioListenerCreated (AudioListenerCreated) , AudioListenerWillBeDestroyed (AudioListenerWillBeDestroyed) , AudioNodeCreated (AudioNodeCreated) , AudioNodeWillBeDestroyed (AudioNodeWillBeDestroyed) , AudioParamCreated (AudioParamCreated) , AudioParamWillBeDestroyed (AudioParamWillBeDestroyed) , NodesConnected (NodesConnected) , NodesDisconnected (NodesDisconnected) , NodeParamConnected (NodeParamConnected) , NodeParamDisconnected (NodeParamDisconnected) });

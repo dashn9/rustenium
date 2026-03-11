@@ -48,6 +48,9 @@ pub struct ClearObjectStore {
 }
 impl ClearObjectStore {
     pub const IDENTIFIER: &'static str = "IndexedDB.clearObjectStore";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ClearObjectStore {
     type Result = super::results::ClearObjectStoreResult;
@@ -102,6 +105,9 @@ pub struct DeleteDatabase {
 }
 impl DeleteDatabase {
     pub const IDENTIFIER: &'static str = "IndexedDB.deleteDatabase";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for DeleteDatabase {
     type Result = super::results::DeleteDatabaseResult;
@@ -161,6 +167,9 @@ pub struct DeleteObjectStoreEntries {
 }
 impl DeleteObjectStoreEntries {
     pub const IDENTIFIER: &'static str = "IndexedDB.deleteObjectStoreEntries";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for DeleteObjectStoreEntries {
     type Result = super::results::DeleteObjectStoreEntriesResult;
@@ -181,6 +190,9 @@ pub struct Disable {
 }
 impl Disable {
     pub const IDENTIFIER: &'static str = "IndexedDB.disable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -201,6 +213,9 @@ pub struct Enable {
 }
 impl Enable {
     pub const IDENTIFIER: &'static str = "IndexedDB.enable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -279,6 +294,9 @@ pub struct RequestData {
 }
 impl RequestData {
     pub const IDENTIFIER: &'static str = "IndexedDB.requestData";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RequestData {
     type Result = super::results::RequestDataResult;
@@ -332,6 +350,9 @@ pub struct GetMetadata {
 }
 impl GetMetadata {
     pub const IDENTIFIER: &'static str = "IndexedDB.getMetadata";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetMetadata {
     type Result = super::results::GetMetadataResult;
@@ -386,6 +407,9 @@ pub struct RequestDatabase {
 }
 impl RequestDatabase {
     pub const IDENTIFIER: &'static str = "IndexedDB.requestDatabase";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RequestDatabase {
     type Result = super::results::RequestDatabaseResult;
@@ -422,6 +446,9 @@ pub struct RequestDatabaseNames {
 }
 impl RequestDatabaseNames {
     pub const IDENTIFIER: &'static str = "IndexedDB.requestDatabaseNames";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RequestDatabaseNames {
     type Result = super::results::RequestDatabaseNamesResult;

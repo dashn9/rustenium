@@ -68,5 +68,8 @@ pub struct Account {
 }
 impl Account {
     pub const IDENTIFIER: &'static str = "FedCm.Account";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (FedCmTypes { LoginState (LoginState) , DialogType (DialogType) , DialogButton (DialogButton) , AccountUrlType (AccountUrlType) , Account (Account) });

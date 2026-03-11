@@ -60,6 +60,9 @@ pub struct DispatchDragEvent {
 }
 impl DispatchDragEvent {
     pub const IDENTIFIER: &'static str = "Input.dispatchDragEvent";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for DispatchDragEvent {
     type Result = super::results::DispatchDragEventResult;
@@ -187,6 +190,9 @@ pub struct DispatchKeyEvent {
 }
 impl DispatchKeyEvent {
     pub const IDENTIFIER: &'static str = "Input.dispatchKeyEvent";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for DispatchKeyEvent {
     type Result = super::results::DispatchKeyEventResult;
@@ -221,6 +227,9 @@ pub struct InsertText {
 }
 impl InsertText {
     pub const IDENTIFIER: &'static str = "Input.insertText";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for InsertText {
     type Result = super::results::InsertTextResult;
@@ -276,6 +285,9 @@ pub struct ImeSetComposition {
 }
 impl ImeSetComposition {
     pub const IDENTIFIER: &'static str = "Input.imeSetComposition";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ImeSetComposition {
     type Result = super::results::ImeSetCompositionResult;
@@ -417,6 +429,9 @@ pub struct DispatchMouseEvent {
 }
 impl DispatchMouseEvent {
     pub const IDENTIFIER: &'static str = "Input.dispatchMouseEvent";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for DispatchMouseEvent {
     type Result = super::results::DispatchMouseEventResult;
@@ -480,6 +495,9 @@ pub struct DispatchTouchEvent {
 }
 impl DispatchTouchEvent {
     pub const IDENTIFIER: &'static str = "Input.dispatchTouchEvent";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for DispatchTouchEvent {
     type Result = super::results::DispatchTouchEventResult;
@@ -500,6 +518,9 @@ pub struct CancelDragging {
 }
 impl CancelDragging {
     pub const IDENTIFIER: &'static str = "Input.cancelDragging";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for CancelDragging {
     type Result = super::results::CancelDraggingResult;
@@ -590,6 +611,9 @@ pub struct EmulateTouchFromMouseEvent {
 }
 impl EmulateTouchFromMouseEvent {
     pub const IDENTIFIER: &'static str = "Input.emulateTouchFromMouseEvent";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for EmulateTouchFromMouseEvent {
     type Result = super::results::EmulateTouchFromMouseEventResult;
@@ -621,6 +645,9 @@ pub struct SetIgnoreInputEvents {
 }
 impl SetIgnoreInputEvents {
     pub const IDENTIFIER: &'static str = "Input.setIgnoreInputEvents";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetIgnoreInputEvents {
     type Result = super::results::SetIgnoreInputEventsResult;
@@ -651,6 +678,9 @@ pub struct SetInterceptDrags {
 }
 impl SetInterceptDrags {
     pub const IDENTIFIER: &'static str = "Input.setInterceptDrags";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetInterceptDrags {
     type Result = super::results::SetInterceptDragsResult;
@@ -702,6 +732,9 @@ pub struct SynthesizePinchGesture {
 }
 impl SynthesizePinchGesture {
     pub const IDENTIFIER: &'static str = "Input.synthesizePinchGesture";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SynthesizePinchGesture {
     type Result = super::results::SynthesizePinchGestureResult;
@@ -797,6 +830,9 @@ pub struct SynthesizeScrollGesture {
 }
 impl SynthesizeScrollGesture {
     pub const IDENTIFIER: &'static str = "Input.synthesizeScrollGesture";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SynthesizeScrollGesture {
     type Result = super::results::SynthesizeScrollGestureResult;
@@ -850,6 +886,9 @@ pub struct SynthesizeTapGesture {
 }
 impl SynthesizeTapGesture {
     pub const IDENTIFIER: &'static str = "Input.synthesizeTapGesture";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SynthesizeTapGesture {
     type Result = super::results::SynthesizeTapGestureResult;

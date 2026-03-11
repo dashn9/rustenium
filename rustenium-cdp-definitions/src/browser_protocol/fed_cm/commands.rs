@@ -19,6 +19,9 @@ pub struct Enable {
 }
 impl Enable {
     pub const IDENTIFIER: &'static str = "FedCm.enable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -37,6 +40,9 @@ pub struct Disable {
 }
 impl Disable {
     pub const IDENTIFIER: &'static str = "FedCm.disable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -68,6 +74,9 @@ pub struct SelectAccount {
 }
 impl SelectAccount {
     pub const IDENTIFIER: &'static str = "FedCm.selectAccount";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SelectAccount {
     type Result = super::results::SelectAccountResult;
@@ -102,6 +111,9 @@ pub struct ClickDialogButton {
 }
 impl ClickDialogButton {
     pub const IDENTIFIER: &'static str = "FedCm.clickDialogButton";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ClickDialogButton {
     type Result = super::results::ClickDialogButtonResult;
@@ -140,6 +152,9 @@ pub struct OpenUrl {
 }
 impl OpenUrl {
     pub const IDENTIFIER: &'static str = "FedCm.openUrl";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for OpenUrl {
     type Result = super::results::OpenUrlResult;
@@ -178,6 +193,9 @@ pub struct DismissDialog {
 }
 impl DismissDialog {
     pub const IDENTIFIER: &'static str = "FedCm.dismissDialog";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for DismissDialog {
     type Result = super::results::DismissDialogResult;
@@ -198,6 +216,9 @@ pub struct ResetCooldown {
 }
 impl ResetCooldown {
     pub const IDENTIFIER: &'static str = "FedCm.resetCooldown";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ResetCooldown {
     type Result = super::results::ResetCooldownResult;

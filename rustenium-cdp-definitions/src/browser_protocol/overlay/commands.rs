@@ -15,6 +15,9 @@ pub struct Disable {
 }
 impl Disable {
     pub const IDENTIFIER: &'static str = "Overlay.disable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -35,6 +38,9 @@ pub struct Enable {
 }
 impl Enable {
     pub const IDENTIFIER: &'static str = "Overlay.enable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -90,6 +96,9 @@ pub struct GetHighlightObjectForTest {
 }
 impl GetHighlightObjectForTest {
     pub const IDENTIFIER: &'static str = "Overlay.getHighlightObjectForTest";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetHighlightObjectForTest {
     type Result = super::results::GetHighlightObjectForTestResult;
@@ -120,6 +129,9 @@ pub struct GetGridHighlightObjectsForTest {
 }
 impl GetGridHighlightObjectsForTest {
     pub const IDENTIFIER: &'static str = "Overlay.getGridHighlightObjectsForTest";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetGridHighlightObjectsForTest {
     type Result = super::results::GetGridHighlightObjectsForTestResult;
@@ -151,6 +163,9 @@ pub struct GetSourceOrderHighlightObjectForTest {
 }
 impl GetSourceOrderHighlightObjectForTest {
     pub const IDENTIFIER: &'static str = "Overlay.getSourceOrderHighlightObjectForTest";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetSourceOrderHighlightObjectForTest {
     type Result = super::results::GetSourceOrderHighlightObjectForTestResult;
@@ -171,6 +186,9 @@ pub struct HideHighlight {
 }
 impl HideHighlight {
     pub const IDENTIFIER: &'static str = "Overlay.hideHighlight";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for HideHighlight {
     type Result = super::results::HideHighlightResult;
@@ -226,6 +244,9 @@ pub struct HighlightNode {
 }
 impl HighlightNode {
     pub const IDENTIFIER: &'static str = "Overlay.highlightNode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for HighlightNode {
     type Result = super::results::HighlightNodeResult;
@@ -269,6 +290,9 @@ pub struct HighlightQuad {
 }
 impl HighlightQuad {
     pub const IDENTIFIER: &'static str = "Overlay.highlightQuad";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for HighlightQuad {
     type Result = super::results::HighlightQuadResult;
@@ -329,6 +353,9 @@ pub struct HighlightRect {
 }
 impl HighlightRect {
     pub const IDENTIFIER: &'static str = "Overlay.highlightRect";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for HighlightRect {
     type Result = super::results::HighlightRectResult;
@@ -378,6 +405,9 @@ pub struct HighlightSourceOrder {
 }
 impl HighlightSourceOrder {
     pub const IDENTIFIER: &'static str = "Overlay.highlightSourceOrder";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for HighlightSourceOrder {
     type Result = super::results::HighlightSourceOrderResult;
@@ -415,6 +445,9 @@ pub struct SetInspectMode {
 }
 impl SetInspectMode {
     pub const IDENTIFIER: &'static str = "Overlay.setInspectMode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetInspectMode {
     type Result = super::results::SetInspectModeResult;
@@ -444,6 +477,9 @@ pub struct SetShowAdHighlights {
 }
 impl SetShowAdHighlights {
     pub const IDENTIFIER: &'static str = "Overlay.setShowAdHighlights";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetShowAdHighlights {
     type Result = super::results::SetShowAdHighlightsResult;
@@ -468,6 +504,9 @@ pub struct SetPausedInDebuggerMessage {
 }
 impl SetPausedInDebuggerMessage {
     pub const IDENTIFIER: &'static str = "Overlay.setPausedInDebuggerMessage";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetPausedInDebuggerMessage {
     type Result = super::results::SetPausedInDebuggerMessageResult;
@@ -497,6 +536,9 @@ pub struct SetShowDebugBorders {
 }
 impl SetShowDebugBorders {
     pub const IDENTIFIER: &'static str = "Overlay.setShowDebugBorders";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetShowDebugBorders {
     type Result = super::results::SetShowDebugBordersResult;
@@ -526,6 +568,9 @@ pub struct SetShowFpsCounter {
 }
 impl SetShowFpsCounter {
     pub const IDENTIFIER: &'static str = "Overlay.setShowFPSCounter";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetShowFpsCounter {
     type Result = super::results::SetShowFpsCounterResult;
@@ -558,6 +603,9 @@ pub struct SetShowGridOverlays {
 }
 impl SetShowGridOverlays {
     pub const IDENTIFIER: &'static str = "Overlay.setShowGridOverlays";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetShowGridOverlays {
     type Result = super::results::SetShowGridOverlaysResult;
@@ -588,6 +636,9 @@ pub struct SetShowFlexOverlays {
 }
 impl SetShowFlexOverlays {
     pub const IDENTIFIER: &'static str = "Overlay.setShowFlexOverlays";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetShowFlexOverlays {
     type Result = super::results::SetShowFlexOverlaysResult;
@@ -620,6 +671,9 @@ pub struct SetShowScrollSnapOverlays {
 }
 impl SetShowScrollSnapOverlays {
     pub const IDENTIFIER: &'static str = "Overlay.setShowScrollSnapOverlays";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetShowScrollSnapOverlays {
     type Result = super::results::SetShowScrollSnapOverlaysResult;
@@ -652,6 +706,9 @@ pub struct SetShowContainerQueryOverlays {
 }
 impl SetShowContainerQueryOverlays {
     pub const IDENTIFIER: &'static str = "Overlay.setShowContainerQueryOverlays";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetShowContainerQueryOverlays {
     type Result = super::results::SetShowContainerQueryOverlaysResult;
@@ -683,6 +740,9 @@ pub struct SetShowInspectedElementAnchor {
 }
 impl SetShowInspectedElementAnchor {
     pub const IDENTIFIER: &'static str = "Overlay.setShowInspectedElementAnchor";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetShowInspectedElementAnchor {
     type Result = super::results::SetShowInspectedElementAnchorResult;
@@ -714,6 +774,9 @@ pub struct SetShowPaintRects {
 }
 impl SetShowPaintRects {
     pub const IDENTIFIER: &'static str = "Overlay.setShowPaintRects";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetShowPaintRects {
     type Result = super::results::SetShowPaintRectsResult;
@@ -745,6 +808,9 @@ pub struct SetShowLayoutShiftRegions {
 }
 impl SetShowLayoutShiftRegions {
     pub const IDENTIFIER: &'static str = "Overlay.setShowLayoutShiftRegions";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetShowLayoutShiftRegions {
     type Result = super::results::SetShowLayoutShiftRegionsResult;
@@ -774,6 +840,9 @@ pub struct SetShowScrollBottleneckRects {
 }
 impl SetShowScrollBottleneckRects {
     pub const IDENTIFIER: &'static str = "Overlay.setShowScrollBottleneckRects";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetShowScrollBottleneckRects {
     type Result = super::results::SetShowScrollBottleneckRectsResult;
@@ -803,6 +872,9 @@ pub struct SetShowViewportSizeOnResize {
 }
 impl SetShowViewportSizeOnResize {
     pub const IDENTIFIER: &'static str = "Overlay.setShowViewportSizeOnResize";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetShowViewportSizeOnResize {
     type Result = super::results::SetShowViewportSizeOnResizeResult;
@@ -829,6 +901,9 @@ pub struct SetShowHinge {
 }
 impl SetShowHinge {
     pub const IDENTIFIER: &'static str = "Overlay.setShowHinge";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetShowHinge {
     type Result = super::results::SetShowHingeResult;
@@ -863,6 +938,9 @@ pub struct SetShowIsolatedElements {
 }
 impl SetShowIsolatedElements {
     pub const IDENTIFIER: &'static str = "Overlay.setShowIsolatedElements";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetShowIsolatedElements {
     type Result = super::results::SetShowIsolatedElementsResult;
@@ -889,6 +967,9 @@ pub struct SetShowWindowControlsOverlay {
 }
 impl SetShowWindowControlsOverlay {
     pub const IDENTIFIER: &'static str = "Overlay.setShowWindowControlsOverlay";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetShowWindowControlsOverlay {
     type Result = super::results::SetShowWindowControlsOverlayResult;

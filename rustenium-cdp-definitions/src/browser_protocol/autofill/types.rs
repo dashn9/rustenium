@@ -19,6 +19,9 @@ pub struct CreditCard {
 }
 impl CreditCard {
     pub const IDENTIFIER: &'static str = "Autofill.CreditCard";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AddressField {
@@ -39,6 +42,9 @@ impl AddressField {
 }
 impl AddressField {
     pub const IDENTIFIER: &'static str = "Autofill.AddressField";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "A list of address fields.\n[AddressFields](https://chromedevtools.github.io/devtools-protocol/tot/Autofill/#type-AddressFields)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -54,6 +60,9 @@ impl AddressFields {
 }
 impl AddressFields {
     pub const IDENTIFIER: &'static str = "Autofill.AddressFields";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Address {
@@ -69,6 +78,9 @@ impl Address {
 }
 impl Address {
     pub const IDENTIFIER: &'static str = "Autofill.Address";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Defines how an address can be displayed like in chrome://settings/addresses.\nAddress UI is a two dimensional array, each inner array is an \"address information line\", and when rendered in a UI surface should be displayed as such.\nThe following address UI for instance:\n[[{name: \"GIVE_NAME\", value: \"Jon\"}, {name: \"FAMILY_NAME\", value: \"Doe\"}], [{name: \"CITY\", value: \"Munich\"}, {name: \"ZIP\", value: \"81456\"}]]\nshould allow the receiver to render:\nJon Doe\nMunich 81456\n[AddressUI](https://chromedevtools.github.io/devtools-protocol/tot/Autofill/#type-AddressUI)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -85,6 +97,9 @@ impl AddressUi {
 }
 impl AddressUi {
     pub const IDENTIFIER: &'static str = "Autofill.AddressUI";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Specified whether a filled field was done so by using the html autocomplete attribute or autofill heuristics."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -123,5 +138,8 @@ pub struct FilledField {
 }
 impl FilledField {
     pub const IDENTIFIER: &'static str = "Autofill.FilledField";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (AutofillTypes { CreditCard (CreditCard) , AddressField (AddressField) , AddressFields (AddressFields) , Address (Address) , AddressUi (AddressUi) , FillingStrategy (FillingStrategy) , FilledField (FilledField) });

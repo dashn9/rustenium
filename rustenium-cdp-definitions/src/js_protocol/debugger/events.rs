@@ -73,6 +73,9 @@ pub struct Paused {
 }
 impl Paused {
     pub const IDENTIFIER: &'static str = "Debugger.paused";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when the virtual machine resumed execution.\n[resumed](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#event-resumed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -90,6 +93,9 @@ pub struct Resumed {
 }
 impl Resumed {
     pub const IDENTIFIER: &'static str = "Debugger.resumed";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when virtual machine fails to parse the script.\n[scriptFailedToParse](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#event-scriptFailedToParse)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -180,6 +186,9 @@ pub struct ScriptFailedToParse {
 }
 impl ScriptFailedToParse {
     pub const IDENTIFIER: &'static str = "Debugger.scriptFailedToParse";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when virtual machine parses script. This event is also fired for all known and uncollected\nscripts upon enabling debugger.\n[scriptParsed](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#event-scriptParsed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -285,5 +294,8 @@ pub struct ScriptParsed {
 }
 impl ScriptParsed {
     pub const IDENTIFIER: &'static str = "Debugger.scriptParsed";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (DebuggerEvents { Paused (Paused) , Resumed (Resumed) , ScriptFailedToParse (ScriptFailedToParse) , ScriptParsed (ScriptParsed) });

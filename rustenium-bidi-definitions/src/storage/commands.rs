@@ -23,6 +23,9 @@ pub struct GetCookies {
 impl GetCookies {
     pub const IDENTIFIER: &'static str = "storage.getCookies";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetCookies {
     type Result = super::results::GetCookiesResult;
@@ -57,6 +60,9 @@ pub struct SetCookie {
 impl SetCookie {
     pub const IDENTIFIER: &'static str = "storage.setCookie";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetCookie {
     type Result = super::results::SetCookieResult;
@@ -85,6 +91,9 @@ pub struct DeleteCookies {
 impl DeleteCookies {
     pub const IDENTIFIER: &'static str = "storage.deleteCookies";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for DeleteCookies {
     type Result = super::results::DeleteCookiesResult;

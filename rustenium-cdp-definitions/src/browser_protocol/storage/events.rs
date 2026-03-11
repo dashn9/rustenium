@@ -28,6 +28,9 @@ pub struct CacheStorageContentUpdated {
 }
 impl CacheStorageContentUpdated {
     pub const IDENTIFIER: &'static str = "Storage.cacheStorageContentUpdated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "A cache has been added/deleted.\n[cacheStorageListUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-cacheStorageListUpdated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -55,6 +58,9 @@ pub struct CacheStorageListUpdated {
 }
 impl CacheStorageListUpdated {
     pub const IDENTIFIER: &'static str = "Storage.cacheStorageListUpdated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "The origin's IndexedDB object store has been modified.\n[indexedDBContentUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-indexedDBContentUpdated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -88,6 +94,9 @@ pub struct IndexedDbContentUpdated {
 }
 impl IndexedDbContentUpdated {
     pub const IDENTIFIER: &'static str = "Storage.indexedDBContentUpdated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "The origin's IndexedDB database list has been modified.\n[indexedDBListUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-indexedDBListUpdated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -115,6 +124,9 @@ pub struct IndexedDbListUpdated {
 }
 impl IndexedDbListUpdated {
     pub const IDENTIFIER: &'static str = "Storage.indexedDBListUpdated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "One of the interest groups was accessed. Note that these events are global\nto all targets sharing an interest group store.\n[interestGroupAccessed](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-interestGroupAccessed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -160,6 +172,9 @@ pub struct InterestGroupAccessed {
 }
 impl InterestGroupAccessed {
     pub const IDENTIFIER: &'static str = "Storage.interestGroupAccessed";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "An auction involving interest groups is taking place. These events are\ntarget-specific.\n[interestGroupAuctionEventOccurred](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-interestGroupAuctionEventOccurred)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -194,6 +209,9 @@ pub struct InterestGroupAuctionEventOccurred {
 }
 impl InterestGroupAuctionEventOccurred {
     pub const IDENTIFIER: &'static str = "Storage.interestGroupAuctionEventOccurred";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Specifies which auctions a particular network fetch may be related to, and\nin what role. Note that it is not ordered with respect to\nNetwork.requestWillBeSent (but will happen before loadingFinished\nloadingFailed).\n[interestGroupAuctionNetworkRequestCreated](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-interestGroupAuctionNetworkRequestCreated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -220,6 +238,9 @@ pub struct InterestGroupAuctionNetworkRequestCreated {
 }
 impl InterestGroupAuctionNetworkRequestCreated {
     pub const IDENTIFIER: &'static str = "Storage.interestGroupAuctionNetworkRequestCreated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Shared storage was accessed by the associated page.\nThe following parameters are included in all events.\n[sharedStorageAccessed](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-sharedStorageAccessed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -259,6 +280,9 @@ pub struct SharedStorageAccessed {
 }
 impl SharedStorageAccessed {
     pub const IDENTIFIER: &'static str = "Storage.sharedStorageAccessed";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "A shared storage run or selectURL operation finished its execution.\nThe following parameters are included in all events.\n[sharedStorageWorkletOperationExecutionFinished](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#event-sharedStorageWorkletOperationExecutionFinished)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -298,6 +322,9 @@ pub struct SharedStorageWorkletOperationExecutionFinished {
 }
 impl SharedStorageWorkletOperationExecutionFinished {
     pub const IDENTIFIER: &'static str = "Storage.sharedStorageWorkletOperationExecutionFinished";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StorageBucketCreatedOrUpdatedParams {
@@ -316,6 +343,9 @@ pub struct StorageBucketCreatedOrUpdated {
 }
 impl StorageBucketCreatedOrUpdated {
     pub const IDENTIFIER: &'static str = "Storage.storageBucketCreatedOrUpdated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StorageBucketDeletedParams {
@@ -334,6 +364,9 @@ pub struct StorageBucketDeleted {
 }
 impl StorageBucketDeleted {
     pub const IDENTIFIER: &'static str = "Storage.storageBucketDeleted";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributionReportingSourceRegisteredParams {
@@ -354,6 +387,9 @@ pub struct AttributionReportingSourceRegistered {
 }
 impl AttributionReportingSourceRegistered {
     pub const IDENTIFIER: &'static str = "Storage.attributionReportingSourceRegistered";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributionReportingTriggerRegisteredParams {
@@ -376,6 +412,9 @@ pub struct AttributionReportingTriggerRegistered {
 }
 impl AttributionReportingTriggerRegistered {
     pub const IDENTIFIER: &'static str = "Storage.attributionReportingTriggerRegistered";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributionReportingReportSentParams {
@@ -411,6 +450,9 @@ pub struct AttributionReportingReportSent {
 }
 impl AttributionReportingReportSent {
     pub const IDENTIFIER: &'static str = "Storage.attributionReportingReportSent";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributionReportingVerboseDebugReportSentParams {
@@ -445,5 +487,8 @@ pub struct AttributionReportingVerboseDebugReportSent {
 }
 impl AttributionReportingVerboseDebugReportSent {
     pub const IDENTIFIER: &'static str = "Storage.attributionReportingVerboseDebugReportSent";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (StorageEvents { CacheStorageContentUpdated (CacheStorageContentUpdated) , CacheStorageListUpdated (CacheStorageListUpdated) , IndexedDbContentUpdated (IndexedDbContentUpdated) , IndexedDbListUpdated (IndexedDbListUpdated) , InterestGroupAccessed (InterestGroupAccessed) , InterestGroupAuctionEventOccurred (InterestGroupAuctionEventOccurred) , InterestGroupAuctionNetworkRequestCreated (InterestGroupAuctionNetworkRequestCreated) , SharedStorageAccessed (SharedStorageAccessed) , SharedStorageWorkletOperationExecutionFinished (SharedStorageWorkletOperationExecutionFinished) , StorageBucketCreatedOrUpdated (StorageBucketCreatedOrUpdated) , StorageBucketDeleted (StorageBucketDeleted) , AttributionReportingSourceRegistered (AttributionReportingSourceRegistered) , AttributionReportingTriggerRegistered (AttributionReportingTriggerRegistered) , AttributionReportingReportSent (AttributionReportingReportSent) , AttributionReportingVerboseDebugReportSent (AttributionReportingVerboseDebugReportSent) });

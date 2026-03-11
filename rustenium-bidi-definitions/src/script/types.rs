@@ -27,6 +27,9 @@ impl From<String> for Channel {
 impl Channel {
     pub const IDENTIFIER: &'static str = "script.Channel";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ChannelValue {
@@ -51,6 +54,9 @@ impl ChannelValue {
 impl ChannelValue {
     pub const IDENTIFIER: &'static str = "script.ChannelValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ChannelProperties {
@@ -77,6 +83,9 @@ impl ChannelProperties {
 impl ChannelProperties {
     pub const IDENTIFIER: &'static str = "script.ChannelProperties";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EvaluateResultSuccess {
@@ -108,6 +117,9 @@ impl EvaluateResultSuccess {
 impl EvaluateResultSuccess {
     pub const IDENTIFIER: &'static str = "script.EvaluateResultSuccess";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EvaluateResultException {
@@ -139,6 +151,9 @@ impl EvaluateResultException {
 impl EvaluateResultException {
     pub const IDENTIFIER: &'static str = "script.EvaluateResultException";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ExceptionDetails {
@@ -156,6 +171,9 @@ pub struct ExceptionDetails {
 impl ExceptionDetails {
     pub const IDENTIFIER: &'static str = "script.ExceptionDetails";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
 pub struct Handle(String);
@@ -185,6 +203,9 @@ impl From<String> for Handle {
 impl Handle {
     pub const IDENTIFIER: &'static str = "script.Handle";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
 pub struct InternalId(String);
@@ -219,6 +240,9 @@ impl std::borrow::Borrow<str> for InternalId {
 impl InternalId {
     pub const IDENTIFIER: &'static str = "script.InternalId";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct LocalValue(serde_json::Value);
@@ -233,6 +257,9 @@ impl LocalValue {
 impl LocalValue {
     pub const IDENTIFIER: &'static str = "script.LocalValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ListLocalValue(Vec<LocalValue>);
@@ -247,6 +274,9 @@ impl ListLocalValue {
 impl ListLocalValue {
     pub const IDENTIFIER: &'static str = "script.ListLocalValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ArrayLocalValue {
@@ -271,6 +301,9 @@ impl ArrayLocalValue {
 impl ArrayLocalValue {
     pub const IDENTIFIER: &'static str = "script.ArrayLocalValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DateLocalValue {
@@ -295,6 +328,9 @@ impl DateLocalValue {
 impl DateLocalValue {
     pub const IDENTIFIER: &'static str = "script.DateLocalValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MappingLocalValue(Vec<Vec<serde_json::Value>>);
@@ -309,6 +345,9 @@ impl MappingLocalValue {
 impl MappingLocalValue {
     pub const IDENTIFIER: &'static str = "script.MappingLocalValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MapLocalValue {
@@ -333,6 +372,9 @@ impl MapLocalValue {
 impl MapLocalValue {
     pub const IDENTIFIER: &'static str = "script.MapLocalValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ObjectLocalValue {
@@ -360,6 +402,9 @@ impl ObjectLocalValue {
 impl ObjectLocalValue {
     pub const IDENTIFIER: &'static str = "script.ObjectLocalValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RegExpValue {
@@ -386,6 +431,9 @@ impl<T: Into<String>> From<T> for RegExpValue {
 impl RegExpValue {
     pub const IDENTIFIER: &'static str = "script.RegExpValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RegExpLocalValue {
@@ -410,6 +458,9 @@ impl RegExpLocalValue {
 impl RegExpLocalValue {
     pub const IDENTIFIER: &'static str = "script.RegExpLocalValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetLocalValue {
@@ -434,6 +485,9 @@ impl SetLocalValue {
 impl SetLocalValue {
     pub const IDENTIFIER: &'static str = "script.SetLocalValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
 pub struct PreloadScript(String);
@@ -463,6 +517,9 @@ impl From<String> for PreloadScript {
 impl PreloadScript {
     pub const IDENTIFIER: &'static str = "script.PreloadScript";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
 pub struct Realm(String);
@@ -492,6 +549,9 @@ impl From<String> for Realm {
 impl Realm {
     pub const IDENTIFIER: &'static str = "script.Realm";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -523,6 +583,9 @@ impl UndefinedValue {
 impl UndefinedValue {
     pub const IDENTIFIER: &'static str = "script.UndefinedValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NullValue {
@@ -544,6 +607,9 @@ impl NullValue {
 impl NullValue {
     pub const IDENTIFIER: &'static str = "script.NullValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StringValue {
@@ -568,6 +634,9 @@ impl StringValue {
 impl StringValue {
     pub const IDENTIFIER: &'static str = "script.StringValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
 pub struct SpecialNumber(String);
@@ -597,6 +666,9 @@ impl From<String> for SpecialNumber {
 impl SpecialNumber {
     pub const IDENTIFIER: &'static str = "script.SpecialNumber";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NumberValue {
@@ -621,6 +693,9 @@ impl NumberValue {
 impl NumberValue {
     pub const IDENTIFIER: &'static str = "script.NumberValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BooleanValue {
@@ -645,6 +720,9 @@ impl BooleanValue {
 impl BooleanValue {
     pub const IDENTIFIER: &'static str = "script.BooleanValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BigIntValue {
@@ -669,6 +747,9 @@ impl BigIntValue {
 impl BigIntValue {
     pub const IDENTIFIER: &'static str = "script.BigIntValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum RealmType {
@@ -722,6 +803,9 @@ impl SharedReference {
 impl SharedReference {
     pub const IDENTIFIER: &'static str = "script.SharedReference";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RemoteObjectReference {
@@ -750,6 +834,9 @@ impl RemoteObjectReference {
 impl RemoteObjectReference {
     pub const IDENTIFIER: &'static str = "script.RemoteObjectReference";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -789,6 +876,9 @@ impl ListRemoteValue {
 impl ListRemoteValue {
     pub const IDENTIFIER: &'static str = "script.ListRemoteValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MappingRemoteValue(Vec<Vec<serde_json::Value>>);
@@ -803,6 +893,9 @@ impl MappingRemoteValue {
 impl MappingRemoteValue {
     pub const IDENTIFIER: &'static str = "script.MappingRemoteValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SymbolRemoteValue {
@@ -834,6 +927,9 @@ impl SymbolRemoteValue {
 impl SymbolRemoteValue {
     pub const IDENTIFIER: &'static str = "script.SymbolRemoteValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ArrayRemoteValue {
@@ -870,6 +966,9 @@ impl ArrayRemoteValue {
 impl ArrayRemoteValue {
     pub const IDENTIFIER: &'static str = "script.ArrayRemoteValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ObjectRemoteValue {
@@ -906,6 +1005,9 @@ impl ObjectRemoteValue {
 impl ObjectRemoteValue {
     pub const IDENTIFIER: &'static str = "script.ObjectRemoteValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FunctionRemoteValue {
@@ -937,6 +1039,9 @@ impl FunctionRemoteValue {
 impl FunctionRemoteValue {
     pub const IDENTIFIER: &'static str = "script.FunctionRemoteValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RegExpRemoteValue {
@@ -964,6 +1069,9 @@ impl RegExpRemoteValue {
 impl RegExpRemoteValue {
     pub const IDENTIFIER: &'static str = "script.RegExpRemoteValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DateRemoteValue {
@@ -991,6 +1099,9 @@ impl DateRemoteValue {
 impl DateRemoteValue {
     pub const IDENTIFIER: &'static str = "script.DateRemoteValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MapRemoteValue {
@@ -1027,6 +1138,9 @@ impl MapRemoteValue {
 impl MapRemoteValue {
     pub const IDENTIFIER: &'static str = "script.MapRemoteValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetRemoteValue {
@@ -1063,6 +1177,9 @@ impl SetRemoteValue {
 impl SetRemoteValue {
     pub const IDENTIFIER: &'static str = "script.SetRemoteValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WeakMapRemoteValue {
@@ -1094,6 +1211,9 @@ impl WeakMapRemoteValue {
 impl WeakMapRemoteValue {
     pub const IDENTIFIER: &'static str = "script.WeakMapRemoteValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WeakSetRemoteValue {
@@ -1125,6 +1245,9 @@ impl WeakSetRemoteValue {
 impl WeakSetRemoteValue {
     pub const IDENTIFIER: &'static str = "script.WeakSetRemoteValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GeneratorRemoteValue {
@@ -1156,6 +1279,9 @@ impl GeneratorRemoteValue {
 impl GeneratorRemoteValue {
     pub const IDENTIFIER: &'static str = "script.GeneratorRemoteValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ErrorRemoteValue {
@@ -1187,6 +1313,9 @@ impl ErrorRemoteValue {
 impl ErrorRemoteValue {
     pub const IDENTIFIER: &'static str = "script.ErrorRemoteValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ProxyRemoteValue {
@@ -1218,6 +1347,9 @@ impl ProxyRemoteValue {
 impl ProxyRemoteValue {
     pub const IDENTIFIER: &'static str = "script.ProxyRemoteValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PromiseRemoteValue {
@@ -1249,6 +1381,9 @@ impl PromiseRemoteValue {
 impl PromiseRemoteValue {
     pub const IDENTIFIER: &'static str = "script.PromiseRemoteValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TypedArrayRemoteValue {
@@ -1280,6 +1415,9 @@ impl TypedArrayRemoteValue {
 impl TypedArrayRemoteValue {
     pub const IDENTIFIER: &'static str = "script.TypedArrayRemoteValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ArrayBufferRemoteValue {
@@ -1311,6 +1449,9 @@ impl ArrayBufferRemoteValue {
 impl ArrayBufferRemoteValue {
     pub const IDENTIFIER: &'static str = "script.ArrayBufferRemoteValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NodeListRemoteValue {
@@ -1347,6 +1488,9 @@ impl NodeListRemoteValue {
 impl NodeListRemoteValue {
     pub const IDENTIFIER: &'static str = "script.NodeListRemoteValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HtmlCollectionRemoteValue {
@@ -1383,6 +1527,9 @@ impl HtmlCollectionRemoteValue {
 impl HtmlCollectionRemoteValue {
     pub const IDENTIFIER: &'static str = "script.HTMLCollectionRemoteValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NodeRemoteValue {
@@ -1424,6 +1571,9 @@ impl NodeRemoteValue {
 impl NodeRemoteValue {
     pub const IDENTIFIER: &'static str = "script.NodeRemoteValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NodeProperties {
@@ -1484,6 +1634,9 @@ impl NodeProperties {
 impl NodeProperties {
     pub const IDENTIFIER: &'static str = "script.NodeProperties";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WindowProxyRemoteValue {
@@ -1521,6 +1674,9 @@ impl WindowProxyRemoteValue {
 impl WindowProxyRemoteValue {
     pub const IDENTIFIER: &'static str = "script.WindowProxyRemoteValue";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WindowProxyProperties {
@@ -1537,6 +1693,9 @@ impl WindowProxyProperties {
 impl WindowProxyProperties {
     pub const IDENTIFIER: &'static str = "script.WindowProxyProperties";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum ResultOwnership {
@@ -1575,6 +1734,9 @@ pub enum SerializationOptionsIncludeShadowTree {
 impl SerializationOptions {
     pub const IDENTIFIER: &'static str = "script.SerializationOptions";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
 pub struct SharedId(String);
@@ -1609,6 +1771,9 @@ impl std::borrow::Borrow<str> for SharedId {
 impl SharedId {
     pub const IDENTIFIER: &'static str = "script.SharedId";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StackFrame {
@@ -1639,6 +1804,9 @@ impl StackFrame {
 impl StackFrame {
     pub const IDENTIFIER: &'static str = "script.StackFrame";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StackTrace {
@@ -1654,6 +1822,9 @@ impl StackTrace {
 impl StackTrace {
     pub const IDENTIFIER: &'static str = "script.StackTrace";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RealmTarget {
@@ -1670,6 +1841,9 @@ impl RealmTarget {
 impl RealmTarget {
     pub const IDENTIFIER: &'static str = "script.RealmTarget";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ContextTarget {
@@ -1691,6 +1865,9 @@ impl ContextTarget {
 impl ContextTarget {
     pub const IDENTIFIER: &'static str = "script.ContextTarget";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -1728,6 +1905,9 @@ impl BaseRealmInfo {
 impl BaseRealmInfo {
     pub const IDENTIFIER: &'static str = "script.BaseRealmInfo";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WindowRealmInfo {
@@ -1765,6 +1945,9 @@ impl WindowRealmInfo {
 impl WindowRealmInfo {
     pub const IDENTIFIER: &'static str = "script.WindowRealmInfo";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DedicatedWorkerRealmInfo {
@@ -1798,6 +1981,9 @@ impl DedicatedWorkerRealmInfo {
 impl DedicatedWorkerRealmInfo {
     pub const IDENTIFIER: &'static str = "script.DedicatedWorkerRealmInfo";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SharedWorkerRealmInfo {
@@ -1826,6 +2012,9 @@ impl SharedWorkerRealmInfo {
 impl SharedWorkerRealmInfo {
     pub const IDENTIFIER: &'static str = "script.SharedWorkerRealmInfo";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ServiceWorkerRealmInfo {
@@ -1854,6 +2043,9 @@ impl ServiceWorkerRealmInfo {
 impl ServiceWorkerRealmInfo {
     pub const IDENTIFIER: &'static str = "script.ServiceWorkerRealmInfo";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WorkerRealmInfo {
@@ -1882,6 +2074,9 @@ impl WorkerRealmInfo {
 impl WorkerRealmInfo {
     pub const IDENTIFIER: &'static str = "script.WorkerRealmInfo";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PaintWorkletRealmInfo {
@@ -1910,6 +2105,9 @@ impl PaintWorkletRealmInfo {
 impl PaintWorkletRealmInfo {
     pub const IDENTIFIER: &'static str = "script.PaintWorkletRealmInfo";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AudioWorkletRealmInfo {
@@ -1938,6 +2136,9 @@ impl AudioWorkletRealmInfo {
 impl AudioWorkletRealmInfo {
     pub const IDENTIFIER: &'static str = "script.AudioWorkletRealmInfo";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WorkletRealmInfo {
@@ -1966,6 +2167,9 @@ impl WorkletRealmInfo {
 impl WorkletRealmInfo {
     pub const IDENTIFIER: &'static str = "script.WorkletRealmInfo";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Source {
@@ -1987,5 +2191,8 @@ impl Source {
 impl Source {
     pub const IDENTIFIER: &'static str = "script.Source";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (ScriptType { Channel (Channel) , ChannelValue (ChannelValue) , ChannelProperties (ChannelProperties) , EvaluateResultSuccess (EvaluateResultSuccess) , EvaluateResultException (EvaluateResultException) , ExceptionDetails (ExceptionDetails) , Handle (Handle) , InternalId (InternalId) , LocalValue (LocalValue) , ListLocalValue (ListLocalValue) , ArrayLocalValue (ArrayLocalValue) , DateLocalValue (DateLocalValue) , MappingLocalValue (MappingLocalValue) , MapLocalValue (MapLocalValue) , ObjectLocalValue (ObjectLocalValue) , RegExpValue (RegExpValue) , RegExpLocalValue (RegExpLocalValue) , SetLocalValue (SetLocalValue) , PreloadScript (PreloadScript) , Realm (Realm) , SpecialNumber (SpecialNumber) , RealmType (RealmType) , RemoteReference (RemoteReference) , RemoteValue (RemoteValue) , ListRemoteValue (ListRemoteValue) , MappingRemoteValue (MappingRemoteValue) , HtmlCollectionRemoteValue (HtmlCollectionRemoteValue) , NodeProperties (NodeProperties) , WindowProxyProperties (WindowProxyProperties) , ResultOwnership (ResultOwnership) , SerializationOptions (SerializationOptions) , SharedId (SharedId) , StackFrame (StackFrame) , StackTrace (StackTrace) , Target (Target) , RealmInfo (RealmInfo) , BaseRealmInfo (BaseRealmInfo) , Source (Source) });

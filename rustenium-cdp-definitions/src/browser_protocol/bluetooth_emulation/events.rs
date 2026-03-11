@@ -20,6 +20,9 @@ pub struct GattOperationReceived {
 }
 impl GattOperationReceived {
     pub const IDENTIFIER: &'static str = "BluetoothEmulation.gattOperationReceived";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Event for when a characteristic operation of |type| to the characteristic\nrespresented by |characteristicId| happened. |data| and |writeType| is\nexpected to exist when |type| is write.\n[characteristicOperationReceived](https://chromedevtools.github.io/devtools-protocol/tot/BluetoothEmulation/#event-characteristicOperationReceived)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -50,6 +53,9 @@ pub struct CharacteristicOperationReceived {
 }
 impl CharacteristicOperationReceived {
     pub const IDENTIFIER: &'static str = "BluetoothEmulation.characteristicOperationReceived";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Event for when a descriptor operation of |type| to the descriptor\nrespresented by |descriptorId| happened. |data| is expected to exist when\n|type| is write.\n[descriptorOperationReceived](https://chromedevtools.github.io/devtools-protocol/tot/BluetoothEmulation/#event-descriptorOperationReceived)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -76,5 +82,8 @@ pub struct DescriptorOperationReceived {
 }
 impl DescriptorOperationReceived {
     pub const IDENTIFIER: &'static str = "BluetoothEmulation.descriptorOperationReceived";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (BluetoothEmulationEvents { GattOperationReceived (GattOperationReceived) , CharacteristicOperationReceived (CharacteristicOperationReceived) , DescriptorOperationReceived (DescriptorOperationReceived) });

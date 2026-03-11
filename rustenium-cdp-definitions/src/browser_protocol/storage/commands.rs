@@ -20,6 +20,9 @@ pub struct GetStorageKey {
 }
 impl GetStorageKey {
     pub const IDENTIFIER: &'static str = "Storage.getStorageKey";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetStorageKey {
     type Result = super::results::GetStorageKeyResult;
@@ -55,6 +58,9 @@ pub struct ClearDataForOrigin {
 }
 impl ClearDataForOrigin {
     pub const IDENTIFIER: &'static str = "Storage.clearDataForOrigin";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ClearDataForOrigin {
     type Result = super::results::ClearDataForOriginResult;
@@ -90,6 +96,9 @@ pub struct ClearDataForStorageKey {
 }
 impl ClearDataForStorageKey {
     pub const IDENTIFIER: &'static str = "Storage.clearDataForStorageKey";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ClearDataForStorageKey {
     type Result = super::results::ClearDataForStorageKeyResult;
@@ -116,6 +125,9 @@ pub struct GetCookies {
 }
 impl GetCookies {
     pub const IDENTIFIER: &'static str = "Storage.getCookies";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetCookies {
     type Result = super::results::GetCookiesResult;
@@ -154,6 +166,9 @@ pub struct SetCookies {
 }
 impl SetCookies {
     pub const IDENTIFIER: &'static str = "Storage.setCookies";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetCookies {
     type Result = super::results::SetCookiesResult;
@@ -180,6 +195,9 @@ pub struct ClearCookies {
 }
 impl ClearCookies {
     pub const IDENTIFIER: &'static str = "Storage.clearCookies";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ClearCookies {
     type Result = super::results::ClearCookiesResult;
@@ -216,6 +234,9 @@ pub struct GetUsageAndQuota {
 }
 impl GetUsageAndQuota {
     pub const IDENTIFIER: &'static str = "Storage.getUsageAndQuota";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetUsageAndQuota {
     type Result = super::results::GetUsageAndQuotaResult;
@@ -258,6 +279,9 @@ pub struct OverrideQuotaForOrigin {
 }
 impl OverrideQuotaForOrigin {
     pub const IDENTIFIER: &'static str = "Storage.overrideQuotaForOrigin";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for OverrideQuotaForOrigin {
     type Result = super::results::OverrideQuotaForOriginResult;
@@ -294,6 +318,9 @@ pub struct TrackCacheStorageForOrigin {
 }
 impl TrackCacheStorageForOrigin {
     pub const IDENTIFIER: &'static str = "Storage.trackCacheStorageForOrigin";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for TrackCacheStorageForOrigin {
     type Result = super::results::TrackCacheStorageForOriginResult;
@@ -330,6 +357,9 @@ pub struct TrackCacheStorageForStorageKey {
 }
 impl TrackCacheStorageForStorageKey {
     pub const IDENTIFIER: &'static str = "Storage.trackCacheStorageForStorageKey";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for TrackCacheStorageForStorageKey {
     type Result = super::results::TrackCacheStorageForStorageKeyResult;
@@ -366,6 +396,9 @@ pub struct TrackIndexedDbForOrigin {
 }
 impl TrackIndexedDbForOrigin {
     pub const IDENTIFIER: &'static str = "Storage.trackIndexedDBForOrigin";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for TrackIndexedDbForOrigin {
     type Result = super::results::TrackIndexedDbForOriginResult;
@@ -402,6 +435,9 @@ pub struct TrackIndexedDbForStorageKey {
 }
 impl TrackIndexedDbForStorageKey {
     pub const IDENTIFIER: &'static str = "Storage.trackIndexedDBForStorageKey";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for TrackIndexedDbForStorageKey {
     type Result = super::results::TrackIndexedDbForStorageKeyResult;
@@ -438,6 +474,9 @@ pub struct UntrackCacheStorageForOrigin {
 }
 impl UntrackCacheStorageForOrigin {
     pub const IDENTIFIER: &'static str = "Storage.untrackCacheStorageForOrigin";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for UntrackCacheStorageForOrigin {
     type Result = super::results::UntrackCacheStorageForOriginResult;
@@ -474,6 +513,9 @@ pub struct UntrackCacheStorageForStorageKey {
 }
 impl UntrackCacheStorageForStorageKey {
     pub const IDENTIFIER: &'static str = "Storage.untrackCacheStorageForStorageKey";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for UntrackCacheStorageForStorageKey {
     type Result = super::results::UntrackCacheStorageForStorageKeyResult;
@@ -510,6 +552,9 @@ pub struct UntrackIndexedDbForOrigin {
 }
 impl UntrackIndexedDbForOrigin {
     pub const IDENTIFIER: &'static str = "Storage.untrackIndexedDBForOrigin";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for UntrackIndexedDbForOrigin {
     type Result = super::results::UntrackIndexedDbForOriginResult;
@@ -546,6 +591,9 @@ pub struct UntrackIndexedDbForStorageKey {
 }
 impl UntrackIndexedDbForStorageKey {
     pub const IDENTIFIER: &'static str = "Storage.untrackIndexedDBForStorageKey";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for UntrackIndexedDbForStorageKey {
     type Result = super::results::UntrackIndexedDbForStorageKeyResult;
@@ -566,6 +614,9 @@ pub struct GetTrustTokens {
 }
 impl GetTrustTokens {
     pub const IDENTIFIER: &'static str = "Storage.getTrustTokens";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetTrustTokens {
     type Result = super::results::GetTrustTokensResult;
@@ -601,6 +652,9 @@ pub struct ClearTrustTokens {
 }
 impl ClearTrustTokens {
     pub const IDENTIFIER: &'static str = "Storage.clearTrustTokens";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ClearTrustTokens {
     type Result = super::results::ClearTrustTokensResult;
@@ -634,6 +688,9 @@ pub struct GetInterestGroupDetails {
 }
 impl GetInterestGroupDetails {
     pub const IDENTIFIER: &'static str = "Storage.getInterestGroupDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetInterestGroupDetails {
     type Result = super::results::GetInterestGroupDetailsResult;
@@ -664,6 +721,9 @@ pub struct SetInterestGroupTracking {
 }
 impl SetInterestGroupTracking {
     pub const IDENTIFIER: &'static str = "Storage.setInterestGroupTracking";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetInterestGroupTracking {
     type Result = super::results::SetInterestGroupTrackingResult;
@@ -694,6 +754,9 @@ pub struct SetInterestGroupAuctionTracking {
 }
 impl SetInterestGroupAuctionTracking {
     pub const IDENTIFIER: &'static str = "Storage.setInterestGroupAuctionTracking";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetInterestGroupAuctionTracking {
     type Result = super::results::SetInterestGroupAuctionTrackingResult;
@@ -729,6 +792,9 @@ pub struct GetSharedStorageMetadata {
 }
 impl GetSharedStorageMetadata {
     pub const IDENTIFIER: &'static str = "Storage.getSharedStorageMetadata";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetSharedStorageMetadata {
     type Result = super::results::GetSharedStorageMetadataResult;
@@ -764,6 +830,9 @@ pub struct GetSharedStorageEntries {
 }
 impl GetSharedStorageEntries {
     pub const IDENTIFIER: &'static str = "Storage.getSharedStorageEntries";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetSharedStorageEntries {
     type Result = super::results::GetSharedStorageEntriesResult;
@@ -810,6 +879,9 @@ pub struct SetSharedStorageEntry {
 }
 impl SetSharedStorageEntry {
     pub const IDENTIFIER: &'static str = "Storage.setSharedStorageEntry";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetSharedStorageEntry {
     type Result = super::results::SetSharedStorageEntryResult;
@@ -843,6 +915,9 @@ pub struct DeleteSharedStorageEntry {
 }
 impl DeleteSharedStorageEntry {
     pub const IDENTIFIER: &'static str = "Storage.deleteSharedStorageEntry";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for DeleteSharedStorageEntry {
     type Result = super::results::DeleteSharedStorageEntryResult;
@@ -878,6 +953,9 @@ pub struct ClearSharedStorageEntries {
 }
 impl ClearSharedStorageEntries {
     pub const IDENTIFIER: &'static str = "Storage.clearSharedStorageEntries";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ClearSharedStorageEntries {
     type Result = super::results::ClearSharedStorageEntriesResult;
@@ -913,6 +991,9 @@ pub struct ResetSharedStorageBudget {
 }
 impl ResetSharedStorageBudget {
     pub const IDENTIFIER: &'static str = "Storage.resetSharedStorageBudget";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ResetSharedStorageBudget {
     type Result = super::results::ResetSharedStorageBudgetResult;
@@ -943,6 +1024,9 @@ pub struct SetSharedStorageTracking {
 }
 impl SetSharedStorageTracking {
     pub const IDENTIFIER: &'static str = "Storage.setSharedStorageTracking";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetSharedStorageTracking {
     type Result = super::results::SetSharedStorageTrackingResult;
@@ -976,6 +1060,9 @@ pub struct SetStorageBucketTracking {
 }
 impl SetStorageBucketTracking {
     pub const IDENTIFIER: &'static str = "Storage.setStorageBucketTracking";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetStorageBucketTracking {
     type Result = super::results::SetStorageBucketTrackingResult;
@@ -1006,6 +1093,9 @@ pub struct DeleteStorageBucket {
 }
 impl DeleteStorageBucket {
     pub const IDENTIFIER: &'static str = "Storage.deleteStorageBucket";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for DeleteStorageBucket {
     type Result = super::results::DeleteStorageBucketResult;
@@ -1026,6 +1116,9 @@ pub struct RunBounceTrackingMitigations {
 }
 impl RunBounceTrackingMitigations {
     pub const IDENTIFIER: &'static str = "Storage.runBounceTrackingMitigations";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RunBounceTrackingMitigations {
     type Result = super::results::RunBounceTrackingMitigationsResult;
@@ -1057,6 +1150,9 @@ pub struct SetAttributionReportingLocalTestingMode {
 }
 impl SetAttributionReportingLocalTestingMode {
     pub const IDENTIFIER: &'static str = "Storage.setAttributionReportingLocalTestingMode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetAttributionReportingLocalTestingMode {
     type Result = super::results::SetAttributionReportingLocalTestingModeResult;
@@ -1087,6 +1183,9 @@ pub struct SetAttributionReportingTracking {
 }
 impl SetAttributionReportingTracking {
     pub const IDENTIFIER: &'static str = "Storage.setAttributionReportingTracking";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetAttributionReportingTracking {
     type Result = super::results::SetAttributionReportingTrackingResult;
@@ -1107,6 +1206,9 @@ pub struct SendPendingAttributionReports {
 }
 impl SendPendingAttributionReports {
     pub const IDENTIFIER: &'static str = "Storage.sendPendingAttributionReports";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SendPendingAttributionReports {
     type Result = super::results::SendPendingAttributionReportsResult;
@@ -1127,6 +1229,9 @@ pub struct GetRelatedWebsiteSets {
 }
 impl GetRelatedWebsiteSets {
     pub const IDENTIFIER: &'static str = "Storage.getRelatedWebsiteSets";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetRelatedWebsiteSets {
     type Result = super::results::GetRelatedWebsiteSetsResult;
@@ -1163,6 +1268,9 @@ pub struct GetAffectedUrlsForThirdPartyCookieMetadata {
 }
 impl GetAffectedUrlsForThirdPartyCookieMetadata {
     pub const IDENTIFIER: &'static str = "Storage.getAffectedUrlsForThirdPartyCookieMetadata";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetAffectedUrlsForThirdPartyCookieMetadata {
     type Result = super::results::GetAffectedUrlsForThirdPartyCookieMetadataResult;
@@ -1202,6 +1310,9 @@ pub struct SetProtectedAudienceKAnonymity {
 }
 impl SetProtectedAudienceKAnonymity {
     pub const IDENTIFIER: &'static str = "Storage.setProtectedAudienceKAnonymity";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetProtectedAudienceKAnonymity {
     type Result = super::results::SetProtectedAudienceKAnonymityResult;

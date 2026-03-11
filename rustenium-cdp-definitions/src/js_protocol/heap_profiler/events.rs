@@ -16,6 +16,9 @@ pub struct AddHeapSnapshotChunk {
 }
 impl AddHeapSnapshotChunk {
     pub const IDENTIFIER: &'static str = "HeapProfiler.addHeapSnapshotChunk";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "If heap objects tracking has been started then backend may send update for one or more fragments\n[heapStatsUpdate](https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler/#event-heapStatsUpdate)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -38,6 +41,9 @@ pub struct HeapStatsUpdate {
 }
 impl HeapStatsUpdate {
     pub const IDENTIFIER: &'static str = "HeapProfiler.heapStatsUpdate";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "If heap objects tracking has been started then backend regularly sends a current value for last\nseen object id and corresponding timestamp. If the were changes in the heap since last event\nthen one or more heapStatsUpdate events will be sent before a new lastSeenObjectId event.\n[lastSeenObjectId](https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler/#event-lastSeenObjectId)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -60,6 +66,9 @@ pub struct LastSeenObjectId {
 }
 impl LastSeenObjectId {
     pub const IDENTIFIER: &'static str = "HeapProfiler.lastSeenObjectId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ReportHeapSnapshotProgressParams {
@@ -84,6 +93,9 @@ pub struct ReportHeapSnapshotProgress {
 }
 impl ReportHeapSnapshotProgress {
     pub const IDENTIFIER: &'static str = "HeapProfiler.reportHeapSnapshotProgress";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResetProfilesParams {}
@@ -99,5 +111,8 @@ pub struct ResetProfiles {
 }
 impl ResetProfiles {
     pub const IDENTIFIER: &'static str = "HeapProfiler.resetProfiles";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (HeapProfilerEvents { AddHeapSnapshotChunk (AddHeapSnapshotChunk) , HeapStatsUpdate (HeapStatsUpdate) , LastSeenObjectId (LastSeenObjectId) , ReportHeapSnapshotProgress (ReportHeapSnapshotProgress) , ResetProfiles (ResetProfiles) });

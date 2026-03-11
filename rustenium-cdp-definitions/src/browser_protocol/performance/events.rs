@@ -23,5 +23,8 @@ pub struct Metrics {
 }
 impl Metrics {
     pub const IDENTIFIER: &'static str = "Performance.metrics";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (PerformanceEvents { Metrics (Metrics) });

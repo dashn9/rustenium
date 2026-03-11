@@ -21,6 +21,9 @@ pub struct PlayerPropertiesChanged {
 }
 impl PlayerPropertiesChanged {
     pub const IDENTIFIER: &'static str = "Media.playerPropertiesChanged";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Send events as a list, allowing them to be batched on the browser for less\ncongestion. If batched, events must ALWAYS be in chronological order.\n[playerEventsAdded](https://chromedevtools.github.io/devtools-protocol/tot/Media/#event-playerEventsAdded)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -44,6 +47,9 @@ pub struct PlayerEventsAdded {
 }
 impl PlayerEventsAdded {
     pub const IDENTIFIER: &'static str = "Media.playerEventsAdded";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Send a list of any messages that need to be delivered.\n[playerMessagesLogged](https://chromedevtools.github.io/devtools-protocol/tot/Media/#event-playerMessagesLogged)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -67,6 +73,9 @@ pub struct PlayerMessagesLogged {
 }
 impl PlayerMessagesLogged {
     pub const IDENTIFIER: &'static str = "Media.playerMessagesLogged";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Send a list of any errors that need to be delivered.\n[playerErrorsRaised](https://chromedevtools.github.io/devtools-protocol/tot/Media/#event-playerErrorsRaised)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -90,6 +99,9 @@ pub struct PlayerErrorsRaised {
 }
 impl PlayerErrorsRaised {
     pub const IDENTIFIER: &'static str = "Media.playerErrorsRaised";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Called whenever a player is created, or when a new agent joins and receives\na list of active players. If an agent is restored, it will receive one\nevent for each active player.\n[playerCreated](https://chromedevtools.github.io/devtools-protocol/tot/Media/#event-playerCreated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -110,5 +122,8 @@ pub struct PlayerCreated {
 }
 impl PlayerCreated {
     pub const IDENTIFIER: &'static str = "Media.playerCreated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (MediaEvents { PlayerPropertiesChanged (PlayerPropertiesChanged) , PlayerEventsAdded (PlayerEventsAdded) , PlayerMessagesLogged (PlayerMessagesLogged) , PlayerErrorsRaised (PlayerErrorsRaised) , PlayerCreated (PlayerCreated) });

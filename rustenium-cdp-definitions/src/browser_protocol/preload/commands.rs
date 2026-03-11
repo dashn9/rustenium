@@ -13,6 +13,9 @@ pub struct Enable {
 }
 impl Enable {
     pub const IDENTIFIER: &'static str = "Preload.enable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -31,6 +34,9 @@ pub struct Disable {
 }
 impl Disable {
     pub const IDENTIFIER: &'static str = "Preload.disable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;

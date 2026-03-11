@@ -32,6 +32,9 @@ impl std::borrow::Borrow<str> for CacheId {
 }
 impl CacheId {
     pub const IDENTIFIER: &'static str = "CacheStorage.CacheId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "type of HTTP response cached"]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -81,6 +84,9 @@ pub struct DataEntry {
 }
 impl DataEntry {
     pub const IDENTIFIER: &'static str = "CacheStorage.DataEntry";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Cache identifier.\n[Cache](https://chromedevtools.github.io/devtools-protocol/tot/CacheStorage/#type-Cache)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -121,6 +127,9 @@ impl Cache {
 }
 impl Cache {
     pub const IDENTIFIER: &'static str = "CacheStorage.Cache";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Header {
@@ -139,6 +148,9 @@ impl Header {
 }
 impl Header {
     pub const IDENTIFIER: &'static str = "CacheStorage.Header";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Cached response\n[CachedResponse](https://chromedevtools.github.io/devtools-protocol/tot/CacheStorage/#type-CachedResponse)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -154,5 +166,8 @@ impl CachedResponse {
 }
 impl CachedResponse {
     pub const IDENTIFIER: &'static str = "CacheStorage.CachedResponse";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (CacheStorageTypes { CacheId (CacheId) , CachedResponseType (CachedResponseType) , DataEntry (DataEntry) , Cache (Cache) , Header (Header) , CachedResponse (CachedResponse) });

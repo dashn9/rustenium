@@ -15,6 +15,9 @@ pub struct Clear {
 }
 impl Clear {
     pub const IDENTIFIER: &'static str = "Log.clear";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Clear {
     type Result = super::results::ClearResult;
@@ -35,6 +38,9 @@ pub struct Disable {
 }
 impl Disable {
     pub const IDENTIFIER: &'static str = "Log.disable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -55,6 +61,9 @@ pub struct Enable {
 }
 impl Enable {
     pub const IDENTIFIER: &'static str = "Log.enable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -85,6 +94,9 @@ pub struct StartViolationsReport {
 }
 impl StartViolationsReport {
     pub const IDENTIFIER: &'static str = "Log.startViolationsReport";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for StartViolationsReport {
     type Result = super::results::StartViolationsReportResult;
@@ -105,6 +117,9 @@ pub struct StopViolationsReport {
 }
 impl StopViolationsReport {
     pub const IDENTIFIER: &'static str = "Log.stopViolationsReport";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for StopViolationsReport {
     type Result = super::results::StopViolationsReportResult;

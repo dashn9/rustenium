@@ -28,6 +28,9 @@ impl DatabaseWithObjectStores {
 }
 impl DatabaseWithObjectStores {
     pub const IDENTIFIER: &'static str = "IndexedDB.DatabaseWithObjectStores";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Object store.\n[ObjectStore](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#type-ObjectStore)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -63,6 +66,9 @@ impl ObjectStore {
 }
 impl ObjectStore {
     pub const IDENTIFIER: &'static str = "IndexedDB.ObjectStore";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Object store index.\n[ObjectStoreIndex](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#type-ObjectStoreIndex)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -97,6 +103,9 @@ impl ObjectStoreIndex {
 }
 impl ObjectStoreIndex {
     pub const IDENTIFIER: &'static str = "IndexedDB.ObjectStoreIndex";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Key.\n[Key](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#type-Key)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -150,6 +159,9 @@ impl Key {
 }
 impl Key {
     pub const IDENTIFIER: &'static str = "IndexedDB.Key";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Key range.\n[KeyRange](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#type-KeyRange)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -183,6 +195,9 @@ impl KeyRange {
 }
 impl KeyRange {
     pub const IDENTIFIER: &'static str = "IndexedDB.KeyRange";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Data entry.\n[DataEntry](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#type-DataEntry)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -212,6 +227,9 @@ impl DataEntry {
 }
 impl DataEntry {
     pub const IDENTIFIER: &'static str = "IndexedDB.DataEntry";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Key path.\n[KeyPath](https://chromedevtools.github.io/devtools-protocol/tot/IndexedDB/#type-KeyPath)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -251,5 +269,8 @@ impl KeyPath {
 }
 impl KeyPath {
     pub const IDENTIFIER: &'static str = "IndexedDB.KeyPath";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (IndexedDbTypes { DatabaseWithObjectStores (DatabaseWithObjectStores) , ObjectStore (ObjectStore) , ObjectStoreIndex (ObjectStoreIndex) , Key (Key) , KeyRange (KeyRange) , DataEntry (DataEntry) , KeyPath (KeyPath) });

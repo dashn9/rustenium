@@ -1,60 +1,97 @@
-use rustenium_bidi_commands::browsing_context::commands::{BrowsingContextCreateMethod, Create as BrowsingContextCreate, CreateParameters as BrowsingContextCreateParameters, BrowsingContextResult};
-use rustenium_bidi_commands::browsing_context::types::{BrowsingContext, CreateType as BrowsingContextCreateType};
-use rustenium_bidi_commands::{BrowsingContextCommand, CommandData, ResultData};
-use crate::error::{CommandResultError};
-use crate::Session;
+use rustenium_bidi_definitions::browsing_context::command_builders::CreateBuilder;
+use rustenium_bidi_definitions::browsing_context::results::CreateResult;
+use rustenium_bidi_definitions::browsing_context::types::{
+    BrowsingContext as BrowsingContextDefinition, CreateType,
+};
+
+use crate::error::CommandResultError;
+use crate::session::BidiSession;
 use crate::transport::ConnectionTransport;
 
-#[derive(Debug, Clone)]
-pub struct Context {
-    pub r#type: BrowsingContextCreateType,
-    id: BrowsingContext,
+#[derive(Clone)]
+pub struct CreateBrowsingContext<'a, T: ConnectionTransport> {
+    session: &'a BidiSession<T>,
+    r#type: CreateType,
+    reference_context: Option<&'a BrowsingContext>,
+    background: bool,
 }
 
-impl Context {
-    /// Create a Context from existing ID and type
-    pub fn from_id(id: String, context_type: BrowsingContextCreateType) -> Self {
+impl<'a, T: ConnectionTransport> CreateBrowsingContext<'a, T> {
+    fn new(session: &'a mut BidiSession<T>) -> Self {
         Self {
-            r#type: context_type,
-            id,
+            session,
+            r#type: CreateType::Tab,
+            reference_context: None,
+            background: false,
         }
     }
 
-    pub async fn new<OT: ConnectionTransport>(session: &mut Session<OT>, context_creation_type: Option<BrowsingContextCreateType>, reference_context: Option<&Context>, background: bool) -> Result<Self, CommandResultError>  {
-        let context_creation_type = context_creation_type.unwrap_or(BrowsingContextCreateType::Tab);
-        let create_browsing_context_command = BrowsingContextCreate {
-            method: BrowsingContextCreateMethod::BrowsingContextCreate,
-            params: BrowsingContextCreateParameters {
-                r#type: context_creation_type.clone(),
-                reference_context: reference_context.map(|c| c.id.clone()),
-                background: Option::from(background),
-                // I don't know how to deal with UserContext yet.
-                user_context: None,
-            },
-        };
-        let context = session.send(CommandData::BrowsingContextCommand(BrowsingContextCommand::Create(create_browsing_context_command))).await;
+    pub fn r#type(mut self, create_type: CreateType) -> Self {
+        self.r#type = create_type;
+        self
+    }
+
+    pub fn reference_context(mut self, reference_context: &'a BrowsingContext) -> Self {
+        self.reference_context = Option::from(reference_context);
+        self
+    }
+
+    pub fn background(mut self, background: bool) -> Self {
+        self.background = background;
+        self
+    }
+
+    pub async fn create(self) -> Result<BrowsingContext, CommandResultError> {
+        let create_browsing_context_command = CreateBuilder::default()
+            .r#type(self.r#type.clone())
+            .background(self.background);
+        if let Some(reference_context) = self.reference_context {
+            create_browsing_context_command.reference_context(reference_context.into());
+        }
+        let context = self
+            .session
+            .send(create_browsing_context_command.build().unwrap())
+            .await;
         match context {
-            Ok(ResultData::BrowsingContextResult(context)) => match context {
-                BrowsingContextResult::CreateResult(context) => {
-                    Ok(Self {
-                        r#type: context_creation_type,
-                        id: context.context
-                    })
-                },
-                _ => Err(CommandResultError::InvalidResultTypeError(ResultData::BrowsingContextResult(context)))
-            },
-            Ok(result) => Err(CommandResultError::InvalidResultTypeError(result)),
+            Ok(response) => {
+                let result: CreateResult = response
+                    .result
+                    .try_into()
+                    .map_err(|_| CommandResultError::InvalidResultTypeError(response.result))?;
+                Ok(BrowsingContext {
+                    r#type: self.r#type,
+                    id: result.context,
+                })
+            }
             Err(e) => Err(CommandResultError::SessionSendError(e)),
+        }
+    }
+}
+pub struct BrowsingContext {
+    pub r#type: CreateType,
+    id: BrowsingContextDefinition,
+}
+
+impl BrowsingContext {
+    /// Create a Context from existing ID and type
+    pub fn from_id(
+        id: impl Into<BrowsingContextDefinition>,
+        context_type: CreateType,
+    ) -> Self {
+        Self {
+            r#type: context_type,
+            id: id.into(),
         }
     }
 
     /// Get the context ID as a string reference
-    pub fn id(&self) -> &BrowsingContext {
+    pub fn id(&self) -> &BrowsingContextDefinition {
         &self.id
     }
+}
 
-    /// Get a cloned context ID (deprecated - use id() instead)
-    pub fn get_context_id(&self) -> String {
-        self.id.clone()
+impl From<BrowsingContext> for String {
+    fn from(browsing_context: BrowsingContext) -> String {
+        browsing_context.id.as_ref().to_string()
     }
 }

@@ -46,6 +46,9 @@ impl ProfileNode {
 }
 impl ProfileNode {
     pub const IDENTIFIER: &'static str = "Profiler.ProfileNode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Profile.\n[Profile](https://chromedevtools.github.io/devtools-protocol/tot/Profiler/#type-Profile)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -88,6 +91,9 @@ impl Profile {
 }
 impl Profile {
     pub const IDENTIFIER: &'static str = "Profiler.Profile";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Specifies a number of samples attributed to a certain source position.\n[PositionTickInfo](https://chromedevtools.github.io/devtools-protocol/tot/Profiler/#type-PositionTickInfo)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -109,6 +115,9 @@ impl PositionTickInfo {
 }
 impl PositionTickInfo {
     pub const IDENTIFIER: &'static str = "Profiler.PositionTickInfo";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Coverage data for a source range.\n[CoverageRange](https://chromedevtools.github.io/devtools-protocol/tot/Profiler/#type-CoverageRange)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -138,6 +147,9 @@ impl CoverageRange {
 }
 impl CoverageRange {
     pub const IDENTIFIER: &'static str = "Profiler.CoverageRange";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Coverage data for a JavaScript function.\n[FunctionCoverage](https://chromedevtools.github.io/devtools-protocol/tot/Profiler/#type-FunctionCoverage)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -168,6 +180,9 @@ impl FunctionCoverage {
 }
 impl FunctionCoverage {
     pub const IDENTIFIER: &'static str = "Profiler.FunctionCoverage";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Coverage data for a JavaScript script.\n[ScriptCoverage](https://chromedevtools.github.io/devtools-protocol/tot/Profiler/#type-ScriptCoverage)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -198,5 +213,8 @@ impl ScriptCoverage {
 }
 impl ScriptCoverage {
     pub const IDENTIFIER: &'static str = "Profiler.ScriptCoverage";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (ProfilerTypes { ProfileNode (ProfileNode) , Profile (Profile) , PositionTickInfo (PositionTickInfo) , CoverageRange (CoverageRange) , FunctionCoverage (FunctionCoverage) , ScriptCoverage (ScriptCoverage) });

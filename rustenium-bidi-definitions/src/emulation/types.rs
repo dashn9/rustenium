@@ -55,6 +55,9 @@ impl GeolocationCoordinates {
 impl GeolocationCoordinates {
     pub const IDENTIFIER: &'static str = "emulation.GeolocationCoordinates";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GeolocationPositionError {
@@ -76,6 +79,9 @@ impl GeolocationPositionError {
 impl GeolocationPositionError {
     pub const IDENTIFIER: &'static str = "emulation.GeolocationPositionError";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NetworkConditions(NetworkConditionsOffline);
@@ -90,6 +96,9 @@ impl NetworkConditions {
 impl NetworkConditions {
     pub const IDENTIFIER: &'static str = "emulation.NetworkConditions";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NetworkConditionsOffline {
@@ -111,6 +120,9 @@ impl NetworkConditionsOffline {
 impl NetworkConditionsOffline {
     pub const IDENTIFIER: &'static str = "emulation.NetworkConditionsOffline";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum ScreenOrientationNatural {
@@ -151,5 +163,8 @@ impl ScreenOrientation {
 impl ScreenOrientation {
     pub const IDENTIFIER: &'static str = "emulation.ScreenOrientation";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (EmulationType { ForcedColorsModeTheme (ForcedColorsModeTheme) , GeolocationCoordinates (GeolocationCoordinates) , GeolocationPositionError (GeolocationPositionError) , NetworkConditions (NetworkConditions) , NetworkConditionsOffline (NetworkConditionsOffline) , ScreenOrientationNatural (ScreenOrientationNatural) , ScreenOrientationType (ScreenOrientationType) , ScreenOrientation (ScreenOrientation) });

@@ -32,6 +32,9 @@ impl SamplingProfileNode {
 }
 impl SamplingProfileNode {
     pub const IDENTIFIER: &'static str = "Memory.SamplingProfileNode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Array of heap profile samples.\n[SamplingProfile](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#type-SamplingProfile)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -50,6 +53,9 @@ impl SamplingProfile {
 }
 impl SamplingProfile {
     pub const IDENTIFIER: &'static str = "Memory.SamplingProfile";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Executable module information\n[Module](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#type-Module)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -84,6 +90,9 @@ impl Module {
 }
 impl Module {
     pub const IDENTIFIER: &'static str = "Memory.Module";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "DOM object counter data.\n[DOMCounter](https://chromedevtools.github.io/devtools-protocol/tot/Memory/#type-DOMCounter)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -105,5 +114,8 @@ impl DomCounter {
 }
 impl DomCounter {
     pub const IDENTIFIER: &'static str = "Memory.DOMCounter";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (MemoryTypes { PressureLevel (PressureLevel) , SamplingProfileNode (SamplingProfileNode) , SamplingProfile (SamplingProfile) , Module (Module) , DomCounter (DomCounter) });

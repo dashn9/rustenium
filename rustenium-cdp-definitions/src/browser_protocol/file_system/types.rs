@@ -29,6 +29,9 @@ impl File {
 }
 impl File {
     pub const IDENTIFIER: &'static str = "FileSystem.File";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Directory {
@@ -57,6 +60,9 @@ impl Directory {
 }
 impl Directory {
     pub const IDENTIFIER: &'static str = "FileSystem.Directory";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BucketFileSystemLocator {
@@ -87,5 +93,8 @@ impl BucketFileSystemLocator {
 }
 impl BucketFileSystemLocator {
     pub const IDENTIFIER: &'static str = "FileSystem.BucketFileSystemLocator";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (FileSystemTypes { File (File) , Directory (Directory) , BucketFileSystemLocator (BucketFileSystemLocator) });

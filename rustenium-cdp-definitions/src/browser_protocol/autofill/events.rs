@@ -23,5 +23,8 @@ pub struct AddressFormFilled {
 }
 impl AddressFormFilled {
     pub const IDENTIFIER: &'static str = "Autofill.addressFormFilled";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (AutofillEvents { AddressFormFilled (AddressFormFilled) });

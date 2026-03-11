@@ -72,6 +72,9 @@ impl TouchPoint {
 }
 impl TouchPoint {
     pub const IDENTIFIER: &'static str = "Input.TouchPoint";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum GestureSourceType {
@@ -110,6 +113,9 @@ impl TimeSinceEpoch {
 }
 impl TimeSinceEpoch {
     pub const IDENTIFIER: &'static str = "Input.TimeSinceEpoch";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DragDataItem {
@@ -142,6 +148,9 @@ impl DragDataItem {
 }
 impl DragDataItem {
     pub const IDENTIFIER: &'static str = "Input.DragDataItem";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DragData {
@@ -168,5 +177,8 @@ impl DragData {
 }
 impl DragData {
     pub const IDENTIFIER: &'static str = "Input.DragData";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (InputTypes { TouchPoint (TouchPoint) , GestureSourceType (GestureSourceType) , MouseButton (MouseButton) , TimeSinceEpoch (TimeSinceEpoch) , DragDataItem (DragDataItem) , DragData (DragData) });

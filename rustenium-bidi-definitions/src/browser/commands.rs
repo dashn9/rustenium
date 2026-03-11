@@ -14,6 +14,9 @@ pub struct Close {
 impl Close {
     pub const IDENTIFIER: &'static str = "browser.close";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Close {
     type Result = super::results::CloseResult;
@@ -46,6 +49,9 @@ pub struct CreateUserContext {
 impl CreateUserContext {
     pub const IDENTIFIER: &'static str = "browser.createUserContext";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for CreateUserContext {
     type Result = super::results::CreateUserContextResult;
@@ -65,6 +71,9 @@ pub struct GetClientWindows {
 impl GetClientWindows {
     pub const IDENTIFIER: &'static str = "browser.getClientWindows";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetClientWindows {
     type Result = super::results::GetClientWindowsResult;
@@ -84,6 +93,9 @@ pub struct GetUserContexts {
 impl GetUserContexts {
     pub const IDENTIFIER: &'static str = "browser.getUserContexts";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetUserContexts {
     type Result = super::results::GetUserContextsResult;
@@ -113,6 +125,9 @@ pub struct RemoveUserContext {
 impl RemoveUserContext {
     pub const IDENTIFIER: &'static str = "browser.removeUserContext";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RemoveUserContext {
     type Result = super::results::RemoveUserContextResult;
@@ -153,6 +168,9 @@ pub struct SetClientWindowState {
 impl SetClientWindowState {
     pub const IDENTIFIER: &'static str = "browser.setClientWindowState";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetClientWindowState {
     type Result = super::results::SetClientWindowStateResult;
@@ -181,6 +199,9 @@ pub struct SetDownloadBehavior {
 impl SetDownloadBehavior {
     pub const IDENTIFIER: &'static str = "browser.setDownloadBehavior";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetDownloadBehavior {
     type Result = super::results::SetDownloadBehaviorResult;

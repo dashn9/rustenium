@@ -22,6 +22,9 @@ impl SourceOrderConfig {
 }
 impl SourceOrderConfig {
     pub const IDENTIFIER: &'static str = "Overlay.SourceOrderConfig";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Configuration data for the highlighting of Grid elements.\n[GridHighlightConfig](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#type-GridHighlightConfig)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -119,6 +122,9 @@ pub struct GridHighlightConfig {
 }
 impl GridHighlightConfig {
     pub const IDENTIFIER: &'static str = "Overlay.GridHighlightConfig";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Configuration data for the highlighting of Flex container elements.\n[FlexContainerHighlightConfig](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#type-FlexContainerHighlightConfig)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -166,6 +172,9 @@ pub struct FlexContainerHighlightConfig {
 }
 impl FlexContainerHighlightConfig {
     pub const IDENTIFIER: &'static str = "Overlay.FlexContainerHighlightConfig";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Configuration data for the highlighting of Flex item elements.\n[FlexItemHighlightConfig](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#type-FlexItemHighlightConfig)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -188,6 +197,9 @@ pub struct FlexItemHighlightConfig {
 }
 impl FlexItemHighlightConfig {
     pub const IDENTIFIER: &'static str = "Overlay.FlexItemHighlightConfig";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Style information for drawing a line.\n[LineStyle](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#type-LineStyle)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -213,6 +225,9 @@ pub enum LineStylePattern {
 }
 impl LineStyle {
     pub const IDENTIFIER: &'static str = "Overlay.LineStyle";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Style information for drawing a box.\n[BoxStyle](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#type-BoxStyle)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -230,6 +245,9 @@ pub struct BoxStyle {
 }
 impl BoxStyle {
     pub const IDENTIFIER: &'static str = "Overlay.BoxStyle";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum ContrastAlgorithm {
@@ -341,6 +359,9 @@ pub struct HighlightConfig {
 }
 impl HighlightConfig {
     pub const IDENTIFIER: &'static str = "Overlay.HighlightConfig";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum ColorFormat {
@@ -376,6 +397,9 @@ impl GridNodeHighlightConfig {
 }
 impl GridNodeHighlightConfig {
     pub const IDENTIFIER: &'static str = "Overlay.GridNodeHighlightConfig";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FlexNodeHighlightConfig {
@@ -399,6 +423,9 @@ impl FlexNodeHighlightConfig {
 }
 impl FlexNodeHighlightConfig {
     pub const IDENTIFIER: &'static str = "Overlay.FlexNodeHighlightConfig";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ScrollSnapContainerHighlightConfig {
@@ -425,6 +452,9 @@ pub struct ScrollSnapContainerHighlightConfig {
 }
 impl ScrollSnapContainerHighlightConfig {
     pub const IDENTIFIER: &'static str = "Overlay.ScrollSnapContainerHighlightConfig";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ScrollSnapHighlightConfig {
@@ -448,6 +478,9 @@ impl ScrollSnapHighlightConfig {
 }
 impl ScrollSnapHighlightConfig {
     pub const IDENTIFIER: &'static str = "Overlay.ScrollSnapHighlightConfig";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Configuration for dual screen hinge\n[HingeConfig](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#type-HingeConfig)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -477,6 +510,9 @@ impl HingeConfig {
 }
 impl HingeConfig {
     pub const IDENTIFIER: &'static str = "Overlay.HingeConfig";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Configuration for Window Controls Overlay\n[WindowControlsOverlayConfig](https://chromedevtools.github.io/devtools-protocol/tot/Overlay/#type-WindowControlsOverlayConfig)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -506,6 +542,9 @@ impl WindowControlsOverlayConfig {
 }
 impl WindowControlsOverlayConfig {
     pub const IDENTIFIER: &'static str = "Overlay.WindowControlsOverlayConfig";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ContainerQueryHighlightConfig {
@@ -530,6 +569,9 @@ impl ContainerQueryHighlightConfig {
 }
 impl ContainerQueryHighlightConfig {
     pub const IDENTIFIER: &'static str = "Overlay.ContainerQueryHighlightConfig";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct ContainerQueryContainerHighlightConfig {
@@ -546,6 +588,9 @@ pub struct ContainerQueryContainerHighlightConfig {
 }
 impl ContainerQueryContainerHighlightConfig {
     pub const IDENTIFIER: &'static str = "Overlay.ContainerQueryContainerHighlightConfig";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct IsolatedElementHighlightConfig {
@@ -569,6 +614,9 @@ impl IsolatedElementHighlightConfig {
 }
 impl IsolatedElementHighlightConfig {
     pub const IDENTIFIER: &'static str = "Overlay.IsolatedElementHighlightConfig";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct IsolationModeHighlightConfig {
@@ -590,6 +638,9 @@ pub struct IsolationModeHighlightConfig {
 }
 impl IsolationModeHighlightConfig {
     pub const IDENTIFIER: &'static str = "Overlay.IsolationModeHighlightConfig";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum InspectMode {
@@ -617,5 +668,8 @@ pub struct InspectedElementAnchorConfig {
 }
 impl InspectedElementAnchorConfig {
     pub const IDENTIFIER: &'static str = "Overlay.InspectedElementAnchorConfig";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (OverlayTypes { SourceOrderConfig (SourceOrderConfig) , GridHighlightConfig (GridHighlightConfig) , FlexContainerHighlightConfig (FlexContainerHighlightConfig) , FlexItemHighlightConfig (FlexItemHighlightConfig) , LineStyle (LineStyle) , BoxStyle (BoxStyle) , ContrastAlgorithm (ContrastAlgorithm) , HighlightConfig (HighlightConfig) , ColorFormat (ColorFormat) , GridNodeHighlightConfig (GridNodeHighlightConfig) , FlexNodeHighlightConfig (FlexNodeHighlightConfig) , ScrollSnapContainerHighlightConfig (ScrollSnapContainerHighlightConfig) , ScrollSnapHighlightConfig (ScrollSnapHighlightConfig) , HingeConfig (HingeConfig) , WindowControlsOverlayConfig (WindowControlsOverlayConfig) , ContainerQueryHighlightConfig (ContainerQueryHighlightConfig) , ContainerQueryContainerHighlightConfig (ContainerQueryContainerHighlightConfig) , IsolatedElementHighlightConfig (IsolatedElementHighlightConfig) , IsolationModeHighlightConfig (IsolationModeHighlightConfig) , InspectMode (InspectMode) , InspectedElementAnchorConfig (InspectedElementAnchorConfig) });

@@ -25,6 +25,9 @@ pub struct StartObserving {
 }
 impl StartObserving {
     pub const IDENTIFIER: &'static str = "BackgroundService.startObserving";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for StartObserving {
     type Result = super::results::StartObservingResult;
@@ -55,6 +58,9 @@ pub struct StopObserving {
 }
 impl StopObserving {
     pub const IDENTIFIER: &'static str = "BackgroundService.stopObserving";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for StopObserving {
     type Result = super::results::StopObservingResult;
@@ -91,6 +97,9 @@ pub struct SetRecording {
 }
 impl SetRecording {
     pub const IDENTIFIER: &'static str = "BackgroundService.setRecording";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetRecording {
     type Result = super::results::SetRecordingResult;
@@ -121,6 +130,9 @@ pub struct ClearEvents {
 }
 impl ClearEvents {
     pub const IDENTIFIER: &'static str = "BackgroundService.clearEvents";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ClearEvents {
     type Result = super::results::ClearEventsResult;

@@ -35,6 +35,9 @@ pub struct ContextCreated {
 impl ContextCreated {
     pub const IDENTIFIER: &'static str = "browsingContext.contextCreated";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ContextDestroyedParams {
@@ -72,6 +75,9 @@ pub struct ContextDestroyed {
 impl ContextDestroyed {
     pub const IDENTIFIER: &'static str = "browsingContext.contextDestroyed";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NavigationStartedParams {
@@ -92,6 +98,9 @@ pub struct NavigationStarted {
 impl NavigationStarted {
     pub const IDENTIFIER: &'static str = "browsingContext.navigationStarted";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FragmentNavigatedParams {
@@ -112,6 +121,9 @@ pub struct FragmentNavigated {
 impl FragmentNavigated {
     pub const IDENTIFIER: &'static str = "browsingContext.fragmentNavigated";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HistoryUpdatedParams {
@@ -135,6 +147,9 @@ pub struct HistoryUpdated {
 impl HistoryUpdated {
     pub const IDENTIFIER: &'static str = "browsingContext.historyUpdated";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DomContentLoadedParams {
@@ -155,6 +170,9 @@ pub struct DomContentLoaded {
 impl DomContentLoaded {
     pub const IDENTIFIER: &'static str = "browsingContext.domContentLoaded";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LoadParams {
@@ -175,6 +193,9 @@ pub struct Load {
 impl Load {
     pub const IDENTIFIER: &'static str = "browsingContext.load";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DownloadWillBeginParams {
@@ -197,6 +218,9 @@ pub struct DownloadWillBegin {
 impl DownloadWillBegin {
     pub const IDENTIFIER: &'static str = "browsingContext.downloadWillBegin";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DownloadEndParams {
@@ -218,6 +242,9 @@ pub struct DownloadEnd {
 impl DownloadEnd {
     pub const IDENTIFIER: &'static str = "browsingContext.downloadEnd";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NavigationAbortedParams {
@@ -238,6 +265,9 @@ pub struct NavigationAborted {
 impl NavigationAborted {
     pub const IDENTIFIER: &'static str = "browsingContext.navigationAborted";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NavigationCommittedParams {
@@ -258,6 +288,9 @@ pub struct NavigationCommitted {
 impl NavigationCommitted {
     pub const IDENTIFIER: &'static str = "browsingContext.navigationCommitted";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NavigationFailedParams {
@@ -278,6 +311,9 @@ pub struct NavigationFailed {
 impl NavigationFailed {
     pub const IDENTIFIER: &'static str = "browsingContext.navigationFailed";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UserPromptClosedParams {
@@ -305,6 +341,9 @@ pub struct UserPromptClosed {
 impl UserPromptClosed {
     pub const IDENTIFIER: &'static str = "browsingContext.userPromptClosed";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UserPromptOpenedParams {
@@ -334,5 +373,8 @@ pub struct UserPromptOpened {
 impl UserPromptOpened {
     pub const IDENTIFIER: &'static str = "browsingContext.userPromptOpened";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (BrowsingContextEvent { ContextCreated (ContextCreated) , ContextDestroyed (ContextDestroyed) , NavigationStarted (NavigationStarted) , FragmentNavigated (FragmentNavigated) , HistoryUpdated (HistoryUpdated) , DomContentLoaded (DomContentLoaded) , Load (Load) , DownloadWillBegin (DownloadWillBegin) , DownloadEnd (DownloadEnd) , NavigationAborted (NavigationAborted) , NavigationCommitted (NavigationCommitted) , NavigationFailed (NavigationFailed) , UserPromptClosed (UserPromptClosed) , UserPromptOpened (UserPromptOpened) });

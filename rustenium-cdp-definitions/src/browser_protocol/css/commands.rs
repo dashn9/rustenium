@@ -44,6 +44,9 @@ pub struct AddRule {
 }
 impl AddRule {
     pub const IDENTIFIER: &'static str = "CSS.addRule";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for AddRule {
     type Result = super::results::AddRuleResult;
@@ -76,6 +79,9 @@ pub struct CollectClassNames {
 }
 impl CollectClassNames {
     pub const IDENTIFIER: &'static str = "CSS.collectClassNames";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for CollectClassNames {
     type Result = super::results::CollectClassNamesResult;
@@ -113,6 +119,9 @@ pub struct CreateStyleSheet {
 }
 impl CreateStyleSheet {
     pub const IDENTIFIER: &'static str = "CSS.createStyleSheet";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for CreateStyleSheet {
     type Result = super::results::CreateStyleSheetResult;
@@ -133,6 +142,9 @@ pub struct Disable {
 }
 impl Disable {
     pub const IDENTIFIER: &'static str = "CSS.disable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -153,6 +165,9 @@ pub struct Enable {
 }
 impl Enable {
     pub const IDENTIFIER: &'static str = "CSS.enable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -192,6 +207,9 @@ pub struct ForcePseudoState {
 }
 impl ForcePseudoState {
     pub const IDENTIFIER: &'static str = "CSS.forcePseudoState";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ForcePseudoState {
     type Result = super::results::ForcePseudoStateResult;
@@ -230,6 +248,9 @@ pub struct ForceStartingStyle {
 }
 impl ForceStartingStyle {
     pub const IDENTIFIER: &'static str = "CSS.forceStartingStyle";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ForceStartingStyle {
     type Result = super::results::ForceStartingStyleResult;
@@ -259,6 +280,9 @@ pub struct GetBackgroundColors {
 }
 impl GetBackgroundColors {
     pub const IDENTIFIER: &'static str = "CSS.getBackgroundColors";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetBackgroundColors {
     type Result = super::results::GetBackgroundColorsResult;
@@ -289,6 +313,9 @@ pub struct GetComputedStyleForNode {
 }
 impl GetComputedStyleForNode {
     pub const IDENTIFIER: &'static str = "CSS.getComputedStyleForNode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetComputedStyleForNode {
     type Result = super::results::GetComputedStyleForNodeResult;
@@ -346,6 +373,9 @@ pub struct ResolveValues {
 }
 impl ResolveValues {
     pub const IDENTIFIER: &'static str = "CSS.resolveValues";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ResolveValues {
     type Result = super::results::ResolveValuesResult;
@@ -377,6 +407,9 @@ pub struct GetLonghandProperties {
 }
 impl GetLonghandProperties {
     pub const IDENTIFIER: &'static str = "CSS.getLonghandProperties";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetLonghandProperties {
     type Result = super::results::GetLonghandPropertiesResult;
@@ -407,6 +440,9 @@ pub struct GetInlineStylesForNode {
 }
 impl GetInlineStylesForNode {
     pub const IDENTIFIER: &'static str = "CSS.getInlineStylesForNode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetInlineStylesForNode {
     type Result = super::results::GetInlineStylesForNodeResult;
@@ -437,6 +473,9 @@ pub struct GetAnimatedStylesForNode {
 }
 impl GetAnimatedStylesForNode {
     pub const IDENTIFIER: &'static str = "CSS.getAnimatedStylesForNode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetAnimatedStylesForNode {
     type Result = super::results::GetAnimatedStylesForNodeResult;
@@ -467,6 +506,9 @@ pub struct GetMatchedStylesForNode {
 }
 impl GetMatchedStylesForNode {
     pub const IDENTIFIER: &'static str = "CSS.getMatchedStylesForNode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetMatchedStylesForNode {
     type Result = super::results::GetMatchedStylesForNodeResult;
@@ -487,6 +529,9 @@ pub struct GetEnvironmentVariables {
 }
 impl GetEnvironmentVariables {
     pub const IDENTIFIER: &'static str = "CSS.getEnvironmentVariables";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetEnvironmentVariables {
     type Result = super::results::GetEnvironmentVariablesResult;
@@ -507,6 +552,9 @@ pub struct GetMediaQueries {
 }
 impl GetMediaQueries {
     pub const IDENTIFIER: &'static str = "CSS.getMediaQueries";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetMediaQueries {
     type Result = super::results::GetMediaQueriesResult;
@@ -537,6 +585,9 @@ pub struct GetPlatformFontsForNode {
 }
 impl GetPlatformFontsForNode {
     pub const IDENTIFIER: &'static str = "CSS.getPlatformFontsForNode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetPlatformFontsForNode {
     type Result = super::results::GetPlatformFontsForNodeResult;
@@ -569,6 +620,9 @@ pub struct GetStyleSheetText {
 }
 impl GetStyleSheetText {
     pub const IDENTIFIER: &'static str = "CSS.getStyleSheetText";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetStyleSheetText {
     type Result = super::results::GetStyleSheetTextResult;
@@ -599,6 +653,9 @@ pub struct GetLayersForNode {
 }
 impl GetLayersForNode {
     pub const IDENTIFIER: &'static str = "CSS.getLayersForNode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetLayersForNode {
     type Result = super::results::GetLayersForNodeResult;
@@ -635,6 +692,9 @@ pub struct GetLocationForSelector {
 }
 impl GetLocationForSelector {
     pub const IDENTIFIER: &'static str = "CSS.getLocationForSelector";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetLocationForSelector {
     type Result = super::results::GetLocationForSelectorResult;
@@ -660,6 +720,9 @@ pub struct TrackComputedStyleUpdatesForNode {
 }
 impl TrackComputedStyleUpdatesForNode {
     pub const IDENTIFIER: &'static str = "CSS.trackComputedStyleUpdatesForNode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for TrackComputedStyleUpdatesForNode {
     type Result = super::results::TrackComputedStyleUpdatesForNodeResult;
@@ -691,6 +754,9 @@ pub struct TrackComputedStyleUpdates {
 }
 impl TrackComputedStyleUpdates {
     pub const IDENTIFIER: &'static str = "CSS.trackComputedStyleUpdates";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for TrackComputedStyleUpdates {
     type Result = super::results::TrackComputedStyleUpdatesResult;
@@ -711,6 +777,9 @@ pub struct TakeComputedStyleUpdates {
 }
 impl TakeComputedStyleUpdates {
     pub const IDENTIFIER: &'static str = "CSS.takeComputedStyleUpdates";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for TakeComputedStyleUpdates {
     type Result = super::results::TakeComputedStyleUpdatesResult;
@@ -752,6 +821,9 @@ pub struct SetEffectivePropertyValueForNode {
 }
 impl SetEffectivePropertyValueForNode {
     pub const IDENTIFIER: &'static str = "CSS.setEffectivePropertyValueForNode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetEffectivePropertyValueForNode {
     type Result = super::results::SetEffectivePropertyValueForNodeResult;
@@ -792,6 +864,9 @@ pub struct SetPropertyRulePropertyName {
 }
 impl SetPropertyRulePropertyName {
     pub const IDENTIFIER: &'static str = "CSS.setPropertyRulePropertyName";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetPropertyRulePropertyName {
     type Result = super::results::SetPropertyRulePropertyNameResult;
@@ -832,6 +907,9 @@ pub struct SetKeyframeKey {
 }
 impl SetKeyframeKey {
     pub const IDENTIFIER: &'static str = "CSS.setKeyframeKey";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetKeyframeKey {
     type Result = super::results::SetKeyframeKeyResult;
@@ -872,6 +950,9 @@ pub struct SetMediaText {
 }
 impl SetMediaText {
     pub const IDENTIFIER: &'static str = "CSS.setMediaText";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetMediaText {
     type Result = super::results::SetMediaTextResult;
@@ -912,6 +993,9 @@ pub struct SetContainerQueryText {
 }
 impl SetContainerQueryText {
     pub const IDENTIFIER: &'static str = "CSS.setContainerQueryText";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetContainerQueryText {
     type Result = super::results::SetContainerQueryTextResult;
@@ -952,6 +1036,9 @@ pub struct SetSupportsText {
 }
 impl SetSupportsText {
     pub const IDENTIFIER: &'static str = "CSS.setSupportsText";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetSupportsText {
     type Result = super::results::SetSupportsTextResult;
@@ -992,6 +1079,9 @@ pub struct SetScopeText {
 }
 impl SetScopeText {
     pub const IDENTIFIER: &'static str = "CSS.setScopeText";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetScopeText {
     type Result = super::results::SetScopeTextResult;
@@ -1032,6 +1122,9 @@ pub struct SetRuleSelector {
 }
 impl SetRuleSelector {
     pub const IDENTIFIER: &'static str = "CSS.setRuleSelector";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetRuleSelector {
     type Result = super::results::SetRuleSelectorResult;
@@ -1068,6 +1161,9 @@ pub struct SetStyleSheetText {
 }
 impl SetStyleSheetText {
     pub const IDENTIFIER: &'static str = "CSS.setStyleSheetText";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetStyleSheetText {
     type Result = super::results::SetStyleSheetTextResult;
@@ -1105,6 +1201,9 @@ pub struct SetStyleTexts {
 }
 impl SetStyleTexts {
     pub const IDENTIFIER: &'static str = "CSS.setStyleTexts";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetStyleTexts {
     type Result = super::results::SetStyleTextsResult;
@@ -1125,6 +1224,9 @@ pub struct StartRuleUsageTracking {
 }
 impl StartRuleUsageTracking {
     pub const IDENTIFIER: &'static str = "CSS.startRuleUsageTracking";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for StartRuleUsageTracking {
     type Result = super::results::StartRuleUsageTrackingResult;
@@ -1145,6 +1247,9 @@ pub struct StopRuleUsageTracking {
 }
 impl StopRuleUsageTracking {
     pub const IDENTIFIER: &'static str = "CSS.stopRuleUsageTracking";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for StopRuleUsageTracking {
     type Result = super::results::StopRuleUsageTrackingResult;
@@ -1165,6 +1270,9 @@ pub struct TakeCoverageDelta {
 }
 impl TakeCoverageDelta {
     pub const IDENTIFIER: &'static str = "CSS.takeCoverageDelta";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for TakeCoverageDelta {
     type Result = super::results::TakeCoverageDeltaResult;
@@ -1196,6 +1304,9 @@ pub struct SetLocalFontsEnabled {
 }
 impl SetLocalFontsEnabled {
     pub const IDENTIFIER: &'static str = "CSS.setLocalFontsEnabled";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetLocalFontsEnabled {
     type Result = super::results::SetLocalFontsEnabledResult;

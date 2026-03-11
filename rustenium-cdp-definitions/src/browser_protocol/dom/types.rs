@@ -12,6 +12,9 @@ impl NodeId {
 }
 impl NodeId {
     pub const IDENTIFIER: &'static str = "DOM.NodeId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Unique DOM node identifier used to reference a node that may not have been pushed to the\nfront-end.\n[BackendNodeId](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#type-BackendNodeId)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Copy, Hash)]
@@ -26,6 +29,9 @@ impl BackendNodeId {
 }
 impl BackendNodeId {
     pub const IDENTIFIER: &'static str = "DOM.BackendNodeId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Unique identifier for a CSS stylesheet.\n[StyleSheetId](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#type-StyleSheetId)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
@@ -60,6 +66,9 @@ impl std::borrow::Borrow<str> for StyleSheetId {
 }
 impl StyleSheetId {
     pub const IDENTIFIER: &'static str = "DOM.StyleSheetId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Backend node with a friendly name.\n[BackendNode](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#type-BackendNode)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -88,6 +97,9 @@ impl BackendNode {
 }
 impl BackendNode {
     pub const IDENTIFIER: &'static str = "DOM.BackendNode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Pseudo element type."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -379,6 +391,9 @@ pub struct Node {
 }
 impl Node {
     pub const IDENTIFIER: &'static str = "DOM.Node";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "A structure to hold the top-level node of a detached tree and an array of its retained descendants.\n[DetachedElementInfo](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#type-DetachedElementInfo)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -399,6 +414,9 @@ impl DetachedElementInfo {
 }
 impl DetachedElementInfo {
     pub const IDENTIFIER: &'static str = "DOM.DetachedElementInfo";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "A structure holding an RGBA color.\n[RGBA](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#type-RGBA)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -430,6 +448,9 @@ impl Rgba {
 }
 impl Rgba {
     pub const IDENTIFIER: &'static str = "DOM.RGBA";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "An array of quad vertices, x immediately followed by y for each point, points clock-wise.\n[Quad](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#type-Quad)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -444,6 +465,9 @@ impl Quad {
 }
 impl Quad {
     pub const IDENTIFIER: &'static str = "DOM.Quad";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Box model.\n[BoxModel](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#type-BoxModel)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -474,6 +498,9 @@ pub struct BoxModel {
 }
 impl BoxModel {
     pub const IDENTIFIER: &'static str = "DOM.BoxModel";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "CSS Shape Outside details.\n[ShapeOutsideInfo](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#type-ShapeOutsideInfo)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -505,6 +532,9 @@ impl ShapeOutsideInfo {
 }
 impl ShapeOutsideInfo {
     pub const IDENTIFIER: &'static str = "DOM.ShapeOutsideInfo";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Rectangle.\n[Rect](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#type-Rect)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -539,6 +569,9 @@ impl Rect {
 }
 impl Rect {
     pub const IDENTIFIER: &'static str = "DOM.Rect";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CssComputedStyleProperty {
@@ -559,5 +592,8 @@ impl CssComputedStyleProperty {
 }
 impl CssComputedStyleProperty {
     pub const IDENTIFIER: &'static str = "DOM.CSSComputedStyleProperty";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (DomTypes { NodeId (NodeId) , BackendNodeId (BackendNodeId) , StyleSheetId (StyleSheetId) , BackendNode (BackendNode) , PseudoType (PseudoType) , ShadowRootType (ShadowRootType) , CompatibilityMode (CompatibilityMode) , PhysicalAxes (PhysicalAxes) , LogicalAxes (LogicalAxes) , ScrollOrientation (ScrollOrientation) , Node (Node) , DetachedElementInfo (DetachedElementInfo) , Rgba (Rgba) , Quad (Quad) , BoxModel (BoxModel) , ShapeOutsideInfo (ShapeOutsideInfo) , Rect (Rect) , CssComputedStyleProperty (CssComputedStyleProperty) });

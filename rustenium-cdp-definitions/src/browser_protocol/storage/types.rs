@@ -26,6 +26,9 @@ impl From<String> for SerializedStorageKey {
 }
 impl SerializedStorageKey {
     pub const IDENTIFIER: &'static str = "Storage.SerializedStorageKey";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Enum of possible storage types."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -77,6 +80,9 @@ impl UsageForType {
 }
 impl UsageForType {
     pub const IDENTIFIER: &'static str = "Storage.UsageForType";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Pair of issuer origin and number of available (signed, but not used) Trust\nTokens from that issuer.\n[TrustTokens](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#type-TrustTokens)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -96,6 +102,9 @@ impl TrustTokens {
 }
 impl TrustTokens {
     pub const IDENTIFIER: &'static str = "Storage.TrustTokens";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Protected audience interest group auction identifier.\n[InterestGroupAuctionId](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#type-InterestGroupAuctionId)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
@@ -130,6 +139,9 @@ impl std::borrow::Borrow<str> for InterestGroupAuctionId {
 }
 impl InterestGroupAuctionId {
     pub const IDENTIFIER: &'static str = "Storage.InterestGroupAuctionId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Enum of interest group access types."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -243,6 +255,9 @@ impl SharedStorageEntry {
 }
 impl SharedStorageEntry {
     pub const IDENTIFIER: &'static str = "Storage.SharedStorageEntry";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Details for an origin's shared storage.\n[SharedStorageMetadata](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#type-SharedStorageMetadata)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -277,6 +292,9 @@ impl SharedStorageMetadata {
 }
 impl SharedStorageMetadata {
     pub const IDENTIFIER: &'static str = "Storage.SharedStorageMetadata";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Represents a dictionary object passed in as privateAggregationConfig to\nrun or selectURL.\n[SharedStoragePrivateAggregationConfig](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#type-SharedStoragePrivateAggregationConfig)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -312,6 +330,9 @@ impl SharedStoragePrivateAggregationConfig {
 }
 impl SharedStoragePrivateAggregationConfig {
     pub const IDENTIFIER: &'static str = "Storage.SharedStoragePrivateAggregationConfig";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Pair of reporting metadata details for a candidate URL for `selectURL()`.\n[SharedStorageReportingMetadata](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#type-SharedStorageReportingMetadata)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -331,6 +352,9 @@ impl SharedStorageReportingMetadata {
 }
 impl SharedStorageReportingMetadata {
     pub const IDENTIFIER: &'static str = "Storage.SharedStorageReportingMetadata";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Bundles a candidate URL with its reporting metadata.\n[SharedStorageUrlWithMetadata](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#type-SharedStorageUrlWithMetadata)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -356,6 +380,9 @@ impl SharedStorageUrlWithMetadata {
 }
 impl SharedStorageUrlWithMetadata {
     pub const IDENTIFIER: &'static str = "Storage.SharedStorageUrlWithMetadata";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Bundles the parameters for shared storage access events whose\npresence/absence can vary according to SharedStorageAccessType.\n[SharedStorageAccessParams](https://chromedevtools.github.io/devtools-protocol/tot/Storage/#type-SharedStorageAccessParams)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -448,6 +475,9 @@ pub struct SharedStorageAccessParams {
 }
 impl SharedStorageAccessParams {
     pub const IDENTIFIER: &'static str = "Storage.SharedStorageAccessParams";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum StorageBucketsDurability {
@@ -476,6 +506,9 @@ impl StorageBucket {
 }
 impl StorageBucket {
     pub const IDENTIFIER: &'static str = "Storage.StorageBucket";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StorageBucketInfo {
@@ -495,6 +528,9 @@ pub struct StorageBucketInfo {
 }
 impl StorageBucketInfo {
     pub const IDENTIFIER: &'static str = "Storage.StorageBucketInfo";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum AttributionReportingSourceType {
@@ -530,6 +566,9 @@ impl From<String> for UnsignedInt64AsBase10 {
 }
 impl UnsignedInt64AsBase10 {
     pub const IDENTIFIER: &'static str = "Storage.UnsignedInt64AsBase10";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
 pub struct UnsignedInt128AsBase16(String);
@@ -558,6 +597,9 @@ impl From<String> for UnsignedInt128AsBase16 {
 }
 impl UnsignedInt128AsBase16 {
     pub const IDENTIFIER: &'static str = "Storage.UnsignedInt128AsBase16";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
 pub struct SignedInt64AsBase10(String);
@@ -586,6 +628,9 @@ impl From<String> for SignedInt64AsBase10 {
 }
 impl SignedInt64AsBase10 {
     pub const IDENTIFIER: &'static str = "Storage.SignedInt64AsBase10";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributionReportingFilterDataEntry {
@@ -605,6 +650,9 @@ impl AttributionReportingFilterDataEntry {
 }
 impl AttributionReportingFilterDataEntry {
     pub const IDENTIFIER: &'static str = "Storage.AttributionReportingFilterDataEntry";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributionReportingFilterConfig {
@@ -627,6 +675,9 @@ impl AttributionReportingFilterConfig {
 }
 impl AttributionReportingFilterConfig {
     pub const IDENTIFIER: &'static str = "Storage.AttributionReportingFilterConfig";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributionReportingFilterPair {
@@ -650,6 +701,9 @@ impl AttributionReportingFilterPair {
 }
 impl AttributionReportingFilterPair {
     pub const IDENTIFIER: &'static str = "Storage.AttributionReportingFilterPair";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributionReportingAggregationKeysEntry {
@@ -668,6 +722,9 @@ impl AttributionReportingAggregationKeysEntry {
 }
 impl AttributionReportingAggregationKeysEntry {
     pub const IDENTIFIER: &'static str = "Storage.AttributionReportingAggregationKeysEntry";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributionReportingEventReportWindows {
@@ -689,6 +746,9 @@ impl AttributionReportingEventReportWindows {
 }
 impl AttributionReportingEventReportWindows {
     pub const IDENTIFIER: &'static str = "Storage.AttributionReportingEventReportWindows";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum AttributionReportingTriggerDataMatching {
@@ -724,6 +784,9 @@ impl AttributionReportingAggregatableDebugReportingData {
 impl AttributionReportingAggregatableDebugReportingData {
     pub const IDENTIFIER: &'static str =
         "Storage.AttributionReportingAggregatableDebugReportingData";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributionReportingAggregatableDebugReportingConfig {
@@ -758,6 +821,9 @@ impl AttributionReportingAggregatableDebugReportingConfig {
 impl AttributionReportingAggregatableDebugReportingConfig {
     pub const IDENTIFIER: &'static str =
         "Storage.AttributionReportingAggregatableDebugReportingConfig";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributionScopesData {
@@ -785,6 +851,9 @@ impl AttributionScopesData {
 }
 impl AttributionScopesData {
     pub const IDENTIFIER: &'static str = "Storage.AttributionScopesData";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributionReportingNamedBudgetDef {
@@ -803,6 +872,9 @@ impl AttributionReportingNamedBudgetDef {
 }
 impl AttributionReportingNamedBudgetDef {
     pub const IDENTIFIER: &'static str = "Storage.AttributionReportingNamedBudgetDef";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributionReportingSourceRegistration {
@@ -865,6 +937,9 @@ pub struct AttributionReportingSourceRegistration {
 }
 impl AttributionReportingSourceRegistration {
     pub const IDENTIFIER: &'static str = "Storage.AttributionReportingSourceRegistration";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum AttributionReportingSourceRegistrationResult {
@@ -933,6 +1008,9 @@ impl AttributionReportingAggregatableValueDictEntry {
 }
 impl AttributionReportingAggregatableValueDictEntry {
     pub const IDENTIFIER: &'static str = "Storage.AttributionReportingAggregatableValueDictEntry";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributionReportingAggregatableValueEntry {
@@ -955,6 +1033,9 @@ impl AttributionReportingAggregatableValueEntry {
 }
 impl AttributionReportingAggregatableValueEntry {
     pub const IDENTIFIER: &'static str = "Storage.AttributionReportingAggregatableValueEntry";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributionReportingEventTriggerData {
@@ -985,6 +1066,9 @@ impl AttributionReportingEventTriggerData {
 }
 impl AttributionReportingEventTriggerData {
     pub const IDENTIFIER: &'static str = "Storage.AttributionReportingEventTriggerData";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributionReportingAggregatableTriggerData {
@@ -1011,6 +1095,9 @@ impl AttributionReportingAggregatableTriggerData {
 }
 impl AttributionReportingAggregatableTriggerData {
     pub const IDENTIFIER: &'static str = "Storage.AttributionReportingAggregatableTriggerData";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributionReportingAggregatableDedupKey {
@@ -1031,6 +1118,9 @@ impl AttributionReportingAggregatableDedupKey {
 }
 impl AttributionReportingAggregatableDedupKey {
     pub const IDENTIFIER: &'static str = "Storage.AttributionReportingAggregatableDedupKey";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributionReportingNamedBudgetCandidate {
@@ -1051,6 +1141,9 @@ impl AttributionReportingNamedBudgetCandidate {
 }
 impl AttributionReportingNamedBudgetCandidate {
     pub const IDENTIFIER: &'static str = "Storage.AttributionReportingNamedBudgetCandidate";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributionReportingTriggerRegistration {
@@ -1097,6 +1190,9 @@ pub struct AttributionReportingTriggerRegistration {
 }
 impl AttributionReportingTriggerRegistration {
     pub const IDENTIFIER: &'static str = "Storage.AttributionReportingTriggerRegistration";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum AttributionReportingEventLevelResult {
@@ -1218,5 +1314,8 @@ impl RelatedWebsiteSet {
 }
 impl RelatedWebsiteSet {
     pub const IDENTIFIER: &'static str = "Storage.RelatedWebsiteSet";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (StorageTypes { SerializedStorageKey (SerializedStorageKey) , StorageType (StorageType) , UsageForType (UsageForType) , TrustTokens (TrustTokens) , InterestGroupAuctionId (InterestGroupAuctionId) , InterestGroupAccessType (InterestGroupAccessType) , InterestGroupAuctionEventType (InterestGroupAuctionEventType) , InterestGroupAuctionFetchType (InterestGroupAuctionFetchType) , SharedStorageAccessScope (SharedStorageAccessScope) , SharedStorageAccessMethod (SharedStorageAccessMethod) , SharedStorageEntry (SharedStorageEntry) , SharedStorageMetadata (SharedStorageMetadata) , SharedStoragePrivateAggregationConfig (SharedStoragePrivateAggregationConfig) , SharedStorageReportingMetadata (SharedStorageReportingMetadata) , SharedStorageUrlWithMetadata (SharedStorageUrlWithMetadata) , SharedStorageAccessParams (SharedStorageAccessParams) , StorageBucketsDurability (StorageBucketsDurability) , StorageBucket (StorageBucket) , StorageBucketInfo (StorageBucketInfo) , AttributionReportingSourceType (AttributionReportingSourceType) , UnsignedInt64AsBase10 (UnsignedInt64AsBase10) , UnsignedInt128AsBase16 (UnsignedInt128AsBase16) , SignedInt64AsBase10 (SignedInt64AsBase10) , AttributionReportingFilterDataEntry (AttributionReportingFilterDataEntry) , AttributionReportingFilterConfig (AttributionReportingFilterConfig) , AttributionReportingFilterPair (AttributionReportingFilterPair) , AttributionReportingAggregationKeysEntry (AttributionReportingAggregationKeysEntry) , AttributionReportingEventReportWindows (AttributionReportingEventReportWindows) , AttributionReportingTriggerDataMatching (AttributionReportingTriggerDataMatching) , AttributionReportingAggregatableDebugReportingData (AttributionReportingAggregatableDebugReportingData) , AttributionReportingAggregatableDebugReportingConfig (AttributionReportingAggregatableDebugReportingConfig) , AttributionScopesData (AttributionScopesData) , AttributionReportingNamedBudgetDef (AttributionReportingNamedBudgetDef) , AttributionReportingSourceRegistration (AttributionReportingSourceRegistration) , AttributionReportingSourceRegistrationResult (AttributionReportingSourceRegistrationResult) , AttributionReportingSourceRegistrationTimeConfig (AttributionReportingSourceRegistrationTimeConfig) , AttributionReportingAggregatableValueDictEntry (AttributionReportingAggregatableValueDictEntry) , AttributionReportingAggregatableValueEntry (AttributionReportingAggregatableValueEntry) , AttributionReportingEventTriggerData (AttributionReportingEventTriggerData) , AttributionReportingAggregatableTriggerData (AttributionReportingAggregatableTriggerData) , AttributionReportingAggregatableDedupKey (AttributionReportingAggregatableDedupKey) , AttributionReportingNamedBudgetCandidate (AttributionReportingNamedBudgetCandidate) , AttributionReportingTriggerRegistration (AttributionReportingTriggerRegistration) , AttributionReportingEventLevelResult (AttributionReportingEventLevelResult) , AttributionReportingAggregatableResult (AttributionReportingAggregatableResult) , AttributionReportingReportResult (AttributionReportingReportResult) , RelatedWebsiteSet (RelatedWebsiteSet) });

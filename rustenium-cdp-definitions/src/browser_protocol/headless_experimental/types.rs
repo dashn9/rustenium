@@ -30,5 +30,8 @@ pub enum ScreenshotParamsFormat {
 }
 impl ScreenshotParams {
     pub const IDENTIFIER: &'static str = "HeadlessExperimental.ScreenshotParams";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (HeadlessExperimentalTypes { ScreenshotParams (ScreenshotParams) });

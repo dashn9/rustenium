@@ -120,6 +120,9 @@ impl LogEntry {
 }
 impl LogEntry {
     pub const IDENTIFIER: &'static str = "Log.LogEntry";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Violation configuration setting.\n[ViolationSetting](https://chromedevtools.github.io/devtools-protocol/tot/Log/#type-ViolationSetting)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -159,5 +162,8 @@ impl ViolationSetting {
 }
 impl ViolationSetting {
     pub const IDENTIFIER: &'static str = "Log.ViolationSetting";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (LogTypes { LogEntry (LogEntry) , ViolationSetting (ViolationSetting) });

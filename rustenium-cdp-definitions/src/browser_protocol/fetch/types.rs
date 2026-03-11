@@ -32,6 +32,9 @@ impl std::borrow::Borrow<str> for RequestId {
 }
 impl RequestId {
     pub const IDENTIFIER: &'static str = "Fetch.RequestId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Stages of the request to handle. Request will intercept before the request is\nsent. Response will intercept after the response is received (but before response\nbody is received)."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -61,6 +64,9 @@ pub struct RequestPattern {
 }
 impl RequestPattern {
     pub const IDENTIFIER: &'static str = "Fetch.RequestPattern";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Response HTTP header entry\n[HeaderEntry](https://chromedevtools.github.io/devtools-protocol/tot/Fetch/#type-HeaderEntry)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -80,6 +86,9 @@ impl HeaderEntry {
 }
 impl HeaderEntry {
     pub const IDENTIFIER: &'static str = "Fetch.HeaderEntry";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Authorization challenge for HTTP status code 401 or 407.\n[AuthChallenge](https://chromedevtools.github.io/devtools-protocol/tot/Fetch/#type-AuthChallenge)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -123,6 +132,9 @@ impl AuthChallenge {
 }
 impl AuthChallenge {
     pub const IDENTIFIER: &'static str = "Fetch.AuthChallenge";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Response to an AuthChallenge.\n[AuthChallengeResponse](https://chromedevtools.github.io/devtools-protocol/tot/Fetch/#type-AuthChallengeResponse)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -162,5 +174,8 @@ impl AuthChallengeResponse {
 }
 impl AuthChallengeResponse {
     pub const IDENTIFIER: &'static str = "Fetch.AuthChallengeResponse";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (FetchTypes { RequestId (RequestId) , RequestStage (RequestStage) , RequestPattern (RequestPattern) , HeaderEntry (HeaderEntry) , AuthChallenge (AuthChallenge) , AuthChallengeResponse (AuthChallengeResponse) });

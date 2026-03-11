@@ -31,6 +31,9 @@ impl std::borrow::Borrow<str> for RegistrationId {
 }
 impl RegistrationId {
     pub const IDENTIFIER: &'static str = "ServiceWorker.RegistrationID";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "ServiceWorker registration.\n[ServiceWorkerRegistration](https://chromedevtools.github.io/devtools-protocol/tot/ServiceWorker/#type-ServiceWorkerRegistration)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -57,6 +60,9 @@ impl ServiceWorkerRegistration {
 }
 impl ServiceWorkerRegistration {
     pub const IDENTIFIER: &'static str = "ServiceWorker.ServiceWorkerRegistration";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum ServiceWorkerVersionRunningStatus {
@@ -122,6 +128,9 @@ pub struct ServiceWorkerVersion {
 }
 impl ServiceWorkerVersion {
     pub const IDENTIFIER: &'static str = "ServiceWorker.ServiceWorkerVersion";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "ServiceWorker error message.\n[ServiceWorkerErrorMessage](https://chromedevtools.github.io/devtools-protocol/tot/ServiceWorker/#type-ServiceWorkerErrorMessage)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -141,5 +150,8 @@ pub struct ServiceWorkerErrorMessage {
 }
 impl ServiceWorkerErrorMessage {
     pub const IDENTIFIER: &'static str = "ServiceWorker.ServiceWorkerErrorMessage";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (ServiceWorkerTypes { RegistrationId (RegistrationId) , ServiceWorkerRegistration (ServiceWorkerRegistration) , ServiceWorkerVersionRunningStatus (ServiceWorkerVersionRunningStatus) , ServiceWorkerVersionStatus (ServiceWorkerVersionStatus) , ServiceWorkerVersion (ServiceWorkerVersion) , ServiceWorkerErrorMessage (ServiceWorkerErrorMessage) });

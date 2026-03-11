@@ -20,6 +20,9 @@ pub struct DomStorageItemAdded {
 }
 impl DomStorageItemAdded {
     pub const IDENTIFIER: &'static str = "DOMStorage.domStorageItemAdded";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DomStorageItemRemovedParams {
@@ -40,6 +43,9 @@ pub struct DomStorageItemRemoved {
 }
 impl DomStorageItemRemoved {
     pub const IDENTIFIER: &'static str = "DOMStorage.domStorageItemRemoved";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DomStorageItemUpdatedParams {
@@ -64,6 +70,9 @@ pub struct DomStorageItemUpdated {
 }
 impl DomStorageItemUpdated {
     pub const IDENTIFIER: &'static str = "DOMStorage.domStorageItemUpdated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DomStorageItemsClearedParams {
@@ -82,5 +91,8 @@ pub struct DomStorageItemsCleared {
 }
 impl DomStorageItemsCleared {
     pub const IDENTIFIER: &'static str = "DOMStorage.domStorageItemsCleared";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (DomStorageEvents { DomStorageItemAdded (DomStorageItemAdded) , DomStorageItemRemoved (DomStorageItemRemoved) , DomStorageItemUpdated (DomStorageItemUpdated) , DomStorageItemsCleared (DomStorageItemsCleared) });

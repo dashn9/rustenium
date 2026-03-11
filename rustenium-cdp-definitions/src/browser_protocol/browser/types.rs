@@ -31,6 +31,9 @@ impl std::borrow::Borrow<str> for BrowserContextId {
 }
 impl BrowserContextId {
     pub const IDENTIFIER: &'static str = "Browser.BrowserContextID";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Copy, Hash)]
 pub struct WindowId(i64);
@@ -44,6 +47,9 @@ impl WindowId {
 }
 impl WindowId {
     pub const IDENTIFIER: &'static str = "Browser.WindowID";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "The state of the browser window."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -88,6 +94,9 @@ pub struct Bounds {
 }
 impl Bounds {
     pub const IDENTIFIER: &'static str = "Browser.Bounds";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum PermissionType {
@@ -230,6 +239,9 @@ impl<T: Into<String>> From<T> for PermissionDescriptor {
 }
 impl PermissionDescriptor {
     pub const IDENTIFIER: &'static str = "Browser.PermissionDescriptor";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Browser command ids used by executeBrowserCommand."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -265,6 +277,9 @@ impl Bucket {
 }
 impl Bucket {
     pub const IDENTIFIER: &'static str = "Browser.Bucket";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Chrome histogram.\n[Histogram](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#type-Histogram)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -300,6 +315,9 @@ impl Histogram {
 }
 impl Histogram {
     pub const IDENTIFIER: &'static str = "Browser.Histogram";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum PrivacySandboxApi {

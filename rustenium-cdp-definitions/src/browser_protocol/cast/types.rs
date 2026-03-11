@@ -22,5 +22,8 @@ impl Sink {
 }
 impl Sink {
     pub const IDENTIFIER: &'static str = "Cast.Sink";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (CastTypes { Sink (Sink) });

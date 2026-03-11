@@ -20,6 +20,9 @@ pub struct CredentialAdded {
 }
 impl CredentialAdded {
     pub const IDENTIFIER: &'static str = "WebAuthn.credentialAdded";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Triggered when a credential is deleted, e.g. through\nPublicKeyCredential.signalUnknownCredential().\n[credentialDeleted](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#event-credentialDeleted)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -42,6 +45,9 @@ pub struct CredentialDeleted {
 }
 impl CredentialDeleted {
     pub const IDENTIFIER: &'static str = "WebAuthn.credentialDeleted";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Triggered when a credential is updated, e.g. through\nPublicKeyCredential.signalCurrentUserDetails().\n[credentialUpdated](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#event-credentialUpdated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -64,6 +70,9 @@ pub struct CredentialUpdated {
 }
 impl CredentialUpdated {
     pub const IDENTIFIER: &'static str = "WebAuthn.credentialUpdated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Triggered when a credential is used in a webauthn assertion.\n[credentialAsserted](https://chromedevtools.github.io/devtools-protocol/tot/WebAuthn/#event-credentialAsserted)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -86,5 +95,8 @@ pub struct CredentialAsserted {
 }
 impl CredentialAsserted {
     pub const IDENTIFIER: &'static str = "WebAuthn.credentialAsserted";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (WebAuthnEvents { CredentialAdded (CredentialAdded) , CredentialDeleted (CredentialDeleted) , CredentialUpdated (CredentialUpdated) , CredentialAsserted (CredentialAsserted) });

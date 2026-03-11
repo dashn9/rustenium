@@ -25,6 +25,9 @@ impl AffectedCookie {
 }
 impl AffectedCookie {
     pub const IDENTIFIER: &'static str = "Audits.AffectedCookie";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Information about a request that is affected by an inspector issue.\n[AffectedRequest](https://chromedevtools.github.io/devtools-protocol/tot/Audits/#type-AffectedRequest)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -52,6 +55,9 @@ impl<T: Into<String>> From<T> for AffectedRequest {
 }
 impl AffectedRequest {
     pub const IDENTIFIER: &'static str = "Audits.AffectedRequest";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Information about the frame affected by an inspector issue.\n[AffectedFrame](https://chromedevtools.github.io/devtools-protocol/tot/Audits/#type-AffectedFrame)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -68,6 +74,9 @@ impl AffectedFrame {
 }
 impl AffectedFrame {
     pub const IDENTIFIER: &'static str = "Audits.AffectedFrame";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum CookieExclusionReason {
@@ -162,6 +171,9 @@ impl CookieIssueInsight {
 }
 impl CookieIssueInsight {
     pub const IDENTIFIER: &'static str = "Audits.CookieIssueInsight";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "This information is currently necessary, as the front-end has a difficult\ntime finding a specific cookie. With this, we can convey specific error\ninformation without the cookie.\n[CookieIssueDetails](https://chromedevtools.github.io/devtools-protocol/tot/Audits/#type-CookieIssueDetails)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -223,6 +235,9 @@ impl CookieIssueDetails {
 }
 impl CookieIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.CookieIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum PerformanceIssueType {
@@ -249,6 +264,9 @@ impl PerformanceIssueDetails {
 }
 impl PerformanceIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.PerformanceIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum MixedContentResolutionStatus {
@@ -365,6 +383,9 @@ impl MixedContentIssueDetails {
 }
 impl MixedContentIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.MixedContentIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Enum indicating the reason a response has been blocked. These reasons are\nrefinements of the net error BLOCKED_BY_RESPONSE."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -417,6 +438,9 @@ impl BlockedByResponseIssueDetails {
 }
 impl BlockedByResponseIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.BlockedByResponseIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum HeavyAdResolutionStatus {
@@ -461,6 +485,9 @@ impl HeavyAdIssueDetails {
 }
 impl HeavyAdIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.HeavyAdIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum ContentSecurityPolicyViolationType {
@@ -508,6 +535,9 @@ impl SourceCodeLocation {
 }
 impl SourceCodeLocation {
     pub const IDENTIFIER: &'static str = "Audits.SourceCodeLocation";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ContentSecurityPolicyIssueDetails {
@@ -555,6 +585,9 @@ impl ContentSecurityPolicyIssueDetails {
 }
 impl ContentSecurityPolicyIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.ContentSecurityPolicyIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum SharedArrayBufferIssueType {
@@ -588,6 +621,9 @@ impl SharedArrayBufferIssueDetails {
 }
 impl SharedArrayBufferIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.SharedArrayBufferIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LowTextContrastIssueDetails {
@@ -608,6 +644,9 @@ pub struct LowTextContrastIssueDetails {
 }
 impl LowTextContrastIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.LowTextContrastIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Details for a CORS related issue, e.g. a warning or error related to\nCORS RFC1918 enforcement.\n[CorsIssueDetails](https://chromedevtools.github.io/devtools-protocol/tot/Audits/#type-CorsIssueDetails)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -654,6 +693,9 @@ impl CorsIssueDetails {
 }
 impl CorsIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.CorsIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum AttributionReportingIssueType {
@@ -855,6 +897,9 @@ impl AttributionReportingIssueDetails {
 }
 impl AttributionReportingIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.AttributionReportingIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Details for issues about documents in Quirks Mode\nor Limited Quirks Mode that affects page layouting.\n[QuirksModeIssueDetails](https://chromedevtools.github.io/devtools-protocol/tot/Audits/#type-QuirksModeIssueDetails)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -873,6 +918,9 @@ pub struct QuirksModeIssueDetails {
 }
 impl QuirksModeIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.QuirksModeIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SharedDictionaryIssueDetails {
@@ -894,6 +942,9 @@ impl SharedDictionaryIssueDetails {
 }
 impl SharedDictionaryIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.SharedDictionaryIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SriMessageSignatureIssueDetails {
@@ -924,6 +975,9 @@ impl SriMessageSignatureIssueDetails {
 }
 impl SriMessageSignatureIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.SRIMessageSignatureIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UnencodedDigestIssueDetails {
@@ -945,6 +999,9 @@ impl UnencodedDigestIssueDetails {
 }
 impl UnencodedDigestIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.UnencodedDigestIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ConnectionAllowlistIssueDetails {
@@ -966,6 +1023,9 @@ impl ConnectionAllowlistIssueDetails {
 }
 impl ConnectionAllowlistIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.ConnectionAllowlistIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum GenericIssueErrorType {
@@ -1036,6 +1096,9 @@ impl GenericIssueDetails {
 }
 impl GenericIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.GenericIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "This issue tracks information needed to print a deprecation message.\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/core/frame/third_party/blink/renderer/core/frame/deprecation/README.md\n[DeprecationIssueDetails](https://chromedevtools.github.io/devtools-protocol/tot/Audits/#type-DeprecationIssueDetails)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1064,6 +1127,9 @@ impl DeprecationIssueDetails {
 }
 impl DeprecationIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.DeprecationIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "This issue warns about sites in the redirect chain of a finished navigation\nthat may be flagged as trackers and have their state cleared if they don't\nreceive a user interaction. Note that in this context 'site' means eTLD+1.\nFor example, if the URL `https://example.test:80/bounce` was in the\nredirect chain, the site reported would be `example.test`.\n[BounceTrackingIssueDetails](https://chromedevtools.github.io/devtools-protocol/tot/Audits/#type-BounceTrackingIssueDetails)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1079,6 +1145,9 @@ impl BounceTrackingIssueDetails {
 }
 impl BounceTrackingIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.BounceTrackingIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "This issue warns about third-party sites that are accessing cookies on the\ncurrent page, and have been permitted due to having a global metadata grant.\nNote that in this context 'site' means eTLD+1. For example, if the URL\n`https://example.test:80/web_page` was accessing cookies, the site reported\nwould be `example.test`.\n[CookieDeprecationMetadataIssueDetails](https://chromedevtools.github.io/devtools-protocol/tot/Audits/#type-CookieDeprecationMetadataIssueDetails)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1110,6 +1179,9 @@ impl CookieDeprecationMetadataIssueDetails {
 }
 impl CookieDeprecationMetadataIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.CookieDeprecationMetadataIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum ClientHintIssueReason {
@@ -1136,6 +1208,9 @@ impl FederatedAuthRequestIssueDetails {
 }
 impl FederatedAuthRequestIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.FederatedAuthRequestIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Represents the failure reason when a federated authentication reason fails.\nShould be updated alongside RequestIdTokenStatus in\nthird_party/blink/public/mojom/devtools/inspector_issue.mojom to include\nall cases except for success."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -1244,6 +1319,9 @@ impl FederatedAuthUserInfoRequestIssueDetails {
 }
 impl FederatedAuthUserInfoRequestIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.FederatedAuthUserInfoRequestIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Represents the failure reason when a getUserInfo() call fails.\nShould be updated alongside FederatedAuthUserInfoRequestResult in\nthird_party/blink/public/mojom/devtools/inspector_issue.mojom."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -1288,6 +1366,9 @@ impl ClientHintIssueDetails {
 }
 impl ClientHintIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.ClientHintIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FailedRequestInfo {
@@ -1313,6 +1394,9 @@ impl FailedRequestInfo {
 }
 impl FailedRequestInfo {
     pub const IDENTIFIER: &'static str = "Audits.FailedRequestInfo";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum PartitioningBlobUrlInfo {
@@ -1343,6 +1427,9 @@ impl PartitioningBlobUrlIssueDetails {
 }
 impl PartitioningBlobUrlIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.PartitioningBlobURLIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum ElementAccessibilityIssueReason {
@@ -1384,6 +1471,9 @@ impl ElementAccessibilityIssueDetails {
 }
 impl ElementAccessibilityIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.ElementAccessibilityIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum StyleSheetLoadingIssueReason {
@@ -1421,6 +1511,9 @@ impl StylesheetLoadingIssueDetails {
 }
 impl StylesheetLoadingIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.StylesheetLoadingIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum PropertyRuleIssueReason {
@@ -1462,6 +1555,9 @@ impl PropertyRuleIssueDetails {
 }
 impl PropertyRuleIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.PropertyRuleIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum UserReidentificationIssueType {
@@ -1499,6 +1595,9 @@ impl UserReidentificationIssueDetails {
 }
 impl UserReidentificationIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.UserReidentificationIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum PermissionElementIssueType {
@@ -1602,6 +1701,9 @@ impl PermissionElementIssueDetails {
 }
 impl PermissionElementIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.PermissionElementIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Metadata about the ad script that was on the stack that caused the current\nscript in the `AdAncestry` to be considered ad related.\n[AdScriptIdentifier](https://chromedevtools.github.io/devtools-protocol/tot/Audits/#type-AdScriptIdentifier)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1631,6 +1733,9 @@ impl AdScriptIdentifier {
 }
 impl AdScriptIdentifier {
     pub const IDENTIFIER: &'static str = "Audits.AdScriptIdentifier";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Providence about how an ad script was determined to be such. It is an ad\nbecause its url matched a filterlist rule, or because some other ad script\nwas on the stack when this script was loaded.\n[AdAncestry](https://chromedevtools.github.io/devtools-protocol/tot/Audits/#type-AdAncestry)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1655,6 +1760,9 @@ impl AdAncestry {
 }
 impl AdAncestry {
     pub const IDENTIFIER: &'static str = "Audits.AdAncestry";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "The issue warns about blocked calls to privacy sensitive APIs via the\nSelective Permissions Intervention.\n[SelectivePermissionsInterventionIssueDetails](https://chromedevtools.github.io/devtools-protocol/tot/Audits/#type-SelectivePermissionsInterventionIssueDetails)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1682,6 +1790,9 @@ impl SelectivePermissionsInterventionIssueDetails {
 }
 impl SelectivePermissionsInterventionIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.SelectivePermissionsInterventionIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "A unique identifier for the type of issue. Each type may use one of the\noptional fields in InspectorIssueDetails to convey more specific\ninformation about the kind of issue."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -1872,6 +1983,9 @@ pub struct InspectorIssueDetails {
 }
 impl InspectorIssueDetails {
     pub const IDENTIFIER: &'static str = "Audits.InspectorIssueDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "A unique id for a DevTools inspector issue. Allows other entities (e.g.\nexceptions, CDP message, console messages, etc.) to reference an issue.\n[IssueId](https://chromedevtools.github.io/devtools-protocol/tot/Audits/#type-IssueId)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
@@ -1906,6 +2020,9 @@ impl std::borrow::Borrow<str> for IssueId {
 }
 impl IssueId {
     pub const IDENTIFIER: &'static str = "Audits.IssueId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "An inspector issue reported from the back-end.\n[InspectorIssue](https://chromedevtools.github.io/devtools-protocol/tot/Audits/#type-InspectorIssue)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1934,5 +2051,8 @@ impl InspectorIssue {
 }
 impl InspectorIssue {
     pub const IDENTIFIER: &'static str = "Audits.InspectorIssue";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (AuditsTypes { AffectedCookie (AffectedCookie) , AffectedRequest (AffectedRequest) , AffectedFrame (AffectedFrame) , CookieExclusionReason (CookieExclusionReason) , CookieWarningReason (CookieWarningReason) , CookieOperation (CookieOperation) , InsightType (InsightType) , CookieIssueInsight (CookieIssueInsight) , CookieIssueDetails (CookieIssueDetails) , PerformanceIssueType (PerformanceIssueType) , PerformanceIssueDetails (PerformanceIssueDetails) , MixedContentResolutionStatus (MixedContentResolutionStatus) , MixedContentResourceType (MixedContentResourceType) , MixedContentIssueDetails (MixedContentIssueDetails) , BlockedByResponseReason (BlockedByResponseReason) , BlockedByResponseIssueDetails (BlockedByResponseIssueDetails) , HeavyAdResolutionStatus (HeavyAdResolutionStatus) , HeavyAdReason (HeavyAdReason) , HeavyAdIssueDetails (HeavyAdIssueDetails) , ContentSecurityPolicyViolationType (ContentSecurityPolicyViolationType) , SourceCodeLocation (SourceCodeLocation) , ContentSecurityPolicyIssueDetails (ContentSecurityPolicyIssueDetails) , SharedArrayBufferIssueType (SharedArrayBufferIssueType) , SharedArrayBufferIssueDetails (SharedArrayBufferIssueDetails) , LowTextContrastIssueDetails (LowTextContrastIssueDetails) , CorsIssueDetails (CorsIssueDetails) , AttributionReportingIssueType (AttributionReportingIssueType) , SharedDictionaryError (SharedDictionaryError) , SriMessageSignatureError (SriMessageSignatureError) , UnencodedDigestError (UnencodedDigestError) , ConnectionAllowlistError (ConnectionAllowlistError) , AttributionReportingIssueDetails (AttributionReportingIssueDetails) , QuirksModeIssueDetails (QuirksModeIssueDetails) , SharedDictionaryIssueDetails (SharedDictionaryIssueDetails) , SriMessageSignatureIssueDetails (SriMessageSignatureIssueDetails) , UnencodedDigestIssueDetails (UnencodedDigestIssueDetails) , ConnectionAllowlistIssueDetails (ConnectionAllowlistIssueDetails) , GenericIssueErrorType (GenericIssueErrorType) , GenericIssueDetails (GenericIssueDetails) , DeprecationIssueDetails (DeprecationIssueDetails) , BounceTrackingIssueDetails (BounceTrackingIssueDetails) , CookieDeprecationMetadataIssueDetails (CookieDeprecationMetadataIssueDetails) , ClientHintIssueReason (ClientHintIssueReason) , FederatedAuthRequestIssueDetails (FederatedAuthRequestIssueDetails) , FederatedAuthRequestIssueReason (FederatedAuthRequestIssueReason) , FederatedAuthUserInfoRequestIssueDetails (FederatedAuthUserInfoRequestIssueDetails) , FederatedAuthUserInfoRequestIssueReason (FederatedAuthUserInfoRequestIssueReason) , ClientHintIssueDetails (ClientHintIssueDetails) , FailedRequestInfo (FailedRequestInfo) , PartitioningBlobUrlInfo (PartitioningBlobUrlInfo) , PartitioningBlobUrlIssueDetails (PartitioningBlobUrlIssueDetails) , ElementAccessibilityIssueReason (ElementAccessibilityIssueReason) , ElementAccessibilityIssueDetails (ElementAccessibilityIssueDetails) , StyleSheetLoadingIssueReason (StyleSheetLoadingIssueReason) , StylesheetLoadingIssueDetails (StylesheetLoadingIssueDetails) , PropertyRuleIssueReason (PropertyRuleIssueReason) , PropertyRuleIssueDetails (PropertyRuleIssueDetails) , UserReidentificationIssueType (UserReidentificationIssueType) , UserReidentificationIssueDetails (UserReidentificationIssueDetails) , PermissionElementIssueType (PermissionElementIssueType) , PermissionElementIssueDetails (PermissionElementIssueDetails) , AdScriptIdentifier (AdScriptIdentifier) , AdAncestry (AdAncestry) , SelectivePermissionsInterventionIssueDetails (SelectivePermissionsInterventionIssueDetails) , InspectorIssueCode (InspectorIssueCode) , InspectorIssueDetails (InspectorIssueDetails) , IssueId (IssueId) , InspectorIssue (InspectorIssue) });

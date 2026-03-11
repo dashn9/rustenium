@@ -16,6 +16,9 @@ pub struct DomContentEventFired {
 }
 impl DomContentEventFired {
     pub const IDENTIFIER: &'static str = "Page.domContentEventFired";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Emitted only when `page.interceptFileChooser` is enabled.\n[fileChooserOpened](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-fileChooserOpened)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -53,6 +56,9 @@ pub struct FileChooserOpened {
 }
 impl FileChooserOpened {
     pub const IDENTIFIER: &'static str = "Page.fileChooserOpened";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when frame has been attached to its parent.\n[frameAttached](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-frameAttached)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -82,6 +88,9 @@ pub struct FrameAttached {
 }
 impl FrameAttached {
     pub const IDENTIFIER: &'static str = "Page.frameAttached";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when frame has been detached from its parent.\n[frameDetached](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-frameDetached)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -114,6 +123,9 @@ pub struct FrameDetached {
 }
 impl FrameDetached {
     pub const IDENTIFIER: &'static str = "Page.frameDetached";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired before frame subtree is detached. Emitted before any frame of the\nsubtree is actually detached.\n[frameSubtreeWillBeDetached](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-frameSubtreeWillBeDetached)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -135,6 +147,9 @@ pub struct FrameSubtreeWillBeDetached {
 }
 impl FrameSubtreeWillBeDetached {
     pub const IDENTIFIER: &'static str = "Page.frameSubtreeWillBeDetached";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired once navigation of the frame has completed. Frame is now associated with the new loader.\n[frameNavigated](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-frameNavigated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -158,6 +173,9 @@ pub struct FrameNavigated {
 }
 impl FrameNavigated {
     pub const IDENTIFIER: &'static str = "Page.frameNavigated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when opening document to write to.\n[documentOpened](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-documentOpened)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -179,6 +197,9 @@ pub struct DocumentOpened {
 }
 impl DocumentOpened {
     pub const IDENTIFIER: &'static str = "Page.documentOpened";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FrameResizedParams {}
@@ -194,6 +215,9 @@ pub struct FrameResized {
 }
 impl FrameResized {
     pub const IDENTIFIER: &'static str = "Page.frameResized";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when a navigation starts. This event is fired for both\nrenderer-initiated and browser-initiated navigations. For renderer-initiated\nnavigations, the event is fired after `frameRequestedNavigation`.\nNavigation may still be cancelled after the event is issued. Multiple events\ncan be fired for a single navigation, for example, when a same-document\nnavigation becomes a cross-document navigation (such as in the case of a\nframeset).\n[frameStartedNavigating](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-frameStartedNavigating)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -242,6 +266,9 @@ pub struct FrameStartedNavigating {
 }
 impl FrameStartedNavigating {
     pub const IDENTIFIER: &'static str = "Page.frameStartedNavigating";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when a renderer-initiated navigation is requested.\nNavigation may still be cancelled after the event is issued.\n[frameRequestedNavigation](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-frameRequestedNavigation)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -272,6 +299,9 @@ pub struct FrameRequestedNavigation {
 }
 impl FrameRequestedNavigation {
     pub const IDENTIFIER: &'static str = "Page.frameRequestedNavigation";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when frame has started loading.\n[frameStartedLoading](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-frameStartedLoading)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -293,6 +323,9 @@ pub struct FrameStartedLoading {
 }
 impl FrameStartedLoading {
     pub const IDENTIFIER: &'static str = "Page.frameStartedLoading";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when frame has stopped loading.\n[frameStoppedLoading](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-frameStoppedLoading)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -314,6 +347,9 @@ pub struct FrameStoppedLoading {
 }
 impl FrameStoppedLoading {
     pub const IDENTIFIER: &'static str = "Page.frameStoppedLoading";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when interstitial page was hidden\n[interstitialHidden](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-interstitialHidden)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -331,6 +367,9 @@ pub struct InterstitialHidden {
 }
 impl InterstitialHidden {
     pub const IDENTIFIER: &'static str = "Page.interstitialHidden";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when interstitial page was shown\n[interstitialShown](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-interstitialShown)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -348,6 +387,9 @@ pub struct InterstitialShown {
 }
 impl InterstitialShown {
     pub const IDENTIFIER: &'static str = "Page.interstitialShown";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when a JavaScript initiated dialog (alert, confirm, prompt, or onbeforeunload) has been\nclosed.\n[javascriptDialogClosed](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-javascriptDialogClosed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -375,6 +417,9 @@ pub struct JavascriptDialogClosed {
 }
 impl JavascriptDialogClosed {
     pub const IDENTIFIER: &'static str = "Page.javascriptDialogClosed";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when a JavaScript initiated dialog (alert, confirm, prompt, or onbeforeunload) is about to\nopen.\n[javascriptDialogOpening](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-javascriptDialogOpening)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -413,6 +458,9 @@ pub struct JavascriptDialogOpening {
 }
 impl JavascriptDialogOpening {
     pub const IDENTIFIER: &'static str = "Page.javascriptDialogOpening";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired for lifecycle events (navigation, load, paint, etc) in the current\ntarget (including local frames).\n[lifecycleEvent](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-lifecycleEvent)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -441,6 +489,9 @@ pub struct LifecycleEvent {
 }
 impl LifecycleEvent {
     pub const IDENTIFIER: &'static str = "Page.lifecycleEvent";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired for failed bfcache history navigations if BackForwardCache feature is enabled. Do\nnot assume any ordering with the Page.frameNavigated event. This event is fired only for\nmain-frame history navigation where the document changes (non-same-document navigations),\nwhen bfcache navigation fails.\n[backForwardCacheNotUsed](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-backForwardCacheNotUsed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -475,6 +526,9 @@ pub struct BackForwardCacheNotUsed {
 }
 impl BackForwardCacheNotUsed {
     pub const IDENTIFIER: &'static str = "Page.backForwardCacheNotUsed";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LoadEventFiredParams {
@@ -493,6 +547,9 @@ pub struct LoadEventFired {
 }
 impl LoadEventFired {
     pub const IDENTIFIER: &'static str = "Page.loadEventFired";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when same-document navigation happens, e.g. due to history API usage or anchor navigation.\n[navigatedWithinDocument](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-navigatedWithinDocument)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -533,6 +590,9 @@ pub struct NavigatedWithinDocument {
 }
 impl NavigatedWithinDocument {
     pub const IDENTIFIER: &'static str = "Page.navigatedWithinDocument";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Compressed image data requested by the `startScreencast`.\n[screencastFrame](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-screencastFrame)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -560,6 +620,9 @@ pub struct ScreencastFrame {
 }
 impl ScreencastFrame {
     pub const IDENTIFIER: &'static str = "Page.screencastFrame";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when the page with currently enabled screencast was shown or hidden `.\n[screencastVisibilityChanged](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-screencastVisibilityChanged)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -581,6 +644,9 @@ pub struct ScreencastVisibilityChanged {
 }
 impl ScreencastVisibilityChanged {
     pub const IDENTIFIER: &'static str = "Page.screencastVisibilityChanged";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when a new window is going to be opened, via window.open(), link click, form submission,\netc.\n[windowOpen](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-windowOpen)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -612,6 +678,9 @@ pub struct WindowOpen {
 }
 impl WindowOpen {
     pub const IDENTIFIER: &'static str = "Page.windowOpen";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Issued for every compilation cache generated.\n[compilationCacheProduced](https://chromedevtools.github.io/devtools-protocol/tot/Page/#event-compilationCacheProduced)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -635,5 +704,8 @@ pub struct CompilationCacheProduced {
 }
 impl CompilationCacheProduced {
     pub const IDENTIFIER: &'static str = "Page.compilationCacheProduced";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (PageEvents { DomContentEventFired (DomContentEventFired) , FileChooserOpened (FileChooserOpened) , FrameAttached (FrameAttached) , FrameDetached (FrameDetached) , FrameSubtreeWillBeDetached (FrameSubtreeWillBeDetached) , FrameNavigated (FrameNavigated) , DocumentOpened (DocumentOpened) , FrameResized (FrameResized) , FrameStartedNavigating (FrameStartedNavigating) , FrameRequestedNavigation (FrameRequestedNavigation) , FrameStartedLoading (FrameStartedLoading) , FrameStoppedLoading (FrameStoppedLoading) , InterstitialHidden (InterstitialHidden) , InterstitialShown (InterstitialShown) , JavascriptDialogClosed (JavascriptDialogClosed) , JavascriptDialogOpening (JavascriptDialogOpening) , LifecycleEvent (LifecycleEvent) , BackForwardCacheNotUsed (BackForwardCacheNotUsed) , LoadEventFired (LoadEventFired) , NavigatedWithinDocument (NavigatedWithinDocument) , ScreencastFrame (ScreencastFrame) , ScreencastVisibilityChanged (ScreencastVisibilityChanged) , WindowOpen (WindowOpen) , CompilationCacheProduced (CompilationCacheProduced) });

@@ -38,6 +38,9 @@ pub struct GetEventListeners {
 }
 impl GetEventListeners {
     pub const IDENTIFIER: &'static str = "DOMDebugger.getEventListeners";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetEventListeners {
     type Result = super::results::GetEventListenersResult;
@@ -76,6 +79,9 @@ pub struct RemoveDomBreakpoint {
 }
 impl RemoveDomBreakpoint {
     pub const IDENTIFIER: &'static str = "DOMDebugger.removeDOMBreakpoint";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RemoveDomBreakpoint {
     type Result = super::results::RemoveDomBreakpointResult;
@@ -118,6 +124,9 @@ pub struct RemoveEventListenerBreakpoint {
 }
 impl RemoveEventListenerBreakpoint {
     pub const IDENTIFIER: &'static str = "DOMDebugger.removeEventListenerBreakpoint";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RemoveEventListenerBreakpoint {
     type Result = super::results::RemoveEventListenerBreakpointResult;
@@ -152,6 +161,9 @@ pub struct RemoveXhrBreakpoint {
 }
 impl RemoveXhrBreakpoint {
     pub const IDENTIFIER: &'static str = "DOMDebugger.removeXHRBreakpoint";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RemoveXhrBreakpoint {
     type Result = super::results::RemoveXhrBreakpointResult;
@@ -182,6 +194,9 @@ pub struct SetBreakOnCspViolation {
 }
 impl SetBreakOnCspViolation {
     pub const IDENTIFIER: &'static str = "DOMDebugger.setBreakOnCSPViolation";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetBreakOnCspViolation {
     type Result = super::results::SetBreakOnCspViolationResult;
@@ -220,6 +235,9 @@ pub struct SetDomBreakpoint {
 }
 impl SetDomBreakpoint {
     pub const IDENTIFIER: &'static str = "DOMDebugger.setDOMBreakpoint";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetDomBreakpoint {
     type Result = super::results::SetDomBreakpointResult;
@@ -262,6 +280,9 @@ pub struct SetEventListenerBreakpoint {
 }
 impl SetEventListenerBreakpoint {
     pub const IDENTIFIER: &'static str = "DOMDebugger.setEventListenerBreakpoint";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetEventListenerBreakpoint {
     type Result = super::results::SetEventListenerBreakpointResult;
@@ -296,6 +317,9 @@ pub struct SetXhrBreakpoint {
 }
 impl SetXhrBreakpoint {
     pub const IDENTIFIER: &'static str = "DOMDebugger.setXHRBreakpoint";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetXhrBreakpoint {
     type Result = super::results::SetXhrBreakpointResult;

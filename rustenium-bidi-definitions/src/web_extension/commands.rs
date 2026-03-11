@@ -24,6 +24,9 @@ pub struct Install {
 impl Install {
     pub const IDENTIFIER: &'static str = "webExtension.install";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Install {
     type Result = super::results::InstallResult;
@@ -53,6 +56,9 @@ pub struct Uninstall {
 impl Uninstall {
     pub const IDENTIFIER: &'static str = "webExtension.uninstall";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Uninstall {
     type Result = super::results::UninstallResult;

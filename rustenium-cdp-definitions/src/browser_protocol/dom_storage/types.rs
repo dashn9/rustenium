@@ -26,6 +26,9 @@ impl From<String> for SerializedStorageKey {
 }
 impl SerializedStorageKey {
     pub const IDENTIFIER: &'static str = "DOMStorage.SerializedStorageKey";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "DOM Storage identifier.\n[StorageId](https://chromedevtools.github.io/devtools-protocol/tot/DOMStorage/#type-StorageId)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -55,6 +58,9 @@ impl StorageId {
 }
 impl StorageId {
     pub const IDENTIFIER: &'static str = "DOMStorage.StorageId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "DOM Storage item.\n[Item](https://chromedevtools.github.io/devtools-protocol/tot/DOMStorage/#type-Item)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -69,5 +75,8 @@ impl Item {
 }
 impl Item {
     pub const IDENTIFIER: &'static str = "DOMStorage.Item";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (DomStorageTypes { SerializedStorageKey (SerializedStorageKey) , StorageId (StorageId) , Item (Item) });

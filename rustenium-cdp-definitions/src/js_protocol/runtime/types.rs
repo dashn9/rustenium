@@ -32,6 +32,9 @@ impl std::borrow::Borrow<str> for ScriptId {
 }
 impl ScriptId {
     pub const IDENTIFIER: &'static str = "Runtime.ScriptId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Represents options for serialization. Overrides `generatePreview` and `returnByValue`.\n[SerializationOptions](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#type-SerializationOptions)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -72,6 +75,9 @@ impl SerializationOptions {
 }
 impl SerializationOptions {
     pub const IDENTIFIER: &'static str = "Runtime.SerializationOptions";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Represents deep serialized value.\n[DeepSerializedValue](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#type-DeepSerializedValue)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -155,6 +161,9 @@ impl DeepSerializedValue {
 }
 impl DeepSerializedValue {
     pub const IDENTIFIER: &'static str = "Runtime.DeepSerializedValue";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Unique object identifier.\n[RemoteObjectId](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#type-RemoteObjectId)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
@@ -189,6 +198,9 @@ impl std::borrow::Borrow<str> for RemoteObjectId {
 }
 impl RemoteObjectId {
     pub const IDENTIFIER: &'static str = "Runtime.RemoteObjectId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Primitive value which cannot be JSON-stringified. Includes values `-0`, `NaN`, `Infinity`,\n`-Infinity`, and bigint literals.\n[UnserializableValue](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#type-UnserializableValue)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
@@ -218,6 +230,9 @@ impl From<String> for UnserializableValue {
 }
 impl UnserializableValue {
     pub const IDENTIFIER: &'static str = "Runtime.UnserializableValue";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Mirror object referencing original JavaScript object.\n[RemoteObject](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#type-RemoteObject)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -353,6 +368,9 @@ impl RemoteObject {
 }
 impl RemoteObject {
     pub const IDENTIFIER: &'static str = "Runtime.RemoteObject";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CustomPreview {
@@ -380,6 +398,9 @@ impl<T: Into<String>> From<T> for CustomPreview {
 }
 impl CustomPreview {
     pub const IDENTIFIER: &'static str = "Runtime.CustomPreview";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Object containing abbreviated remote object value.\n[ObjectPreview](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#type-ObjectPreview)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -493,6 +514,9 @@ impl ObjectPreview {
 }
 impl ObjectPreview {
     pub const IDENTIFIER: &'static str = "Runtime.ObjectPreview";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PropertyPreview {
@@ -598,6 +622,9 @@ impl PropertyPreview {
 }
 impl PropertyPreview {
     pub const IDENTIFIER: &'static str = "Runtime.PropertyPreview";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EntryPreview {
@@ -620,6 +647,9 @@ impl EntryPreview {
 }
 impl EntryPreview {
     pub const IDENTIFIER: &'static str = "Runtime.EntryPreview";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Object property descriptor.\n[PropertyDescriptor](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#type-PropertyDescriptor)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -691,6 +721,9 @@ impl PropertyDescriptor {
 }
 impl PropertyDescriptor {
     pub const IDENTIFIER: &'static str = "Runtime.PropertyDescriptor";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Object internal property descriptor. This property isn't normally visible in JavaScript code.\n[InternalPropertyDescriptor](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#type-InternalPropertyDescriptor)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -719,6 +752,9 @@ impl<T: Into<String>> From<T> for InternalPropertyDescriptor {
 }
 impl InternalPropertyDescriptor {
     pub const IDENTIFIER: &'static str = "Runtime.InternalPropertyDescriptor";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Object private field descriptor.\n[PrivatePropertyDescriptor](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#type-PrivatePropertyDescriptor)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -759,6 +795,9 @@ impl<T: Into<String>> From<T> for PrivatePropertyDescriptor {
 }
 impl PrivatePropertyDescriptor {
     pub const IDENTIFIER: &'static str = "Runtime.PrivatePropertyDescriptor";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Represents function call argument. Either remote object id `objectId`, primitive `value`,\nunserializable primitive value or neither of (for undefined) them should be specified.\n[CallArgument](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#type-CallArgument)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -781,6 +820,9 @@ pub struct CallArgument {
 }
 impl CallArgument {
     pub const IDENTIFIER: &'static str = "Runtime.CallArgument";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Id of an execution context.\n[ExecutionContextId](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#type-ExecutionContextId)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Copy, Hash)]
@@ -795,6 +837,9 @@ impl ExecutionContextId {
 }
 impl ExecutionContextId {
     pub const IDENTIFIER: &'static str = "Runtime.ExecutionContextId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Description of an isolated world.\n[ExecutionContextDescription](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#type-ExecutionContextDescription)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -835,6 +880,9 @@ impl ExecutionContextDescription {
 }
 impl ExecutionContextDescription {
     pub const IDENTIFIER: &'static str = "Runtime.ExecutionContextDescription";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Detailed information about exception (or error) that was thrown during script compilation or\nexecution.\n[ExceptionDetails](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#type-ExceptionDetails)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -905,6 +953,9 @@ impl ExceptionDetails {
 }
 impl ExceptionDetails {
     pub const IDENTIFIER: &'static str = "Runtime.ExceptionDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Number of milliseconds since epoch.\n[Timestamp](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#type-Timestamp)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -919,6 +970,9 @@ impl Timestamp {
 }
 impl Timestamp {
     pub const IDENTIFIER: &'static str = "Runtime.Timestamp";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Number of milliseconds.\n[TimeDelta](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#type-TimeDelta)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -933,6 +987,9 @@ impl TimeDelta {
 }
 impl TimeDelta {
     pub const IDENTIFIER: &'static str = "Runtime.TimeDelta";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Stack entry for runtime errors and assertions.\n[CallFrame](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#type-CallFrame)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -955,6 +1012,9 @@ pub struct CallFrame {
 }
 impl CallFrame {
     pub const IDENTIFIER: &'static str = "Runtime.CallFrame";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Call frames for assertions or error messages.\n[StackTrace](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#type-StackTrace)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -991,6 +1051,9 @@ impl StackTrace {
 }
 impl StackTrace {
     pub const IDENTIFIER: &'static str = "Runtime.StackTrace";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Unique identifier of current debugger.\n[UniqueDebuggerId](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#type-UniqueDebuggerId)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
@@ -1025,6 +1088,9 @@ impl std::borrow::Borrow<str> for UniqueDebuggerId {
 }
 impl UniqueDebuggerId {
     pub const IDENTIFIER: &'static str = "Runtime.UniqueDebuggerId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "If `debuggerId` is set stack trace comes from another debugger and can be resolved there. This\nallows to track cross-debugger calls. See `Runtime.StackTrace` and `Debugger.paused` for usages.\n[StackTraceId](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#type-StackTraceId)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1051,5 +1117,8 @@ impl<T: Into<String>> From<T> for StackTraceId {
 }
 impl StackTraceId {
     pub const IDENTIFIER: &'static str = "Runtime.StackTraceId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (RuntimeTypes { ScriptId (ScriptId) , SerializationOptions (SerializationOptions) , DeepSerializedValue (DeepSerializedValue) , RemoteObjectId (RemoteObjectId) , UnserializableValue (UnserializableValue) , RemoteObject (RemoteObject) , CustomPreview (CustomPreview) , ObjectPreview (ObjectPreview) , PropertyPreview (PropertyPreview) , EntryPreview (EntryPreview) , PropertyDescriptor (PropertyDescriptor) , InternalPropertyDescriptor (InternalPropertyDescriptor) , PrivatePropertyDescriptor (PrivatePropertyDescriptor) , CallArgument (CallArgument) , ExecutionContextId (ExecutionContextId) , ExecutionContextDescription (ExecutionContextDescription) , ExceptionDetails (ExceptionDetails) , Timestamp (Timestamp) , TimeDelta (TimeDelta) , CallFrame (CallFrame) , StackTrace (StackTrace) , UniqueDebuggerId (UniqueDebuggerId) , StackTraceId (StackTraceId) });

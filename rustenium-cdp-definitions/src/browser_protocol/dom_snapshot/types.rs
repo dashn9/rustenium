@@ -175,6 +175,9 @@ impl DomNode {
 }
 impl DomNode {
     pub const IDENTIFIER: &'static str = "DOMSnapshot.DOMNode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Details of post layout rendered text positions. The exact layout should not be regarded as\nstable and may change between versions.\n[InlineTextBox](https://chromedevtools.github.io/devtools-protocol/tot/DOMSnapshot/#type-InlineTextBox)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -204,6 +207,9 @@ impl InlineTextBox {
 }
 impl InlineTextBox {
     pub const IDENTIFIER: &'static str = "DOMSnapshot.InlineTextBox";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Details of an element in the DOM tree with a LayoutObject.\n[LayoutTreeNode](https://chromedevtools.github.io/devtools-protocol/tot/DOMSnapshot/#type-LayoutTreeNode)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -258,6 +264,9 @@ impl LayoutTreeNode {
 }
 impl LayoutTreeNode {
     pub const IDENTIFIER: &'static str = "DOMSnapshot.LayoutTreeNode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "A subset of the full ComputedStyle as defined by the request whitelist.\n[ComputedStyle](https://chromedevtools.github.io/devtools-protocol/tot/DOMSnapshot/#type-ComputedStyle)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -274,6 +283,9 @@ impl ComputedStyle {
 }
 impl ComputedStyle {
     pub const IDENTIFIER: &'static str = "DOMSnapshot.ComputedStyle";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "A name/value pair.\n[NameValue](https://chromedevtools.github.io/devtools-protocol/tot/DOMSnapshot/#type-NameValue)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -295,6 +307,9 @@ impl NameValue {
 }
 impl NameValue {
     pub const IDENTIFIER: &'static str = "DOMSnapshot.NameValue";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Index of the string in the strings table.\n[StringIndex](https://chromedevtools.github.io/devtools-protocol/tot/DOMSnapshot/#type-StringIndex)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Copy, Hash)]
@@ -309,6 +324,9 @@ impl StringIndex {
 }
 impl StringIndex {
     pub const IDENTIFIER: &'static str = "DOMSnapshot.StringIndex";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Index of the string in the strings table.\n[ArrayOfStrings](https://chromedevtools.github.io/devtools-protocol/tot/DOMSnapshot/#type-ArrayOfStrings)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -323,6 +341,9 @@ impl ArrayOfStrings {
 }
 impl ArrayOfStrings {
     pub const IDENTIFIER: &'static str = "DOMSnapshot.ArrayOfStrings";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Data that is only present on rare nodes.\n[RareStringData](https://chromedevtools.github.io/devtools-protocol/tot/DOMSnapshot/#type-RareStringData)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -341,6 +362,9 @@ impl RareStringData {
 }
 impl RareStringData {
     pub const IDENTIFIER: &'static str = "DOMSnapshot.RareStringData";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RareBooleanData {
@@ -355,6 +379,9 @@ impl RareBooleanData {
 }
 impl RareBooleanData {
     pub const IDENTIFIER: &'static str = "DOMSnapshot.RareBooleanData";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RareIntegerData {
@@ -372,6 +399,9 @@ impl RareIntegerData {
 }
 impl RareIntegerData {
     pub const IDENTIFIER: &'static str = "DOMSnapshot.RareIntegerData";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Rectangle(Vec<f64>);
@@ -385,6 +415,9 @@ impl Rectangle {
 }
 impl Rectangle {
     pub const IDENTIFIER: &'static str = "DOMSnapshot.Rectangle";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Document snapshot.\n[DocumentSnapshot](https://chromedevtools.github.io/devtools-protocol/tot/DOMSnapshot/#type-DocumentSnapshot)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -445,6 +478,9 @@ pub struct DocumentSnapshot {
 }
 impl DocumentSnapshot {
     pub const IDENTIFIER: &'static str = "DOMSnapshot.DocumentSnapshot";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Table containing nodes.\n[NodeTreeSnapshot](https://chromedevtools.github.io/devtools-protocol/tot/DOMSnapshot/#type-NodeTreeSnapshot)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -537,6 +573,9 @@ pub struct NodeTreeSnapshot {
 }
 impl NodeTreeSnapshot {
     pub const IDENTIFIER: &'static str = "DOMSnapshot.NodeTreeSnapshot";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Table of details of an element in the DOM tree with a LayoutObject.\n[LayoutTreeSnapshot](https://chromedevtools.github.io/devtools-protocol/tot/DOMSnapshot/#type-LayoutTreeSnapshot)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -593,6 +632,9 @@ pub struct LayoutTreeSnapshot {
 }
 impl LayoutTreeSnapshot {
     pub const IDENTIFIER: &'static str = "DOMSnapshot.LayoutTreeSnapshot";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Table of details of the post layout rendered text positions. The exact layout should not be regarded as\nstable and may change between versions.\n[TextBoxSnapshot](https://chromedevtools.github.io/devtools-protocol/tot/DOMSnapshot/#type-TextBoxSnapshot)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -631,5 +673,8 @@ impl TextBoxSnapshot {
 }
 impl TextBoxSnapshot {
     pub const IDENTIFIER: &'static str = "DOMSnapshot.TextBoxSnapshot";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (DomSnapshotTypes { DomNode (DomNode) , InlineTextBox (InlineTextBox) , LayoutTreeNode (LayoutTreeNode) , ComputedStyle (ComputedStyle) , NameValue (NameValue) , StringIndex (StringIndex) , ArrayOfStrings (ArrayOfStrings) , RareStringData (RareStringData) , RareBooleanData (RareBooleanData) , RareIntegerData (RareIntegerData) , Rectangle (Rectangle) , DocumentSnapshot (DocumentSnapshot) , NodeTreeSnapshot (NodeTreeSnapshot) , LayoutTreeSnapshot (LayoutTreeSnapshot) , TextBoxSnapshot (TextBoxSnapshot) });

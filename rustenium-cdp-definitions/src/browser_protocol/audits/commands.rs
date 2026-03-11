@@ -55,6 +55,9 @@ pub struct GetEncodedResponse {
 }
 impl GetEncodedResponse {
     pub const IDENTIFIER: &'static str = "Audits.getEncodedResponse";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetEncodedResponse {
     type Result = super::results::GetEncodedResponseResult;
@@ -75,6 +78,9 @@ pub struct Disable {
 }
 impl Disable {
     pub const IDENTIFIER: &'static str = "Audits.disable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -95,6 +101,9 @@ pub struct Enable {
 }
 impl Enable {
     pub const IDENTIFIER: &'static str = "Audits.enable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -121,6 +130,9 @@ pub struct CheckContrast {
 }
 impl CheckContrast {
     pub const IDENTIFIER: &'static str = "Audits.checkContrast";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for CheckContrast {
     type Result = super::results::CheckContrastResult;
@@ -141,6 +153,9 @@ pub struct CheckFormsIssues {
 }
 impl CheckFormsIssues {
     pub const IDENTIFIER: &'static str = "Audits.checkFormsIssues";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for CheckFormsIssues {
     type Result = super::results::CheckFormsIssuesResult;

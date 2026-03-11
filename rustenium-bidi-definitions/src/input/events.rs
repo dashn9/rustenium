@@ -23,5 +23,8 @@ pub struct FileDialogOpened {
 impl FileDialogOpened {
     pub const IDENTIFIER: &'static str = "input.fileDialogOpened";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (InputEvent { FileDialogOpened (FileDialogOpened) });

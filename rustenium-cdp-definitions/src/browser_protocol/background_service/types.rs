@@ -33,6 +33,9 @@ impl EventMetadata {
 }
 impl EventMetadata {
     pub const IDENTIFIER: &'static str = "BackgroundService.EventMetadata";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BackgroundServiceEvent {
@@ -65,5 +68,8 @@ pub struct BackgroundServiceEvent {
 }
 impl BackgroundServiceEvent {
     pub const IDENTIFIER: &'static str = "BackgroundService.BackgroundServiceEvent";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (BackgroundServiceTypes { ServiceName (ServiceName) , EventMetadata (EventMetadata) , BackgroundServiceEvent (BackgroundServiceEvent) });

@@ -16,5 +16,8 @@ pub struct IssueAdded {
 }
 impl IssueAdded {
     pub const IDENTIFIER: &'static str = "Audits.issueAdded";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (AuditsEvents { IssueAdded (IssueAdded) });

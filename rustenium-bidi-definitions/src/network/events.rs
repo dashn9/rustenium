@@ -20,6 +20,9 @@ pub struct AuthRequired {
 impl AuthRequired {
     pub const IDENTIFIER: &'static str = "network.authRequired";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BeforeRequestSentParams {
@@ -44,6 +47,9 @@ pub struct BeforeRequestSent {
 impl BeforeRequestSent {
     pub const IDENTIFIER: &'static str = "network.beforeRequestSent";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FetchErrorParams {
@@ -66,6 +72,9 @@ pub struct FetchError {
 impl FetchError {
     pub const IDENTIFIER: &'static str = "network.fetchError";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResponseCompletedParams {
@@ -88,6 +97,9 @@ pub struct ResponseCompleted {
 impl ResponseCompleted {
     pub const IDENTIFIER: &'static str = "network.responseCompleted";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResponseStartedParams {
@@ -110,5 +122,8 @@ pub struct ResponseStarted {
 impl ResponseStarted {
     pub const IDENTIFIER: &'static str = "network.responseStarted";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (NetworkEvent { AuthRequired (AuthRequired) , BeforeRequestSent (BeforeRequestSent) , FetchError (FetchError) , ResponseCompleted (ResponseCompleted) , ResponseStarted (ResponseStarted) });

@@ -15,6 +15,9 @@ pub struct GetDomCounters {
 }
 impl GetDomCounters {
     pub const IDENTIFIER: &'static str = "Memory.getDOMCounters";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetDomCounters {
     type Result = super::results::GetDomCountersResult;
@@ -35,6 +38,9 @@ pub struct GetDomCountersForLeakDetection {
 }
 impl GetDomCountersForLeakDetection {
     pub const IDENTIFIER: &'static str = "Memory.getDOMCountersForLeakDetection";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetDomCountersForLeakDetection {
     type Result = super::results::GetDomCountersForLeakDetectionResult;
@@ -55,6 +61,9 @@ pub struct PrepareForLeakDetection {
 }
 impl PrepareForLeakDetection {
     pub const IDENTIFIER: &'static str = "Memory.prepareForLeakDetection";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for PrepareForLeakDetection {
     type Result = super::results::PrepareForLeakDetectionResult;
@@ -75,6 +84,9 @@ pub struct ForciblyPurgeJavaScriptMemory {
 }
 impl ForciblyPurgeJavaScriptMemory {
     pub const IDENTIFIER: &'static str = "Memory.forciblyPurgeJavaScriptMemory";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ForciblyPurgeJavaScriptMemory {
     type Result = super::results::ForciblyPurgeJavaScriptMemoryResult;
@@ -106,6 +118,9 @@ pub struct SetPressureNotificationsSuppressed {
 }
 impl SetPressureNotificationsSuppressed {
     pub const IDENTIFIER: &'static str = "Memory.setPressureNotificationsSuppressed";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetPressureNotificationsSuppressed {
     type Result = super::results::SetPressureNotificationsSuppressedResult;
@@ -137,6 +152,9 @@ pub struct SimulatePressureNotification {
 }
 impl SimulatePressureNotification {
     pub const IDENTIFIER: &'static str = "Memory.simulatePressureNotification";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SimulatePressureNotification {
     type Result = super::results::SimulatePressureNotificationResult;
@@ -168,6 +186,9 @@ pub struct StartSampling {
 }
 impl StartSampling {
     pub const IDENTIFIER: &'static str = "Memory.startSampling";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for StartSampling {
     type Result = super::results::StartSamplingResult;
@@ -188,6 +209,9 @@ pub struct StopSampling {
 }
 impl StopSampling {
     pub const IDENTIFIER: &'static str = "Memory.stopSampling";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for StopSampling {
     type Result = super::results::StopSamplingResult;
@@ -208,6 +232,9 @@ pub struct GetAllTimeSamplingProfile {
 }
 impl GetAllTimeSamplingProfile {
     pub const IDENTIFIER: &'static str = "Memory.getAllTimeSamplingProfile";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetAllTimeSamplingProfile {
     type Result = super::results::GetAllTimeSamplingProfileResult;
@@ -228,6 +255,9 @@ pub struct GetBrowserSamplingProfile {
 }
 impl GetBrowserSamplingProfile {
     pub const IDENTIFIER: &'static str = "Memory.getBrowserSamplingProfile";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetBrowserSamplingProfile {
     type Result = super::results::GetBrowserSamplingProfileResult;
@@ -248,6 +278,9 @@ pub struct GetSamplingProfile {
 }
 impl GetSamplingProfile {
     pub const IDENTIFIER: &'static str = "Memory.getSamplingProfile";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetSamplingProfile {
     type Result = super::results::GetSamplingProfileResult;

@@ -67,6 +67,9 @@ impl ManufacturerData {
 }
 impl ManufacturerData {
     pub const IDENTIFIER: &'static str = "BluetoothEmulation.ManufacturerData";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Stores the byte data of the advertisement packet sent by a Bluetooth device.\n[ScanRecord](https://chromedevtools.github.io/devtools-protocol/tot/BluetoothEmulation/#type-ScanRecord)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -97,6 +100,9 @@ pub struct ScanRecord {
 }
 impl ScanRecord {
     pub const IDENTIFIER: &'static str = "BluetoothEmulation.ScanRecord";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Stores the advertisement packet information that is sent by a Bluetooth device.\n[ScanEntry](https://chromedevtools.github.io/devtools-protocol/tot/BluetoothEmulation/#type-ScanEntry)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -123,6 +129,9 @@ impl ScanEntry {
 }
 impl ScanEntry {
     pub const IDENTIFIER: &'static str = "BluetoothEmulation.ScanEntry";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Describes the properties of a characteristic. This follows Bluetooth Core\nSpecification BT 4.2 Vol 3 Part G 3.3.1. Characteristic Properties.\n[CharacteristicProperties](https://chromedevtools.github.io/devtools-protocol/tot/BluetoothEmulation/#type-CharacteristicProperties)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -162,5 +171,8 @@ pub struct CharacteristicProperties {
 }
 impl CharacteristicProperties {
     pub const IDENTIFIER: &'static str = "BluetoothEmulation.CharacteristicProperties";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (BluetoothEmulationTypes { CentralState (CentralState) , GattOperationType (GattOperationType) , CharacteristicWriteType (CharacteristicWriteType) , CharacteristicOperationType (CharacteristicOperationType) , DescriptorOperationType (DescriptorOperationType) , ManufacturerData (ManufacturerData) , ScanRecord (ScanRecord) , ScanEntry (ScanEntry) , CharacteristicProperties (CharacteristicProperties) });

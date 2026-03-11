@@ -196,8 +196,8 @@ impl Generator {
             }
 
             let protocol_type_group = event::group_enum_closed(&proto_type_name, &type_entries);
-            let protocol_cmd_group = event::group_enum_closed(&proto_cmd_name, &cmd_entries);
-            let protocol_evt_group = event::group_enum_open(&proto_evt_name, &evt_entries);
+            let protocol_cmd_group = event::group_enum_closed_identifiable(&proto_cmd_name, &cmd_entries);
+            let protocol_evt_group = event::group_enum_open_identifiable(&proto_evt_name, &evt_entries);
             let protocol_transitive = event::impl_from_transitive(&proto_transitive);
 
             let mod_decls: Vec<_> = module_infos.iter().map(|(name, _, _, _, _)| {
@@ -316,8 +316,8 @@ impl Generator {
             }
 
             let top_type_group = event::group_enum_closed(&format_ident!("Type"), &top_type_entries);
-            let top_cmd_group = event::group_enum_closed(&format_ident!("Command"), &top_cmd_entries);
-            let top_evt_group = event::group_enum_open(&format_ident!("Event"), &top_evt_entries);
+            let top_cmd_group = event::group_enum_closed_identifiable(&format_ident!("Command"), &top_cmd_entries);
+            let top_evt_group = event::group_enum_open_identifiable(&format_ident!("Event"), &top_evt_entries);
             let top_transitive_impls = event::impl_from_transitive(&top_transitive);
 
             let event_message = if !top_evt_entries.is_empty() {
@@ -522,10 +522,10 @@ impl Generator {
             types_stream.extend(event::group_enum_closed(&format_ident!("{}{}", module_camel, ts), &type_entries));
         }
         if !cmd_entries.is_empty() {
-            commands_stream.extend(event::group_enum_closed(&format_ident!("{}{}", module_camel, cs), &cmd_entries));
+            commands_stream.extend(event::group_enum_closed_identifiable(&format_ident!("{}{}", module_camel, cs), &cmd_entries));
         }
         if !evt_entries.is_empty() {
-            events_stream.extend(event::group_enum_closed(&format_ident!("{}{}", module_camel, es), &evt_entries));
+            events_stream.extend(event::group_enum_closed_identifiable(&format_ident!("{}{}", module_camel, es), &evt_entries));
         }
 
         let serde_import = quote! { use serde::{Serialize, Deserialize}; };
@@ -603,6 +603,7 @@ impl Generator {
                     impl #def_ident {
                         pub const IDENTIFIER: &'static str = #identifier;
                         #domain_direction_const
+                        pub fn identifier(&self) -> &'static str { Self::IDENTIFIER }
                     }
 
                 });
@@ -624,6 +625,7 @@ impl Generator {
                     impl #name {
                         pub const IDENTIFIER: &'static str = #identifier;
                         #domain_direction_const
+                        pub fn identifier(&self) -> &'static str { Self::IDENTIFIER }
                     }
 
                 });

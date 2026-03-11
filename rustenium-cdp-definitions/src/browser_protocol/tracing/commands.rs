@@ -15,6 +15,9 @@ pub struct End {
 }
 impl End {
     pub const IDENTIFIER: &'static str = "Tracing.end";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for End {
     type Result = super::results::EndResult;
@@ -35,6 +38,9 @@ pub struct GetCategories {
 }
 impl GetCategories {
     pub const IDENTIFIER: &'static str = "Tracing.getCategories";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetCategories {
     type Result = super::results::GetCategoriesResult;
@@ -55,6 +61,9 @@ pub struct GetTrackEventDescriptor {
 }
 impl GetTrackEventDescriptor {
     pub const IDENTIFIER: &'static str = "Tracing.getTrackEventDescriptor";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetTrackEventDescriptor {
     type Result = super::results::GetTrackEventDescriptorResult;
@@ -91,6 +100,9 @@ pub struct RecordClockSyncMarker {
 }
 impl RecordClockSyncMarker {
     pub const IDENTIFIER: &'static str = "Tracing.recordClockSyncMarker";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RecordClockSyncMarker {
     type Result = super::results::RecordClockSyncMarkerResult;
@@ -122,6 +134,9 @@ pub struct RequestMemoryDump {
 }
 impl RequestMemoryDump {
     pub const IDENTIFIER: &'static str = "Tracing.requestMemoryDump";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RequestMemoryDump {
     type Result = super::results::RequestMemoryDumpResult;
@@ -185,6 +200,9 @@ pub struct Start {
 }
 impl Start {
     pub const IDENTIFIER: &'static str = "Tracing.start";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Start {
     type Result = super::results::StartResult;

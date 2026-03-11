@@ -32,6 +32,9 @@ impl std::borrow::Borrow<str> for GraphObjectId {
 }
 impl GraphObjectId {
     pub const IDENTIFIER: &'static str = "WebAudio.GraphObjectId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Enum of BaseAudioContext types"]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -81,6 +84,9 @@ impl From<String> for NodeType {
 }
 impl NodeType {
     pub const IDENTIFIER: &'static str = "WebAudio.NodeType";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Enum of AudioNode::ChannelCountMode from the spec"]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -128,6 +134,9 @@ impl From<String> for ParamType {
 }
 impl ParamType {
     pub const IDENTIFIER: &'static str = "WebAudio.ParamType";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Enum of AudioParam::AutomationRate from the spec"]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -170,6 +179,9 @@ impl ContextRealtimeData {
 }
 impl ContextRealtimeData {
     pub const IDENTIFIER: &'static str = "WebAudio.ContextRealtimeData";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Protocol object for BaseAudioContext\n[BaseAudioContext](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#type-BaseAudioContext)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -196,6 +208,9 @@ pub struct BaseAudioContext {
 }
 impl BaseAudioContext {
     pub const IDENTIFIER: &'static str = "WebAudio.BaseAudioContext";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Protocol object for AudioListener\n[AudioListener](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#type-AudioListener)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -218,6 +233,9 @@ impl AudioListener {
 }
 impl AudioListener {
     pub const IDENTIFIER: &'static str = "WebAudio.AudioListener";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Protocol object for AudioNode\n[AudioNode](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#type-AudioNode)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -241,6 +259,9 @@ pub struct AudioNode {
 }
 impl AudioNode {
     pub const IDENTIFIER: &'static str = "WebAudio.AudioNode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Protocol object for AudioParam\n[AudioParam](https://chromedevtools.github.io/devtools-protocol/tot/WebAudio/#type-AudioParam)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -264,5 +285,8 @@ pub struct AudioParam {
 }
 impl AudioParam {
     pub const IDENTIFIER: &'static str = "WebAudio.AudioParam";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (WebAudioTypes { GraphObjectId (GraphObjectId) , ContextType (ContextType) , ContextState (ContextState) , NodeType (NodeType) , ChannelCountMode (ChannelCountMode) , ChannelInterpretation (ChannelInterpretation) , ParamType (ParamType) , AutomationRate (AutomationRate) , ContextRealtimeData (ContextRealtimeData) , BaseAudioContext (BaseAudioContext) , AudioListener (AudioListener) , AudioNode (AudioNode) , AudioParam (AudioParam) });

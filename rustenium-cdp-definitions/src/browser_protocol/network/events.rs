@@ -33,6 +33,9 @@ pub struct DataReceived {
 }
 impl DataReceived {
     pub const IDENTIFIER: &'static str = "Network.dataReceived";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when EventSource message is received.\n[eventSourceMessageReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-eventSourceMessageReceived)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -66,6 +69,9 @@ pub struct EventSourceMessageReceived {
 }
 impl EventSourceMessageReceived {
     pub const IDENTIFIER: &'static str = "Network.eventSourceMessageReceived";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when HTTP request has failed to load.\n[loadingFailed](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-loadingFailed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -111,6 +117,9 @@ pub struct LoadingFailed {
 }
 impl LoadingFailed {
     pub const IDENTIFIER: &'static str = "Network.loadingFailed";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when HTTP request has finished loading.\n[loadingFinished](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-loadingFinished)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -138,6 +147,9 @@ pub struct LoadingFinished {
 }
 impl LoadingFinished {
     pub const IDENTIFIER: &'static str = "Network.loadingFinished";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired if request ended up loading from cache.\n[requestServedFromCache](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-requestServedFromCache)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -159,6 +171,9 @@ pub struct RequestServedFromCache {
 }
 impl RequestServedFromCache {
     pub const IDENTIFIER: &'static str = "Network.requestServedFromCache";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when page is about to send HTTP request.\n[requestWillBeSent](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-requestWillBeSent)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -226,6 +241,9 @@ pub struct RequestWillBeSent {
 }
 impl RequestWillBeSent {
     pub const IDENTIFIER: &'static str = "Network.requestWillBeSent";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when resource loading priority is changed\n[resourceChangedPriority](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-resourceChangedPriority)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -253,6 +271,9 @@ pub struct ResourceChangedPriority {
 }
 impl ResourceChangedPriority {
     pub const IDENTIFIER: &'static str = "Network.resourceChangedPriority";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when a signed exchange was received over the network\n[signedExchangeReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-signedExchangeReceived)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -277,6 +298,9 @@ pub struct SignedExchangeReceived {
 }
 impl SignedExchangeReceived {
     pub const IDENTIFIER: &'static str = "Network.signedExchangeReceived";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when HTTP response is available.\n[responseReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-responseReceived)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -318,6 +342,9 @@ pub struct ResponseReceived {
 }
 impl ResponseReceived {
     pub const IDENTIFIER: &'static str = "Network.responseReceived";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when WebSocket is closed.\n[webSocketClosed](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webSocketClosed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -342,6 +369,9 @@ pub struct WebSocketClosed {
 }
 impl WebSocketClosed {
     pub const IDENTIFIER: &'static str = "Network.webSocketClosed";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired upon WebSocket creation.\n[webSocketCreated](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webSocketCreated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -371,6 +401,9 @@ pub struct WebSocketCreated {
 }
 impl WebSocketCreated {
     pub const IDENTIFIER: &'static str = "Network.webSocketCreated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when WebSocket message error occurs.\n[webSocketFrameError](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webSocketFrameError)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -398,6 +431,9 @@ pub struct WebSocketFrameError {
 }
 impl WebSocketFrameError {
     pub const IDENTIFIER: &'static str = "Network.webSocketFrameError";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when WebSocket message is received.\n[webSocketFrameReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webSocketFrameReceived)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -425,6 +461,9 @@ pub struct WebSocketFrameReceived {
 }
 impl WebSocketFrameReceived {
     pub const IDENTIFIER: &'static str = "Network.webSocketFrameReceived";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when WebSocket message is sent.\n[webSocketFrameSent](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webSocketFrameSent)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -452,6 +491,9 @@ pub struct WebSocketFrameSent {
 }
 impl WebSocketFrameSent {
     pub const IDENTIFIER: &'static str = "Network.webSocketFrameSent";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when WebSocket handshake response becomes available.\n[webSocketHandshakeResponseReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webSocketHandshakeResponseReceived)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -479,6 +521,9 @@ pub struct WebSocketHandshakeResponseReceived {
 }
 impl WebSocketHandshakeResponseReceived {
     pub const IDENTIFIER: &'static str = "Network.webSocketHandshakeResponseReceived";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when WebSocket is about to initiate handshake.\n[webSocketWillSendHandshakeRequest](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webSocketWillSendHandshakeRequest)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -509,6 +554,9 @@ pub struct WebSocketWillSendHandshakeRequest {
 }
 impl WebSocketWillSendHandshakeRequest {
     pub const IDENTIFIER: &'static str = "Network.webSocketWillSendHandshakeRequest";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired upon WebTransport creation.\n[webTransportCreated](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webTransportCreated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -541,6 +589,9 @@ pub struct WebTransportCreated {
 }
 impl WebTransportCreated {
     pub const IDENTIFIER: &'static str = "Network.webTransportCreated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when WebTransport handshake is finished.\n[webTransportConnectionEstablished](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webTransportConnectionEstablished)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -565,6 +616,9 @@ pub struct WebTransportConnectionEstablished {
 }
 impl WebTransportConnectionEstablished {
     pub const IDENTIFIER: &'static str = "Network.webTransportConnectionEstablished";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when WebTransport is disposed.\n[webTransportClosed](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-webTransportClosed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -589,6 +643,9 @@ pub struct WebTransportClosed {
 }
 impl WebTransportClosed {
     pub const IDENTIFIER: &'static str = "Network.webTransportClosed";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired upon direct_socket.TCPSocket creation.\n[directTCPSocketCreated](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directTCPSocketCreated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -622,6 +679,9 @@ pub struct DirectTcpSocketCreated {
 }
 impl DirectTcpSocketCreated {
     pub const IDENTIFIER: &'static str = "Network.directTCPSocketCreated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when direct_socket.TCPSocket connection is opened.\n[directTCPSocketOpened](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directTCPSocketOpened)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -658,6 +718,9 @@ pub struct DirectTcpSocketOpened {
 }
 impl DirectTcpSocketOpened {
     pub const IDENTIFIER: &'static str = "Network.directTCPSocketOpened";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when direct_socket.TCPSocket is aborted.\n[directTCPSocketAborted](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directTCPSocketAborted)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -682,6 +745,9 @@ pub struct DirectTcpSocketAborted {
 }
 impl DirectTcpSocketAborted {
     pub const IDENTIFIER: &'static str = "Network.directTCPSocketAborted";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when direct_socket.TCPSocket is closed.\n[directTCPSocketClosed](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directTCPSocketClosed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -704,6 +770,9 @@ pub struct DirectTcpSocketClosed {
 }
 impl DirectTcpSocketClosed {
     pub const IDENTIFIER: &'static str = "Network.directTCPSocketClosed";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when data is sent to tcp direct socket stream.\n[directTCPSocketChunkSent](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directTCPSocketChunkSent)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -728,6 +797,9 @@ pub struct DirectTcpSocketChunkSent {
 }
 impl DirectTcpSocketChunkSent {
     pub const IDENTIFIER: &'static str = "Network.directTCPSocketChunkSent";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when data is received from tcp direct socket stream.\n[directTCPSocketChunkReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directTCPSocketChunkReceived)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -752,6 +824,9 @@ pub struct DirectTcpSocketChunkReceived {
 }
 impl DirectTcpSocketChunkReceived {
     pub const IDENTIFIER: &'static str = "Network.directTCPSocketChunkReceived";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DirectUdpSocketJoinedMulticastGroupParams {
@@ -772,6 +847,9 @@ pub struct DirectUdpSocketJoinedMulticastGroup {
 }
 impl DirectUdpSocketJoinedMulticastGroup {
     pub const IDENTIFIER: &'static str = "Network.directUDPSocketJoinedMulticastGroup";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DirectUdpSocketLeftMulticastGroupParams {
@@ -792,6 +870,9 @@ pub struct DirectUdpSocketLeftMulticastGroup {
 }
 impl DirectUdpSocketLeftMulticastGroup {
     pub const IDENTIFIER: &'static str = "Network.directUDPSocketLeftMulticastGroup";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired upon direct_socket.UDPSocket creation.\n[directUDPSocketCreated](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directUDPSocketCreated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -820,6 +901,9 @@ pub struct DirectUdpSocketCreated {
 }
 impl DirectUdpSocketCreated {
     pub const IDENTIFIER: &'static str = "Network.directUDPSocketCreated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when direct_socket.UDPSocket connection is opened.\n[directUDPSocketOpened](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directUDPSocketOpened)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -856,6 +940,9 @@ pub struct DirectUdpSocketOpened {
 }
 impl DirectUdpSocketOpened {
     pub const IDENTIFIER: &'static str = "Network.directUDPSocketOpened";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when direct_socket.UDPSocket is aborted.\n[directUDPSocketAborted](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directUDPSocketAborted)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -880,6 +967,9 @@ pub struct DirectUdpSocketAborted {
 }
 impl DirectUdpSocketAborted {
     pub const IDENTIFIER: &'static str = "Network.directUDPSocketAborted";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when direct_socket.UDPSocket is closed.\n[directUDPSocketClosed](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directUDPSocketClosed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -902,6 +992,9 @@ pub struct DirectUdpSocketClosed {
 }
 impl DirectUdpSocketClosed {
     pub const IDENTIFIER: &'static str = "Network.directUDPSocketClosed";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when message is sent to udp direct socket stream.\n[directUDPSocketChunkSent](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directUDPSocketChunkSent)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -926,6 +1019,9 @@ pub struct DirectUdpSocketChunkSent {
 }
 impl DirectUdpSocketChunkSent {
     pub const IDENTIFIER: &'static str = "Network.directUDPSocketChunkSent";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when message is received from udp direct socket stream.\n[directUDPSocketChunkReceived](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-directUDPSocketChunkReceived)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -950,6 +1046,9 @@ pub struct DirectUdpSocketChunkReceived {
 }
 impl DirectUdpSocketChunkReceived {
     pub const IDENTIFIER: &'static str = "Network.directUDPSocketChunkReceived";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when additional information about a requestWillBeSent event is available from the\nnetwork stack. Not every requestWillBeSent event will have an additional\nrequestWillBeSentExtraInfo fired for it, and there is no guarantee whether requestWillBeSent\nor requestWillBeSentExtraInfo will be fired first for the same request.\n[requestWillBeSentExtraInfo](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-requestWillBeSentExtraInfo)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1001,6 +1100,9 @@ pub struct RequestWillBeSentExtraInfo {
 }
 impl RequestWillBeSentExtraInfo {
     pub const IDENTIFIER: &'static str = "Network.requestWillBeSentExtraInfo";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when additional information about a responseReceived event is available from the network\nstack. Not every responseReceived event will have an additional responseReceivedExtraInfo for\nit, and responseReceivedExtraInfo may be fired before or after responseReceived.\n[responseReceivedExtraInfo](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-responseReceivedExtraInfo)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1055,6 +1157,9 @@ pub struct ResponseReceivedExtraInfo {
 }
 impl ResponseReceivedExtraInfo {
     pub const IDENTIFIER: &'static str = "Network.responseReceivedExtraInfo";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when 103 Early Hints headers is received in addition to the common response.\nNot every responseReceived event will have an responseReceivedEarlyHints fired.\nOnly one responseReceivedEarlyHints may be fired for eached responseReceived event.\n[responseReceivedEarlyHints](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-responseReceivedEarlyHints)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1079,6 +1184,9 @@ pub struct ResponseReceivedEarlyHints {
 }
 impl ResponseReceivedEarlyHints {
     pub const IDENTIFIER: &'static str = "Network.responseReceivedEarlyHints";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired exactly once for each Trust Token operation. Depending on\nthe type of the operation and whether the operation succeeded or\nfailed, the event is fired before the corresponding request was sent\nor after the response was received.\n[trustTokenOperationDone](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-trustTokenOperationDone)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1149,6 +1257,9 @@ pub struct TrustTokenOperationDone {
 }
 impl TrustTokenOperationDone {
     pub const IDENTIFIER: &'static str = "Network.trustTokenOperationDone";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired once security policy has been updated.\n[policyUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-policyUpdated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1166,6 +1277,9 @@ pub struct PolicyUpdated {
 }
 impl PolicyUpdated {
     pub const IDENTIFIER: &'static str = "Network.policyUpdated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Is sent whenever a new report is added.\nAnd after 'enableReportingApi' for all existing reports.\n[reportingApiReportAdded](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-reportingApiReportAdded)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1186,6 +1300,9 @@ pub struct ReportingApiReportAdded {
 }
 impl ReportingApiReportAdded {
     pub const IDENTIFIER: &'static str = "Network.reportingApiReportAdded";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ReportingApiReportUpdatedParams {
@@ -1204,6 +1321,9 @@ pub struct ReportingApiReportUpdated {
 }
 impl ReportingApiReportUpdated {
     pub const IDENTIFIER: &'static str = "Network.reportingApiReportUpdated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ReportingApiEndpointsChangedForOriginParams {
@@ -1226,6 +1346,9 @@ pub struct ReportingApiEndpointsChangedForOrigin {
 }
 impl ReportingApiEndpointsChangedForOrigin {
     pub const IDENTIFIER: &'static str = "Network.reportingApiEndpointsChangedForOrigin";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Triggered when the initial set of device bound sessions is added.\n[deviceBoundSessionsAdded](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-deviceBoundSessionsAdded)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1248,6 +1371,9 @@ pub struct DeviceBoundSessionsAdded {
 }
 impl DeviceBoundSessionsAdded {
     pub const IDENTIFIER: &'static str = "Network.deviceBoundSessionsAdded";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Triggered when a device bound session event occurs.\n[deviceBoundSessionEventOccurred](https://chromedevtools.github.io/devtools-protocol/tot/Network/#event-deviceBoundSessionEventOccurred)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1297,5 +1423,8 @@ pub struct DeviceBoundSessionEventOccurred {
 }
 impl DeviceBoundSessionEventOccurred {
     pub const IDENTIFIER: &'static str = "Network.deviceBoundSessionEventOccurred";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (NetworkEvents { DataReceived (DataReceived) , EventSourceMessageReceived (EventSourceMessageReceived) , LoadingFailed (LoadingFailed) , LoadingFinished (LoadingFinished) , RequestServedFromCache (RequestServedFromCache) , RequestWillBeSent (RequestWillBeSent) , ResourceChangedPriority (ResourceChangedPriority) , SignedExchangeReceived (SignedExchangeReceived) , ResponseReceived (ResponseReceived) , WebSocketClosed (WebSocketClosed) , WebSocketCreated (WebSocketCreated) , WebSocketFrameError (WebSocketFrameError) , WebSocketFrameReceived (WebSocketFrameReceived) , WebSocketFrameSent (WebSocketFrameSent) , WebSocketHandshakeResponseReceived (WebSocketHandshakeResponseReceived) , WebSocketWillSendHandshakeRequest (WebSocketWillSendHandshakeRequest) , WebTransportCreated (WebTransportCreated) , WebTransportConnectionEstablished (WebTransportConnectionEstablished) , WebTransportClosed (WebTransportClosed) , DirectTcpSocketCreated (DirectTcpSocketCreated) , DirectTcpSocketOpened (DirectTcpSocketOpened) , DirectTcpSocketAborted (DirectTcpSocketAborted) , DirectTcpSocketClosed (DirectTcpSocketClosed) , DirectTcpSocketChunkSent (DirectTcpSocketChunkSent) , DirectTcpSocketChunkReceived (DirectTcpSocketChunkReceived) , DirectUdpSocketJoinedMulticastGroup (DirectUdpSocketJoinedMulticastGroup) , DirectUdpSocketLeftMulticastGroup (DirectUdpSocketLeftMulticastGroup) , DirectUdpSocketCreated (DirectUdpSocketCreated) , DirectUdpSocketOpened (DirectUdpSocketOpened) , DirectUdpSocketAborted (DirectUdpSocketAborted) , DirectUdpSocketClosed (DirectUdpSocketClosed) , DirectUdpSocketChunkSent (DirectUdpSocketChunkSent) , DirectUdpSocketChunkReceived (DirectUdpSocketChunkReceived) , RequestWillBeSentExtraInfo (RequestWillBeSentExtraInfo) , ResponseReceivedExtraInfo (ResponseReceivedExtraInfo) , ResponseReceivedEarlyHints (ResponseReceivedEarlyHints) , TrustTokenOperationDone (TrustTokenOperationDone) , PolicyUpdated (PolicyUpdated) , ReportingApiReportAdded (ReportingApiReportAdded) , ReportingApiReportUpdated (ReportingApiReportUpdated) , ReportingApiEndpointsChangedForOrigin (ReportingApiEndpointsChangedForOrigin) , DeviceBoundSessionsAdded (DeviceBoundSessionsAdded) , DeviceBoundSessionEventOccurred (DeviceBoundSessionEventOccurred) });

@@ -12,6 +12,9 @@ impl CertificateId {
 }
 impl CertificateId {
     pub const IDENTIFIER: &'static str = "Security.CertificateId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "A description of mixed content (HTTP resources on HTTPS pages), as defined by\nhttps://www.w3.org/TR/mixed-content/#categories"]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -106,6 +109,9 @@ pub struct CertificateSecurityState {
 }
 impl CertificateSecurityState {
     pub const IDENTIFIER: &'static str = "Security.CertificateSecurityState";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum SafetyTipStatus {
@@ -135,6 +141,9 @@ impl SafetyTipInfo {
 }
 impl SafetyTipInfo {
     pub const IDENTIFIER: &'static str = "Security.SafetyTipInfo";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Security state information about the page.\n[VisibleSecurityState](https://chromedevtools.github.io/devtools-protocol/tot/Security/#type-VisibleSecurityState)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -172,6 +181,9 @@ impl VisibleSecurityState {
 }
 impl VisibleSecurityState {
     pub const IDENTIFIER: &'static str = "Security.VisibleSecurityState";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "An explanation of an factor contributing to the security state.\n[SecurityStateExplanation](https://chromedevtools.github.io/devtools-protocol/tot/Security/#type-SecurityStateExplanation)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -203,6 +215,9 @@ pub struct SecurityStateExplanation {
 }
 impl SecurityStateExplanation {
     pub const IDENTIFIER: &'static str = "Security.SecurityStateExplanation";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "The action to take when a certificate error occurs. continue will continue processing the\nrequest and cancel will cancel the request."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]

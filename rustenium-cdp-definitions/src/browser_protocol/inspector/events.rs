@@ -19,6 +19,9 @@ pub struct Detached {
 }
 impl Detached {
     pub const IDENTIFIER: &'static str = "Inspector.detached";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when debugging target has crashed\n[targetCrashed](https://chromedevtools.github.io/devtools-protocol/tot/Inspector/#event-targetCrashed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -36,6 +39,9 @@ pub struct TargetCrashed {
 }
 impl TargetCrashed {
     pub const IDENTIFIER: &'static str = "Inspector.targetCrashed";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when debugging target has reloaded after crash\n[targetReloadedAfterCrash](https://chromedevtools.github.io/devtools-protocol/tot/Inspector/#event-targetReloadedAfterCrash)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -53,6 +59,9 @@ pub struct TargetReloadedAfterCrash {
 }
 impl TargetReloadedAfterCrash {
     pub const IDENTIFIER: &'static str = "Inspector.targetReloadedAfterCrash";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired on worker targets when main worker script and any imported scripts have been evaluated.\n[workerScriptLoaded](https://chromedevtools.github.io/devtools-protocol/tot/Inspector/#event-workerScriptLoaded)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -70,5 +79,8 @@ pub struct WorkerScriptLoaded {
 }
 impl WorkerScriptLoaded {
     pub const IDENTIFIER: &'static str = "Inspector.workerScriptLoaded";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (InspectorEvents { Detached (Detached) , TargetCrashed (TargetCrashed) , TargetReloadedAfterCrash (TargetReloadedAfterCrash) , WorkerScriptLoaded (WorkerScriptLoaded) });

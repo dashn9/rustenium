@@ -27,5 +27,8 @@ impl From<String> for StreamHandle {
 }
 impl StreamHandle {
     pub const IDENTIFIER: &'static str = "IO.StreamHandle";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (IoTypes { StreamHandle (StreamHandle) });

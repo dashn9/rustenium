@@ -24,6 +24,9 @@ pub struct Activate {
 impl Activate {
     pub const IDENTIFIER: &'static str = "browsingContext.activate";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Activate {
     type Result = super::results::ActivateResult;
@@ -75,6 +78,9 @@ pub struct CaptureScreenshot {
 impl CaptureScreenshot {
     pub const IDENTIFIER: &'static str = "browsingContext.captureScreenshot";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for CaptureScreenshot {
     type Result = super::results::CaptureScreenshotResult;
@@ -112,6 +118,9 @@ pub struct Close {
 impl Close {
     pub const IDENTIFIER: &'static str = "browsingContext.close";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Close {
     type Result = super::results::CloseResult;
@@ -159,6 +168,9 @@ pub struct Create {
 impl Create {
     pub const IDENTIFIER: &'static str = "browsingContext.create";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Create {
     type Result = super::results::CreateResult;
@@ -187,6 +199,9 @@ pub struct GetTree {
 impl GetTree {
     pub const IDENTIFIER: &'static str = "browsingContext.getTree";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetTree {
     type Result = super::results::GetTreeResult;
@@ -226,6 +241,9 @@ pub struct HandleUserPrompt {
 impl HandleUserPrompt {
     pub const IDENTIFIER: &'static str = "browsingContext.handleUserPrompt";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for HandleUserPrompt {
     type Result = super::results::HandleUserPromptResult;
@@ -277,6 +295,9 @@ pub struct LocateNodes {
 impl LocateNodes {
     pub const IDENTIFIER: &'static str = "browsingContext.locateNodes";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for LocateNodes {
     type Result = super::results::LocateNodesResult;
@@ -314,6 +335,9 @@ pub struct Navigate {
 impl Navigate {
     pub const IDENTIFIER: &'static str = "browsingContext.navigate";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Navigate {
     type Result = super::results::NavigateResult;
@@ -394,6 +418,9 @@ pub struct Print {
 impl Print {
     pub const IDENTIFIER: &'static str = "browsingContext.print";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Print {
     type Result = super::results::PrintResult;
@@ -433,6 +460,9 @@ pub struct Reload {
 impl Reload {
     pub const IDENTIFIER: &'static str = "browsingContext.reload";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Reload {
     type Result = super::results::ReloadResult;
@@ -470,6 +500,9 @@ pub struct SetViewport {
 impl SetViewport {
     pub const IDENTIFIER: &'static str = "browsingContext.setViewport";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetViewport {
     type Result = super::results::SetViewportResult;
@@ -502,6 +535,9 @@ pub struct TraverseHistory {
 impl TraverseHistory {
     pub const IDENTIFIER: &'static str = "browsingContext.traverseHistory";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for TraverseHistory {
     type Result = super::results::TraverseHistoryResult;

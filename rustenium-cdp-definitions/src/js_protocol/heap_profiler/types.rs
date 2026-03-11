@@ -32,6 +32,9 @@ impl std::borrow::Borrow<str> for HeapSnapshotObjectId {
 }
 impl HeapSnapshotObjectId {
     pub const IDENTIFIER: &'static str = "HeapProfiler.HeapSnapshotObjectId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Sampling Heap Profile node. Holds callsite information, allocation statistics and child nodes.\n[SamplingHeapProfileNode](https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler/#type-SamplingHeapProfileNode)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -67,6 +70,9 @@ impl SamplingHeapProfileNode {
 }
 impl SamplingHeapProfileNode {
     pub const IDENTIFIER: &'static str = "HeapProfiler.SamplingHeapProfileNode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "A single sample from a sampling profile.\n[SamplingHeapProfileSample](https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler/#type-SamplingHeapProfileSample)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -92,6 +98,9 @@ impl SamplingHeapProfileSample {
 }
 impl SamplingHeapProfileSample {
     pub const IDENTIFIER: &'static str = "HeapProfiler.SamplingHeapProfileSample";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Sampling profile.\n[SamplingHeapProfile](https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler/#type-SamplingHeapProfile)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -115,5 +124,8 @@ impl SamplingHeapProfile {
 }
 impl SamplingHeapProfile {
     pub const IDENTIFIER: &'static str = "HeapProfiler.SamplingHeapProfile";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (HeapProfilerTypes { HeapSnapshotObjectId (HeapSnapshotObjectId) , SamplingHeapProfileNode (SamplingHeapProfileNode) , SamplingHeapProfileSample (SamplingHeapProfileSample) , SamplingHeapProfile (SamplingHeapProfile) });

@@ -33,6 +33,31 @@ macro_rules! group_enum {
         )*
     };
 
+    ($name:ident { $( $variant:ident($ty:ty) ),* $(,)? } + identifiable) => {
+        group_enum!($name { $( $variant($ty) ),* });
+
+        impl $name {
+            pub fn identifier(&self) -> &'static str {
+                match self {
+                    $( $name::$variant(inner) => inner.identifier(), )*
+                }
+            }
+        }
+    };
+
+    ($name:ident { $( $variant:ident($ty:ty) ),* $(,)? } + other + identifiable) => {
+        group_enum!($name { $( $variant($ty) ),* } + other);
+
+        impl $name {
+            pub fn identifier(&self) -> &'static str {
+                match self {
+                    $( $name::$variant(inner) => inner.identifier(), )*
+                    $name::Other(_) => "unknown",
+                }
+            }
+        }
+    };
+
     ($name:ident { $( $variant:ident($ty:ty) ),* $(,)? }) => {
         #[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
         #[serde(untagged)]
@@ -102,6 +127,22 @@ pub fn group_enum_closed(enum_name: &Ident, entries: &[(Ident, TokenStream)]) ->
     }
 }
 
+/// Generate a closed `group_enum!` with `identifier()` method.
+pub fn group_enum_closed_identifiable(enum_name: &Ident, entries: &[(Ident, TokenStream)]) -> TokenStream {
+    if entries.is_empty() {
+        return TokenStream::default();
+    }
+
+    let variants: Vec<_> = entries
+        .iter()
+        .map(|(var, ty)| quote! { #var(#ty) })
+        .collect();
+
+    quote! {
+        group_enum!(#enum_name { #(#variants),* } + identifiable);
+    }
+}
+
 /// Generate an open `group_enum!` invocation (with `Other(serde_json::Value)` catch-all).
 pub fn group_enum_open(enum_name: &Ident, entries: &[(Ident, TokenStream)]) -> TokenStream {
     if entries.is_empty() {
@@ -115,6 +156,22 @@ pub fn group_enum_open(enum_name: &Ident, entries: &[(Ident, TokenStream)]) -> T
 
     quote! {
         group_enum!(#enum_name { #(#variants),* } + other);
+    }
+}
+
+/// Generate an open `group_enum!` with `identifier()` method.
+pub fn group_enum_open_identifiable(enum_name: &Ident, entries: &[(Ident, TokenStream)]) -> TokenStream {
+    if entries.is_empty() {
+        return TokenStream::default();
+    }
+
+    let variants: Vec<_> = entries
+        .iter()
+        .map(|(var, ty)| quote! { #var(#ty) })
+        .collect();
+
+    quote! {
+        group_enum!(#enum_name { #(#variants),* } + other + identifiable);
     }
 }
 

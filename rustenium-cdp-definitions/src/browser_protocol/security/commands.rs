@@ -15,6 +15,9 @@ pub struct Disable {
 }
 impl Disable {
     pub const IDENTIFIER: &'static str = "Security.disable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -35,6 +38,9 @@ pub struct Enable {
 }
 impl Enable {
     pub const IDENTIFIER: &'static str = "Security.enable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -66,6 +72,9 @@ pub struct SetIgnoreCertificateErrors {
 }
 impl SetIgnoreCertificateErrors {
     pub const IDENTIFIER: &'static str = "Security.setIgnoreCertificateErrors";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetIgnoreCertificateErrors {
     type Result = super::results::SetIgnoreCertificateErrorsResult;

@@ -19,6 +19,9 @@ pub struct AnimationCanceled {
 }
 impl AnimationCanceled {
     pub const IDENTIFIER: &'static str = "Animation.animationCanceled";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Event for each animation that has been created.\n[animationCreated](https://chromedevtools.github.io/devtools-protocol/tot/Animation/#event-animationCreated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -40,6 +43,9 @@ pub struct AnimationCreated {
 }
 impl AnimationCreated {
     pub const IDENTIFIER: &'static str = "Animation.animationCreated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Event for animation that has been started.\n[animationStarted](https://chromedevtools.github.io/devtools-protocol/tot/Animation/#event-animationStarted)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -61,6 +67,9 @@ pub struct AnimationStarted {
 }
 impl AnimationStarted {
     pub const IDENTIFIER: &'static str = "Animation.animationStarted";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Event for animation that has been updated.\n[animationUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Animation/#event-animationUpdated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -82,5 +91,8 @@ pub struct AnimationUpdated {
 }
 impl AnimationUpdated {
     pub const IDENTIFIER: &'static str = "Animation.animationUpdated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (AnimationEvents { AnimationCanceled (AnimationCanceled) , AnimationCreated (AnimationCreated) , AnimationStarted (AnimationStarted) , AnimationUpdated (AnimationUpdated) });

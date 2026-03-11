@@ -42,6 +42,9 @@ impl LargestContentfulPaint {
 }
 impl LargestContentfulPaint {
     pub const IDENTIFIER: &'static str = "PerformanceTimeline.LargestContentfulPaint";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LayoutShiftAttribution {
@@ -68,6 +71,9 @@ impl LayoutShiftAttribution {
 }
 impl LayoutShiftAttribution {
     pub const IDENTIFIER: &'static str = "PerformanceTimeline.LayoutShiftAttribution";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "See https://wicg.github.io/layout-instability/#sec-layout-shift and layout_shift.idl\n[LayoutShift](https://chromedevtools.github.io/devtools-protocol/tot/PerformanceTimeline/#type-LayoutShift)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -100,6 +106,9 @@ impl LayoutShift {
 }
 impl LayoutShift {
     pub const IDENTIFIER: &'static str = "PerformanceTimeline.LayoutShift";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TimelineEvent {
@@ -149,5 +158,8 @@ impl TimelineEvent {
 }
 impl TimelineEvent {
     pub const IDENTIFIER: &'static str = "PerformanceTimeline.TimelineEvent";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (PerformanceTimelineTypes { LargestContentfulPaint (LargestContentfulPaint) , LayoutShiftAttribution (LayoutShiftAttribution) , LayoutShift (LayoutShift) , TimelineEvent (TimelineEvent) });

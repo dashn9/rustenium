@@ -22,5 +22,8 @@ pub struct Accepted {
 }
 impl Accepted {
     pub const IDENTIFIER: &'static str = "Tethering.accepted";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (TetheringEvents { Accepted (Accepted) });

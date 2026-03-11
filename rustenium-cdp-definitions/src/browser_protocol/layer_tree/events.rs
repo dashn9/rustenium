@@ -20,6 +20,9 @@ pub struct LayerPainted {
 }
 impl LayerPainted {
     pub const IDENTIFIER: &'static str = "LayerTree.layerPainted";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct LayerTreeDidChangeParams {
@@ -41,5 +44,8 @@ pub struct LayerTreeDidChange {
 }
 impl LayerTreeDidChange {
     pub const IDENTIFIER: &'static str = "LayerTree.layerTreeDidChange";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (LayerTreeEvents { LayerPainted (LayerPainted) , LayerTreeDidChange (LayerTreeDidChange) });

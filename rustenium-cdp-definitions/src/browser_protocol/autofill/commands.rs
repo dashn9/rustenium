@@ -44,6 +44,9 @@ pub struct Trigger {
 }
 impl Trigger {
     pub const IDENTIFIER: &'static str = "Autofill.trigger";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Trigger {
     type Result = super::results::TriggerResult;
@@ -74,6 +77,9 @@ pub struct SetAddresses {
 }
 impl SetAddresses {
     pub const IDENTIFIER: &'static str = "Autofill.setAddresses";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetAddresses {
     type Result = super::results::SetAddressesResult;
@@ -94,6 +100,9 @@ pub struct Disable {
 }
 impl Disable {
     pub const IDENTIFIER: &'static str = "Autofill.disable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -114,6 +123,9 @@ pub struct Enable {
 }
 impl Enable {
     pub const IDENTIFIER: &'static str = "Autofill.enable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;

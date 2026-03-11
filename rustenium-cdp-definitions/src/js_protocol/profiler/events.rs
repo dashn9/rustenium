@@ -26,6 +26,9 @@ pub struct ConsoleProfileFinished {
 }
 impl ConsoleProfileFinished {
     pub const IDENTIFIER: &'static str = "Profiler.consoleProfileFinished";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Sent when new profile recording is started using console.profile() call.\n[consoleProfileStarted](https://chromedevtools.github.io/devtools-protocol/tot/Profiler/#event-consoleProfileStarted)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -54,6 +57,9 @@ pub struct ConsoleProfileStarted {
 }
 impl ConsoleProfileStarted {
     pub const IDENTIFIER: &'static str = "Profiler.consoleProfileStarted";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Reports coverage delta since the last poll (either from an event like this, or from\n`takePreciseCoverage` for the current isolate. May only be sent if precise code\ncoverage has been started. This event can be trigged by the embedder to, for example,\ntrigger collection of coverage data immediately at a certain point in time.\n[preciseCoverageDeltaUpdate](https://chromedevtools.github.io/devtools-protocol/tot/Profiler/#event-preciseCoverageDeltaUpdate)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -82,5 +88,8 @@ pub struct PreciseCoverageDeltaUpdate {
 }
 impl PreciseCoverageDeltaUpdate {
     pub const IDENTIFIER: &'static str = "Profiler.preciseCoverageDeltaUpdate";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (ProfilerEvents { ConsoleProfileFinished (ConsoleProfileFinished) , ConsoleProfileStarted (ConsoleProfileStarted) , PreciseCoverageDeltaUpdate (PreciseCoverageDeltaUpdate) });

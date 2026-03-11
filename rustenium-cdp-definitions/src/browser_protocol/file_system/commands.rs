@@ -25,6 +25,9 @@ pub struct GetDirectory {
 }
 impl GetDirectory {
     pub const IDENTIFIER: &'static str = "FileSystem.getDirectory";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetDirectory {
     type Result = super::results::GetDirectoryResult;

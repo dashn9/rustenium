@@ -51,6 +51,9 @@ pub struct SetPermission {
 }
 impl SetPermission {
     pub const IDENTIFIER: &'static str = "Browser.setPermission";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetPermission {
     type Result = super::results::SetPermissionResult;
@@ -77,6 +80,9 @@ pub struct ResetPermissions {
 }
 impl ResetPermissions {
     pub const IDENTIFIER: &'static str = "Browser.resetPermissions";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ResetPermissions {
     type Result = super::results::ResetPermissionsResult;
@@ -138,6 +144,9 @@ pub struct SetDownloadBehavior {
 }
 impl SetDownloadBehavior {
     pub const IDENTIFIER: &'static str = "Browser.setDownloadBehavior";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetDownloadBehavior {
     type Result = super::results::SetDownloadBehaviorResult;
@@ -180,6 +189,9 @@ pub struct CancelDownload {
 }
 impl CancelDownload {
     pub const IDENTIFIER: &'static str = "Browser.cancelDownload";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for CancelDownload {
     type Result = super::results::CancelDownloadResult;
@@ -200,6 +212,9 @@ pub struct Close {
 }
 impl Close {
     pub const IDENTIFIER: &'static str = "Browser.close";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Close {
     type Result = super::results::CloseResult;
@@ -220,6 +235,9 @@ pub struct Crash {
 }
 impl Crash {
     pub const IDENTIFIER: &'static str = "Browser.crash";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Crash {
     type Result = super::results::CrashResult;
@@ -240,6 +258,9 @@ pub struct CrashGpuProcess {
 }
 impl CrashGpuProcess {
     pub const IDENTIFIER: &'static str = "Browser.crashGpuProcess";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for CrashGpuProcess {
     type Result = super::results::CrashGpuProcessResult;
@@ -260,6 +281,9 @@ pub struct GetVersion {
 }
 impl GetVersion {
     pub const IDENTIFIER: &'static str = "Browser.getVersion";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetVersion {
     type Result = super::results::GetVersionResult;
@@ -280,6 +304,9 @@ pub struct GetBrowserCommandLine {
 }
 impl GetBrowserCommandLine {
     pub const IDENTIFIER: &'static str = "Browser.getBrowserCommandLine";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetBrowserCommandLine {
     type Result = super::results::GetBrowserCommandLineResult;
@@ -311,6 +338,9 @@ pub struct GetHistograms {
 }
 impl GetHistograms {
     pub const IDENTIFIER: &'static str = "Browser.getHistograms";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetHistograms {
     type Result = super::results::GetHistogramsResult;
@@ -353,6 +383,9 @@ pub struct GetHistogram {
 }
 impl GetHistogram {
     pub const IDENTIFIER: &'static str = "Browser.getHistogram";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetHistogram {
     type Result = super::results::GetHistogramResult;
@@ -384,6 +417,9 @@ pub struct GetWindowBounds {
 }
 impl GetWindowBounds {
     pub const IDENTIFIER: &'static str = "Browser.getWindowBounds";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetWindowBounds {
     type Result = super::results::GetWindowBoundsResult;
@@ -410,6 +446,9 @@ pub struct GetWindowForTarget {
 }
 impl GetWindowForTarget {
     pub const IDENTIFIER: &'static str = "Browser.getWindowForTarget";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetWindowForTarget {
     type Result = super::results::GetWindowForTargetResult;
@@ -448,6 +487,9 @@ pub struct SetWindowBounds {
 }
 impl SetWindowBounds {
     pub const IDENTIFIER: &'static str = "Browser.setWindowBounds";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetWindowBounds {
     type Result = super::results::SetWindowBoundsResult;
@@ -491,6 +533,9 @@ pub struct SetContentsSize {
 }
 impl SetContentsSize {
     pub const IDENTIFIER: &'static str = "Browser.setContentsSize";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetContentsSize {
     type Result = super::results::SetContentsSizeResult;
@@ -521,6 +566,9 @@ pub struct SetDockTile {
 }
 impl SetDockTile {
     pub const IDENTIFIER: &'static str = "Browser.setDockTile";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetDockTile {
     type Result = super::results::SetDockTileResult;
@@ -551,6 +599,9 @@ pub struct ExecuteBrowserCommand {
 }
 impl ExecuteBrowserCommand {
     pub const IDENTIFIER: &'static str = "Browser.executeBrowserCommand";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ExecuteBrowserCommand {
     type Result = super::results::ExecuteBrowserCommandResult;
@@ -584,6 +635,9 @@ pub struct AddPrivacySandboxEnrollmentOverride {
 }
 impl AddPrivacySandboxEnrollmentOverride {
     pub const IDENTIFIER: &'static str = "Browser.addPrivacySandboxEnrollmentOverride";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for AddPrivacySandboxEnrollmentOverride {
     type Result = super::results::AddPrivacySandboxEnrollmentOverrideResult;
@@ -630,6 +684,9 @@ pub struct AddPrivacySandboxCoordinatorKeyConfig {
 }
 impl AddPrivacySandboxCoordinatorKeyConfig {
     pub const IDENTIFIER: &'static str = "Browser.addPrivacySandboxCoordinatorKeyConfig";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for AddPrivacySandboxCoordinatorKeyConfig {
     type Result = super::results::AddPrivacySandboxCoordinatorKeyConfigResult;

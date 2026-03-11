@@ -15,5 +15,8 @@ pub struct VirtualTimeBudgetExpired {
 }
 impl VirtualTimeBudgetExpired {
     pub const IDENTIFIER: &'static str = "Emulation.virtualTimeBudgetExpired";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (EmulationEvents { VirtualTimeBudgetExpired (VirtualTimeBudgetExpired) });

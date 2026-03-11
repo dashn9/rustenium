@@ -33,6 +33,9 @@ pub struct Enable {
 }
 impl Enable {
     pub const IDENTIFIER: &'static str = "BluetoothEmulation.enable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -64,6 +67,9 @@ pub struct SetSimulatedCentralState {
 }
 impl SetSimulatedCentralState {
     pub const IDENTIFIER: &'static str = "BluetoothEmulation.setSimulatedCentralState";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetSimulatedCentralState {
     type Result = super::results::SetSimulatedCentralStateResult;
@@ -84,6 +90,9 @@ pub struct Disable {
 }
 impl Disable {
     pub const IDENTIFIER: &'static str = "BluetoothEmulation.disable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -130,6 +139,9 @@ pub struct SimulatePreconnectedPeripheral {
 }
 impl SimulatePreconnectedPeripheral {
     pub const IDENTIFIER: &'static str = "BluetoothEmulation.simulatePreconnectedPeripheral";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SimulatePreconnectedPeripheral {
     type Result = super::results::SimulatePreconnectedPeripheralResult;
@@ -160,6 +172,9 @@ pub struct SimulateAdvertisement {
 }
 impl SimulateAdvertisement {
     pub const IDENTIFIER: &'static str = "BluetoothEmulation.simulateAdvertisement";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SimulateAdvertisement {
     type Result = super::results::SimulateAdvertisementResult;
@@ -200,6 +215,9 @@ pub struct SimulateGattOperationResponse {
 }
 impl SimulateGattOperationResponse {
     pub const IDENTIFIER: &'static str = "BluetoothEmulation.simulateGATTOperationResponse";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SimulateGattOperationResponse {
     type Result = super::results::SimulateGattOperationResponseResult;
@@ -246,6 +264,9 @@ pub struct SimulateCharacteristicOperationResponse {
 impl SimulateCharacteristicOperationResponse {
     pub const IDENTIFIER: &'static str =
         "BluetoothEmulation.simulateCharacteristicOperationResponse";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SimulateCharacteristicOperationResponse {
     type Result = super::results::SimulateCharacteristicOperationResponseResult;
@@ -291,6 +312,9 @@ pub struct SimulateDescriptorOperationResponse {
 }
 impl SimulateDescriptorOperationResponse {
     pub const IDENTIFIER: &'static str = "BluetoothEmulation.simulateDescriptorOperationResponse";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SimulateDescriptorOperationResponse {
     type Result = super::results::SimulateDescriptorOperationResponseResult;
@@ -324,6 +348,9 @@ pub struct AddService {
 }
 impl AddService {
     pub const IDENTIFIER: &'static str = "BluetoothEmulation.addService";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for AddService {
     type Result = super::results::AddServiceResult;
@@ -359,6 +386,9 @@ pub struct RemoveService {
 }
 impl RemoveService {
     pub const IDENTIFIER: &'static str = "BluetoothEmulation.removeService";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RemoveService {
     type Result = super::results::RemoveServiceResult;
@@ -399,6 +429,9 @@ pub struct AddCharacteristic {
 }
 impl AddCharacteristic {
     pub const IDENTIFIER: &'static str = "BluetoothEmulation.addCharacteristic";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for AddCharacteristic {
     type Result = super::results::AddCharacteristicResult;
@@ -434,6 +467,9 @@ pub struct RemoveCharacteristic {
 }
 impl RemoveCharacteristic {
     pub const IDENTIFIER: &'static str = "BluetoothEmulation.removeCharacteristic";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RemoveCharacteristic {
     type Result = super::results::RemoveCharacteristicResult;
@@ -467,6 +503,9 @@ pub struct AddDescriptor {
 }
 impl AddDescriptor {
     pub const IDENTIFIER: &'static str = "BluetoothEmulation.addDescriptor";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for AddDescriptor {
     type Result = super::results::AddDescriptorResult;
@@ -502,6 +541,9 @@ pub struct RemoveDescriptor {
 }
 impl RemoveDescriptor {
     pub const IDENTIFIER: &'static str = "BluetoothEmulation.removeDescriptor";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RemoveDescriptor {
     type Result = super::results::RemoveDescriptorResult;
@@ -537,6 +579,9 @@ pub struct SimulateGattDisconnection {
 }
 impl SimulateGattDisconnection {
     pub const IDENTIFIER: &'static str = "BluetoothEmulation.simulateGATTDisconnection";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SimulateGattDisconnection {
     type Result = super::results::SimulateGattDisconnectionResult;

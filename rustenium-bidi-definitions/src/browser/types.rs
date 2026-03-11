@@ -27,6 +27,9 @@ impl From<String> for ClientWindow {
 impl ClientWindow {
     pub const IDENTIFIER: &'static str = "browser.ClientWindow";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClientWindowInfo {
@@ -59,6 +62,9 @@ pub enum ClientWindowInfoState {
 impl ClientWindowInfo {
     pub const IDENTIFIER: &'static str = "browser.ClientWindowInfo";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
 pub struct UserContext(String);
@@ -88,6 +94,9 @@ impl From<String> for UserContext {
 impl UserContext {
     pub const IDENTIFIER: &'static str = "browser.UserContext";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UserContextInfo {
@@ -104,6 +113,9 @@ impl UserContextInfo {
 impl UserContextInfo {
     pub const IDENTIFIER: &'static str = "browser.UserContextInfo";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -135,6 +147,9 @@ impl ClientWindowNamedState {
 impl ClientWindowNamedState {
     pub const IDENTIFIER: &'static str = "browser.ClientWindowNamedState";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClientWindowRectState {
@@ -176,6 +191,9 @@ impl ClientWindowRectState {
 impl ClientWindowRectState {
     pub const IDENTIFIER: &'static str = "browser.ClientWindowRectState";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -209,6 +227,9 @@ impl DownloadBehaviorAllowed {
 impl DownloadBehaviorAllowed {
     pub const IDENTIFIER: &'static str = "browser.DownloadBehaviorAllowed";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DownloadBehaviorDenied {
@@ -230,5 +251,8 @@ impl DownloadBehaviorDenied {
 impl DownloadBehaviorDenied {
     pub const IDENTIFIER: &'static str = "browser.DownloadBehaviorDenied";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (BrowserType { ClientWindow (ClientWindow) , ClientWindowInfo (ClientWindowInfo) , UserContext (UserContext) , UserContextInfo (UserContextInfo) , ClientWindowNamedStateClientWindowRectStateUnion (ClientWindowNamedStateClientWindowRectStateUnion) , DownloadBehavior (DownloadBehavior) });

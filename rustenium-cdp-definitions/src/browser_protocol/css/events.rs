@@ -21,6 +21,9 @@ pub struct FontsUpdated {
 }
 impl FontsUpdated {
     pub const IDENTIFIER: &'static str = "CSS.fontsUpdated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fires whenever a MediaQuery result changes (for example, after a browser window has been\nresized.) The current implementation considers only viewport-dependent media features.\n[mediaQueryResultChanged](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#event-mediaQueryResultChanged)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -38,6 +41,9 @@ pub struct MediaQueryResultChanged {
 }
 impl MediaQueryResultChanged {
     pub const IDENTIFIER: &'static str = "CSS.mediaQueryResultChanged";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired whenever an active document stylesheet is added.\n[styleSheetAdded](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#event-styleSheetAdded)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -59,6 +65,9 @@ pub struct StyleSheetAdded {
 }
 impl StyleSheetAdded {
     pub const IDENTIFIER: &'static str = "CSS.styleSheetAdded";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired whenever a stylesheet is changed as a result of the client operation.\n[styleSheetChanged](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#event-styleSheetChanged)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -79,6 +88,9 @@ pub struct StyleSheetChanged {
 }
 impl StyleSheetChanged {
     pub const IDENTIFIER: &'static str = "CSS.styleSheetChanged";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired whenever an active document stylesheet is removed.\n[styleSheetRemoved](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#event-styleSheetRemoved)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -100,6 +112,9 @@ pub struct StyleSheetRemoved {
 }
 impl StyleSheetRemoved {
     pub const IDENTIFIER: &'static str = "CSS.styleSheetRemoved";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ComputedStyleUpdatedParams {
@@ -119,5 +134,8 @@ pub struct ComputedStyleUpdated {
 }
 impl ComputedStyleUpdated {
     pub const IDENTIFIER: &'static str = "CSS.computedStyleUpdated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (CssEvents { FontsUpdated (FontsUpdated) , MediaQueryResultChanged (MediaQueryResultChanged) , StyleSheetAdded (StyleSheetAdded) , StyleSheetChanged (StyleSheetChanged) , StyleSheetRemoved (StyleSheetRemoved) , ComputedStyleUpdated (ComputedStyleUpdated) });

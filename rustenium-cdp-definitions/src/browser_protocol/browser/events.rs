@@ -28,6 +28,9 @@ pub struct DownloadWillBegin {
 }
 impl DownloadWillBegin {
     pub const IDENTIFIER: &'static str = "Browser.downloadWillBegin";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when download makes progress. Last call has |done| == true.\n[downloadProgress](https://chromedevtools.github.io/devtools-protocol/tot/Browser/#event-downloadProgress)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -73,5 +76,8 @@ pub struct DownloadProgress {
 }
 impl DownloadProgress {
     pub const IDENTIFIER: &'static str = "Browser.downloadProgress";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (BrowserEvents { DownloadWillBegin (DownloadWillBegin) , DownloadProgress (DownloadProgress) });

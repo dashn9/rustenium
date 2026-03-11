@@ -14,6 +14,9 @@ pub struct Status {
 impl Status {
     pub const IDENTIFIER: &'static str = "session.status";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Status {
     type Result = super::results::StatusResult;
@@ -43,6 +46,9 @@ pub struct New {
 impl New {
     pub const IDENTIFIER: &'static str = "session.new";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for New {
     type Result = super::results::NewResult;
@@ -62,6 +68,9 @@ pub struct End {
 impl End {
     pub const IDENTIFIER: &'static str = "session.end";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for End {
     type Result = super::results::EndResult;
@@ -102,6 +111,9 @@ pub struct Subscribe {
 impl Subscribe {
     pub const IDENTIFIER: &'static str = "session.subscribe";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Subscribe {
     type Result = super::results::SubscribeResult;
@@ -132,6 +144,9 @@ pub struct Unsubscribe {
 impl Unsubscribe {
     pub const IDENTIFIER: &'static str = "session.unsubscribe";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Unsubscribe {
     type Result = super::results::UnsubscribeResult;

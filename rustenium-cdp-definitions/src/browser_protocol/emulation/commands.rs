@@ -15,6 +15,9 @@ pub struct ClearDeviceMetricsOverride {
 }
 impl ClearDeviceMetricsOverride {
     pub const IDENTIFIER: &'static str = "Emulation.clearDeviceMetricsOverride";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ClearDeviceMetricsOverride {
     type Result = super::results::ClearDeviceMetricsOverrideResult;
@@ -35,6 +38,9 @@ pub struct ClearGeolocationOverride {
 }
 impl ClearGeolocationOverride {
     pub const IDENTIFIER: &'static str = "Emulation.clearGeolocationOverride";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ClearGeolocationOverride {
     type Result = super::results::ClearGeolocationOverrideResult;
@@ -55,6 +61,9 @@ pub struct ResetPageScaleFactor {
 }
 impl ResetPageScaleFactor {
     pub const IDENTIFIER: &'static str = "Emulation.resetPageScaleFactor";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ResetPageScaleFactor {
     type Result = super::results::ResetPageScaleFactorResult;
@@ -86,6 +95,9 @@ pub struct SetFocusEmulationEnabled {
 }
 impl SetFocusEmulationEnabled {
     pub const IDENTIFIER: &'static str = "Emulation.setFocusEmulationEnabled";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetFocusEmulationEnabled {
     type Result = super::results::SetFocusEmulationEnabledResult;
@@ -112,6 +124,9 @@ pub struct SetAutoDarkModeOverride {
 }
 impl SetAutoDarkModeOverride {
     pub const IDENTIFIER: &'static str = "Emulation.setAutoDarkModeOverride";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetAutoDarkModeOverride {
     type Result = super::results::SetAutoDarkModeOverrideResult;
@@ -141,6 +156,9 @@ pub struct SetCpuThrottlingRate {
 }
 impl SetCpuThrottlingRate {
     pub const IDENTIFIER: &'static str = "Emulation.setCPUThrottlingRate";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetCpuThrottlingRate {
     type Result = super::results::SetCpuThrottlingRateResult;
@@ -167,6 +185,9 @@ pub struct SetDefaultBackgroundColorOverride {
 }
 impl SetDefaultBackgroundColorOverride {
     pub const IDENTIFIER: &'static str = "Emulation.setDefaultBackgroundColorOverride";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetDefaultBackgroundColorOverride {
     type Result = super::results::SetDefaultBackgroundColorOverrideResult;
@@ -197,6 +218,9 @@ pub struct SetSafeAreaInsetsOverride {
 }
 impl SetSafeAreaInsetsOverride {
     pub const IDENTIFIER: &'static str = "Emulation.setSafeAreaInsetsOverride";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetSafeAreaInsetsOverride {
     type Result = super::results::SetSafeAreaInsetsOverrideResult;
@@ -309,6 +333,9 @@ pub struct SetDeviceMetricsOverride {
 }
 impl SetDeviceMetricsOverride {
     pub const IDENTIFIER: &'static str = "Emulation.setDeviceMetricsOverride";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetDeviceMetricsOverride {
     type Result = super::results::SetDeviceMetricsOverrideResult;
@@ -339,6 +366,9 @@ pub struct SetDevicePostureOverride {
 }
 impl SetDevicePostureOverride {
     pub const IDENTIFIER: &'static str = "Emulation.setDevicePostureOverride";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetDevicePostureOverride {
     type Result = super::results::SetDevicePostureOverrideResult;
@@ -359,6 +389,9 @@ pub struct ClearDevicePostureOverride {
 }
 impl ClearDevicePostureOverride {
     pub const IDENTIFIER: &'static str = "Emulation.clearDevicePostureOverride";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ClearDevicePostureOverride {
     type Result = super::results::ClearDevicePostureOverrideResult;
@@ -388,6 +421,9 @@ pub struct SetDisplayFeaturesOverride {
 }
 impl SetDisplayFeaturesOverride {
     pub const IDENTIFIER: &'static str = "Emulation.setDisplayFeaturesOverride";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetDisplayFeaturesOverride {
     type Result = super::results::SetDisplayFeaturesOverrideResult;
@@ -408,6 +444,9 @@ pub struct ClearDisplayFeaturesOverride {
 }
 impl ClearDisplayFeaturesOverride {
     pub const IDENTIFIER: &'static str = "Emulation.clearDisplayFeaturesOverride";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ClearDisplayFeaturesOverride {
     type Result = super::results::ClearDisplayFeaturesOverrideResult;
@@ -437,6 +476,9 @@ pub struct SetScrollbarsHidden {
 }
 impl SetScrollbarsHidden {
     pub const IDENTIFIER: &'static str = "Emulation.setScrollbarsHidden";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetScrollbarsHidden {
     type Result = super::results::SetScrollbarsHiddenResult;
@@ -466,6 +508,9 @@ pub struct SetDocumentCookieDisabled {
 }
 impl SetDocumentCookieDisabled {
     pub const IDENTIFIER: &'static str = "Emulation.setDocumentCookieDisabled";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetDocumentCookieDisabled {
     type Result = super::results::SetDocumentCookieDisabledResult;
@@ -509,6 +554,9 @@ pub struct SetEmitTouchEventsForMouse {
 }
 impl SetEmitTouchEventsForMouse {
     pub const IDENTIFIER: &'static str = "Emulation.setEmitTouchEventsForMouse";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetEmitTouchEventsForMouse {
     type Result = super::results::SetEmitTouchEventsForMouseResult;
@@ -540,6 +588,9 @@ pub struct SetEmulatedMedia {
 }
 impl SetEmulatedMedia {
     pub const IDENTIFIER: &'static str = "Emulation.setEmulatedMedia";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetEmulatedMedia {
     type Result = super::results::SetEmulatedMediaResult;
@@ -589,6 +640,9 @@ pub struct SetEmulatedVisionDeficiency {
 }
 impl SetEmulatedVisionDeficiency {
     pub const IDENTIFIER: &'static str = "Emulation.setEmulatedVisionDeficiency";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetEmulatedVisionDeficiency {
     type Result = super::results::SetEmulatedVisionDeficiencyResult;
@@ -614,6 +668,9 @@ pub struct SetEmulatedOsTextScale {
 }
 impl SetEmulatedOsTextScale {
     pub const IDENTIFIER: &'static str = "Emulation.setEmulatedOSTextScale";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetEmulatedOsTextScale {
     type Result = super::results::SetEmulatedOsTextScaleResult;
@@ -670,6 +727,9 @@ pub struct SetGeolocationOverride {
 }
 impl SetGeolocationOverride {
     pub const IDENTIFIER: &'static str = "Emulation.setGeolocationOverride";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetGeolocationOverride {
     type Result = super::results::SetGeolocationOverrideResult;
@@ -698,6 +758,9 @@ pub struct GetOverriddenSensorInformation {
 }
 impl GetOverriddenSensorInformation {
     pub const IDENTIFIER: &'static str = "Emulation.getOverriddenSensorInformation";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetOverriddenSensorInformation {
     type Result = super::results::GetOverriddenSensorInformationResult;
@@ -736,6 +799,9 @@ pub struct SetSensorOverrideEnabled {
 }
 impl SetSensorOverrideEnabled {
     pub const IDENTIFIER: &'static str = "Emulation.setSensorOverrideEnabled";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetSensorOverrideEnabled {
     type Result = super::results::SetSensorOverrideEnabledResult;
@@ -772,6 +838,9 @@ pub struct SetSensorOverrideReadings {
 }
 impl SetSensorOverrideReadings {
     pub const IDENTIFIER: &'static str = "Emulation.setSensorOverrideReadings";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetSensorOverrideReadings {
     type Result = super::results::SetSensorOverrideReadingsResult;
@@ -810,6 +879,9 @@ pub struct SetPressureSourceOverrideEnabled {
 }
 impl SetPressureSourceOverrideEnabled {
     pub const IDENTIFIER: &'static str = "Emulation.setPressureSourceOverrideEnabled";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetPressureSourceOverrideEnabled {
     type Result = super::results::SetPressureSourceOverrideEnabledResult;
@@ -846,6 +918,9 @@ pub struct SetPressureStateOverride {
 }
 impl SetPressureStateOverride {
     pub const IDENTIFIER: &'static str = "Emulation.setPressureStateOverride";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetPressureStateOverride {
     type Result = super::results::SetPressureStateOverrideResult;
@@ -887,6 +962,9 @@ pub struct SetPressureDataOverride {
 }
 impl SetPressureDataOverride {
     pub const IDENTIFIER: &'static str = "Emulation.setPressureDataOverride";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetPressureDataOverride {
     type Result = super::results::SetPressureDataOverrideResult;
@@ -922,6 +1000,9 @@ pub struct SetIdleOverride {
 }
 impl SetIdleOverride {
     pub const IDENTIFIER: &'static str = "Emulation.setIdleOverride";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetIdleOverride {
     type Result = super::results::SetIdleOverrideResult;
@@ -942,6 +1023,9 @@ pub struct ClearIdleOverride {
 }
 impl ClearIdleOverride {
     pub const IDENTIFIER: &'static str = "Emulation.clearIdleOverride";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ClearIdleOverride {
     type Result = super::results::ClearIdleOverrideResult;
@@ -973,6 +1057,9 @@ pub struct SetPageScaleFactor {
 }
 impl SetPageScaleFactor {
     pub const IDENTIFIER: &'static str = "Emulation.setPageScaleFactor";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetPageScaleFactor {
     type Result = super::results::SetPageScaleFactorResult;
@@ -1004,6 +1091,9 @@ pub struct SetScriptExecutionDisabled {
 }
 impl SetScriptExecutionDisabled {
     pub const IDENTIFIER: &'static str = "Emulation.setScriptExecutionDisabled";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetScriptExecutionDisabled {
     type Result = super::results::SetScriptExecutionDisabledResult;
@@ -1041,6 +1131,9 @@ pub struct SetTouchEmulationEnabled {
 }
 impl SetTouchEmulationEnabled {
     pub const IDENTIFIER: &'static str = "Emulation.setTouchEmulationEnabled";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetTouchEmulationEnabled {
     type Result = super::results::SetTouchEmulationEnabledResult;
@@ -1089,6 +1182,9 @@ pub struct SetVirtualTimePolicy {
 }
 impl SetVirtualTimePolicy {
     pub const IDENTIFIER: &'static str = "Emulation.setVirtualTimePolicy";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetVirtualTimePolicy {
     type Result = super::results::SetVirtualTimePolicyResult;
@@ -1115,6 +1211,9 @@ pub struct SetLocaleOverride {
 }
 impl SetLocaleOverride {
     pub const IDENTIFIER: &'static str = "Emulation.setLocaleOverride";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetLocaleOverride {
     type Result = super::results::SetLocaleOverrideResult;
@@ -1151,6 +1250,9 @@ pub struct SetTimezoneOverride {
 }
 impl SetTimezoneOverride {
     pub const IDENTIFIER: &'static str = "Emulation.setTimezoneOverride";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetTimezoneOverride {
     type Result = super::results::SetTimezoneOverrideResult;
@@ -1179,6 +1281,9 @@ pub struct SetDisabledImageTypes {
 }
 impl SetDisabledImageTypes {
     pub const IDENTIFIER: &'static str = "Emulation.setDisabledImageTypes";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetDisabledImageTypes {
     type Result = super::results::SetDisabledImageTypesResult;
@@ -1205,6 +1310,9 @@ pub struct SetDataSaverOverride {
 }
 impl SetDataSaverOverride {
     pub const IDENTIFIER: &'static str = "Emulation.setDataSaverOverride";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetDataSaverOverride {
     type Result = super::results::SetDataSaverOverrideResult;
@@ -1234,6 +1342,9 @@ pub struct SetHardwareConcurrencyOverride {
 }
 impl SetHardwareConcurrencyOverride {
     pub const IDENTIFIER: &'static str = "Emulation.setHardwareConcurrencyOverride";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetHardwareConcurrencyOverride {
     type Result = super::results::SetHardwareConcurrencyOverrideResult;
@@ -1288,6 +1399,9 @@ pub struct SetUserAgentOverride {
 }
 impl SetUserAgentOverride {
     pub const IDENTIFIER: &'static str = "Emulation.setUserAgentOverride";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetUserAgentOverride {
     type Result = super::results::SetUserAgentOverrideResult;
@@ -1319,6 +1433,9 @@ pub struct SetAutomationOverride {
 }
 impl SetAutomationOverride {
     pub const IDENTIFIER: &'static str = "Emulation.setAutomationOverride";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetAutomationOverride {
     type Result = super::results::SetAutomationOverrideResult;
@@ -1350,6 +1467,9 @@ pub struct SetSmallViewportHeightDifferenceOverride {
 }
 impl SetSmallViewportHeightDifferenceOverride {
     pub const IDENTIFIER: &'static str = "Emulation.setSmallViewportHeightDifferenceOverride";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetSmallViewportHeightDifferenceOverride {
     type Result = super::results::SetSmallViewportHeightDifferenceOverrideResult;
@@ -1370,6 +1490,9 @@ pub struct GetScreenInfos {
 }
 impl GetScreenInfos {
     pub const IDENTIFIER: &'static str = "Emulation.getScreenInfos";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetScreenInfos {
     type Result = super::results::GetScreenInfosResult;
@@ -1454,6 +1577,9 @@ pub struct AddScreen {
 }
 impl AddScreen {
     pub const IDENTIFIER: &'static str = "Emulation.addScreen";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for AddScreen {
     type Result = super::results::AddScreenResult;
@@ -1484,6 +1610,9 @@ pub struct RemoveScreen {
 }
 impl RemoveScreen {
     pub const IDENTIFIER: &'static str = "Emulation.removeScreen";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RemoveScreen {
     type Result = super::results::RemoveScreenResult;

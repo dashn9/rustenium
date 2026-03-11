@@ -30,6 +30,9 @@ pub struct TriggerAction {
 }
 impl TriggerAction {
     pub const IDENTIFIER: &'static str = "Extensions.triggerAction";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for TriggerAction {
     type Result = super::results::TriggerActionResult;
@@ -72,6 +75,9 @@ pub struct LoadUnpacked {
 }
 impl LoadUnpacked {
     pub const IDENTIFIER: &'static str = "Extensions.loadUnpacked";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for LoadUnpacked {
     type Result = super::results::LoadUnpackedResult;
@@ -92,6 +98,9 @@ pub struct GetExtensions {
 }
 impl GetExtensions {
     pub const IDENTIFIER: &'static str = "Extensions.getExtensions";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetExtensions {
     type Result = super::results::GetExtensionsResult;
@@ -126,6 +135,9 @@ pub struct Uninstall {
 }
 impl Uninstall {
     pub const IDENTIFIER: &'static str = "Extensions.uninstall";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Uninstall {
     type Result = super::results::UninstallResult;
@@ -167,6 +179,9 @@ pub struct GetStorageItems {
 }
 impl GetStorageItems {
     pub const IDENTIFIER: &'static str = "Extensions.getStorageItems";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetStorageItems {
     type Result = super::results::GetStorageItemsResult;
@@ -211,6 +226,9 @@ pub struct RemoveStorageItems {
 }
 impl RemoveStorageItems {
     pub const IDENTIFIER: &'static str = "Extensions.removeStorageItems";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RemoveStorageItems {
     type Result = super::results::RemoveStorageItemsResult;
@@ -246,6 +264,9 @@ pub struct ClearStorageItems {
 }
 impl ClearStorageItems {
     pub const IDENTIFIER: &'static str = "Extensions.clearStorageItems";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ClearStorageItems {
     type Result = super::results::ClearStorageItemsResult;
@@ -289,6 +310,9 @@ pub struct SetStorageItems {
 }
 impl SetStorageItems {
     pub const IDENTIFIER: &'static str = "Extensions.setStorageItems";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetStorageItems {
     type Result = super::results::SetStorageItemsResult;

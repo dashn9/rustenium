@@ -18,5 +18,8 @@ pub struct DragIntercepted {
 }
 impl DragIntercepted {
     pub const IDENTIFIER: &'static str = "Input.dragIntercepted";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (InputEvents { DragIntercepted (DragIntercepted) });

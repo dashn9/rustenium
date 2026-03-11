@@ -21,6 +21,9 @@ pub struct Enable {
 }
 impl Enable {
     pub const IDENTIFIER: &'static str = "WebAuthn.enable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -41,6 +44,9 @@ pub struct Disable {
 }
 impl Disable {
     pub const IDENTIFIER: &'static str = "WebAuthn.disable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -71,6 +77,9 @@ pub struct AddVirtualAuthenticator {
 }
 impl AddVirtualAuthenticator {
     pub const IDENTIFIER: &'static str = "WebAuthn.addVirtualAuthenticator";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for AddVirtualAuthenticator {
     type Result = super::results::AddVirtualAuthenticatorResult;
@@ -119,6 +128,9 @@ pub struct SetResponseOverrideBits {
 }
 impl SetResponseOverrideBits {
     pub const IDENTIFIER: &'static str = "WebAuthn.setResponseOverrideBits";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetResponseOverrideBits {
     type Result = super::results::SetResponseOverrideBitsResult;
@@ -149,6 +161,9 @@ pub struct RemoveVirtualAuthenticator {
 }
 impl RemoveVirtualAuthenticator {
     pub const IDENTIFIER: &'static str = "WebAuthn.removeVirtualAuthenticator";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RemoveVirtualAuthenticator {
     type Result = super::results::RemoveVirtualAuthenticatorResult;
@@ -185,6 +200,9 @@ pub struct AddCredential {
 }
 impl AddCredential {
     pub const IDENTIFIER: &'static str = "WebAuthn.addCredential";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for AddCredential {
     type Result = super::results::AddCredentialResult;
@@ -221,6 +239,9 @@ pub struct GetCredential {
 }
 impl GetCredential {
     pub const IDENTIFIER: &'static str = "WebAuthn.getCredential";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetCredential {
     type Result = super::results::GetCredentialResult;
@@ -251,6 +272,9 @@ pub struct GetCredentials {
 }
 impl GetCredentials {
     pub const IDENTIFIER: &'static str = "WebAuthn.getCredentials";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetCredentials {
     type Result = super::results::GetCredentialsResult;
@@ -287,6 +311,9 @@ pub struct RemoveCredential {
 }
 impl RemoveCredential {
     pub const IDENTIFIER: &'static str = "WebAuthn.removeCredential";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RemoveCredential {
     type Result = super::results::RemoveCredentialResult;
@@ -317,6 +344,9 @@ pub struct ClearCredentials {
 }
 impl ClearCredentials {
     pub const IDENTIFIER: &'static str = "WebAuthn.clearCredentials";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ClearCredentials {
     type Result = super::results::ClearCredentialsResult;
@@ -353,6 +383,9 @@ pub struct SetUserVerified {
 }
 impl SetUserVerified {
     pub const IDENTIFIER: &'static str = "WebAuthn.setUserVerified";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetUserVerified {
     type Result = super::results::SetUserVerifiedResult;
@@ -389,6 +422,9 @@ pub struct SetAutomaticPresenceSimulation {
 }
 impl SetAutomaticPresenceSimulation {
     pub const IDENTIFIER: &'static str = "WebAuthn.setAutomaticPresenceSimulation";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetAutomaticPresenceSimulation {
     type Result = super::results::SetAutomaticPresenceSimulationResult;
@@ -435,6 +471,9 @@ pub struct SetCredentialProperties {
 }
 impl SetCredentialProperties {
     pub const IDENTIFIER: &'static str = "WebAuthn.setCredentialProperties";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetCredentialProperties {
     type Result = super::results::SetCredentialPropertiesResult;

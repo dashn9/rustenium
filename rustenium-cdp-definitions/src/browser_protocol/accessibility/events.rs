@@ -19,6 +19,9 @@ pub struct LoadComplete {
 }
 impl LoadComplete {
     pub const IDENTIFIER: &'static str = "Accessibility.loadComplete";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "The nodesUpdated event is sent every time a previously requested node has changed the in tree.\n[nodesUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Accessibility/#event-nodesUpdated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -41,5 +44,8 @@ pub struct NodesUpdated {
 }
 impl NodesUpdated {
     pub const IDENTIFIER: &'static str = "Accessibility.nodesUpdated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (AccessibilityEvents { LoadComplete (LoadComplete) , NodesUpdated (NodesUpdated) });

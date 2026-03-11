@@ -15,6 +15,9 @@ pub struct ClearDeviceOrientationOverride {
 }
 impl ClearDeviceOrientationOverride {
     pub const IDENTIFIER: &'static str = "DeviceOrientation.clearDeviceOrientationOverride";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ClearDeviceOrientationOverride {
     type Result = super::results::ClearDeviceOrientationOverrideResult;
@@ -54,6 +57,9 @@ pub struct SetDeviceOrientationOverride {
 }
 impl SetDeviceOrientationOverride {
     pub const IDENTIFIER: &'static str = "DeviceOrientation.setDeviceOrientationOverride";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetDeviceOrientationOverride {
     type Result = super::results::SetDeviceOrientationOverrideResult;

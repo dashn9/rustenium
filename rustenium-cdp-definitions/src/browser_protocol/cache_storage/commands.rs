@@ -26,6 +26,9 @@ pub struct DeleteCache {
 }
 impl DeleteCache {
     pub const IDENTIFIER: &'static str = "CacheStorage.deleteCache";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for DeleteCache {
     type Result = super::results::DeleteCacheResult;
@@ -61,6 +64,9 @@ pub struct DeleteEntry {
 }
 impl DeleteEntry {
     pub const IDENTIFIER: &'static str = "CacheStorage.deleteEntry";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for DeleteEntry {
     type Result = super::results::DeleteEntryResult;
@@ -97,6 +103,9 @@ pub struct RequestCacheNames {
 }
 impl RequestCacheNames {
     pub const IDENTIFIER: &'static str = "CacheStorage.requestCacheNames";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RequestCacheNames {
     type Result = super::results::RequestCacheNamesResult;
@@ -141,6 +150,9 @@ pub struct RequestCachedResponse {
 }
 impl RequestCachedResponse {
     pub const IDENTIFIER: &'static str = "CacheStorage.requestCachedResponse";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RequestCachedResponse {
     type Result = super::results::RequestCachedResponseResult;
@@ -190,6 +202,9 @@ pub struct RequestEntries {
 }
 impl RequestEntries {
     pub const IDENTIFIER: &'static str = "CacheStorage.requestEntries";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RequestEntries {
     type Result = super::results::RequestEntriesResult;

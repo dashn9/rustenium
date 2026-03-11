@@ -26,6 +26,9 @@ pub struct Close {
 }
 impl Close {
     pub const IDENTIFIER: &'static str = "IO.close";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Close {
     type Result = super::results::CloseResult;
@@ -69,6 +72,9 @@ pub struct Read {
 }
 impl Read {
     pub const IDENTIFIER: &'static str = "IO.read";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Read {
     type Result = super::results::ReadResult;
@@ -100,6 +106,9 @@ pub struct ResolveBlob {
 }
 impl ResolveBlob {
     pub const IDENTIFIER: &'static str = "IO.resolveBlob";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ResolveBlob {
     type Result = super::results::ResolveBlobResult;

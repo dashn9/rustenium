@@ -32,6 +32,9 @@ impl std::borrow::Borrow<str> for PlayerId {
 }
 impl PlayerId {
     pub const IDENTIFIER: &'static str = "Media.PlayerId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct Timestamp(f64);
@@ -45,6 +48,9 @@ impl Timestamp {
 }
 impl Timestamp {
     pub const IDENTIFIER: &'static str = "Media.Timestamp";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Have one type per entry in MediaLogRecord::Type\nCorresponds to kMessage\n[PlayerMessage](https://chromedevtools.github.io/devtools-protocol/tot/Media/#type-PlayerMessage)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -77,6 +83,9 @@ impl PlayerMessage {
 }
 impl PlayerMessage {
     pub const IDENTIFIER: &'static str = "Media.PlayerMessage";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Corresponds to kMediaPropertyChange\n[PlayerProperty](https://chromedevtools.github.io/devtools-protocol/tot/Media/#type-PlayerProperty)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -96,6 +105,9 @@ impl PlayerProperty {
 }
 impl PlayerProperty {
     pub const IDENTIFIER: &'static str = "Media.PlayerProperty";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Corresponds to kMediaEventTriggered\n[PlayerEvent](https://chromedevtools.github.io/devtools-protocol/tot/Media/#type-PlayerEvent)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -115,6 +127,9 @@ impl PlayerEvent {
 }
 impl PlayerEvent {
     pub const IDENTIFIER: &'static str = "Media.PlayerEvent";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Represents logged source line numbers reported in an error.\nNOTE: file and line are from chromium c++ implementation code, not js.\n[PlayerErrorSourceLocation](https://chromedevtools.github.io/devtools-protocol/tot/Media/#type-PlayerErrorSourceLocation)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -134,6 +149,9 @@ impl PlayerErrorSourceLocation {
 }
 impl PlayerErrorSourceLocation {
     pub const IDENTIFIER: &'static str = "Media.PlayerErrorSourceLocation";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Corresponds to kMediaError\n[PlayerError](https://chromedevtools.github.io/devtools-protocol/tot/Media/#type-PlayerError)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -157,6 +175,9 @@ pub struct PlayerError {
 }
 impl PlayerError {
     pub const IDENTIFIER: &'static str = "Media.PlayerError";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Player {
@@ -177,5 +198,8 @@ impl Player {
 }
 impl Player {
     pub const IDENTIFIER: &'static str = "Media.Player";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (MediaTypes { PlayerId (PlayerId) , Timestamp (Timestamp) , PlayerMessage (PlayerMessage) , PlayerProperty (PlayerProperty) , PlayerEvent (PlayerEvent) , PlayerErrorSourceLocation (PlayerErrorSourceLocation) , PlayerError (PlayerError) , Player (Player) });

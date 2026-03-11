@@ -28,6 +28,9 @@ pub struct DialogShown {
 }
 impl DialogShown {
     pub const IDENTIFIER: &'static str = "FedCm.dialogShown";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Triggered when a dialog is closed, either by user action, JS abort,\nor a command below.\n[dialogClosed](https://chromedevtools.github.io/devtools-protocol/tot/FedCm/#event-dialogClosed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -48,5 +51,8 @@ pub struct DialogClosed {
 }
 impl DialogClosed {
     pub const IDENTIFIER: &'static str = "FedCm.dialogClosed";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (FedCmEvents { DialogShown (DialogShown) , DialogClosed (DialogClosed) });

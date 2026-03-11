@@ -26,6 +26,9 @@ pub struct AddInspectedHeapObject {
 }
 impl AddInspectedHeapObject {
     pub const IDENTIFIER: &'static str = "HeapProfiler.addInspectedHeapObject";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for AddInspectedHeapObject {
     type Result = super::results::AddInspectedHeapObjectResult;
@@ -44,6 +47,9 @@ pub struct CollectGarbage {
 }
 impl CollectGarbage {
     pub const IDENTIFIER: &'static str = "HeapProfiler.collectGarbage";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for CollectGarbage {
     type Result = super::results::CollectGarbageResult;
@@ -62,6 +68,9 @@ pub struct Disable {
 }
 impl Disable {
     pub const IDENTIFIER: &'static str = "HeapProfiler.disable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -80,6 +89,9 @@ pub struct Enable {
 }
 impl Enable {
     pub const IDENTIFIER: &'static str = "HeapProfiler.enable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -109,6 +121,9 @@ pub struct GetHeapObjectId {
 }
 impl GetHeapObjectId {
     pub const IDENTIFIER: &'static str = "HeapProfiler.getHeapObjectId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetHeapObjectId {
     type Result = super::results::GetHeapObjectIdResult;
@@ -143,6 +158,9 @@ pub struct GetObjectByHeapObjectId {
 }
 impl GetObjectByHeapObjectId {
     pub const IDENTIFIER: &'static str = "HeapProfiler.getObjectByHeapObjectId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetObjectByHeapObjectId {
     type Result = super::results::GetObjectByHeapObjectIdResult;
@@ -161,6 +179,9 @@ pub struct GetSamplingProfile {
 }
 impl GetSamplingProfile {
     pub const IDENTIFIER: &'static str = "HeapProfiler.getSamplingProfile";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetSamplingProfile {
     type Result = super::results::GetSamplingProfileResult;
@@ -200,6 +221,9 @@ pub struct StartSampling {
 }
 impl StartSampling {
     pub const IDENTIFIER: &'static str = "HeapProfiler.startSampling";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for StartSampling {
     type Result = super::results::StartSamplingResult;
@@ -223,6 +247,9 @@ pub struct StartTrackingHeapObjects {
 }
 impl StartTrackingHeapObjects {
     pub const IDENTIFIER: &'static str = "HeapProfiler.startTrackingHeapObjects";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for StartTrackingHeapObjects {
     type Result = super::results::StartTrackingHeapObjectsResult;
@@ -241,6 +268,9 @@ pub struct StopSampling {
 }
 impl StopSampling {
     pub const IDENTIFIER: &'static str = "HeapProfiler.stopSampling";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for StopSampling {
     type Result = super::results::StopSamplingResult;
@@ -275,6 +305,9 @@ pub struct StopTrackingHeapObjects {
 }
 impl StopTrackingHeapObjects {
     pub const IDENTIFIER: &'static str = "HeapProfiler.stopTrackingHeapObjects";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for StopTrackingHeapObjects {
     type Result = super::results::StopTrackingHeapObjectsResult;
@@ -309,6 +342,9 @@ pub struct TakeHeapSnapshot {
 }
 impl TakeHeapSnapshot {
     pub const IDENTIFIER: &'static str = "HeapProfiler.takeHeapSnapshot";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for TakeHeapSnapshot {
     type Result = super::results::TakeHeapSnapshotResult;

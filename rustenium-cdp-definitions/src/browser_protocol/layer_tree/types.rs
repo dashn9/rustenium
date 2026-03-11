@@ -32,6 +32,9 @@ impl std::borrow::Borrow<str> for LayerId {
 }
 impl LayerId {
     pub const IDENTIFIER: &'static str = "LayerTree.LayerId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Unique snapshot identifier.\n[SnapshotId](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#type-SnapshotId)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
@@ -66,6 +69,9 @@ impl std::borrow::Borrow<str> for SnapshotId {
 }
 impl SnapshotId {
     pub const IDENTIFIER: &'static str = "LayerTree.SnapshotId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Rectangle where scrolling happens on the main thread.\n[ScrollRect](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#type-ScrollRect)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -100,6 +106,9 @@ impl ScrollRect {
 }
 impl ScrollRect {
     pub const IDENTIFIER: &'static str = "LayerTree.ScrollRect";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Sticky position constraints.\n[StickyPositionConstraint](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#type-StickyPositionConstraint)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -136,6 +145,9 @@ impl StickyPositionConstraint {
 }
 impl StickyPositionConstraint {
     pub const IDENTIFIER: &'static str = "LayerTree.StickyPositionConstraint";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Serialized fragment of layer picture along with its offset within the layer.\n[PictureTile](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#type-PictureTile)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -161,6 +173,9 @@ impl PictureTile {
 }
 impl PictureTile {
     pub const IDENTIFIER: &'static str = "LayerTree.PictureTile";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Information about a compositing layer.\n[Layer](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#type-Layer)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -234,6 +249,9 @@ pub struct Layer {
 }
 impl Layer {
     pub const IDENTIFIER: &'static str = "LayerTree.Layer";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Array of timings, one per paint step.\n[PaintProfile](https://chromedevtools.github.io/devtools-protocol/tot/LayerTree/#type-PaintProfile)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -248,5 +266,8 @@ impl PaintProfile {
 }
 impl PaintProfile {
     pub const IDENTIFIER: &'static str = "LayerTree.PaintProfile";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (LayerTreeTypes { LayerId (LayerId) , SnapshotId (SnapshotId) , ScrollRect (ScrollRect) , StickyPositionConstraint (StickyPositionConstraint) , PictureTile (PictureTile) , Layer (Layer) , PaintProfile (PaintProfile) });

@@ -15,6 +15,9 @@ pub struct Disable {
 }
 impl Disable {
     pub const IDENTIFIER: &'static str = "Fetch.disable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -46,6 +49,9 @@ pub struct Enable {
 }
 impl Enable {
     pub const IDENTIFIER: &'static str = "Fetch.enable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -84,6 +90,9 @@ pub struct FailRequest {
 }
 impl FailRequest {
     pub const IDENTIFIER: &'static str = "Fetch.failRequest";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for FailRequest {
     type Result = super::results::FailRequestResult;
@@ -146,6 +155,9 @@ pub struct FulfillRequest {
 }
 impl FulfillRequest {
     pub const IDENTIFIER: &'static str = "Fetch.fulfillRequest";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for FulfillRequest {
     type Result = super::results::FulfillRequestResult;
@@ -207,6 +219,9 @@ pub struct ContinueRequest {
 }
 impl ContinueRequest {
     pub const IDENTIFIER: &'static str = "Fetch.continueRequest";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ContinueRequest {
     type Result = super::results::ContinueRequestResult;
@@ -245,6 +260,9 @@ pub struct ContinueWithAuth {
 }
 impl ContinueWithAuth {
     pub const IDENTIFIER: &'static str = "Fetch.continueWithAuth";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ContinueWithAuth {
     type Result = super::results::ContinueWithAuthResult;
@@ -300,6 +318,9 @@ pub struct ContinueResponse {
 }
 impl ContinueResponse {
     pub const IDENTIFIER: &'static str = "Fetch.continueResponse";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ContinueResponse {
     type Result = super::results::ContinueResponseResult;
@@ -331,6 +352,9 @@ pub struct GetResponseBody {
 }
 impl GetResponseBody {
     pub const IDENTIFIER: &'static str = "Fetch.getResponseBody";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetResponseBody {
     type Result = super::results::GetResponseBodyResult;
@@ -361,6 +385,9 @@ pub struct TakeResponseBodyAsStream {
 }
 impl TakeResponseBodyAsStream {
     pub const IDENTIFIER: &'static str = "Fetch.takeResponseBodyAsStream";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for TakeResponseBodyAsStream {
     type Result = super::results::TakeResponseBodyAsStreamResult;

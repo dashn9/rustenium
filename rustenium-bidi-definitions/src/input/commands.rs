@@ -31,6 +31,9 @@ pub struct PerformActions {
 impl PerformActions {
     pub const IDENTIFIER: &'static str = "input.performActions";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for PerformActions {
     type Result = super::results::PerformActionsResult;
@@ -60,6 +63,9 @@ pub struct ReleaseActions {
 impl ReleaseActions {
     pub const IDENTIFIER: &'static str = "input.releaseActions";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ReleaseActions {
     type Result = super::results::ReleaseActionsResult;
@@ -100,6 +106,9 @@ pub struct SetFiles {
 impl SetFiles {
     pub const IDENTIFIER: &'static str = "input.setFiles";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetFiles {
     type Result = super::results::SetFilesResult;

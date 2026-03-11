@@ -32,6 +32,9 @@ impl std::borrow::Borrow<str> for BreakpointId {
 }
 impl BreakpointId {
     pub const IDENTIFIER: &'static str = "Debugger.BreakpointId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Call frame identifier.\n[CallFrameId](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#type-CallFrameId)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
@@ -66,6 +69,9 @@ impl std::borrow::Borrow<str> for CallFrameId {
 }
 impl CallFrameId {
     pub const IDENTIFIER: &'static str = "Debugger.CallFrameId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Location in the source code.\n[Location](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#type-Location)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -96,6 +102,9 @@ impl Location {
 }
 impl Location {
     pub const IDENTIFIER: &'static str = "Debugger.Location";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Location in the source code.\n[ScriptPosition](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#type-ScriptPosition)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -115,6 +124,9 @@ impl ScriptPosition {
 }
 impl ScriptPosition {
     pub const IDENTIFIER: &'static str = "Debugger.ScriptPosition";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Location range within one script.\n[LocationRange](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#type-LocationRange)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -141,6 +153,9 @@ impl LocationRange {
 }
 impl LocationRange {
     pub const IDENTIFIER: &'static str = "Debugger.LocationRange";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "JavaScript call frame. Array of call frames form the call stack.\n[CallFrame](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#type-CallFrame)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -179,6 +194,9 @@ pub struct CallFrame {
 }
 impl CallFrame {
     pub const IDENTIFIER: &'static str = "Debugger.CallFrame";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Scope description.\n[Scope](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#type-Scope)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -244,6 +262,9 @@ impl Scope {
 }
 impl Scope {
     pub const IDENTIFIER: &'static str = "Debugger.Scope";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Search match for resource.\n[SearchMatch](https://chromedevtools.github.io/devtools-protocol/tot/Debugger/#type-SearchMatch)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -265,6 +286,9 @@ impl SearchMatch {
 }
 impl SearchMatch {
     pub const IDENTIFIER: &'static str = "Debugger.SearchMatch";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BreakLocation {
@@ -308,6 +332,9 @@ impl BreakLocation {
 }
 impl BreakLocation {
     pub const IDENTIFIER: &'static str = "Debugger.BreakLocation";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WasmDisassemblyChunk {
@@ -330,6 +357,9 @@ impl WasmDisassemblyChunk {
 }
 impl WasmDisassemblyChunk {
     pub const IDENTIFIER: &'static str = "Debugger.WasmDisassemblyChunk";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Enum of possible script languages."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -371,6 +401,9 @@ impl DebugSymbols {
 }
 impl DebugSymbols {
     pub const IDENTIFIER: &'static str = "Debugger.DebugSymbols";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResolvedBreakpoint {
@@ -391,5 +424,8 @@ impl ResolvedBreakpoint {
 }
 impl ResolvedBreakpoint {
     pub const IDENTIFIER: &'static str = "Debugger.ResolvedBreakpoint";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (DebuggerTypes { BreakpointId (BreakpointId) , CallFrameId (CallFrameId) , Location (Location) , ScriptPosition (ScriptPosition) , LocationRange (LocationRange) , CallFrame (CallFrame) , Scope (Scope) , SearchMatch (SearchMatch) , BreakLocation (BreakLocation) , WasmDisassemblyChunk (WasmDisassemblyChunk) , ScriptLanguage (ScriptLanguage) , DebugSymbols (DebugSymbols) , ResolvedBreakpoint (ResolvedBreakpoint) });

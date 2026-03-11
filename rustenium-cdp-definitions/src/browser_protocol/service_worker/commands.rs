@@ -33,6 +33,9 @@ pub struct DeliverPushMessage {
 }
 impl DeliverPushMessage {
     pub const IDENTIFIER: &'static str = "ServiceWorker.deliverPushMessage";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for DeliverPushMessage {
     type Result = super::results::DeliverPushMessageResult;
@@ -51,6 +54,9 @@ pub struct Disable {
 }
 impl Disable {
     pub const IDENTIFIER: &'static str = "ServiceWorker.disable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -93,6 +99,9 @@ pub struct DispatchSyncEvent {
 }
 impl DispatchSyncEvent {
     pub const IDENTIFIER: &'static str = "ServiceWorker.dispatchSyncEvent";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for DispatchSyncEvent {
     type Result = super::results::DispatchSyncEventResult;
@@ -131,6 +140,9 @@ pub struct DispatchPeriodicSyncEvent {
 }
 impl DispatchPeriodicSyncEvent {
     pub const IDENTIFIER: &'static str = "ServiceWorker.dispatchPeriodicSyncEvent";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for DispatchPeriodicSyncEvent {
     type Result = super::results::DispatchPeriodicSyncEventResult;
@@ -149,6 +161,9 @@ pub struct Enable {
 }
 impl Enable {
     pub const IDENTIFIER: &'static str = "ServiceWorker.enable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -177,6 +192,9 @@ pub struct SetForceUpdateOnPageLoad {
 }
 impl SetForceUpdateOnPageLoad {
     pub const IDENTIFIER: &'static str = "ServiceWorker.setForceUpdateOnPageLoad";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetForceUpdateOnPageLoad {
     type Result = super::results::SetForceUpdateOnPageLoadResult;
@@ -210,6 +228,9 @@ pub struct SkipWaiting {
 }
 impl SkipWaiting {
     pub const IDENTIFIER: &'static str = "ServiceWorker.skipWaiting";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SkipWaiting {
     type Result = super::results::SkipWaitingResult;
@@ -243,6 +264,9 @@ pub struct StartWorker {
 }
 impl StartWorker {
     pub const IDENTIFIER: &'static str = "ServiceWorker.startWorker";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for StartWorker {
     type Result = super::results::StartWorkerResult;
@@ -261,6 +285,9 @@ pub struct StopAllWorkers {
 }
 impl StopAllWorkers {
     pub const IDENTIFIER: &'static str = "ServiceWorker.stopAllWorkers";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for StopAllWorkers {
     type Result = super::results::StopAllWorkersResult;
@@ -294,6 +321,9 @@ pub struct StopWorker {
 }
 impl StopWorker {
     pub const IDENTIFIER: &'static str = "ServiceWorker.stopWorker";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for StopWorker {
     type Result = super::results::StopWorkerResult;
@@ -327,6 +357,9 @@ pub struct Unregister {
 }
 impl Unregister {
     pub const IDENTIFIER: &'static str = "ServiceWorker.unregister";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Unregister {
     type Result = super::results::UnregisterResult;
@@ -360,6 +393,9 @@ pub struct UpdateRegistration {
 }
 impl UpdateRegistration {
     pub const IDENTIFIER: &'static str = "ServiceWorker.updateRegistration";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for UpdateRegistration {
     type Result = super::results::UpdateRegistrationResult;

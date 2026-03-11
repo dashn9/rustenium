@@ -31,6 +31,9 @@ impl std::borrow::Borrow<str> for TargetId {
 }
 impl TargetId {
     pub const IDENTIFIER: &'static str = "Target.TargetID";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Unique identifier of attached debugging session.\n[SessionID](https://chromedevtools.github.io/devtools-protocol/tot/Target/#type-SessionID)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
@@ -65,6 +68,9 @@ impl std::borrow::Borrow<str> for SessionId {
 }
 impl SessionId {
     pub const IDENTIFIER: &'static str = "Target.SessionID";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TargetInfo {
@@ -110,6 +116,9 @@ pub struct TargetInfo {
 }
 impl TargetInfo {
     pub const IDENTIFIER: &'static str = "Target.TargetInfo";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "A filter used by target query/discovery/auto-attach operations.\n[FilterEntry](https://chromedevtools.github.io/devtools-protocol/tot/Target/#type-FilterEntry)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -127,6 +136,9 @@ pub struct FilterEntry {
 }
 impl FilterEntry {
     pub const IDENTIFIER: &'static str = "Target.FilterEntry";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "The entries in TargetFilter are matched sequentially against targets and\nthe first entry that matches determines if the target is included or not,\ndepending on the value of `exclude` field in the entry.\nIf filter is not specified, the one assumed is\n[{type: \"browser\", exclude: true}, {type: \"tab\", exclude: true}, {}]\n(i.e. include everything but `browser` and `tab`).\n[TargetFilter](https://chromedevtools.github.io/devtools-protocol/tot/Target/#type-TargetFilter)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -141,6 +153,9 @@ impl TargetFilter {
 }
 impl TargetFilter {
     pub const IDENTIFIER: &'static str = "Target.TargetFilter";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RemoteLocation {
@@ -159,6 +174,9 @@ impl RemoteLocation {
 }
 impl RemoteLocation {
     pub const IDENTIFIER: &'static str = "Target.RemoteLocation";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "The state of the target window."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]

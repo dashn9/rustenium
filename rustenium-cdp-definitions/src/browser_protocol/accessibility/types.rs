@@ -32,6 +32,9 @@ impl std::borrow::Borrow<str> for AxNodeId {
 }
 impl AxNodeId {
     pub const IDENTIFIER: &'static str = "Accessibility.AXNodeId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Enum of possible property types."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -175,6 +178,9 @@ impl AxValueSource {
 }
 impl AxValueSource {
     pub const IDENTIFIER: &'static str = "Accessibility.AXValueSource";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AxRelatedNode {
@@ -205,6 +211,9 @@ impl AxRelatedNode {
 }
 impl AxRelatedNode {
     pub const IDENTIFIER: &'static str = "Accessibility.AXRelatedNode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AxProperty {
@@ -225,6 +234,9 @@ impl AxProperty {
 }
 impl AxProperty {
     pub const IDENTIFIER: &'static str = "Accessibility.AXProperty";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "A single computed AX property.\n[AXValue](https://chromedevtools.github.io/devtools-protocol/tot/Accessibility/#type-AXValue)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -260,6 +272,9 @@ impl AxValue {
 }
 impl AxValue {
     pub const IDENTIFIER: &'static str = "Accessibility.AXValue";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Values of AXProperty name:\n- from 'busy' to 'roledescription': states which apply to every AX node\n- from 'live' to 'root': attributes which apply to nodes in live regions\n- from 'autocomplete' to 'valuetext': attributes which apply to widgets\n- from 'checked' to 'selected': states which apply to widgets\n- from 'activedescendant' to 'owns': relationships between elements other than parent/child/sibling\n- from 'activeFullscreenElement' to 'uninteresting': reasons why this noode is hidden"]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -468,5 +483,8 @@ impl AxNode {
 }
 impl AxNode {
     pub const IDENTIFIER: &'static str = "Accessibility.AXNode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (AccessibilityTypes { AxNodeId (AxNodeId) , AxValueType (AxValueType) , AxValueSourceType (AxValueSourceType) , AxValueNativeSourceType (AxValueNativeSourceType) , AxValueSource (AxValueSource) , AxRelatedNode (AxRelatedNode) , AxProperty (AxProperty) , AxValue (AxValue) , AxPropertyName (AxPropertyName) , AxNode (AxNode) });

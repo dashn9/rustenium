@@ -1,5 +1,5 @@
 use crate::error::{ResponseReceiveTimeoutError, SessionSendError};
-use crate::events::{BidiEvent, EventManagement};
+use crate::events::{BidiEvent, BidiEventManagement};
 use crate::listeners::CommandResponseState;
 use crate::network::NetworkRequestHandledState;
 use crate::{
@@ -20,10 +20,10 @@ use tokio::sync::oneshot;
 use tokio::time::timeout;
 use tracing;
 
-pub struct Session<T: ConnectionTransport> {
+pub struct BidiSession<T: ConnectionTransport> {
     id: Option<String>,
     connection: Connection<T>,
-    bidi_events: Arc<Mutex<Vec<BidiEvent>>>,
+    events: Arc<Mutex<Vec<BidiEvent>>>,
     /// Tracks network requests that have been handled, keyed by request ID
     pub handled_network_requests: Arc<Mutex<HashMap<String, NetworkRequestHandledState>>>,
 }
@@ -32,19 +32,19 @@ pub enum SessionConnectionType {
     WebSocket,
 }
 
-impl<T: ConnectionTransport> Session<T> {
+impl<T: ConnectionTransport> BidiSession<T> {
     pub async fn ws_new(
         connection_config: &ConnectionTransportConfig,
-    ) -> Session<WebsocketConnectionTransport> {
+    ) -> BidiSession<WebsocketConnectionTransport> {
         let connection_transport = WebsocketConnectionTransport::new(connection_config)
             .await
             .unwrap();
         let connection = Connection::new(connection_transport);
         connection.start_listeners();
-        Session {
+        BidiSession {
             id: None,
             connection,
-            bidi_events: Arc::new(Mutex::new(Vec::new())),
+            events: Arc::new(Mutex::new(Vec::new())),
             handled_network_requests: Arc::new(Mutex::new(HashMap::new())),
         }
     }
@@ -143,16 +143,16 @@ impl<T: ConnectionTransport> Session<T> {
     }
 }
 
-impl<T: ConnectionTransport> EventManagement for Session<T> {
-    async fn send_event(&mut self, command: Command) -> Result<CommandResponse, SessionSendError> {
+impl<T: ConnectionTransport> BidiEventManagement for BidiSession<T> {
+    async fn send_event(&mut self, command: impl Into<Command>) -> Result<CommandResponse, SessionSendError> {
         self.send(command).await
     }
 
-    fn get_bidi_events(&mut self) -> &mut Arc<Mutex<Vec<BidiEvent>>> {
-        &mut self.bidi_events
+    fn get_events(&mut self) -> &mut Arc<Mutex<Vec<BidiEvent>>> {
+        &mut self.events
     }
 
     fn push_event(&mut self, event: BidiEvent) {
-        self.bidi_events.lock().unwrap().push(event);
+        self.events.lock().unwrap().push(event);
     }
 }

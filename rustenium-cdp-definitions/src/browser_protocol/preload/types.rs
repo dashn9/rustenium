@@ -32,6 +32,9 @@ impl std::borrow::Borrow<str> for RuleSetId {
 }
 impl RuleSetId {
     pub const IDENTIFIER: &'static str = "Preload.RuleSetId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Corresponds to SpeculationRuleSet\n[RuleSet](https://chromedevtools.github.io/devtools-protocol/tot/Preload/#type-RuleSet)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -88,6 +91,9 @@ impl RuleSet {
 }
 impl RuleSet {
     pub const IDENTIFIER: &'static str = "Preload.RuleSet";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum RuleSetErrorType {
@@ -146,6 +152,9 @@ impl PreloadingAttemptKey {
 }
 impl PreloadingAttemptKey {
     pub const IDENTIFIER: &'static str = "Preload.PreloadingAttemptKey";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Lists sources for a preloading attempt, specifically the ids of rule sets\nthat had a speculation rule that triggered the attempt, and the\nBackendNodeIds of <a href> or <area href> elements that triggered the\nattempt (in the case of attempts triggered by a document rule). It is\npossible for multiple rule sets and links to trigger a single attempt.\n[PreloadingAttemptSource](https://chromedevtools.github.io/devtools-protocol/tot/Preload/#type-PreloadingAttemptSource)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -174,6 +183,9 @@ impl PreloadingAttemptSource {
 }
 impl PreloadingAttemptSource {
     pub const IDENTIFIER: &'static str = "Preload.PreloadingAttemptSource";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Chrome manages different types of preloads together using a\nconcept of preloading pipeline. For example, if a site uses a\nSpeculationRules for prerender, Chrome first starts a prefetch and\nthen upgrades it to prerender.\n\nCDP events for them are emitted separately but they share\n`PreloadPipelineId`.\n[PreloadPipelineId](https://chromedevtools.github.io/devtools-protocol/tot/Preload/#type-PreloadPipelineId)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
@@ -208,6 +220,9 @@ impl std::borrow::Borrow<str> for PreloadPipelineId {
 }
 impl PreloadPipelineId {
     pub const IDENTIFIER: &'static str = "Preload.PreloadPipelineId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "List of FinalStatus reasons for Prerender2."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -484,5 +499,8 @@ impl<T: Into<String>> From<T> for PrerenderMismatchedHeaders {
 }
 impl PrerenderMismatchedHeaders {
     pub const IDENTIFIER: &'static str = "Preload.PrerenderMismatchedHeaders";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (PreloadTypes { RuleSetId (RuleSetId) , RuleSet (RuleSet) , RuleSetErrorType (RuleSetErrorType) , SpeculationAction (SpeculationAction) , SpeculationTargetHint (SpeculationTargetHint) , PreloadingAttemptKey (PreloadingAttemptKey) , PreloadingAttemptSource (PreloadingAttemptSource) , PreloadPipelineId (PreloadPipelineId) , PrerenderFinalStatus (PrerenderFinalStatus) , PreloadingStatus (PreloadingStatus) , PrefetchStatus (PrefetchStatus) , PrerenderMismatchedHeaders (PrerenderMismatchedHeaders) });

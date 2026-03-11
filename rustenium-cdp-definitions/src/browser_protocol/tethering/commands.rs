@@ -24,6 +24,9 @@ pub struct Bind {
 }
 impl Bind {
     pub const IDENTIFIER: &'static str = "Tethering.bind";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Bind {
     type Result = super::results::BindResult;
@@ -53,6 +56,9 @@ pub struct Unbind {
 }
 impl Unbind {
     pub const IDENTIFIER: &'static str = "Tethering.unbind";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Unbind {
     type Result = super::results::UnbindResult;

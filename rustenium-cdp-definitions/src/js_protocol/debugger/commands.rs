@@ -38,6 +38,9 @@ pub struct ContinueToLocation {
 }
 impl ContinueToLocation {
     pub const IDENTIFIER: &'static str = "Debugger.continueToLocation";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ContinueToLocation {
     type Result = super::results::ContinueToLocationResult;
@@ -58,6 +61,9 @@ pub struct Disable {
 }
 impl Disable {
     pub const IDENTIFIER: &'static str = "Debugger.disable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -84,6 +90,9 @@ pub struct Enable {
 }
 impl Enable {
     pub const IDENTIFIER: &'static str = "Debugger.enable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -164,6 +173,9 @@ pub struct EvaluateOnCallFrame {
 }
 impl EvaluateOnCallFrame {
     pub const IDENTIFIER: &'static str = "Debugger.evaluateOnCallFrame";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for EvaluateOnCallFrame {
     type Result = super::results::EvaluateOnCallFrameResult;
@@ -207,6 +219,9 @@ pub struct GetPossibleBreakpoints {
 }
 impl GetPossibleBreakpoints {
     pub const IDENTIFIER: &'static str = "Debugger.getPossibleBreakpoints";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetPossibleBreakpoints {
     type Result = super::results::GetPossibleBreakpointsResult;
@@ -238,6 +253,9 @@ pub struct GetScriptSource {
 }
 impl GetScriptSource {
     pub const IDENTIFIER: &'static str = "Debugger.getScriptSource";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetScriptSource {
     type Result = super::results::GetScriptSourceResult;
@@ -267,6 +285,9 @@ pub struct DisassembleWasmModule {
 }
 impl DisassembleWasmModule {
     pub const IDENTIFIER: &'static str = "Debugger.disassembleWasmModule";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for DisassembleWasmModule {
     type Result = super::results::DisassembleWasmModuleResult;
@@ -302,6 +323,9 @@ pub struct NextWasmDisassemblyChunk {
 }
 impl NextWasmDisassemblyChunk {
     pub const IDENTIFIER: &'static str = "Debugger.nextWasmDisassemblyChunk";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for NextWasmDisassemblyChunk {
     type Result = super::results::NextWasmDisassemblyChunkResult;
@@ -334,6 +358,9 @@ pub struct GetStackTrace {
 }
 impl GetStackTrace {
     pub const IDENTIFIER: &'static str = "Debugger.getStackTrace";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetStackTrace {
     type Result = super::results::GetStackTraceResult;
@@ -354,6 +381,9 @@ pub struct Pause {
 }
 impl Pause {
     pub const IDENTIFIER: &'static str = "Debugger.pause";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Pause {
     type Result = super::results::PauseResult;
@@ -384,6 +414,9 @@ pub struct RemoveBreakpoint {
 }
 impl RemoveBreakpoint {
     pub const IDENTIFIER: &'static str = "Debugger.removeBreakpoint";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RemoveBreakpoint {
     type Result = super::results::RemoveBreakpointResult;
@@ -428,6 +461,9 @@ pub struct RestartFrame {
 }
 impl RestartFrame {
     pub const IDENTIFIER: &'static str = "Debugger.restartFrame";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RestartFrame {
     type Result = super::results::RestartFrameResult;
@@ -454,6 +490,9 @@ pub struct Resume {
 }
 impl Resume {
     pub const IDENTIFIER: &'static str = "Debugger.resume";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Resume {
     type Result = super::results::ResumeResult;
@@ -504,6 +543,9 @@ pub struct SearchInContent {
 }
 impl SearchInContent {
     pub const IDENTIFIER: &'static str = "Debugger.searchInContent";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SearchInContent {
     type Result = super::results::SearchInContentResult;
@@ -535,6 +577,9 @@ pub struct SetAsyncCallStackDepth {
 }
 impl SetAsyncCallStackDepth {
     pub const IDENTIFIER: &'static str = "Debugger.setAsyncCallStackDepth";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetAsyncCallStackDepth {
     type Result = super::results::SetAsyncCallStackDepthResult;
@@ -565,6 +610,9 @@ pub struct SetBlackboxExecutionContexts {
 }
 impl SetBlackboxExecutionContexts {
     pub const IDENTIFIER: &'static str = "Debugger.setBlackboxExecutionContexts";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetBlackboxExecutionContexts {
     type Result = super::results::SetBlackboxExecutionContextsResult;
@@ -603,6 +651,9 @@ pub struct SetBlackboxPatterns {
 }
 impl SetBlackboxPatterns {
     pub const IDENTIFIER: &'static str = "Debugger.setBlackboxPatterns";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetBlackboxPatterns {
     type Result = super::results::SetBlackboxPatternsResult;
@@ -641,6 +692,9 @@ pub struct SetBlackboxedRanges {
 }
 impl SetBlackboxedRanges {
     pub const IDENTIFIER: &'static str = "Debugger.setBlackboxedRanges";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetBlackboxedRanges {
     type Result = super::results::SetBlackboxedRangesResult;
@@ -678,6 +732,9 @@ pub struct SetBreakpoint {
 }
 impl SetBreakpoint {
     pub const IDENTIFIER: &'static str = "Debugger.setBreakpoint";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetBreakpoint {
     type Result = super::results::SetBreakpointResult;
@@ -717,6 +774,9 @@ pub struct SetInstrumentationBreakpoint {
 }
 impl SetInstrumentationBreakpoint {
     pub const IDENTIFIER: &'static str = "Debugger.setInstrumentationBreakpoint";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetInstrumentationBreakpoint {
     type Result = super::results::SetInstrumentationBreakpointResult;
@@ -778,6 +838,9 @@ pub struct SetBreakpointByUrl {
 }
 impl SetBreakpointByUrl {
     pub const IDENTIFIER: &'static str = "Debugger.setBreakpointByUrl";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetBreakpointByUrl {
     type Result = super::results::SetBreakpointByUrlResult;
@@ -815,6 +878,9 @@ pub struct SetBreakpointOnFunctionCall {
 }
 impl SetBreakpointOnFunctionCall {
     pub const IDENTIFIER: &'static str = "Debugger.setBreakpointOnFunctionCall";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetBreakpointOnFunctionCall {
     type Result = super::results::SetBreakpointOnFunctionCallResult;
@@ -846,6 +912,9 @@ pub struct SetBreakpointsActive {
 }
 impl SetBreakpointsActive {
     pub const IDENTIFIER: &'static str = "Debugger.setBreakpointsActive";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetBreakpointsActive {
     type Result = super::results::SetBreakpointsActiveResult;
@@ -889,6 +958,9 @@ pub struct SetPauseOnExceptions {
 }
 impl SetPauseOnExceptions {
     pub const IDENTIFIER: &'static str = "Debugger.setPauseOnExceptions";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetPauseOnExceptions {
     type Result = super::results::SetPauseOnExceptionsResult;
@@ -920,6 +992,9 @@ pub struct SetReturnValue {
 }
 impl SetReturnValue {
     pub const IDENTIFIER: &'static str = "Debugger.setReturnValue";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetReturnValue {
     type Result = super::results::SetReturnValueResult;
@@ -970,6 +1045,9 @@ pub struct SetScriptSource {
 }
 impl SetScriptSource {
     pub const IDENTIFIER: &'static str = "Debugger.setScriptSource";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetScriptSource {
     type Result = super::results::SetScriptSourceResult;
@@ -999,6 +1077,9 @@ pub struct SetSkipAllPauses {
 }
 impl SetSkipAllPauses {
     pub const IDENTIFIER: &'static str = "Debugger.setSkipAllPauses";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetSkipAllPauses {
     type Result = super::results::SetSkipAllPausesResult;
@@ -1047,6 +1128,9 @@ pub struct SetVariableValue {
 }
 impl SetVariableValue {
     pub const IDENTIFIER: &'static str = "Debugger.setVariableValue";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetVariableValue {
     type Result = super::results::SetVariableValueResult;
@@ -1078,6 +1162,9 @@ pub struct StepInto {
 }
 impl StepInto {
     pub const IDENTIFIER: &'static str = "Debugger.stepInto";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for StepInto {
     type Result = super::results::StepIntoResult;
@@ -1098,6 +1185,9 @@ pub struct StepOut {
 }
 impl StepOut {
     pub const IDENTIFIER: &'static str = "Debugger.stepOut";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for StepOut {
     type Result = super::results::StepOutResult;
@@ -1124,6 +1214,9 @@ pub struct StepOver {
 }
 impl StepOver {
     pub const IDENTIFIER: &'static str = "Debugger.stepOver";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for StepOver {
     type Result = super::results::StepOverResult;

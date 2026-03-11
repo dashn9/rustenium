@@ -18,6 +18,9 @@ pub struct RuleSetUpdated {
 }
 impl RuleSetUpdated {
     pub const IDENTIFIER: &'static str = "Preload.ruleSetUpdated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RuleSetRemovedParams {
@@ -36,6 +39,9 @@ pub struct RuleSetRemoved {
 }
 impl RuleSetRemoved {
     pub const IDENTIFIER: &'static str = "Preload.ruleSetRemoved";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when a preload enabled state is updated.\n[preloadEnabledStateUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Preload/#event-preloadEnabledStateUpdated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -64,6 +70,9 @@ pub struct PreloadEnabledStateUpdated {
 }
 impl PreloadEnabledStateUpdated {
     pub const IDENTIFIER: &'static str = "Preload.preloadEnabledStateUpdated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when a prefetch attempt is updated.\n[prefetchStatusUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Preload/#event-prefetchStatusUpdated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -97,6 +106,9 @@ pub struct PrefetchStatusUpdated {
 }
 impl PrefetchStatusUpdated {
     pub const IDENTIFIER: &'static str = "Preload.prefetchStatusUpdated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when a prerender attempt is updated.\n[prerenderStatusUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Preload/#event-prerenderStatusUpdated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -134,6 +146,9 @@ pub struct PrerenderStatusUpdated {
 }
 impl PrerenderStatusUpdated {
     pub const IDENTIFIER: &'static str = "Preload.prerenderStatusUpdated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Send a list of sources for all preloading attempts in a document.\n[preloadingAttemptSourcesUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Preload/#event-preloadingAttemptSourcesUpdated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -157,5 +172,8 @@ pub struct PreloadingAttemptSourcesUpdated {
 }
 impl PreloadingAttemptSourcesUpdated {
     pub const IDENTIFIER: &'static str = "Preload.preloadingAttemptSourcesUpdated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (PreloadEvents { RuleSetUpdated (RuleSetUpdated) , RuleSetRemoved (RuleSetRemoved) , PreloadEnabledStateUpdated (PreloadEnabledStateUpdated) , PrefetchStatusUpdated (PrefetchStatusUpdated) , PrerenderStatusUpdated (PrerenderStatusUpdated) , PreloadingAttemptSourcesUpdated (PreloadingAttemptSourcesUpdated) });

@@ -19,5 +19,8 @@ pub struct EntryAdded {
 }
 impl EntryAdded {
     pub const IDENTIFIER: &'static str = "Log.entryAdded";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (LogEvents { EntryAdded (EntryAdded) });

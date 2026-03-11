@@ -25,6 +25,9 @@ pub struct SetAcceptedEncodings {
 }
 impl SetAcceptedEncodings {
     pub const IDENTIFIER: &'static str = "Network.setAcceptedEncodings";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetAcceptedEncodings {
     type Result = super::results::SetAcceptedEncodingsResult;
@@ -45,6 +48,9 @@ pub struct ClearAcceptedEncodingsOverride {
 }
 impl ClearAcceptedEncodingsOverride {
     pub const IDENTIFIER: &'static str = "Network.clearAcceptedEncodingsOverride";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ClearAcceptedEncodingsOverride {
     type Result = super::results::ClearAcceptedEncodingsOverrideResult;
@@ -65,6 +71,9 @@ pub struct ClearBrowserCache {
 }
 impl ClearBrowserCache {
     pub const IDENTIFIER: &'static str = "Network.clearBrowserCache";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ClearBrowserCache {
     type Result = super::results::ClearBrowserCacheResult;
@@ -85,6 +94,9 @@ pub struct ClearBrowserCookies {
 }
 impl ClearBrowserCookies {
     pub const IDENTIFIER: &'static str = "Network.clearBrowserCookies";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ClearBrowserCookies {
     type Result = super::results::ClearBrowserCookiesResult;
@@ -145,6 +157,9 @@ pub struct DeleteCookies {
 }
 impl DeleteCookies {
     pub const IDENTIFIER: &'static str = "Network.deleteCookies";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for DeleteCookies {
     type Result = super::results::DeleteCookiesResult;
@@ -165,6 +180,9 @@ pub struct Disable {
 }
 impl Disable {
     pub const IDENTIFIER: &'static str = "Network.disable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -204,6 +222,9 @@ pub struct EmulateNetworkConditionsByRule {
 }
 impl EmulateNetworkConditionsByRule {
     pub const IDENTIFIER: &'static str = "Network.emulateNetworkConditionsByRule";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for EmulateNetworkConditionsByRule {
     type Result = super::results::EmulateNetworkConditionsByRuleResult;
@@ -258,6 +279,9 @@ pub struct OverrideNetworkState {
 }
 impl OverrideNetworkState {
     pub const IDENTIFIER: &'static str = "Network.overrideNetworkState";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for OverrideNetworkState {
     type Result = super::results::OverrideNetworkStateResult;
@@ -304,6 +328,9 @@ pub struct Enable {
 }
 impl Enable {
     pub const IDENTIFIER: &'static str = "Network.enable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -335,6 +362,9 @@ pub struct ConfigureDurableMessages {
 }
 impl ConfigureDurableMessages {
     pub const IDENTIFIER: &'static str = "Network.configureDurableMessages";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ConfigureDurableMessages {
     type Result = super::results::ConfigureDurableMessagesResult;
@@ -371,6 +401,9 @@ pub struct GetCertificate {
 }
 impl GetCertificate {
     pub const IDENTIFIER: &'static str = "Network.getCertificate";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetCertificate {
     type Result = super::results::GetCertificateResult;
@@ -397,6 +430,9 @@ pub struct GetCookies {
 }
 impl GetCookies {
     pub const IDENTIFIER: &'static str = "Network.getCookies";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetCookies {
     type Result = super::results::GetCookiesResult;
@@ -428,6 +464,9 @@ pub struct GetResponseBody {
 }
 impl GetResponseBody {
     pub const IDENTIFIER: &'static str = "Network.getResponseBody";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetResponseBody {
     type Result = super::results::GetResponseBodyResult;
@@ -459,6 +498,9 @@ pub struct GetRequestPostData {
 }
 impl GetRequestPostData {
     pub const IDENTIFIER: &'static str = "Network.getRequestPostData";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetRequestPostData {
     type Result = super::results::GetRequestPostDataResult;
@@ -490,6 +532,9 @@ pub struct GetResponseBodyForInterception {
 }
 impl GetResponseBodyForInterception {
     pub const IDENTIFIER: &'static str = "Network.getResponseBodyForInterception";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetResponseBodyForInterception {
     type Result = super::results::GetResponseBodyForInterceptionResult;
@@ -520,6 +565,9 @@ pub struct TakeResponseBodyForInterceptionAsStream {
 }
 impl TakeResponseBodyForInterceptionAsStream {
     pub const IDENTIFIER: &'static str = "Network.takeResponseBodyForInterceptionAsStream";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for TakeResponseBodyForInterceptionAsStream {
     type Result = super::results::TakeResponseBodyForInterceptionAsStreamResult;
@@ -551,6 +599,9 @@ pub struct ReplayXhr {
 }
 impl ReplayXhr {
     pub const IDENTIFIER: &'static str = "Network.replayXHR";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ReplayXhr {
     type Result = super::results::ReplayXhrResult;
@@ -598,6 +649,9 @@ pub struct SearchInResponseBody {
 }
 impl SearchInResponseBody {
     pub const IDENTIFIER: &'static str = "Network.searchInResponseBody";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SearchInResponseBody {
     type Result = super::results::SearchInResponseBodyResult;
@@ -624,6 +678,9 @@ pub struct SetBlockedUrLs {
 }
 impl SetBlockedUrLs {
     pub const IDENTIFIER: &'static str = "Network.setBlockedURLs";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetBlockedUrLs {
     type Result = super::results::SetBlockedUrLsResult;
@@ -655,6 +712,9 @@ pub struct SetBypassServiceWorker {
 }
 impl SetBypassServiceWorker {
     pub const IDENTIFIER: &'static str = "Network.setBypassServiceWorker";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetBypassServiceWorker {
     type Result = super::results::SetBypassServiceWorkerResult;
@@ -686,6 +746,9 @@ pub struct SetCacheDisabled {
 }
 impl SetCacheDisabled {
     pub const IDENTIFIER: &'static str = "Network.setCacheDisabled";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetCacheDisabled {
     type Result = super::results::SetCacheDisabledResult;
@@ -787,6 +850,9 @@ pub struct SetCookie {
 }
 impl SetCookie {
     pub const IDENTIFIER: &'static str = "Network.setCookie";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetCookie {
     type Result = super::results::SetCookieResult;
@@ -817,6 +883,9 @@ pub struct SetCookies {
 }
 impl SetCookies {
     pub const IDENTIFIER: &'static str = "Network.setCookies";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetCookies {
     type Result = super::results::SetCookiesResult;
@@ -848,6 +917,9 @@ pub struct SetExtraHttpHeaders {
 }
 impl SetExtraHttpHeaders {
     pub const IDENTIFIER: &'static str = "Network.setExtraHTTPHeaders";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetExtraHttpHeaders {
     type Result = super::results::SetExtraHttpHeadersResult;
@@ -879,6 +951,9 @@ pub struct SetAttachDebugStack {
 }
 impl SetAttachDebugStack {
     pub const IDENTIFIER: &'static str = "Network.setAttachDebugStack";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetAttachDebugStack {
     type Result = super::results::SetAttachDebugStackResult;
@@ -933,6 +1008,9 @@ pub struct SetUserAgentOverride {
 }
 impl SetUserAgentOverride {
     pub const IDENTIFIER: &'static str = "Network.setUserAgentOverride";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetUserAgentOverride {
     type Result = super::results::SetUserAgentOverrideResult;
@@ -964,6 +1042,9 @@ pub struct StreamResourceContent {
 }
 impl StreamResourceContent {
     pub const IDENTIFIER: &'static str = "Network.streamResourceContent";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for StreamResourceContent {
     type Result = super::results::StreamResourceContentResult;
@@ -990,6 +1071,9 @@ pub struct GetSecurityIsolationStatus {
 }
 impl GetSecurityIsolationStatus {
     pub const IDENTIFIER: &'static str = "Network.getSecurityIsolationStatus";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetSecurityIsolationStatus {
     type Result = super::results::GetSecurityIsolationStatusResult;
@@ -1021,6 +1105,9 @@ pub struct EnableReportingApi {
 }
 impl EnableReportingApi {
     pub const IDENTIFIER: &'static str = "Network.enableReportingApi";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for EnableReportingApi {
     type Result = super::results::EnableReportingApiResult;
@@ -1052,6 +1139,9 @@ pub struct EnableDeviceBoundSessions {
 }
 impl EnableDeviceBoundSessions {
     pub const IDENTIFIER: &'static str = "Network.enableDeviceBoundSessions";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for EnableDeviceBoundSessions {
     type Result = super::results::EnableDeviceBoundSessionsResult;
@@ -1088,6 +1178,9 @@ pub struct FetchSchemefulSite {
 }
 impl FetchSchemefulSite {
     pub const IDENTIFIER: &'static str = "Network.fetchSchemefulSite";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for FetchSchemefulSite {
     type Result = super::results::FetchSchemefulSiteResult;
@@ -1132,6 +1225,9 @@ pub struct LoadNetworkResource {
 }
 impl LoadNetworkResource {
     pub const IDENTIFIER: &'static str = "Network.loadNetworkResource";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for LoadNetworkResource {
     type Result = super::results::LoadNetworkResourceResult;
@@ -1175,6 +1271,9 @@ pub struct SetCookieControls {
 }
 impl SetCookieControls {
     pub const IDENTIFIER: &'static str = "Network.setCookieControls";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetCookieControls {
     type Result = super::results::SetCookieControlsResult;

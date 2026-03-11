@@ -31,6 +31,9 @@ impl std::borrow::Borrow<str> for AuthenticatorId {
 }
 impl AuthenticatorId {
     pub const IDENTIFIER: &'static str = "WebAuthn.AuthenticatorId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum AuthenticatorProtocol {
@@ -149,6 +152,9 @@ impl VirtualAuthenticatorOptions {
 }
 impl VirtualAuthenticatorOptions {
     pub const IDENTIFIER: &'static str = "WebAuthn.VirtualAuthenticatorOptions";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Credential {
@@ -222,5 +228,8 @@ impl Credential {
 }
 impl Credential {
     pub const IDENTIFIER: &'static str = "WebAuthn.Credential";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (WebAuthnTypes { AuthenticatorId (AuthenticatorId) , AuthenticatorProtocol (AuthenticatorProtocol) , Ctap2Version (Ctap2Version) , AuthenticatorTransport (AuthenticatorTransport) , VirtualAuthenticatorOptions (VirtualAuthenticatorOptions) , Credential (Credential) });

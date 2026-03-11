@@ -14,5 +14,8 @@ pub struct EntryAdded {
 impl EntryAdded {
     pub const IDENTIFIER: &'static str = "log.entryAdded";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (LogEvent { EntryAdded (EntryAdded) });

@@ -1,6 +1,6 @@
 use std::{collections::HashMap, sync::{Arc}};
 
-use rustenium_bidi_definitions::base::{CommandResponse, ErrorResponse, Event, Message};
+use rustenium_bidi_definitions::{Event, base::{CommandResponse, ErrorResponse, EventResponse, Message}};
 use serde::{Deserialize, Serialize};
 use tokio::sync::{mpsc::{UnboundedReceiver, UnboundedSender}, oneshot, Mutex};
 use tokio::task::JoinHandle;
@@ -9,14 +9,14 @@ use tokio::task::JoinHandle;
 pub struct Listener {
     rx: UnboundedReceiver<String>,
     pub command_response_tx: UnboundedSender<CommandResponseState>,
-    pub event_tx: UnboundedSender<Event>,
+    pub event_tx: UnboundedSender<EventResponse>,
 }
 
 impl Listener {
     pub fn new(
         rx: UnboundedReceiver<String>,
         command_response_tx: UnboundedSender<CommandResponseState>,
-        event_tx: UnboundedSender<Event>,
+        event_tx: UnboundedSender<EventResponse>,
     ) -> Self {
         Self {
             rx,

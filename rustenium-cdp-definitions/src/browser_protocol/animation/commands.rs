@@ -15,6 +15,9 @@ pub struct Disable {
 }
 impl Disable {
     pub const IDENTIFIER: &'static str = "Animation.disable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -35,6 +38,9 @@ pub struct Enable {
 }
 impl Enable {
     pub const IDENTIFIER: &'static str = "Animation.enable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -69,6 +75,9 @@ pub struct GetCurrentTime {
 }
 impl GetCurrentTime {
     pub const IDENTIFIER: &'static str = "Animation.getCurrentTime";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetCurrentTime {
     type Result = super::results::GetCurrentTimeResult;
@@ -89,6 +98,9 @@ pub struct GetPlaybackRate {
 }
 impl GetPlaybackRate {
     pub const IDENTIFIER: &'static str = "Animation.getPlaybackRate";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetPlaybackRate {
     type Result = super::results::GetPlaybackRateResult;
@@ -119,6 +131,9 @@ pub struct ReleaseAnimations {
 }
 impl ReleaseAnimations {
     pub const IDENTIFIER: &'static str = "Animation.releaseAnimations";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ReleaseAnimations {
     type Result = super::results::ReleaseAnimationsResult;
@@ -155,6 +170,9 @@ pub struct ResolveAnimation {
 }
 impl ResolveAnimation {
     pub const IDENTIFIER: &'static str = "Animation.resolveAnimation";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ResolveAnimation {
     type Result = super::results::ResolveAnimationResult;
@@ -191,6 +209,9 @@ pub struct SeekAnimations {
 }
 impl SeekAnimations {
     pub const IDENTIFIER: &'static str = "Animation.seekAnimations";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SeekAnimations {
     type Result = super::results::SeekAnimationsResult;
@@ -227,6 +248,9 @@ pub struct SetPaused {
 }
 impl SetPaused {
     pub const IDENTIFIER: &'static str = "Animation.setPaused";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetPaused {
     type Result = super::results::SetPausedResult;
@@ -258,6 +282,9 @@ pub struct SetPlaybackRate {
 }
 impl SetPlaybackRate {
     pub const IDENTIFIER: &'static str = "Animation.setPlaybackRate";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetPlaybackRate {
     type Result = super::results::SetPlaybackRateResult;
@@ -301,6 +328,9 @@ pub struct SetTiming {
 }
 impl SetTiming {
     pub const IDENTIFIER: &'static str = "Animation.setTiming";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetTiming {
     type Result = super::results::SetTimingResult;

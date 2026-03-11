@@ -44,6 +44,9 @@ pub struct SafeAreaInsets {
 }
 impl SafeAreaInsets {
     pub const IDENTIFIER: &'static str = "Emulation.SafeAreaInsets";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Screen orientation.\n[ScreenOrientation](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#type-ScreenOrientation)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -77,6 +80,9 @@ impl ScreenOrientation {
 }
 impl ScreenOrientation {
     pub const IDENTIFIER: &'static str = "Emulation.ScreenOrientation";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DisplayFeature {
@@ -113,6 +119,9 @@ impl DisplayFeature {
 }
 impl DisplayFeature {
     pub const IDENTIFIER: &'static str = "Emulation.DisplayFeature";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DevicePosture {
@@ -137,6 +146,9 @@ impl DevicePosture {
 }
 impl DevicePosture {
     pub const IDENTIFIER: &'static str = "Emulation.DevicePosture";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MediaFeature {
@@ -155,6 +167,9 @@ impl MediaFeature {
 }
 impl MediaFeature {
     pub const IDENTIFIER: &'static str = "Emulation.MediaFeature";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "advance: If the scheduler runs out of immediate work, the virtual time base may fast forward to\nallow the next delayed task (if any) to run; pause: The virtual time base may not advance;\npauseIfNetworkFetchesPending: The virtual time base may not advance if there are any pending\nresource fetches."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -184,6 +199,9 @@ impl UserAgentBrandVersion {
 }
 impl UserAgentBrandVersion {
     pub const IDENTIFIER: &'static str = "Emulation.UserAgentBrandVersion";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Used to specify User Agent Client Hints to emulate. See https://wicg.github.io/ua-client-hints\nMissing optional values will be filled in by the target with what it would normally use.\n[UserAgentMetadata](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#type-UserAgentMetadata)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -224,6 +242,9 @@ pub struct UserAgentMetadata {
 }
 impl UserAgentMetadata {
     pub const IDENTIFIER: &'static str = "Emulation.UserAgentMetadata";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Used to specify sensor types to emulate.\nSee https://w3c.github.io/sensors/#automation for more information."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -262,6 +283,9 @@ pub struct SensorMetadata {
 }
 impl SensorMetadata {
     pub const IDENTIFIER: &'static str = "Emulation.SensorMetadata";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SensorReadingSingle {
@@ -277,6 +301,9 @@ impl SensorReadingSingle {
 }
 impl SensorReadingSingle {
     pub const IDENTIFIER: &'static str = "Emulation.SensorReadingSingle";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SensorReadingXyz {
@@ -298,6 +325,9 @@ impl SensorReadingXyz {
 }
 impl SensorReadingXyz {
     pub const IDENTIFIER: &'static str = "Emulation.SensorReadingXYZ";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SensorReadingQuaternion {
@@ -322,6 +352,9 @@ impl SensorReadingQuaternion {
 }
 impl SensorReadingQuaternion {
     pub const IDENTIFIER: &'static str = "Emulation.SensorReadingQuaternion";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SensorReading {
@@ -340,6 +373,9 @@ pub struct SensorReading {
 }
 impl SensorReading {
     pub const IDENTIFIER: &'static str = "Emulation.SensorReading";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum PressureSource {
@@ -366,6 +402,9 @@ pub struct PressureMetadata {
 }
 impl PressureMetadata {
     pub const IDENTIFIER: &'static str = "Emulation.PressureMetadata";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct WorkAreaInsets {
@@ -392,6 +431,9 @@ pub struct WorkAreaInsets {
 }
 impl WorkAreaInsets {
     pub const IDENTIFIER: &'static str = "Emulation.WorkAreaInsets";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
 pub struct ScreenId(String);
@@ -425,6 +467,9 @@ impl std::borrow::Borrow<str> for ScreenId {
 }
 impl ScreenId {
     pub const IDENTIFIER: &'static str = "Emulation.ScreenId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Screen information similar to the one returned by window.getScreenDetails() method,\nsee https://w3c.github.io/window-management/#screendetailed.\n[ScreenInfo](https://chromedevtools.github.io/devtools-protocol/tot/Emulation/#type-ScreenInfo)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -480,6 +525,9 @@ pub struct ScreenInfo {
 }
 impl ScreenInfo {
     pub const IDENTIFIER: &'static str = "Emulation.ScreenInfo";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Enum of image types that can be disabled."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]

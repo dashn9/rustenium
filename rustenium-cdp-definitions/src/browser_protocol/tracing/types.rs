@@ -12,6 +12,9 @@ impl MemoryDumpConfig {
 }
 impl MemoryDumpConfig {
     pub const IDENTIFIER: &'static str = "Tracing.MemoryDumpConfig";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct TraceConfig {
@@ -75,6 +78,9 @@ pub enum TraceConfigRecordMode {
 }
 impl TraceConfig {
     pub const IDENTIFIER: &'static str = "Tracing.TraceConfig";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Data format of a trace. Can be either the legacy JSON format or the\nprotocol buffer format. Note that the JSON format will be deprecated soon."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]

@@ -15,6 +15,9 @@ pub struct GetInfo {
 }
 impl GetInfo {
     pub const IDENTIFIER: &'static str = "SystemInfo.getInfo";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetInfo {
     type Result = super::results::GetInfoResult;
@@ -50,6 +53,9 @@ pub struct GetFeatureState {
 }
 impl GetFeatureState {
     pub const IDENTIFIER: &'static str = "SystemInfo.getFeatureState";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetFeatureState {
     type Result = super::results::GetFeatureStateResult;
@@ -70,6 +76,9 @@ pub struct GetProcessInfo {
 }
 impl GetProcessInfo {
     pub const IDENTIFIER: &'static str = "SystemInfo.getProcessInfo";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetProcessInfo {
     type Result = super::results::GetProcessInfoResult;

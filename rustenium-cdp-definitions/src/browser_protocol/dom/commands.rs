@@ -26,6 +26,9 @@ pub struct CollectClassNamesFromSubtree {
 }
 impl CollectClassNamesFromSubtree {
     pub const IDENTIFIER: &'static str = "DOM.collectClassNamesFromSubtree";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for CollectClassNamesFromSubtree {
     type Result = super::results::CollectClassNamesFromSubtreeResult;
@@ -70,6 +73,9 @@ pub struct CopyTo {
 }
 impl CopyTo {
     pub const IDENTIFIER: &'static str = "DOM.copyTo";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for CopyTo {
     type Result = super::results::CopyToResult;
@@ -116,6 +122,9 @@ pub struct DescribeNode {
 }
 impl DescribeNode {
     pub const IDENTIFIER: &'static str = "DOM.describeNode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for DescribeNode {
     type Result = super::results::DescribeNodeResult;
@@ -157,6 +166,9 @@ pub struct ScrollIntoViewIfNeeded {
 }
 impl ScrollIntoViewIfNeeded {
     pub const IDENTIFIER: &'static str = "DOM.scrollIntoViewIfNeeded";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ScrollIntoViewIfNeeded {
     type Result = super::results::ScrollIntoViewIfNeededResult;
@@ -177,6 +189,9 @@ pub struct Disable {
 }
 impl Disable {
     pub const IDENTIFIER: &'static str = "DOM.disable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -213,6 +228,9 @@ pub struct DiscardSearchResults {
 }
 impl DiscardSearchResults {
     pub const IDENTIFIER: &'static str = "DOM.discardSearchResults";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for DiscardSearchResults {
     type Result = super::results::DiscardSearchResultsResult;
@@ -249,6 +267,9 @@ pub struct Enable {
 }
 impl Enable {
     pub const IDENTIFIER: &'static str = "DOM.enable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -285,6 +306,9 @@ pub struct Focus {
 }
 impl Focus {
     pub const IDENTIFIER: &'static str = "DOM.focus";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Focus {
     type Result = super::results::FocusResult;
@@ -316,6 +340,9 @@ pub struct GetAttributes {
 }
 impl GetAttributes {
     pub const IDENTIFIER: &'static str = "DOM.getAttributes";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetAttributes {
     type Result = super::results::GetAttributesResult;
@@ -352,6 +379,9 @@ pub struct GetBoxModel {
 }
 impl GetBoxModel {
     pub const IDENTIFIER: &'static str = "DOM.getBoxModel";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetBoxModel {
     type Result = super::results::GetBoxModelResult;
@@ -388,6 +418,9 @@ pub struct GetContentQuads {
 }
 impl GetContentQuads {
     pub const IDENTIFIER: &'static str = "DOM.getContentQuads";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetContentQuads {
     type Result = super::results::GetContentQuadsResult;
@@ -419,6 +452,9 @@ pub struct GetDocument {
 }
 impl GetDocument {
     pub const IDENTIFIER: &'static str = "DOM.getDocument";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetDocument {
     type Result = super::results::GetDocumentResult;
@@ -464,6 +500,9 @@ pub struct GetNodesForSubtreeByStyle {
 }
 impl GetNodesForSubtreeByStyle {
     pub const IDENTIFIER: &'static str = "DOM.getNodesForSubtreeByStyle";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetNodesForSubtreeByStyle {
     type Result = super::results::GetNodesForSubtreeByStyleResult;
@@ -511,6 +550,9 @@ pub struct GetNodeForLocation {
 }
 impl GetNodeForLocation {
     pub const IDENTIFIER: &'static str = "DOM.getNodeForLocation";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetNodeForLocation {
     type Result = super::results::GetNodeForLocationResult;
@@ -552,6 +594,9 @@ pub struct GetOuterHtml {
 }
 impl GetOuterHtml {
     pub const IDENTIFIER: &'static str = "DOM.getOuterHTML";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetOuterHtml {
     type Result = super::results::GetOuterHtmlResult;
@@ -583,6 +628,9 @@ pub struct GetRelayoutBoundary {
 }
 impl GetRelayoutBoundary {
     pub const IDENTIFIER: &'static str = "DOM.getRelayoutBoundary";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetRelayoutBoundary {
     type Result = super::results::GetRelayoutBoundaryResult;
@@ -626,6 +674,9 @@ pub struct GetSearchResults {
 }
 impl GetSearchResults {
     pub const IDENTIFIER: &'static str = "DOM.getSearchResults";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetSearchResults {
     type Result = super::results::GetSearchResultsResult;
@@ -646,6 +697,9 @@ pub struct HideHighlight {
 }
 impl HideHighlight {
     pub const IDENTIFIER: &'static str = "DOM.hideHighlight";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for HideHighlight {
     type Result = super::results::HideHighlightResult;
@@ -666,6 +720,9 @@ pub struct HighlightNode {
 }
 impl HighlightNode {
     pub const IDENTIFIER: &'static str = "DOM.highlightNode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for HighlightNode {
     type Result = super::results::HighlightNodeResult;
@@ -686,6 +743,9 @@ pub struct HighlightRect {
 }
 impl HighlightRect {
     pub const IDENTIFIER: &'static str = "DOM.highlightRect";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for HighlightRect {
     type Result = super::results::HighlightRectResult;
@@ -706,6 +766,9 @@ pub struct MarkUndoableState {
 }
 impl MarkUndoableState {
     pub const IDENTIFIER: &'static str = "DOM.markUndoableState";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for MarkUndoableState {
     type Result = super::results::MarkUndoableStateResult;
@@ -750,6 +813,9 @@ pub struct MoveTo {
 }
 impl MoveTo {
     pub const IDENTIFIER: &'static str = "DOM.moveTo";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for MoveTo {
     type Result = super::results::MoveToResult;
@@ -792,6 +858,9 @@ pub struct PerformSearch {
 }
 impl PerformSearch {
     pub const IDENTIFIER: &'static str = "DOM.performSearch";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for PerformSearch {
     type Result = super::results::PerformSearchResult;
@@ -826,6 +895,9 @@ pub struct PushNodeByPathToFrontend {
 }
 impl PushNodeByPathToFrontend {
     pub const IDENTIFIER: &'static str = "DOM.pushNodeByPathToFrontend";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for PushNodeByPathToFrontend {
     type Result = super::results::PushNodeByPathToFrontendResult;
@@ -856,6 +928,9 @@ pub struct PushNodesByBackendIdsToFrontend {
 }
 impl PushNodesByBackendIdsToFrontend {
     pub const IDENTIFIER: &'static str = "DOM.pushNodesByBackendIdsToFrontend";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for PushNodesByBackendIdsToFrontend {
     type Result = super::results::PushNodesByBackendIdsToFrontendResult;
@@ -891,6 +966,9 @@ pub struct QuerySelector {
 }
 impl QuerySelector {
     pub const IDENTIFIER: &'static str = "DOM.querySelector";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for QuerySelector {
     type Result = super::results::QuerySelectorResult;
@@ -926,6 +1004,9 @@ pub struct QuerySelectorAll {
 }
 impl QuerySelectorAll {
     pub const IDENTIFIER: &'static str = "DOM.querySelectorAll";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for QuerySelectorAll {
     type Result = super::results::QuerySelectorAllResult;
@@ -946,6 +1027,9 @@ pub struct GetTopLayerElements {
 }
 impl GetTopLayerElements {
     pub const IDENTIFIER: &'static str = "DOM.getTopLayerElements";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetTopLayerElements {
     type Result = super::results::GetTopLayerElementsResult;
@@ -997,6 +1081,9 @@ pub struct GetElementByRelation {
 }
 impl GetElementByRelation {
     pub const IDENTIFIER: &'static str = "DOM.getElementByRelation";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetElementByRelation {
     type Result = super::results::GetElementByRelationResult;
@@ -1017,6 +1104,9 @@ pub struct Redo {
 }
 impl Redo {
     pub const IDENTIFIER: &'static str = "DOM.redo";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Redo {
     type Result = super::results::RedoResult;
@@ -1052,6 +1142,9 @@ pub struct RemoveAttribute {
 }
 impl RemoveAttribute {
     pub const IDENTIFIER: &'static str = "DOM.removeAttribute";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RemoveAttribute {
     type Result = super::results::RemoveAttributeResult;
@@ -1083,6 +1176,9 @@ pub struct RemoveNode {
 }
 impl RemoveNode {
     pub const IDENTIFIER: &'static str = "DOM.removeNode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RemoveNode {
     type Result = super::results::RemoveNodeResult;
@@ -1126,6 +1222,9 @@ pub struct RequestChildNodes {
 }
 impl RequestChildNodes {
     pub const IDENTIFIER: &'static str = "DOM.requestChildNodes";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RequestChildNodes {
     type Result = super::results::RequestChildNodesResult;
@@ -1157,6 +1256,9 @@ pub struct RequestNode {
 }
 impl RequestNode {
     pub const IDENTIFIER: &'static str = "DOM.requestNode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RequestNode {
     type Result = super::results::RequestNodeResult;
@@ -1198,6 +1300,9 @@ pub struct ResolveNode {
 }
 impl ResolveNode {
     pub const IDENTIFIER: &'static str = "DOM.resolveNode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ResolveNode {
     type Result = super::results::ResolveNodeResult;
@@ -1241,6 +1346,9 @@ pub struct SetAttributeValue {
 }
 impl SetAttributeValue {
     pub const IDENTIFIER: &'static str = "DOM.setAttributeValue";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetAttributeValue {
     type Result = super::results::SetAttributeValueResult;
@@ -1282,6 +1390,9 @@ pub struct SetAttributesAsText {
 }
 impl SetAttributesAsText {
     pub const IDENTIFIER: &'static str = "DOM.setAttributesAsText";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetAttributesAsText {
     type Result = super::results::SetAttributesAsTextResult;
@@ -1332,6 +1443,9 @@ pub struct SetFileInputFiles {
 }
 impl SetFileInputFiles {
     pub const IDENTIFIER: &'static str = "DOM.setFileInputFiles";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetFileInputFiles {
     type Result = super::results::SetFileInputFilesResult;
@@ -1363,6 +1477,9 @@ pub struct SetNodeStackTracesEnabled {
 }
 impl SetNodeStackTracesEnabled {
     pub const IDENTIFIER: &'static str = "DOM.setNodeStackTracesEnabled";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetNodeStackTracesEnabled {
     type Result = super::results::SetNodeStackTracesEnabledResult;
@@ -1394,6 +1511,9 @@ pub struct GetNodeStackTraces {
 }
 impl GetNodeStackTraces {
     pub const IDENTIFIER: &'static str = "DOM.getNodeStackTraces";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetNodeStackTraces {
     type Result = super::results::GetNodeStackTracesResult;
@@ -1425,6 +1545,9 @@ pub struct GetFileInfo {
 }
 impl GetFileInfo {
     pub const IDENTIFIER: &'static str = "DOM.getFileInfo";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetFileInfo {
     type Result = super::results::GetFileInfoResult;
@@ -1445,6 +1568,9 @@ pub struct GetDetachedDomNodes {
 }
 impl GetDetachedDomNodes {
     pub const IDENTIFIER: &'static str = "DOM.getDetachedDomNodes";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetDetachedDomNodes {
     type Result = super::results::GetDetachedDomNodesResult;
@@ -1476,6 +1602,9 @@ pub struct SetInspectedNode {
 }
 impl SetInspectedNode {
     pub const IDENTIFIER: &'static str = "DOM.setInspectedNode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetInspectedNode {
     type Result = super::results::SetInspectedNodeResult;
@@ -1511,6 +1640,9 @@ pub struct SetNodeName {
 }
 impl SetNodeName {
     pub const IDENTIFIER: &'static str = "DOM.setNodeName";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetNodeName {
     type Result = super::results::SetNodeNameResult;
@@ -1546,6 +1678,9 @@ pub struct SetNodeValue {
 }
 impl SetNodeValue {
     pub const IDENTIFIER: &'static str = "DOM.setNodeValue";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetNodeValue {
     type Result = super::results::SetNodeValueResult;
@@ -1581,6 +1716,9 @@ pub struct SetOuterHtml {
 }
 impl SetOuterHtml {
     pub const IDENTIFIER: &'static str = "DOM.setOuterHTML";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetOuterHtml {
     type Result = super::results::SetOuterHtmlResult;
@@ -1601,6 +1739,9 @@ pub struct Undo {
 }
 impl Undo {
     pub const IDENTIFIER: &'static str = "DOM.undo";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Undo {
     type Result = super::results::UndoResult;
@@ -1631,6 +1772,9 @@ pub struct GetFrameOwner {
 }
 impl GetFrameOwner {
     pub const IDENTIFIER: &'static str = "DOM.getFrameOwner";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetFrameOwner {
     type Result = super::results::GetFrameOwnerResult;
@@ -1686,6 +1830,9 @@ pub struct GetContainerForNode {
 }
 impl GetContainerForNode {
     pub const IDENTIFIER: &'static str = "DOM.getContainerForNode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetContainerForNode {
     type Result = super::results::GetContainerForNodeResult;
@@ -1717,6 +1864,9 @@ pub struct GetQueryingDescendantsForContainer {
 }
 impl GetQueryingDescendantsForContainer {
     pub const IDENTIFIER: &'static str = "DOM.getQueryingDescendantsForContainer";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetQueryingDescendantsForContainer {
     type Result = super::results::GetQueryingDescendantsForContainerResult;
@@ -1754,6 +1904,9 @@ pub struct GetAnchorElement {
 }
 impl GetAnchorElement {
     pub const IDENTIFIER: &'static str = "DOM.getAnchorElement";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetAnchorElement {
     type Result = super::results::GetAnchorElementResult;
@@ -1789,6 +1942,9 @@ pub struct ForceShowPopover {
 }
 impl ForceShowPopover {
     pub const IDENTIFIER: &'static str = "DOM.forceShowPopover";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ForceShowPopover {
     type Result = super::results::ForceShowPopoverResult;

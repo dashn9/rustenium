@@ -19,6 +19,9 @@ impl FileHandlerAccept {
 }
 impl FileHandlerAccept {
     pub const IDENTIFIER: &'static str = "PWA.FileHandlerAccept";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FileHandler {
@@ -45,6 +48,9 @@ impl FileHandler {
 }
 impl FileHandler {
     pub const IDENTIFIER: &'static str = "PWA.FileHandler";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "If user prefers opening the app in browser or an app window."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]

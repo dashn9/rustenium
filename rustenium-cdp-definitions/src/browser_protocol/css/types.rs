@@ -41,6 +41,9 @@ impl PseudoElementMatches {
 }
 impl PseudoElementMatches {
     pub const IDENTIFIER: &'static str = "CSS.PseudoElementMatches";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "CSS style coming from animations with the name of the animation.\n[CSSAnimationStyle](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-CSSAnimationStyle)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -64,6 +67,9 @@ impl CssAnimationStyle {
 }
 impl CssAnimationStyle {
     pub const IDENTIFIER: &'static str = "CSS.CSSAnimationStyle";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Inherited CSS rule collection from ancestor node.\n[InheritedStyleEntry](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-InheritedStyleEntry)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -88,6 +94,9 @@ impl InheritedStyleEntry {
 }
 impl InheritedStyleEntry {
     pub const IDENTIFIER: &'static str = "CSS.InheritedStyleEntry";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Inherited CSS style collection for animated styles from ancestor node.\n[InheritedAnimatedStyleEntry](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-InheritedAnimatedStyleEntry)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -105,6 +114,9 @@ pub struct InheritedAnimatedStyleEntry {
 }
 impl InheritedAnimatedStyleEntry {
     pub const IDENTIFIER: &'static str = "CSS.InheritedAnimatedStyleEntry";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Inherited pseudo element matches from pseudos of an ancestor node.\n[InheritedPseudoElementMatches](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-InheritedPseudoElementMatches)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -121,6 +133,9 @@ impl InheritedPseudoElementMatches {
 }
 impl InheritedPseudoElementMatches {
     pub const IDENTIFIER: &'static str = "CSS.InheritedPseudoElementMatches";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Match data for a CSS rule.\n[RuleMatch](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-RuleMatch)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -143,6 +158,9 @@ impl RuleMatch {
 }
 impl RuleMatch {
     pub const IDENTIFIER: &'static str = "CSS.RuleMatch";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Data for a simple selector (these are delimited by commas in a selector list).\n[Value](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-Value)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -177,6 +195,9 @@ impl<T: Into<String>> From<T> for Value {
 }
 impl Value {
     pub const IDENTIFIER: &'static str = "CSS.Value";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Specificity:\nhttps://drafts.csswg.org/selectors/#specificity-rules\n[Specificity](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-Specificity)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -202,6 +223,9 @@ impl Specificity {
 }
 impl Specificity {
     pub const IDENTIFIER: &'static str = "CSS.Specificity";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Selector list data.\n[SelectorList](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-SelectorList)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -224,6 +248,9 @@ impl SelectorList {
 }
 impl SelectorList {
     pub const IDENTIFIER: &'static str = "CSS.SelectorList";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "CSS stylesheet metainformation.\n[CSSStyleSheetHeader](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-CSSStyleSheetHeader)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -293,6 +320,9 @@ pub struct CssStyleSheetHeader {
 }
 impl CssStyleSheetHeader {
     pub const IDENTIFIER: &'static str = "CSS.CSSStyleSheetHeader";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "CSS rule representation.\n[CSSRule](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-CSSRule)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -382,6 +412,9 @@ impl CssRule {
 }
 impl CssRule {
     pub const IDENTIFIER: &'static str = "CSS.CSSRule";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Enum indicating the type of a CSS rule, used to represent the order of a style rule's ancestors.\nThis list only contains rule types that are collected during the ancestor rule collection."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -434,6 +467,9 @@ impl RuleUsage {
 }
 impl RuleUsage {
     pub const IDENTIFIER: &'static str = "CSS.RuleUsage";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Text range within a resource. All numbers are zero-based.\n[SourceRange](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-SourceRange)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -468,6 +504,9 @@ impl SourceRange {
 }
 impl SourceRange {
     pub const IDENTIFIER: &'static str = "CSS.SourceRange";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ShorthandEntry {
@@ -494,6 +533,9 @@ impl ShorthandEntry {
 }
 impl ShorthandEntry {
     pub const IDENTIFIER: &'static str = "CSS.ShorthandEntry";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CssComputedStyleProperty {
@@ -514,6 +556,9 @@ impl CssComputedStyleProperty {
 }
 impl CssComputedStyleProperty {
     pub const IDENTIFIER: &'static str = "CSS.CSSComputedStyleProperty";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ComputedStyleExtraFields {
@@ -530,6 +575,9 @@ impl ComputedStyleExtraFields {
 }
 impl ComputedStyleExtraFields {
     pub const IDENTIFIER: &'static str = "CSS.ComputedStyleExtraFields";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "CSS style representation.\n[CSSStyle](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-CSSStyle)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -571,6 +619,9 @@ impl CssStyle {
 }
 impl CssStyle {
     pub const IDENTIFIER: &'static str = "CSS.CSSStyle";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "CSS property declaration data.\n[CSSProperty](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-CSSProperty)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -634,6 +685,9 @@ impl CssProperty {
 }
 impl CssProperty {
     pub const IDENTIFIER: &'static str = "CSS.CSSProperty";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "CSS media rule descriptor.\n[CSSMedia](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-CSSMedia)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -691,6 +745,9 @@ impl CssMedia {
 }
 impl CssMedia {
     pub const IDENTIFIER: &'static str = "CSS.CSSMedia";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Media query descriptor.\n[MediaQuery](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-MediaQuery)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -713,6 +770,9 @@ impl MediaQuery {
 }
 impl MediaQuery {
     pub const IDENTIFIER: &'static str = "CSS.MediaQuery";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Media query expression descriptor.\n[MediaQueryExpression](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-MediaQueryExpression)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -750,6 +810,9 @@ impl MediaQueryExpression {
 }
 impl MediaQueryExpression {
     pub const IDENTIFIER: &'static str = "CSS.MediaQueryExpression";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "CSS container query rule descriptor.\n[CSSContainerQuery](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-CSSContainerQuery)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -814,6 +877,9 @@ impl<T: Into<String>> From<T> for CssContainerQuery {
 }
 impl CssContainerQuery {
     pub const IDENTIFIER: &'static str = "CSS.CSSContainerQuery";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "CSS Supports at-rule descriptor.\n[CSSSupports](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-CSSSupports)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -847,6 +913,9 @@ impl CssSupports {
 }
 impl CssSupports {
     pub const IDENTIFIER: &'static str = "CSS.CSSSupports";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "CSS Scope at-rule descriptor.\n[CSSScope](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-CSSScope)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -881,6 +950,9 @@ impl<T: Into<String>> From<T> for CssScope {
 }
 impl CssScope {
     pub const IDENTIFIER: &'static str = "CSS.CSSScope";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "CSS Layer at-rule descriptor.\n[CSSLayer](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-CSSLayer)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -915,6 +987,9 @@ impl<T: Into<String>> From<T> for CssLayer {
 }
 impl CssLayer {
     pub const IDENTIFIER: &'static str = "CSS.CSSLayer";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "CSS Starting Style at-rule descriptor.\n[CSSStartingStyle](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-CSSStartingStyle)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -932,6 +1007,9 @@ pub struct CssStartingStyle {
 }
 impl CssStartingStyle {
     pub const IDENTIFIER: &'static str = "CSS.CSSStartingStyle";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "CSS Layer data.\n[CSSLayerData](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-CSSLayerData)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -959,6 +1037,9 @@ impl CssLayerData {
 }
 impl CssLayerData {
     pub const IDENTIFIER: &'static str = "CSS.CSSLayerData";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Information about amount of glyphs that were rendered with given font.\n[PlatformFontUsage](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-PlatformFontUsage)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -993,6 +1074,9 @@ impl PlatformFontUsage {
 }
 impl PlatformFontUsage {
     pub const IDENTIFIER: &'static str = "CSS.PlatformFontUsage";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Information about font variation axes for variable fonts\n[FontVariationAxis](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-FontVariationAxis)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1015,6 +1099,9 @@ pub struct FontVariationAxis {
 }
 impl FontVariationAxis {
     pub const IDENTIFIER: &'static str = "CSS.FontVariationAxis";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Properties of a web font: https://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html#font-descriptions\nand additional information such as platformFontFamily and fontVariationAxes.\n[FontFace](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-FontFace)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1054,6 +1141,9 @@ pub struct FontFace {
 }
 impl FontFace {
     pub const IDENTIFIER: &'static str = "CSS.FontFace";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "CSS try rule representation.\n[CSSTryRule](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-CSSTryRule)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1081,6 +1171,9 @@ impl CssTryRule {
 }
 impl CssTryRule {
     pub const IDENTIFIER: &'static str = "CSS.CSSTryRule";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "CSS @position-try rule representation.\n[CSSPositionTryRule](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-CSSPositionTryRule)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1120,6 +1213,9 @@ impl CssPositionTryRule {
 }
 impl CssPositionTryRule {
     pub const IDENTIFIER: &'static str = "CSS.CSSPositionTryRule";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "CSS keyframes rule representation.\n[CSSKeyframesRule](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-CSSKeyframesRule)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1142,6 +1238,9 @@ impl CssKeyframesRule {
 }
 impl CssKeyframesRule {
     pub const IDENTIFIER: &'static str = "CSS.CSSKeyframesRule";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Representation of a custom property registration through CSS.registerProperty\n[CSSPropertyRegistration](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-CSSPropertyRegistration)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1173,6 +1272,9 @@ impl CssPropertyRegistration {
 }
 impl CssPropertyRegistration {
     pub const IDENTIFIER: &'static str = "CSS.CSSPropertyRegistration";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "CSS generic @rule representation.\n[CSSAtRule](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-CSSAtRule)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1247,6 +1349,9 @@ impl CssAtRule {
 }
 impl CssAtRule {
     pub const IDENTIFIER: &'static str = "CSS.CSSAtRule";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "CSS property at-rule representation.\n[CSSPropertyRule](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-CSSPropertyRule)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1282,6 +1387,9 @@ impl CssPropertyRule {
 }
 impl CssPropertyRule {
     pub const IDENTIFIER: &'static str = "CSS.CSSPropertyRule";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "CSS function argument representation.\n[CSSFunctionParameter](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-CSSFunctionParameter)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1303,6 +1411,9 @@ impl CssFunctionParameter {
 }
 impl CssFunctionParameter {
     pub const IDENTIFIER: &'static str = "CSS.CSSFunctionParameter";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "CSS function conditional block representation.\n[CSSFunctionConditionNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-CSSFunctionConditionNode)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1343,6 +1454,9 @@ impl CssFunctionConditionNode {
 }
 impl CssFunctionConditionNode {
     pub const IDENTIFIER: &'static str = "CSS.CSSFunctionConditionNode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Section of the body of a CSS function rule.\n[CSSFunctionNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-CSSFunctionNode)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -1360,6 +1474,9 @@ pub struct CssFunctionNode {
 }
 impl CssFunctionNode {
     pub const IDENTIFIER: &'static str = "CSS.CSSFunctionNode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "CSS function at-rule representation.\n[CSSFunctionRule](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-CSSFunctionRule)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1402,6 +1519,9 @@ impl CssFunctionRule {
 }
 impl CssFunctionRule {
     pub const IDENTIFIER: &'static str = "CSS.CSSFunctionRule";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "CSS keyframe rule representation.\n[CSSKeyframeRule](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-CSSKeyframeRule)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1437,6 +1557,9 @@ impl CssKeyframeRule {
 }
 impl CssKeyframeRule {
     pub const IDENTIFIER: &'static str = "CSS.CSSKeyframeRule";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "A descriptor of operation to mutate style declaration text.\n[StyleDeclarationEdit](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#type-StyleDeclarationEdit)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1466,5 +1589,8 @@ impl StyleDeclarationEdit {
 }
 impl StyleDeclarationEdit {
     pub const IDENTIFIER: &'static str = "CSS.StyleDeclarationEdit";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (CssTypes { StyleSheetOrigin (StyleSheetOrigin) , PseudoElementMatches (PseudoElementMatches) , CssAnimationStyle (CssAnimationStyle) , InheritedStyleEntry (InheritedStyleEntry) , InheritedAnimatedStyleEntry (InheritedAnimatedStyleEntry) , InheritedPseudoElementMatches (InheritedPseudoElementMatches) , RuleMatch (RuleMatch) , Value (Value) , Specificity (Specificity) , SelectorList (SelectorList) , CssStyleSheetHeader (CssStyleSheetHeader) , CssRule (CssRule) , CssRuleType (CssRuleType) , RuleUsage (RuleUsage) , SourceRange (SourceRange) , ShorthandEntry (ShorthandEntry) , CssComputedStyleProperty (CssComputedStyleProperty) , ComputedStyleExtraFields (ComputedStyleExtraFields) , CssStyle (CssStyle) , CssProperty (CssProperty) , CssMedia (CssMedia) , MediaQuery (MediaQuery) , MediaQueryExpression (MediaQueryExpression) , CssContainerQuery (CssContainerQuery) , CssSupports (CssSupports) , CssScope (CssScope) , CssLayer (CssLayer) , CssStartingStyle (CssStartingStyle) , CssLayerData (CssLayerData) , PlatformFontUsage (PlatformFontUsage) , FontVariationAxis (FontVariationAxis) , FontFace (FontFace) , CssTryRule (CssTryRule) , CssPositionTryRule (CssPositionTryRule) , CssKeyframesRule (CssKeyframesRule) , CssPropertyRegistration (CssPropertyRegistration) , CssAtRule (CssAtRule) , CssPropertyRule (CssPropertyRule) , CssFunctionParameter (CssFunctionParameter) , CssFunctionConditionNode (CssFunctionConditionNode) , CssFunctionNode (CssFunctionNode) , CssFunctionRule (CssFunctionRule) , CssKeyframeRule (CssKeyframeRule) , StyleDeclarationEdit (StyleDeclarationEdit) });

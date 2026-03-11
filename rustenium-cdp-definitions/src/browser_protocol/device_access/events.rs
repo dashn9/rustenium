@@ -21,5 +21,8 @@ pub struct DeviceRequestPrompted {
 }
 impl DeviceRequestPrompted {
     pub const IDENTIFIER: &'static str = "DeviceAccess.deviceRequestPrompted";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (DeviceAccessEvents { DeviceRequestPrompted (DeviceRequestPrompted) });

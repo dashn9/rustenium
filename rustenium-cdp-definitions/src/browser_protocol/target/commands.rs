@@ -25,6 +25,9 @@ pub struct ActivateTarget {
 }
 impl ActivateTarget {
     pub const IDENTIFIER: &'static str = "Target.activateTarget";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ActivateTarget {
     type Result = super::results::ActivateTargetResult;
@@ -61,6 +64,9 @@ pub struct AttachToTarget {
 }
 impl AttachToTarget {
     pub const IDENTIFIER: &'static str = "Target.attachToTarget";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for AttachToTarget {
     type Result = super::results::AttachToTargetResult;
@@ -81,6 +87,9 @@ pub struct AttachToBrowserTarget {
 }
 impl AttachToBrowserTarget {
     pub const IDENTIFIER: &'static str = "Target.attachToBrowserTarget";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for AttachToBrowserTarget {
     type Result = super::results::AttachToBrowserTargetResult;
@@ -111,6 +120,9 @@ pub struct CloseTarget {
 }
 impl CloseTarget {
     pub const IDENTIFIER: &'static str = "Target.closeTarget";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for CloseTarget {
     type Result = super::results::CloseTargetResult;
@@ -153,6 +165,9 @@ pub struct ExposeDevToolsProtocol {
 }
 impl ExposeDevToolsProtocol {
     pub const IDENTIFIER: &'static str = "Target.exposeDevToolsProtocol";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ExposeDevToolsProtocol {
     type Result = super::results::ExposeDevToolsProtocolResult;
@@ -194,6 +209,9 @@ pub struct CreateBrowserContext {
 }
 impl CreateBrowserContext {
     pub const IDENTIFIER: &'static str = "Target.createBrowserContext";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for CreateBrowserContext {
     type Result = super::results::CreateBrowserContextResult;
@@ -214,6 +232,9 @@ pub struct GetBrowserContexts {
 }
 impl GetBrowserContexts {
     pub const IDENTIFIER: &'static str = "Target.getBrowserContexts";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetBrowserContexts {
     type Result = super::results::GetBrowserContextsResult;
@@ -322,6 +343,9 @@ pub struct CreateTarget {
 }
 impl CreateTarget {
     pub const IDENTIFIER: &'static str = "Target.createTarget";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for CreateTarget {
     type Result = super::results::CreateTargetResult;
@@ -348,6 +372,9 @@ pub struct DetachFromTarget {
 }
 impl DetachFromTarget {
     pub const IDENTIFIER: &'static str = "Target.detachFromTarget";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for DetachFromTarget {
     type Result = super::results::DetachFromTargetResult;
@@ -380,6 +407,9 @@ pub struct DisposeBrowserContext {
 }
 impl DisposeBrowserContext {
     pub const IDENTIFIER: &'static str = "Target.disposeBrowserContext";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for DisposeBrowserContext {
     type Result = super::results::DisposeBrowserContextResult;
@@ -405,6 +435,9 @@ pub struct GetTargetInfo {
 }
 impl GetTargetInfo {
     pub const IDENTIFIER: &'static str = "Target.getTargetInfo";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetTargetInfo {
     type Result = super::results::GetTargetInfoResult;
@@ -431,6 +464,9 @@ pub struct GetTargets {
 }
 impl GetTargets {
     pub const IDENTIFIER: &'static str = "Target.getTargets";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetTargets {
     type Result = super::results::GetTargetsResult;
@@ -478,6 +514,9 @@ pub struct SetAutoAttach {
 }
 impl SetAutoAttach {
     pub const IDENTIFIER: &'static str = "Target.setAutoAttach";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetAutoAttach {
     type Result = super::results::SetAutoAttachResult;
@@ -521,6 +560,9 @@ pub struct AutoAttachRelated {
 }
 impl AutoAttachRelated {
     pub const IDENTIFIER: &'static str = "Target.autoAttachRelated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for AutoAttachRelated {
     type Result = super::results::AutoAttachRelatedResult;
@@ -558,6 +600,9 @@ pub struct SetDiscoverTargets {
 }
 impl SetDiscoverTargets {
     pub const IDENTIFIER: &'static str = "Target.setDiscoverTargets";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetDiscoverTargets {
     type Result = super::results::SetDiscoverTargetsResult;
@@ -588,6 +633,9 @@ pub struct SetRemoteLocations {
 }
 impl SetRemoteLocations {
     pub const IDENTIFIER: &'static str = "Target.setRemoteLocations";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetRemoteLocations {
     type Result = super::results::SetRemoteLocationsResult;
@@ -619,6 +667,9 @@ pub struct GetDevToolsTarget {
 }
 impl GetDevToolsTarget {
     pub const IDENTIFIER: &'static str = "Target.getDevToolsTarget";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetDevToolsTarget {
     type Result = super::results::GetDevToolsTargetResult;
@@ -656,6 +707,9 @@ pub struct OpenDevTools {
 }
 impl OpenDevTools {
     pub const IDENTIFIER: &'static str = "Target.openDevTools";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for OpenDevTools {
     type Result = super::results::OpenDevToolsResult;

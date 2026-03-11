@@ -58,6 +58,9 @@ pub struct RequestPaused {
 }
 impl RequestPaused {
     pub const IDENTIFIER: &'static str = "Fetch.requestPaused";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Issued when the domain is enabled with handleAuthRequests set to true.\nThe request is paused until client responds with continueWithAuth.\n[authRequired](https://chromedevtools.github.io/devtools-protocol/tot/Fetch/#event-authRequired)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -91,5 +94,8 @@ pub struct AuthRequired {
 }
 impl AuthRequired {
     pub const IDENTIFIER: &'static str = "Fetch.authRequired";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (FetchEvents { RequestPaused (RequestPaused) , AuthRequired (AuthRequired) });

@@ -49,6 +49,9 @@ pub struct AddPreloadScript {
 impl AddPreloadScript {
     pub const IDENTIFIER: &'static str = "script.addPreloadScript";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for AddPreloadScript {
     type Result = super::results::AddPreloadScriptResult;
@@ -85,6 +88,9 @@ pub struct Disown {
 impl Disown {
     pub const IDENTIFIER: &'static str = "script.disown";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Disown {
     type Result = super::results::DisownResult;
@@ -152,6 +158,9 @@ pub struct CallFunction {
 impl CallFunction {
     pub const IDENTIFIER: &'static str = "script.callFunction";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for CallFunction {
     type Result = super::results::CallFunctionResult;
@@ -209,6 +218,9 @@ pub struct Evaluate {
 impl Evaluate {
     pub const IDENTIFIER: &'static str = "script.evaluate";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Evaluate {
     type Result = super::results::EvaluateResult;
@@ -237,6 +249,9 @@ pub struct GetRealms {
 impl GetRealms {
     pub const IDENTIFIER: &'static str = "script.getRealms";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetRealms {
     type Result = super::results::GetRealmsResult;
@@ -266,6 +281,9 @@ pub struct RemovePreloadScript {
 impl RemovePreloadScript {
     pub const IDENTIFIER: &'static str = "script.removePreloadScript";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RemovePreloadScript {
     type Result = super::results::RemovePreloadScriptResult;

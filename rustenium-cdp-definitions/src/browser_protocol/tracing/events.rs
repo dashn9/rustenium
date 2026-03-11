@@ -29,6 +29,9 @@ pub struct BufferUsage {
 }
 impl BufferUsage {
     pub const IDENTIFIER: &'static str = "Tracing.bufferUsage";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Contains a bucket of collected trace events. When tracing is stopped collected events will be\nsent as a sequence of dataCollected events followed by tracingComplete event.\n[dataCollected](https://chromedevtools.github.io/devtools-protocol/tot/Tracing/#event-dataCollected)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -50,6 +53,9 @@ pub struct DataCollected {
 }
 impl DataCollected {
     pub const IDENTIFIER: &'static str = "Tracing.dataCollected";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Signals that tracing is stopped and there is no trace buffers pending flush, all data were\ndelivered via dataCollected events.\n[tracingComplete](https://chromedevtools.github.io/devtools-protocol/tot/Tracing/#event-tracingComplete)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -86,5 +92,8 @@ pub struct TracingComplete {
 }
 impl TracingComplete {
     pub const IDENTIFIER: &'static str = "Tracing.tracingComplete";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (TracingEvents { BufferUsage (BufferUsage) , DataCollected (DataCollected) , TracingComplete (TracingComplete) });

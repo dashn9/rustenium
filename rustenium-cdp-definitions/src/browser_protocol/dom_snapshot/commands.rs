@@ -15,6 +15,9 @@ pub struct Disable {
 }
 impl Disable {
     pub const IDENTIFIER: &'static str = "DOMSnapshot.disable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -35,6 +38,9 @@ pub struct Enable {
 }
 impl Enable {
     pub const IDENTIFIER: &'static str = "DOMSnapshot.enable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -91,6 +97,9 @@ pub struct CaptureSnapshot {
 }
 impl CaptureSnapshot {
     pub const IDENTIFIER: &'static str = "DOMSnapshot.captureSnapshot";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for CaptureSnapshot {
     type Result = super::results::CaptureSnapshotResult;

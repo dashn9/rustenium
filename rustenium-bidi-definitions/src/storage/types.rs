@@ -27,6 +27,9 @@ impl PartitionKey {
 impl PartitionKey {
     pub const IDENTIFIER: &'static str = "storage.PartitionKey";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CookieFilter {
@@ -91,6 +94,9 @@ impl CookieFilter {
 impl CookieFilter {
     pub const IDENTIFIER: &'static str = "storage.CookieFilter";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BrowsingContextPartitionDescriptor {
@@ -118,6 +124,9 @@ impl BrowsingContextPartitionDescriptor {
 impl BrowsingContextPartitionDescriptor {
     pub const IDENTIFIER: &'static str = "storage.BrowsingContextPartitionDescriptor";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StorageKeyPartitionDescriptor {
@@ -156,6 +165,9 @@ impl StorageKeyPartitionDescriptor {
 impl StorageKeyPartitionDescriptor {
     pub const IDENTIFIER: &'static str = "storage.StorageKeyPartitionDescriptor";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -218,5 +230,8 @@ impl PartialCookie {
 impl PartialCookie {
     pub const IDENTIFIER: &'static str = "storage.PartialCookie";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (StorageType { PartitionKey (PartitionKey) , CookieFilter (CookieFilter) , PartitionDescriptor (PartitionDescriptor) , PartialCookie (PartialCookie) });

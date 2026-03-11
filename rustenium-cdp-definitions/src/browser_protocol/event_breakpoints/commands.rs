@@ -31,6 +31,9 @@ pub struct SetInstrumentationBreakpoint {
 }
 impl SetInstrumentationBreakpoint {
     pub const IDENTIFIER: &'static str = "EventBreakpoints.setInstrumentationBreakpoint";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetInstrumentationBreakpoint {
     type Result = super::results::SetInstrumentationBreakpointResult;
@@ -67,6 +70,9 @@ pub struct RemoveInstrumentationBreakpoint {
 }
 impl RemoveInstrumentationBreakpoint {
     pub const IDENTIFIER: &'static str = "EventBreakpoints.removeInstrumentationBreakpoint";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RemoveInstrumentationBreakpoint {
     type Result = super::results::RemoveInstrumentationBreakpointResult;
@@ -87,6 +93,9 @@ pub struct Disable {
 }
 impl Disable {
     pub const IDENTIFIER: &'static str = "EventBreakpoints.disable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;

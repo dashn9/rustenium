@@ -20,6 +20,9 @@ pub struct RecordingStateChanged {
 }
 impl RecordingStateChanged {
     pub const IDENTIFIER: &'static str = "BackgroundService.recordingStateChanged";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Called with all existing backgroundServiceEvents when enabled, and all new\nevents afterwards if enabled and recording.\n[backgroundServiceEventReceived](https://chromedevtools.github.io/devtools-protocol/tot/BackgroundService/#event-backgroundServiceEventReceived)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -40,5 +43,8 @@ pub struct BackgroundServiceEventReceived {
 }
 impl BackgroundServiceEventReceived {
     pub const IDENTIFIER: &'static str = "BackgroundService.backgroundServiceEventReceived";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (BackgroundServiceEvents { RecordingStateChanged (RecordingStateChanged) , BackgroundServiceEventReceived (BackgroundServiceEventReceived) });

@@ -54,6 +54,9 @@ pub enum AnimationType {
 }
 impl Animation {
     pub const IDENTIFIER: &'static str = "Animation.Animation";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Timeline instance\n[ViewOrScrollTimeline](https://chromedevtools.github.io/devtools-protocol/tot/Animation/#type-ViewOrScrollTimeline)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -95,6 +98,9 @@ impl ViewOrScrollTimeline {
 }
 impl ViewOrScrollTimeline {
     pub const IDENTIFIER: &'static str = "Animation.ViewOrScrollTimeline";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "AnimationEffect instance\n[AnimationEffect](https://chromedevtools.github.io/devtools-protocol/tot/Animation/#type-AnimationEffect)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -138,6 +144,9 @@ pub struct AnimationEffect {
 }
 impl AnimationEffect {
     pub const IDENTIFIER: &'static str = "Animation.AnimationEffect";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Keyframes Rule\n[KeyframesRule](https://chromedevtools.github.io/devtools-protocol/tot/Animation/#type-KeyframesRule)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -162,6 +171,9 @@ impl KeyframesRule {
 }
 impl KeyframesRule {
     pub const IDENTIFIER: &'static str = "Animation.KeyframesRule";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Keyframe Style\n[KeyframeStyle](https://chromedevtools.github.io/devtools-protocol/tot/Animation/#type-KeyframeStyle)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -183,5 +195,8 @@ impl KeyframeStyle {
 }
 impl KeyframeStyle {
     pub const IDENTIFIER: &'static str = "Animation.KeyframeStyle";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (AnimationTypes { Animation (Animation) , ViewOrScrollTimeline (ViewOrScrollTimeline) , AnimationEffect (AnimationEffect) , KeyframesRule (KeyframesRule) , KeyframeStyle (KeyframeStyle) });

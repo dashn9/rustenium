@@ -33,6 +33,9 @@ pub struct GpuDevice {
 }
 impl GpuDevice {
     pub const IDENTIFIER: &'static str = "SystemInfo.GPUDevice";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Describes the width and height dimensions of an entity.\n[Size](https://chromedevtools.github.io/devtools-protocol/tot/SystemInfo/#type-Size)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -54,6 +57,9 @@ impl Size {
 }
 impl Size {
     pub const IDENTIFIER: &'static str = "SystemInfo.Size";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Describes a supported video decoding profile with its associated minimum and\nmaximum resolutions.\n[VideoDecodeAcceleratorCapability](https://chromedevtools.github.io/devtools-protocol/tot/SystemInfo/#type-VideoDecodeAcceleratorCapability)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -83,6 +89,9 @@ impl VideoDecodeAcceleratorCapability {
 }
 impl VideoDecodeAcceleratorCapability {
     pub const IDENTIFIER: &'static str = "SystemInfo.VideoDecodeAcceleratorCapability";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Describes a supported video encoding profile with its associated maximum\nresolution and maximum framerate.\n[VideoEncodeAcceleratorCapability](https://chromedevtools.github.io/devtools-protocol/tot/SystemInfo/#type-VideoEncodeAcceleratorCapability)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -116,6 +125,9 @@ impl VideoEncodeAcceleratorCapability {
 }
 impl VideoEncodeAcceleratorCapability {
     pub const IDENTIFIER: &'static str = "SystemInfo.VideoEncodeAcceleratorCapability";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "YUV subsampling type of the pixels of a given image."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -186,6 +198,9 @@ impl GpuInfo {
 }
 impl GpuInfo {
     pub const IDENTIFIER: &'static str = "SystemInfo.GPUInfo";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Represents process info.\n[ProcessInfo](https://chromedevtools.github.io/devtools-protocol/tot/SystemInfo/#type-ProcessInfo)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -211,5 +226,8 @@ impl ProcessInfo {
 }
 impl ProcessInfo {
     pub const IDENTIFIER: &'static str = "SystemInfo.ProcessInfo";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (SystemInfoTypes { GpuDevice (GpuDevice) , Size (Size) , VideoDecodeAcceleratorCapability (VideoDecodeAcceleratorCapability) , VideoEncodeAcceleratorCapability (VideoEncodeAcceleratorCapability) , SubsamplingFormat (SubsamplingFormat) , ImageType (ImageType) , GpuInfo (GpuInfo) , ProcessInfo (ProcessInfo) });

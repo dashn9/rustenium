@@ -15,6 +15,9 @@ pub struct Disable {
 }
 impl Disable {
     pub const IDENTIFIER: &'static str = "Accessibility.disable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -35,6 +38,9 @@ pub struct Enable {
 }
 impl Enable {
     pub const IDENTIFIER: &'static str = "Accessibility.enable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -76,6 +82,9 @@ pub struct GetPartialAxTree {
 }
 impl GetPartialAxTree {
     pub const IDENTIFIER: &'static str = "Accessibility.getPartialAXTree";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetPartialAxTree {
     type Result = super::results::GetPartialAxTreeResult;
@@ -107,6 +116,9 @@ pub struct GetFullAxTree {
 }
 impl GetFullAxTree {
     pub const IDENTIFIER: &'static str = "Accessibility.getFullAXTree";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetFullAxTree {
     type Result = super::results::GetFullAxTreeResult;
@@ -133,6 +145,9 @@ pub struct GetRootAxNode {
 }
 impl GetRootAxNode {
     pub const IDENTIFIER: &'static str = "Accessibility.getRootAXNode";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetRootAxNode {
     type Result = super::results::GetRootAxNodeResult;
@@ -169,6 +184,9 @@ pub struct GetAxNodeAndAncestors {
 }
 impl GetAxNodeAndAncestors {
     pub const IDENTIFIER: &'static str = "Accessibility.getAXNodeAndAncestors";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetAxNodeAndAncestors {
     type Result = super::results::GetAxNodeAndAncestorsResult;
@@ -205,6 +223,9 @@ pub struct GetChildAxNodes {
 }
 impl GetChildAxNodes {
     pub const IDENTIFIER: &'static str = "Accessibility.getChildAXNodes";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetChildAxNodes {
     type Result = super::results::GetChildAxNodesResult;
@@ -251,6 +272,9 @@ pub struct QueryAxTree {
 }
 impl QueryAxTree {
     pub const IDENTIFIER: &'static str = "Accessibility.queryAXTree";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for QueryAxTree {
     type Result = super::results::QueryAxTreeResult;

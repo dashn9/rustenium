@@ -28,6 +28,31 @@ macro_rules! group_enum {
         )*
     };
 
+    ($name:ident { $( $variant:ident($ty:ty) ),* $(,)? } + identifiable) => {
+        group_enum!($name { $( $variant($ty) ),* });
+
+        impl $name {
+            pub fn identifier(&self) -> &'static str {
+                match self {
+                    $( $name::$variant(inner) => inner.identifier(), )*
+                }
+            }
+        }
+    };
+
+    ($name:ident { $( $variant:ident($ty:ty) ),* $(,)? } + other + identifiable) => {
+        group_enum!($name { $( $variant($ty) ),* } + other);
+
+        impl $name {
+            pub fn identifier(&self) -> &'static str {
+                match self {
+                    $( $name::$variant(inner) => inner.identifier(), )*
+                    $name::Other(_) => "unknown",
+                }
+            }
+        }
+    };
+
     ($name:ident { $( $variant:ident($ty:ty) ),* $(,)? }) => {
         #[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
         #[serde(untagged)]

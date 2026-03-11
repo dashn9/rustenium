@@ -15,6 +15,9 @@ pub struct Enable {
 }
 impl Enable {
     pub const IDENTIFIER: &'static str = "DeviceAccess.enable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -35,6 +38,9 @@ pub struct Disable {
 }
 impl Disable {
     pub const IDENTIFIER: &'static str = "DeviceAccess.disable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -71,6 +77,9 @@ pub struct SelectPrompt {
 }
 impl SelectPrompt {
     pub const IDENTIFIER: &'static str = "DeviceAccess.selectPrompt";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SelectPrompt {
     type Result = super::results::SelectPromptResult;
@@ -99,6 +108,9 @@ pub struct CancelPrompt {
 }
 impl CancelPrompt {
     pub const IDENTIFIER: &'static str = "DeviceAccess.cancelPrompt";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for CancelPrompt {
     type Result = super::results::CancelPromptResult;

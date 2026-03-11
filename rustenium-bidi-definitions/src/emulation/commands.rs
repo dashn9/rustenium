@@ -27,6 +27,9 @@ pub struct SetForcedColorsModeThemeOverride {
 impl SetForcedColorsModeThemeOverride {
     pub const IDENTIFIER: &'static str = "emulation.setForcedColorsModeThemeOverride";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetForcedColorsModeThemeOverride {
     type Result = super::results::SetForcedColorsModeThemeOverrideResult;
@@ -66,6 +69,9 @@ pub struct SetGeolocationOverride {
 impl SetGeolocationOverride {
     pub const IDENTIFIER: &'static str = "emulation.setGeolocationOverride";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetGeolocationOverride {
     type Result = super::results::SetGeolocationOverrideResult;
@@ -98,6 +104,9 @@ pub struct SetLocaleOverride {
 impl SetLocaleOverride {
     pub const IDENTIFIER: &'static str = "emulation.setLocaleOverride";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetLocaleOverride {
     type Result = super::results::SetLocaleOverrideResult;
@@ -130,6 +139,9 @@ pub struct SetNetworkConditions {
 impl SetNetworkConditions {
     pub const IDENTIFIER: &'static str = "emulation.setNetworkConditions";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetNetworkConditions {
     type Result = super::results::SetNetworkConditionsResult;
@@ -162,6 +174,9 @@ pub struct SetScreenOrientationOverride {
 impl SetScreenOrientationOverride {
     pub const IDENTIFIER: &'static str = "emulation.setScreenOrientationOverride";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetScreenOrientationOverride {
     type Result = super::results::SetScreenOrientationOverrideResult;
@@ -194,6 +209,9 @@ pub struct SetUserAgentOverride {
 impl SetUserAgentOverride {
     pub const IDENTIFIER: &'static str = "emulation.setUserAgentOverride";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetUserAgentOverride {
     type Result = super::results::SetUserAgentOverrideResult;
@@ -226,6 +244,9 @@ pub struct SetScriptingEnabled {
 impl SetScriptingEnabled {
     pub const IDENTIFIER: &'static str = "emulation.setScriptingEnabled";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetScriptingEnabled {
     type Result = super::results::SetScriptingEnabledResult;
@@ -258,6 +279,9 @@ pub struct SetTimezoneOverride {
 impl SetTimezoneOverride {
     pub const IDENTIFIER: &'static str = "emulation.setTimezoneOverride";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetTimezoneOverride {
     type Result = super::results::SetTimezoneOverrideResult;

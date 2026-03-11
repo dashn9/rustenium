@@ -20,6 +20,9 @@ pub struct Enable {
 }
 impl Enable {
     pub const IDENTIFIER: &'static str = "Cast.enable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -40,6 +43,9 @@ pub struct Disable {
 }
 impl Disable {
     pub const IDENTIFIER: &'static str = "Cast.disable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -75,6 +81,9 @@ pub struct SetSinkToUse {
 }
 impl SetSinkToUse {
     pub const IDENTIFIER: &'static str = "Cast.setSinkToUse";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetSinkToUse {
     type Result = super::results::SetSinkToUseResult;
@@ -110,6 +119,9 @@ pub struct StartDesktopMirroring {
 }
 impl StartDesktopMirroring {
     pub const IDENTIFIER: &'static str = "Cast.startDesktopMirroring";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for StartDesktopMirroring {
     type Result = super::results::StartDesktopMirroringResult;
@@ -145,6 +157,9 @@ pub struct StartTabMirroring {
 }
 impl StartTabMirroring {
     pub const IDENTIFIER: &'static str = "Cast.startTabMirroring";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for StartTabMirroring {
     type Result = super::results::StartTabMirroringResult;
@@ -180,6 +195,9 @@ pub struct StopCasting {
 }
 impl StopCasting {
     pub const IDENTIFIER: &'static str = "Cast.stopCasting";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for StopCasting {
     type Result = super::results::StopCastingResult;

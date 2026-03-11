@@ -23,6 +23,9 @@ pub struct BindingCalled {
 }
 impl BindingCalled {
     pub const IDENTIFIER: &'static str = "Runtime.bindingCalled";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Issued when console API was called.\n[consoleAPICalled](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-consoleAPICalled)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -104,6 +107,9 @@ pub struct ConsoleApiCalled {
 }
 impl ConsoleApiCalled {
     pub const IDENTIFIER: &'static str = "Runtime.consoleAPICalled";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Issued when unhandled exception was revoked.\n[exceptionRevoked](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-exceptionRevoked)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -128,6 +134,9 @@ pub struct ExceptionRevoked {
 }
 impl ExceptionRevoked {
     pub const IDENTIFIER: &'static str = "Runtime.exceptionRevoked";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Issued when exception was thrown and unhandled.\n[exceptionThrown](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-exceptionThrown)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -151,6 +160,9 @@ pub struct ExceptionThrown {
 }
 impl ExceptionThrown {
     pub const IDENTIFIER: &'static str = "Runtime.exceptionThrown";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Issued when new execution context is created.\n[executionContextCreated](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-executionContextCreated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -172,6 +184,9 @@ pub struct ExecutionContextCreated {
 }
 impl ExecutionContextCreated {
     pub const IDENTIFIER: &'static str = "Runtime.executionContextCreated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Issued when execution context is destroyed.\n[executionContextDestroyed](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-executionContextDestroyed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -193,6 +208,9 @@ pub struct ExecutionContextDestroyed {
 }
 impl ExecutionContextDestroyed {
     pub const IDENTIFIER: &'static str = "Runtime.executionContextDestroyed";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Issued when all executionContexts were cleared in browser\n[executionContextsCleared](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-executionContextsCleared)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -210,6 +228,9 @@ pub struct ExecutionContextsCleared {
 }
 impl ExecutionContextsCleared {
     pub const IDENTIFIER: &'static str = "Runtime.executionContextsCleared";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Issued when object should be inspected (for example, as a result of inspect() command line API\ncall).\n[inspectRequested](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/#event-inspectRequested)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -237,5 +258,8 @@ pub struct InspectRequested {
 }
 impl InspectRequested {
     pub const IDENTIFIER: &'static str = "Runtime.inspectRequested";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (RuntimeEvents { BindingCalled (BindingCalled) , ConsoleApiCalled (ConsoleApiCalled) , ExceptionRevoked (ExceptionRevoked) , ExceptionThrown (ExceptionThrown) , ExecutionContextCreated (ExecutionContextCreated) , ExecutionContextDestroyed (ExecutionContextDestroyed) , ExecutionContextsCleared (ExecutionContextsCleared) , InspectRequested (InspectRequested) });

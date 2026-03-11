@@ -46,6 +46,9 @@ pub struct AddDataCollector {
 impl AddDataCollector {
     pub const IDENTIFIER: &'static str = "network.addDataCollector";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for AddDataCollector {
     type Result = super::results::AddDataCollectorResult;
@@ -86,6 +89,9 @@ pub struct AddIntercept {
 impl AddIntercept {
     pub const IDENTIFIER: &'static str = "network.addIntercept";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for AddIntercept {
     type Result = super::results::AddInterceptResult;
@@ -140,6 +146,9 @@ pub struct ContinueRequest {
 impl ContinueRequest {
     pub const IDENTIFIER: &'static str = "network.continueRequest";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ContinueRequest {
     type Result = super::results::ContinueRequestResult;
@@ -194,6 +203,9 @@ pub struct ContinueResponse {
 impl ContinueResponse {
     pub const IDENTIFIER: &'static str = "network.continueResponse";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ContinueResponse {
     type Result = super::results::ContinueResponseResult;
@@ -234,6 +246,9 @@ pub struct ContinueWithAuth {
 impl ContinueWithAuth {
     pub const IDENTIFIER: &'static str = "network.continueWithAuth";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ContinueWithAuth {
     type Result = super::results::ContinueWithAuthResult;
@@ -273,6 +288,9 @@ pub struct DisownData {
 impl DisownData {
     pub const IDENTIFIER: &'static str = "network.disownData";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for DisownData {
     type Result = super::results::DisownDataResult;
@@ -302,6 +320,9 @@ pub struct FailRequest {
 impl FailRequest {
     pub const IDENTIFIER: &'static str = "network.failRequest";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for FailRequest {
     type Result = super::results::FailRequestResult;
@@ -350,6 +371,9 @@ pub struct GetData {
 impl GetData {
     pub const IDENTIFIER: &'static str = "network.getData";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetData {
     type Result = super::results::GetDataResult;
@@ -404,6 +428,9 @@ pub struct ProvideResponse {
 impl ProvideResponse {
     pub const IDENTIFIER: &'static str = "network.provideResponse";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ProvideResponse {
     type Result = super::results::ProvideResponseResult;
@@ -433,6 +460,9 @@ pub struct RemoveDataCollector {
 impl RemoveDataCollector {
     pub const IDENTIFIER: &'static str = "network.removeDataCollector";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RemoveDataCollector {
     type Result = super::results::RemoveDataCollectorResult;
@@ -462,6 +492,9 @@ pub struct RemoveIntercept {
 impl RemoveIntercept {
     pub const IDENTIFIER: &'static str = "network.removeIntercept";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RemoveIntercept {
     type Result = super::results::RemoveInterceptResult;
@@ -503,6 +536,9 @@ pub struct SetCacheBehavior {
 impl SetCacheBehavior {
     pub const IDENTIFIER: &'static str = "network.setCacheBehavior";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetCacheBehavior {
     type Result = super::results::SetCacheBehaviorResult;
@@ -543,6 +579,9 @@ pub struct SetExtraHeaders {
 impl SetExtraHeaders {
     pub const IDENTIFIER: &'static str = "network.setExtraHeaders";
     pub const DOMAIN_DIRECTION: &'static str = "remote";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetExtraHeaders {
     type Result = super::results::SetExtraHeadersResult;

@@ -23,6 +23,9 @@ pub struct Clear {
 }
 impl Clear {
     pub const IDENTIFIER: &'static str = "DOMStorage.clear";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Clear {
     type Result = super::results::ClearResult;
@@ -43,6 +46,9 @@ pub struct Disable {
 }
 impl Disable {
     pub const IDENTIFIER: &'static str = "DOMStorage.disable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -63,6 +69,9 @@ pub struct Enable {
 }
 impl Enable {
     pub const IDENTIFIER: &'static str = "DOMStorage.enable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -91,6 +100,9 @@ pub struct GetDomStorageItems {
 }
 impl GetDomStorageItems {
     pub const IDENTIFIER: &'static str = "DOMStorage.getDOMStorageItems";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetDomStorageItems {
     type Result = super::results::GetDomStorageItemsResult;
@@ -122,6 +134,9 @@ pub struct RemoveDomStorageItem {
 }
 impl RemoveDomStorageItem {
     pub const IDENTIFIER: &'static str = "DOMStorage.removeDOMStorageItem";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RemoveDomStorageItem {
     type Result = super::results::RemoveDomStorageItemResult;
@@ -160,6 +175,9 @@ pub struct SetDomStorageItem {
 }
 impl SetDomStorageItem {
     pub const IDENTIFIER: &'static str = "DOMStorage.setDOMStorageItem";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetDomStorageItem {
     type Result = super::results::SetDomStorageItemResult;

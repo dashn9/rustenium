@@ -26,6 +26,9 @@ pub struct CompositingReasons {
 }
 impl CompositingReasons {
     pub const IDENTIFIER: &'static str = "LayerTree.compositingReasons";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for CompositingReasons {
     type Result = super::results::CompositingReasonsResult;
@@ -46,6 +49,9 @@ pub struct Disable {
 }
 impl Disable {
     pub const IDENTIFIER: &'static str = "LayerTree.disable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -66,6 +72,9 @@ pub struct Enable {
 }
 impl Enable {
     pub const IDENTIFIER: &'static str = "LayerTree.enable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -96,6 +105,9 @@ pub struct LoadSnapshot {
 }
 impl LoadSnapshot {
     pub const IDENTIFIER: &'static str = "LayerTree.loadSnapshot";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for LoadSnapshot {
     type Result = super::results::LoadSnapshotResult;
@@ -127,6 +139,9 @@ pub struct MakeSnapshot {
 }
 impl MakeSnapshot {
     pub const IDENTIFIER: &'static str = "LayerTree.makeSnapshot";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for MakeSnapshot {
     type Result = super::results::MakeSnapshotResult;
@@ -174,6 +189,9 @@ pub struct ProfileSnapshot {
 }
 impl ProfileSnapshot {
     pub const IDENTIFIER: &'static str = "LayerTree.profileSnapshot";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ProfileSnapshot {
     type Result = super::results::ProfileSnapshotResult;
@@ -205,6 +223,9 @@ pub struct ReleaseSnapshot {
 }
 impl ReleaseSnapshot {
     pub const IDENTIFIER: &'static str = "LayerTree.releaseSnapshot";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ReleaseSnapshot {
     type Result = super::results::ReleaseSnapshotResult;
@@ -254,6 +275,9 @@ pub struct ReplaySnapshot {
 }
 impl ReplaySnapshot {
     pub const IDENTIFIER: &'static str = "LayerTree.replaySnapshot";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ReplaySnapshot {
     type Result = super::results::ReplaySnapshotResult;
@@ -285,6 +309,9 @@ pub struct SnapshotCommandLog {
 }
 impl SnapshotCommandLog {
     pub const IDENTIFIER: &'static str = "LayerTree.snapshotCommandLog";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SnapshotCommandLog {
     type Result = super::results::SnapshotCommandLogResult;

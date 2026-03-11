@@ -21,6 +21,9 @@ pub struct Message {
 impl Message {
     pub const IDENTIFIER: &'static str = "script.message";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RealmCreatedParams {}
@@ -37,6 +40,9 @@ pub struct RealmCreated {
 impl RealmCreated {
     pub const IDENTIFIER: &'static str = "script.realmCreated";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RealmDestroyedParams {
@@ -56,5 +62,8 @@ pub struct RealmDestroyed {
 impl RealmDestroyed {
     pub const IDENTIFIER: &'static str = "script.realmDestroyed";
     pub const DOMAIN_DIRECTION: &'static str = "local";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (ScriptEvent { Message (Message) , RealmCreated (RealmCreated) , RealmDestroyed (RealmDestroyed) });

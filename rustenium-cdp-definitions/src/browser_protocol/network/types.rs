@@ -74,6 +74,9 @@ impl std::borrow::Borrow<str> for LoaderId {
 }
 impl LoaderId {
     pub const IDENTIFIER: &'static str = "Network.LoaderId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Unique network request identifier.\nNote that this does not identify individual HTTP requests that are part of\na network request.\n[RequestId](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-RequestId)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
@@ -108,6 +111,9 @@ impl std::borrow::Borrow<str> for RequestId {
 }
 impl RequestId {
     pub const IDENTIFIER: &'static str = "Network.RequestId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Unique intercepted request identifier.\n[InterceptionId](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-InterceptionId)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
@@ -142,6 +148,9 @@ impl std::borrow::Borrow<str> for InterceptionId {
 }
 impl InterceptionId {
     pub const IDENTIFIER: &'static str = "Network.InterceptionId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Network level fetch failure reason."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -188,6 +197,9 @@ impl TimeSinceEpoch {
 }
 impl TimeSinceEpoch {
     pub const IDENTIFIER: &'static str = "Network.TimeSinceEpoch";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Monotonically increasing time in seconds since an arbitrary point in the past.\n[MonotonicTime](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-MonotonicTime)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -202,6 +214,9 @@ impl MonotonicTime {
 }
 impl MonotonicTime {
     pub const IDENTIFIER: &'static str = "Network.MonotonicTime";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Request / response headers as keys / values of JSON object.\n[Headers](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-Headers)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -216,6 +231,9 @@ impl Headers {
 }
 impl Headers {
     pub const IDENTIFIER: &'static str = "Network.Headers";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "The underlying connection technology that the browser is supposedly using."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -342,6 +360,9 @@ pub struct ResourceTiming {
 }
 impl ResourceTiming {
     pub const IDENTIFIER: &'static str = "Network.ResourceTiming";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Loading priority of a resource request."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -381,6 +402,9 @@ pub struct PostDataEntry {
 }
 impl PostDataEntry {
     pub const IDENTIFIER: &'static str = "Network.PostDataEntry";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "HTTP request data.\n[Request](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-Request)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -463,6 +487,9 @@ pub enum RequestReferrerPolicy {
 }
 impl Request {
     pub const IDENTIFIER: &'static str = "Network.Request";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Details of a signed certificate timestamp (SCT).\n[SignedCertificateTimestamp](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-SignedCertificateTimestamp)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -494,6 +521,9 @@ pub struct SignedCertificateTimestamp {
 }
 impl SignedCertificateTimestamp {
     pub const IDENTIFIER: &'static str = "Network.SignedCertificateTimestamp";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Security details about a request.\n[SecurityDetails](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-SecurityDetails)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -554,6 +584,9 @@ pub struct SecurityDetails {
 }
 impl SecurityDetails {
     pub const IDENTIFIER: &'static str = "Network.SecurityDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Whether the request complied with Certificate Transparency policy."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -683,6 +716,9 @@ impl CorsErrorStatus {
 }
 impl CorsErrorStatus {
     pub const IDENTIFIER: &'static str = "Network.CorsErrorStatus";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Source of serviceworker response."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -732,6 +768,9 @@ impl TrustTokenParams {
 }
 impl TrustTokenParams {
     pub const IDENTIFIER: &'static str = "Network.TrustTokenParams";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum TrustTokenOperationType {
@@ -807,6 +846,9 @@ pub struct ServiceWorkerRouterInfo {
 }
 impl ServiceWorkerRouterInfo {
     pub const IDENTIFIER: &'static str = "Network.ServiceWorkerRouterInfo";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "HTTP response data.\n[Response](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-Response)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -919,6 +961,9 @@ pub struct Response {
 }
 impl Response {
     pub const IDENTIFIER: &'static str = "Network.Response";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "WebSocket request data.\n[WebSocketRequest](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-WebSocketRequest)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -936,6 +981,9 @@ impl WebSocketRequest {
 }
 impl WebSocketRequest {
     pub const IDENTIFIER: &'static str = "Network.WebSocketRequest";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "WebSocket response data.\n[WebSocketResponse](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-WebSocketResponse)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -983,6 +1031,9 @@ impl WebSocketResponse {
 }
 impl WebSocketResponse {
     pub const IDENTIFIER: &'static str = "Network.WebSocketResponse";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "WebSocket message data. This represents an entire WebSocket message, not just a fragmented frame as the name suggests.\n[WebSocketFrame](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-WebSocketFrame)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1012,6 +1063,9 @@ impl WebSocketFrame {
 }
 impl WebSocketFrame {
     pub const IDENTIFIER: &'static str = "Network.WebSocketFrame";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Information about the cached resource.\n[CachedResource](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-CachedResource)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1047,6 +1101,9 @@ impl CachedResource {
 }
 impl CachedResource {
     pub const IDENTIFIER: &'static str = "Network.CachedResource";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Information about the request initiator.\n[Initiator](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-Initiator)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1112,6 +1169,9 @@ impl Initiator {
 }
 impl Initiator {
     pub const IDENTIFIER: &'static str = "Network.Initiator";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "cookiePartitionKey object\nThe representation of the components of the key that are created by the cookiePartitionKey class contained in net/cookies/cookie_partition_key.h.\n[CookiePartitionKey](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-CookiePartitionKey)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1136,6 +1196,9 @@ impl CookiePartitionKey {
 }
 impl CookiePartitionKey {
     pub const IDENTIFIER: &'static str = "Network.CookiePartitionKey";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Cookie object\n[Cookie](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-Cookie)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1194,6 +1257,9 @@ pub struct Cookie {
 }
 impl Cookie {
     pub const IDENTIFIER: &'static str = "Network.Cookie";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Types of reasons why a cookie may not be stored from a response."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -1384,6 +1450,9 @@ impl BlockedSetCookieWithReason {
 }
 impl BlockedSetCookieWithReason {
     pub const IDENTIFIER: &'static str = "Network.BlockedSetCookieWithReason";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "A cookie should have been blocked by 3PCD but is exempted and stored from a response with the\ncorresponding reason. A cookie could only have at most one exemption reason.\n[ExemptedSetCookieWithReason](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-ExemptedSetCookieWithReason)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1413,6 +1482,9 @@ impl ExemptedSetCookieWithReason {
 }
 impl ExemptedSetCookieWithReason {
     pub const IDENTIFIER: &'static str = "Network.ExemptedSetCookieWithReason";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "A cookie associated with the request which may or may not be sent with it.\nIncludes the cookies itself and reasons for blocking or exemption.\n[AssociatedCookie](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-AssociatedCookie)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1441,6 +1513,9 @@ impl AssociatedCookie {
 }
 impl AssociatedCookie {
     pub const IDENTIFIER: &'static str = "Network.AssociatedCookie";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Cookie parameter object\n[CookieParam](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-CookieParam)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1528,6 +1603,9 @@ impl CookieParam {
 }
 impl CookieParam {
     pub const IDENTIFIER: &'static str = "Network.CookieParam";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Authorization challenge for HTTP status code 401 or 407.\n[AuthChallenge](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-AuthChallenge)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1571,6 +1649,9 @@ impl AuthChallenge {
 }
 impl AuthChallenge {
     pub const IDENTIFIER: &'static str = "Network.AuthChallenge";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Response to an AuthChallenge.\n[AuthChallengeResponse](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-AuthChallengeResponse)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1610,6 +1691,9 @@ impl AuthChallengeResponse {
 }
 impl AuthChallengeResponse {
     pub const IDENTIFIER: &'static str = "Network.AuthChallengeResponse";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Stages of the interception to begin intercepting. Request will intercept before the request is\nsent. Response will intercept after the response is received."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -1640,6 +1724,9 @@ pub struct RequestPattern {
 }
 impl RequestPattern {
     pub const IDENTIFIER: &'static str = "Network.RequestPattern";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Information about a signed exchange signature.\nhttps://wicg.github.io/webpackage/draft-yasskin-httpbis-origin-signed-exchanges-impl.html#rfc.section.3.1\n[SignedExchangeSignature](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-SignedExchangeSignature)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1680,6 +1767,9 @@ pub struct SignedExchangeSignature {
 }
 impl SignedExchangeSignature {
     pub const IDENTIFIER: &'static str = "Network.SignedExchangeSignature";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Information about a signed exchange header.\nhttps://wicg.github.io/webpackage/draft-yasskin-httpbis-origin-signed-exchanges-impl.html#cbor-representation\n[SignedExchangeHeader](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-SignedExchangeHeader)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1703,6 +1793,9 @@ pub struct SignedExchangeHeader {
 }
 impl SignedExchangeHeader {
     pub const IDENTIFIER: &'static str = "Network.SignedExchangeHeader";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Field type for a signed exchange related error."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -1753,6 +1846,9 @@ impl<T: Into<String>> From<T> for SignedExchangeError {
 }
 impl SignedExchangeError {
     pub const IDENTIFIER: &'static str = "Network.SignedExchangeError";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Information about a signed exchange response.\n[SignedExchangeInfo](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-SignedExchangeInfo)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1792,6 +1888,9 @@ impl SignedExchangeInfo {
 }
 impl SignedExchangeInfo {
     pub const IDENTIFIER: &'static str = "Network.SignedExchangeInfo";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "List of content encodings supported by the backend."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -1861,6 +1960,9 @@ impl NetworkConditions {
 }
 impl NetworkConditions {
     pub const IDENTIFIER: &'static str = "Network.NetworkConditions";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BlockPattern {
@@ -1881,6 +1983,9 @@ impl BlockPattern {
 }
 impl BlockPattern {
     pub const IDENTIFIER: &'static str = "Network.BlockPattern";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum DirectSocketDnsQueryType {
@@ -1927,6 +2032,9 @@ impl DirectTcpSocketOptions {
 }
 impl DirectTcpSocketOptions {
     pub const IDENTIFIER: &'static str = "Network.DirectTCPSocketOptions";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct DirectUdpSocketOptions {
@@ -1978,6 +2086,9 @@ pub struct DirectUdpSocketOptions {
 }
 impl DirectUdpSocketOptions {
     pub const IDENTIFIER: &'static str = "Network.DirectUDPSocketOptions";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DirectUdpMessage {
@@ -2005,6 +2116,9 @@ impl DirectUdpMessage {
 }
 impl DirectUdpMessage {
     pub const IDENTIFIER: &'static str = "Network.DirectUDPMessage";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum LocalNetworkAccessRequestPolicy {
@@ -2045,6 +2159,9 @@ impl ConnectTiming {
 }
 impl ConnectTiming {
     pub const IDENTIFIER: &'static str = "Network.ConnectTiming";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClientSecurityState {
@@ -2070,6 +2187,9 @@ impl ClientSecurityState {
 }
 impl ClientSecurityState {
     pub const IDENTIFIER: &'static str = "Network.ClientSecurityState";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum CrossOriginOpenerPolicyValue {
@@ -2118,6 +2238,9 @@ impl CrossOriginOpenerPolicyStatus {
 }
 impl CrossOriginOpenerPolicyStatus {
     pub const IDENTIFIER: &'static str = "Network.CrossOriginOpenerPolicyStatus";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum CrossOriginEmbedderPolicyValue {
@@ -2158,6 +2281,9 @@ impl CrossOriginEmbedderPolicyStatus {
 }
 impl CrossOriginEmbedderPolicyStatus {
     pub const IDENTIFIER: &'static str = "Network.CrossOriginEmbedderPolicyStatus";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum ContentSecurityPolicySource {
@@ -2190,6 +2316,9 @@ impl ContentSecurityPolicyStatus {
 }
 impl ContentSecurityPolicyStatus {
     pub const IDENTIFIER: &'static str = "Network.ContentSecurityPolicyStatus";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SecurityIsolationStatus {
@@ -2208,6 +2337,9 @@ pub struct SecurityIsolationStatus {
 }
 impl SecurityIsolationStatus {
     pub const IDENTIFIER: &'static str = "Network.SecurityIsolationStatus";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "The status of a Reporting API report."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -2257,6 +2389,9 @@ impl std::borrow::Borrow<str> for ReportId {
 }
 impl ReportId {
     pub const IDENTIFIER: &'static str = "Network.ReportId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "An object representing a report generated by the Reporting API.\n[ReportingApiReport](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-ReportingApiReport)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -2288,6 +2423,9 @@ pub struct ReportingApiReport {
 }
 impl ReportingApiReport {
     pub const IDENTIFIER: &'static str = "Network.ReportingApiReport";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ReportingApiEndpoint {
@@ -2308,6 +2446,9 @@ impl ReportingApiEndpoint {
 }
 impl ReportingApiEndpoint {
     pub const IDENTIFIER: &'static str = "Network.ReportingApiEndpoint";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Unique identifier for a device bound session.\n[DeviceBoundSessionKey](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-DeviceBoundSessionKey)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -2329,6 +2470,9 @@ impl DeviceBoundSessionKey {
 }
 impl DeviceBoundSessionKey {
     pub const IDENTIFIER: &'static str = "Network.DeviceBoundSessionKey";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "How a device bound session was used during a request.\n[DeviceBoundSessionWithUsage](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-DeviceBoundSessionWithUsage)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -2369,6 +2513,9 @@ impl DeviceBoundSessionWithUsage {
 }
 impl DeviceBoundSessionWithUsage {
     pub const IDENTIFIER: &'static str = "Network.DeviceBoundSessionWithUsage";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "A device bound session's cookie craving.\n[DeviceBoundSessionCookieCraving](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-DeviceBoundSessionCookieCraving)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -2396,6 +2543,9 @@ pub struct DeviceBoundSessionCookieCraving {
 }
 impl DeviceBoundSessionCookieCraving {
     pub const IDENTIFIER: &'static str = "Network.DeviceBoundSessionCookieCraving";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "A device bound session's inclusion URL rule.\n[DeviceBoundSessionUrlRule](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-DeviceBoundSessionUrlRule)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -2433,6 +2583,9 @@ impl DeviceBoundSessionUrlRule {
 }
 impl DeviceBoundSessionUrlRule {
     pub const IDENTIFIER: &'static str = "Network.DeviceBoundSessionUrlRule";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "A device bound session's inclusion rules.\n[DeviceBoundSessionInclusionRules](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-DeviceBoundSessionInclusionRules)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -2463,6 +2616,9 @@ impl DeviceBoundSessionInclusionRules {
 }
 impl DeviceBoundSessionInclusionRules {
     pub const IDENTIFIER: &'static str = "Network.DeviceBoundSessionInclusionRules";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "A device bound session.\n[DeviceBoundSession](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-DeviceBoundSession)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -2495,6 +2651,9 @@ pub struct DeviceBoundSession {
 }
 impl DeviceBoundSession {
     pub const IDENTIFIER: &'static str = "Network.DeviceBoundSession";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "A unique identifier for a device bound session event.\n[DeviceBoundSessionEventId](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-DeviceBoundSessionEventId)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
@@ -2529,6 +2688,9 @@ impl std::borrow::Borrow<str> for DeviceBoundSessionEventId {
 }
 impl DeviceBoundSessionEventId {
     pub const IDENTIFIER: &'static str = "Network.DeviceBoundSessionEventId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "A fetch result for a device bound session creation or refresh."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -2709,6 +2871,9 @@ impl<T: Into<String>> From<T> for DeviceBoundSessionFailedRequest {
 }
 impl DeviceBoundSessionFailedRequest {
     pub const IDENTIFIER: &'static str = "Network.DeviceBoundSessionFailedRequest";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Session event details specific to creation.\n[CreationEventDetails](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-CreationEventDetails)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -2738,6 +2903,9 @@ impl CreationEventDetails {
 }
 impl CreationEventDetails {
     pub const IDENTIFIER: &'static str = "Network.CreationEventDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Session event details specific to refresh.\n[RefreshEventDetails](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-RefreshEventDetails)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -2798,6 +2966,9 @@ impl RefreshEventDetails {
 }
 impl RefreshEventDetails {
     pub const IDENTIFIER: &'static str = "Network.RefreshEventDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Session event details specific to termination.\n[TerminationEventDetails](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-TerminationEventDetails)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -2835,6 +3006,9 @@ impl TerminationEventDetails {
 }
 impl TerminationEventDetails {
     pub const IDENTIFIER: &'static str = "Network.TerminationEventDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Session event details specific to challenges.\n[ChallengeEventDetails](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-ChallengeEventDetails)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -2871,6 +3045,9 @@ impl ChallengeEventDetails {
 }
 impl ChallengeEventDetails {
     pub const IDENTIFIER: &'static str = "Network.ChallengeEventDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "An object providing the result of a network resource load.\n[LoadNetworkResourcePageResult](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-LoadNetworkResourcePageResult)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -2915,6 +3092,9 @@ impl LoadNetworkResourcePageResult {
 }
 impl LoadNetworkResourcePageResult {
     pub const IDENTIFIER: &'static str = "Network.LoadNetworkResourcePageResult";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "An options object that may be extended later to better support CORS,\nCORB and streaming.\n[LoadNetworkResourceOptions](https://chromedevtools.github.io/devtools-protocol/tot/Network/#type-LoadNetworkResourceOptions)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -2934,5 +3114,8 @@ impl LoadNetworkResourceOptions {
 }
 impl LoadNetworkResourceOptions {
     pub const IDENTIFIER: &'static str = "Network.LoadNetworkResourceOptions";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (NetworkTypes { ResourceType (ResourceType) , LoaderId (LoaderId) , RequestId (RequestId) , InterceptionId (InterceptionId) , ErrorReason (ErrorReason) , TimeSinceEpoch (TimeSinceEpoch) , MonotonicTime (MonotonicTime) , Headers (Headers) , ConnectionType (ConnectionType) , CookieSameSite (CookieSameSite) , CookiePriority (CookiePriority) , CookieSourceScheme (CookieSourceScheme) , ResourceTiming (ResourceTiming) , ResourcePriority (ResourcePriority) , RenderBlockingBehavior (RenderBlockingBehavior) , PostDataEntry (PostDataEntry) , Request (Request) , SignedCertificateTimestamp (SignedCertificateTimestamp) , SecurityDetails (SecurityDetails) , CertificateTransparencyCompliance (CertificateTransparencyCompliance) , BlockedReason (BlockedReason) , CorsError (CorsError) , CorsErrorStatus (CorsErrorStatus) , ServiceWorkerResponseSource (ServiceWorkerResponseSource) , TrustTokenParams (TrustTokenParams) , TrustTokenOperationType (TrustTokenOperationType) , AlternateProtocolUsage (AlternateProtocolUsage) , ServiceWorkerRouterSource (ServiceWorkerRouterSource) , ServiceWorkerRouterInfo (ServiceWorkerRouterInfo) , Response (Response) , WebSocketRequest (WebSocketRequest) , WebSocketResponse (WebSocketResponse) , WebSocketFrame (WebSocketFrame) , CachedResource (CachedResource) , Initiator (Initiator) , CookiePartitionKey (CookiePartitionKey) , Cookie (Cookie) , SetCookieBlockedReason (SetCookieBlockedReason) , CookieBlockedReason (CookieBlockedReason) , CookieExemptionReason (CookieExemptionReason) , BlockedSetCookieWithReason (BlockedSetCookieWithReason) , ExemptedSetCookieWithReason (ExemptedSetCookieWithReason) , AssociatedCookie (AssociatedCookie) , CookieParam (CookieParam) , AuthChallenge (AuthChallenge) , AuthChallengeResponse (AuthChallengeResponse) , InterceptionStage (InterceptionStage) , RequestPattern (RequestPattern) , SignedExchangeSignature (SignedExchangeSignature) , SignedExchangeHeader (SignedExchangeHeader) , SignedExchangeErrorField (SignedExchangeErrorField) , SignedExchangeError (SignedExchangeError) , SignedExchangeInfo (SignedExchangeInfo) , ContentEncoding (ContentEncoding) , NetworkConditions (NetworkConditions) , BlockPattern (BlockPattern) , DirectSocketDnsQueryType (DirectSocketDnsQueryType) , DirectTcpSocketOptions (DirectTcpSocketOptions) , DirectUdpSocketOptions (DirectUdpSocketOptions) , DirectUdpMessage (DirectUdpMessage) , LocalNetworkAccessRequestPolicy (LocalNetworkAccessRequestPolicy) , IpAddressSpace (IpAddressSpace) , ConnectTiming (ConnectTiming) , ClientSecurityState (ClientSecurityState) , CrossOriginOpenerPolicyValue (CrossOriginOpenerPolicyValue) , CrossOriginOpenerPolicyStatus (CrossOriginOpenerPolicyStatus) , CrossOriginEmbedderPolicyValue (CrossOriginEmbedderPolicyValue) , CrossOriginEmbedderPolicyStatus (CrossOriginEmbedderPolicyStatus) , ContentSecurityPolicySource (ContentSecurityPolicySource) , ContentSecurityPolicyStatus (ContentSecurityPolicyStatus) , SecurityIsolationStatus (SecurityIsolationStatus) , ReportStatus (ReportStatus) , ReportId (ReportId) , ReportingApiReport (ReportingApiReport) , ReportingApiEndpoint (ReportingApiEndpoint) , DeviceBoundSessionKey (DeviceBoundSessionKey) , DeviceBoundSessionWithUsage (DeviceBoundSessionWithUsage) , DeviceBoundSessionCookieCraving (DeviceBoundSessionCookieCraving) , DeviceBoundSessionUrlRule (DeviceBoundSessionUrlRule) , DeviceBoundSessionInclusionRules (DeviceBoundSessionInclusionRules) , DeviceBoundSession (DeviceBoundSession) , DeviceBoundSessionEventId (DeviceBoundSessionEventId) , DeviceBoundSessionFetchResult (DeviceBoundSessionFetchResult) , DeviceBoundSessionFailedRequest (DeviceBoundSessionFailedRequest) , CreationEventDetails (CreationEventDetails) , RefreshEventDetails (RefreshEventDetails) , TerminationEventDetails (TerminationEventDetails) , ChallengeEventDetails (ChallengeEventDetails) , LoadNetworkResourcePageResult (LoadNetworkResourcePageResult) , LoadNetworkResourceOptions (LoadNetworkResourceOptions) });

@@ -38,6 +38,9 @@ pub struct AwaitPromise {
 }
 impl AwaitPromise {
     pub const IDENTIFIER: &'static str = "Runtime.awaitPromise";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for AwaitPromise {
     type Result = super::results::AwaitPromiseResult;
@@ -146,6 +149,9 @@ pub struct CallFunctionOn {
 }
 impl CallFunctionOn {
     pub const IDENTIFIER: &'static str = "Runtime.callFunctionOn";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for CallFunctionOn {
     type Result = super::results::CallFunctionOnResult;
@@ -195,6 +201,9 @@ pub struct CompileScript {
 }
 impl CompileScript {
     pub const IDENTIFIER: &'static str = "Runtime.compileScript";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for CompileScript {
     type Result = super::results::CompileScriptResult;
@@ -215,6 +224,9 @@ pub struct Disable {
 }
 impl Disable {
     pub const IDENTIFIER: &'static str = "Runtime.disable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -235,6 +247,9 @@ pub struct DiscardConsoleEntries {
 }
 impl DiscardConsoleEntries {
     pub const IDENTIFIER: &'static str = "Runtime.discardConsoleEntries";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for DiscardConsoleEntries {
     type Result = super::results::DiscardConsoleEntriesResult;
@@ -255,6 +270,9 @@ pub struct Enable {
 }
 impl Enable {
     pub const IDENTIFIER: &'static str = "Runtime.enable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -381,6 +399,9 @@ pub struct Evaluate {
 }
 impl Evaluate {
     pub const IDENTIFIER: &'static str = "Runtime.evaluate";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Evaluate {
     type Result = super::results::EvaluateResult;
@@ -401,6 +422,9 @@ pub struct GetIsolateId {
 }
 impl GetIsolateId {
     pub const IDENTIFIER: &'static str = "Runtime.getIsolateId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetIsolateId {
     type Result = super::results::GetIsolateIdResult;
@@ -421,6 +445,9 @@ pub struct GetHeapUsage {
 }
 impl GetHeapUsage {
     pub const IDENTIFIER: &'static str = "Runtime.getHeapUsage";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetHeapUsage {
     type Result = super::results::GetHeapUsageResult;
@@ -476,6 +503,9 @@ pub struct GetProperties {
 }
 impl GetProperties {
     pub const IDENTIFIER: &'static str = "Runtime.getProperties";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetProperties {
     type Result = super::results::GetPropertiesResult;
@@ -502,6 +532,9 @@ pub struct GlobalLexicalScopeNames {
 }
 impl GlobalLexicalScopeNames {
     pub const IDENTIFIER: &'static str = "Runtime.globalLexicalScopeNames";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GlobalLexicalScopeNames {
     type Result = super::results::GlobalLexicalScopeNamesResult;
@@ -537,6 +570,9 @@ pub struct QueryObjects {
 }
 impl QueryObjects {
     pub const IDENTIFIER: &'static str = "Runtime.queryObjects";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for QueryObjects {
     type Result = super::results::QueryObjectsResult;
@@ -568,6 +604,9 @@ pub struct ReleaseObject {
 }
 impl ReleaseObject {
     pub const IDENTIFIER: &'static str = "Runtime.releaseObject";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ReleaseObject {
     type Result = super::results::ReleaseObjectResult;
@@ -604,6 +643,9 @@ pub struct ReleaseObjectGroup {
 }
 impl ReleaseObjectGroup {
     pub const IDENTIFIER: &'static str = "Runtime.releaseObjectGroup";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ReleaseObjectGroup {
     type Result = super::results::ReleaseObjectGroupResult;
@@ -624,6 +666,9 @@ pub struct RunIfWaitingForDebugger {
 }
 impl RunIfWaitingForDebugger {
     pub const IDENTIFIER: &'static str = "Runtime.runIfWaitingForDebugger";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RunIfWaitingForDebugger {
     type Result = super::results::RunIfWaitingForDebuggerResult;
@@ -697,6 +742,9 @@ pub struct RunScript {
 }
 impl RunScript {
     pub const IDENTIFIER: &'static str = "Runtime.runScript";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RunScript {
     type Result = super::results::RunScriptResult;
@@ -728,6 +776,9 @@ pub struct SetAsyncCallStackDepth {
 }
 impl SetAsyncCallStackDepth {
     pub const IDENTIFIER: &'static str = "Runtime.setAsyncCallStackDepth";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetAsyncCallStackDepth {
     type Result = super::results::SetAsyncCallStackDepthResult;
@@ -756,6 +807,9 @@ pub struct SetCustomObjectFormatterEnabled {
 }
 impl SetCustomObjectFormatterEnabled {
     pub const IDENTIFIER: &'static str = "Runtime.setCustomObjectFormatterEnabled";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetCustomObjectFormatterEnabled {
     type Result = super::results::SetCustomObjectFormatterEnabledResult;
@@ -782,6 +836,9 @@ pub struct SetMaxCallStackSizeToCapture {
 }
 impl SetMaxCallStackSizeToCapture {
     pub const IDENTIFIER: &'static str = "Runtime.setMaxCallStackSizeToCapture";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetMaxCallStackSizeToCapture {
     type Result = super::results::SetMaxCallStackSizeToCaptureResult;
@@ -802,6 +859,9 @@ pub struct TerminateExecution {
 }
 impl TerminateExecution {
     pub const IDENTIFIER: &'static str = "Runtime.terminateExecution";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for TerminateExecution {
     type Result = super::results::TerminateExecutionResult;
@@ -843,6 +903,9 @@ pub struct AddBinding {
 }
 impl AddBinding {
     pub const IDENTIFIER: &'static str = "Runtime.addBinding";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for AddBinding {
     type Result = super::results::AddBindingResult;
@@ -876,6 +939,9 @@ pub struct RemoveBinding {
 }
 impl RemoveBinding {
     pub const IDENTIFIER: &'static str = "Runtime.removeBinding";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for RemoveBinding {
     type Result = super::results::RemoveBindingResult;
@@ -907,6 +973,9 @@ pub struct GetExceptionDetails {
 }
 impl GetExceptionDetails {
     pub const IDENTIFIER: &'static str = "Runtime.getExceptionDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetExceptionDetails {
     type Result = super::results::GetExceptionDetailsResult;

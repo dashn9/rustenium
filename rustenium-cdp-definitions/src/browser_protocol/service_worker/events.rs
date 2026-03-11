@@ -16,6 +16,9 @@ pub struct WorkerErrorReported {
 }
 impl WorkerErrorReported {
     pub const IDENTIFIER: &'static str = "ServiceWorker.workerErrorReported";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WorkerRegistrationUpdatedParams {
@@ -35,6 +38,9 @@ pub struct WorkerRegistrationUpdated {
 }
 impl WorkerRegistrationUpdated {
     pub const IDENTIFIER: &'static str = "ServiceWorker.workerRegistrationUpdated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WorkerVersionUpdatedParams {
@@ -54,5 +60,8 @@ pub struct WorkerVersionUpdated {
 }
 impl WorkerVersionUpdated {
     pub const IDENTIFIER: &'static str = "ServiceWorker.workerVersionUpdated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (ServiceWorkerEvents { WorkerErrorReported (WorkerErrorReported) , WorkerRegistrationUpdated (WorkerRegistrationUpdated) , WorkerVersionUpdated (WorkerVersionUpdated) });

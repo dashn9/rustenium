@@ -3,10 +3,7 @@ use std::collections::HashMap;
 
 use serde::Deserializer;
 
-use crate::{
-    Command, browsing_context::events::BrowsingContextEvent, input::events::InputEvent,
-    log::events::LogEvent, network::events::NetworkEvent, script::events::ScriptEvent,
-};
+use crate::{Command, Event};
 
 fn float_or_int_to_u64<'de, D>(deserializer: D) -> Result<u64, D::Error>
 where
@@ -88,7 +85,7 @@ pub struct EmptyParams {
 pub enum Message {
     ErrorResponse(ErrorResponse),
     CommandResponse(CommandResponse),
-    Event(Event),
+    Event(EventResponse),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -138,23 +135,13 @@ impl std::fmt::Display for ErrorResponse {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Event {
+pub struct EventResponse {
     #[serde(rename = "type")]
     pub r#type: EventEnum,
     #[serde(flatten)]
-    pub event_data: EventData,
+    pub event_data: Event,
     #[serde(flatten)]
     pub extensible: Extensible,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(untagged)]
-pub enum EventData {
-    BrowsingContextEvent(BrowsingContextEvent),
-    InputEvent(InputEvent),
-    LogEvent(LogEvent),
-    NetworkEvent(NetworkEvent),
-    ScriptEvent(ScriptEvent),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

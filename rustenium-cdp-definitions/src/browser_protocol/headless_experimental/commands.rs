@@ -36,6 +36,9 @@ pub struct BeginFrame {
 }
 impl BeginFrame {
     pub const IDENTIFIER: &'static str = "HeadlessExperimental.beginFrame";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for BeginFrame {
     type Result = super::results::BeginFrameResult;

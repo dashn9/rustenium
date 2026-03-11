@@ -32,6 +32,9 @@ impl std::borrow::Borrow<str> for RequestId {
 }
 impl RequestId {
     pub const IDENTIFIER: &'static str = "DeviceAccess.RequestId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "A device id.\n[DeviceId](https://chromedevtools.github.io/devtools-protocol/tot/DeviceAccess/#type-DeviceId)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
@@ -66,6 +69,9 @@ impl std::borrow::Borrow<str> for DeviceId {
 }
 impl DeviceId {
     pub const IDENTIFIER: &'static str = "DeviceAccess.DeviceId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Device information displayed in a user prompt to select a device.\n[PromptDevice](https://chromedevtools.github.io/devtools-protocol/tot/DeviceAccess/#type-PromptDevice)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -86,5 +92,8 @@ impl PromptDevice {
 }
 impl PromptDevice {
     pub const IDENTIFIER: &'static str = "DeviceAccess.PromptDevice";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (DeviceAccessTypes { RequestId (RequestId) , DeviceId (DeviceId) , PromptDevice (PromptDevice) });

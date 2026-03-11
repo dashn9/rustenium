@@ -1,7 +1,7 @@
 use std::{collections::HashMap, net::TcpListener};
 use std::sync::Arc;
+use rustenium_bidi_definitions::base::EventResponse;
 use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
-use rustenium_bidi_commands::{Event};
 use tokio::sync::{oneshot, Mutex};
 
 use crate::{listeners::CommandResponseState, transport::ConnectionTransport};
@@ -31,14 +31,14 @@ where
         }
     }
 
-    pub async fn register_event_listener_channel(&mut self, channel: UnboundedSender<Event>) {
+    pub async fn register_event_listener_channel(&mut self, channel: UnboundedSender<EventResponse>) {
         self.event_listener.listeners.lock().await.push(channel);
     }
 
     pub fn start_listeners(&self) -> () {
         let (listener_tx, listener_rx) = unbounded_channel::<String>();
         let (command_response_tx, command_response_rx) = unbounded_channel::<CommandResponseState>();
-        let (event_tx, event_rx) = unbounded_channel::<Event>();
+        let (event_tx, event_rx) = unbounded_channel::<EventResponse>();
 
         self.transport.listen(listener_tx);
         

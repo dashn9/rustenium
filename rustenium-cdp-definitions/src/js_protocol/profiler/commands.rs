@@ -13,6 +13,9 @@ pub struct Disable {
 }
 impl Disable {
     pub const IDENTIFIER: &'static str = "Profiler.disable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Disable {
     type Result = super::results::DisableResult;
@@ -31,6 +34,9 @@ pub struct Enable {
 }
 impl Enable {
     pub const IDENTIFIER: &'static str = "Profiler.enable";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Enable {
     type Result = super::results::EnableResult;
@@ -51,6 +57,9 @@ pub struct GetBestEffortCoverage {
 }
 impl GetBestEffortCoverage {
     pub const IDENTIFIER: &'static str = "Profiler.getBestEffortCoverage";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetBestEffortCoverage {
     type Result = super::results::GetBestEffortCoverageResult;
@@ -82,6 +91,9 @@ pub struct SetSamplingInterval {
 }
 impl SetSamplingInterval {
     pub const IDENTIFIER: &'static str = "Profiler.setSamplingInterval";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for SetSamplingInterval {
     type Result = super::results::SetSamplingIntervalResult;
@@ -100,6 +112,9 @@ pub struct Start {
 }
 impl Start {
     pub const IDENTIFIER: &'static str = "Profiler.start";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Start {
     type Result = super::results::StartResult;
@@ -136,6 +151,9 @@ pub struct StartPreciseCoverage {
 }
 impl StartPreciseCoverage {
     pub const IDENTIFIER: &'static str = "Profiler.startPreciseCoverage";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for StartPreciseCoverage {
     type Result = super::results::StartPreciseCoverageResult;
@@ -154,6 +172,9 @@ pub struct Stop {
 }
 impl Stop {
     pub const IDENTIFIER: &'static str = "Profiler.stop";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Stop {
     type Result = super::results::StopResult;
@@ -174,6 +195,9 @@ pub struct StopPreciseCoverage {
 }
 impl StopPreciseCoverage {
     pub const IDENTIFIER: &'static str = "Profiler.stopPreciseCoverage";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for StopPreciseCoverage {
     type Result = super::results::StopPreciseCoverageResult;
@@ -194,6 +218,9 @@ pub struct TakePreciseCoverage {
 }
 impl TakePreciseCoverage {
     pub const IDENTIFIER: &'static str = "Profiler.takePreciseCoverage";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for TakePreciseCoverage {
     type Result = super::results::TakePreciseCoverageResult;

@@ -31,6 +31,9 @@ pub struct GetOsAppState {
 }
 impl GetOsAppState {
     pub const IDENTIFIER: &'static str = "PWA.getOsAppState";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for GetOsAppState {
     type Result = super::results::GetOsAppStateResult;
@@ -72,6 +75,9 @@ pub struct Install {
 }
 impl Install {
     pub const IDENTIFIER: &'static str = "PWA.install";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Install {
     type Result = super::results::InstallResult;
@@ -107,6 +113,9 @@ pub struct Uninstall {
 }
 impl Uninstall {
     pub const IDENTIFIER: &'static str = "PWA.uninstall";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Uninstall {
     type Result = super::results::UninstallResult;
@@ -147,6 +156,9 @@ pub struct Launch {
 }
 impl Launch {
     pub const IDENTIFIER: &'static str = "PWA.launch";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for Launch {
     type Result = super::results::LaunchResult;
@@ -181,6 +193,9 @@ pub struct LaunchFilesInApp {
 }
 impl LaunchFilesInApp {
     pub const IDENTIFIER: &'static str = "PWA.launchFilesInApp";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for LaunchFilesInApp {
     type Result = super::results::LaunchFilesInAppResult;
@@ -216,6 +231,9 @@ pub struct OpenCurrentPageInApp {
 }
 impl OpenCurrentPageInApp {
     pub const IDENTIFIER: &'static str = "PWA.openCurrentPageInApp";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for OpenCurrentPageInApp {
     type Result = super::results::OpenCurrentPageInAppResult;
@@ -262,6 +280,9 @@ pub struct ChangeAppUserSettings {
 }
 impl ChangeAppUserSettings {
     pub const IDENTIFIER: &'static str = "PWA.changeAppUserSettings";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 impl crate::CommandResult for ChangeAppUserSettings {
     type Result = super::results::ChangeAppUserSettingsResult;

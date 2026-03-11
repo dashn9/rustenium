@@ -19,6 +19,9 @@ pub struct SinksUpdated {
 }
 impl SinksUpdated {
     pub const IDENTIFIER: &'static str = "Cast.sinksUpdated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "This is fired whenever the outstanding issue/error message changes.\n|issueMessage| is empty if there is no issue.\n[issueUpdated](https://chromedevtools.github.io/devtools-protocol/tot/Cast/#event-issueUpdated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -39,5 +42,8 @@ pub struct IssueUpdated {
 }
 impl IssueUpdated {
     pub const IDENTIFIER: &'static str = "Cast.issueUpdated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (CastEvents { SinksUpdated (SinksUpdated) , IssueUpdated (IssueUpdated) });

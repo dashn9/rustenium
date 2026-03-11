@@ -32,6 +32,9 @@ impl std::borrow::Borrow<str> for FrameId {
 }
 impl FrameId {
     pub const IDENTIFIER: &'static str = "Page.FrameId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Indicates whether a frame has been identified as an ad."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -74,6 +77,9 @@ impl AdFrameStatus {
 }
 impl AdFrameStatus {
     pub const IDENTIFIER: &'static str = "Page.AdFrameStatus";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Identifies the script which caused a script or frame to be labelled as an\nad.\n[AdScriptId](https://chromedevtools.github.io/devtools-protocol/tot/Page/#type-AdScriptId)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -98,6 +104,9 @@ impl AdScriptId {
 }
 impl AdScriptId {
     pub const IDENTIFIER: &'static str = "Page.AdScriptId";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Encapsulates the script ancestry and the root script filterlist rule that\ncaused the frame to be labelled as an ad. Only created when `ancestryChain`\nis not empty.\n[AdScriptAncestry](https://chromedevtools.github.io/devtools-protocol/tot/Page/#type-AdScriptAncestry)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -122,6 +131,9 @@ impl AdScriptAncestry {
 }
 impl AdScriptAncestry {
     pub const IDENTIFIER: &'static str = "Page.AdScriptAncestry";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Indicates whether the frame is a secure context and why it is the case."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -423,6 +435,9 @@ impl PermissionsPolicyBlockLocator {
 }
 impl PermissionsPolicyBlockLocator {
     pub const IDENTIFIER: &'static str = "Page.PermissionsPolicyBlockLocator";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PermissionsPolicyFeatureState {
@@ -446,6 +461,9 @@ impl PermissionsPolicyFeatureState {
 }
 impl PermissionsPolicyFeatureState {
     pub const IDENTIFIER: &'static str = "Page.PermissionsPolicyFeatureState";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Origin Trial(https://www.chromium.org/blink/origin-trials) support.\nStatus for an Origin Trial token."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -511,6 +529,9 @@ pub struct OriginTrialToken {
 }
 impl OriginTrialToken {
     pub const IDENTIFIER: &'static str = "Page.OriginTrialToken";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct OriginTrialTokenWithStatus {
@@ -538,6 +559,9 @@ impl OriginTrialTokenWithStatus {
 }
 impl OriginTrialTokenWithStatus {
     pub const IDENTIFIER: &'static str = "Page.OriginTrialTokenWithStatus";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct OriginTrial {
@@ -564,6 +588,9 @@ impl OriginTrial {
 }
 impl OriginTrial {
     pub const IDENTIFIER: &'static str = "Page.OriginTrial";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Additional information about the frame document's security origin.\n[SecurityOriginDetails](https://chromedevtools.github.io/devtools-protocol/tot/Page/#type-SecurityOriginDetails)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -581,6 +608,9 @@ impl SecurityOriginDetails {
 }
 impl SecurityOriginDetails {
     pub const IDENTIFIER: &'static str = "Page.SecurityOriginDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Information about the Frame on the page.\n[Frame](https://chromedevtools.github.io/devtools-protocol/tot/Page/#type-Frame)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -646,6 +676,9 @@ pub struct Frame {
 }
 impl Frame {
     pub const IDENTIFIER: &'static str = "Page.Frame";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Information about the Resource on the page.\n[FrameResource](https://chromedevtools.github.io/devtools-protocol/tot/Page/#type-FrameResource)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -699,6 +732,9 @@ impl FrameResource {
 }
 impl FrameResource {
     pub const IDENTIFIER: &'static str = "Page.FrameResource";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Information about the Frame hierarchy along with their cached resources.\n[FrameResourceTree](https://chromedevtools.github.io/devtools-protocol/tot/Page/#type-FrameResourceTree)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -727,6 +763,9 @@ impl FrameResourceTree {
 }
 impl FrameResourceTree {
     pub const IDENTIFIER: &'static str = "Page.FrameResourceTree";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Information about the Frame hierarchy.\n[FrameTree](https://chromedevtools.github.io/devtools-protocol/tot/Page/#type-FrameTree)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -750,6 +789,9 @@ impl FrameTree {
 }
 impl FrameTree {
     pub const IDENTIFIER: &'static str = "Page.FrameTree";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Unique script identifier.\n[ScriptIdentifier](https://chromedevtools.github.io/devtools-protocol/tot/Page/#type-ScriptIdentifier)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
@@ -779,6 +821,9 @@ impl From<String> for ScriptIdentifier {
 }
 impl ScriptIdentifier {
     pub const IDENTIFIER: &'static str = "Page.ScriptIdentifier";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Transition type."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -831,6 +876,9 @@ pub struct NavigationEntry {
 }
 impl NavigationEntry {
     pub const IDENTIFIER: &'static str = "Page.NavigationEntry";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Screencast frame metadata.\n[ScreencastFrameMetadata](https://chromedevtools.github.io/devtools-protocol/tot/Page/#type-ScreencastFrameMetadata)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -861,6 +909,9 @@ pub struct ScreencastFrameMetadata {
 }
 impl ScreencastFrameMetadata {
     pub const IDENTIFIER: &'static str = "Page.ScreencastFrameMetadata";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Javascript dialog type."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -907,6 +958,9 @@ impl AppManifestError {
 }
 impl AppManifestError {
     pub const IDENTIFIER: &'static str = "Page.AppManifestError";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Parsed app manifest properties.\n[AppManifestParsedProperties](https://chromedevtools.github.io/devtools-protocol/tot/Page/#type-AppManifestParsedProperties)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -929,6 +983,9 @@ impl<T: Into<String>> From<T> for AppManifestParsedProperties {
 }
 impl AppManifestParsedProperties {
     pub const IDENTIFIER: &'static str = "Page.AppManifestParsedProperties";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Layout viewport position and dimensions.\n[LayoutViewport](https://chromedevtools.github.io/devtools-protocol/tot/Page/#type-LayoutViewport)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -963,6 +1020,9 @@ impl LayoutViewport {
 }
 impl LayoutViewport {
     pub const IDENTIFIER: &'static str = "Page.LayoutViewport";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Visual viewport position, dimensions, and scale.\n[VisualViewport](https://chromedevtools.github.io/devtools-protocol/tot/Page/#type-VisualViewport)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -996,6 +1056,9 @@ pub struct VisualViewport {
 }
 impl VisualViewport {
     pub const IDENTIFIER: &'static str = "Page.VisualViewport";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Viewport for capturing screenshot.\n[Viewport](https://chromedevtools.github.io/devtools-protocol/tot/Page/#type-Viewport)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1018,6 +1081,9 @@ pub struct Viewport {
 }
 impl Viewport {
     pub const IDENTIFIER: &'static str = "Page.Viewport";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Generic font families collection.\n[FontFamilies](https://chromedevtools.github.io/devtools-protocol/tot/Page/#type-FontFamilies)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -1060,6 +1126,9 @@ pub struct FontFamilies {
 }
 impl FontFamilies {
     pub const IDENTIFIER: &'static str = "Page.FontFamilies";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Font families collection for a script.\n[ScriptFontFamilies](https://chromedevtools.github.io/devtools-protocol/tot/Page/#type-ScriptFontFamilies)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1081,6 +1150,9 @@ impl ScriptFontFamilies {
 }
 impl ScriptFontFamilies {
     pub const IDENTIFIER: &'static str = "Page.ScriptFontFamilies";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Default font sizes.\n[FontSizes](https://chromedevtools.github.io/devtools-protocol/tot/Page/#type-FontSizes)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -1098,6 +1170,9 @@ pub struct FontSizes {
 }
 impl FontSizes {
     pub const IDENTIFIER: &'static str = "Page.FontSizes";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum ClientNavigationReason {
@@ -1152,6 +1227,9 @@ impl InstallabilityErrorArgument {
 }
 impl InstallabilityErrorArgument {
     pub const IDENTIFIER: &'static str = "Page.InstallabilityErrorArgument";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "The installability error\n[InstallabilityError](https://chromedevtools.github.io/devtools-protocol/tot/Page/#type-InstallabilityError)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1177,6 +1255,9 @@ impl InstallabilityError {
 }
 impl InstallabilityError {
     pub const IDENTIFIER: &'static str = "Page.InstallabilityError";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "The referring-policy used for the navigation."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -1225,6 +1306,9 @@ impl<T: Into<String>> From<T> for CompilationCacheParams {
 }
 impl CompilationCacheParams {
     pub const IDENTIFIER: &'static str = "Page.CompilationCacheParams";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "The manifest of a webapp, see\nhttps://www.w3.org/TR/appmanifest/#dfn-manifest.\nSome fields do not appear in the standard since the API is designed to\nexpose more browser internal states.\n[FileFilter](https://chromedevtools.github.io/devtools-protocol/tot/Page/#type-FileFilter)"]
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
@@ -1240,6 +1324,9 @@ pub struct FileFilter {
 }
 impl FileFilter {
     pub const IDENTIFIER: &'static str = "Page.FileFilter";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FileHandler {
@@ -1277,6 +1364,9 @@ impl FileHandler {
 }
 impl FileHandler {
     pub const IDENTIFIER: &'static str = "Page.FileHandler";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "The image definition used in both icon and screenshot.\n[ImageResource](https://chromedevtools.github.io/devtools-protocol/tot/Page/#type-ImageResource)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -1309,6 +1399,9 @@ impl<T: Into<String>> From<T> for ImageResource {
 }
 impl ImageResource {
     pub const IDENTIFIER: &'static str = "Page.ImageResource";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LaunchHandler {
@@ -1329,6 +1422,9 @@ impl<T: Into<String>> From<T> for LaunchHandler {
 }
 impl LaunchHandler {
     pub const IDENTIFIER: &'static str = "Page.LaunchHandler";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ProtocolHandler {
@@ -1347,6 +1443,9 @@ impl ProtocolHandler {
 }
 impl ProtocolHandler {
     pub const IDENTIFIER: &'static str = "Page.ProtocolHandler";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RelatedApplication {
@@ -1372,6 +1471,9 @@ impl<T: Into<String>> From<T> for RelatedApplication {
 }
 impl RelatedApplication {
     pub const IDENTIFIER: &'static str = "Page.RelatedApplication";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ScopeExtension {
@@ -1391,6 +1493,9 @@ impl ScopeExtension {
 }
 impl ScopeExtension {
     pub const IDENTIFIER: &'static str = "Page.ScopeExtension";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Screenshot {
@@ -1414,6 +1519,9 @@ impl Screenshot {
 }
 impl Screenshot {
     pub const IDENTIFIER: &'static str = "Page.Screenshot";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ShareTarget {
@@ -1460,6 +1568,9 @@ impl ShareTarget {
 }
 impl ShareTarget {
     pub const IDENTIFIER: &'static str = "Page.ShareTarget";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Shortcut {
@@ -1478,6 +1589,9 @@ impl Shortcut {
 }
 impl Shortcut {
     pub const IDENTIFIER: &'static str = "Page.Shortcut";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct WebAppManifest {
@@ -1583,6 +1697,9 @@ pub struct WebAppManifest {
 }
 impl WebAppManifest {
     pub const IDENTIFIER: &'static str = "Page.WebAppManifest";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "The type of a frameNavigated event."]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -1932,6 +2049,9 @@ impl BackForwardCacheBlockingDetails {
 }
 impl BackForwardCacheBlockingDetails {
     pub const IDENTIFIER: &'static str = "Page.BackForwardCacheBlockingDetails";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BackForwardCacheNotRestoredExplanation {
@@ -1966,6 +2086,9 @@ impl BackForwardCacheNotRestoredExplanation {
 }
 impl BackForwardCacheNotRestoredExplanation {
     pub const IDENTIFIER: &'static str = "Page.BackForwardCacheNotRestoredExplanation";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BackForwardCacheNotRestoredExplanationTree {
@@ -1996,5 +2119,8 @@ impl BackForwardCacheNotRestoredExplanationTree {
 }
 impl BackForwardCacheNotRestoredExplanationTree {
     pub const IDENTIFIER: &'static str = "Page.BackForwardCacheNotRestoredExplanationTree";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (PageTypes { FrameId (FrameId) , AdFrameType (AdFrameType) , AdFrameExplanation (AdFrameExplanation) , AdFrameStatus (AdFrameStatus) , AdScriptId (AdScriptId) , AdScriptAncestry (AdScriptAncestry) , SecureContextType (SecureContextType) , CrossOriginIsolatedContextType (CrossOriginIsolatedContextType) , GatedApiFeatures (GatedApiFeatures) , PermissionsPolicyFeature (PermissionsPolicyFeature) , PermissionsPolicyBlockReason (PermissionsPolicyBlockReason) , PermissionsPolicyBlockLocator (PermissionsPolicyBlockLocator) , PermissionsPolicyFeatureState (PermissionsPolicyFeatureState) , OriginTrialTokenStatus (OriginTrialTokenStatus) , OriginTrialStatus (OriginTrialStatus) , OriginTrialUsageRestriction (OriginTrialUsageRestriction) , OriginTrialToken (OriginTrialToken) , OriginTrialTokenWithStatus (OriginTrialTokenWithStatus) , OriginTrial (OriginTrial) , SecurityOriginDetails (SecurityOriginDetails) , Frame (Frame) , FrameResource (FrameResource) , FrameResourceTree (FrameResourceTree) , FrameTree (FrameTree) , ScriptIdentifier (ScriptIdentifier) , TransitionType (TransitionType) , NavigationEntry (NavigationEntry) , ScreencastFrameMetadata (ScreencastFrameMetadata) , DialogType (DialogType) , AppManifestError (AppManifestError) , AppManifestParsedProperties (AppManifestParsedProperties) , LayoutViewport (LayoutViewport) , VisualViewport (VisualViewport) , Viewport (Viewport) , FontFamilies (FontFamilies) , ScriptFontFamilies (ScriptFontFamilies) , FontSizes (FontSizes) , ClientNavigationReason (ClientNavigationReason) , ClientNavigationDisposition (ClientNavigationDisposition) , InstallabilityErrorArgument (InstallabilityErrorArgument) , InstallabilityError (InstallabilityError) , ReferrerPolicy (ReferrerPolicy) , CompilationCacheParams (CompilationCacheParams) , FileFilter (FileFilter) , FileHandler (FileHandler) , ImageResource (ImageResource) , LaunchHandler (LaunchHandler) , ProtocolHandler (ProtocolHandler) , RelatedApplication (RelatedApplication) , ScopeExtension (ScopeExtension) , Screenshot (Screenshot) , ShareTarget (ShareTarget) , Shortcut (Shortcut) , WebAppManifest (WebAppManifest) , NavigationType (NavigationType) , BackForwardCacheNotRestoredReason (BackForwardCacheNotRestoredReason) , BackForwardCacheNotRestoredReasonType (BackForwardCacheNotRestoredReasonType) , BackForwardCacheBlockingDetails (BackForwardCacheBlockingDetails) , BackForwardCacheNotRestoredExplanation (BackForwardCacheNotRestoredExplanation) , BackForwardCacheNotRestoredExplanationTree (BackForwardCacheNotRestoredExplanationTree) });

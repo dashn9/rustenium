@@ -23,6 +23,9 @@ pub struct AttachedToTarget {
 }
 impl AttachedToTarget {
     pub const IDENTIFIER: &'static str = "Target.attachedToTarget";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Issued when detached from target for any reason (including `detachFromTarget` command). Can be\nissued multiple times per target if multiple sessions have been attached to it.\n[detachedFromTarget](https://chromedevtools.github.io/devtools-protocol/tot/Target/#event-detachedFromTarget)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -44,6 +47,9 @@ pub struct DetachedFromTarget {
 }
 impl DetachedFromTarget {
     pub const IDENTIFIER: &'static str = "Target.detachedFromTarget";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Notifies about a new protocol message received from the session (as reported in\n`attachedToTarget` event).\n[receivedMessageFromTarget](https://chromedevtools.github.io/devtools-protocol/tot/Target/#event-receivedMessageFromTarget)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -67,6 +73,9 @@ pub struct ReceivedMessageFromTarget {
 }
 impl ReceivedMessageFromTarget {
     pub const IDENTIFIER: &'static str = "Target.receivedMessageFromTarget";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Issued when a possible inspection target is created.\n[targetCreated](https://chromedevtools.github.io/devtools-protocol/tot/Target/#event-targetCreated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -87,6 +96,9 @@ pub struct TargetCreated {
 }
 impl TargetCreated {
     pub const IDENTIFIER: &'static str = "Target.targetCreated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Issued when a target is destroyed.\n[targetDestroyed](https://chromedevtools.github.io/devtools-protocol/tot/Target/#event-targetDestroyed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -107,6 +119,9 @@ pub struct TargetDestroyed {
 }
 impl TargetDestroyed {
     pub const IDENTIFIER: &'static str = "Target.targetDestroyed";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Issued when a target has crashed.\n[targetCrashed](https://chromedevtools.github.io/devtools-protocol/tot/Target/#event-targetCrashed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -133,6 +148,9 @@ pub struct TargetCrashed {
 }
 impl TargetCrashed {
     pub const IDENTIFIER: &'static str = "Target.targetCrashed";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Issued when some information about a target has changed. This only happens between\n`targetCreated` and `targetDestroyed`.\n[targetInfoChanged](https://chromedevtools.github.io/devtools-protocol/tot/Target/#event-targetInfoChanged)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -153,5 +171,8 @@ pub struct TargetInfoChanged {
 }
 impl TargetInfoChanged {
     pub const IDENTIFIER: &'static str = "Target.targetInfoChanged";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (TargetEvents { AttachedToTarget (AttachedToTarget) , DetachedFromTarget (DetachedFromTarget) , ReceivedMessageFromTarget (ReceivedMessageFromTarget) , TargetCreated (TargetCreated) , TargetDestroyed (TargetDestroyed) , TargetCrashed (TargetCrashed) , TargetInfoChanged (TargetInfoChanged) });

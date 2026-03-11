@@ -1,5 +1,5 @@
+use rustenium_bidi_definitions::base::ErrorResponse;
 use thiserror::Error;
-use rustenium_bidi_commands::{ErrorResponse, ResultData};
 
 #[derive(Debug, Error)]
 pub enum SessionSendError {
@@ -11,7 +11,7 @@ pub enum SessionSendError {
 #[derive(Debug, Error)]
 pub enum CommandResultError {
     #[error("Invalid Result gotten For Command")]
-    InvalidResultTypeError(ResultData),
+    InvalidResultTypeError(serde_json::Value),
     #[error("Error Occurred with Command")]
     SessionSendError(SessionSendError)
 }

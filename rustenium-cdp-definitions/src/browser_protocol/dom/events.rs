@@ -25,6 +25,9 @@ pub struct AttributeModified {
 }
 impl AttributeModified {
     pub const IDENTIFIER: &'static str = "DOM.attributeModified";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when `Element`'s adoptedStyleSheets are modified.\n[adoptedStyleSheetsModified](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-adoptedStyleSheetsModified)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -50,6 +53,9 @@ pub struct AdoptedStyleSheetsModified {
 }
 impl AdoptedStyleSheetsModified {
     pub const IDENTIFIER: &'static str = "DOM.adoptedStyleSheetsModified";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when `Element`'s attribute is removed.\n[attributeRemoved](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-attributeRemoved)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -74,6 +80,9 @@ pub struct AttributeRemoved {
 }
 impl AttributeRemoved {
     pub const IDENTIFIER: &'static str = "DOM.attributeRemoved";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Mirrors `DOMCharacterDataModified` event.\n[characterDataModified](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-characterDataModified)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -98,6 +107,9 @@ pub struct CharacterDataModified {
 }
 impl CharacterDataModified {
     pub const IDENTIFIER: &'static str = "DOM.characterDataModified";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when `Container`'s child node count has changed.\n[childNodeCountUpdated](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-childNodeCountUpdated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -122,6 +134,9 @@ pub struct ChildNodeCountUpdated {
 }
 impl ChildNodeCountUpdated {
     pub const IDENTIFIER: &'static str = "DOM.childNodeCountUpdated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Mirrors `DOMNodeInserted` event.\n[childNodeInserted](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-childNodeInserted)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -149,6 +164,9 @@ pub struct ChildNodeInserted {
 }
 impl ChildNodeInserted {
     pub const IDENTIFIER: &'static str = "DOM.childNodeInserted";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Mirrors `DOMNodeRemoved` event.\n[childNodeRemoved](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-childNodeRemoved)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -173,6 +191,9 @@ pub struct ChildNodeRemoved {
 }
 impl ChildNodeRemoved {
     pub const IDENTIFIER: &'static str = "DOM.childNodeRemoved";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Called when distribution is changed.\n[distributedNodesUpdated](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-distributedNodesUpdated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -198,6 +219,9 @@ pub struct DistributedNodesUpdated {
 }
 impl DistributedNodesUpdated {
     pub const IDENTIFIER: &'static str = "DOM.distributedNodesUpdated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when `Document` has been totally updated. Node ids are no longer valid.\n[documentUpdated](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-documentUpdated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -215,6 +239,9 @@ pub struct DocumentUpdated {
 }
 impl DocumentUpdated {
     pub const IDENTIFIER: &'static str = "DOM.documentUpdated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when `Element`'s inline style is modified via a CSS property modification.\n[inlineStyleInvalidated](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-inlineStyleInvalidated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -237,6 +264,9 @@ pub struct InlineStyleInvalidated {
 }
 impl InlineStyleInvalidated {
     pub const IDENTIFIER: &'static str = "DOM.inlineStyleInvalidated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Called when a pseudo element is added to an element.\n[pseudoElementAdded](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-pseudoElementAdded)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -261,6 +291,9 @@ pub struct PseudoElementAdded {
 }
 impl PseudoElementAdded {
     pub const IDENTIFIER: &'static str = "DOM.pseudoElementAdded";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Called when top layer elements are changed.\n[topLayerElementsUpdated](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-topLayerElementsUpdated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -278,6 +311,9 @@ pub struct TopLayerElementsUpdated {
 }
 impl TopLayerElementsUpdated {
     pub const IDENTIFIER: &'static str = "DOM.topLayerElementsUpdated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when a node's scrollability state changes.\n[scrollableFlagUpdated](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-scrollableFlagUpdated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -302,6 +338,9 @@ pub struct ScrollableFlagUpdated {
 }
 impl ScrollableFlagUpdated {
     pub const IDENTIFIER: &'static str = "DOM.scrollableFlagUpdated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when a node's ad related state changes.\n[adRelatedStateUpdated](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-adRelatedStateUpdated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -326,6 +365,9 @@ pub struct AdRelatedStateUpdated {
 }
 impl AdRelatedStateUpdated {
     pub const IDENTIFIER: &'static str = "DOM.adRelatedStateUpdated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when a node's starting styles changes.\n[affectedByStartingStylesFlagUpdated](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-affectedByStartingStylesFlagUpdated)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -350,6 +392,9 @@ pub struct AffectedByStartingStylesFlagUpdated {
 }
 impl AffectedByStartingStylesFlagUpdated {
     pub const IDENTIFIER: &'static str = "DOM.affectedByStartingStylesFlagUpdated";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Called when a pseudo element is removed from an element.\n[pseudoElementRemoved](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-pseudoElementRemoved)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -374,6 +419,9 @@ pub struct PseudoElementRemoved {
 }
 impl PseudoElementRemoved {
     pub const IDENTIFIER: &'static str = "DOM.pseudoElementRemoved";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Fired when backend wants to provide client with the missing DOM structure. This happens upon\nmost of the calls requesting node ids.\n[setChildNodes](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-setChildNodes)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -399,6 +447,9 @@ pub struct SetChildNodes {
 }
 impl SetChildNodes {
     pub const IDENTIFIER: &'static str = "DOM.setChildNodes";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Called when shadow root is popped from the element.\n[shadowRootPopped](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-shadowRootPopped)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -423,6 +474,9 @@ pub struct ShadowRootPopped {
 }
 impl ShadowRootPopped {
     pub const IDENTIFIER: &'static str = "DOM.shadowRootPopped";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 #[doc = "Called when shadow root is pushed into the element.\n[shadowRootPushed](https://chromedevtools.github.io/devtools-protocol/tot/DOM/#event-shadowRootPushed)"]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -447,5 +501,8 @@ pub struct ShadowRootPushed {
 }
 impl ShadowRootPushed {
     pub const IDENTIFIER: &'static str = "DOM.shadowRootPushed";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
 }
 group_enum ! (DomEvents { AttributeModified (AttributeModified) , AdoptedStyleSheetsModified (AdoptedStyleSheetsModified) , AttributeRemoved (AttributeRemoved) , CharacterDataModified (CharacterDataModified) , ChildNodeCountUpdated (ChildNodeCountUpdated) , ChildNodeInserted (ChildNodeInserted) , ChildNodeRemoved (ChildNodeRemoved) , DistributedNodesUpdated (DistributedNodesUpdated) , DocumentUpdated (DocumentUpdated) , InlineStyleInvalidated (InlineStyleInvalidated) , PseudoElementAdded (PseudoElementAdded) , TopLayerElementsUpdated (TopLayerElementsUpdated) , ScrollableFlagUpdated (ScrollableFlagUpdated) , AdRelatedStateUpdated (AdRelatedStateUpdated) , AffectedByStartingStylesFlagUpdated (AffectedByStartingStylesFlagUpdated) , PseudoElementRemoved (PseudoElementRemoved) , SetChildNodes (SetChildNodes) , ShadowRootPopped (ShadowRootPopped) , ShadowRootPushed (ShadowRootPushed) });
