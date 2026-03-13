@@ -1,28 +1,33 @@
-use rustenium_bidi_commands::browsing_context::types::{ClipRectangle, ElementClipRectangle, ElementEnum, ImageFormat, Locator, OriginUnion};
-use rustenium_bidi_commands::script::types::{
-    ContextTarget, LocalValue, NodeRemoteValue,
-    PrimitiveProtocolValue, RemoteReference, RemoteValue, SharedReference, Target
-};
-use rustenium_bidi_commands::script::commands::{CallFunction, CallFunctionParameters, EvaluateResult, ScriptCallFunctionMethod};
-use rustenium_bidi_commands::{BrowsingContextCommand, BrowsingContextResult, CommandData, ResultData, ScriptCommand, ScriptResult};
-use rustenium_bidi_commands::browsing_context::commands::{
-    BrowsingContextCaptureScreenshotMethod, CaptureScreenshot, CaptureScreenshotParameters,
-};
-use rustenium_core::transport::ConnectionTransport;
-use rustenium_core::{CommandResponseState, Session};
-use rustenium_core::error::{CommandResultError, ResponseReceiveTimeoutError, SessionSendError};
+use crate::error::ScreenshotError;
 use crate::nodes::NodePosition;
+use rustenium_bidi_definitions::Command;
+use rustenium_bidi_definitions::base::CommandResponse;
+use rustenium_bidi_definitions::browsing_context::commands::CaptureScreenshot;
+use rustenium_bidi_definitions::browsing_context::results::CaptureScreenshotResult;
+use rustenium_bidi_definitions::browsing_context::type_builders::ElementClipRectangleBuilder;
+use rustenium_bidi_definitions::browsing_context::types::{ElementClipRectangleType, Locator};
+use rustenium_bidi_definitions::script::command_builders::CallFunctionBuilder;
+use rustenium_bidi_definitions::script::results::{CallFunctionResult, EvaluateResult};
+use rustenium_bidi_definitions::script::type_builders::{
+    ContextTargetBuilder, SharedReferenceBuilder,
+};
+use rustenium_bidi_definitions::script::types::{NodeRemoteValue, Target};
+use rustenium_core::error::{CommandResultError, ResponseReceiveTimeoutError, SessionSendError};
+use rustenium_core::transport::ConnectionTransport;
+use rustenium_core::{BidiSession, CommandResponseState};
 use std::sync::Arc;
 use std::time::Duration;
 use tokio::sync::Mutex;
 use tokio::time::timeout;
 
-pub(crate) struct BidiNode<T: ConnectionTransport = rustenium_core::transport::WebsocketConnectionTransport> {
+pub(crate) struct BidiNode<
+    T: ConnectionTransport = rustenium_core::transport::WebsocketConnectionTransport,
+> {
     _raw_node: NodeRemoteValue,
     pub children: Vec<BidiNode<T>>,
     pub locator: Locator,
     pub position: Option<NodePosition>,
-    pub session: Option<Arc<Mutex<Session<T>>>>,
+    pub session: Option<Arc<Mutex<BidiSession<T>>>>,
     pub context: Option<String>,
 }
 
@@ -30,7 +35,7 @@ impl<T: ConnectionTransport> BidiNode<T> {
     pub fn new(
         _raw_node: NodeRemoteValue,
         locator: Locator,
-        session: Arc<Mutex<Session<T>>>,
+        session: Arc<Mutex<BidiSession<T>>>,
         context: String,
     ) -> Self {
         let mut children = Vec::new();
@@ -62,39 +67,49 @@ impl<T: ConnectionTransport> BidiNode<T> {
     ) -> Vec<BidiNode<T>> {
         let mut chrome_node_children = Vec::new();
         for child in children {
-            let chrome_node = BidiNode::new(child, locator.clone(), session.clone(), context.clone());
+            let chrome_node =
+                BidiNode::new(child, locator.clone(), session.clone(), context.clone());
             chrome_node_children.push(chrome_node);
         }
         chrome_node_children
     }
 
-    pub fn get_raw_node_ref(&self) -> &NodeRemoteValue{
+    pub fn get_raw_node_ref(&self) -> &NodeRemoteValue {
         &self._raw_node
     }
 
     /// Private helper to send a command via the session
-    async fn send_command(&self, command: CommandData) -> Result<ResultData, SessionSendError> {
+    async fn send_command(
+        &self,
+        command: impl Into<Command>,
+    ) -> Result<CommandResponse, SessionSendError> {
         let session = self.session.as_ref().ok_or_else(|| {
             SessionSendError::ResponseReceiveTimeoutError(ResponseReceiveTimeoutError)
         })?;
 
         let rx = {
             let mut sess = session.lock().await;
-            sess.send_and_get_receiver(command).await
+            sess.send_and_get_receiver(command.into()).await
         };
 
         match timeout(Duration::from_secs(100), rx).await {
             Ok(Ok(command_result)) => match command_result {
-                CommandResponseState::Success(response) => Ok(response.result),
-                CommandResponseState::Error(err) => Err(SessionSendError::ErrorResponse(err))
+                CommandResponseState::Success(response) => Ok(response),
+                CommandResponseState::Error(err) => Err(SessionSendError::ErrorResponse(err)),
             },
-            Ok(Err(_)) => Err(SessionSendError::ResponseReceiveTimeoutError(ResponseReceiveTimeoutError)),
-            Err(_) => Err(SessionSendError::ResponseReceiveTimeoutError(ResponseReceiveTimeoutError)),
+            Ok(Err(_)) => Err(SessionSendError::ResponseReceiveTimeoutError(
+                ResponseReceiveTimeoutError,
+            )),
+            Err(_) => Err(SessionSendError::ResponseReceiveTimeoutError(
+                ResponseReceiveTimeoutError,
+            )),
         }
     }
 
     /// Get the position of the node, updating it if not available
-    pub async fn get_position(&mut self) -> Result<Option<&NodePosition>, crate::error::EvaluateResultError> {
+    pub async fn get_position(
+        &mut self,
+    ) -> Result<Option<&NodePosition>, crate::error::EvaluateResultError> {
         if self.position.is_none() {
             self.update_position().await?;
         }
@@ -108,16 +123,13 @@ impl<T: ConnectionTransport> BidiNode<T> {
             None => return Ok(false),
         };
 
-        let shared_reference = LocalValue::RemoteReference(
-            RemoteReference::SharedReference(SharedReference {
-                shared_id,
-                handle: self._raw_node.handle.clone(),
-                extensible: Default::default(),
-            }),
-        );
+        let mut shared_reference = SharedReferenceBuilder::default().shared_id(shared_id);
 
-        let script =
-            "function() {
+        if let Some(handle) = self._raw_node.handle.clone() {
+            shared_reference = shared_reference.handle(handle);
+        }
+
+        let script = "function() {
     if (!this) {
         return null;
     }
@@ -135,75 +147,70 @@ impl<T: ConnectionTransport> BidiNode<T> {
     });
 }";
 
-        let context = self.context.as_ref().ok_or(crate::error::EvaluateResultError::NoSharedId)?;
+        let context = self
+            .context
+            .as_ref()
+            .ok_or(crate::error::EvaluateResultError::NoSharedId)?;
 
-        let target = Target::ContextTarget(ContextTarget {
-            context: context.clone(),
-            sandbox: None,
-        });
+        let target = ContextTargetBuilder::default()
+            .context(context.clone())
+            .build()
+            .unwrap();
 
-        let command = CommandData::ScriptCommand(ScriptCommand::CallFunction(CallFunction {
-            method: ScriptCallFunctionMethod::ScriptCallFunction,
-            params: CallFunctionParameters {
-                function_declaration: script.to_string(),
-                await_promise: false,
-                target,
-                arguments: None,
-                result_ownership: None,
-                serialization_options: None,
-                this: Some(shared_reference),
-                user_activation: None,
-            },
-        }));
+        let command = CallFunctionBuilder::default()
+            .function_declaration(script.to_string())
+            .await_promise(false)
+            .target(target)
+            .this(shared_reference.build().unwrap().into())
+            .build()
+            .unwrap();
 
-        let result = self.send_command(command).await
-            .map_err(|e| crate::error::EvaluateResultError::CommandResultError(
-                CommandResultError::SessionSendError(e)
-            ))?;
+        let response = self.send_command(command).await.map_err(|e| {
+            crate::error::EvaluateResultError::CommandResultError(
+                CommandResultError::SessionSendError(e),
+            )
+        })?;
 
-        match result {
-            ResultData::ScriptResult(script_result) => {
-                let evaluate_result = match script_result {
-                    ScriptResult::CallFunctionResult(eval_result) => eval_result,
-                    ScriptResult::EvaluateResult(eval_result) => eval_result,
-                    _ => return Ok(false),
-                };
-
-                match evaluate_result {
-                    EvaluateResult::EvaluateResultSuccess(evaluate_result_success) => {
-                        if let RemoteValue::PrimitiveProtocolValue(PrimitiveProtocolValue::StringValue(rv_sv)) =
-                            evaluate_result_success.result
-                        {
-                            let position: Option<NodePosition> = serde_json::from_str(rv_sv.value.as_str()).ok();
-                            if let Some(pos) = position {
-                                self.position = Some(pos);
-                                return Ok(true);
-                            }
-                        }
-                        Ok(false)
+        let evaluate_result: CallFunctionResult = response.result.try_into().unwrap();
+        match evaluate_result {
+            EvaluateResult(evaluate_result_success) => {
+                if let RemoteValue::PrimitiveProtocolValue(PrimitiveProtocolValue::StringValue(
+                    rv_sv,
+                )) = evaluate_result_success.result
+                {
+                    let position: Option<NodePosition> =
+                        serde_json::from_str(rv_sv.value.as_str()).ok();
+                    if let Some(pos) = position {
+                        self.position = Some(pos);
+                        return Ok(true);
                     }
-                    EvaluateResult::EvaluateResultException(_) => Ok(false),
                 }
+                Ok(false)
             }
-            _ => Ok(false),
+            EvaluateResult::EvaluateResultException(_) => Ok(false),
         }
     }
 
     /// Get the inner text of the node
     pub async fn get_inner_text(&self) -> Result<String, crate::error::EvaluateResultError> {
-        let shared_id = self._raw_node.shared_id.as_ref()
+        let shared_id = self
+            ._raw_node
+            .shared_id
+            .as_ref()
             .ok_or(crate::error::EvaluateResultError::NoSharedId)?;
 
-        let shared_reference = LocalValue::RemoteReference(
-            RemoteReference::SharedReference(SharedReference {
+        let shared_reference =
+            LocalValue::RemoteReference(RemoteReference::SharedReference(SharedReference {
                 shared_id: shared_id.clone(),
                 handle: self._raw_node.handle.clone(),
                 extensible: Default::default(),
-            }),
-        );
+            }));
 
         let script = "function() { return this.innerText || ''; }";
-        let context = self.context.as_ref().ok_or(crate::error::EvaluateResultError::NoSharedId)?;
+        let context = self
+            .context
+            .as_ref()
+            .ok_or(crate::error::EvaluateResultError::NoSharedId)?;
 
         let target = Target::ContextTarget(ContextTarget {
             context: context.clone(),
@@ -224,10 +231,11 @@ impl<T: ConnectionTransport> BidiNode<T> {
             },
         }));
 
-        let result = self.send_command(command).await
-            .map_err(|e| crate::error::EvaluateResultError::CommandResultError(
-                CommandResultError::SessionSendError(e)
-            ))?;
+        let result = self.send_command(command).await.map_err(|e| {
+            crate::error::EvaluateResultError::CommandResultError(
+                CommandResultError::SessionSendError(e),
+            )
+        })?;
 
         match result {
             ResultData::ScriptResult(script_result) => {
@@ -239,8 +247,9 @@ impl<T: ConnectionTransport> BidiNode<T> {
 
                 match evaluate_result {
                     EvaluateResult::EvaluateResultSuccess(evaluate_result_success) => {
-                        if let RemoteValue::PrimitiveProtocolValue(PrimitiveProtocolValue::StringValue(rv_sv)) =
-                            evaluate_result_success.result
+                        if let RemoteValue::PrimitiveProtocolValue(
+                            PrimitiveProtocolValue::StringValue(rv_sv),
+                        ) = evaluate_result_success.result
                         {
                             return Ok(rv_sv.value);
                         }
@@ -255,19 +264,24 @@ impl<T: ConnectionTransport> BidiNode<T> {
 
     /// Get the text content of the node
     pub async fn get_text_content(&self) -> Result<String, crate::error::EvaluateResultError> {
-        let shared_id = self._raw_node.shared_id.as_ref()
+        let shared_id = self
+            ._raw_node
+            .shared_id
+            .as_ref()
             .ok_or(crate::error::EvaluateResultError::NoSharedId)?;
 
-        let shared_reference = LocalValue::RemoteReference(
-            RemoteReference::SharedReference(SharedReference {
+        let shared_reference =
+            LocalValue::RemoteReference(RemoteReference::SharedReference(SharedReference {
                 shared_id: shared_id.clone(),
                 handle: self._raw_node.handle.clone(),
                 extensible: Default::default(),
-            }),
-        );
+            }));
 
         let script = "function() { return this.textContent || ''; }";
-        let context = self.context.as_ref().ok_or(crate::error::EvaluateResultError::NoSharedId)?;
+        let context = self
+            .context
+            .as_ref()
+            .ok_or(crate::error::EvaluateResultError::NoSharedId)?;
 
         let target = Target::ContextTarget(ContextTarget {
             context: context.clone(),
@@ -288,10 +302,11 @@ impl<T: ConnectionTransport> BidiNode<T> {
             },
         }));
 
-        let result = self.send_command(command).await
-            .map_err(|e| crate::error::EvaluateResultError::CommandResultError(
-                CommandResultError::SessionSendError(e)
-            ))?;
+        let result = self.send_command(command).await.map_err(|e| {
+            crate::error::EvaluateResultError::CommandResultError(
+                CommandResultError::SessionSendError(e),
+            )
+        })?;
 
         match result {
             ResultData::ScriptResult(script_result) => {
@@ -303,8 +318,9 @@ impl<T: ConnectionTransport> BidiNode<T> {
 
                 match evaluate_result {
                     EvaluateResult::EvaluateResultSuccess(evaluate_result_success) => {
-                        if let RemoteValue::PrimitiveProtocolValue(PrimitiveProtocolValue::StringValue(rv_sv)) =
-                            evaluate_result_success.result
+                        if let RemoteValue::PrimitiveProtocolValue(
+                            PrimitiveProtocolValue::StringValue(rv_sv),
+                        ) = evaluate_result_success.result
                         {
                             return Ok(rv_sv.value);
                         }
@@ -318,31 +334,37 @@ impl<T: ConnectionTransport> BidiNode<T> {
     }
 
     /// Get a specific attribute value from the node
-    pub fn get_attribute(&self, attribute_name: &str) -> Option<String> {
-        self._raw_node.value.as_ref()
+    pub fn get_attribute(&self, attribute_name: &str) -> Option<serde_json::Value> {
+        self._raw_node
+            .value
+            .as_ref()
             .and_then(|props| props.attributes.as_ref())
             .and_then(|attrs| attrs.get(attribute_name).cloned())
     }
 
     /// Get all attributes from the node
-    pub fn get_attributes(&self) -> std::collections::HashMap<String, String> {
-        self._raw_node.value.as_ref()
+    pub fn get_attributes(&self) -> std::collections::HashMap<String, serde_json::Value> {
+        self._raw_node
+            .value
+            .as_ref()
             .and_then(|props| props.attributes.clone())
             .unwrap_or_default()
     }
 
     /// Check if the node is visible in the viewport
     pub async fn is_visible(&self) -> Result<bool, crate::error::EvaluateResultError> {
-        let shared_id = self._raw_node.shared_id.as_ref()
+        let shared_id = self
+            ._raw_node
+            .shared_id
+            .as_ref()
             .ok_or(crate::error::EvaluateResultError::NoSharedId)?;
 
-        let shared_reference = LocalValue::RemoteReference(
-            RemoteReference::SharedReference(SharedReference {
+        let shared_reference =
+            LocalValue::RemoteReference(RemoteReference::SharedReference(SharedReference {
                 shared_id: shared_id.clone(),
                 handle: self._raw_node.handle.clone(),
                 extensible: Default::default(),
-            }),
-        );
+            }));
 
         let script = r#"function() {
             if (!this) return false;
@@ -354,7 +376,11 @@ impl<T: ConnectionTransport> BidiNode<T> {
                    style.display !== 'none' &&
                    style.opacity !== '0';
         }"#;
-        let context = self.context.as_ref().ok_or(crate::error::EvaluateResultError::NoSharedId)?;
+
+        let context = self
+            .context
+            .as_ref()
+            .ok_or(crate::error::EvaluateResultError::NoSharedId)?;
 
         let target = Target::ContextTarget(ContextTarget {
             context: context.clone(),
@@ -375,10 +401,11 @@ impl<T: ConnectionTransport> BidiNode<T> {
             },
         }));
 
-        let result = self.send_command(command).await
-            .map_err(|e| crate::error::EvaluateResultError::CommandResultError(
-                CommandResultError::SessionSendError(e)
-            ))?;
+        let result = self.send_command(command).await.map_err(|e| {
+            crate::error::EvaluateResultError::CommandResultError(
+                CommandResultError::SessionSendError(e),
+            )
+        })?;
 
         match result {
             ResultData::ScriptResult(script_result) => {
@@ -390,8 +417,9 @@ impl<T: ConnectionTransport> BidiNode<T> {
 
                 match evaluate_result {
                     EvaluateResult::EvaluateResultSuccess(evaluate_result_success) => {
-                        if let RemoteValue::PrimitiveProtocolValue(PrimitiveProtocolValue::BooleanValue(bv)) =
-                            evaluate_result_success.result
+                        if let RemoteValue::PrimitiveProtocolValue(
+                            PrimitiveProtocolValue::BooleanValue(bv),
+                        ) = evaluate_result_success.result
                         {
                             return Ok(bv.value);
                         }
@@ -406,19 +434,24 @@ impl<T: ConnectionTransport> BidiNode<T> {
 
     /// Scroll the node into view
     pub async fn scroll_into_view(&self) -> Result<(), crate::error::EvaluateResultError> {
-        let shared_id = self._raw_node.shared_id.as_ref()
+        let shared_id = self
+            ._raw_node
+            .shared_id
+            .as_ref()
             .ok_or(crate::error::EvaluateResultError::NoSharedId)?;
 
-        let shared_reference = LocalValue::RemoteReference(
-            RemoteReference::SharedReference(SharedReference {
+        let shared_reference =
+            LocalValue::RemoteReference(RemoteReference::SharedReference(SharedReference {
                 shared_id: shared_id.clone(),
                 handle: self._raw_node.handle.clone(),
                 extensible: Default::default(),
-            }),
-        );
+            }));
 
         let script = "function() { if (!this) { return null; } this.scrollIntoView({block: 'center', inline: 'center', behavior: 'instant'}); }";
-        let context = self.context.as_ref().ok_or(crate::error::EvaluateResultError::NoSharedId)?;
+        let context = self
+            .context
+            .as_ref()
+            .ok_or(crate::error::EvaluateResultError::NoSharedId)?;
 
         let target = Target::ContextTarget(ContextTarget {
             context: context.clone(),
@@ -439,29 +472,35 @@ impl<T: ConnectionTransport> BidiNode<T> {
             },
         }));
 
-        self.send_command(command).await
-            .map_err(|e| crate::error::EvaluateResultError::CommandResultError(
-                CommandResultError::SessionSendError(e)
-            ))?;
+        self.send_command(command).await.map_err(|e| {
+            crate::error::EvaluateResultError::CommandResultError(
+                CommandResultError::SessionSendError(e),
+            )
+        })?;
 
         Ok(())
     }
 
     /// Get the inner HTML of the node
     pub async fn get_inner_html(&self) -> Result<String, crate::error::EvaluateResultError> {
-        let shared_id = self._raw_node.shared_id.as_ref()
+        let shared_id = self
+            ._raw_node
+            .shared_id
+            .as_ref()
             .ok_or(crate::error::EvaluateResultError::NoSharedId)?;
 
-        let shared_reference = LocalValue::RemoteReference(
-            RemoteReference::SharedReference(SharedReference {
+        let shared_reference =
+            LocalValue::RemoteReference(RemoteReference::SharedReference(SharedReference {
                 shared_id: shared_id.clone(),
                 handle: self._raw_node.handle.clone(),
                 extensible: Default::default(),
-            }),
-        );
+            }));
 
         let script = "function() { return this.innerHTML || ''; }";
-        let context = self.context.as_ref().ok_or(crate::error::EvaluateResultError::NoSharedId)?;
+        let context = self
+            .context
+            .as_ref()
+            .ok_or(crate::error::EvaluateResultError::NoSharedId)?;
 
         let target = Target::ContextTarget(ContextTarget {
             context: context.clone(),
@@ -482,10 +521,11 @@ impl<T: ConnectionTransport> BidiNode<T> {
             },
         }));
 
-        let result = self.send_command(command).await
-            .map_err(|e| crate::error::EvaluateResultError::CommandResultError(
-                CommandResultError::SessionSendError(e)
-            ))?;
+        let result = self.send_command(command).await.map_err(|e| {
+            crate::error::EvaluateResultError::CommandResultError(
+                CommandResultError::SessionSendError(e),
+            )
+        })?;
 
         match result {
             ResultData::ScriptResult(script_result) => {
@@ -497,8 +537,9 @@ impl<T: ConnectionTransport> BidiNode<T> {
 
                 match evaluate_result {
                     EvaluateResult::EvaluateResultSuccess(evaluate_result_success) => {
-                        if let RemoteValue::PrimitiveProtocolValue(PrimitiveProtocolValue::StringValue(rv_sv)) =
-                            evaluate_result_success.result
+                        if let RemoteValue::PrimitiveProtocolValue(
+                            PrimitiveProtocolValue::StringValue(rv_sv),
+                        ) = evaluate_result_success.result
                         {
                             return Ok(rv_sv.value);
                         }
@@ -513,19 +554,25 @@ impl<T: ConnectionTransport> BidiNode<T> {
 
     /// Delete the node from the DOM
     pub async fn delete(&self) -> Result<(), crate::error::EvaluateResultError> {
-        let shared_id = self._raw_node.shared_id.as_ref()
+        let shared_id = self
+            ._raw_node
+            .shared_id
+            .as_ref()
             .ok_or(crate::error::EvaluateResultError::NoSharedId)?;
 
-        let shared_reference = LocalValue::RemoteReference(
-            RemoteReference::SharedReference(SharedReference {
+        let shared_reference =
+            LocalValue::RemoteReference(RemoteReference::SharedReference(SharedReference {
                 shared_id: shared_id.clone(),
                 handle: self._raw_node.handle.clone(),
                 extensible: Default::default(),
-            }),
-        );
+            }));
 
-        let script = "function() { if (this && this.parentNode) { this.parentNode.removeChild(this); } }";
-        let context = self.context.as_ref().ok_or(crate::error::EvaluateResultError::NoSharedId)?;
+        let script =
+            "function() { if (this && this.parentNode) { this.parentNode.removeChild(this); } }";
+        let context = self
+            .context
+            .as_ref()
+            .ok_or(crate::error::EvaluateResultError::NoSharedId)?;
 
         let target = Target::ContextTarget(ContextTarget {
             context: context.clone(),
@@ -546,10 +593,11 @@ impl<T: ConnectionTransport> BidiNode<T> {
             },
         }));
 
-        self.send_command(command).await
-            .map_err(|e| crate::error::EvaluateResultError::CommandResultError(
-                CommandResultError::SessionSendError(e)
-            ))?;
+        self.send_command(command).await.map_err(|e| {
+            crate::error::EvaluateResultError::CommandResultError(
+                CommandResultError::SessionSendError(e),
+            )
+        })?;
 
         Ok(())
     }
@@ -562,59 +610,48 @@ impl<T: ConnectionTransport> BidiNode<T> {
     /// Otherwise, returns the base64-encoded image data
     pub async fn screenshot(
         &self,
-        origin: Option<OriginUnion>,
-        format: Option<ImageFormat>,
-        save_path: Option<&str>,
+        screenshot_command: impl Into<CaptureScreenshot>,
     ) -> Result<String, crate::error::ScreenshotError> {
-        let shared_id = self._raw_node.shared_id.as_ref()
+        let shared_id = self
+            ._raw_node
+            .shared_id
+            .as_ref()
             .ok_or(crate::error::ScreenshotError::NoSharedId)?;
 
-        let context = self.context.as_ref()
+        let context = self
+            .context
+            .as_ref()
             .ok_or(crate::error::ScreenshotError::NoContext)?;
 
         // Create clip rectangle for this element
-        let clip = Some(ClipRectangle::ElementClipRectangle(ElementClipRectangle {
-            r#type: ElementEnum::Element,
-            element: SharedReference {
-                shared_id: shared_id.clone(),
-                handle: self._raw_node.handle.clone(),
-                extensible: Default::default(),
-            },
-        }));
+        let clip = Some(
+            ElementClipRectangleBuilder::default()
+                .r#type(ElementClipRectangleType::Element)
+                .element(
+                    SharedReferenceBuilder::default()
+                        .shared_id(shared_id.clone())
+                        .handle(self._raw_node.handle.clone()),
+                ),
+        );
 
-        let result = self
-            .send_command(CommandData::BrowsingContextCommand(
-                BrowsingContextCommand::CaptureScreenshot(CaptureScreenshot {
-                    method: BrowsingContextCaptureScreenshotMethod::BrowsingContextCaptureScreenshot,
-                    params: CaptureScreenshotParameters {
-                        context: context.clone(),
-                        origin,
-                        format,
-                        clip,
-                    },
-                }),
-            ))
-            .await;
+        let response = self.send_command(screenshot_command.into()).await;
 
-        let base64_data = match result {
-            Ok(ResultData::BrowsingContextResult(browsing_context_result)) => {
-                match browsing_context_result {
-                    BrowsingContextResult::CaptureScreenshotResult(screenshot_result) => {
-                        screenshot_result.data
-                    }
-                    _ => return Err(crate::error::ScreenshotError::CommandResultError(
-                        CommandResultError::InvalidResultTypeError(
-                            ResultData::BrowsingContextResult(browsing_context_result),
-                        ),
-                    )),
-                }
+        let base64_data = match response {
+            Ok(response) => {
+                let context_result: CaptureScreenshotResult =
+                    response.result.clone().try_into().map_err(|_| {
+                        ScreenshotError::CommandResultError(
+                            CommandResultError::InvalidResultTypeError(response.result),
+                        )
+                    })?;
+
+                context_result.data
             }
-            Ok(result) => return Err(crate::error::ScreenshotError::CommandResultError(
-                CommandResultError::InvalidResultTypeError(result),
-            )),
-            Err(err) => return Err(crate::error::ScreenshotError::CommandResultError(
-                CommandResultError::SessionSendError(err),
-            )),
+            Err(err) => {
+                return Err(crate::error::ScreenshotError::CommandResultError(
+                    CommandResultError::SessionSendError(err),
+                ));
+            }
         };
 
         // If save_path is provided, save to file
@@ -636,9 +673,10 @@ impl<T: ConnectionTransport> BidiNode<T> {
                 // Verify parent directory exists
                 if let Some(parent) = path_obj.parent() {
                     if !parent.as_os_str().is_empty() && !parent.exists() {
-                        return Err(crate::error::ScreenshotError::InvalidPath(
-                            format!("Parent directory does not exist: {}", parent.display())
-                        ));
+                        return Err(crate::error::ScreenshotError::InvalidPath(format!(
+                            "Parent directory does not exist: {}",
+                            parent.display()
+                        )));
                     }
                 }
                 path_obj.to_path_buf()
@@ -646,7 +684,8 @@ impl<T: ConnectionTransport> BidiNode<T> {
 
             // Decode base64 and write to file
             use base64::{Engine as _, engine::general_purpose};
-            let decoded = general_purpose::STANDARD.decode(&base64_data)
+            let decoded = general_purpose::STANDARD
+                .decode(&base64_data)
                 .map_err(|e| crate::error::ScreenshotError::Base64DecodeError(e.to_string()))?;
 
             std::fs::write(&final_path, decoded)

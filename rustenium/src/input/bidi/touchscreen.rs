@@ -1,14 +1,13 @@
-use rustenium_bidi_commands::browsing_context::types::BrowsingContext;
-use rustenium_bidi_commands::input::commands::{
-    InputCommand, PerformActions, PerformActionsParameters, InputPerformActionsMethod,
+use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
+use rustenium_bidi_definitions::input::commands::{
+    PerformActions, PerformActionsParams, PerformActionsMethod,
 };
-use rustenium_bidi_commands::input::types::{
+use rustenium_bidi_definitions::input::types::{
     PointerSourceActions, PointerSourceAction, PointerDownAction, PointerUpAction,
-    PointerMoveAction, SourceActions, PointerEnum, PointerDownEnum, PointerUpEnum,
-    PointerMoveEnum, PointerCommonProperties, PointerParameters, PointerType, Origin,
+    PointerMoveAction, SourceActions, PointerSourceActionsType, PointerDownActionType, PointerUpActionType,
+    PointerMoveActionType, PointerCommonProperties, PointerParameters, PointerType, Origin,
 };
-use rustenium_bidi_commands::CommandData;
-use rustenium_core::Session;
+use rustenium_core::BidiSession;
 use rustenium_core::transport::ConnectionTransport;
 use crate::error::InputError;
 use std::sync::Arc;
@@ -28,7 +27,7 @@ pub struct TouchMoveOptions {
 /// Each `TouchHandle` represents one finger/touch point. Create multiple handles
 /// to simulate multi-touch gestures like pinch, zoom, or multi-finger swipes.
 pub struct TouchHandle<OT: ConnectionTransport> {
-    session: Arc<Mutex<Session<OT>>>,
+    session: Arc<Mutex<BidiSession<OT>>>,
     touchscreen: Arc<Touchscreen<OT>>,
     id: usize,
     bidi_id: String,
@@ -39,7 +38,7 @@ pub struct TouchHandle<OT: ConnectionTransport> {
 
 impl<OT: ConnectionTransport> TouchHandle<OT> {
     pub(crate) fn new(
-        session: Arc<Mutex<Session<OT>>>,
+        session: Arc<Mutex<BidiSession<OT>>>,
         touchscreen: Arc<Touchscreen<OT>>,
         id: usize,
         x: f64,
@@ -86,19 +85,19 @@ impl<OT: ConnectionTransport> TouchHandle<OT> {
         let options = options.unwrap_or_default();
         let position = *self.position.lock().await;
 
-        let command = InputCommand::PerformActions(PerformActions {
-            method: InputPerformActionsMethod::InputPerformActions,
-            params: PerformActionsParameters {
+        let command = PerformActions {
+            method: PerformActionsMethod::InputPerformActions,
+            params: PerformActionsParams {
                 context: context.clone(),
                 actions: vec![SourceActions::PointerSourceActions(PointerSourceActions {
-                    r#type: PointerEnum::Pointer,
+                    r#type: PointerSourceActionsType::Pointer,
                     id: self.bidi_id.clone(),
                     parameters: Some(PointerParameters {
                         pointer_type: Some(PointerType::Touch),
                     }),
                     actions: vec![
                         PointerSourceAction::PointerMoveAction(PointerMoveAction {
-                            r#type: PointerMoveEnum::PointerMove,
+                            r#type: PointerMoveActionType::PointerMove,
                             x: position.x,
                             y: position.y,
                             duration: None,
@@ -114,17 +113,17 @@ impl<OT: ConnectionTransport> TouchHandle<OT> {
                             },
                         }),
                         PointerSourceAction::PointerDownAction(PointerDownAction {
-                            r#type: PointerDownEnum::PointerDown,
+                            r#type: PointerDownActionType::PointerDown,
                             button: 0,
                             pointer_common_properties: self.properties.clone(),
                         }),
                     ],
                 })],
             },
-        });
+        };
 
         let mut session = self.session.lock().await;
-        session.send(CommandData::InputCommand(command))
+        session.send(command)
             .await
             .map_err(|e| InputError::CommandResultError(rustenium_core::error::CommandResultError::SessionSendError(e)))?;
         *started = true;
@@ -245,14 +244,14 @@ impl<OT: ConnectionTransport> TouchHandle<OT> {
 /// # }
 /// ```
 pub struct Touchscreen<OT: ConnectionTransport> {
-    session: Arc<Mutex<Session<OT>>>,
+    session: Arc<Mutex<BidiSession<OT>>>,
     touches: Arc<Mutex<Vec<usize>>>,
     id_counter: Arc<Mutex<usize>>,
 }
 
 impl<OT: ConnectionTransport> Touchscreen<OT> {
     /// Creates a new Touchscreen instance.
-    pub fn new(session: Arc<Mutex<Session<OT>>>) -> Self {
+    pub fn new(session: Arc<Mutex<BidiSession<OT>>>) -> Self {
         Self {
             session,
             touches: Arc::new(Mutex::new(Vec::new())),

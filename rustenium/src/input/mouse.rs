@@ -1,7 +1,7 @@
 use std::future::Future;
 use std::sync::Arc;
 use tokio::sync::Mutex;
-use rustenium_bidi_commands::browsing_context::types::BrowsingContext;
+use rustenium_core::BrowsingContext;
 use crate::error::InputError;
 
 /// Options for mouse movement operations.
@@ -10,7 +10,7 @@ pub struct MouseMoveOptions {
     /// Number of intermediate steps for smooth movement (used by BidiMouse).
     pub steps: Option<usize>,
     /// Origin point for relative movements.
-    pub origin: Option<rustenium_bidi_commands::input::types::Origin>,
+    pub origin: Option<rustenium_bidi_definitions::input::types::Origin>,
 }
 
 /// Options for mouse click operations.
@@ -23,7 +23,7 @@ pub struct MouseClickOptions {
     /// Delay in milliseconds between mousedown and mouseup events.
     pub delay: Option<u64>,
     /// Origin point for the click.
-    pub origin: Option<rustenium_bidi_commands::input::types::Origin>,
+    pub origin: Option<rustenium_bidi_definitions::input::types::Origin>,
 }
 
 /// Options for mouse button press/release operations.

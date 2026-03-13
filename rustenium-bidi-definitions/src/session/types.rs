@@ -407,4 +407,32 @@ pub enum UnsubscribeParameters {
     UnsubscribeByAttributesRequest(UnsubscribeByAttributesRequest),
     UnsubscribeByIdRequest(UnsubscribeByIdRequest),
 }
+impl From<UnsubscribeByAttributesRequest> for UnsubscribeParameters {
+    fn from(v: UnsubscribeByAttributesRequest) -> Self {
+        UnsubscribeParameters::UnsubscribeByAttributesRequest(v)
+    }
+}
+impl TryFrom<UnsubscribeParameters> for UnsubscribeByAttributesRequest {
+    type Error = UnsubscribeParameters;
+    fn try_from(e: UnsubscribeParameters) -> Result<Self, Self::Error> {
+        match e {
+            UnsubscribeParameters::UnsubscribeByAttributesRequest(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<UnsubscribeByIdRequest> for UnsubscribeParameters {
+    fn from(v: UnsubscribeByIdRequest) -> Self {
+        UnsubscribeParameters::UnsubscribeByIdRequest(v)
+    }
+}
+impl TryFrom<UnsubscribeParameters> for UnsubscribeByIdRequest {
+    type Error = UnsubscribeParameters;
+    fn try_from(e: UnsubscribeParameters) -> Result<Self, Self::Error> {
+        match e {
+            UnsubscribeParameters::UnsubscribeByIdRequest(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
 group_enum ! (SessionType { CapabilitiesRequest (CapabilitiesRequest) , CapabilityRequest (CapabilityRequest) , ProxyConfiguration (ProxyConfiguration) , AutodetectProxyConfiguration (AutodetectProxyConfiguration) , DirectProxyConfiguration (DirectProxyConfiguration) , ManualProxyConfiguration (ManualProxyConfiguration) , SocksProxyConfiguration (SocksProxyConfiguration) , PacProxyConfiguration (PacProxyConfiguration) , SystemProxyConfiguration (SystemProxyConfiguration) , UserPromptHandler (UserPromptHandler) , UserPromptHandlerType (UserPromptHandlerType) , Subscription (Subscription) , UnsubscribeByIdRequest (UnsubscribeByIdRequest) , UnsubscribeParameters (UnsubscribeParameters) });

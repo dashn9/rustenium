@@ -123,6 +123,38 @@ pub enum ClientWindowNamedStateClientWindowRectStateUnion {
     ClientWindowNamedState(ClientWindowNamedState),
     ClientWindowRectState(ClientWindowRectState),
 }
+impl From<ClientWindowNamedState> for ClientWindowNamedStateClientWindowRectStateUnion {
+    fn from(v: ClientWindowNamedState) -> Self {
+        ClientWindowNamedStateClientWindowRectStateUnion::ClientWindowNamedState(v)
+    }
+}
+impl TryFrom<ClientWindowNamedStateClientWindowRectStateUnion> for ClientWindowNamedState {
+    type Error = ClientWindowNamedStateClientWindowRectStateUnion;
+    fn try_from(e: ClientWindowNamedStateClientWindowRectStateUnion) -> Result<Self, Self::Error> {
+        match e {
+            ClientWindowNamedStateClientWindowRectStateUnion::ClientWindowNamedState(inner) => {
+                Ok(inner)
+            }
+            other => Err(other),
+        }
+    }
+}
+impl From<ClientWindowRectState> for ClientWindowNamedStateClientWindowRectStateUnion {
+    fn from(v: ClientWindowRectState) -> Self {
+        ClientWindowNamedStateClientWindowRectStateUnion::ClientWindowRectState(v)
+    }
+}
+impl TryFrom<ClientWindowNamedStateClientWindowRectStateUnion> for ClientWindowRectState {
+    type Error = ClientWindowNamedStateClientWindowRectStateUnion;
+    fn try_from(e: ClientWindowNamedStateClientWindowRectStateUnion) -> Result<Self, Self::Error> {
+        match e {
+            ClientWindowNamedStateClientWindowRectStateUnion::ClientWindowRectState(inner) => {
+                Ok(inner)
+            }
+            other => Err(other),
+        }
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ClientWindowNamedState {
     #[serde(rename = "state")]
@@ -201,6 +233,34 @@ pub enum DownloadBehavior {
     DownloadBehaviorAllowed(DownloadBehaviorAllowed),
     DownloadBehaviorDenied(DownloadBehaviorDenied),
 }
+impl From<DownloadBehaviorAllowed> for DownloadBehavior {
+    fn from(v: DownloadBehaviorAllowed) -> Self {
+        DownloadBehavior::DownloadBehaviorAllowed(v)
+    }
+}
+impl TryFrom<DownloadBehavior> for DownloadBehaviorAllowed {
+    type Error = DownloadBehavior;
+    fn try_from(e: DownloadBehavior) -> Result<Self, Self::Error> {
+        match e {
+            DownloadBehavior::DownloadBehaviorAllowed(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<DownloadBehaviorDenied> for DownloadBehavior {
+    fn from(v: DownloadBehaviorDenied) -> Self {
+        DownloadBehavior::DownloadBehaviorDenied(v)
+    }
+}
+impl TryFrom<DownloadBehavior> for DownloadBehaviorDenied {
+    type Error = DownloadBehavior;
+    fn try_from(e: DownloadBehavior) -> Result<Self, Self::Error> {
+        match e {
+            DownloadBehavior::DownloadBehaviorDenied(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DownloadBehaviorAllowed {
     #[serde(rename = "type")]
@@ -255,4 +315,4 @@ impl DownloadBehaviorDenied {
         Self::IDENTIFIER
     }
 }
-group_enum ! (BrowserType { ClientWindow (ClientWindow) , ClientWindowInfo (ClientWindowInfo) , UserContext (UserContext) , UserContextInfo (UserContextInfo) , ClientWindowNamedStateClientWindowRectStateUnion (ClientWindowNamedStateClientWindowRectStateUnion) , DownloadBehavior (DownloadBehavior) });
+group_enum ! (BrowserType { ClientWindow (ClientWindow) , UserContext (UserContext) , ClientWindowNamedStateClientWindowRectStateUnion (ClientWindowNamedStateClientWindowRectStateUnion) , DownloadBehavior (DownloadBehavior) });

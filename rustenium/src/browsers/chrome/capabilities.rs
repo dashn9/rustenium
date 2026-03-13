@@ -1,5 +1,4 @@
-use rustenium_bidi_commands::session::types::CapabilityRequest;
-use rustenium_bidi_commands::Extensible;
+use rustenium_bidi_definitions::session::types::CapabilityRequest;
 use serde::{Serialize, Deserialize};
 use serde_json::Value;
 use std::collections::HashMap;

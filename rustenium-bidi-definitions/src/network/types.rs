@@ -39,6 +39,34 @@ pub enum BytesValue {
     StringValue(StringValue),
     Base64Value(Base64Value),
 }
+impl From<StringValue> for BytesValue {
+    fn from(v: StringValue) -> Self {
+        BytesValue::StringValue(v)
+    }
+}
+impl TryFrom<BytesValue> for StringValue {
+    type Error = BytesValue;
+    fn try_from(e: BytesValue) -> Result<Self, Self::Error> {
+        match e {
+            BytesValue::StringValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<Base64Value> for BytesValue {
+    fn from(v: Base64Value) -> Self {
+        BytesValue::Base64Value(v)
+    }
+}
+impl TryFrom<BytesValue> for Base64Value {
+    type Error = BytesValue;
+    fn try_from(e: BytesValue) -> Result<Self, Self::Error> {
+        match e {
+            BytesValue::Base64Value(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StringValue {
     #[serde(rename = "type")]
@@ -379,6 +407,34 @@ pub enum UrlPattern {
     UrlPatternPattern(UrlPatternPattern),
     UrlPatternString(UrlPatternString),
 }
+impl From<UrlPatternPattern> for UrlPattern {
+    fn from(v: UrlPatternPattern) -> Self {
+        UrlPattern::UrlPatternPattern(v)
+    }
+}
+impl TryFrom<UrlPattern> for UrlPatternPattern {
+    type Error = UrlPattern;
+    fn try_from(e: UrlPattern) -> Result<Self, Self::Error> {
+        match e {
+            UrlPattern::UrlPatternPattern(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<UrlPatternString> for UrlPattern {
+    fn from(v: UrlPatternString) -> Self {
+        UrlPattern::UrlPatternString(v)
+    }
+}
+impl TryFrom<UrlPattern> for UrlPatternString {
+    type Error = UrlPattern;
+    fn try_from(e: UrlPattern) -> Result<Self, Self::Error> {
+        match e {
+            UrlPattern::UrlPatternString(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UrlPatternPattern {
     #[serde(rename = "type")]
@@ -469,6 +525,44 @@ pub enum InterceptPhase {
 pub enum ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion {
     ContinueWithAuthCredentials(ContinueWithAuthCredentials),
     ContinueWithAuthNoCredentials(ContinueWithAuthNoCredentials),
+}
+impl From<ContinueWithAuthCredentials>
+    for ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion
+{
+    fn from(v: ContinueWithAuthCredentials) -> Self {
+        ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion::ContinueWithAuthCredentials(
+            v,
+        )
+    }
+}
+impl TryFrom<ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion>
+    for ContinueWithAuthCredentials
+{
+    type Error = ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion;
+    fn try_from(
+        e: ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion,
+    ) -> Result<Self, Self::Error> {
+        match e { ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion :: ContinueWithAuthCredentials (inner) => Ok (inner) , other => Err (other) , }
+    }
+}
+impl From<ContinueWithAuthNoCredentials>
+    for ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion
+{
+    fn from(v: ContinueWithAuthNoCredentials) -> Self {
+        ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion::ContinueWithAuthNoCredentials(
+            v,
+        )
+    }
+}
+impl TryFrom<ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion>
+    for ContinueWithAuthNoCredentials
+{
+    type Error = ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion;
+    fn try_from(
+        e: ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion,
+    ) -> Result<Self, Self::Error> {
+        match e { ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion :: ContinueWithAuthNoCredentials (inner) => Ok (inner) , other => Err (other) , }
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ContinueWithAuthCredentials {

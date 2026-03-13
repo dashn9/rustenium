@@ -1,6 +1,6 @@
 use tokio::time::{Duration, sleep};
 use rustenium::browsers::{create_chrome_browser, ChromeConfig};
-use rustenium_bidi_commands::browsing_context::types::ReadinessState;
+use rustenium_bidi_definitions::browsing_context::types::ReadinessState;
 use rustenium_macros::css;
 
 #[tokio::test]

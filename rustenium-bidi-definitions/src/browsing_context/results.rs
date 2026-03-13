@@ -106,21 +106,7 @@ impl TryFrom<serde_json::Value> for PrintResult {
         serde_json::from_value(value)
     }
 }
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct ReloadResult {
-    #[serde(rename = "navigation")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default)]
-    pub navigation: Option<super::types::Navigation>,
-    #[serde(rename = "url")]
-    pub url: String,
-}
-impl TryFrom<serde_json::Value> for ReloadResult {
-    type Error = serde_json::Error;
-    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
-        serde_json::from_value(value)
-    }
-}
+pub type ReloadResult = NavigateResult;
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetViewportResult {
     #[serde(flatten)]

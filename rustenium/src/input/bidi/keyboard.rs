@@ -1,13 +1,12 @@
-use rustenium_bidi_commands::browsing_context::types::BrowsingContext;
-use rustenium_bidi_commands::input::commands::{
-    InputCommand, PerformActions, PerformActionsParameters, InputPerformActionsMethod,
+use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
+use rustenium_bidi_definitions::input::commands::{
+    PerformActions, PerformActionsParams, PerformActionsMethod,
 };
-use rustenium_bidi_commands::input::types::{
+use rustenium_bidi_definitions::input::types::{
     KeySourceActions, KeySourceAction, KeyDownAction, KeyUpAction, PauseAction,
-    SourceActions, KeyEnum, KeyDownEnum, KeyUpEnum, PauseEnum,
+    SourceActions, KeySourceActionsType, KeyDownActionType, KeyUpActionType, PauseActionType,
 };
-use rustenium_bidi_commands::CommandData;
-use rustenium_core::Session;
+use rustenium_core::BidiSession;
 use rustenium_core::transport::ConnectionTransport;
 use crate::error::InputError;
 use std::sync::Arc;
@@ -160,10 +159,10 @@ fn get_bidi_key_value(key: &str) -> Result<String, InputError> {
 ///
 /// ```no_run
 /// # use rustenium::input::Keyboard;
-/// # use rustenium_bidi_commands::browsing_context::types::BrowsingContext;
+/// # use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
 /// # use std::sync::Arc;
 /// # use tokio::sync::Mutex;
-/// # use rustenium_core::Session;
+/// # use rustenium_core::BidiSession;
 /// # async fn example(session: Arc<Mutex<Session<rustenium_core::transport::WebsocketConnectionTransport>>>, context: BrowsingContext) -> Result<(), Box<dyn std::error::Error>> {
 /// let keyboard = Keyboard::new(session);
 ///
@@ -181,12 +180,12 @@ fn get_bidi_key_value(key: &str) -> Result<String, InputError> {
 /// # }
 /// ```
 pub struct Keyboard<OT: ConnectionTransport> {
-    session: Arc<Mutex<Session<OT>>>,
+    session: Arc<Mutex<BidiSession<OT>>>,
 }
 
 impl<OT: ConnectionTransport> Keyboard<OT> {
     /// Creates a new Keyboard instance.
-    pub fn new(session: Arc<Mutex<Session<OT>>>) -> Self {
+    pub fn new(session: Arc<Mutex<BidiSession<OT>>>) -> Self {
         Self { session }
     }
 

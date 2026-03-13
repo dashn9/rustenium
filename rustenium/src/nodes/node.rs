@@ -1,8 +1,8 @@
 use std::collections::HashMap;
 use std::future::Future;
 use serde::Deserialize;
-use rustenium_bidi_commands::browsing_context::types::Locator;
-use rustenium_bidi_commands::script::types::{Handle, SharedId};
+use rustenium_bidi_definitions::browsing_context::types::Locator;
+use rustenium_bidi_definitions::script::types::{Handle, SharedId};
 use crate::error::EvaluateResultError;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

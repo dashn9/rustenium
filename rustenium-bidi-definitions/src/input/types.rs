@@ -37,6 +37,62 @@ pub enum SourceActions {
     PointerSourceActions(PointerSourceActions),
     WheelSourceActions(WheelSourceActions),
 }
+impl From<NoneSourceActions> for SourceActions {
+    fn from(v: NoneSourceActions) -> Self {
+        SourceActions::NoneSourceActions(v)
+    }
+}
+impl TryFrom<SourceActions> for NoneSourceActions {
+    type Error = SourceActions;
+    fn try_from(e: SourceActions) -> Result<Self, Self::Error> {
+        match e {
+            SourceActions::NoneSourceActions(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<KeySourceActions> for SourceActions {
+    fn from(v: KeySourceActions) -> Self {
+        SourceActions::KeySourceActions(v)
+    }
+}
+impl TryFrom<SourceActions> for KeySourceActions {
+    type Error = SourceActions;
+    fn try_from(e: SourceActions) -> Result<Self, Self::Error> {
+        match e {
+            SourceActions::KeySourceActions(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<PointerSourceActions> for SourceActions {
+    fn from(v: PointerSourceActions) -> Self {
+        SourceActions::PointerSourceActions(v)
+    }
+}
+impl TryFrom<SourceActions> for PointerSourceActions {
+    type Error = SourceActions;
+    fn try_from(e: SourceActions) -> Result<Self, Self::Error> {
+        match e {
+            SourceActions::PointerSourceActions(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<WheelSourceActions> for SourceActions {
+    fn from(v: WheelSourceActions) -> Self {
+        SourceActions::WheelSourceActions(v)
+    }
+}
+impl TryFrom<SourceActions> for WheelSourceActions {
+    type Error = SourceActions;
+    fn try_from(e: SourceActions) -> Result<Self, Self::Error> {
+        match e {
+            SourceActions::WheelSourceActions(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NoneSourceActions {
     #[serde(rename = "type")]
@@ -131,6 +187,48 @@ pub enum KeySourceAction {
     KeyDownAction(KeyDownAction),
     KeyUpAction(KeyUpAction),
 }
+impl From<PauseAction> for KeySourceAction {
+    fn from(v: PauseAction) -> Self {
+        KeySourceAction::PauseAction(v)
+    }
+}
+impl TryFrom<KeySourceAction> for PauseAction {
+    type Error = KeySourceAction;
+    fn try_from(e: KeySourceAction) -> Result<Self, Self::Error> {
+        match e {
+            KeySourceAction::PauseAction(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<KeyDownAction> for KeySourceAction {
+    fn from(v: KeyDownAction) -> Self {
+        KeySourceAction::KeyDownAction(v)
+    }
+}
+impl TryFrom<KeySourceAction> for KeyDownAction {
+    type Error = KeySourceAction;
+    fn try_from(e: KeySourceAction) -> Result<Self, Self::Error> {
+        match e {
+            KeySourceAction::KeyDownAction(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<KeyUpAction> for KeySourceAction {
+    fn from(v: KeyUpAction) -> Self {
+        KeySourceAction::KeyUpAction(v)
+    }
+}
+impl TryFrom<KeySourceAction> for KeyUpAction {
+    type Error = KeySourceAction;
+    fn try_from(e: KeySourceAction) -> Result<Self, Self::Error> {
+        match e {
+            KeySourceAction::KeyUpAction(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PointerSourceActions {
     #[serde(rename = "type")]
@@ -202,6 +300,62 @@ pub enum PointerSourceAction {
     PointerUpAction(PointerUpAction),
     PointerMoveAction(PointerMoveAction),
 }
+impl From<PauseAction> for PointerSourceAction {
+    fn from(v: PauseAction) -> Self {
+        PointerSourceAction::PauseAction(v)
+    }
+}
+impl TryFrom<PointerSourceAction> for PauseAction {
+    type Error = PointerSourceAction;
+    fn try_from(e: PointerSourceAction) -> Result<Self, Self::Error> {
+        match e {
+            PointerSourceAction::PauseAction(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<PointerDownAction> for PointerSourceAction {
+    fn from(v: PointerDownAction) -> Self {
+        PointerSourceAction::PointerDownAction(v)
+    }
+}
+impl TryFrom<PointerSourceAction> for PointerDownAction {
+    type Error = PointerSourceAction;
+    fn try_from(e: PointerSourceAction) -> Result<Self, Self::Error> {
+        match e {
+            PointerSourceAction::PointerDownAction(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<PointerUpAction> for PointerSourceAction {
+    fn from(v: PointerUpAction) -> Self {
+        PointerSourceAction::PointerUpAction(v)
+    }
+}
+impl TryFrom<PointerSourceAction> for PointerUpAction {
+    type Error = PointerSourceAction;
+    fn try_from(e: PointerSourceAction) -> Result<Self, Self::Error> {
+        match e {
+            PointerSourceAction::PointerUpAction(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<PointerMoveAction> for PointerSourceAction {
+    fn from(v: PointerMoveAction) -> Self {
+        PointerSourceAction::PointerMoveAction(v)
+    }
+}
+impl TryFrom<PointerSourceAction> for PointerMoveAction {
+    type Error = PointerSourceAction;
+    fn try_from(e: PointerSourceAction) -> Result<Self, Self::Error> {
+        match e {
+            PointerSourceAction::PointerMoveAction(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WheelSourceActions {
     #[serde(rename = "type")]
@@ -242,6 +396,34 @@ impl WheelSourceActions {
 pub enum WheelSourceAction {
     PauseAction(PauseAction),
     WheelScrollAction(WheelScrollAction),
+}
+impl From<PauseAction> for WheelSourceAction {
+    fn from(v: PauseAction) -> Self {
+        WheelSourceAction::PauseAction(v)
+    }
+}
+impl TryFrom<WheelSourceAction> for PauseAction {
+    type Error = WheelSourceAction;
+    fn try_from(e: WheelSourceAction) -> Result<Self, Self::Error> {
+        match e {
+            WheelSourceAction::PauseAction(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<WheelScrollAction> for WheelSourceAction {
+    fn from(v: WheelScrollAction) -> Self {
+        WheelSourceAction::WheelScrollAction(v)
+    }
+}
+impl TryFrom<WheelSourceAction> for WheelScrollAction {
+    type Error = WheelSourceAction;
+    fn try_from(e: WheelSourceAction) -> Result<Self, Self::Error> {
+        match e {
+            WheelSourceAction::WheelScrollAction(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PauseAction {

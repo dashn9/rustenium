@@ -43,6 +43,7 @@ fn add_module_property_to_module<'a>(mod_prop: ModuleProperty<'a>, module: &mut 
                     name: result_name,
                     parameters: vec![],
                     raw_name: Cow::Owned(String::new()),
+                    type_choice: None,
                 });
             }
         }
@@ -270,6 +271,7 @@ pub fn parse_pdl<'a>(input: &'a str) -> Result<Protocol<'a>, Error> {
                         name: Cow::Owned(format!("{}Result", command_name)),
                         parameters: vec![],
                         raw_name: Cow::Owned(String::new()),
+                        type_choice: None,
                     }))
                 }
                 "parameters" | "properties" => {

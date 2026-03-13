@@ -17,6 +17,48 @@ pub enum Entry {
     ConsoleLogEntry(ConsoleLogEntry),
     JavascriptLogEntry(JavascriptLogEntry),
 }
+impl From<GenericLogEntry> for Entry {
+    fn from(v: GenericLogEntry) -> Self {
+        Entry::GenericLogEntry(v)
+    }
+}
+impl TryFrom<Entry> for GenericLogEntry {
+    type Error = Entry;
+    fn try_from(e: Entry) -> Result<Self, Self::Error> {
+        match e {
+            Entry::GenericLogEntry(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<ConsoleLogEntry> for Entry {
+    fn from(v: ConsoleLogEntry) -> Self {
+        Entry::ConsoleLogEntry(v)
+    }
+}
+impl TryFrom<Entry> for ConsoleLogEntry {
+    type Error = Entry;
+    fn try_from(e: Entry) -> Result<Self, Self::Error> {
+        match e {
+            Entry::ConsoleLogEntry(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<JavascriptLogEntry> for Entry {
+    fn from(v: JavascriptLogEntry) -> Self {
+        Entry::JavascriptLogEntry(v)
+    }
+}
+impl TryFrom<Entry> for JavascriptLogEntry {
+    type Error = Entry;
+    fn try_from(e: Entry) -> Result<Self, Self::Error> {
+        match e {
+            Entry::JavascriptLogEntry(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BaseLogEntry {
     #[serde(rename = "level")]

@@ -68,6 +68,7 @@ impl<'a, T: ConnectionTransport> CreateBrowsingContext<'a, T> {
         }
     }
 }
+#[derive(Clone)]
 pub struct BrowsingContext {
     pub r#type: CreateType,
     id: BrowsingContextDefinition,

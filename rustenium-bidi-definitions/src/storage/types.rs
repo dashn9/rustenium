@@ -175,6 +175,34 @@ pub enum PartitionDescriptor {
     BrowsingContextPartitionDescriptor(BrowsingContextPartitionDescriptor),
     StorageKeyPartitionDescriptor(StorageKeyPartitionDescriptor),
 }
+impl From<BrowsingContextPartitionDescriptor> for PartitionDescriptor {
+    fn from(v: BrowsingContextPartitionDescriptor) -> Self {
+        PartitionDescriptor::BrowsingContextPartitionDescriptor(v)
+    }
+}
+impl TryFrom<PartitionDescriptor> for BrowsingContextPartitionDescriptor {
+    type Error = PartitionDescriptor;
+    fn try_from(e: PartitionDescriptor) -> Result<Self, Self::Error> {
+        match e {
+            PartitionDescriptor::BrowsingContextPartitionDescriptor(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<StorageKeyPartitionDescriptor> for PartitionDescriptor {
+    fn from(v: StorageKeyPartitionDescriptor) -> Self {
+        PartitionDescriptor::StorageKeyPartitionDescriptor(v)
+    }
+}
+impl TryFrom<PartitionDescriptor> for StorageKeyPartitionDescriptor {
+    type Error = PartitionDescriptor;
+    fn try_from(e: PartitionDescriptor) -> Result<Self, Self::Error> {
+        match e {
+            PartitionDescriptor::StorageKeyPartitionDescriptor(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PartialCookie {
     #[serde(rename = "name")]

@@ -1,5 +1,5 @@
 use thiserror::Error;
-use rustenium_bidi_commands::script::types::EvaluateResultException;
+use rustenium_bidi_definitions::script::types::EvaluateResultException;
 use rustenium_core::error::{CommandResultError};
 
 #[derive(Debug, Error)]

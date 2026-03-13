@@ -1,16 +1,15 @@
-use rustenium_bidi_commands::browsing_context::types::BrowsingContext;
-use rustenium_bidi_commands::input::commands::{
-    InputCommand, PerformActions, PerformActionsParameters, ReleaseActions,
-    ReleaseActionsParameters, InputPerformActionsMethod, InputReleaseActionsMethod,
+use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
+use rustenium_bidi_definitions::input::commands::{
+    PerformActions, PerformActionsParams, ReleaseActions,
+    ReleaseActionsParams, PerformActionsMethod, ReleaseActionsMethod,
 };
-use rustenium_bidi_commands::input::types::{
+use rustenium_bidi_definitions::input::types::{
     PointerSourceActions, PointerSourceAction, PointerDownAction, PointerUpAction,
     PointerMoveAction, WheelSourceActions, WheelSourceAction, WheelScrollAction,
-    SourceActions, PointerEnum, WheelEnum, PointerDownEnum, PointerUpEnum,
-    PointerMoveEnum, PauseEnum, ScrollEnum, PointerCommonProperties, PauseAction,
+    SourceActions, PointerSourceActionsType, WheelSourceActionsType, PointerDownActionType, PointerUpActionType,
+    PointerMoveActionType, PauseActionType, WheelScrollActionType, PointerCommonProperties, PauseAction,
 };
-use rustenium_bidi_commands::CommandData;
-use rustenium_core::Session;
+use rustenium_core::BidiSession;
 use rustenium_core::transport::ConnectionTransport;
 use crate::error::InputError;
 use std::sync::Arc;
@@ -32,11 +31,11 @@ use crate::input::mouse::{Mouse, MouseMoveOptions, MouseClickOptions, MouseOptio
 ///
 /// ```no_run
 /// # use rustenium::input::{BidiMouse, Point};
-/// # use rustenium_bidi_commands::browsing_context::types::BrowsingContext;
+/// # use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
 /// # use std::sync::Arc;
 /// # use tokio::sync::Mutex;
-/// # use rustenium_core::Session;
-/// # async fn example(session: Arc<Mutex<Session<rustenium_core::transport::WebsocketConnectionTransport>>>, context: BrowsingContext) -> Result<(), Box<dyn std::error::Error>> {
+/// # use rustenium_core::BidiSession;
+/// # async fn example(session: Arc<Mutex<BidiSession<rustenium_core::transport::WebsocketConnectionTransport>>>, context: BrowsingContext) -> Result<(), Box<dyn std::error::Error>> {
 /// let mouse = BidiMouse::new(session);
 ///
 /// // Move instantly to coordinates
@@ -48,13 +47,13 @@ use crate::input::mouse::{Mouse, MouseMoveOptions, MouseClickOptions, MouseOptio
 /// # }
 /// ```
 pub struct BidiMouse<OT: ConnectionTransport> {
-    session: Arc<Mutex<Session<OT>>>,
+    session: Arc<Mutex<BidiSession<OT>>>,
     last_move_point: Arc<Mutex<Point>>,
 }
 
 impl<OT: ConnectionTransport> BidiMouse<OT> {
     /// Creates a new BidiMouse instance.
-    pub fn new(session: Arc<Mutex<Session<OT>>>) -> Self {
+    pub fn new(session: Arc<Mutex<BidiSession<OT>>>) -> Self {
         Self {
             session,
             last_move_point: Arc::new(Mutex::new(Point::default())),

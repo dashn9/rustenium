@@ -1,9 +1,11 @@
 use std::collections::HashMap;
-use rustenium_bidi_commands::browsing_context::types::{ImageFormat, Locator, OriginUnion};
+use rustenium_bidi_definitions::browsing_context::types::{ImageFormat, Locator};
+use rustenium_bidi_definitions::browsing_context::commands::CaptureScreenshotOrigin;
+use crate::error::EvaluateResultError;
 use crate::nodes::bidi::node::BidiNode;
-use rustenium_bidi_commands::script::types::{Handle, NodeRemoteValue, SharedId};
+use rustenium_bidi_definitions::script::types::{Handle, NodeRemoteValue, SharedId};
 use rustenium_core::transport::ConnectionTransport;
-use rustenium_core::Session;
+use rustenium_core::BidiSession;
 use crate::nodes::node::Node;
 use crate::nodes::NodePosition;
 use std::sync::Arc;
@@ -18,7 +20,7 @@ impl<T: ConnectionTransport> ChromeNode<T> {
     pub fn from_bidi(
         _raw_bidi_node: NodeRemoteValue,
         locator: Locator,
-        session: Arc<Mutex<Session<T>>>,
+        session: Arc<Mutex<BidiSession<T>>>,
         context: String,
     ) -> Self {
         let bidi_node = BidiNode::new(_raw_bidi_node, locator.clone(), session.clone(), context.clone());
@@ -104,15 +106,15 @@ impl<T: ConnectionTransport> Node for ChromeNode<T> {
         self.bidi_node.position = Some(position);
     }
 
-    async fn scroll_into_view(&self) -> Result<(), crate::error::EvaluateResultError> {
+    async fn scroll_into_view(&self) -> Result<(), EvaluateResultError> {
         self.bidi_node.scroll_into_view().await
     }
 
-    async fn is_visible(&self) -> Result<bool, crate::error::EvaluateResultError> {
+    async fn is_visible(&self) -> Result<bool, EvaluateResultError> {
         self.bidi_node.is_visible().await
     }
 
-    async fn delete(&self) -> Result<(), crate::error::EvaluateResultError> {
+    async fn delete(&self) -> Result<(), EvaluateResultError> {
         self.bidi_node.delete().await
     }
 }

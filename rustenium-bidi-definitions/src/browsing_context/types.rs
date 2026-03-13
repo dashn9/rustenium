@@ -40,6 +40,76 @@ pub enum Locator {
     InnerTextLocator(InnerTextLocator),
     XPathLocator(XPathLocator),
 }
+impl From<AccessibilityLocator> for Locator {
+    fn from(v: AccessibilityLocator) -> Self {
+        Locator::AccessibilityLocator(v)
+    }
+}
+impl TryFrom<Locator> for AccessibilityLocator {
+    type Error = Locator;
+    fn try_from(e: Locator) -> Result<Self, Self::Error> {
+        match e {
+            Locator::AccessibilityLocator(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<CssLocator> for Locator {
+    fn from(v: CssLocator) -> Self {
+        Locator::CssLocator(v)
+    }
+}
+impl TryFrom<Locator> for CssLocator {
+    type Error = Locator;
+    fn try_from(e: Locator) -> Result<Self, Self::Error> {
+        match e {
+            Locator::CssLocator(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<ContextLocator> for Locator {
+    fn from(v: ContextLocator) -> Self {
+        Locator::ContextLocator(v)
+    }
+}
+impl TryFrom<Locator> for ContextLocator {
+    type Error = Locator;
+    fn try_from(e: Locator) -> Result<Self, Self::Error> {
+        match e {
+            Locator::ContextLocator(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<InnerTextLocator> for Locator {
+    fn from(v: InnerTextLocator) -> Self {
+        Locator::InnerTextLocator(v)
+    }
+}
+impl TryFrom<Locator> for InnerTextLocator {
+    type Error = Locator;
+    fn try_from(e: Locator) -> Result<Self, Self::Error> {
+        match e {
+            Locator::InnerTextLocator(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<XPathLocator> for Locator {
+    fn from(v: XPathLocator) -> Self {
+        Locator::XPathLocator(v)
+    }
+}
+impl TryFrom<Locator> for XPathLocator {
+    type Error = Locator;
+    fn try_from(e: Locator) -> Result<Self, Self::Error> {
+        match e {
+            Locator::XPathLocator(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AccessibilityLocator {
     #[serde(rename = "type")]
@@ -290,6 +360,34 @@ impl ImageFormat {
 pub enum ClipRectangle {
     BoxClipRectangle(BoxClipRectangle),
     ElementClipRectangle(ElementClipRectangle),
+}
+impl From<BoxClipRectangle> for ClipRectangle {
+    fn from(v: BoxClipRectangle) -> Self {
+        ClipRectangle::BoxClipRectangle(v)
+    }
+}
+impl TryFrom<ClipRectangle> for BoxClipRectangle {
+    type Error = ClipRectangle;
+    fn try_from(e: ClipRectangle) -> Result<Self, Self::Error> {
+        match e {
+            ClipRectangle::BoxClipRectangle(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<ElementClipRectangle> for ClipRectangle {
+    fn from(v: ElementClipRectangle) -> Self {
+        ClipRectangle::ElementClipRectangle(v)
+    }
+}
+impl TryFrom<ClipRectangle> for ElementClipRectangle {
+    type Error = ClipRectangle;
+    fn try_from(e: ClipRectangle) -> Result<Self, Self::Error> {
+        match e {
+            ClipRectangle::ElementClipRectangle(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ElementClipRectangle {
@@ -547,6 +645,38 @@ impl BaseNavigationInfo {
 pub enum DownloadCanceledParamsDownloadCompleteParamsUnion {
     DownloadCanceledParams(DownloadCanceledParams),
     DownloadCompleteParams(DownloadCompleteParams),
+}
+impl From<DownloadCanceledParams> for DownloadCanceledParamsDownloadCompleteParamsUnion {
+    fn from(v: DownloadCanceledParams) -> Self {
+        DownloadCanceledParamsDownloadCompleteParamsUnion::DownloadCanceledParams(v)
+    }
+}
+impl TryFrom<DownloadCanceledParamsDownloadCompleteParamsUnion> for DownloadCanceledParams {
+    type Error = DownloadCanceledParamsDownloadCompleteParamsUnion;
+    fn try_from(e: DownloadCanceledParamsDownloadCompleteParamsUnion) -> Result<Self, Self::Error> {
+        match e {
+            DownloadCanceledParamsDownloadCompleteParamsUnion::DownloadCanceledParams(inner) => {
+                Ok(inner)
+            }
+            other => Err(other),
+        }
+    }
+}
+impl From<DownloadCompleteParams> for DownloadCanceledParamsDownloadCompleteParamsUnion {
+    fn from(v: DownloadCompleteParams) -> Self {
+        DownloadCanceledParamsDownloadCompleteParamsUnion::DownloadCompleteParams(v)
+    }
+}
+impl TryFrom<DownloadCanceledParamsDownloadCompleteParamsUnion> for DownloadCompleteParams {
+    type Error = DownloadCanceledParamsDownloadCompleteParamsUnion;
+    fn try_from(e: DownloadCanceledParamsDownloadCompleteParamsUnion) -> Result<Self, Self::Error> {
+        match e {
+            DownloadCanceledParamsDownloadCompleteParamsUnion::DownloadCompleteParams(inner) => {
+                Ok(inner)
+            }
+            other => Err(other),
+        }
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DownloadCanceledParams {

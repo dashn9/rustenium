@@ -1,16 +1,18 @@
-use rustenium_bidi_commands::browsing_context::commands::NavigateResult;
-use rustenium_bidi_commands::browsing_context::types::{BrowsingContext, ClipRectangle, ImageFormat, Locator, OriginUnion, ReadinessState};
-use rustenium_bidi_commands::{CommandData, ResultData, Event};
-use rustenium_bidi_commands::script::types::{
+use rustenium_bidi_definitions::browsing_context::results::NavigateResult;
+use rustenium_bidi_definitions::browsing_context::types::{BrowsingContext, ClipRectangle, ImageFormat, Locator, ReadinessState};
+use rustenium_bidi_definitions::browsing_context::commands::CaptureScreenshotOrigin;
+use rustenium_bidi_definitions::Event;
+use rustenium_bidi_definitions::Command;
+use rustenium_bidi_definitions::script::types::{
     ChannelValue,
-    SerializationOptions, SerializationOptionsincludeShadowTreeUnion, SharedReference
+    SerializationOptions, SerializationOptionsIncludeShadowTree, SharedReference
 };
-use rustenium_bidi_commands::session::types::ProxyConfiguration;
-use rustenium_bidi_commands::network::types::UrlPattern;
+use rustenium_bidi_definitions::session::types::ProxyConfiguration;
+use rustenium_bidi_definitions::network::types::UrlPattern;
 use rustenium_core::error::{CommandResultError, SessionSendError};
 use rustenium_core::transport::{ConnectionTransportConfig, WebsocketConnectionTransport};
 use rustenium_core::{find_free_port, NetworkRequest};
-use rustenium_core::events::EventManagement;
+use rustenium_core::events::BidiEventManagement;
 use rustenium_core::session::SessionConnectionType;
 use crate::drivers::bidi::drivers::{BidiDriver, BidiDrive, DriverConfiguration};
 use crate::error::{EvaluateResultError, FindNodesError, OpenUrlError, InterceptNetworkError, ContextIndexError};

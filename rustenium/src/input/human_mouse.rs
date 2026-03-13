@@ -1,4 +1,4 @@
-use rustenium_bidi_commands::browsing_context::types::BrowsingContext;
+use rustenium_core::BrowsingContext;
 use crate::error::InputError;
 use std::sync::Arc;
 use tokio::sync::Mutex;
@@ -24,7 +24,7 @@ use super::mouse::{Mouse, MouseMoveOptions, MouseClickOptions, MouseOptions, Mou
 /// # use rustenium_bidi_commands::browsing_context::types::BrowsingContext;
 /// # use std::sync::Arc;
 /// # use tokio::sync::Mutex;
-/// # use rustenium_core::Session;
+/// # use rustenium_core::BidiSession;
 /// # async fn example(session: Arc<Mutex<Session<rustenium_core::transport::WebsocketConnectionTransport>>>, context: BrowsingContext) -> Result<(), Box<dyn std::error::Error>> {
 /// let bidi_mouse = BidiMouse::new(session);
 /// let human_mouse = HumanMouse::new(bidi_mouse);

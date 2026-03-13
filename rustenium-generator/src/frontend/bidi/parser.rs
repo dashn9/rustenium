@@ -183,6 +183,7 @@ pub fn parse_cddl(inputs: &[(&str, DomainDirection)]) -> Protocol<'static> {
                     name: o(result_name),
                     parameters: vec![],
                     raw_name: o(""),
+                    type_choice: None,
                 });
             }
         }
@@ -339,13 +340,45 @@ fn parse_result(
     body: &str,
     rule_map: &HashMap<&str, &str>,
 ) -> Option<(CommandResult<'static>, Vec<TypeDef<'static>>)> {
-    let (params, synthetic) = resolve_result_fields(body.trim().trim_end_matches(';'), rule_map);
+    let body = body.trim().trim_end_matches(';');
+    // Union-body result → TypeChoice enum in results.rs
+    if let Some(refs) = parse_union_refs(body) {
+        return Some((CommandResult {
+            description: None, name: o(type_name), parameters: vec![],
+            raw_name: o(full_name), type_choice: Some(refs),
+        }, vec![]));
+    }
+    // Type alias result (e.g. CallFunctionResult = EvaluateResult) → type alias
+    if !body.contains('{') && !body.contains('/') && !body.contains(':') && body.contains('.') {
+        return Some((CommandResult {
+            description: None, name: o(type_name), parameters: vec![],
+            raw_name: o(full_name), type_choice: Some(vec![type_ref(body)]),
+        }, vec![]));
+    }
+    let (params, synthetic) = resolve_result_fields(body, rule_map);
     Some((CommandResult {
-        description: None,
-        name: o(type_name),
-        parameters: params,
-        raw_name: o(full_name),
+        description: None, name: o(type_name), parameters: params,
+        raw_name: o(full_name), type_choice: None,
     }, synthetic))
+}
+
+/// Try to parse a body as a type union, returning TypeRefs if successful.
+fn parse_union_refs(body: &str) -> Option<Vec<TypeRef<'static>>> {
+    let inner = if body.starts_with('(') {
+        &body[1..body.rfind(')')?]
+    } else if body.contains('/') && !body.starts_with('{') {
+        body
+    } else {
+        return None;
+    };
+    let sep = if inner.contains("//") { "//" } else { "/" };
+    let parts: Vec<&str> = inner.split(sep).map(|p| p.trim())
+        .filter(|p| !p.is_empty())
+        .map(|p| p.strip_prefix('{').and_then(|p| p.strip_suffix('}')).map(|p| p.trim()).unwrap_or(p))
+        .collect();
+    (parts.len() >= 2 && parts.iter().all(|p| !p.contains(':') && !p.contains('{'))).then(|| {
+        parts.into_iter().map(type_ref).collect()
+    })
 }
 
 /// Resolve a result body to struct fields, following aliases.
@@ -448,6 +481,8 @@ fn parse_typedef(full_name: &str, type_name: &str, body: &str, rule_map: &HashMa
                 .split(separator)
                 .map(|p| p.trim())
                 .filter(|p| !p.is_empty())
+                // Strip { } wrappers: CDDL `{ Type }` means the same as `Type` in a union context
+                .map(|p| p.strip_prefix('{').and_then(|p| p.strip_suffix('}')).map(|p| p.trim()).unwrap_or(p))
                 .collect();
             if parts.len() >= 2 && parts.iter().all(|p| !p.contains(':') && !p.contains('{')) {
                 let refs: Vec<TypeRef<'static>> = parts.into_iter().map(type_ref).collect();
@@ -461,7 +496,11 @@ fn parse_typedef(full_name: &str, type_name: &str, body: &str, rule_map: &HashMa
     // Bare type union: A / B or A // B (without parens or braces)
     if body.contains('/') && !body.contains('"') {
         let separator = if body.contains("//") { "//" } else { "/" };
-        let parts: Vec<&str> = body.split(separator).map(|p| p.trim()).filter(|p| !p.is_empty()).collect();
+        let parts: Vec<&str> = body.split(separator)
+            .map(|p| p.trim())
+            .filter(|p| !p.is_empty())
+            .map(|p| p.strip_prefix('{').and_then(|p| p.strip_suffix('}')).map(|p| p.trim()).unwrap_or(p))
+            .collect();
         if parts.len() >= 2 && parts.iter().all(|p| !p.contains(':') && !p.contains('{')) {
             let refs: Vec<TypeRef<'static>> = parts.into_iter().map(type_ref).collect();
             return Some(td(Type::Object, Some(Item::TypeChoice(refs))));

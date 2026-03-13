@@ -399,11 +399,17 @@ impl Generator {
             .filter(|dt| with_experimental || !dt.is_experimental())
             .collect();
 
-        // Collect names that are TypeChoice variants of another type — exclude from group enum
-        let type_choice_variants: HashSet<String> = datatypes.iter()
+        // Collect names that are TypeChoice variants — exclude from group enum
+        let mut type_choice_variants: HashSet<String> = datatypes.iter()
             .filter_map(|dt| dt.as_type_choice())
             .flat_map(|refs| refs.iter().map(|r| r.name.to_string()))
             .collect();
+        // Also exclude variants of TypeChoice results
+        for cr in &module.command_results {
+            if let Some(refs) = &cr.type_choice {
+                type_choice_variants.extend(refs.iter().map(|r| r.name.to_string()));
+            }
+        }
 
         for dt in datatypes {
             let is_type = dt.is_type();
@@ -441,73 +447,108 @@ impl Generator {
             }
         }
 
-        // Generate CommandResult structs
+        // Generate CommandResult types
         for cr in &module.command_results {
             let returns_name = cr.name.to_upper_camel_case();
-            let params = cr.parameters.iter()
-                .filter(|p| with_deprecated || !p.deprecated)
-                .filter(|p| with_experimental || !p.experimental);
-
             let name = format_ident!("{}", returns_name);
-            let mut builder = Builder::new(name.clone());
-            let mut default_fns = TokenStream::default();
 
-            for param in params {
-                if let Type::Enum(vars) = &param.r#type {
-                    let enum_ident = Variant {
-                        description: param.description.as_deref().map(Cow::Borrowed),
-                        name: Cow::Owned(subenum_name(cr.name.as_ref(), param.name.as_ref())),
-                    };
-                    results_stream.extend(self.generate_enum(&enum_ident, vars));
-                }
-
-                let field_name = format_ident!("{}", generate_field_name(param.name.as_ref()));
-                let mut ty = self.generate_field_type(module, cr.name.as_ref(), param.name.as_ref(), &param.r#type, current_protocol, false);
-                ty.needs_box = ty.needs_box || param.is_circular_dep;
-
-                let field = FieldDefinition {
-                    name: param.name.to_string(),
-                    name_ident: field_name,
-                    ty,
-                    optional: param.optional,
-                    deprecated: param.deprecated,
-                    serde_skip: false,
-                };
-
-                if let Some(default_fn) = field.generate_default_fn(param, &returns_name) {
-                    default_fns.extend(default_fn);
-                }
-
-                builder.fields.push((field.generate_meta(param, &returns_name), field));
-            }
-
-            if builder.fields.is_empty() {
-                results_stream.extend(quote! {
-                    #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-                    pub struct #name {}
-                });
-            } else {
-                let struct_def = builder.generate_struct_def();
-                let derives = if !builder.has_mandatory_types() {
-                    quote! { #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)] }
+            if let Some(refs) = &cr.type_choice {
+                if refs.len() == 1 {
+                    // Type alias result (e.g. CallFunctionResult = EvaluateResult)
+                    let target = format_ident!("{}", refs[0].name.to_upper_camel_case());
+                    results_stream.extend(quote! { pub type #name = #target; });
                 } else {
-                    quote! { #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)] }
-                };
-                results_stream.extend(quote! {
-                    #derives
-                    #struct_def
-                    #default_fns
-                });
+                    // TypeChoice result → untagged enum
+                    let variant_data: Vec<_> = refs.iter().map(|tr| {
+                        let v = format_ident!("{}", tr.name.to_upper_camel_case());
+                        let ty = self.projected_type(module, tr, false);
+                        (v, ty)
+                    }).collect();
+                    let variants = variant_data.iter().map(|(v, ty)| quote! { #v(#ty) });
+                    let from_impls = variant_data.iter().map(|(v, ty)| quote! {
+                        impl From<#ty> for #name { fn from(val: #ty) -> Self { #name::#v(val) } }
+                        impl TryFrom<#name> for #ty {
+                            type Error = #name;
+                            fn try_from(e: #name) -> Result<Self, Self::Error> {
+                                match e { #name::#v(inner) => Ok(inner), other => Err(other) }
+                            }
+                        }
+                    });
+                    results_stream.extend(quote! {
+                        #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+                        #[serde(untagged)]
+                        pub enum #name { #(#variants),* }
+                        #(#from_impls)*
+                    });
+                }
+            } else {
+                let params = cr.parameters.iter()
+                    .filter(|p| with_deprecated || !p.deprecated)
+                    .filter(|p| with_experimental || !p.experimental);
+
+                let mut builder = Builder::new(name.clone());
+                let mut default_fns = TokenStream::default();
+
+                for param in params {
+                    if let Type::Enum(vars) = &param.r#type {
+                        let enum_ident = Variant {
+                            description: param.description.as_deref().map(Cow::Borrowed),
+                            name: Cow::Owned(subenum_name(cr.name.as_ref(), param.name.as_ref())),
+                        };
+                        results_stream.extend(self.generate_enum(&enum_ident, vars));
+                    }
+
+                    let field_name = format_ident!("{}", generate_field_name(param.name.as_ref()));
+                    let mut ty = self.generate_field_type(module, cr.name.as_ref(), param.name.as_ref(), &param.r#type, current_protocol, false);
+                    ty.needs_box = ty.needs_box || param.is_circular_dep;
+
+                    let field = FieldDefinition {
+                        name: param.name.to_string(),
+                        name_ident: field_name,
+                        ty,
+                        optional: param.optional,
+                        deprecated: param.deprecated,
+                        serde_skip: false,
+                    };
+
+                    if let Some(default_fn) = field.generate_default_fn(param, &returns_name) {
+                        default_fns.extend(default_fn);
+                    }
+
+                    builder.fields.push((field.generate_meta(param, &returns_name), field));
+                }
+
+                if builder.fields.is_empty() {
+                    results_stream.extend(quote! {
+                        #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+                        pub struct #name {}
+                    });
+                } else {
+                    let struct_def = builder.generate_struct_def();
+                    let derives = if !builder.has_mandatory_types() {
+                        quote! { #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)] }
+                    } else {
+                        quote! { #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)] }
+                    };
+                    results_stream.extend(quote! {
+                        #derives
+                        #struct_def
+                        #default_fns
+                    });
+                }
             }
 
-            results_stream.extend(quote! {
-                impl TryFrom<serde_json::Value> for #name {
-                    type Error = serde_json::Error;
-                    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
-                        serde_json::from_value(value)
+            // Type aliases inherit TryFrom from underlying type
+            if !matches!(&cr.type_choice, Some(refs) if refs.len() == 1) {
+                results_stream.extend(quote! {
+                    impl TryFrom<serde_json::Value> for #name {
+                        type Error = serde_json::Error;
+                        fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+                            serde_json::from_value(value)
+                        }
                     }
-                }
-            });
+                });
+            }
         }
 
         // Group enums
@@ -856,11 +897,35 @@ impl Generator {
         let enum_name = format_ident!("{}", dt.ident_name());
         let desc = dt.type_description_tokens(module.name.as_ref());
 
-        let variants: Vec<TokenStream> = type_refs.iter().map(|tr| {
+        let variant_data: Vec<(Ident, TokenStream)> = type_refs.iter().map(|tr| {
             let variant_name = format_ident!("{}", tr.name.to_upper_camel_case());
             let ty = self.projected_type(module, tr, local_same_file);
-            quote! { #variant_name(#ty) }
+            (variant_name, ty)
         }).collect();
+
+        let variants: Vec<TokenStream> = variant_data.iter()
+            .map(|(v, ty)| quote! { #v(#ty) })
+            .collect();
+
+        let from_impls: Vec<TokenStream> = variant_data.iter()
+            .map(|(variant_name, ty)| {
+                quote! {
+                    impl From<#ty> for #enum_name {
+                        fn from(v: #ty) -> Self { #enum_name::#variant_name(v) }
+                    }
+
+                    impl TryFrom<#enum_name> for #ty {
+                        type Error = #enum_name;
+                        fn try_from(e: #enum_name) -> Result<Self, Self::Error> {
+                            match e {
+                                #enum_name::#variant_name(inner) => Ok(inner),
+                                other => Err(other),
+                            }
+                        }
+                    }
+                }
+            })
+            .collect();
 
         quote! {
             #desc
@@ -869,6 +934,8 @@ impl Generator {
             pub enum #enum_name {
                 #(#variants),*
             }
+
+            #(#from_impls)*
         }
     }
 

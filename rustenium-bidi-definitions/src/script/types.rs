@@ -244,21 +244,143 @@ impl InternalId {
         Self::IDENTIFIER
     }
 }
-#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
-pub struct LocalValue(serde_json::Value);
-impl LocalValue {
-    pub fn new(val: impl Into<serde_json::Value>) -> Self {
-        LocalValue(val.into())
-    }
-    pub fn inner(&self) -> &serde_json::Value {
-        &self.0
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum LocalValue {
+    RemoteReference(RemoteReference),
+    PrimitiveProtocolValue(PrimitiveProtocolValue),
+    ChannelValue(ChannelValue),
+    ArrayLocalValue(ArrayLocalValue),
+    DateLocalValue(DateLocalValue),
+    MapLocalValue(MapLocalValue),
+    ObjectLocalValue(ObjectLocalValue),
+    RegExpLocalValue(RegExpLocalValue),
+    SetLocalValue(SetLocalValue),
+}
+impl From<RemoteReference> for LocalValue {
+    fn from(v: RemoteReference) -> Self {
+        LocalValue::RemoteReference(v)
     }
 }
-impl LocalValue {
-    pub const IDENTIFIER: &'static str = "script.LocalValue";
-    pub const DOMAIN_DIRECTION: &'static str = "all";
-    pub fn identifier(&self) -> &'static str {
-        Self::IDENTIFIER
+impl TryFrom<LocalValue> for RemoteReference {
+    type Error = LocalValue;
+    fn try_from(e: LocalValue) -> Result<Self, Self::Error> {
+        match e {
+            LocalValue::RemoteReference(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<PrimitiveProtocolValue> for LocalValue {
+    fn from(v: PrimitiveProtocolValue) -> Self {
+        LocalValue::PrimitiveProtocolValue(v)
+    }
+}
+impl TryFrom<LocalValue> for PrimitiveProtocolValue {
+    type Error = LocalValue;
+    fn try_from(e: LocalValue) -> Result<Self, Self::Error> {
+        match e {
+            LocalValue::PrimitiveProtocolValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<ChannelValue> for LocalValue {
+    fn from(v: ChannelValue) -> Self {
+        LocalValue::ChannelValue(v)
+    }
+}
+impl TryFrom<LocalValue> for ChannelValue {
+    type Error = LocalValue;
+    fn try_from(e: LocalValue) -> Result<Self, Self::Error> {
+        match e {
+            LocalValue::ChannelValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<ArrayLocalValue> for LocalValue {
+    fn from(v: ArrayLocalValue) -> Self {
+        LocalValue::ArrayLocalValue(v)
+    }
+}
+impl TryFrom<LocalValue> for ArrayLocalValue {
+    type Error = LocalValue;
+    fn try_from(e: LocalValue) -> Result<Self, Self::Error> {
+        match e {
+            LocalValue::ArrayLocalValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<DateLocalValue> for LocalValue {
+    fn from(v: DateLocalValue) -> Self {
+        LocalValue::DateLocalValue(v)
+    }
+}
+impl TryFrom<LocalValue> for DateLocalValue {
+    type Error = LocalValue;
+    fn try_from(e: LocalValue) -> Result<Self, Self::Error> {
+        match e {
+            LocalValue::DateLocalValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<MapLocalValue> for LocalValue {
+    fn from(v: MapLocalValue) -> Self {
+        LocalValue::MapLocalValue(v)
+    }
+}
+impl TryFrom<LocalValue> for MapLocalValue {
+    type Error = LocalValue;
+    fn try_from(e: LocalValue) -> Result<Self, Self::Error> {
+        match e {
+            LocalValue::MapLocalValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<ObjectLocalValue> for LocalValue {
+    fn from(v: ObjectLocalValue) -> Self {
+        LocalValue::ObjectLocalValue(v)
+    }
+}
+impl TryFrom<LocalValue> for ObjectLocalValue {
+    type Error = LocalValue;
+    fn try_from(e: LocalValue) -> Result<Self, Self::Error> {
+        match e {
+            LocalValue::ObjectLocalValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<RegExpLocalValue> for LocalValue {
+    fn from(v: RegExpLocalValue) -> Self {
+        LocalValue::RegExpLocalValue(v)
+    }
+}
+impl TryFrom<LocalValue> for RegExpLocalValue {
+    type Error = LocalValue;
+    fn try_from(e: LocalValue) -> Result<Self, Self::Error> {
+        match e {
+            LocalValue::RegExpLocalValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<SetLocalValue> for LocalValue {
+    fn from(v: SetLocalValue) -> Self {
+        LocalValue::SetLocalValue(v)
+    }
+}
+impl TryFrom<LocalValue> for SetLocalValue {
+    type Error = LocalValue;
+    fn try_from(e: LocalValue) -> Result<Self, Self::Error> {
+        match e {
+            LocalValue::SetLocalValue(inner) => Ok(inner),
+            other => Err(other),
+        }
     }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -563,6 +685,90 @@ pub enum PrimitiveProtocolValue {
     BooleanValue(BooleanValue),
     BigIntValue(BigIntValue),
 }
+impl From<UndefinedValue> for PrimitiveProtocolValue {
+    fn from(v: UndefinedValue) -> Self {
+        PrimitiveProtocolValue::UndefinedValue(v)
+    }
+}
+impl TryFrom<PrimitiveProtocolValue> for UndefinedValue {
+    type Error = PrimitiveProtocolValue;
+    fn try_from(e: PrimitiveProtocolValue) -> Result<Self, Self::Error> {
+        match e {
+            PrimitiveProtocolValue::UndefinedValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<NullValue> for PrimitiveProtocolValue {
+    fn from(v: NullValue) -> Self {
+        PrimitiveProtocolValue::NullValue(v)
+    }
+}
+impl TryFrom<PrimitiveProtocolValue> for NullValue {
+    type Error = PrimitiveProtocolValue;
+    fn try_from(e: PrimitiveProtocolValue) -> Result<Self, Self::Error> {
+        match e {
+            PrimitiveProtocolValue::NullValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<StringValue> for PrimitiveProtocolValue {
+    fn from(v: StringValue) -> Self {
+        PrimitiveProtocolValue::StringValue(v)
+    }
+}
+impl TryFrom<PrimitiveProtocolValue> for StringValue {
+    type Error = PrimitiveProtocolValue;
+    fn try_from(e: PrimitiveProtocolValue) -> Result<Self, Self::Error> {
+        match e {
+            PrimitiveProtocolValue::StringValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<NumberValue> for PrimitiveProtocolValue {
+    fn from(v: NumberValue) -> Self {
+        PrimitiveProtocolValue::NumberValue(v)
+    }
+}
+impl TryFrom<PrimitiveProtocolValue> for NumberValue {
+    type Error = PrimitiveProtocolValue;
+    fn try_from(e: PrimitiveProtocolValue) -> Result<Self, Self::Error> {
+        match e {
+            PrimitiveProtocolValue::NumberValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<BooleanValue> for PrimitiveProtocolValue {
+    fn from(v: BooleanValue) -> Self {
+        PrimitiveProtocolValue::BooleanValue(v)
+    }
+}
+impl TryFrom<PrimitiveProtocolValue> for BooleanValue {
+    type Error = PrimitiveProtocolValue;
+    fn try_from(e: PrimitiveProtocolValue) -> Result<Self, Self::Error> {
+        match e {
+            PrimitiveProtocolValue::BooleanValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<BigIntValue> for PrimitiveProtocolValue {
+    fn from(v: BigIntValue) -> Self {
+        PrimitiveProtocolValue::BigIntValue(v)
+    }
+}
+impl TryFrom<PrimitiveProtocolValue> for BigIntValue {
+    type Error = PrimitiveProtocolValue;
+    fn try_from(e: PrimitiveProtocolValue) -> Result<Self, Self::Error> {
+        match e {
+            PrimitiveProtocolValue::BigIntValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UndefinedValue {
     #[serde(rename = "type")]
@@ -776,6 +982,34 @@ pub enum RemoteReference {
     SharedReference(SharedReference),
     RemoteObjectReference(RemoteObjectReference),
 }
+impl From<SharedReference> for RemoteReference {
+    fn from(v: SharedReference) -> Self {
+        RemoteReference::SharedReference(v)
+    }
+}
+impl TryFrom<RemoteReference> for SharedReference {
+    type Error = RemoteReference;
+    fn try_from(e: RemoteReference) -> Result<Self, Self::Error> {
+        match e {
+            RemoteReference::SharedReference(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<RemoteObjectReference> for RemoteReference {
+    fn from(v: RemoteObjectReference) -> Self {
+        RemoteReference::RemoteObjectReference(v)
+    }
+}
+impl TryFrom<RemoteReference> for RemoteObjectReference {
+    type Error = RemoteReference;
+    fn try_from(e: RemoteReference) -> Result<Self, Self::Error> {
+        match e {
+            RemoteReference::RemoteObjectReference(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SharedReference {
     #[serde(rename = "sharedId")]
@@ -862,6 +1096,300 @@ pub enum RemoteValue {
     HtmlCollectionRemoteValue(HtmlCollectionRemoteValue),
     NodeRemoteValue(NodeRemoteValue),
     WindowProxyRemoteValue(WindowProxyRemoteValue),
+}
+impl From<PrimitiveProtocolValue> for RemoteValue {
+    fn from(v: PrimitiveProtocolValue) -> Self {
+        RemoteValue::PrimitiveProtocolValue(v)
+    }
+}
+impl TryFrom<RemoteValue> for PrimitiveProtocolValue {
+    type Error = RemoteValue;
+    fn try_from(e: RemoteValue) -> Result<Self, Self::Error> {
+        match e {
+            RemoteValue::PrimitiveProtocolValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<SymbolRemoteValue> for RemoteValue {
+    fn from(v: SymbolRemoteValue) -> Self {
+        RemoteValue::SymbolRemoteValue(v)
+    }
+}
+impl TryFrom<RemoteValue> for SymbolRemoteValue {
+    type Error = RemoteValue;
+    fn try_from(e: RemoteValue) -> Result<Self, Self::Error> {
+        match e {
+            RemoteValue::SymbolRemoteValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<ArrayRemoteValue> for RemoteValue {
+    fn from(v: ArrayRemoteValue) -> Self {
+        RemoteValue::ArrayRemoteValue(v)
+    }
+}
+impl TryFrom<RemoteValue> for ArrayRemoteValue {
+    type Error = RemoteValue;
+    fn try_from(e: RemoteValue) -> Result<Self, Self::Error> {
+        match e {
+            RemoteValue::ArrayRemoteValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<ObjectRemoteValue> for RemoteValue {
+    fn from(v: ObjectRemoteValue) -> Self {
+        RemoteValue::ObjectRemoteValue(v)
+    }
+}
+impl TryFrom<RemoteValue> for ObjectRemoteValue {
+    type Error = RemoteValue;
+    fn try_from(e: RemoteValue) -> Result<Self, Self::Error> {
+        match e {
+            RemoteValue::ObjectRemoteValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<FunctionRemoteValue> for RemoteValue {
+    fn from(v: FunctionRemoteValue) -> Self {
+        RemoteValue::FunctionRemoteValue(v)
+    }
+}
+impl TryFrom<RemoteValue> for FunctionRemoteValue {
+    type Error = RemoteValue;
+    fn try_from(e: RemoteValue) -> Result<Self, Self::Error> {
+        match e {
+            RemoteValue::FunctionRemoteValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<RegExpRemoteValue> for RemoteValue {
+    fn from(v: RegExpRemoteValue) -> Self {
+        RemoteValue::RegExpRemoteValue(v)
+    }
+}
+impl TryFrom<RemoteValue> for RegExpRemoteValue {
+    type Error = RemoteValue;
+    fn try_from(e: RemoteValue) -> Result<Self, Self::Error> {
+        match e {
+            RemoteValue::RegExpRemoteValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<DateRemoteValue> for RemoteValue {
+    fn from(v: DateRemoteValue) -> Self {
+        RemoteValue::DateRemoteValue(v)
+    }
+}
+impl TryFrom<RemoteValue> for DateRemoteValue {
+    type Error = RemoteValue;
+    fn try_from(e: RemoteValue) -> Result<Self, Self::Error> {
+        match e {
+            RemoteValue::DateRemoteValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<MapRemoteValue> for RemoteValue {
+    fn from(v: MapRemoteValue) -> Self {
+        RemoteValue::MapRemoteValue(v)
+    }
+}
+impl TryFrom<RemoteValue> for MapRemoteValue {
+    type Error = RemoteValue;
+    fn try_from(e: RemoteValue) -> Result<Self, Self::Error> {
+        match e {
+            RemoteValue::MapRemoteValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<SetRemoteValue> for RemoteValue {
+    fn from(v: SetRemoteValue) -> Self {
+        RemoteValue::SetRemoteValue(v)
+    }
+}
+impl TryFrom<RemoteValue> for SetRemoteValue {
+    type Error = RemoteValue;
+    fn try_from(e: RemoteValue) -> Result<Self, Self::Error> {
+        match e {
+            RemoteValue::SetRemoteValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<WeakMapRemoteValue> for RemoteValue {
+    fn from(v: WeakMapRemoteValue) -> Self {
+        RemoteValue::WeakMapRemoteValue(v)
+    }
+}
+impl TryFrom<RemoteValue> for WeakMapRemoteValue {
+    type Error = RemoteValue;
+    fn try_from(e: RemoteValue) -> Result<Self, Self::Error> {
+        match e {
+            RemoteValue::WeakMapRemoteValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<WeakSetRemoteValue> for RemoteValue {
+    fn from(v: WeakSetRemoteValue) -> Self {
+        RemoteValue::WeakSetRemoteValue(v)
+    }
+}
+impl TryFrom<RemoteValue> for WeakSetRemoteValue {
+    type Error = RemoteValue;
+    fn try_from(e: RemoteValue) -> Result<Self, Self::Error> {
+        match e {
+            RemoteValue::WeakSetRemoteValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<GeneratorRemoteValue> for RemoteValue {
+    fn from(v: GeneratorRemoteValue) -> Self {
+        RemoteValue::GeneratorRemoteValue(v)
+    }
+}
+impl TryFrom<RemoteValue> for GeneratorRemoteValue {
+    type Error = RemoteValue;
+    fn try_from(e: RemoteValue) -> Result<Self, Self::Error> {
+        match e {
+            RemoteValue::GeneratorRemoteValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<ErrorRemoteValue> for RemoteValue {
+    fn from(v: ErrorRemoteValue) -> Self {
+        RemoteValue::ErrorRemoteValue(v)
+    }
+}
+impl TryFrom<RemoteValue> for ErrorRemoteValue {
+    type Error = RemoteValue;
+    fn try_from(e: RemoteValue) -> Result<Self, Self::Error> {
+        match e {
+            RemoteValue::ErrorRemoteValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<ProxyRemoteValue> for RemoteValue {
+    fn from(v: ProxyRemoteValue) -> Self {
+        RemoteValue::ProxyRemoteValue(v)
+    }
+}
+impl TryFrom<RemoteValue> for ProxyRemoteValue {
+    type Error = RemoteValue;
+    fn try_from(e: RemoteValue) -> Result<Self, Self::Error> {
+        match e {
+            RemoteValue::ProxyRemoteValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<PromiseRemoteValue> for RemoteValue {
+    fn from(v: PromiseRemoteValue) -> Self {
+        RemoteValue::PromiseRemoteValue(v)
+    }
+}
+impl TryFrom<RemoteValue> for PromiseRemoteValue {
+    type Error = RemoteValue;
+    fn try_from(e: RemoteValue) -> Result<Self, Self::Error> {
+        match e {
+            RemoteValue::PromiseRemoteValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<TypedArrayRemoteValue> for RemoteValue {
+    fn from(v: TypedArrayRemoteValue) -> Self {
+        RemoteValue::TypedArrayRemoteValue(v)
+    }
+}
+impl TryFrom<RemoteValue> for TypedArrayRemoteValue {
+    type Error = RemoteValue;
+    fn try_from(e: RemoteValue) -> Result<Self, Self::Error> {
+        match e {
+            RemoteValue::TypedArrayRemoteValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<ArrayBufferRemoteValue> for RemoteValue {
+    fn from(v: ArrayBufferRemoteValue) -> Self {
+        RemoteValue::ArrayBufferRemoteValue(v)
+    }
+}
+impl TryFrom<RemoteValue> for ArrayBufferRemoteValue {
+    type Error = RemoteValue;
+    fn try_from(e: RemoteValue) -> Result<Self, Self::Error> {
+        match e {
+            RemoteValue::ArrayBufferRemoteValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<NodeListRemoteValue> for RemoteValue {
+    fn from(v: NodeListRemoteValue) -> Self {
+        RemoteValue::NodeListRemoteValue(v)
+    }
+}
+impl TryFrom<RemoteValue> for NodeListRemoteValue {
+    type Error = RemoteValue;
+    fn try_from(e: RemoteValue) -> Result<Self, Self::Error> {
+        match e {
+            RemoteValue::NodeListRemoteValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<HtmlCollectionRemoteValue> for RemoteValue {
+    fn from(v: HtmlCollectionRemoteValue) -> Self {
+        RemoteValue::HtmlCollectionRemoteValue(v)
+    }
+}
+impl TryFrom<RemoteValue> for HtmlCollectionRemoteValue {
+    type Error = RemoteValue;
+    fn try_from(e: RemoteValue) -> Result<Self, Self::Error> {
+        match e {
+            RemoteValue::HtmlCollectionRemoteValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<NodeRemoteValue> for RemoteValue {
+    fn from(v: NodeRemoteValue) -> Self {
+        RemoteValue::NodeRemoteValue(v)
+    }
+}
+impl TryFrom<RemoteValue> for NodeRemoteValue {
+    type Error = RemoteValue;
+    fn try_from(e: RemoteValue) -> Result<Self, Self::Error> {
+        match e {
+            RemoteValue::NodeRemoteValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<WindowProxyRemoteValue> for RemoteValue {
+    fn from(v: WindowProxyRemoteValue) -> Self {
+        RemoteValue::WindowProxyRemoteValue(v)
+    }
+}
+impl TryFrom<RemoteValue> for WindowProxyRemoteValue {
+    type Error = RemoteValue;
+    fn try_from(e: RemoteValue) -> Result<Self, Self::Error> {
+        match e {
+            RemoteValue::WindowProxyRemoteValue(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ListRemoteValue(Vec<RemoteValue>);
@@ -1875,6 +2403,34 @@ pub enum Target {
     ContextTarget(ContextTarget),
     RealmTarget(RealmTarget),
 }
+impl From<ContextTarget> for Target {
+    fn from(v: ContextTarget) -> Self {
+        Target::ContextTarget(v)
+    }
+}
+impl TryFrom<Target> for ContextTarget {
+    type Error = Target;
+    fn try_from(e: Target) -> Result<Self, Self::Error> {
+        match e {
+            Target::ContextTarget(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<RealmTarget> for Target {
+    fn from(v: RealmTarget) -> Self {
+        Target::RealmTarget(v)
+    }
+}
+impl TryFrom<Target> for RealmTarget {
+    type Error = Target;
+    fn try_from(e: Target) -> Result<Self, Self::Error> {
+        match e {
+            Target::RealmTarget(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum RealmInfo {
@@ -1886,6 +2442,118 @@ pub enum RealmInfo {
     PaintWorkletRealmInfo(PaintWorkletRealmInfo),
     AudioWorkletRealmInfo(AudioWorkletRealmInfo),
     WorkletRealmInfo(WorkletRealmInfo),
+}
+impl From<WindowRealmInfo> for RealmInfo {
+    fn from(v: WindowRealmInfo) -> Self {
+        RealmInfo::WindowRealmInfo(v)
+    }
+}
+impl TryFrom<RealmInfo> for WindowRealmInfo {
+    type Error = RealmInfo;
+    fn try_from(e: RealmInfo) -> Result<Self, Self::Error> {
+        match e {
+            RealmInfo::WindowRealmInfo(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<DedicatedWorkerRealmInfo> for RealmInfo {
+    fn from(v: DedicatedWorkerRealmInfo) -> Self {
+        RealmInfo::DedicatedWorkerRealmInfo(v)
+    }
+}
+impl TryFrom<RealmInfo> for DedicatedWorkerRealmInfo {
+    type Error = RealmInfo;
+    fn try_from(e: RealmInfo) -> Result<Self, Self::Error> {
+        match e {
+            RealmInfo::DedicatedWorkerRealmInfo(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<SharedWorkerRealmInfo> for RealmInfo {
+    fn from(v: SharedWorkerRealmInfo) -> Self {
+        RealmInfo::SharedWorkerRealmInfo(v)
+    }
+}
+impl TryFrom<RealmInfo> for SharedWorkerRealmInfo {
+    type Error = RealmInfo;
+    fn try_from(e: RealmInfo) -> Result<Self, Self::Error> {
+        match e {
+            RealmInfo::SharedWorkerRealmInfo(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<ServiceWorkerRealmInfo> for RealmInfo {
+    fn from(v: ServiceWorkerRealmInfo) -> Self {
+        RealmInfo::ServiceWorkerRealmInfo(v)
+    }
+}
+impl TryFrom<RealmInfo> for ServiceWorkerRealmInfo {
+    type Error = RealmInfo;
+    fn try_from(e: RealmInfo) -> Result<Self, Self::Error> {
+        match e {
+            RealmInfo::ServiceWorkerRealmInfo(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<WorkerRealmInfo> for RealmInfo {
+    fn from(v: WorkerRealmInfo) -> Self {
+        RealmInfo::WorkerRealmInfo(v)
+    }
+}
+impl TryFrom<RealmInfo> for WorkerRealmInfo {
+    type Error = RealmInfo;
+    fn try_from(e: RealmInfo) -> Result<Self, Self::Error> {
+        match e {
+            RealmInfo::WorkerRealmInfo(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<PaintWorkletRealmInfo> for RealmInfo {
+    fn from(v: PaintWorkletRealmInfo) -> Self {
+        RealmInfo::PaintWorkletRealmInfo(v)
+    }
+}
+impl TryFrom<RealmInfo> for PaintWorkletRealmInfo {
+    type Error = RealmInfo;
+    fn try_from(e: RealmInfo) -> Result<Self, Self::Error> {
+        match e {
+            RealmInfo::PaintWorkletRealmInfo(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<AudioWorkletRealmInfo> for RealmInfo {
+    fn from(v: AudioWorkletRealmInfo) -> Self {
+        RealmInfo::AudioWorkletRealmInfo(v)
+    }
+}
+impl TryFrom<RealmInfo> for AudioWorkletRealmInfo {
+    type Error = RealmInfo;
+    fn try_from(e: RealmInfo) -> Result<Self, Self::Error> {
+        match e {
+            RealmInfo::AudioWorkletRealmInfo(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<WorkletRealmInfo> for RealmInfo {
+    fn from(v: WorkletRealmInfo) -> Self {
+        RealmInfo::WorkletRealmInfo(v)
+    }
+}
+impl TryFrom<RealmInfo> for WorkletRealmInfo {
+    type Error = RealmInfo;
+    fn try_from(e: RealmInfo) -> Result<Self, Self::Error> {
+        match e {
+            RealmInfo::WorkletRealmInfo(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BaseRealmInfo {
@@ -2195,4 +2863,4 @@ impl Source {
         Self::IDENTIFIER
     }
 }
-group_enum ! (ScriptType { Channel (Channel) , ChannelValue (ChannelValue) , ChannelProperties (ChannelProperties) , EvaluateResultSuccess (EvaluateResultSuccess) , EvaluateResultException (EvaluateResultException) , ExceptionDetails (ExceptionDetails) , Handle (Handle) , InternalId (InternalId) , LocalValue (LocalValue) , ListLocalValue (ListLocalValue) , ArrayLocalValue (ArrayLocalValue) , DateLocalValue (DateLocalValue) , MappingLocalValue (MappingLocalValue) , MapLocalValue (MapLocalValue) , ObjectLocalValue (ObjectLocalValue) , RegExpValue (RegExpValue) , RegExpLocalValue (RegExpLocalValue) , SetLocalValue (SetLocalValue) , PreloadScript (PreloadScript) , Realm (Realm) , SpecialNumber (SpecialNumber) , RealmType (RealmType) , RemoteReference (RemoteReference) , RemoteValue (RemoteValue) , ListRemoteValue (ListRemoteValue) , MappingRemoteValue (MappingRemoteValue) , HtmlCollectionRemoteValue (HtmlCollectionRemoteValue) , NodeProperties (NodeProperties) , WindowProxyProperties (WindowProxyProperties) , ResultOwnership (ResultOwnership) , SerializationOptions (SerializationOptions) , SharedId (SharedId) , StackFrame (StackFrame) , StackTrace (StackTrace) , Target (Target) , RealmInfo (RealmInfo) , BaseRealmInfo (BaseRealmInfo) , Source (Source) });
+group_enum ! (ScriptType { Channel (Channel) , ChannelProperties (ChannelProperties) , ExceptionDetails (ExceptionDetails) , Handle (Handle) , InternalId (InternalId) , LocalValue (LocalValue) , ListLocalValue (ListLocalValue) , MappingLocalValue (MappingLocalValue) , RegExpValue (RegExpValue) , PreloadScript (PreloadScript) , Realm (Realm) , SpecialNumber (SpecialNumber) , RealmType (RealmType) , RemoteValue (RemoteValue) , ListRemoteValue (ListRemoteValue) , MappingRemoteValue (MappingRemoteValue) , HtmlCollectionRemoteValue (HtmlCollectionRemoteValue) , NodeProperties (NodeProperties) , WindowProxyProperties (WindowProxyProperties) , ResultOwnership (ResultOwnership) , SerializationOptions (SerializationOptions) , SharedId (SharedId) , StackFrame (StackFrame) , StackTrace (StackTrace) , Target (Target) , RealmInfo (RealmInfo) , BaseRealmInfo (BaseRealmInfo) , Source (Source) });

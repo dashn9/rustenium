@@ -38,6 +38,48 @@ pub enum ExtensionData {
     ExtensionBase64Encoded(ExtensionBase64Encoded),
     ExtensionPath(ExtensionPath),
 }
+impl From<ExtensionArchivePath> for ExtensionData {
+    fn from(v: ExtensionArchivePath) -> Self {
+        ExtensionData::ExtensionArchivePath(v)
+    }
+}
+impl TryFrom<ExtensionData> for ExtensionArchivePath {
+    type Error = ExtensionData;
+    fn try_from(e: ExtensionData) -> Result<Self, Self::Error> {
+        match e {
+            ExtensionData::ExtensionArchivePath(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<ExtensionBase64Encoded> for ExtensionData {
+    fn from(v: ExtensionBase64Encoded) -> Self {
+        ExtensionData::ExtensionBase64Encoded(v)
+    }
+}
+impl TryFrom<ExtensionData> for ExtensionBase64Encoded {
+    type Error = ExtensionData;
+    fn try_from(e: ExtensionData) -> Result<Self, Self::Error> {
+        match e {
+            ExtensionData::ExtensionBase64Encoded(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<ExtensionPath> for ExtensionData {
+    fn from(v: ExtensionPath) -> Self {
+        ExtensionData::ExtensionPath(v)
+    }
+}
+impl TryFrom<ExtensionData> for ExtensionPath {
+    type Error = ExtensionData;
+    fn try_from(e: ExtensionData) -> Result<Self, Self::Error> {
+        match e {
+            ExtensionData::ExtensionPath(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ExtensionPath {
     #[serde(rename = "type")]

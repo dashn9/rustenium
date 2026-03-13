@@ -200,6 +200,7 @@ pub struct CommandResult<'a> {
     pub name: Cow<'a, str>,
     pub parameters: Vec<Param<'a>>,
     pub raw_name: Cow<'a, str>,
+    pub type_choice: Option<Vec<TypeRef<'a>>>,
 }
 
 #[derive(Clone, Debug, PartialEq)]
