@@ -3,7 +3,7 @@ macro_rules! css {
     ($value:expr) => {
         $crate::rustenium_bidi_definitions::browsing_context::types::Locator::CssLocator(
             $crate::rustenium_bidi_definitions::browsing_context::types::CssLocator {
-                r#type: $crate::rustenium_bidi_definitions::browsing_context::types::CssEnum::Css,
+                r#type: $crate::rustenium_bidi_definitions::browsing_context::types::CssLocatorType::Css,
                 value: $value.to_string(),
             }
         )
@@ -15,7 +15,7 @@ macro_rules! xpath {
     ($value:expr) => {
         $crate::rustenium_bidi_definitions::browsing_context::types::Locator::XPathLocator(
             $crate::rustenium_bidi_definitions::browsing_context::types::XPathLocator {
-                r#type: $crate::rustenium_bidi_definitions::browsing_context::types::XpathEnum::Xpath,
+                r#type: $crate::rustenium_bidi_definitions::browsing_context::types::XPathLocatorType::Xpath,
                 value: $value.to_string(),
             }
         )

@@ -68,7 +68,6 @@ pub mod options {
     pub struct CreateContextOptions {
         pub context_type: Option<CreateType>,
         pub reference_context: Option<BrowsingContext>,
-        pub background: Option<bool>,
     }
 
     #[derive(Debug, Clone, Default)]
@@ -401,23 +400,23 @@ impl ChromeBrowser {
     /// Creates a new browsing context (tab) with default options.
     pub async fn create_context_bidi(
         &mut self,
+        background: bool
     ) -> Result<rustenium_core::BrowsingContext, ContextCreationError> {
-        self.create_context_bidi_with_options(CreateContextOptions::default()).await
+        self.create_context_bidi_with_options(background, CreateContextOptions::default()).await
     }
 
     /// Creates a new browsing context with custom options (type, reference context, background).
     pub async fn create_context_bidi_with_options(
         &mut self,
+        background: bool,
         options: CreateContextOptions,
     ) -> Result<rustenium_core::BrowsingContext, ContextCreationError> {
         let context_type = options.context_type.unwrap_or(CreateType::Tab);
         let mut builder = CreateBuilder::default().r#type(context_type);
         if let Some(ref_ctx) = options.reference_context {
             builder = builder.reference_context(ref_ctx);
-        }
-        if let Some(bg) = options.background {
-            builder = builder.background(bg);
-        }
+        };
+        builder = builder.background(background);
         self.driver.create_context(builder.build().unwrap()).await
     }
 

@@ -10,7 +10,7 @@ use rustenium_core::BidiSession;
 use crate::error::{EvaluateResultError, MouseInputError, ScreenshotError};
 use crate::input::{Mouse, MouseClickOptions, MouseMoveOptions};
 use crate::input::BidiMouse;
-pub use crate::nodes::bidi::node::ScreenshotOptions;
+pub use crate::nodes::bidi::node::BidiNodeScreenshotOptions;
 use crate::nodes::bidi::node::BidiNode;
 use crate::nodes::node::Node;
 use crate::nodes::NodePosition;
@@ -46,15 +46,11 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static> ChromeNode<T, M> 
         Self { bidi_node, children, mouse }
     }
 
-    pub fn mouse(&self) -> &M {
-        &self.mouse
-    }
-
     // ── Screenshot ───────────────────────────────────────────────────────────
 
     /// Captures a screenshot of the element and returns base64-encoded image data.
     pub async fn screenshot(&self) -> Result<String, ScreenshotError> {
-        self.bidi_node.screenshot(ScreenshotOptions::default()).await
+        self.bidi_node.screenshot(BidiNodeScreenshotOptions::default()).await
     }
 
     /// Captures a screenshot of the element with custom options (format, origin, save path).
@@ -62,7 +58,7 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static> ChromeNode<T, M> 
     /// If `save_path` is a directory, saves with an auto-generated filename.
     /// If `save_path` is a file path, saves to that exact location and returns the path.
     /// If `save_path` is `None`, returns base64-encoded image data.
-    pub async fn screenshot_with_options(&self, options: ScreenshotOptions) -> Result<String, ScreenshotError> {
+    pub async fn screenshot_with_options(&self, options: BidiNodeScreenshotOptions) -> Result<String, ScreenshotError> {
         self.bidi_node.screenshot(options).await
     }
 

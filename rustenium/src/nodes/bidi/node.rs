@@ -23,7 +23,7 @@ use tokio::sync::Mutex;
 use tokio::time::timeout;
 
 #[derive(Debug, Clone, Default)]
-pub struct ScreenshotOptions {
+pub struct BidiNodeScreenshotOptions {
     pub origin: Option<CaptureScreenshotOrigin>,
     pub format: Option<ImageFormat>,
     pub save_path: Option<String>,
@@ -432,7 +432,7 @@ impl<T: ConnectionTransport> BidiNode<T> {
         Ok(())
     }
 
-    pub async fn screenshot(&self, options: ScreenshotOptions) -> Result<String, ScreenshotError> {
+    pub async fn screenshot(&self, options: BidiNodeScreenshotOptions) -> Result<String, ScreenshotError> {
         let mut builder = CaptureScreenshotBuilder::default().context(self.context_id.clone());
         if let Some(origin) = options.origin {
             builder = builder.origin(origin);
