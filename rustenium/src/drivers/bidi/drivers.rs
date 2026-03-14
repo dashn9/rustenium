@@ -57,7 +57,7 @@ use std::time::Duration;
 use tokio::sync::Mutex as TokioMutex;
 use tokio::time::sleep;
 
-use crate::input::{BidiMouse, HumanMouse, Keyboard, Point};
+use crate::input::{BidiMouse, HumanMouse, Keyboard};
 
 pub struct OnRequestBuilder<'a, T: ConnectionTransport + Send + Sync, F> {
     driver: &'a mut BidiDriver<T>,
@@ -231,9 +231,9 @@ pub struct BidiDriver<T: ConnectionTransport + Send + Sync> {
     pub active_bc_index: usize,
     pub browsing_contexts: Arc<Mutex<Vec<Context>>>,
     pub driver_process: Process,
-    pub mouse: BidiMouse<T>,
-    pub human_mouse: HumanMouse<BidiMouse<T>>,
-    pub keyboard: Keyboard<T>,
+    pub mouse: Arc<BidiMouse<T>>,
+    pub human_mouse: Arc<HumanMouse<BidiMouse<T>>>,
+    pub keyboard: Arc<Keyboard<T>>,
 }
 
 impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
@@ -245,9 +245,9 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
         browsing_contexts: Arc<Mutex<Vec<Context>>>,
         driver_process: Process,
     ) -> Self {
-        let mouse = BidiMouse::new(session.clone());
-        let human_mouse = HumanMouse::new(BidiMouse::new(session.clone()));
-        let keyboard = Keyboard::new(session.clone());
+        let mouse = Arc::new(BidiMouse::new(session.clone()));
+        let human_mouse = Arc::new(HumanMouse::new(BidiMouse::new(session.clone())));
+        let keyboard = Arc::new(Keyboard::new(session.clone()));
 
         Self {
             exe_path,
@@ -338,7 +338,7 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
         }
     }
 
-    pub async fn open_url(&mut self, navigate: Navigate) -> Result<NavigateResult, OpenUrlError> {
+    pub async fn navigate(&mut self, navigate: Navigate) -> Result<NavigateResult, OpenUrlError> {
         // navigate.params.context = navigate.params.context.unwrap_or(self.get_active_context_id()?);
 
         let result_value = self
@@ -495,42 +495,6 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
         let bc = Context::from_id(result.context, context_type);
 
         Ok(bc)
-    }
-
-    pub async fn move_mouse_to_node<N: crate::nodes::Node>(
-        &mut self,
-        node: &mut N,
-        scroll_into_view: bool,
-        options: crate::input::MouseMoveOptions,
-    ) -> Result<(), crate::error::MouseInputError> {
-        if scroll_into_view {
-            node.scroll_into_view().await?;
-        }
-
-        let position = node
-            .get_position()
-            .await
-            .ok_or(crate::error::InvalidPositionError)?;
-
-        let center_point = Point {
-            x: position.x + (position.width / 2.0),
-            y: position.y + (position.height / 2.0),
-        };
-
-        self.mouse.move_to(center_point, node.get_context_id(), options).await?;
-        Ok(())
-    }
-
-    /// If you are planning to make a realistic approach to clicking on the node, this is not advisable
-    /// The node is scrolled into view and the mouse is teleported to position before clicking
-    pub async fn click_on_node<N: crate::nodes::Node>(
-        &mut self,
-        node: &mut N,
-        options: crate::input::MouseClickOptions,
-    ) -> Result<(), crate::error::MouseInputError> {
-        self.move_mouse_to_node(node, true, Default::default()).await?;
-        self.mouse.click(None, node.get_context_id(), options).await?;
-        Ok(())
     }
 
     async fn on_network<F, R>(

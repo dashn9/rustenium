@@ -1,13 +1,16 @@
 use tokio::time::{Duration, sleep};
-use rustenium::browsers::{create_chrome_browser, ChromeConfig};
+use rustenium::browsers::{create_chrome_browser, ChromeConfig, NavigateOptions};
 use rustenium_bidi_definitions::browsing_context::types::ReadinessState;
 use rustenium_macros::css;
 
 #[tokio::test]
 async fn open_browser() {
     let mut browser = create_chrome_browser(None).await;
-    browser.open_url("https://linkedin.com", Some(ReadinessState::Complete), None).await.unwrap();
-    let elements = browser.find_nodes(css!("body"), None, None, None, None).await.unwrap();
+    browser.navigate_with_options("https://linkedin.com", NavigateOptions {
+        wait: Some(ReadinessState::Complete),
+        ..Default::default()
+    }).await.unwrap();
+    let elements = browser.find_nodes(css!("body")).await.unwrap();
     sleep(Duration::from_secs(13)).await;
 }
 
@@ -18,12 +21,12 @@ async fn test_auto_attach_mode() {
     config.remote_debugging_port = Some(0); // Auto mode
 
     let mut browser = create_chrome_browser(Some(config)).await;
-    browser.open_url("https://example.com",
-                    Some(ReadinessState::Complete),
-                    None).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptions {
+        wait: Some(ReadinessState::Complete),
+        ..Default::default()
+    }).await.unwrap();
 
-    let nodes = browser.find_nodes(css!("body"), None, None, None, None)
-                       .await.unwrap();
+    let nodes = browser.find_nodes(css!("body")).await.unwrap();
     assert!(!nodes.is_empty());
 }
 
@@ -35,11 +38,11 @@ async fn test_manual_attach_mode() {
     config.remote_debugging_port = Some(9222); // Connect to existing Chrome on port 9222
 
     let mut browser = create_chrome_browser(Some(config)).await;
-    browser.open_url("https://example.com",
-                    Some(ReadinessState::Complete),
-                    None).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptions {
+        wait: Some(ReadinessState::Complete),
+        ..Default::default()
+    }).await.unwrap();
 
-    let nodes = browser.find_nodes(css!("body"), None, None, None, None)
-                       .await.unwrap();
+    let nodes = browser.find_nodes(css!("body")).await.unwrap();
     assert!(!nodes.is_empty());
 }

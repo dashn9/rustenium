@@ -1,27 +1,137 @@
-use rustenium_bidi_definitions::browsing_context::results::NavigateResult;
-use rustenium_bidi_definitions::browsing_context::types::{BrowsingContext, ClipRectangle, ImageFormat, Locator, ReadinessState};
+use rustenium_bidi_definitions::browsing_context::command_builders::{
+    CaptureScreenshotBuilder, CreateBuilder, LocateNodesBuilder, NavigateBuilder,
+};
 use rustenium_bidi_definitions::browsing_context::commands::CaptureScreenshotOrigin;
+use rustenium_bidi_definitions::browsing_context::results::NavigateResult;
+use rustenium_bidi_definitions::browsing_context::types::{
+    BrowsingContext, ClipRectangle, CreateType, ImageFormat, Locator, ReadinessState,
+};
+use rustenium_bidi_definitions::browser::types::UserContext;
+use rustenium_bidi_definitions::emulation::command_builders::SetTimezoneOverrideBuilder;
 use rustenium_bidi_definitions::Event;
 use rustenium_bidi_definitions::Command;
-use rustenium_bidi_definitions::script::types::{
-    ChannelValue,
-    SerializationOptions, SerializationOptionsIncludeShadowTree, SharedReference
+use rustenium_bidi_definitions::script::command_builders::{
+    AddPreloadScriptBuilder, EvaluateBuilder, RemovePreloadScriptBuilder,
 };
+use rustenium_bidi_definitions::script::types::{
+    ChannelValue, ContextTarget, ResultOwnership, SerializationOptions,
+    SerializationOptionsIncludeShadowTree, SharedReference, Target,
+};
+use rustenium_bidi_definitions::session::results::SubscribeResult;
 use rustenium_bidi_definitions::session::types::ProxyConfiguration;
 use rustenium_bidi_definitions::network::types::UrlPattern;
+use rustenium_bidi_definitions::base::CommandResponse;
 use rustenium_core::error::{CommandResultError, SessionSendError};
-use rustenium_core::transport::{ConnectionTransportConfig, WebsocketConnectionTransport};
-use rustenium_core::{find_free_port, NetworkRequest};
 use rustenium_core::events::BidiEventManagement;
 use rustenium_core::session::SessionConnectionType;
+use rustenium_core::transport::{ConnectionTransportConfig, WebsocketConnectionTransport};
+use rustenium_core::{find_free_port, BidiSession, NetworkRequest};
 use crate::drivers::bidi::drivers::{BidiDriver, BidiDrive, DriverConfiguration};
-use crate::error::{EvaluateResultError, FindNodesError, OpenUrlError, InterceptNetworkError, ContextIndexError};
+use crate::error::{
+    ContextCreationError, ContextIndexError, EmulationError,
+    EvaluateResultError, FindNodesError, InterceptNetworkError, OpenUrlError, ScreenshotError,
+};
 use crate::nodes::ChromeNode;
+use crate::input::BidiMouse;
 use super::capabilities::ChromeCapabilities;
 use std::sync::{Arc, Mutex};
 use std::collections::HashSet;
 use std::future::Future;
 use rustenium_core::process::Process;
+
+pub mod options {
+    use rustenium_bidi_definitions::browsing_context::commands::CaptureScreenshotOrigin;
+    use rustenium_bidi_definitions::browsing_context::types::{
+        BrowsingContext, ClipRectangle, CreateType, ImageFormat, ReadinessState,
+    };
+    use rustenium_bidi_definitions::script::types::{
+        ChannelValue, ResultOwnership, SerializationOptions, SharedReference, Target,
+    };
+    use rustenium_bidi_definitions::network::types::UrlPattern;
+
+    #[derive(Debug, Clone, Default)]
+    pub struct BrowserScreenshotOptions {
+        pub context_id: Option<BrowsingContext>,
+        pub origin: Option<CaptureScreenshotOrigin>,
+        pub format: Option<ImageFormat>,
+        pub clip: Option<ClipRectangle>,
+        pub save_path: Option<String>,
+    }
+
+    #[derive(Debug, Clone, Default)]
+    pub struct NavigateOptions {
+        pub wait: Option<ReadinessState>,
+        pub context_id: Option<BrowsingContext>,
+    }
+
+    #[derive(Debug, Clone, Default)]
+    pub struct CreateContextOptions {
+        pub context_type: Option<CreateType>,
+        pub reference_context: Option<BrowsingContext>,
+        pub background: Option<bool>,
+    }
+
+    #[derive(Debug, Clone, Default)]
+    pub struct FindNodesOptions {
+        pub context_id: Option<BrowsingContext>,
+        pub max_node_count: Option<u64>,
+        pub serialization_options: Option<SerializationOptions>,
+        pub start_nodes: Option<Vec<SharedReference>>,
+    }
+
+    #[derive(Debug, Clone, Default)]
+    pub struct WaitForNodesOptions {
+        pub context_id: Option<BrowsingContext>,
+        pub timeout_ms: Option<u64>,
+        pub poll_interval_ms: Option<u64>,
+    }
+
+    #[derive(Debug, Clone, Default)]
+    pub struct OnRequestOptions {
+        pub url_patterns: Option<Vec<UrlPattern>>,
+        pub contexts: Option<Vec<String>>,
+    }
+
+    #[derive(Debug, Clone, Default)]
+    pub struct SubscribeEventsOptions {
+        pub browsing_contexts: Option<Vec<String>>,
+        pub user_contexts: Option<Vec<String>>,
+    }
+
+    #[derive(Debug, Clone, Default)]
+    pub struct EvaluateScriptOptions {
+        pub target: Option<Target>,
+        pub result_ownership: Option<ResultOwnership>,
+        pub serialization_options: Option<SerializationOptions>,
+        pub user_activation: Option<bool>,
+    }
+
+    #[derive(Debug, Clone, Default)]
+    pub struct AddPreloadScriptOptions {
+        pub arguments: Option<Vec<ChannelValue>>,
+        pub contexts: Option<Vec<BrowsingContext>>,
+        pub user_contexts: Option<Vec<String>>,
+        pub sandbox: Option<String>,
+    }
+
+    #[derive(Debug, Clone, Default)]
+    pub struct EmulateTimezoneOptions {
+        pub contexts: Option<Vec<BrowsingContext>>,
+        pub user_contexts: Option<Vec<String>>,
+    }
+
+    #[derive(Debug, Clone, Default)]
+    pub struct AuthenticateOptions {
+        pub url_patterns: Option<Vec<UrlPattern>>,
+        pub contexts: Option<Vec<String>>,
+    }
+}
+
+pub use options::{
+    BrowserScreenshotOptions, NavigateOptions, CreateContextOptions,
+    FindNodesOptions, WaitForNodesOptions, OnRequestOptions, SubscribeEventsOptions,
+    EvaluateScriptOptions, AddPreloadScriptOptions, EmulateTimezoneOptions, AuthenticateOptions,
+};
 
 /// Configuration for Chrome browser and chromedriver.
 ///
@@ -240,7 +350,7 @@ impl ChromeBrowser {
         }
 
         // Convert ChromeCapabilities to CapabilitiesRequest
-        let capabilities = Some(config.capabilities.clone().build());
+        let capabilities = config.capabilities.clone().build();
 
         // Start chromedriver (it will attach to Chrome if debugger_address is set)
         let result = Self::start(&config, &ct_config, SessionConnectionType::WebSocket, capabilities).await;
@@ -264,194 +374,147 @@ impl ChromeBrowser {
         browser
     }
 
-    /// Navigates to the specified URL.
-    ///
-    /// # Arguments
-    ///
-    /// * `url` - The URL to navigate to
-    /// * `wait` - Optional readiness state to wait for (e.g., `ReadinessState::Complete`)
-    /// * `context_id` - Optional browsing context ID (uses active context if None)
-    ///
-    /// # Examples
-    ///
-    /// ```no_run
-    /// # use rustenium::browsers::ChromeBrowser;
-    /// # async fn example(mut browser: ChromeBrowser) -> Result<(), Box<dyn std::error::Error>> {
-    /// // Navigate to a URL
-    /// browser.open_url("https://example.com", None, None).await?;
-    ///
-    /// // Wait for page to fully load
-    /// use rustenium_bidi_commands::browsing_context::types::ReadinessState;
-    /// browser.open_url(
-    ///     "https://example.com",
-    ///     Some(ReadinessState::Complete),
-    ///     None
-    /// ).await?;
-    /// # Ok(())
-    /// # }
-    /// ```
-    pub async fn open_url(
+    // ── Navigation ───────────────────────────────────────────────────────────
+
+    /// Navigates to the specified URL in the active context.
+    pub async fn navigate(&mut self, url: &str) -> Result<NavigateResult, OpenUrlError> {
+        self.navigate_with_options(url, NavigateOptions::default()).await
+    }
+
+    /// Navigates to the specified URL with custom options (wait state, context).
+    pub async fn navigate_with_options(
         &mut self,
         url: &str,
-        wait: Option<ReadinessState>,
-        context_id: Option<BrowsingContext>,
+        options: NavigateOptions,
     ) -> Result<NavigateResult, OpenUrlError> {
-        self.driver.open_url(url.to_string(), wait, context_id).await
+        let context = options.context_id
+            .unwrap_or_else(|| self.driver.get_active_context_id().unwrap());
+        let mut builder = NavigateBuilder::default().url(url).context(context);
+        if let Some(wait) = options.wait {
+            builder = builder.wait(wait);
+        }
+        self.driver.navigate(builder.build().unwrap()).await
     }
 
-    /// Create a new browsing context (tab or window)
+    // ── Context ──────────────────────────────────────────────────────────────
+
+    /// Creates a new browsing context (tab) with default options.
     pub async fn create_context_bidi(
         &mut self,
-        context_type: Option<rustenium_bidi_commands::browsing_context::types::CreateType>,
-        reference_context: Option<&rustenium_core::Context>,
-        background: bool,
-    ) -> Result<rustenium_core::Context, CommandResultError> {
-        self.driver.create_context(context_type, reference_context, background).await
+    ) -> Result<rustenium_core::BrowsingContext, ContextCreationError> {
+        self.create_context_bidi_with_options(CreateContextOptions::default()).await
     }
 
-    /// Finds all elements matching the given locator.
-    ///
-    /// # Arguments
-    ///
-    /// * `locator` - Element locator (CSS selector, XPath, etc.)
-    /// * `context_id` - Optional browsing context (uses active context if None)
-    /// * `max_node_count` - Optional maximum number of nodes to return
-    /// * `serialization_options` - Optional serialization options for node data
-    /// * `start_nodes` - Optional starting nodes for the search
-    ///
-    /// # Examples
-    ///
-    /// ```no_run
-    /// # use rustenium::browsers::ChromeBrowser;
-    /// # use rustenium::{css, xpath};
-    /// # async fn example(mut browser: ChromeBrowser) -> Result<(), Box<dyn std::error::Error>> {
-    /// // Find all buttons using CSS selector
-    /// let buttons = browser.find_nodes(css!("button"), None, None, None, None).await?;
-    ///
-    /// // Find up to 5 links
-    /// let links = browser.find_nodes(css!("a"), None, Some(5), None, None).await?;
-    ///
-    /// // Find using XPath
-    /// let elements = browser.find_nodes(xpath!("//div[@class='content']"), None, None, None, None).await?;
-    /// # Ok(())
-    /// # }
-    /// ```
+    /// Creates a new browsing context with custom options (type, reference context, background).
+    pub async fn create_context_bidi_with_options(
+        &mut self,
+        options: CreateContextOptions,
+    ) -> Result<rustenium_core::BrowsingContext, ContextCreationError> {
+        let context_type = options.context_type.unwrap_or(CreateType::Tab);
+        let mut builder = CreateBuilder::default().r#type(context_type);
+        if let Some(ref_ctx) = options.reference_context {
+            builder = builder.reference_context(ref_ctx);
+        }
+        if let Some(bg) = options.background {
+            builder = builder.background(bg);
+        }
+        self.driver.create_context(builder.build().unwrap()).await
+    }
+
+    // ── Node finding ─────────────────────────────────────────────────────────
+
+    /// Finds all elements matching the given locator in the active context.
     pub async fn find_nodes(
         &mut self,
         locator: Locator,
-        context_id: Option<BrowsingContext>,
-        max_node_count: Option<u64>,
-        serialization_options: Option<SerializationOptions>,
-        start_nodes: Option<Vec<SharedReference>>,
     ) -> Result<Vec<ChromeNode<WebsocketConnectionTransport>>, FindNodesError> {
-        let serialization_options = serialization_options.unwrap_or(SerializationOptions {
-            max_dom_depth: Some(Some(99)),
-            max_object_depth: Some(Some(99)),
-            include_shadow_tree: Some(SerializationOptionsincludeShadowTreeUnion::Open),
+        self.find_nodes_with_options(locator, FindNodesOptions::default()).await
+    }
+
+    /// Finds all elements matching the given locator with custom options (context, count, serialization, start nodes).
+    pub async fn find_nodes_with_options(
+        &mut self,
+        locator: Locator,
+        options: FindNodesOptions,
+    ) -> Result<Vec<ChromeNode<WebsocketConnectionTransport>>, FindNodesError> {
+        let context = options.context_id.clone()
+            .unwrap_or_else(|| self.driver.get_active_context_id().unwrap());
+        let serialization_options = options.serialization_options.unwrap_or(SerializationOptions {
+            max_dom_depth: Some(99),
+            max_object_depth: Some(99),
+            include_shadow_tree: Some(SerializationOptionsIncludeShadowTree::Open),
         });
-        let context = context_id.clone().unwrap_or_else(|| self.driver.get_active_context_id().unwrap());
-        let node_result = self
-            .driver
-            .find_nodes(
-                locator.clone(),
-                context_id,
-                max_node_count,
-                Some(serialization_options),
-                start_nodes,
-            )
-            .await?;
+        let mut builder = LocateNodesBuilder::default()
+            .context(context.clone())
+            .locator(locator.clone())
+            .serialization_options(serialization_options);
+        if let Some(max_count) = options.max_node_count {
+            builder = builder.max_node_count(max_count);
+        }
+        if let Some(start_nodes) = options.start_nodes {
+            builder = builder.start_nodes(start_nodes);
+        }
+        let node_result = self.driver.find_nodes(builder.build().unwrap()).await?;
         let mut chrome_nodes = Vec::new();
-        for (_i, node) in node_result.nodes.iter().enumerate() {
+        for node in node_result.nodes.iter() {
             let chrome_node = ChromeNode::from_bidi(
                 node.clone(),
                 locator.clone(),
                 self.driver.session.clone(),
                 context.clone(),
+                self.driver.mouse.clone(),
             );
             chrome_nodes.push(chrome_node);
         }
         Ok(chrome_nodes)
     }
 
-    /// Finds the first element matching the given locator.
+    /// Finds the first element matching the given locator in the active context.
     ///
     /// Returns `None` if no matching element is found.
-    ///
-    /// # Examples
-    ///
-    /// ```no_run
-    /// # use rustenium::browsers::ChromeBrowser;
-    /// # use rustenium::css;
-    /// # async fn example(mut browser: ChromeBrowser) -> Result<(), Box<dyn std::error::Error>> {
-    /// // Find the submit button
-    /// if let Some(button) = browser.find_node(css!("#submit"), None, None, None, None).await? {
-    ///     let text = button.get_inner_text().await;
-    ///     println!("Button text: {}", text);
-    /// }
-    /// # Ok(())
-    /// # }
-    /// ```
     pub async fn find_node(
         &mut self,
         locator: Locator,
-        context_id: Option<BrowsingContext>,
-        max_node_count: Option<u64>,
-        serialization_options: Option<SerializationOptions>,
-        start_nodes: Option<Vec<SharedReference>>,
     ) -> Result<Option<ChromeNode<WebsocketConnectionTransport>>, FindNodesError> {
-        let nodes = self.find_nodes(locator, context_id, max_node_count, serialization_options, start_nodes).await?;
+        self.find_node_with_options(locator, FindNodesOptions::default()).await
+    }
+
+    /// Finds the first element matching the given locator with custom options.
+    ///
+    /// Returns `None` if no matching element is found.
+    pub async fn find_node_with_options(
+        &mut self,
+        locator: Locator,
+        options: FindNodesOptions,
+    ) -> Result<Option<ChromeNode<WebsocketConnectionTransport>>, FindNodesError> {
+        let nodes = self.find_nodes_with_options(locator, options).await?;
         Ok(nodes.into_iter().next())
     }
 
-    /// Waits for elements matching the locator to appear, with a configurable timeout.
-    ///
-    /// Polls for elements at regular intervals until they appear or the timeout is reached.
-    ///
-    /// # Arguments
-    ///
-    /// * `locator` - Element locator
-    /// * `context_id` - Optional browsing context
-    /// * `timeout_ms` - Timeout in milliseconds (default: 4000ms)
-    /// * `poll_interval_ms` - Polling interval in milliseconds (default: timeout/6)
-    ///
-    /// # Examples
-    ///
-    /// ```no_run
-    /// # use rustenium::browsers::ChromeBrowser;
-    /// # use rustenium::css;
-    /// # async fn example(mut browser: ChromeBrowser) -> Result<(), Box<dyn std::error::Error>> {
-    /// // Wait up to 5 seconds for dynamic content to load
-    /// let elements = browser.wait_for_nodes(
-    ///     css!(".dynamic-content"),
-    ///     None,
-    ///     Some(5000),
-    ///     None,
-    /// ).await?;
-    ///
-    /// if !elements.is_empty() {
-    ///     println!("Found {} elements", elements.len());
-    /// }
-    /// # Ok(())
-    /// # }
-    /// ```
+    // ── Waiting ───────────────────────────────────────────────────────────────
+
+    /// Waits for elements matching the locator to appear (default 4s timeout).
     pub async fn wait_for_nodes(
         &mut self,
         locator: Locator,
-        context_id: Option<BrowsingContext>,
-        timeout_ms: Option<u64>,
-        poll_interval_ms: Option<u64>,
     ) -> Result<Vec<ChromeNode<WebsocketConnectionTransport>>, FindNodesError> {
-        let timeout = timeout_ms.unwrap_or(4000);
-        let poll_interval = poll_interval_ms.unwrap_or(timeout / 6);
+        self.wait_for_nodes_with_options(locator, WaitForNodesOptions::default()).await
+    }
+
+    /// Waits for elements matching the locator with custom options (context, timeout, poll interval).
+    pub async fn wait_for_nodes_with_options(
+        &mut self,
+        locator: Locator,
+        options: WaitForNodesOptions,
+    ) -> Result<Vec<ChromeNode<WebsocketConnectionTransport>>, FindNodesError> {
+        let timeout = options.timeout_ms.unwrap_or(4000);
+        let poll_interval = options.poll_interval_ms.unwrap_or(timeout / 6);
         let start = std::time::Instant::now();
 
         loop {
-            let nodes = self.find_nodes(
+            let nodes = self.find_nodes_with_options(
                 locator.clone(),
-                context_id.clone(),
-                None,
-                None,
-                None,
+                FindNodesOptions { context_id: options.context_id.clone(), ..Default::default() },
             ).await?;
 
             if !nodes.is_empty() {
@@ -466,194 +529,298 @@ impl ChromeBrowser {
         }
     }
 
-    /// Waits for a single element matching the locator to appear.
+    /// Waits for a single element matching the locator to appear (default 4s timeout).
     ///
     /// Returns `None` if no matching element appears within the timeout.
-    ///
-    /// # Examples
-    ///
-    /// ```no_run
-    /// # use rustenium::browsers::ChromeBrowser;
-    /// # use rustenium::css;
-    /// # async fn example(mut browser: ChromeBrowser) -> Result<(), Box<dyn std::error::Error>> {
-    /// // Wait for login button to appear
-    /// if let Some(button) = browser.wait_for_node(
-    ///     css!("#login-btn"),
-    ///     None,
-    ///     Some(3000), // 3 second timeout
-    ///     None,
-    /// ).await? {
-    ///     println!("Login button appeared!");
-    /// }
-    /// # Ok(())
-    /// # }
-    /// ```
     pub async fn wait_for_node(
         &mut self,
         locator: Locator,
-        context_id: Option<BrowsingContext>,
-        timeout_ms: Option<u64>,
-        poll_interval_ms: Option<u64>,
     ) -> Result<Option<ChromeNode<WebsocketConnectionTransport>>, FindNodesError> {
-        let nodes = self.wait_for_nodes(locator, context_id, timeout_ms, poll_interval_ms).await?;
+        self.wait_for_node_with_options(locator, WaitForNodesOptions::default()).await
+    }
+
+    /// Waits for a single element matching the locator with custom options.
+    ///
+    /// Returns `None` if no matching element appears within the timeout.
+    pub async fn wait_for_node_with_options(
+        &mut self,
+        locator: Locator,
+        options: WaitForNodesOptions,
+    ) -> Result<Option<ChromeNode<WebsocketConnectionTransport>>, FindNodesError> {
+        let nodes = self.wait_for_nodes_with_options(locator, options).await?;
         Ok(nodes.into_iter().next())
     }
 
-    /// Sends a raw WebDriver BiDi command.
-    ///
-    /// This is a low-level method for sending custom BiDi commands not covered by the high-level API.
-    ///
-    /// # Examples
-    ///
-    /// ```no_run
-    /// # use rustenium::browsers::ChromeBrowser;
-    /// # use rustenium_bidi_commands::CommandData;
-    /// # async fn example(mut browser: ChromeBrowser) -> Result<(), Box<dyn std::error::Error>> {
-    /// // Send a custom BiDi command
-    /// let command = CommandData::/*...*/;
-    /// # let command: CommandData = unimplemented!();
-    /// let result = browser.send_bidi_command(command).await?;
-    /// # Ok(())
-    /// # }
-    /// ```
-    pub async fn send_bidi_command(&mut self, command: CommandData) -> Result<ResultData, SessionSendError> {
-        self.driver.send_command(command).await
-    }
+    // ── Network interception ──────────────────────────────────────────────────
 
-    /// Register a handler to be called for each network request
-    ///
-    /// # Example
-    /// ```ignore
-    /// browser.on_request_bidi(|request| async move {
-    ///     if request.params.base_parameters.request.url.contains("ads") {
-    ///         let _ = request.abort().await;
-    ///     } else {
-    ///         let _ = request.continue_().await;
-    ///     }
-    /// }, None, None).await?;
-    /// ```
+    /// Registers a handler called for each network request (all URLs, all contexts).
     pub async fn on_request_bidi<F, Fut>(
         &mut self,
         handler: F,
-        url_patterns: Option<Vec<UrlPattern>>,
-        contexts: Option<Vec<String>>,
     ) -> Result<(), InterceptNetworkError>
     where
         F: Fn(NetworkRequest<WebsocketConnectionTransport>) -> Fut + Send + Sync + 'static,
         Fut: Future<Output = ()> + Send + 'static,
     {
-        self.driver.on_request(handler, url_patterns, contexts).await
+        self.on_request_bidi_with_options(handler, OnRequestOptions::default()).await
     }
 
-    /// Subscribes to browser events and registers a handler to process them.
-    ///
-    /// # Arguments
-    ///
-    /// * `events` - Set of event names to subscribe to (e.g., "browsingContext.load", "network.responseCompleted")
-    /// * `handler` - Async function called for each matching event
-    /// * `browsing_contexts` - Optional list of browsing context IDs to filter events
-    /// * `user_contexts` - Optional list of user context IDs
-    ///
-    /// # Examples
-    ///
-    /// ```no_run
-    /// # use rustenium::browsers::ChromeBrowser;
-    /// # use std::collections::HashSet;
-    /// # async fn example(mut browser: ChromeBrowser) -> Result<(), Box<dyn std::error::Error>> {
-    /// // Subscribe to page load events
-    /// browser.subscribe_events(
-    ///     HashSet::from(["browsingContext.load"]),
-    ///     |event| async move {
-    ///         println!("Page loaded: {:?}", event);
-    ///     },
-    ///     None,
-    ///     None,
-    /// ).await?;
-    ///
-    /// // Subscribe to multiple network events
-    /// browser.subscribe_events(
-    ///     HashSet::from(["network.responseStarted", "network.responseCompleted"]),
-    ///     |event| async move {
-    ///         println!("Network event: {:?}", event);
-    ///     },
-    ///     None,
-    ///     None,
-    /// ).await?;
-    /// # Ok(())
-    /// # }
-    /// ```
+    /// Registers a handler called for each network request with custom URL pattern and context filters.
+    pub async fn on_request_bidi_with_options<F, Fut>(
+        &mut self,
+        handler: F,
+        options: OnRequestOptions,
+    ) -> Result<(), InterceptNetworkError>
+    where
+        F: Fn(NetworkRequest<WebsocketConnectionTransport>) -> Fut + Send + Sync + 'static,
+        Fut: Future<Output = ()> + Send + 'static,
+    {
+        let mut builder = self.driver.on_request(handler);
+        if let Some(patterns) = options.url_patterns {
+            builder = builder.url_patterns(patterns);
+        }
+        if let Some(contexts) = options.contexts {
+            builder = builder.contexts(contexts);
+        }
+        builder.execute().await
+    }
+
+    // ── Events ────────────────────────────────────────────────────────────────
+
+    /// Subscribes to browser events and registers a handler.
     pub async fn subscribe_events<F, R>(
         &mut self,
         events: HashSet<&str>,
         handler: F,
-        browsing_contexts: Option<Vec<String>>,
-        user_contexts: Option<Vec<&str>>,
-    ) -> Result<Option<rustenium_bidi_commands::session::commands::SubscribeResult>, CommandResultError>
+    ) -> Result<Option<SubscribeResult>, CommandResultError>
     where
         F: FnMut(Event) -> R + Send + Sync + 'static,
         R: Future<Output = ()> + Send + 'static,
     {
-        self.driver.session.lock().await.subscribe_events(
-            events,
-            handler,
-            browsing_contexts,
-            user_contexts,
-        ).await
+        self.subscribe_events_with_options(events, handler, SubscribeEventsOptions::default()).await
     }
 
-    /// Add an event handler without sending a subscription command
-    /// Returns the handler ID (either provided or generated)
+    /// Subscribes to browser events with context and user context filters.
+    pub async fn subscribe_events_with_options<F, R>(
+        &mut self,
+        events: HashSet<&str>,
+        handler: F,
+        options: SubscribeEventsOptions,
+    ) -> Result<Option<SubscribeResult>, CommandResultError>
+    where
+        F: FnMut(Event) -> R + Send + Sync + 'static,
+        R: Future<Output = ()> + Send + 'static,
+    {
+        let mut bidi_event = {
+            let mut session = self.driver.session.lock().await;
+            session.create_event::<_, _, BidiSession<WebsocketConnectionTransport>>(events, handler)
+        };
+        if let Some(contexts) = options.browsing_contexts {
+            for ctx in contexts {
+                bidi_event.add_browsing_context(ctx);
+            }
+        }
+        if let Some(user_ctxs) = options.user_contexts {
+            for uctx in user_ctxs {
+                bidi_event.add_user_context(uctx);
+            }
+        }
+        self.driver.session.lock().await.subscribe_events(bidi_event).await
+    }
+
+    /// Adds an event handler without sending a subscription command.
+    ///
+    /// Returns the auto-generated handler ID.
     pub async fn add_event_handler<F, R>(
         &mut self,
         events: HashSet<&str>,
         handler: F,
-        handler_id: Option<String>,
     ) -> String
     where
         F: FnMut(Event) -> R + Send + Sync + 'static,
         R: Future<Output = ()> + Send + 'static,
     {
-        self.driver.add_event_handler(events, handler, handler_id).await
+        self.driver.add_event_handler(events, handler).await
     }
 
-    /// Evaluate a JavaScript expression in the browser context using BiDi
-    ///
-    /// # Example
-    /// ```ignore
-    /// let result = browser.evaluate_script_bidi(
-    ///     "document.title".to_string(),
-    ///     false,
-    ///     None,
-    ///     None,
-    ///     None,
-    ///     None,
-    /// ).await?;
-    /// ```
+    // ── Script evaluation ─────────────────────────────────────────────────────
+
+    /// Evaluates a JavaScript expression in the active browsing context.
     pub async fn evaluate_script_bidi(
         &mut self,
         expression: String,
         await_promise: bool,
-        target: Option<rustenium_bidi_commands::script::types::Target>,
-        result_ownership: Option<rustenium_bidi_commands::script::types::ResultOwnership>,
-        serialization_options: Option<SerializationOptions>,
-        user_activation: Option<bool>,
-    ) -> Result<rustenium_bidi_commands::script::types::EvaluateResultSuccess, EvaluateResultError> {
-        self.driver.evaluate_script(
-            expression,
-            await_promise,
-            target,
-            result_ownership,
-            serialization_options,
-            user_activation,
-        ).await
+    ) -> Result<rustenium_bidi_definitions::script::types::EvaluateResultSuccess, EvaluateResultError> {
+        self.evaluate_script_bidi_with_options(expression, await_promise, EvaluateScriptOptions::default()).await
     }
 
-    /// Get a reference to the Chrome configuration
+    /// Evaluates a JavaScript expression with custom options (target, result ownership, serialization).
+    pub async fn evaluate_script_bidi_with_options(
+        &mut self,
+        expression: String,
+        await_promise: bool,
+        options: EvaluateScriptOptions,
+    ) -> Result<rustenium_bidi_definitions::script::types::EvaluateResultSuccess, EvaluateResultError> {
+        let target = options.target.unwrap_or_else(|| {
+            let context = self.driver.get_active_context_id().unwrap();
+            Target::ContextTarget(ContextTarget::new(context))
+        });
+        let mut builder = EvaluateBuilder::default()
+            .expression(expression)
+            .await_promise(await_promise)
+            .target(target);
+        if let Some(ro) = options.result_ownership {
+            builder = builder.result_ownership(ro);
+        }
+        if let Some(so) = options.serialization_options {
+            builder = builder.serialization_options(so);
+        }
+        if let Some(ua) = options.user_activation {
+            builder = builder.user_activation(ua);
+        }
+        self.driver.evaluate_script(builder.build().unwrap()).await
+    }
+
+    // ── Preload scripts ───────────────────────────────────────────────────────
+
+    /// Adds a preload script that runs in every new browsing context.
+    pub async fn add_preload_script_bidi(
+        &mut self,
+        function_declaration: String,
+    ) -> Result<String, EvaluateResultError> {
+        self.add_preload_script_bidi_with_options(function_declaration, AddPreloadScriptOptions::default()).await
+    }
+
+    /// Adds a preload script with custom options (arguments, contexts, sandbox).
+    pub async fn add_preload_script_bidi_with_options(
+        &mut self,
+        function_declaration: String,
+        options: AddPreloadScriptOptions,
+    ) -> Result<String, EvaluateResultError> {
+        let mut builder = AddPreloadScriptBuilder::default()
+            .function_declaration(function_declaration);
+        if let Some(args) = options.arguments {
+            builder = builder.arguments(args);
+        }
+        if let Some(contexts) = options.contexts {
+            builder = builder.contexts(contexts);
+        }
+        if let Some(user_contexts) = options.user_contexts {
+            builder = builder.user_contexts(user_contexts.into_iter().map(UserContext::new));
+        }
+        if let Some(sandbox) = options.sandbox {
+            builder = builder.sandbox(sandbox);
+        }
+        self.driver.add_preload_script(builder.build().unwrap()).await.map(|ps| ps.into())
+    }
+
+    /// Removes a preload script by its ID.
+    pub async fn remove_preload_script_bidi(
+        &mut self,
+        script: String,
+    ) -> Result<(), EvaluateResultError> {
+        let remove_cmd = RemovePreloadScriptBuilder::default().script(script).build().unwrap();
+        self.driver.remove_preload_script(remove_cmd).await
+    }
+
+    // ── Screenshot ────────────────────────────────────────────────────────────
+
+    /// Captures a screenshot of the active browsing context and returns base64-encoded image data.
+    pub async fn screenshot(&mut self) -> Result<String, ScreenshotError> {
+        self.screenshot_with_options(BrowserScreenshotOptions::default()).await
+    }
+
+    /// Captures a screenshot with custom options (context, origin, format, clip, save path).
+    ///
+    /// If `save_path` is a directory, saves with auto-generated filename (screenshot_TIMESTAMP.png).
+    /// If `save_path` is a file path, saves to that exact location and returns the path.
+    /// If `save_path` is `None`, returns base64-encoded image data.
+    pub async fn screenshot_with_options(&mut self, options: BrowserScreenshotOptions) -> Result<String, ScreenshotError> {
+        let context = options.context_id
+            .unwrap_or_else(|| self.driver.get_active_context_id().unwrap());
+        let mut builder = CaptureScreenshotBuilder::default().context(context);
+        if let Some(origin) = options.origin {
+            builder = builder.origin(origin);
+        }
+        if let Some(format) = options.format {
+            builder = builder.format(format);
+        }
+        if let Some(clip) = options.clip {
+            builder = builder.clip(clip);
+        }
+        let command = builder.build().unwrap();
+        self.driver.screenshot(command, options.save_path.as_deref()).await
+    }
+
+    // ── Emulation ─────────────────────────────────────────────────────────────
+
+    /// Emulates a timezone for the active browsing context.
+    ///
+    /// Pass `None` to clear the override.
+    pub async fn emulate_timezone(
+        &mut self,
+        timezone: Option<String>,
+    ) -> Result<(), EmulationError> {
+        self.emulate_timezone_with_options(timezone, EmulateTimezoneOptions::default()).await
+    }
+
+    /// Emulates a timezone with custom context and user context filters.
+    ///
+    /// Pass `None` for `timezone` to clear the override.
+    pub async fn emulate_timezone_with_options(
+        &mut self,
+        timezone: Option<String>,
+        options: EmulateTimezoneOptions,
+    ) -> Result<(), EmulationError> {
+        let mut builder = SetTimezoneOverrideBuilder::default();
+        if let Some(tz) = timezone {
+            builder = builder.timezone(tz);
+        }
+        if let Some(contexts) = options.contexts {
+            builder = builder.contexts(contexts);
+        }
+        if let Some(user_contexts) = options.user_contexts {
+            builder = builder.user_contexts(user_contexts.into_iter().map(UserContext::new));
+        }
+        self.driver.set_timezone_override(builder.build()).await
+    }
+
+    // ── Authentication ────────────────────────────────────────────────────────
+
+    /// Sets HTTP authentication credentials for all requests.
+    pub async fn authenticate(
+        &mut self,
+        username: impl Into<String> + Send + 'static,
+        password: impl Into<String> + Send + 'static,
+    ) -> Result<(), InterceptNetworkError> {
+        self.authenticate_with_options(username, password, AuthenticateOptions::default()).await
+    }
+
+    /// Sets HTTP authentication credentials with URL pattern and context filters.
+    pub async fn authenticate_with_options(
+        &mut self,
+        username: impl Into<String> + Send + 'static,
+        password: impl Into<String> + Send + 'static,
+        options: AuthenticateOptions,
+    ) -> Result<(), InterceptNetworkError> {
+        let mut builder = self.driver.authenticate(username, password);
+        if let Some(patterns) = options.url_patterns {
+            builder = builder.url_patterns(patterns);
+        }
+        if let Some(contexts) = options.contexts {
+            builder = builder.contexts(contexts);
+        }
+        builder.execute().await
+    }
+
+    // ── Accessors ─────────────────────────────────────────────────────────────
+
+    /// Returns a reference to the Chrome configuration.
     pub fn get_config(&self) -> &ChromeConfig {
         &self.config
     }
 
-    /// Get a reference to the Chrome browser process
+    /// Returns a reference to the Chrome browser process.
     pub fn get_browser_process(&self) -> &Option<Process> {
         &self.chrome_process
     }
@@ -674,7 +841,7 @@ impl ChromeBrowser {
     /// # }
     /// ```
     pub fn mouse(&self) -> &crate::input::BidiMouse<WebsocketConnectionTransport> {
-        &self.driver.mouse
+        self.driver.mouse.as_ref()
     }
 
     /// Returns a reference to the human mouse for realistic, human-like movements with Bezier curves and jitter.
@@ -694,7 +861,7 @@ impl ChromeBrowser {
     /// # }
     /// ```
     pub fn human_mouse(&self) -> &crate::input::HumanMouse<crate::input::BidiMouse<WebsocketConnectionTransport>> {
-        &self.driver.human_mouse
+        self.driver.human_mouse.as_ref()
     }
 
     /// Returns a reference to the keyboard for text input and key presses.
@@ -712,194 +879,24 @@ impl ChromeBrowser {
     /// # }
     /// ```
     pub fn keyboard(&self) -> &crate::input::Keyboard<WebsocketConnectionTransport> {
-        &self.driver.keyboard
-    }
-
-    /// Moves the mouse to the center of an element.
-    ///
-    /// # Arguments
-    ///
-    /// * `node` - The element to move the mouse to
-    /// * `context` - Optional browsing context
-    /// * `scroll_into_view` - Whether to scroll the element into view first
-    ///
-    /// # Examples
-    ///
-    /// ```no_run
-    /// # use rustenium::browsers::ChromeBrowser;
-    /// # use rustenium::css;
-    /// # async fn example(mut browser: ChromeBrowser) -> Result<(), Box<dyn std::error::Error>> {
-    /// let mut button = browser.find_node(css!("#submit"), None, None, None, None).await?.unwrap();
-    /// browser.move_mouse_to_node_bidi(&mut button, None, true).await?;
-    /// # Ok(())
-    /// # }
-    /// ```
-    pub async fn move_mouse_to_node_bidi(
-        &mut self,
-        node: &mut ChromeNode,
-        context: Option<&BrowsingContext>,
-        scroll_into_view: bool,
-    ) -> Result<(), crate::error::MouseInputError> {
-        self.driver.move_mouse_to_node(node, context, scroll_into_view).await
-    }
-
-    /// Clicks on an element (automatically scrolls into view and moves mouse to center).
-    ///
-    /// # Examples
-    ///
-    /// ```no_run
-    /// # use rustenium::browsers::ChromeBrowser;
-    /// # use rustenium::css;
-    /// # use rustenium::input::MouseClickOptions;
-    /// # async fn example(mut browser: ChromeBrowser) -> Result<(), Box<dyn std::error::Error>> {
-    /// let mut button = browser.find_node(css!("#submit"), None, None, None, None).await?.unwrap();
-    ///
-    /// // Single click
-    /// browser.click_on_node_bidi(&mut button, None, None).await?;
-    ///
-    /// // Double click
-    /// browser.click_on_node_bidi(
-    ///     &mut button,
-    ///     None,
-    ///     Some(MouseClickOptions {
-    ///         count: Some(2),
-    ///         ..Default::default()
-    ///     })
-    /// ).await?;
-    /// # Ok(())
-    /// # }
-    /// ```
-    pub async fn click_on_node_bidi(
-        &mut self,
-        node: &mut ChromeNode,
-        context: Option<&BrowsingContext>,
-        options: Option<crate::input::MouseClickOptions>,
-    ) -> Result<(), crate::error::MouseInputError> {
-        self.driver.click_on_node(node, context, options).await
-    }
-
-    /// Add a preload script that will be executed in new contexts
-    pub async fn add_preload_script_bidi(
-        &mut self,
-        function_declaration: String,
-        arguments: Option<Vec<ChannelValue>>,
-        contexts: Option<Vec<String>>,
-        user_contexts: Option<Vec<String>>,
-        sandbox: Option<String>,
-    ) -> Result<String, EvaluateResultError> {
-        self.driver
-            .add_preload_script(function_declaration, arguments, contexts, user_contexts, sandbox)
-            .await
-    }
-
-    /// Remove a preload script by its ID
-    pub async fn remove_preload_script_bidi(
-        &mut self,
-        script: String,
-    ) -> Result<(), EvaluateResultError> {
-        self.driver.remove_preload_script(script).await
-    }
-
-    /// Capture a screenshot of the current browsing context
-    /// If `save_path` is provided:
-    ///   - If it's a directory, saves with auto-generated filename (screenshot_TIMESTAMP.png)
-    ///   - If it's a file path, saves to that exact location
-    ///   Returns the final path where the file was saved
-    /// Otherwise, returns the base64-encoded image data
-    ///
-    /// # Example
-    /// ```ignore
-    /// // Get base64 data
-    /// let base64_data = browser.screenshot(None, None, None, None, None).await?;
-    ///
-    /// // Save to specific file
-    /// let path = browser.screenshot(None, None, None, None, Some("screenshot.png")).await?;
-    ///
-    /// // Save to directory with auto-generated filename
-    /// let path = browser.screenshot(None, None, None, None, Some("./screenshots/")).await?;
-    /// ```
-    pub async fn screenshot(
-        &mut self,
-        context_id: Option<BrowsingContext>,
-        origin: Option<OriginUnion>,
-        format: Option<ImageFormat>,
-        clip: Option<ClipRectangle>,
-        save_path: Option<&str>,
-    ) -> Result<String, crate::error::ScreenshotError> {
-        self.driver.screenshot(context_id, origin, format, clip, save_path).await
-    }
-
-    /// Emulate a timezone for the browsing contexts
-    ///
-    /// # Arguments
-    /// * `timezone` - Optional timezone ID (e.g., "America/New_York", "Europe/London"). Pass None to clear the override.
-    /// * `contexts` - Optional list of browsing context IDs to apply the override to. If None, applies to the active context.
-    /// * `user_contexts` - Optional list of user context IDs
-    ///
-    /// # Example
-    /// ```ignore
-    /// // Set timezone to New York
-    /// browser.emulate_timezone(Some("America/New_York".to_string()), None, None).await?;
-    ///
-    /// // Clear timezone override
-    /// browser.emulate_timezone(None, None, None).await?;
-    /// ```
-    pub async fn emulate_timezone(
-        &mut self,
-        timezone: Option<String>,
-        contexts: Option<Vec<BrowsingContext>>,
-        user_contexts: Option<Vec<String>>,
-    ) -> Result<(), crate::error::EmulationError> {
-        self.driver.set_timezone_override(timezone, contexts, user_contexts).await
-    }
-
-    /// Set HTTP authentication credentials (similar to Puppeteer's authenticate)
-    ///
-    /// # Arguments
-    /// * `username` - The username for HTTP authentication
-    /// * `password` - The password for HTTP authentication
-    /// * `url_patterns` - Optional URL patterns to apply authentication to
-    /// * `contexts` - Optional list of browsing contexts
-    ///
-    /// # Example
-    /// ```ignore
-    /// // Authenticate for all requests
-    /// browser.authenticate("user", "pass", None, None).await?;
-    ///
-    /// // Authenticate for specific URLs
-    /// use rustenium_bidi_commands::network::types::UrlPattern;
-    /// let patterns = vec![UrlPattern {
-    ///     pattern: Some("https://example.com/*".to_string()),
-    ///     ..Default::default()
-    /// }];
-    /// browser.authenticate("user", "pass", Some(patterns), None).await?;
-    /// ```
-    pub async fn authenticate(
-        &mut self,
-        username: impl Into<String> + Send + 'static,
-        password: impl Into<String> + Send + 'static,
-        url_patterns: Option<Vec<UrlPattern>>,
-        contexts: Option<Vec<String>>,
-    ) -> Result<(), InterceptNetworkError> {
-        self.driver.authenticate(username, password, url_patterns, contexts).await
+        self.driver.keyboard.as_ref()
     }
 
     pub fn get_active_context_id(&self) -> Result<BrowsingContext, ContextIndexError> {
         self.driver.get_active_context_id()
     }
 
-    /// End the BiDi session and clean up resources
-    ///
-    /// # Example
-    /// ```ignore
-    /// let mut browser = ChromeBrowser::new(config).await;
-    /// // ... use browser ...
-    /// browser.end_bidi_session().await.unwrap();
-    /// ```
+    // ── Session ───────────────────────────────────────────────────────────────
+
+    /// Sends a raw WebDriver BiDi command.
+    pub async fn send_bidi_command(&mut self, command: Command) -> Result<CommandResponse, SessionSendError> {
+        self.driver.send_command(command).await
+    }
+
+    /// Ends the BiDi session and cleans up resources.
     pub async fn end_bidi_session(&mut self) -> Result<(), SessionSendError> {
         self.driver.end_session().await
     }
-
 }
 
 pub async fn create_chrome_browser(config: Option<ChromeConfig>) -> ChromeBrowser {

@@ -671,15 +671,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "rustenium-bidi-commands"
-version = "0.1.2"
-dependencies = [
- "serde",
- "serde_json",
- "serde_valid",
-]
-
-[[package]]
 name = "rustenium-bidi-definitions"
 version = "0.1.0"
 dependencies = [
@@ -733,7 +724,7 @@ dependencies = [
 name = "rustenium-macros"
 version = "0.1.1"
 dependencies = [
- "rustenium-bidi-commands",
+ "rustenium-bidi-definitions",
 ]
 
 [[package]]

@@ -1,111 +1,35 @@
 use std::collections::HashMap;
-use rustenium_bidi_definitions::browsing_context::command_builders::CaptureScreenshotBuilder;
-use rustenium_bidi_definitions::browsing_context::commands::CaptureScreenshotOrigin;
-use rustenium_bidi_definitions::browsing_context::types::{BrowsingContext, ImageFormat, Locator};
-use crate::error::{EvaluateResultError, ScreenshotError};
-use crate::nodes::bidi::node::BidiNode;
-use rustenium_bidi_definitions::script::types::{Handle, NodeRemoteValue, SharedId};
-use rustenium_core::transport::ConnectionTransport;
-use rustenium_core::BidiSession;
-use crate::nodes::node::Node;
-use crate::nodes::NodePosition;
 use std::sync::Arc;
 use tokio::sync::Mutex;
 
-pub struct ChromeNode<T: ConnectionTransport = rustenium_core::transport::WebsocketConnectionTransport> {
+use rustenium_bidi_definitions::browsing_context::types::{BrowsingContext, Locator};
+use rustenium_bidi_definitions::script::types::{Handle, NodeRemoteValue, SharedId};
+use rustenium_core::transport::ConnectionTransport;
+use rustenium_core::BidiSession;
+
+use crate::error::{EvaluateResultError, MouseInputError, ScreenshotError};
+use crate::input::{Mouse, MouseClickOptions, MouseMoveOptions};
+use crate::input::BidiMouse;
+pub use crate::nodes::bidi::node::ScreenshotOptions;
+use crate::nodes::bidi::node::BidiNode;
+use crate::nodes::node::Node;
+use crate::nodes::NodePosition;
+
+pub struct ChromeNode<T: ConnectionTransport, M: Mouse + Send + Sync = BidiMouse<T>> {
     bidi_node: BidiNode<T>,
-    children: Vec<ChromeNode<T>>,
+    children: Vec<ChromeNode<T, M>>,
+    mouse: Arc<M>,
 }
 
-pub struct ScreenshotBuilder<'a, T: ConnectionTransport> {
-    node: &'a ChromeNode<T>,
-    origin: Option<CaptureScreenshotOrigin>,
-    format: Option<ImageFormat>,
-    save_path: Option<String>,
-}
-
-impl<'a, T: ConnectionTransport> ScreenshotBuilder<'a, T> {
-    pub fn new(node: &'a ChromeNode<T>) -> Self {
-        Self {
-            node,
-            origin: None,
-            format: None,
-            save_path: None,
-        }
-    }
-
-    pub fn origin(mut self, origin: CaptureScreenshotOrigin) -> Self {
-        self.origin = Some(origin);
-        self
-    }
-
-    pub fn format(mut self, format: ImageFormat) -> Self {
-        self.format = Some(format);
-        self
-    }
-
-    pub fn save_path(mut self, path: impl Into<String>) -> Self {
-        self.save_path = Some(path.into());
-        self
-    }
-
-    pub async fn execute(self) -> Result<String, ScreenshotError> {
-        let context = self.node.bidi_node.context_id.clone();
-
-        let mut builder = CaptureScreenshotBuilder::default().context(context);
-        if let Some(origin) = self.origin {
-            builder = builder.origin(origin);
-        }
-        if let Some(format) = self.format {
-            builder = builder.format(format);
-        }
-        let command = builder.build().unwrap();
-
-        let base64_data = self.node.bidi_node.screenshot(command).await?;
-
-        if let Some(path) = self.save_path {
-            use std::path::Path;
-            let path_obj = Path::new(&path);
-            let final_path = if path_obj.is_dir() {
-                let timestamp = std::time::SystemTime::now()
-                    .duration_since(std::time::UNIX_EPOCH)
-                    .map(|d| d.as_millis())
-                    .unwrap_or(0);
-                path_obj.join(format!("screenshot_{}.png", timestamp))
-            } else {
-                if let Some(parent) = path_obj.parent() {
-                    if !parent.as_os_str().is_empty() && !parent.exists() {
-                        return Err(ScreenshotError::InvalidPath(format!(
-                            "Parent directory does not exist: {}",
-                            parent.display()
-                        )));
-                    }
-                }
-                path_obj.to_path_buf()
-            };
-
-            use base64::{Engine as _, engine::general_purpose};
-            let decoded = general_purpose::STANDARD
-                .decode(&base64_data)
-                .map_err(|e| ScreenshotError::Base64DecodeError(e.to_string()))?;
-            std::fs::write(&final_path, decoded)
-                .map_err(|e| ScreenshotError::FileWriteError(e.to_string()))?;
-
-            Ok(final_path.to_string_lossy().to_string())
-        } else {
-            Ok(base64_data)
-        }
-    }
-}
-
-impl<T: ConnectionTransport> ChromeNode<T> {
+impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static> ChromeNode<T, M> {
     pub fn from_bidi(
-        _raw_bidi_node: NodeRemoteValue,
+        raw_bidi_node: NodeRemoteValue,
         locator: Locator,
         session: Arc<Mutex<BidiSession<T>>>,
         context: BrowsingContext,
+        mouse: Arc<M>,
     ) -> Self {
-        let bidi_node = BidiNode::new(_raw_bidi_node, locator.clone(), session.clone(), context.clone());
+        let bidi_node = BidiNode::new(raw_bidi_node, locator.clone(), session.clone(), context.clone());
 
         let children = bidi_node.children.iter()
             .map(|bidi_child| {
@@ -114,21 +38,68 @@ impl<T: ConnectionTransport> ChromeNode<T> {
                     locator.clone(),
                     session.clone(),
                     context.clone(),
+                    mouse.clone(),
                 )
             })
             .collect();
 
-        Self { bidi_node, children }
+        Self { bidi_node, children, mouse }
     }
 
-    pub fn screenshot(&self) -> ScreenshotBuilder<'_, T> {
-        ScreenshotBuilder::new(self)
+    pub fn mouse(&self) -> &M {
+        &self.mouse
+    }
+
+    // ── Screenshot ───────────────────────────────────────────────────────────
+
+    /// Captures a screenshot of the element and returns base64-encoded image data.
+    pub async fn screenshot(&self) -> Result<String, ScreenshotError> {
+        self.bidi_node.screenshot(ScreenshotOptions::default()).await
+    }
+
+    /// Captures a screenshot of the element with custom options (format, origin, save path).
+    ///
+    /// If `save_path` is a directory, saves with an auto-generated filename.
+    /// If `save_path` is a file path, saves to that exact location and returns the path.
+    /// If `save_path` is `None`, returns base64-encoded image data.
+    pub async fn screenshot_with_options(&self, options: ScreenshotOptions) -> Result<String, ScreenshotError> {
+        self.bidi_node.screenshot(options).await
+    }
+
+    // ── Mouse move ───────────────────────────────────────────────────────────
+
+    /// Scrolls the element into view and moves the mouse to its center.
+    pub async fn mouse_move(&mut self) -> Result<(), MouseInputError> {
+        self.bidi_node.mouse_move(self.mouse.as_ref(), MouseMoveOptions::default()).await
+    }
+
+    /// Scrolls the element into view and moves the mouse to its center with custom move options.
+    pub async fn mouse_move_with_options(&mut self, options: MouseMoveOptions) -> Result<(), MouseInputError> {
+        self.bidi_node.mouse_move(self.mouse.as_ref(), options).await
+    }
+
+    // ── Mouse click ──────────────────────────────────────────────────────────
+
+    /// Scrolls the element into view, moves the mouse to its center, and clicks.
+    pub async fn mouse_click(&mut self) -> Result<(), MouseInputError> {
+        self.bidi_node.mouse_click(self.mouse.as_ref(), MouseClickOptions::default()).await
+    }
+
+    /// Scrolls the element into view, moves the mouse to its center, and clicks with custom click options.
+    ///
+    /// # Example
+    /// ```ignore
+    /// // Double click
+    /// node.mouse_click_with_options(MouseClickOptions { count: Some(2), ..Default::default() }).await?;
+    /// ```
+    pub async fn mouse_click_with_options(&mut self, options: MouseClickOptions) -> Result<(), MouseInputError> {
+        self.bidi_node.mouse_click(self.mouse.as_ref(), options).await
     }
 }
 
-impl<T: ConnectionTransport> Node for ChromeNode<T> {
+impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static> Node for ChromeNode<T, M> {
     #[allow(refining_impl_trait)]
-    fn get_children_nodes(&self) -> &Vec<ChromeNode<T>> {
+    fn get_children_nodes(&self) -> &Vec<ChromeNode<T, M>> {
         &self.children
     }
 
