@@ -454,9 +454,17 @@ impl Generator {
 
             if let Some(refs) = &cr.type_choice {
                 if refs.len() == 1 {
-                    // Type alias result (e.g. CallFunctionResult = EvaluateResult)
-                    let target = format_ident!("{}", refs[0].name.to_upper_camel_case());
-                    results_stream.extend(quote! { pub type #name = #target; });
+                    // Type alias result — bare ident if target is a result in same module, else projected path
+                    let ref0 = &refs[0];
+                    let is_local_result = ref0.module.as_deref() == Some(module.name.as_ref())
+                        && module.command_results.iter().any(|r| r.name.as_ref() == ref0.name.as_ref());
+                    let ty = if is_local_result {
+                        let i = format_ident!("{}", ref0.name.to_upper_camel_case());
+                        quote! { #i }
+                    } else {
+                        self.projected_type(module, ref0, false)
+                    };
+                    results_stream.extend(quote! { pub type #name = #ty; });
                 } else {
                     // TypeChoice result → untagged enum
                     let variant_data: Vec<_> = refs.iter().map(|tr| {
