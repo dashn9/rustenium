@@ -9,14 +9,14 @@ use crate::session::BidiSession;
 use crate::transport::ConnectionTransport;
 
 
-pub struct CreateBrowsingContext<'a, T: ConnectionTransport> {
+pub struct BrowsingContextBuilder<'a, T: ConnectionTransport> {
     session: &'a mut BidiSession<T>,
     r#type: CreateType,
     reference_context: Option<&'a BrowsingContext>,
     background: bool,
 }
 
-impl<'a, T: ConnectionTransport> CreateBrowsingContext<'a, T> {
+impl<'a, T: ConnectionTransport> BrowsingContextBuilder<'a, T> {
     pub fn new(session: &'a mut BidiSession<T>) -> Self {
         Self {
             session,

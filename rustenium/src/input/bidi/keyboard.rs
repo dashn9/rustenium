@@ -1,10 +1,10 @@
 use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
-use rustenium_bidi_definitions::input::commands::{
-    PerformActions, PerformActionsParams, PerformActionsMethod,
+use rustenium_bidi_definitions::input::command_builders::PerformActionsBuilder;
+use rustenium_bidi_definitions::input::type_builders::{
+    KeySourceActionsBuilder, KeyDownActionBuilder, KeyUpActionBuilder, PauseActionBuilder,
 };
 use rustenium_bidi_definitions::input::types::{
-    KeySourceActions, KeySourceAction, KeyDownAction, KeyUpAction, PauseAction,
-    SourceActions, KeySourceActionsType, KeyDownActionType, KeyUpActionType, PauseActionType,
+    KeySourceActionsType, KeyDownActionType, KeyUpActionType, PauseActionType,
 };
 use rustenium_core::BidiSession;
 use rustenium_core::transport::ConnectionTransport;
@@ -28,20 +28,16 @@ pub struct KeyboardTypeOptions {
     pub delay: Option<u64>,
 }
 
-/// Convert a key string to BiDi key value
 fn get_bidi_key_value(key: &str) -> Result<String, InputError> {
-    // Handle newline conversions
     let key = match key {
         "\r" | "\n" => "Enter",
         _ => key,
     };
 
-    // If it's a single character, return it as-is
     if key.chars().count() == 1 {
         return Ok(key.to_string());
     }
 
-    // Map special keys to their BiDi Unicode values
     let value = match key {
         "Cancel" => "\u{E001}",
         "Help" => "\u{E002}",
@@ -150,103 +146,59 @@ fn get_bidi_key_value(key: &str) -> Result<String, InputError> {
     Ok(value.to_string())
 }
 
-/// Keyboard input implementation for text entry and key presses.
-///
-/// Supports typing text, pressing special keys, and modifier key combinations.
-/// Key names follow WebDriver standard key codes (e.g., "Enter", "Tab", "ArrowLeft").
-///
-/// # Examples
-///
-/// ```no_run
-/// # use rustenium::input::Keyboard;
-/// # use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
-/// # use std::sync::Arc;
-/// # use tokio::sync::Mutex;
-/// # use rustenium_core::BidiSession;
-/// # async fn example(session: Arc<Mutex<Session<rustenium_core::transport::WebsocketConnectionTransport>>>, context: BrowsingContext) -> Result<(), Box<dyn std::error::Error>> {
-/// let keyboard = Keyboard::new(session);
-///
-/// // Type text
-/// keyboard.type_text("Hello, World!", &context).await?;
-///
-/// // Press Enter
-/// keyboard.press("Enter", &context).await?;
-///
-/// // Modifier keys
-/// keyboard.down("Shift", &context).await?;
-/// keyboard.press("a", &context).await?; // Types 'A'
-/// keyboard.up("Shift", &context).await?;
-/// # Ok(())
-/// # }
-/// ```
 pub struct Keyboard<OT: ConnectionTransport> {
     session: Arc<Mutex<BidiSession<OT>>>,
 }
 
 impl<OT: ConnectionTransport> Keyboard<OT> {
-    /// Creates a new Keyboard instance.
     pub fn new(session: Arc<Mutex<BidiSession<OT>>>) -> Self {
         Self { session }
     }
 
-    /// Presses a key down (without releasing).
-    ///
-    /// Use with [`up`](#method.up) to hold modifier keys or create custom key combinations.
     pub async fn down(&self, key: &str, context: &BrowsingContext) -> Result<(), InputError> {
         let key_value = get_bidi_key_value(key)?;
 
-        let command = InputCommand::PerformActions(PerformActions {
-            method: InputPerformActionsMethod::InputPerformActions,
-            params: PerformActionsParameters {
-                context: context.clone(),
-                actions: vec![SourceActions::KeySourceActions(KeySourceActions {
-                    r#type: KeyEnum::Key,
-                    id: KEYBOARD_ID.to_string(),
-                    actions: vec![KeySourceAction::KeyDownAction(KeyDownAction {
-                        r#type: KeyDownEnum::KeyDown,
-                        value: key_value,
-                    })],
-                })],
-            },
-        });
+        let command = PerformActionsBuilder::default()
+            .context(context.clone())
+            .action(
+                KeySourceActionsBuilder::default()
+                    .r#type(KeySourceActionsType::Key)
+                    .id(KEYBOARD_ID)
+                    .action(KeyDownActionBuilder::default()
+                        .r#type(KeyDownActionType::KeyDown)
+                        .value(key_value)
+                        .build().unwrap())
+                    .build().unwrap()
+            )
+            .build().unwrap();
 
-        let mut session = self.session.lock().await;
-        session.send(CommandData::InputCommand(command))
-            .await
+        self.session.lock().await.send(command).await
             .map_err(|e| InputError::CommandResultError(rustenium_core::error::CommandResultError::SessionSendError(e)))?;
         Ok(())
     }
 
-    /// Releases a previously pressed key.
     pub async fn up(&self, key: &str, context: &BrowsingContext) -> Result<(), InputError> {
         let key_value = get_bidi_key_value(key)?;
 
-        let command = InputCommand::PerformActions(PerformActions {
-            method: InputPerformActionsMethod::InputPerformActions,
-            params: PerformActionsParameters {
-                context: context.clone(),
-                actions: vec![SourceActions::KeySourceActions(KeySourceActions {
-                    r#type: KeyEnum::Key,
-                    id: KEYBOARD_ID.to_string(),
-                    actions: vec![KeySourceAction::KeyUpAction(KeyUpAction {
-                        r#type: KeyUpEnum::KeyUp,
-                        value: key_value,
-                    })],
-                })],
-            },
-        });
+        let command = PerformActionsBuilder::default()
+            .context(context.clone())
+            .action(
+                KeySourceActionsBuilder::default()
+                    .r#type(KeySourceActionsType::Key)
+                    .id(KEYBOARD_ID)
+                    .action(KeyUpActionBuilder::default()
+                        .r#type(KeyUpActionType::KeyUp)
+                        .value(key_value)
+                        .build().unwrap())
+                    .build().unwrap()
+            )
+            .build().unwrap();
 
-        let mut session = self.session.lock().await;
-        session.send(CommandData::InputCommand(command))
-            .await
+        self.session.lock().await.send(command).await
             .map_err(|e| InputError::CommandResultError(rustenium_core::error::CommandResultError::SessionSendError(e)))?;
         Ok(())
     }
 
-    /// Presses and releases a key (keydown + keyup).
-    ///
-    /// Accepts standard key names like "Enter", "Tab", "Escape", "ArrowUp", etc.,
-    /// as well as single characters.
     pub async fn press(
         &self,
         key: &str,
@@ -256,48 +208,38 @@ impl<OT: ConnectionTransport> Keyboard<OT> {
         let key_value = get_bidi_key_value(key)?;
         let options = options.unwrap_or_default();
 
-        let mut actions = vec![KeySourceAction::KeyDownAction(KeyDownAction {
-            r#type: KeyDownEnum::KeyDown,
-            value: key_value.clone(),
-        })];
+        let mut key_actions = KeySourceActionsBuilder::default()
+            .r#type(KeySourceActionsType::Key)
+            .id(KEYBOARD_ID)
+            .action(KeyDownActionBuilder::default()
+                .r#type(KeyDownActionType::KeyDown)
+                .value(key_value.clone())
+                .build().unwrap());
 
         if let Some(delay) = options.delay {
             if delay > 0 {
-                actions.push(KeySourceAction::PauseAction(PauseAction {
-                    r#type: PauseEnum::Pause,
-                    duration: Some(delay),
-                }));
+                key_actions = key_actions.action(PauseActionBuilder::default()
+                    .r#type(PauseActionType::Pause)
+                    .duration(delay)
+                    .build().unwrap());
             }
         }
 
-        actions.push(KeySourceAction::KeyUpAction(KeyUpAction {
-            r#type: KeyUpEnum::KeyUp,
-            value: key_value,
-        }));
+        key_actions = key_actions.action(KeyUpActionBuilder::default()
+            .r#type(KeyUpActionType::KeyUp)
+            .value(key_value)
+            .build().unwrap());
 
-        let command = InputCommand::PerformActions(PerformActions {
-            method: InputPerformActionsMethod::InputPerformActions,
-            params: PerformActionsParameters {
-                context: context.clone(),
-                actions: vec![SourceActions::KeySourceActions(KeySourceActions {
-                    r#type: KeyEnum::Key,
-                    id: KEYBOARD_ID.to_string(),
-                    actions,
-                })],
-            },
-        });
+        let command = PerformActionsBuilder::default()
+            .context(context.clone())
+            .action(key_actions.build().unwrap())
+            .build().unwrap();
 
-        let mut session = self.session.lock().await;
-        session.send(CommandData::InputCommand(command))
-            .await
+        self.session.lock().await.send(command).await
             .map_err(|e| InputError::CommandResultError(rustenium_core::error::CommandResultError::SessionSendError(e)))?;
         Ok(())
     }
 
-    /// Types a string of text character by character.
-    ///
-    /// Each character is pressed and released in sequence. Use the `delay` option
-    /// to add pauses between characters for more human-like typing.
     pub async fn type_text(
         &self,
         text: &str,
@@ -307,44 +249,37 @@ impl<OT: ConnectionTransport> Keyboard<OT> {
         let options = options.unwrap_or_default();
         let delay = options.delay.unwrap_or(0);
 
-        // Convert text to individual characters (code points)
-        let mut actions = Vec::new();
+        let mut key_actions = KeySourceActionsBuilder::default()
+            .r#type(KeySourceActionsType::Key)
+            .id(KEYBOARD_ID);
+
         for ch in text.chars() {
             let key_value = get_bidi_key_value(&ch.to_string())?;
 
-            actions.push(KeySourceAction::KeyDownAction(KeyDownAction {
-                r#type: KeyDownEnum::KeyDown,
-                value: key_value.clone(),
-            }));
+            key_actions = key_actions.action(KeyDownActionBuilder::default()
+                .r#type(KeyDownActionType::KeyDown)
+                .value(key_value.clone())
+                .build().unwrap());
 
             if delay > 0 {
-                actions.push(KeySourceAction::PauseAction(PauseAction {
-                    r#type: PauseEnum::Pause,
-                    duration: Some(delay),
-                }));
+                key_actions = key_actions.action(PauseActionBuilder::default()
+                    .r#type(PauseActionType::Pause)
+                    .duration(delay)
+                    .build().unwrap());
             }
 
-            actions.push(KeySourceAction::KeyUpAction(KeyUpAction {
-                r#type: KeyUpEnum::KeyUp,
-                value: key_value,
-            }));
+            key_actions = key_actions.action(KeyUpActionBuilder::default()
+                .r#type(KeyUpActionType::KeyUp)
+                .value(key_value)
+                .build().unwrap());
         }
 
-        let command = InputCommand::PerformActions(PerformActions {
-            method: InputPerformActionsMethod::InputPerformActions,
-            params: PerformActionsParameters {
-                context: context.clone(),
-                actions: vec![SourceActions::KeySourceActions(KeySourceActions {
-                    r#type: KeyEnum::Key,
-                    id: KEYBOARD_ID.to_string(),
-                    actions,
-                })],
-            },
-        });
+        let command = PerformActionsBuilder::default()
+            .context(context.clone())
+            .action(key_actions.build().unwrap())
+            .build().unwrap();
 
-        let mut session = self.session.lock().await;
-        session.send(CommandData::InputCommand(command))
-            .await
+        self.session.lock().await.send(command).await
             .map_err(|e| InputError::CommandResultError(rustenium_core::error::CommandResultError::SessionSendError(e)))?;
         Ok(())
     }

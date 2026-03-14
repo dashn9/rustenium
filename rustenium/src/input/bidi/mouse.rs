@@ -1,13 +1,13 @@
 use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
-use rustenium_bidi_definitions::input::commands::{
-    PerformActions, PerformActionsParams, ReleaseActions,
-    ReleaseActionsParams, PerformActionsMethod, ReleaseActionsMethod,
+use rustenium_bidi_definitions::input::command_builders::{PerformActionsBuilder, ReleaseActionsBuilder};
+use rustenium_bidi_definitions::input::type_builders::{
+    PointerSourceActionsBuilder, PointerDownActionBuilder, PointerUpActionBuilder,
+    PointerMoveActionBuilder, PointerCommonPropertiesBuilder, WheelSourceActionsBuilder,
+    WheelScrollActionBuilder, PauseActionBuilder,
 };
 use rustenium_bidi_definitions::input::types::{
-    PointerSourceActions, PointerSourceAction, PointerDownAction, PointerUpAction,
-    PointerMoveAction, WheelSourceActions, WheelSourceAction, WheelScrollAction,
-    SourceActions, PointerSourceActionsType, WheelSourceActionsType, PointerDownActionType, PointerUpActionType,
-    PointerMoveActionType, PauseActionType, WheelScrollActionType, PointerCommonProperties, PauseAction,
+    PointerSourceActionsType, PointerDownActionType, PointerUpActionType, PointerMoveActionType,
+    WheelSourceActionsType, WheelScrollActionType, PauseActionType,
 };
 use rustenium_core::BidiSession;
 use rustenium_core::transport::ConnectionTransport;
@@ -19,40 +19,12 @@ use super::MOUSE_ID;
 use super::WHEEL_ID;
 use crate::input::mouse::{Mouse, MouseMoveOptions, MouseClickOptions, MouseOptions, MouseWheelOptions, MouseButton, Point};
 
-/// Direct BiDi mouse implementation with instant, precise movements.
-///
-/// `BidiMouse` provides direct control over mouse actions without any delays or smoothing.
-/// Movements are instant and precise, making it ideal for automation scenarios where
-/// speed is more important than mimicking human behavior.
-///
-/// For human-like movements with curves and realistic delays, use [`HumanMouse`](crate::input::HumanMouse) instead.
-///
-/// # Examples
-///
-/// ```no_run
-/// # use rustenium::input::{BidiMouse, Point};
-/// # use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
-/// # use std::sync::Arc;
-/// # use tokio::sync::Mutex;
-/// # use rustenium_core::BidiSession;
-/// # async fn example(session: Arc<Mutex<BidiSession<rustenium_core::transport::WebsocketConnectionTransport>>>, context: BrowsingContext) -> Result<(), Box<dyn std::error::Error>> {
-/// let mouse = BidiMouse::new(session);
-///
-/// // Move instantly to coordinates
-/// mouse.move_to(Point { x: 100.0, y: 200.0 }, &context, None).await?;
-///
-/// // Click at current position
-/// mouse.click(None, &context, None).await?;
-/// # Ok(())
-/// # }
-/// ```
 pub struct BidiMouse<OT: ConnectionTransport> {
     session: Arc<Mutex<BidiSession<OT>>>,
     last_move_point: Arc<Mutex<Point>>,
 }
 
 impl<OT: ConnectionTransport> BidiMouse<OT> {
-    /// Creates a new BidiMouse instance.
     pub fn new(session: Arc<Mutex<BidiSession<OT>>>) -> Self {
         Self {
             session,
@@ -60,302 +32,212 @@ impl<OT: ConnectionTransport> BidiMouse<OT> {
         }
     }
 
-    /// Reset the mouse state
     pub async fn reset(&self, context: &BrowsingContext) -> Result<(), InputError> {
-        let mut last_point = self.last_move_point.lock().await;
-        *last_point = Point::default();
+        *self.last_move_point.lock().await = Point::default();
 
-        let command = InputCommand::ReleaseActions(ReleaseActions {
-            method: InputReleaseActionsMethod::InputReleaseActions,
-            params: ReleaseActionsParameters {
-                context: context.clone(),
-            },
-        });
+        let command = ReleaseActionsBuilder::default()
+            .context(context.to_owned())
+            .build().unwrap();
 
-        let mut session = self.session.lock().await;
-        session.send(CommandData::InputCommand(command))
-            .await
+        self.session.lock().await.send(command).await
             .map_err(|e| InputError::CommandResultError(rustenium_core::error::CommandResultError::SessionSendError(e)))?;
         Ok(())
     }
 
-    /// Move the mouse to a position
     pub async fn move_to(
         &self,
         point: Point,
         context: &BrowsingContext,
-        options: Option<MouseMoveOptions>,
+        options: MouseMoveOptions,
     ) -> Result<(), InputError> {
-        let options = options.unwrap_or_default();
         let last_point = *self.last_move_point.lock().await;
-        let to = Point {
-            x: point.x.round(),
-            y: point.y.round(),
-        };
+        let to = Point { x: point.x.round(), y: point.y.round() };
 
-        let mut actions = Vec::new();
         let steps = options.steps.unwrap_or(0);
+        let empty_props = PointerCommonPropertiesBuilder::default().build();
 
-        // Generate intermediate steps
+        let mut pointer_actions = PointerSourceActionsBuilder::default()
+            .r#type(PointerSourceActionsType::Pointer)
+            .id(MOUSE_ID);
+
         for i in 0..steps {
             let progress = (i as f64) / (steps as f64);
-            actions.push(PointerSourceAction::PointerMoveAction(PointerMoveAction {
-                r#type: PointerMoveEnum::PointerMove,
-                x: last_point.x + (to.x - last_point.x) * progress,
-                y: last_point.y + (to.y - last_point.y) * progress,
-                duration: None,
-                origin: options.origin.clone(),
-                pointer_common_properties: PointerCommonProperties {
-                    width: None,
-                    height: None,
-                    pressure: None,
-                    tangential_pressure: None,
-                    twist: None,
-                    altitude_angle: None,
-                    azimuth_angle: None,
-                },
-            }));
+            pointer_actions = pointer_actions.action(
+                PointerMoveActionBuilder::default()
+                    .r#type(PointerMoveActionType::PointerMove)
+                    .x(last_point.x + (to.x - last_point.x) * progress)
+                    .y(last_point.y + (to.y - last_point.y) * progress)
+                    .pointer_common_properties(empty_props.clone())
+                    .build().unwrap()
+            );
         }
 
-        // Final move to exact position
-        actions.push(PointerSourceAction::PointerMoveAction(PointerMoveAction {
-            r#type: PointerMoveEnum::PointerMove,
-            x: to.x,
-            y: to.y,
-            duration: None,
-            origin: options.origin.clone(),
-            pointer_common_properties: PointerCommonProperties {
-                width: None,
-                height: None,
-                pressure: None,
-                tangential_pressure: None,
-                twist: None,
-                altitude_angle: None,
-                azimuth_angle: None,
-            },
-        }));
+        let mut final_move = PointerMoveActionBuilder::default()
+            .r#type(PointerMoveActionType::PointerMove)
+            .x(to.x)
+            .y(to.y)
+            .pointer_common_properties(empty_props);
 
-        let command = InputCommand::PerformActions(PerformActions {
-            method: InputPerformActionsMethod::InputPerformActions,
-            params: PerformActionsParameters {
-                context: context.clone(),
-                actions: vec![SourceActions::PointerSourceActions(PointerSourceActions {
-                    r#type: PointerEnum::Pointer,
-                    id: MOUSE_ID.to_string(),
-                    parameters: None,
-                    actions,
-                })],
-            },
-        });
+        if let Some(origin) = options.origin {
+            final_move = final_move.origin(origin);
+        }
 
-        // Update last position
+        pointer_actions = pointer_actions.action(final_move.build().unwrap());
+
+        let command = PerformActionsBuilder::default()
+            .context(context.to_owned())
+            .action(pointer_actions.build().unwrap())
+            .build().unwrap();
+
         *self.last_move_point.lock().await = to;
 
-        let mut session = self.session.lock().await;
-        session.send(CommandData::InputCommand(command))
-            .await
+        self.session.lock().await.send(command).await
             .map_err(|e| InputError::CommandResultError(rustenium_core::error::CommandResultError::SessionSendError(e)))?;
         Ok(())
     }
 
-    /// Press a mouse button down
     pub async fn down(
         &self,
         context: &BrowsingContext,
-        options: Option<MouseOptions>,
+        options: MouseOptions,
     ) -> Result<(), InputError> {
-        let options = options.unwrap_or_default();
         let button = options.button.unwrap_or(MouseButton::Left) as u64;
 
-        let command = InputCommand::PerformActions(PerformActions {
-            method: InputPerformActionsMethod::InputPerformActions,
-            params: PerformActionsParameters {
-                context: context.clone(),
-                actions: vec![SourceActions::PointerSourceActions(PointerSourceActions {
-                    r#type: PointerEnum::Pointer,
-                    id: MOUSE_ID.to_string(),
-                    parameters: None,
-                    actions: vec![PointerSourceAction::PointerDownAction(PointerDownAction {
-                        r#type: PointerDownEnum::PointerDown,
-                        button,
-                        pointer_common_properties: PointerCommonProperties {
-                            width: None,
-                            height: None,
-                            pressure: None,
-                            tangential_pressure: None,
-                            twist: None,
-                            altitude_angle: None,
-                            azimuth_angle: None,
-                        },
-                    })],
-                })],
-            },
-        });
+        let command = PerformActionsBuilder::default()
+            .context(context.to_owned())
+            .action(
+                PointerSourceActionsBuilder::default()
+                    .r#type(PointerSourceActionsType::Pointer)
+                    .id(MOUSE_ID)
+                    .action(PointerDownActionBuilder::default()
+                        .r#type(PointerDownActionType::PointerDown)
+                        .button(button)
+                        .pointer_common_properties(PointerCommonPropertiesBuilder::default().build())
+                        .build().unwrap())
+                    .build().unwrap()
+            )
+            .build().unwrap();
 
-        let mut session = self.session.lock().await;
-        session.send(CommandData::InputCommand(command))
-            .await
+        self.session.lock().await.send(command).await
             .map_err(|e| InputError::CommandResultError(rustenium_core::error::CommandResultError::SessionSendError(e)))?;
         Ok(())
     }
 
-    /// Release a mouse button
     pub async fn up(
         &self,
         context: &BrowsingContext,
-        options: Option<MouseOptions>,
+        options: MouseOptions,
     ) -> Result<(), InputError> {
-        let options = options.unwrap_or_default();
         let button = options.button.unwrap_or(MouseButton::Left) as u64;
 
-        let command = InputCommand::PerformActions(PerformActions {
-            method: InputPerformActionsMethod::InputPerformActions,
-            params: PerformActionsParameters {
-                context: context.clone(),
-                actions: vec![SourceActions::PointerSourceActions(PointerSourceActions {
-                    r#type: PointerEnum::Pointer,
-                    id: MOUSE_ID.to_string(),
-                    parameters: None,
-                    actions: vec![PointerSourceAction::PointerUpAction(PointerUpAction {
-                        r#type: PointerUpEnum::PointerUp,
-                        button,
-                    })],
-                })],
-            },
-        });
+        let command = PerformActionsBuilder::default()
+            .context(context.to_owned())
+            .action(
+                PointerSourceActionsBuilder::default()
+                    .r#type(PointerSourceActionsType::Pointer)
+                    .id(MOUSE_ID)
+                    .action(PointerUpActionBuilder::default()
+                        .r#type(PointerUpActionType::PointerUp)
+                        .button(button)
+                        .build().unwrap())
+                    .build().unwrap()
+            )
+            .build().unwrap();
 
-        let mut session = self.session.lock().await;
-        session.send(CommandData::InputCommand(command))
-            .await
+        self.session.lock().await.send(command).await
             .map_err(|e| InputError::CommandResultError(rustenium_core::error::CommandResultError::SessionSendError(e)))?;
         Ok(())
     }
 
-    /// Click at a position
     pub async fn click(
         &self,
         point: Option<Point>,
         context: &BrowsingContext,
-        options: Option<MouseClickOptions>,
+        options: MouseClickOptions,
     ) -> Result<(), InputError> {
-        let options = options.unwrap_or_default();
         let button = options.button.unwrap_or(MouseButton::Left) as u64;
         let count = options.count.unwrap_or(1);
 
-        // Use provided point or last position
         let click_point = match point {
             Some(p) => p,
             None => *self.last_move_point.lock().await,
         };
 
-        let mut actions = vec![PointerSourceAction::PointerMoveAction(PointerMoveAction {
-            r#type: PointerMoveEnum::PointerMove,
-            x: click_point.x.round(),
-            y: click_point.y.round(),
-            duration: None,
-            origin: options.origin.clone(),
-            pointer_common_properties: PointerCommonProperties {
-                width: None,
-                height: None,
-                pressure: None,
-                tangential_pressure: None,
-                twist: None,
-                altitude_angle: None,
-                azimuth_angle: None,
-            },
-        })];
+        let pointer_down = PointerDownActionBuilder::default()
+            .r#type(PointerDownActionType::PointerDown)
+            .button(button)
+            .pointer_common_properties(PointerCommonPropertiesBuilder::default().build())
+            .build().unwrap();
 
-        let pointer_down = PointerSourceAction::PointerDownAction(PointerDownAction {
-            r#type: PointerDownEnum::PointerDown,
-            button,
-            pointer_common_properties: PointerCommonProperties {
-                width: None,
-                height: None,
-                pressure: None,
-                tangential_pressure: None,
-                twist: None,
-                altitude_angle: None,
-                azimuth_angle: None,
-            },
-        });
+        let pointer_up = PointerUpActionBuilder::default()
+            .r#type(PointerUpActionType::PointerUp)
+            .button(button)
+            .build().unwrap();
 
-        let pointer_up = PointerSourceAction::PointerUpAction(PointerUpAction {
-            r#type: PointerUpEnum::PointerUp,
-            button,
-        });
+        let mut pointer_actions = PointerSourceActionsBuilder::default()
+            .r#type(PointerSourceActionsType::Pointer)
+            .id(MOUSE_ID)
+            .action(PointerMoveActionBuilder::default()
+                .r#type(PointerMoveActionType::PointerMove)
+                .x(click_point.x.round())
+                .y(click_point.y.round())
+                .pointer_common_properties(PointerCommonPropertiesBuilder::default().build())
+                .build().unwrap());
 
-        // Add multiple clicks if count > 1
-        for _i in 1..count {
-            actions.push(pointer_down.clone());
-            actions.push(pointer_up.clone());
+        for _ in 1..count {
+            pointer_actions = pointer_actions
+                .action(pointer_down.clone())
+                .action(pointer_up.clone());
         }
 
-        // Final click
-        actions.push(pointer_down);
+        pointer_actions = pointer_actions.action(pointer_down);
 
         if let Some(delay) = options.delay {
             if delay > 0 {
-                actions.push(PointerSourceAction::PauseAction(PauseAction {
-                    r#type: PauseEnum::Pause,
-                    duration: Some(delay),
-                }));
+                pointer_actions = pointer_actions.action(PauseActionBuilder::default()
+                    .r#type(PauseActionType::Pause)
+                    .duration(delay)
+                    .build().unwrap());
             }
         }
 
-        actions.push(pointer_up);
+        pointer_actions = pointer_actions.action(pointer_up);
 
-        let command = InputCommand::PerformActions(PerformActions {
-            method: InputPerformActionsMethod::InputPerformActions,
-            params: PerformActionsParameters {
-                context: context.clone(),
-                actions: vec![SourceActions::PointerSourceActions(PointerSourceActions {
-                    r#type: PointerEnum::Pointer,
-                    id: MOUSE_ID.to_string(),
-                    parameters: None,
-                    actions,
-                })],
-            },
-        });
+        let command = PerformActionsBuilder::default()
+            .context(context.to_owned())
+            .action(pointer_actions.build().unwrap())
+            .build().unwrap();
 
-        let mut session = self.session.lock().await;
-        session.send(CommandData::InputCommand(command))
-            .await
+        self.session.lock().await.send(command).await
             .map_err(|e| InputError::CommandResultError(rustenium_core::error::CommandResultError::SessionSendError(e)))?;
         Ok(())
     }
 
-    /// Scroll the mouse wheel
     pub async fn wheel(
         &self,
         context: &BrowsingContext,
-        options: Option<MouseWheelOptions>,
+        options: MouseWheelOptions,
     ) -> Result<(), InputError> {
-        let options = options.unwrap_or_default();
         let last_point = *self.last_move_point.lock().await;
 
-        let command = InputCommand::PerformActions(PerformActions {
-            method: InputPerformActionsMethod::InputPerformActions,
-            params: PerformActionsParameters {
-                context: context.clone(),
-                actions: vec![SourceActions::WheelSourceActions(WheelSourceActions {
-                    r#type: WheelEnum::Wheel,
-                    id: WHEEL_ID.to_string(),
-                    actions: vec![WheelSourceAction::WheelScrollAction(WheelScrollAction {
-                        r#type: ScrollEnum::Scroll,
-                        x: last_point.x as i64,
-                        y: last_point.y as i64,
-                        delta_x: options.delta_x.unwrap_or(0),
-                        delta_y: options.delta_y.unwrap_or(0),
-                        duration: None,
-                        origin: None,
-                    })],
-                })],
-            },
-        });
+        let command = PerformActionsBuilder::default()
+            .context(context.to_owned())
+            .action(
+                WheelSourceActionsBuilder::default()
+                    .r#type(WheelSourceActionsType::Wheel)
+                    .id(WHEEL_ID)
+                    .action(WheelScrollActionBuilder::default()
+                        .r#type(WheelScrollActionType::Scroll)
+                        .x(last_point.x as i64)
+                        .y(last_point.y as i64)
+                        .delta_x(options.delta_x.unwrap_or(0))
+                        .delta_y(options.delta_y.unwrap_or(0))
+                        .build().unwrap())
+                    .build().unwrap()
+            )
+            .build().unwrap();
 
-        let mut session = self.session.lock().await;
-        session.send(CommandData::InputCommand(command))
-            .await
+        self.session.lock().await.send(command).await
             .map_err(|e| InputError::CommandResultError(rustenium_core::error::CommandResultError::SessionSendError(e)))?;
         Ok(())
     }
@@ -376,45 +258,23 @@ impl<OT: ConnectionTransport> Mouse for BidiMouse<OT> {
         Self::reset(self, context).await
     }
 
-    async fn move_to(
-        &self,
-        point: Point,
-        context: &BrowsingContext,
-        options: Option<MouseMoveOptions>,
-    ) -> Result<(), InputError> {
+    async fn move_to(&self, point: Point, context: &BrowsingContext, options: MouseMoveOptions) -> Result<(), InputError> {
         Self::move_to(self, point, context, options).await
     }
 
-    async fn down(
-        &self,
-        context: &BrowsingContext,
-        options: Option<MouseOptions>,
-    ) -> Result<(), InputError> {
+    async fn down(&self, context: &BrowsingContext, options: MouseOptions) -> Result<(), InputError> {
         Self::down(self, context, options).await
     }
 
-    async fn up(
-        &self,
-        context: &BrowsingContext,
-        options: Option<MouseOptions>,
-    ) -> Result<(), InputError> {
+    async fn up(&self, context: &BrowsingContext, options: MouseOptions) -> Result<(), InputError> {
         Self::up(self, context, options).await
     }
 
-    async fn click(
-        &self,
-        point: Option<Point>,
-        context: &BrowsingContext,
-        options: Option<MouseClickOptions>,
-    ) -> Result<(), InputError> {
+    async fn click(&self, point: Option<Point>, context: &BrowsingContext, options: MouseClickOptions) -> Result<(), InputError> {
         Self::click(self, point, context, options).await
     }
 
-    async fn wheel(
-        &self,
-        context: &BrowsingContext,
-        options: Option<MouseWheelOptions>,
-    ) -> Result<(), InputError> {
+    async fn wheel(&self, context: &BrowsingContext, options: MouseWheelOptions) -> Result<(), InputError> {
         Self::wheel(self, context, options).await
     }
 }

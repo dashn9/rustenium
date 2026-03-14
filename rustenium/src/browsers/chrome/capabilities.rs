@@ -1,4 +1,4 @@
-use rustenium_bidi_definitions::session::types::CapabilityRequest;
+use rustenium_bidi_definitions::session::types::{CapabilitiesRequest, CapabilityRequest, ProxyConfiguration, UserPromptHandler};
 use serde::{Serialize, Deserialize};
 use serde_json::Value;
 use std::collections::HashMap;
@@ -115,7 +115,7 @@ impl Default for ChromeCapabilities {
                 platform_name: None,
                 proxy: None,
                 unhandled_prompt_behavior: None,
-                extensible: Extensible::default(),
+                extensible: HashMap::new(),
             },
             chrome_options: ChromeOptions::default(),
         }
@@ -157,13 +157,13 @@ impl ChromeCapabilities {
     }
 
     /// Configures proxy settings.
-    pub fn proxy(&mut self, proxy: rustenium_bidi_commands::session::types::ProxyConfiguration) -> &mut Self {
+    pub fn proxy(&mut self, proxy: ProxyConfiguration) -> &mut Self {
         self.base_capabilities.proxy = Some(proxy);
         self
     }
 
     /// Sets how to handle unhandled prompts.
-    pub fn unhandled_prompt_behavior(&mut self, behavior: rustenium_bidi_commands::session::types::UserPromptHandler) -> &mut Self {
+    pub fn unhandled_prompt_behavior(&mut self, behavior: UserPromptHandler) -> &mut Self {
         self.base_capabilities.unhandled_prompt_behavior = Some(behavior);
         self
     }
@@ -319,7 +319,7 @@ impl ChromeCapabilities {
     }
 
     /// Builds the final CapabilitiesRequest for session creation.
-    pub fn build(mut self) -> rustenium_bidi_commands::session::types::CapabilitiesRequest {
+    pub fn build(mut self) -> CapabilitiesRequest {
         // Serialize chrome_options and add to extensible under goog:chromeOptions
         let chrome_opts_json = serde_json::to_value(&self.chrome_options).unwrap();
 
@@ -329,7 +329,7 @@ impl ChromeCapabilities {
         );
 
         // Create CapabilitiesRequest
-        rustenium_bidi_commands::session::types::CapabilitiesRequest {
+        CapabilitiesRequest {
             always_match: Some(self.base_capabilities),
             first_match: None,
         }

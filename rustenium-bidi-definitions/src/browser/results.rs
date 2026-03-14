@@ -11,7 +11,7 @@ impl TryFrom<serde_json::Value> for CloseResult {
         serde_json::from_value(value)
     }
 }
-pub type CreateUserContextResult = UserContextInfo;
+pub type CreateUserContextResult = super::types::UserContextInfo;
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GetClientWindowsResult {
     #[serde(rename = "clientWindows")]
@@ -48,7 +48,7 @@ impl TryFrom<serde_json::Value> for RemoveUserContextResult {
         serde_json::from_value(value)
     }
 }
-pub type SetClientWindowStateResult = ClientWindowInfo;
+pub type SetClientWindowStateResult = super::types::ClientWindowInfo;
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SetDownloadBehaviorResult {
     #[serde(flatten)]

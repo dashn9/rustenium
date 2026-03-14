@@ -3,7 +3,7 @@ use rustenium_bidi_definitions::script::types::EvaluateResultException;
 use rustenium_core::error::{CommandResultError};
 
 #[derive(Debug, Error)]
-pub enum ContextCreationListenError {
+pub enum ContextCreationError {
     #[error(transparent)]
     ZeroBrowsingContextAtStart(#[from] ZeroBrowsingContextAtStartError),
     #[error("An error occured executing command")]

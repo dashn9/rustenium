@@ -1,11 +1,12 @@
 use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
-use rustenium_bidi_definitions::input::commands::{
-    PerformActions, PerformActionsParams, PerformActionsMethod,
+use rustenium_bidi_definitions::input::command_builders::PerformActionsBuilder;
+use rustenium_bidi_definitions::input::type_builders::{
+    PointerSourceActionsBuilder, PointerDownActionBuilder, PointerUpActionBuilder,
+    PointerMoveActionBuilder, PointerCommonPropertiesBuilder, PointerParametersBuilder,
 };
 use rustenium_bidi_definitions::input::types::{
-    PointerSourceActions, PointerSourceAction, PointerDownAction, PointerUpAction,
-    PointerMoveAction, SourceActions, PointerSourceActionsType, PointerDownActionType, PointerUpActionType,
-    PointerMoveActionType, PointerCommonProperties, PointerParameters, PointerType, Origin,
+    PointerSourceActionsType, PointerDownActionType, PointerUpActionType,
+    PointerMoveActionType, PointerCommonProperties, PointerType, Origin,
 };
 use rustenium_core::BidiSession;
 use rustenium_core::transport::ConnectionTransport;
@@ -44,15 +45,12 @@ impl<OT: ConnectionTransport> TouchHandle<OT> {
         x: f64,
         y: f64,
     ) -> Self {
-        let properties = PointerCommonProperties {
-            width: Some(1),      // 2 times default touch radius (0.5 * 2)
-            height: Some(1),     // 2 times default touch radius (0.5 * 2)
-            pressure: Some(0.5),
-            tangential_pressure: None,
-            twist: None,
-            altitude_angle: Some(std::f64::consts::PI / 2.0),
-            azimuth_angle: None,
-        };
+        let properties = PointerCommonPropertiesBuilder::default()
+            .width(1u64)
+            .height(1u64)
+            .pressure(0.5f64)
+            .altitude_angle(std::f64::consts::PI / 2.0)
+            .build();
 
         Self {
             session,
@@ -85,42 +83,32 @@ impl<OT: ConnectionTransport> TouchHandle<OT> {
         let options = options.unwrap_or_default();
         let position = *self.position.lock().await;
 
-        let command = PerformActions {
-            method: PerformActionsMethod::InputPerformActions,
-            params: PerformActionsParams {
-                context: context.clone(),
-                actions: vec![SourceActions::PointerSourceActions(PointerSourceActions {
-                    r#type: PointerSourceActionsType::Pointer,
-                    id: self.bidi_id.clone(),
-                    parameters: Some(PointerParameters {
-                        pointer_type: Some(PointerType::Touch),
-                    }),
-                    actions: vec![
-                        PointerSourceAction::PointerMoveAction(PointerMoveAction {
-                            r#type: PointerMoveActionType::PointerMove,
-                            x: position.x,
-                            y: position.y,
-                            duration: None,
-                            origin: options.origin,
-                            pointer_common_properties: PointerCommonProperties {
-                                width: None,
-                                height: None,
-                                pressure: None,
-                                tangential_pressure: None,
-                                twist: None,
-                                altitude_angle: None,
-                                azimuth_angle: None,
-                            },
-                        }),
-                        PointerSourceAction::PointerDownAction(PointerDownAction {
-                            r#type: PointerDownActionType::PointerDown,
-                            button: 0,
-                            pointer_common_properties: self.properties.clone(),
-                        }),
-                    ],
-                })],
-            },
-        };
+        let mut move_action = PointerMoveActionBuilder::default()
+            .r#type(PointerMoveActionType::PointerMove)
+            .x(position.x)
+            .y(position.y)
+            .pointer_common_properties(PointerCommonPropertiesBuilder::default().build());
+
+        if let Some(origin) = options.origin {
+            move_action = move_action.origin(origin);
+        }
+
+        let command = PerformActionsBuilder::default()
+            .context(context.clone())
+            .action(
+                PointerSourceActionsBuilder::default()
+                    .r#type(PointerSourceActionsType::Pointer)
+                    .id(self.bidi_id.clone())
+                    .parameters(PointerParametersBuilder::default().pointer_type(PointerType::Touch).build())
+                    .action(move_action.build().unwrap())
+                    .action(PointerDownActionBuilder::default()
+                        .r#type(PointerDownActionType::PointerDown)
+                        .button(0u64)
+                        .pointer_common_properties(self.properties.clone())
+                        .build().unwrap())
+                    .build().unwrap()
+            )
+            .build().unwrap();
 
         let mut session = self.session.lock().await;
         session.send(command)
@@ -147,32 +135,27 @@ impl<OT: ConnectionTransport> TouchHandle<OT> {
     ) -> Result<(), InputError> {
         let new_position = Point { x: x.round(), y: y.round() };
 
-        let command = InputCommand::PerformActions(PerformActions {
-            method: InputPerformActionsMethod::InputPerformActions,
-            params: PerformActionsParameters {
-                context: context.clone(),
-                actions: vec![SourceActions::PointerSourceActions(PointerSourceActions {
-                    r#type: PointerEnum::Pointer,
-                    id: self.bidi_id.clone(),
-                    parameters: Some(PointerParameters {
-                        pointer_type: Some(PointerType::Touch),
-                    }),
-                    actions: vec![PointerSourceAction::PointerMoveAction(PointerMoveAction {
-                        r#type: PointerMoveEnum::PointerMove,
-                        x: new_position.x,
-                        y: new_position.y,
-                        duration: None,
-                        origin: None,
-                        pointer_common_properties: self.properties.clone(),
-                    })],
-                })],
-            },
-        });
+        let command = PerformActionsBuilder::default()
+            .context(context.clone())
+            .action(
+                PointerSourceActionsBuilder::default()
+                    .r#type(PointerSourceActionsType::Pointer)
+                    .id(self.bidi_id.clone())
+                    .parameters(PointerParametersBuilder::default().pointer_type(PointerType::Touch).build())
+                    .action(PointerMoveActionBuilder::default()
+                        .r#type(PointerMoveActionType::PointerMove)
+                        .x(new_position.x)
+                        .y(new_position.y)
+                        .pointer_common_properties(self.properties.clone())
+                        .build().unwrap())
+                    .build().unwrap()
+            )
+            .build().unwrap();
 
         *self.position.lock().await = new_position;
 
         let mut session = self.session.lock().await;
-        session.send(CommandData::InputCommand(command))
+        session.send(command)
             .await
             .map_err(|e| InputError::CommandResultError(rustenium_core::error::CommandResultError::SessionSendError(e)))?;
         Ok(())
@@ -183,26 +166,23 @@ impl<OT: ConnectionTransport> TouchHandle<OT> {
     /// This performs a touch up event, completing the touch gesture. After calling this method,
     /// the handle is automatically removed from the touchscreen and cannot be reused.
     pub async fn end(&self, context: &BrowsingContext) -> Result<(), InputError> {
-        let command = InputCommand::PerformActions(PerformActions {
-            method: InputPerformActionsMethod::InputPerformActions,
-            params: PerformActionsParameters {
-                context: context.clone(),
-                actions: vec![SourceActions::PointerSourceActions(PointerSourceActions {
-                    r#type: PointerEnum::Pointer,
-                    id: self.bidi_id.clone(),
-                    parameters: Some(PointerParameters {
-                        pointer_type: Some(PointerType::Touch),
-                    }),
-                    actions: vec![PointerSourceAction::PointerUpAction(PointerUpAction {
-                        r#type: PointerUpEnum::PointerUp,
-                        button: 0,
-                    })],
-                })],
-            },
-        });
+        let command = PerformActionsBuilder::default()
+            .context(context.clone())
+            .action(
+                PointerSourceActionsBuilder::default()
+                    .r#type(PointerSourceActionsType::Pointer)
+                    .id(self.bidi_id.clone())
+                    .parameters(PointerParametersBuilder::default().pointer_type(PointerType::Touch).build())
+                    .action(PointerUpActionBuilder::default()
+                        .r#type(PointerUpActionType::PointerUp)
+                        .button(0u64)
+                        .build().unwrap())
+                    .build().unwrap()
+            )
+            .build().unwrap();
 
         let mut session = self.session.lock().await;
-        session.send(CommandData::InputCommand(command))
+        session.send(command)
             .await
             .map_err(|e| InputError::CommandResultError(rustenium_core::error::CommandResultError::SessionSendError(e)))?;
 

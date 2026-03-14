@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::future::Future;
 use serde::Deserialize;
-use rustenium_bidi_definitions::browsing_context::types::Locator;
+use rustenium_bidi_definitions::browsing_context::types::{BrowsingContext, Locator};
 use rustenium_bidi_definitions::script::types::{Handle, SharedId};
 use crate::error::EvaluateResultError;
 
@@ -69,11 +69,13 @@ pub trait Node {
 
     fn get_inner_html(&self) -> impl Future<Output = String>;
 
-    fn get_attribute(&self, attribute_name: &str) -> Option<String>;
+    fn get_attribute(&self, attribute_name: &str) -> Option<serde_json::Value>;
 
-    fn get_attributes(&self) -> HashMap<String, String>;
+    fn get_attributes(&self) -> HashMap<String, serde_json::Value>;
 
     fn get_position(&mut self) -> impl Future<Output = Option<&NodePosition>>;
+
+    fn get_context_id(&self) -> &BrowsingContext;
 
     fn get_shared_id(&self) -> Option<&SharedId>;
 
