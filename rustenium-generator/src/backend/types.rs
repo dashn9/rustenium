@@ -158,6 +158,13 @@ impl<'a> ModuleDatatype<'a> {
 }
 
 impl<'a> ModuleDatatype<'a> {
+    pub fn is_synthetic(&self) -> bool {
+        match self {
+            ModuleDatatype::Type(inner) => inner.synthetic,
+            _ => false,
+        }
+    }
+
     pub fn is_circular_dep(&self) -> bool {
         match self {
             ModuleDatatype::Type(inner) => inner.is_circular_dep,

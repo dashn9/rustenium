@@ -192,4 +192,3 @@ impl JavascriptLogEntry {
         Self::IDENTIFIER
     }
 }
-group_enum ! (LogType { Level (Level) , Entry (Entry) , BaseLogEntry (BaseLogEntry) });

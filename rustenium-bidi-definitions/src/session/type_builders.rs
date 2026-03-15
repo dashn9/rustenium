@@ -49,7 +49,7 @@ pub struct CapabilityRequestBuilder {
     browser_version: Option<String>,
     platform_name: Option<String>,
     proxy: Option<ProxyConfiguration>,
-    unhandled_prompt_behavior: Option<UserPromptHandler>,
+    unhandled_prompt_behavior: Option<UnhandledPromptBehavior>,
     extensible: Option<std::collections::HashMap<String, serde_json::Value>>,
 }
 impl CapabilityRequestBuilder {
@@ -75,7 +75,7 @@ impl CapabilityRequestBuilder {
     }
     pub fn unhandled_prompt_behavior(
         mut self,
-        unhandled_prompt_behavior: impl Into<UserPromptHandler>,
+        unhandled_prompt_behavior: impl Into<UnhandledPromptBehavior>,
     ) -> Self {
         self.unhandled_prompt_behavior = Some(unhandled_prompt_behavior.into());
         self
@@ -98,92 +98,6 @@ impl CapabilityRequestBuilder {
             extensible: self
                 .extensible
                 .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(extensible)))?,
-        })
-    }
-}
-impl ProxyConfiguration {
-    pub fn builder() -> ProxyConfigurationBuilder {
-        <ProxyConfigurationBuilder as Default>::default()
-    }
-}
-#[derive(Default, Clone)]
-pub struct ProxyConfigurationBuilder {
-    autodetect_proxy_configuration: Option<serde_json::Value>,
-    direct_proxy_configuration: Option<serde_json::Value>,
-    manual_proxy_configuration: Option<serde_json::Value>,
-    pac_proxy_configuration: Option<serde_json::Value>,
-    system_proxy_configuration: Option<SystemProxyConfiguration>,
-}
-impl ProxyConfigurationBuilder {
-    pub fn autodetect_proxy_configuration(
-        mut self,
-        autodetect_proxy_configuration: impl Into<serde_json::Value>,
-    ) -> Self {
-        self.autodetect_proxy_configuration = Some(autodetect_proxy_configuration.into());
-        self
-    }
-    pub fn direct_proxy_configuration(
-        mut self,
-        direct_proxy_configuration: impl Into<serde_json::Value>,
-    ) -> Self {
-        self.direct_proxy_configuration = Some(direct_proxy_configuration.into());
-        self
-    }
-    pub fn manual_proxy_configuration(
-        mut self,
-        manual_proxy_configuration: impl Into<serde_json::Value>,
-    ) -> Self {
-        self.manual_proxy_configuration = Some(manual_proxy_configuration.into());
-        self
-    }
-    pub fn pac_proxy_configuration(
-        mut self,
-        pac_proxy_configuration: impl Into<serde_json::Value>,
-    ) -> Self {
-        self.pac_proxy_configuration = Some(pac_proxy_configuration.into());
-        self
-    }
-    pub fn system_proxy_configuration(
-        mut self,
-        system_proxy_configuration: impl Into<SystemProxyConfiguration>,
-    ) -> Self {
-        self.system_proxy_configuration = Some(system_proxy_configuration.into());
-        self
-    }
-    pub fn build(self) -> Result<ProxyConfiguration, String> {
-        Ok(ProxyConfiguration {
-            autodetect_proxy_configuration: self.autodetect_proxy_configuration.ok_or_else(
-                || {
-                    format!(
-                        "Field `{}` is mandatory.",
-                        std::stringify!(autodetect_proxy_configuration)
-                    )
-                },
-            )?,
-            direct_proxy_configuration: self.direct_proxy_configuration.ok_or_else(|| {
-                format!(
-                    "Field `{}` is mandatory.",
-                    std::stringify!(direct_proxy_configuration)
-                )
-            })?,
-            manual_proxy_configuration: self.manual_proxy_configuration.ok_or_else(|| {
-                format!(
-                    "Field `{}` is mandatory.",
-                    std::stringify!(manual_proxy_configuration)
-                )
-            })?,
-            pac_proxy_configuration: self.pac_proxy_configuration.ok_or_else(|| {
-                format!(
-                    "Field `{}` is mandatory.",
-                    std::stringify!(pac_proxy_configuration)
-                )
-            })?,
-            system_proxy_configuration: self.system_proxy_configuration.ok_or_else(|| {
-                format!(
-                    "Field `{}` is mandatory.",
-                    std::stringify!(system_proxy_configuration)
-                )
-            })?,
         })
     }
 }
@@ -541,6 +455,103 @@ impl UnsubscribeByAttributesRequestBuilder {
             events: self
                 .events
                 .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(events)))?,
+        })
+    }
+}
+impl NewResultCapabilities {
+    pub fn builder() -> NewResultCapabilitiesBuilder {
+        <NewResultCapabilitiesBuilder as Default>::default()
+    }
+}
+#[derive(Default, Clone)]
+pub struct NewResultCapabilitiesBuilder {
+    accept_insecure_certs: Option<bool>,
+    browser_name: Option<String>,
+    browser_version: Option<String>,
+    platform_name: Option<String>,
+    set_window_rect: Option<bool>,
+    user_agent: Option<String>,
+    proxy: Option<ProxyConfiguration>,
+    unhandled_prompt_behavior: Option<UnhandledPromptBehavior>,
+    web_socket_url: Option<String>,
+    extensible: Option<std::collections::HashMap<String, serde_json::Value>>,
+}
+impl NewResultCapabilitiesBuilder {
+    pub fn accept_insecure_certs(mut self, accept_insecure_certs: impl Into<bool>) -> Self {
+        self.accept_insecure_certs = Some(accept_insecure_certs.into());
+        self
+    }
+    pub fn browser_name(mut self, browser_name: impl Into<String>) -> Self {
+        self.browser_name = Some(browser_name.into());
+        self
+    }
+    pub fn browser_version(mut self, browser_version: impl Into<String>) -> Self {
+        self.browser_version = Some(browser_version.into());
+        self
+    }
+    pub fn platform_name(mut self, platform_name: impl Into<String>) -> Self {
+        self.platform_name = Some(platform_name.into());
+        self
+    }
+    pub fn set_window_rect(mut self, set_window_rect: impl Into<bool>) -> Self {
+        self.set_window_rect = Some(set_window_rect.into());
+        self
+    }
+    pub fn user_agent(mut self, user_agent: impl Into<String>) -> Self {
+        self.user_agent = Some(user_agent.into());
+        self
+    }
+    pub fn proxy(mut self, proxy: impl Into<ProxyConfiguration>) -> Self {
+        self.proxy = Some(proxy.into());
+        self
+    }
+    pub fn unhandled_prompt_behavior(
+        mut self,
+        unhandled_prompt_behavior: impl Into<UnhandledPromptBehavior>,
+    ) -> Self {
+        self.unhandled_prompt_behavior = Some(unhandled_prompt_behavior.into());
+        self
+    }
+    pub fn web_socket_url(mut self, web_socket_url: impl Into<String>) -> Self {
+        self.web_socket_url = Some(web_socket_url.into());
+        self
+    }
+    pub fn extensible(
+        mut self,
+        extensible: impl Into<std::collections::HashMap<String, serde_json::Value>>,
+    ) -> Self {
+        self.extensible = Some(extensible.into());
+        self
+    }
+    pub fn build(self) -> Result<NewResultCapabilities, String> {
+        Ok(NewResultCapabilities {
+            accept_insecure_certs: self.accept_insecure_certs.ok_or_else(|| {
+                format!(
+                    "Field `{}` is mandatory.",
+                    std::stringify!(accept_insecure_certs)
+                )
+            })?,
+            browser_name: self.browser_name.ok_or_else(|| {
+                format!("Field `{}` is mandatory.", std::stringify!(browser_name))
+            })?,
+            browser_version: self.browser_version.ok_or_else(|| {
+                format!("Field `{}` is mandatory.", std::stringify!(browser_version))
+            })?,
+            platform_name: self.platform_name.ok_or_else(|| {
+                format!("Field `{}` is mandatory.", std::stringify!(platform_name))
+            })?,
+            set_window_rect: self.set_window_rect.ok_or_else(|| {
+                format!("Field `{}` is mandatory.", std::stringify!(set_window_rect))
+            })?,
+            user_agent: self
+                .user_agent
+                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(user_agent)))?,
+            proxy: self.proxy,
+            unhandled_prompt_behavior: self.unhandled_prompt_behavior,
+            web_socket_url: self.web_socket_url,
+            extensible: self
+                .extensible
+                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(extensible)))?,
         })
     }
 }

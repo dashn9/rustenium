@@ -167,4 +167,3 @@ impl ScreenOrientation {
         Self::IDENTIFIER
     }
 }
-group_enum ! (EmulationType { ForcedColorsModeTheme (ForcedColorsModeTheme) , GeolocationCoordinates (GeolocationCoordinates) , GeolocationPositionError (GeolocationPositionError) , NetworkConditions (NetworkConditions) , NetworkConditionsOffline (NetworkConditionsOffline) , ScreenOrientationNatural (ScreenOrientationNatural) , ScreenOrientationType (ScreenOrientationType) , ScreenOrientation (ScreenOrientation) });

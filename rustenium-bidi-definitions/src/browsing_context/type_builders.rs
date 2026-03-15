@@ -7,14 +7,39 @@ impl AccessibilityLocator {
 #[derive(Default, Clone)]
 pub struct AccessibilityLocatorBuilder {
     r#type: Option<AccessibilityLocatorType>,
-    name: Option<String>,
-    role: Option<String>,
+    value: Option<AccessibilityLocatorValue>,
 }
 impl AccessibilityLocatorBuilder {
     pub fn r#type(mut self, r#type: impl Into<AccessibilityLocatorType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
+    pub fn value(mut self, value: impl Into<AccessibilityLocatorValue>) -> Self {
+        self.value = Some(value.into());
+        self
+    }
+    pub fn build(self) -> Result<AccessibilityLocator, String> {
+        Ok(AccessibilityLocator {
+            r#type: self
+                .r#type
+                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(r#type)))?,
+            value: self
+                .value
+                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(value)))?,
+        })
+    }
+}
+impl AccessibilityLocatorValue {
+    pub fn builder() -> AccessibilityLocatorValueBuilder {
+        <AccessibilityLocatorValueBuilder as Default>::default()
+    }
+}
+#[derive(Default, Clone)]
+pub struct AccessibilityLocatorValueBuilder {
+    name: Option<String>,
+    role: Option<String>,
+}
+impl AccessibilityLocatorValueBuilder {
     pub fn name(mut self, name: impl Into<String>) -> Self {
         self.name = Some(name.into());
         self
@@ -23,14 +48,11 @@ impl AccessibilityLocatorBuilder {
         self.role = Some(role.into());
         self
     }
-    pub fn build(self) -> Result<AccessibilityLocator, String> {
-        Ok(AccessibilityLocator {
-            r#type: self
-                .r#type
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(r#type)))?,
+    pub fn build(self) -> AccessibilityLocatorValue {
+        AccessibilityLocatorValue {
             name: self.name,
             role: self.role,
-        })
+        }
     }
 }
 impl CssLocator {
@@ -71,15 +93,15 @@ impl ContextLocator {
 #[derive(Default, Clone)]
 pub struct ContextLocatorBuilder {
     r#type: Option<ContextLocatorType>,
-    context: Option<BrowsingContext>,
+    value: Option<ContextLocatorValue>,
 }
 impl ContextLocatorBuilder {
     pub fn r#type(mut self, r#type: impl Into<ContextLocatorType>) -> Self {
         self.r#type = Some(r#type.into());
         self
     }
-    pub fn context(mut self, context: impl Into<BrowsingContext>) -> Self {
-        self.context = Some(context.into());
+    pub fn value(mut self, value: impl Into<ContextLocatorValue>) -> Self {
+        self.value = Some(value.into());
         self
     }
     pub fn build(self) -> Result<ContextLocator, String> {
@@ -87,6 +109,28 @@ impl ContextLocatorBuilder {
             r#type: self
                 .r#type
                 .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(r#type)))?,
+            value: self
+                .value
+                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(value)))?,
+        })
+    }
+}
+impl ContextLocatorValue {
+    pub fn builder() -> ContextLocatorValueBuilder {
+        <ContextLocatorValueBuilder as Default>::default()
+    }
+}
+#[derive(Default, Clone)]
+pub struct ContextLocatorValueBuilder {
+    context: Option<BrowsingContext>,
+}
+impl ContextLocatorValueBuilder {
+    pub fn context(mut self, context: impl Into<BrowsingContext>) -> Self {
+        self.context = Some(context.into());
+        self
+    }
+    pub fn build(self) -> Result<ContextLocatorValue, String> {
+        Ok(ContextLocatorValue {
             context: self
                 .context
                 .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(context)))?,

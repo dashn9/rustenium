@@ -161,4 +161,3 @@ impl ExtensionBase64Encoded {
         Self::IDENTIFIER
     }
 }
-group_enum ! (WebExtensionType { Extension (Extension) , ExtensionData (ExtensionData) });

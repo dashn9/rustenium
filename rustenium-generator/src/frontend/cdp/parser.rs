@@ -157,6 +157,7 @@ pub fn parse_pdl<'a>(input: &'a str) -> Result<Protocol<'a>, Error> {
                 extends: Type::new(caps.get(5).unwrap().as_str(), caps.get(4).is_some()),
                 parameters: None,
                 direction: None,
+                synthetic: false,
             };
             mod_prop = Some(ModuleProperty::Type(ty));
             continue;

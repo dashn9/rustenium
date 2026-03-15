@@ -2863,4 +2863,3 @@ impl Source {
         Self::IDENTIFIER
     }
 }
-group_enum ! (ScriptType { Channel (Channel) , ChannelProperties (ChannelProperties) , ExceptionDetails (ExceptionDetails) , Handle (Handle) , InternalId (InternalId) , LocalValue (LocalValue) , ListLocalValue (ListLocalValue) , MappingLocalValue (MappingLocalValue) , RegExpValue (RegExpValue) , PreloadScript (PreloadScript) , Realm (Realm) , SpecialNumber (SpecialNumber) , RealmType (RealmType) , RemoteValue (RemoteValue) , ListRemoteValue (ListRemoteValue) , MappingRemoteValue (MappingRemoteValue) , HtmlCollectionRemoteValue (HtmlCollectionRemoteValue) , NodeProperties (NodeProperties) , WindowProxyProperties (WindowProxyProperties) , ResultOwnership (ResultOwnership) , SerializationOptions (SerializationOptions) , SharedId (SharedId) , StackFrame (StackFrame) , StackTrace (StackTrace) , Target (Target) , RealmInfo (RealmInfo) , BaseRealmInfo (BaseRealmInfo) , Source (Source) });

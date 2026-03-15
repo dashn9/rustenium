@@ -71,15 +71,10 @@ impl SetGeolocationOverride {
 }
 #[derive(Default, Clone)]
 pub struct SetGeolocationOverrideBuilder {
-    error: Option<super::types::GeolocationPositionError>,
     contexts: Option<Vec<crate::browsing_context::types::BrowsingContext>>,
     user_contexts: Option<Vec<crate::browser::types::UserContext>>,
 }
 impl SetGeolocationOverrideBuilder {
-    pub fn error(mut self, error: impl Into<super::types::GeolocationPositionError>) -> Self {
-        self.error = Some(error.into());
-        self
-    }
     pub fn context(
         mut self,
         context: impl Into<crate::browsing_context::types::BrowsingContext>,
@@ -118,17 +113,14 @@ impl SetGeolocationOverrideBuilder {
         }
         self
     }
-    pub fn build(self) -> Result<SetGeolocationOverride, String> {
-        Ok(SetGeolocationOverride {
+    pub fn build(self) -> SetGeolocationOverride {
+        SetGeolocationOverride {
             method: SetGeolocationOverrideMethod::SetGeolocationOverride,
             params: SetGeolocationOverrideParams {
-                error: self
-                    .error
-                    .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(error)))?,
                 contexts: self.contexts,
                 user_contexts: self.user_contexts,
             },
-        })
+        }
     }
 }
 impl SetLocaleOverride {

@@ -34,10 +34,8 @@ impl SetForcedColorsModeThemeOverride {
 impl crate::CommandResult for SetForcedColorsModeThemeOverride {
     type Result = super::results::SetForcedColorsModeThemeOverrideResult;
 }
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
 pub struct SetGeolocationOverrideParams {
-    #[serde(rename = "(error")]
-    pub error: super::types::GeolocationPositionError,
     #[serde(rename = "contexts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -46,15 +44,6 @@ pub struct SetGeolocationOverrideParams {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
     pub user_contexts: Option<Vec<crate::browser::types::UserContext>>,
-}
-impl SetGeolocationOverrideParams {
-    pub fn new(error: impl Into<super::types::GeolocationPositionError>) -> Self {
-        Self {
-            error: error.into(),
-            contexts: None,
-            user_contexts: None,
-        }
-    }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum SetGeolocationOverrideMethod {

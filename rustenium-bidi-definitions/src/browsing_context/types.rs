@@ -114,6 +114,34 @@ impl TryFrom<Locator> for XPathLocator {
 pub struct AccessibilityLocator {
     #[serde(rename = "type")]
     pub r#type: AccessibilityLocatorType,
+    #[serde(rename = "value")]
+    pub value: AccessibilityLocatorValue,
+}
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum AccessibilityLocatorType {
+    #[serde(rename = "accessibility")]
+    Accessibility,
+}
+impl AccessibilityLocator {
+    pub fn new(
+        r#type: impl Into<AccessibilityLocatorType>,
+        value: impl Into<AccessibilityLocatorValue>,
+    ) -> Self {
+        Self {
+            r#type: r#type.into(),
+            value: value.into(),
+        }
+    }
+}
+impl AccessibilityLocator {
+    pub const IDENTIFIER: &'static str = "browsingContext.AccessibilityLocator";
+    pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
+}
+#[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize)]
+pub struct AccessibilityLocatorValue {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
@@ -123,23 +151,8 @@ pub struct AccessibilityLocator {
     #[serde(default)]
     pub role: Option<String>,
 }
-#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
-pub enum AccessibilityLocatorType {
-    #[serde(rename = "accessibility")]
-    Accessibility,
-}
-impl AccessibilityLocator {
-    pub fn new(r#type: impl Into<AccessibilityLocatorType>) -> Self {
-        Self {
-            r#type: r#type.into(),
-            name: None,
-            role: None,
-        }
-    }
-}
-impl AccessibilityLocator {
-    pub const IDENTIFIER: &'static str = "browsingContext.AccessibilityLocator";
-    pub const DOMAIN_DIRECTION: &'static str = "all";
+impl AccessibilityLocatorValue {
+    pub const IDENTIFIER: &'static str = "";
     pub fn identifier(&self) -> &'static str {
         Self::IDENTIFIER
     }
@@ -175,8 +188,8 @@ impl CssLocator {
 pub struct ContextLocator {
     #[serde(rename = "type")]
     pub r#type: ContextLocatorType,
-    #[serde(rename = "context")]
-    pub context: BrowsingContext,
+    #[serde(rename = "value")]
+    pub value: ContextLocatorValue,
 }
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum ContextLocatorType {
@@ -184,16 +197,37 @@ pub enum ContextLocatorType {
     Context,
 }
 impl ContextLocator {
-    pub fn new(r#type: impl Into<ContextLocatorType>, context: impl Into<BrowsingContext>) -> Self {
+    pub fn new(
+        r#type: impl Into<ContextLocatorType>,
+        value: impl Into<ContextLocatorValue>,
+    ) -> Self {
         Self {
             r#type: r#type.into(),
-            context: context.into(),
+            value: value.into(),
         }
     }
 }
 impl ContextLocator {
     pub const IDENTIFIER: &'static str = "browsingContext.ContextLocator";
     pub const DOMAIN_DIRECTION: &'static str = "all";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ContextLocatorValue {
+    #[serde(rename = "context")]
+    pub context: BrowsingContext,
+}
+impl ContextLocatorValue {
+    pub fn new(context: impl Into<BrowsingContext>) -> Self {
+        Self {
+            context: context.into(),
+        }
+    }
+}
+impl ContextLocatorValue {
+    pub const IDENTIFIER: &'static str = "";
     pub fn identifier(&self) -> &'static str {
         Self::IDENTIFIER
     }
@@ -745,4 +779,3 @@ impl DownloadCompleteParams {
         Self::IDENTIFIER
     }
 }
-group_enum ! (BrowsingContextType { BrowsingContext (BrowsingContext) , Locator (Locator) , Navigation (Navigation) , ReadinessState (ReadinessState) , UserPromptType (UserPromptType) , ImageFormat (ImageFormat) , ClipRectangle (ClipRectangle) , CreateType (CreateType) , PrintMarginParameters (PrintMarginParameters) , PrintPageParameters (PrintPageParameters) , Viewport (Viewport) , InfoList (InfoList) , Info (Info) , BaseNavigationInfo (BaseNavigationInfo) , DownloadCanceledParamsDownloadCompleteParamsUnion (DownloadCanceledParamsDownloadCompleteParamsUnion) });

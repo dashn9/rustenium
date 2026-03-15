@@ -864,4 +864,3 @@ impl ResponseData {
         Self::IDENTIFIER
     }
 }
-group_enum ! (NetworkType { AuthCredentials (AuthCredentials) , BytesValue (BytesValue) , Collector (Collector) , CollectorType (CollectorType) , SameSite (SameSite) , Cookie (Cookie) , CookieHeader (CookieHeader) , DataType (DataType) , Header (Header) , Intercept (Intercept) , Request (Request) , SetCookieHeader (SetCookieHeader) , UrlPattern (UrlPattern) , InterceptPhase (InterceptPhase) , ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion (ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion) , AuthChallenge (AuthChallenge) , BaseParameters (BaseParameters) , FetchTimingInfo (FetchTimingInfo) , Initiator (Initiator) , RequestData (RequestData) , ResponseContent (ResponseContent) , ResponseData (ResponseData) });

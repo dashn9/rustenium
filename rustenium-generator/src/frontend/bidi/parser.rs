@@ -102,7 +102,6 @@ pub fn parse_cddl(inputs: &[(&str, DomainDirection)]) -> Protocol<'static> {
                 // Only exclude if it's a struct body and not referenced elsewhere as a type
                 if let Some(pt_body) = rule_map.get(pt.as_str()) {
                     if pt_body.trim().starts_with('{') {
-                        // Check if this param type is referenced by non-command/event rules
                         let referenced_elsewhere = rules.iter().any(|r| {
                             !commands.contains(r.name.as_str())
                                 && !events.contains(r.name.as_str())
@@ -294,7 +293,7 @@ fn parse_command(
 ) -> Option<(Command<'static>, Vec<TypeDef<'static>>)> {
     let method_str = extract_quoted(body, "method:")?;
     let params_type = extract_value(body, "params:");
-    let (params, synthetic) = resolve_params(&params_type, rule_map);
+    let (params, synthetic) = resolve_params(&params_type, rule_map, type_name);
 
     Some((Command {
         method: CommandMethod {
@@ -320,7 +319,7 @@ fn parse_event(
 ) -> Option<(Event<'static>, Vec<TypeDef<'static>>)> {
     let method_str = extract_quoted(body, "method:")?;
     let params_type = extract_value(body, "params:");
-    let (parameters, synthetic) = resolve_params(&params_type, rule_map);
+    let (parameters, synthetic) = resolve_params(&params_type, rule_map, type_name);
 
     Some((Event {
         description: None,
@@ -355,7 +354,7 @@ fn parse_result(
             raw_name: o(full_name), type_choice: Some(vec![type_ref(body)]),
         }, vec![]));
     }
-    let (params, synthetic) = resolve_result_fields(body, rule_map);
+    let (params, synthetic) = resolve_result_fields(body, rule_map, type_name);
     Some((CommandResult {
         description: None, name: o(type_name), parameters: params,
         raw_name: o(full_name), type_choice: None,
@@ -382,12 +381,12 @@ fn parse_union_refs(body: &str) -> Option<Vec<TypeRef<'static>>> {
 }
 
 /// Resolve a result body to struct fields, following aliases.
-fn resolve_result_fields(body: &str, rule_map: &HashMap<&str, &str>) -> (Vec<Param<'static>>, Vec<TypeDef<'static>>) {
+fn resolve_result_fields(body: &str, rule_map: &HashMap<&str, &str>, parent_name: &str) -> (Vec<Param<'static>>, Vec<TypeDef<'static>>) {
     if body.starts_with('{') {
-        return parse_struct_fields_resolved(body, rule_map);
+        return parse_struct_fields(body, Some(rule_map), parent_name);
     }
     if let Some(aliased_body) = rule_map.get(body) {
-        return resolve_result_fields(aliased_body.trim(), rule_map);
+        return resolve_result_fields(aliased_body.trim(), rule_map, parent_name);
     }
     Default::default()
 }
@@ -399,6 +398,7 @@ fn parse_typedef(full_name: &str, type_name: &str, body: &str, rule_map: &HashMa
             description: None, experimental: false, deprecated: false,
             name: o(type_name), extends, parameters,
             raw_name: o(full_name), is_circular_dep: false, direction: None,
+            synthetic: false,
         }, vec![])
     };
 
@@ -429,7 +429,7 @@ fn parse_typedef(full_name: &str, type_name: &str, body: &str, rule_map: &HashMa
             return Some(td(Type::Object, Some(Item::TypeChoice(type_refs))));
         }
 
-        let (params, synthetic) = parse_struct_fields_resolved(body, rule_map);
+        let (params, synthetic) = parse_struct_fields(body, Some(rule_map), type_name);
         return Some((TypeDef {
             description: None,
             experimental: false,
@@ -444,6 +444,7 @@ fn parse_typedef(full_name: &str, type_name: &str, body: &str, rule_map: &HashMa
             raw_name: o(full_name),
             is_circular_dep: false,
             direction: None,
+            synthetic: false,
         }, synthetic));
     }
 
@@ -460,7 +461,7 @@ fn parse_typedef(full_name: &str, type_name: &str, body: &str, rule_map: &HashMa
         // Treat as struct if it has named fields (contains ':')
         if inner.contains(':') {
             let wrapped = format!("{{\n{}\n}}", inner);
-            let (params, synthetic) = parse_struct_fields_resolved(&wrapped, rule_map);
+            let (params, synthetic) = parse_struct_fields(&wrapped, Some(rule_map), type_name);
             return Some((TypeDef {
                 description: None,
                 experimental: false,
@@ -471,6 +472,7 @@ fn parse_typedef(full_name: &str, type_name: &str, body: &str, rule_map: &HashMa
                 raw_name: o(full_name),
                 is_circular_dep: false,
                 direction: None,
+                synthetic: false,
             }, synthetic));
         }
 
@@ -514,24 +516,17 @@ fn parse_typedef(full_name: &str, type_name: &str, body: &str, rule_map: &HashMa
 fn resolve_params(
     params_type: &Option<String>,
     rule_map: &HashMap<&str, &str>,
+    parent_name: &str,
 ) -> (Vec<Param<'static>>, Vec<TypeDef<'static>>) {
     match params_type {
         Some(pt) if pt != "EmptyParams" => {
             if let Some(body) = rule_map.get(pt.as_str()) {
                 let body = body.trim();
                 if body.starts_with('{') || body.starts_with('(') {
-                    parse_struct_fields_resolved(body, rule_map)
+                    parse_struct_fields(body, Some(rule_map), parent_name)
                 } else {
-                    // Non-struct params (e.g., union type alias) → single flattened param
-                    let ty = parse_type(pt);
-                    let field_name = pt.rsplit('.').next().unwrap_or(pt);
-                    let field_snake = heck::ToSnakeCase::to_snake_case(field_name);
-                    (vec![Param {
-                        description: None, experimental: false, deprecated: false,
-                        optional: false, r#type: ty, name: o(&field_snake),
-                        raw_name: o(pt.as_str()), is_circular_dep: false,
-                        default_value: None, validation: None, flatten: true,
-                    }], vec![])
+                    let field_snake = heck::ToSnakeCase::to_snake_case(pt.rsplit('.').next().unwrap_or(pt));
+                    (vec![param(&field_snake, pt, parse_type(pt), false, true, None, None)], vec![])
                 }
             } else {
                 Default::default()
@@ -541,33 +536,38 @@ fn resolve_params(
     }
 }
 
-fn parse_struct_fields_resolved(body: &str, rule_map: &HashMap<&str, &str>) -> (Vec<Param<'static>>, Vec<TypeDef<'static>>) {
-    parse_struct_fields_with(body, Some(rule_map))
+fn param(name: &str, raw_name: &str, ty: Type<'static>, optional: bool, flatten: bool,
+         default_value: Option<String>, validation: Option<Vec<Constraint>>) -> Param<'static> {
+    Param {
+        description: None, experimental: false, deprecated: false, optional,
+        r#type: ty, name: o(name), raw_name: o(raw_name),
+        is_circular_dep: false, default_value, validation, flatten,
+    }
 }
 
-fn parse_struct_fields_with(body: &str, rule_map: Option<&HashMap<&str, &str>>) -> (Vec<Param<'static>>, Vec<TypeDef<'static>>) {
+fn synthetic_td(name: &str, parameters: Option<Item<'static>>) -> TypeDef<'static> {
+    TypeDef {
+        description: None, experimental: false, deprecated: false,
+        name: o(name), extends: Type::Object, parameters,
+        raw_name: o(""), is_circular_dep: false, direction: None, synthetic: true,
+    }
+}
+
+fn parse_struct_fields(body: &str, rule_map: Option<&HashMap<&str, &str>>, parent_name: &str) -> (Vec<Param<'static>>, Vec<TypeDef<'static>>) {
     let mut params = Vec::new();
-    let mut synthetic_types = Vec::new();
+    let mut synthetics = Vec::new();
     let mut depth: i32 = 0;
-    // For collecting nested inline struct bodies
-    let mut nested_field: Option<(String, bool)> = None; // (field_name, optional)
+    let mut nested_field: Option<(String, bool)> = None;
     let mut nested_body = String::new();
-    // For collecting inline choice groups: (A // B) possibly spanning multiple lines
     let mut choice_buf: Option<String> = None;
 
     for line in body.lines() {
         let trimmed = line.trim();
-        if trimmed.is_empty() {
-            continue;
-        }
+        if trimmed.is_empty() { continue; }
 
         let prev_depth = depth;
         for ch in trimmed.chars() {
-            match ch {
-                '{' => depth += 1,
-                '}' => depth -= 1,
-                _ => {}
-            }
+            match ch { '{' => depth += 1, '}' => depth -= 1, _ => {} }
         }
 
         // Collecting nested inline struct body
@@ -575,13 +575,14 @@ fn parse_struct_fields_with(body: &str, rule_map: Option<&HashMap<&str, &str>>) 
             nested_body.push_str(trimmed);
             nested_body.push('\n');
             if depth <= 1 {
-                // Nested block closed — flatten inner fields into parent
-                let (_name, _optional) = nested_field.take().unwrap();
-                let (inner_params, inner_types) = parse_struct_fields_with(&nested_body, rule_map);
+                let (name, optional) = nested_field.take().unwrap();
+                let field_camel = name.to_upper_camel_case();
+                let type_name = if parent_name.is_empty() { field_camel } else { format!("{}{}", parent_name, field_camel) };
+                let (inner_params, inner_types) = parse_struct_fields(&nested_body, rule_map, &type_name);
                 nested_body.clear();
-                params.extend(inner_params);
-                synthetic_types.extend(inner_types);
-                continue;
+                synthetics.extend(inner_types);
+                synthetics.push(synthetic_td(&type_name, Some(Item::Properties(inner_params))));
+                params.push(param(&name, &name, Type::Ref(TypeRef { module: None, name: o(&type_name) }), optional, false, None, None));
             }
             continue;
         }
@@ -595,135 +596,67 @@ fn parse_struct_fields_with(body: &str, rule_map: Option<&HashMap<&str, &str>>) 
                 choice_buf = None;
                 if let Some((p, td)) = parse_inline_choice(&full) {
                     params.push(p);
-                    synthetic_types.push(td);
+                    synthetics.push(td);
                 }
             }
             continue;
         }
 
-        if prev_depth != 1 {
-            continue;
-        }
+        if prev_depth != 1 { continue; }
 
         let field_str = trimmed.trim_end_matches(',').trim_end_matches(';');
-        if field_str.is_empty() {
-            continue;
-        }
+        if field_str.is_empty() { continue; }
 
         if field_str == "Extensible" {
-            params.push(Param {
-                description: None,
-                experimental: false,
-                deprecated: false,
-                optional: false,
-                r#type: Type::Extensible,
-                name: o("extensible"),
-                raw_name: o("extensible"),
-                is_circular_dep: false,
-                default_value: None,
-                validation: None,
-                flatten: true,
-            });
+            params.push(extensible_param());
             continue;
         }
 
-        // Inline choice group: (A // B) or multi-line ( \n A // \n B \n )
-        if field_str.starts_with('(') && field_str.contains("//") {
-            if field_str.contains(')') {
+        // Inline choice group
+        if field_str.starts_with('(') {
+            if field_str.contains("//") && field_str.contains(')') {
                 if let Some((p, td)) = parse_inline_choice(field_str) {
                     params.push(p);
-                    synthetic_types.push(td);
+                    synthetics.push(td);
                 }
-            } else {
+            } else if !field_str.contains(':') || field_str.contains("//") {
                 choice_buf = Some(field_str.to_string());
             }
             continue;
         }
-        if field_str.starts_with('(') && !field_str.contains(':') && !field_str.contains(')') {
-            // Possibly multi-line choice group starting
-            choice_buf = Some(field_str.to_string());
-            continue;
-        }
 
-        // Group inclusion: bare type reference without ':' → flattened field
+        // Group inclusion: bare type reference without ':'
         if !field_str.contains(':') {
             let ref_name = field_str.trim();
-            if ref_name.is_empty() || !ref_name.chars().next().unwrap().is_ascii_alphabetic() {
-                continue;
-            }
-            let ty = parse_type(ref_name);
-            // Derive field name from the type name (e.g. "network.BaseParameters" → "base_parameters")
-            let field_name = ref_name
-                .rsplit('.')
-                .next()
-                .unwrap_or(ref_name);
-            let field_name_snake = heck::ToSnakeCase::to_snake_case(field_name);
-            params.push(Param {
-                description: None,
-                experimental: false,
-                deprecated: false,
-                optional: false,
-                r#type: ty,
-                name: o(&field_name_snake),
-                raw_name: o(ref_name),
-                is_circular_dep: false,
-                default_value: None,
-                validation: None,
-                flatten: true,
-            });
+            if ref_name.is_empty() || !ref_name.starts_with(|c: char| c.is_ascii_alphabetic()) { continue; }
+            let field_name = heck::ToSnakeCase::to_snake_case(ref_name.rsplit('.').next().unwrap_or(ref_name));
+            params.push(param(&field_name, ref_name, parse_type(ref_name), false, true, None, None));
             continue;
         }
 
         let mut optional = field_str.starts_with('?');
-        let field_str = if optional {
-            field_str[1..].trim()
-        } else {
-            field_str
-        };
+        let field_str = if optional { field_str[1..].trim() } else { field_str };
 
         if let Some((name, type_str)) = field_str.split_once(':') {
-            let name = name.trim();
-            let type_str = type_str.trim();
+            let (name, type_str) = (name.trim(), type_str.trim());
 
-            // Inline nested struct: field: {
-            if type_str == "{" || type_str.starts_with('{') {
-                if depth > 1 {
-                    // Opening brace pushed depth > 1, start collecting
-                    nested_field = Some((name.to_string(), optional));
-                    nested_body.clear();
-                    nested_body.push_str(trimmed);
-                    nested_body.push('\n');
-                    continue;
-                }
+            if (type_str == "{" || type_str.starts_with('{')) && depth > 1 {
+                nested_field = Some((name.to_string(), optional));
+                nested_body.clear();
+                nested_body.push_str(trimmed);
+                nested_body.push('\n');
+                continue;
             }
 
             let (default_value, validation) = extract_constraints(type_str);
             let (type_str, nullable) = strip_null_from_str(type_str);
             optional = optional || nullable || default_value.is_some();
-
-            let ty = if type_str.is_empty() {
-                Type::Object
-            } else {
-                parse_type(&type_str)
-            };
-
-            params.push(Param {
-                description: None,
-                experimental: false,
-                deprecated: false,
-                optional,
-                r#type: ty,
-                name: o(name),
-                raw_name: o(name),
-                is_circular_dep: false,
-                default_value,
-                validation,
-                flatten: false,
-            });
+            let ty = if type_str.is_empty() { Type::Object } else { parse_type(&type_str) };
+            params.push(param(name, name, ty, optional, false, default_value, validation));
         }
     }
 
-    (params, synthetic_types)
+    (params, synthetics)
 }
 
 /// Extract `.default`, `.ge`, `.gt`, `.le`, `.lt` constraints from a type string.
@@ -973,10 +906,14 @@ fn parse_inner_type_choice(body: &str) -> Option<Vec<TypeRef<'static>>> {
     let inner = body.trim()
         .strip_prefix('{')?
         .strip_suffix('}')?
-        .trim()
-        .strip_prefix('(')?
-        .strip_suffix(')')?
         .trim();
+
+    // Strip optional inner parentheses
+    let inner = inner
+        .strip_prefix('(')
+        .and_then(|s| s.strip_suffix(')'))
+        .map(|s| s.trim())
+        .unwrap_or(inner);
 
     // Must contain // (group choice operator)
     if !inner.contains("//") {
@@ -1001,152 +938,73 @@ fn parse_inner_type_choice(body: &str) -> Option<Vec<TypeRef<'static>>> {
 }
 
 /// Parse inline choice group `(A // B)` inside a struct body.
-/// Returns a flattened Param and a synthetic TypeDef (untagged enum).
 fn parse_inline_choice(s: &str) -> Option<(Param<'static>, TypeDef<'static>)> {
-    let inner = s.trim()
-        .trim_start_matches('(')
-        .trim_end_matches(')')
-        .trim();
+    let inner = s.trim().trim_start_matches('(').trim_end_matches(')').trim();
+    if !inner.contains("//") { return None; }
 
-    if !inner.contains("//") {
-        return None;
-    }
+    let parts: Vec<&str> = inner.split("//").map(|p| p.trim()).filter(|p| !p.is_empty()).collect();
+    if parts.len() < 2 { return None; }
 
-    let parts: Vec<&str> = inner.split("//")
-        .map(|p| p.trim())
-        .filter(|p| !p.is_empty())
-        .collect();
+    let has_named_fields = parts.iter().all(|p| p.trim_start_matches('(').trim_end_matches(')').trim().contains(':'));
 
-    if parts.len() < 2 {
-        return None;
-    }
+    let refs: Vec<TypeRef<'static>> = if has_named_fields {
+        parts.iter().filter_map(|part| {
+            let (name, _) = part.trim_start_matches('(').trim_end_matches(')').trim().split_once(':')?;
+            Some(TypeRef { module: None, name: o(&name.trim().to_upper_camel_case()) })
+        }).collect()
+    } else {
+        parts.into_iter().map(type_ref).collect()
+    };
 
-    // Check if parts are named field groups: (field: Type) // (field: Type)
-    let has_named_fields = parts.iter().all(|p| {
-        let p = p.trim_start_matches('(').trim_end_matches(')').trim();
-        p.contains(':')
-    });
-
-    if has_named_fields {
-        // Named field choice: ((coordinates: Type) // (error: Type))
-        // Each part becomes a struct variant in the union
-        let mut refs = Vec::new();
-        for part in &parts {
-            let inner_part = part.trim_start_matches('(').trim_end_matches(')').trim();
-            if let Some((name, _)) = inner_part.split_once(':') {
-                let name = name.trim().to_upper_camel_case();
-                refs.push(TypeRef { module: None, name: o(&name) });
-            }
-        }
-        // For named field choices, fall through to create union from field names
-        // but these are harder — for now, just use the field names as variant names
-        // and generate a TypeChoice typedef
-        let union_name: String = refs.iter()
-            .map(|r| r.name.as_ref().to_string())
-            .collect::<Vec<_>>()
-            .join("");
-        let union_name = format!("{}Union", union_name);
-        let field_snake = heck::ToSnakeCase::to_snake_case(union_name.as_str());
-
-        let td = TypeDef {
-            description: None,
-            experimental: false,
-            deprecated: false,
-            name: o(&union_name),
-            extends: Type::Object,
-            parameters: Some(Item::TypeChoice(refs)),
-            raw_name: o(""),
-            is_circular_dep: false,
-            direction: None,
-        };
-
-        let param = Param {
-            description: None,
-            experimental: false,
-            deprecated: false,
-            optional: false,
-            r#type: Type::Ref(TypeRef { module: None, name: o(&union_name) }),
-            name: o(&field_snake),
-            raw_name: o(s),
-            is_circular_dep: false,
-            default_value: None,
-            validation: None,
-            flatten: true,
-        };
-
-        return Some((param, td));
-    }
-
-    // Simple type choice: (A // B) — type refs only
-    let refs: Vec<TypeRef<'static>> = parts.into_iter().map(type_ref).collect();
-
-    let union_name: String = refs.iter()
-        .map(|r| r.name.as_ref().to_string())
-        .collect::<Vec<_>>()
-        .join("");
-    let union_name = format!("{}Union", union_name);
+    let union_name = format!("{}Union", refs.iter().map(|r| r.name.as_ref()).collect::<Vec<_>>().join(""));
     let field_snake = heck::ToSnakeCase::to_snake_case(union_name.as_str());
-
-    let td = TypeDef {
-        description: None,
-        experimental: false,
-        deprecated: false,
-        name: o(&union_name),
-        extends: Type::Object,
-        parameters: Some(Item::TypeChoice(refs)),
-        raw_name: o(""),
-        is_circular_dep: false,
-        direction: None,
-    };
-
-    let param = Param {
-        description: None,
-        experimental: false,
-        deprecated: false,
-        optional: false,
-        r#type: Type::Ref(TypeRef { module: None, name: o(&union_name) }),
-        name: o(&field_snake),
-        raw_name: o(s),
-        is_circular_dep: false,
-        default_value: None,
-        validation: None,
-        flatten: true,
-    };
-
-    Some((param, td))
+    let td = synthetic_td(&union_name, Some(Item::TypeChoice(refs)));
+    let p = param(&field_snake, s, Type::Ref(TypeRef { module: None, name: o(&union_name) }), false, true, None, None);
+    Some((p, td))
 }
 
-/// Hardcoded param overrides: (module, type_name) → params to upsert.
-/// TODO: Suboptimal — ideally these would be detected at CDDL parsing level
-/// rather than patched after the fact.
-fn type_overrides() -> Vec<(&'static str, &'static str, Vec<Param<'static>>)> {
-    vec![
-        ("network", "RequestData", vec![
-            Param {
-                description: None,
-                experimental: false,
-                deprecated: false,
-                optional: false,
-                r#type: Type::Extensible,
-                name: o("extensible"),
-                raw_name: o("extensible"),
-                is_circular_dep: false,
-                default_value: None,
-                validation: None,
-                flatten: true,
-            },
-        ]),
-    ]
+fn extensible_param() -> Param<'static> {
+    Param {
+        description: None, experimental: false, deprecated: false, optional: false,
+        r#type: Type::Extensible, name: o("extensible"), raw_name: o("extensible"),
+        is_circular_dep: false, default_value: None, validation: None, flatten: true,
+    }
 }
 
 fn apply_overrides(modules: &mut HashMap<String, Module<'static>>) {
-    for (mod_name, type_name, override_params) in type_overrides() {
+    let prop_overrides: Vec<(&str, &str, Vec<Param<'static>>)> = vec![
+        ("network", "RequestData", vec![extensible_param()]),
+    ];
+
+    let choice_overrides: Vec<(&str, &str, &str)> = vec![
+        ("session", "ProxyConfiguration", "SocksProxyConfiguration"),
+        ("session", "ProxyConfiguration", "EmptyProxyConfiguration"),
+    ];
+
+    let enum_overrides: Vec<(&str, &str, &[&str])> = vec![
+        ("session", "UserPromptHandlerType", &["dismiss and notify"]),
+    ];
+
+    let upb = Type::Ref(TypeRef { module: None, name: o("UnhandledPromptBehavior") });
+    let field_type_overrides: Vec<(&str, &str, &str, Type<'static>)> = vec![
+        ("session", "CapabilityRequest", "unhandledPromptBehavior", upb.clone()),
+        ("session", "NewResultCapabilities", "unhandledPromptBehavior", upb),
+    ];
+
+    let synthetic_choices: Vec<(&str, &str, Vec<TypeRef<'static>>)> = vec![
+        ("session", "UnhandledPromptBehavior", vec![
+            TypeRef { module: Some(o("session")), name: o("UserPromptHandler") },
+            TypeRef { module: Some(o("session")), name: o("UserPromptHandlerType") },
+        ]),
+    ];
+
+    for (mod_name, type_name, params) in prop_overrides {
         let Some(module) = modules.get_mut(mod_name) else { continue };
         let td = module.types.iter_mut().find(|t| t.name.as_ref() == type_name);
         if let Some(td) = td {
-            let params = td.parameters.get_or_insert_with(|| Item::Properties(vec![]));
-            if let Item::Properties(existing) = params {
-                for p in override_params {
+            let existing = td.parameters.get_or_insert_with(|| Item::Properties(vec![]));
+            if let Item::Properties(existing) = existing {
+                for p in params {
                     if let Some(pos) = existing.iter().position(|e| e.name == p.name) {
                         existing[pos] = p;
                     } else {
@@ -1155,17 +1013,52 @@ fn apply_overrides(modules: &mut HashMap<String, Module<'static>>) {
                 }
             }
         } else {
-            module.types.push(TypeDef {
-                description: None,
-                experimental: false,
-                deprecated: false,
-                name: o(type_name),
-                extends: Type::Object,
-                parameters: Some(Item::Properties(override_params)),
-                raw_name: o(format!("{}.{}", mod_name, type_name)),
-                is_circular_dep: false,
-                direction: None,
-            });
+            let mut td = synthetic_td(type_name, Some(Item::Properties(params)));
+            td.raw_name = o(format!("{}.{}", mod_name, type_name));
+            td.synthetic = false;
+            module.types.push(td);
+        }
+    }
+
+    for (mod_name, type_name, catch_all) in choice_overrides {
+        let Some(module) = modules.get_mut(mod_name) else { continue };
+        if let Some(td) = module.types.iter_mut().find(|t| t.name.as_ref() == type_name) {
+            if let Some(Item::TypeChoice(refs)) = &mut td.parameters {
+                refs.push(TypeRef { module: None, name: o(catch_all) });
+            }
+        }
+    }
+
+    for (mod_name, type_name, variants) in enum_overrides {
+        let Some(module) = modules.get_mut(mod_name) else { continue };
+        if let Some(td) = module.types.iter_mut().find(|t| t.name.as_ref() == type_name) {
+            if let Some(Item::Enum(existing)) = &mut td.parameters {
+                existing.extend(variants.iter().map(|v| Variant { description: None, name: o(*v) }));
+            }
+        }
+    }
+
+    for (mod_name, type_name, field_name, new_type) in field_type_overrides {
+        let Some(module) = modules.get_mut(mod_name) else { continue };
+        let find_and_replace = |params: &mut Vec<Param<'static>>, new_type: Type<'static>| {
+            if let Some(p) = params.iter_mut().find(|p| p.raw_name.as_ref() == field_name) {
+                p.r#type = new_type;
+            }
+        };
+        if let Some(td) = module.types.iter_mut().find(|t| t.name.as_ref() == type_name) {
+            if let Some(Item::Properties(params)) = &mut td.parameters {
+                find_and_replace(params, new_type.clone());
+            }
+        }
+        if let Some(cr) = module.command_results.iter_mut().find(|r| r.name.as_ref() == type_name) {
+            find_and_replace(&mut cr.parameters, new_type);
+        }
+    }
+
+    for (mod_name, name, refs) in synthetic_choices {
+        let Some(module) = modules.get_mut(mod_name) else { continue };
+        if !module.types.iter().any(|t| t.name.as_ref() == name) {
+            module.types.push(synthetic_td(name, Some(Item::TypeChoice(refs))));
         }
     }
 }

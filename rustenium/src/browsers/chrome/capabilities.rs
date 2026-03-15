@@ -1,4 +1,4 @@
-use rustenium_bidi_definitions::session::types::{CapabilitiesRequest, CapabilityRequest, ProxyConfiguration, UserPromptHandler};
+use rustenium_bidi_definitions::session::types::{CapabilitiesRequest, CapabilityRequest, ProxyConfiguration, UnhandledPromptBehavior, UserPromptHandler};
 use serde::{Serialize, Deserialize};
 use serde_json::Value;
 use std::collections::HashMap;
@@ -163,7 +163,7 @@ impl ChromeCapabilities {
     }
 
     /// Sets how to handle unhandled prompts.
-    pub fn unhandled_prompt_behavior(&mut self, behavior: UserPromptHandler) -> &mut Self {
+    pub fn unhandled_prompt_behavior(&mut self, behavior: UnhandledPromptBehavior) -> &mut Self {
         self.base_capabilities.unhandled_prompt_behavior = Some(behavior);
         self
     }

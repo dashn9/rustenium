@@ -1,5 +1,5 @@
 use std::borrow::Cow;
-use std::collections::{HashMap, HashSet};
+use std::collections::{HashMap};
 use std::fs;
 use std::io::{self, Error, ErrorKind};
 use std::ops::Deref;
@@ -399,18 +399,6 @@ impl Generator {
             .filter(|dt| with_experimental || !dt.is_experimental())
             .collect();
 
-        // Collect names that are TypeChoice variants — exclude from group enum
-        let mut type_choice_variants: HashSet<String> = datatypes.iter()
-            .filter_map(|dt| dt.as_type_choice())
-            .flat_map(|refs| refs.iter().map(|r| r.name.to_string()))
-            .collect();
-        // Also exclude variants of TypeChoice results
-        for cr in &module.command_results {
-            if let Some(refs) = &cr.type_choice {
-                type_choice_variants.extend(refs.iter().map(|r| r.name.to_string()));
-            }
-        }
-
         for dt in datatypes {
             let is_type = dt.is_type();
             let is_command = dt.is_command();
@@ -421,7 +409,7 @@ impl Generator {
             if is_type {
                 types_stream.extend(def);
                 type_builders_stream.extend(builder_tokens);
-                if !type_choice_variants.contains(&camel_name) {
+                if !flat {
                     let ident = format_ident!("{}", camel_name);
                     type_idents.push((ident.clone(), ident));
                 }
@@ -905,23 +893,23 @@ impl Generator {
         let enum_name = format_ident!("{}", dt.ident_name());
         let desc = dt.type_description_tokens(module.name.as_ref());
 
-        let variant_data: Vec<(Ident, TokenStream)> = type_refs.iter().map(|tr| {
+        let mut variants: Vec<TokenStream> = Vec::new();
+        let mut from_impls: Vec<TokenStream> = Vec::new();
+
+        for tr in type_refs {
             let variant_name = format_ident!("{}", tr.name.to_upper_camel_case());
-            let ty = self.projected_type(module, tr, local_same_file);
-            (variant_name, ty)
-        }).collect();
+            let is_empty = tr.module.is_none()
+                && !module.types.iter().any(|t| t.name.as_ref() == tr.name.as_ref());
 
-        let variants: Vec<TokenStream> = variant_data.iter()
-            .map(|(v, ty)| quote! { #v(#ty) })
-            .collect();
-
-        let from_impls: Vec<TokenStream> = variant_data.iter()
-            .map(|(variant_name, ty)| {
-                quote! {
+            if is_empty {
+                variants.push(quote! { #variant_name {} });
+            } else {
+                let ty = self.projected_type(module, tr, local_same_file);
+                variants.push(quote! { #variant_name(#ty) });
+                from_impls.push(quote! {
                     impl From<#ty> for #enum_name {
                         fn from(v: #ty) -> Self { #enum_name::#variant_name(v) }
                     }
-
                     impl TryFrom<#enum_name> for #ty {
                         type Error = #enum_name;
                         fn try_from(e: #enum_name) -> Result<Self, Self::Error> {
@@ -931,9 +919,9 @@ impl Generator {
                             }
                         }
                     }
-                }
-            })
-            .collect();
+                });
+            }
+        }
 
         quote! {
             #desc

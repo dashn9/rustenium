@@ -315,4 +315,3 @@ impl DownloadBehaviorDenied {
         Self::IDENTIFIER
     }
 }
-group_enum ! (BrowserType { ClientWindow (ClientWindow) , UserContext (UserContext) , ClientWindowNamedStateClientWindowRectStateUnion (ClientWindowNamedStateClientWindowRectStateUnion) , DownloadBehavior (DownloadBehavior) });

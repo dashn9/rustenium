@@ -42,7 +42,7 @@ pub struct CapabilityRequest {
     #[serde(rename = "unhandledPromptBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub unhandled_prompt_behavior: Option<UserPromptHandler>,
+    pub unhandled_prompt_behavior: Option<UnhandledPromptBehavior>,
     #[serde(flatten)]
     #[serde(default)]
     pub extensible: std::collections::HashMap<String, serde_json::Value>,
@@ -70,28 +70,98 @@ impl CapabilityRequest {
     }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct ProxyConfiguration {
-    #[serde(flatten)]
-    #[serde(default)]
-    pub autodetect_proxy_configuration: serde_json::Value,
-    #[serde(flatten)]
-    #[serde(default)]
-    pub direct_proxy_configuration: serde_json::Value,
-    #[serde(flatten)]
-    #[serde(default)]
-    pub manual_proxy_configuration: serde_json::Value,
-    #[serde(flatten)]
-    #[serde(default)]
-    pub pac_proxy_configuration: serde_json::Value,
-    #[serde(flatten)]
-    #[serde(default)]
-    pub system_proxy_configuration: SystemProxyConfiguration,
+#[serde(untagged)]
+pub enum ProxyConfiguration {
+    AutodetectProxyConfiguration(AutodetectProxyConfiguration),
+    DirectProxyConfiguration(DirectProxyConfiguration),
+    ManualProxyConfiguration(ManualProxyConfiguration),
+    PacProxyConfiguration(PacProxyConfiguration),
+    SystemProxyConfiguration(SystemProxyConfiguration),
+    SocksProxyConfiguration(SocksProxyConfiguration),
+    EmptyProxyConfiguration {},
 }
-impl ProxyConfiguration {
-    pub const IDENTIFIER: &'static str = "session.ProxyConfiguration";
-    pub const DOMAIN_DIRECTION: &'static str = "all";
-    pub fn identifier(&self) -> &'static str {
-        Self::IDENTIFIER
+impl From<AutodetectProxyConfiguration> for ProxyConfiguration {
+    fn from(v: AutodetectProxyConfiguration) -> Self {
+        ProxyConfiguration::AutodetectProxyConfiguration(v)
+    }
+}
+impl TryFrom<ProxyConfiguration> for AutodetectProxyConfiguration {
+    type Error = ProxyConfiguration;
+    fn try_from(e: ProxyConfiguration) -> Result<Self, Self::Error> {
+        match e {
+            ProxyConfiguration::AutodetectProxyConfiguration(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<DirectProxyConfiguration> for ProxyConfiguration {
+    fn from(v: DirectProxyConfiguration) -> Self {
+        ProxyConfiguration::DirectProxyConfiguration(v)
+    }
+}
+impl TryFrom<ProxyConfiguration> for DirectProxyConfiguration {
+    type Error = ProxyConfiguration;
+    fn try_from(e: ProxyConfiguration) -> Result<Self, Self::Error> {
+        match e {
+            ProxyConfiguration::DirectProxyConfiguration(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<ManualProxyConfiguration> for ProxyConfiguration {
+    fn from(v: ManualProxyConfiguration) -> Self {
+        ProxyConfiguration::ManualProxyConfiguration(v)
+    }
+}
+impl TryFrom<ProxyConfiguration> for ManualProxyConfiguration {
+    type Error = ProxyConfiguration;
+    fn try_from(e: ProxyConfiguration) -> Result<Self, Self::Error> {
+        match e {
+            ProxyConfiguration::ManualProxyConfiguration(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<PacProxyConfiguration> for ProxyConfiguration {
+    fn from(v: PacProxyConfiguration) -> Self {
+        ProxyConfiguration::PacProxyConfiguration(v)
+    }
+}
+impl TryFrom<ProxyConfiguration> for PacProxyConfiguration {
+    type Error = ProxyConfiguration;
+    fn try_from(e: ProxyConfiguration) -> Result<Self, Self::Error> {
+        match e {
+            ProxyConfiguration::PacProxyConfiguration(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<SystemProxyConfiguration> for ProxyConfiguration {
+    fn from(v: SystemProxyConfiguration) -> Self {
+        ProxyConfiguration::SystemProxyConfiguration(v)
+    }
+}
+impl TryFrom<ProxyConfiguration> for SystemProxyConfiguration {
+    type Error = ProxyConfiguration;
+    fn try_from(e: ProxyConfiguration) -> Result<Self, Self::Error> {
+        match e {
+            ProxyConfiguration::SystemProxyConfiguration(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<SocksProxyConfiguration> for ProxyConfiguration {
+    fn from(v: SocksProxyConfiguration) -> Self {
+        ProxyConfiguration::SocksProxyConfiguration(v)
+    }
+}
+impl TryFrom<ProxyConfiguration> for SocksProxyConfiguration {
+    type Error = ProxyConfiguration;
+    fn try_from(e: ProxyConfiguration) -> Result<Self, Self::Error> {
+        match e {
+            ProxyConfiguration::SocksProxyConfiguration(inner) => Ok(inner),
+            other => Err(other),
+        }
     }
 }
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -332,6 +402,8 @@ pub enum UserPromptHandlerType {
     Dismiss,
     #[serde(rename = "ignore")]
     Ignore,
+    #[serde(rename = "dismiss and notify")]
+    DismissAndNotify,
 }
 #[derive(Debug, Clone, PartialEq, Default, Serialize, Deserialize, Eq, Hash)]
 pub struct Subscription(String);
@@ -435,4 +507,73 @@ impl TryFrom<UnsubscribeParameters> for UnsubscribeByIdRequest {
         }
     }
 }
-group_enum ! (SessionType { CapabilitiesRequest (CapabilitiesRequest) , CapabilityRequest (CapabilityRequest) , ProxyConfiguration (ProxyConfiguration) , AutodetectProxyConfiguration (AutodetectProxyConfiguration) , DirectProxyConfiguration (DirectProxyConfiguration) , ManualProxyConfiguration (ManualProxyConfiguration) , SocksProxyConfiguration (SocksProxyConfiguration) , PacProxyConfiguration (PacProxyConfiguration) , SystemProxyConfiguration (SystemProxyConfiguration) , UserPromptHandler (UserPromptHandler) , UserPromptHandlerType (UserPromptHandlerType) , Subscription (Subscription) , UnsubscribeByIdRequest (UnsubscribeByIdRequest) , UnsubscribeParameters (UnsubscribeParameters) });
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct NewResultCapabilities {
+    #[serde(rename = "acceptInsecureCerts")]
+    pub accept_insecure_certs: bool,
+    #[serde(rename = "browserName")]
+    pub browser_name: String,
+    #[serde(rename = "browserVersion")]
+    pub browser_version: String,
+    #[serde(rename = "platformName")]
+    pub platform_name: String,
+    #[serde(rename = "setWindowRect")]
+    pub set_window_rect: bool,
+    #[serde(rename = "userAgent")]
+    pub user_agent: String,
+    #[serde(rename = "proxy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
+    pub proxy: Option<ProxyConfiguration>,
+    #[serde(rename = "unhandledPromptBehavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
+    pub unhandled_prompt_behavior: Option<UnhandledPromptBehavior>,
+    #[serde(rename = "webSocketUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
+    pub web_socket_url: Option<String>,
+    #[serde(flatten)]
+    #[serde(default)]
+    pub extensible: std::collections::HashMap<String, serde_json::Value>,
+}
+impl NewResultCapabilities {
+    pub const IDENTIFIER: &'static str = "";
+    pub fn identifier(&self) -> &'static str {
+        Self::IDENTIFIER
+    }
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(untagged)]
+pub enum UnhandledPromptBehavior {
+    UserPromptHandler(UserPromptHandler),
+    UserPromptHandlerType(UserPromptHandlerType),
+}
+impl From<UserPromptHandler> for UnhandledPromptBehavior {
+    fn from(v: UserPromptHandler) -> Self {
+        UnhandledPromptBehavior::UserPromptHandler(v)
+    }
+}
+impl TryFrom<UnhandledPromptBehavior> for UserPromptHandler {
+    type Error = UnhandledPromptBehavior;
+    fn try_from(e: UnhandledPromptBehavior) -> Result<Self, Self::Error> {
+        match e {
+            UnhandledPromptBehavior::UserPromptHandler(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}
+impl From<UserPromptHandlerType> for UnhandledPromptBehavior {
+    fn from(v: UserPromptHandlerType) -> Self {
+        UnhandledPromptBehavior::UserPromptHandlerType(v)
+    }
+}
+impl TryFrom<UnhandledPromptBehavior> for UserPromptHandlerType {
+    type Error = UnhandledPromptBehavior;
+    fn try_from(e: UnhandledPromptBehavior) -> Result<Self, Self::Error> {
+        match e {
+            UnhandledPromptBehavior::UserPromptHandlerType(inner) => Ok(inner),
+            other => Err(other),
+        }
+    }
+}

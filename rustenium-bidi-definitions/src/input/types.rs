@@ -718,4 +718,3 @@ pub enum Origin {
     #[serde(rename = "pointer")]
     Pointer,
 }
-group_enum ! (InputType { ElementOrigin (ElementOrigin) , SourceActions (SourceActions) , NoneSourceAction (NoneSourceAction) , KeySourceAction (KeySourceAction) , PointerType (PointerType) , PointerParameters (PointerParameters) , PointerSourceAction (PointerSourceAction) , WheelSourceAction (WheelSourceAction) , PointerCommonProperties (PointerCommonProperties) , Origin (Origin) });

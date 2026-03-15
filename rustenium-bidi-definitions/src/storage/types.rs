@@ -262,4 +262,3 @@ impl PartialCookie {
         Self::IDENTIFIER
     }
 }
-group_enum ! (StorageType { PartitionKey (PartitionKey) , CookieFilter (CookieFilter) , PartitionDescriptor (PartitionDescriptor) , PartialCookie (PartialCookie) });

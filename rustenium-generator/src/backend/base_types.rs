@@ -44,6 +44,9 @@ pub struct TypeDef<'a> {
     pub raw_name: Cow<'a, str>,
     pub is_circular_dep: bool,
     pub direction: Option<DomainDirection>,
+    /// Sub-types produced during parsing (inline structs, enums, choices) that belong
+    /// to a parent type and should be excluded from module-level group enums.
+    pub synthetic: bool,
 }
 
 impl<'a> TypeDef<'a> {
