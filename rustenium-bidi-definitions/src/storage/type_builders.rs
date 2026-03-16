@@ -30,9 +30,7 @@ impl PartitionKeyBuilder {
         Ok(PartitionKey {
             user_context: self.user_context,
             source_origin: self.source_origin,
-            extensible: self
-                .extensible
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(extensible)))?,
+            extensible: self.extensible.unwrap_or_default(),
         })
     }
 }
@@ -109,9 +107,7 @@ impl CookieFilterBuilder {
             secure: self.secure,
             same_site: self.same_site,
             expiry: self.expiry,
-            extensible: self
-                .extensible
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(extensible)))?,
+            extensible: self.extensible.unwrap_or_default(),
         })
     }
 }
@@ -187,9 +183,7 @@ impl StorageKeyPartitionDescriptorBuilder {
                 .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(r#type)))?,
             user_context: self.user_context,
             source_origin: self.source_origin,
-            extensible: self
-                .extensible
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(extensible)))?,
+            extensible: self.extensible.unwrap_or_default(),
         })
     }
 }
@@ -266,9 +260,7 @@ impl PartialCookieBuilder {
             secure: self.secure,
             same_site: self.same_site,
             expiry: self.expiry,
-            extensible: self
-                .extensible
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(extensible)))?,
+            extensible: self.extensible.unwrap_or_default(),
         })
     }
 }

@@ -986,9 +986,11 @@ fn apply_overrides(modules: &mut HashMap<String, Module<'static>>) {
     ];
 
     let upb = Type::Ref(TypeRef { module: None, name: o("UnhandledPromptBehavior") });
-    let field_type_overrides: Vec<(&str, &str, &str, Type<'static>)> = vec![
-        ("session", "CapabilityRequest", "unhandledPromptBehavior", upb.clone()),
-        ("session", "NewResultCapabilities", "unhandledPromptBehavior", upb),
+    // (module, type, field, new_type_or_none, force_optional)
+    let field_overrides: Vec<(&str, &str, &str, Option<Type<'static>>, bool)> = vec![
+        ("session", "CapabilityRequest", "unhandledPromptBehavior", Some(upb.clone()), false),
+        ("session", "NewResultCapabilities", "unhandledPromptBehavior", Some(upb), false),
+        ("session", "NewResultCapabilities", "userAgent", None, true),
     ];
 
     let synthetic_choices: Vec<(&str, &str, Vec<TypeRef<'static>>)> = vec![
@@ -1038,20 +1040,19 @@ fn apply_overrides(modules: &mut HashMap<String, Module<'static>>) {
         }
     }
 
-    for (mod_name, type_name, field_name, new_type) in field_type_overrides {
+    for (mod_name, type_name, field_name, new_type, force_optional) in field_overrides {
         let Some(module) = modules.get_mut(mod_name) else { continue };
-        let find_and_replace = |params: &mut Vec<Param<'static>>, new_type: Type<'static>| {
-            if let Some(p) = params.iter_mut().find(|p| p.raw_name.as_ref() == field_name) {
-                p.r#type = new_type;
-            }
+        let apply = |p: &mut Param<'static>| {
+            if let Some(t) = new_type.clone() { p.r#type = t; }
+            if force_optional { p.optional = true; }
         };
         if let Some(td) = module.types.iter_mut().find(|t| t.name.as_ref() == type_name) {
             if let Some(Item::Properties(params)) = &mut td.parameters {
-                find_and_replace(params, new_type.clone());
+                if let Some(p) = params.iter_mut().find(|p| p.raw_name.as_ref() == field_name) { apply(p); }
             }
         }
         if let Some(cr) = module.command_results.iter_mut().find(|r| r.name.as_ref() == type_name) {
-            find_and_replace(&mut cr.parameters, new_type);
+            if let Some(p) = cr.parameters.iter_mut().find(|p| p.raw_name.as_ref() == field_name) { apply(p); }
         }
     }
 

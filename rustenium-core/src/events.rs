@@ -75,7 +75,6 @@ pub trait BidiEventManagement {
         F: FnMut(Event) -> R + Send + Sync + 'static,
         R: Future<Output = ()> + Send + 'static,
     {
-        // Optimistically push event before sending to avoid race condition
         let temp_id = format!(
             "temp_{}",
             std::time::SystemTime::now()
@@ -116,28 +115,32 @@ pub trait BidiEventManagement {
                     subscribe_event_command_builder.contexts(user_contexts);
             }
 
+            let bidi_event_id = bidi_event.id.to_owned();
+            // Optimistically push event before sending to avoid race condition
+            self.push_event(bidi_event);
             let event_response = self
                 .send_event(subscribe_event_command_builder.build().unwrap())
                 .await;
             match event_response {
                 Ok(response) => {
+                    let mut bidi_events = self.get_events().lock().unwrap();
                     let subscribe_result: SubscribeResult =
                         response.result.clone().try_into().map_err(|_| {
                             // Remove on failure
-                            let mut bidi_events = self.get_events().lock().unwrap();
-                            bidi_events.retain(|e| e.id != bidi_event.id);
+                            bidi_events.retain(|e| e.id != bidi_event_id);
                             CommandResultError::InvalidResultTypeError(response.result)
                         })?;
+                    bidi_events
+                        .iter_mut()
+                        .filter(|e| e.id == bidi_event_id)
+                        .for_each(|e| e.id = subscribe_result.subscription.clone().into());
 
-                    bidi_event.id = subscribe_result.subscription.clone().into();
-
-                    self.push_event(bidi_event);
                     Ok(Some(subscribe_result))
                 }
                 Err(e) => {
                     // Remove on failure
                     let mut bidi_events = self.get_events().lock().unwrap();
-                    bidi_events.retain(|e| e.id != bidi_event.id);
+                    bidi_events.retain(|e| e.id != bidi_event_id);
                     Err(CommandResultError::SessionSendError(e))
                 }
             }
@@ -192,8 +195,11 @@ pub trait BidiEventManagement {
             let event_result = self.send_event(unsubscribe_command).await;
             match event_result {
                 Ok(unsubscribe_response) => {
-                    let unsubscribe_result: UnsubscribeResult =
-                        unsubscribe_response.result.clone().try_into().map_err(|_| {
+                    let unsubscribe_result: UnsubscribeResult = unsubscribe_response
+                        .result
+                        .clone()
+                        .try_into()
+                        .map_err(|_| {
                             CommandResultError::InvalidResultTypeError(unsubscribe_response.result)
                         })?;
                     // Remove the event names from BidiEvents and clean up empty ones
@@ -233,15 +239,15 @@ pub trait BidiEventManagement {
             let event_result = self.send_event(unsubscribe_command).await;
             match event_result {
                 Ok(response) => {
-                    let unsubscribe_result: UnsubscribeResult = response
-                        .result
-                        .clone()
-                        .try_into()
-                        .map_err(|_| CommandResultError::InvalidResultTypeError(response.result))?;
+                    let unsubscribe_result: UnsubscribeResult =
+                        response.result.clone().try_into().map_err(|_| {
+                            CommandResultError::InvalidResultTypeError(response.result)
+                        })?;
                     // Remove the subscriptions from our local tracking
                     let mut bidi_events = self.get_events().lock().unwrap();
-                    bidi_events
-                        .retain(|bidi_event| !subscription_ids.contains(&bidi_event.id.clone().into()));
+                    bidi_events.retain(|bidi_event| {
+                        !subscription_ids.contains(&bidi_event.id.clone().into())
+                    });
                     Ok(unsubscribe_result)
                 }
                 Err(e) => Err(CommandResultError::SessionSendError(e)),

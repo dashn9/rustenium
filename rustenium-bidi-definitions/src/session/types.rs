@@ -520,7 +520,9 @@ pub struct NewResultCapabilities {
     #[serde(rename = "setWindowRect")]
     pub set_window_rect: bool,
     #[serde(rename = "userAgent")]
-    pub user_agent: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
+    pub user_agent: Option<String>,
     #[serde(rename = "proxy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]

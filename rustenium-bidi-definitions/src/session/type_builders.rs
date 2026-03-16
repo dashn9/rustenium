@@ -95,9 +95,7 @@ impl CapabilityRequestBuilder {
             platform_name: self.platform_name,
             proxy: self.proxy,
             unhandled_prompt_behavior: self.unhandled_prompt_behavior,
-            extensible: self
-                .extensible
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(extensible)))?,
+            extensible: self.extensible.unwrap_or_default(),
         })
     }
 }
@@ -131,9 +129,7 @@ impl AutodetectProxyConfigurationBuilder {
             proxy_type: self
                 .proxy_type
                 .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(proxy_type)))?,
-            extensible: self
-                .extensible
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(extensible)))?,
+            extensible: self.extensible.unwrap_or_default(),
         })
     }
 }
@@ -164,9 +160,7 @@ impl DirectProxyConfigurationBuilder {
             proxy_type: self
                 .proxy_type
                 .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(proxy_type)))?,
-            extensible: self
-                .extensible
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(extensible)))?,
+            extensible: self.extensible.unwrap_or_default(),
         })
     }
 }
@@ -227,9 +221,7 @@ impl ManualProxyConfigurationBuilder {
             http_proxy: self.http_proxy,
             ssl_proxy: self.ssl_proxy,
             no_proxy: self.no_proxy,
-            extensible: self
-                .extensible
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(extensible)))?,
+            extensible: self.extensible.unwrap_or_default(),
         })
     }
 }
@@ -301,9 +293,7 @@ impl PacProxyConfigurationBuilder {
                     std::stringify!(proxy_autoconfig_url)
                 )
             })?,
-            extensible: self
-                .extensible
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(extensible)))?,
+            extensible: self.extensible.unwrap_or_default(),
         })
     }
 }
@@ -334,9 +324,7 @@ impl SystemProxyConfigurationBuilder {
             proxy_type: self
                 .proxy_type
                 .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(proxy_type)))?,
-            extensible: self
-                .extensible
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(extensible)))?,
+            extensible: self.extensible.unwrap_or_default(),
         })
     }
 }
@@ -543,15 +531,11 @@ impl NewResultCapabilitiesBuilder {
             set_window_rect: self.set_window_rect.ok_or_else(|| {
                 format!("Field `{}` is mandatory.", std::stringify!(set_window_rect))
             })?,
-            user_agent: self
-                .user_agent
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(user_agent)))?,
+            user_agent: self.user_agent,
             proxy: self.proxy,
             unhandled_prompt_behavior: self.unhandled_prompt_behavior,
             web_socket_url: self.web_socket_url,
-            extensible: self
-                .extensible
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(extensible)))?,
+            extensible: self.extensible.unwrap_or_default(),
         })
     }
 }

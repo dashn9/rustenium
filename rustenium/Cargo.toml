@@ -11,6 +11,9 @@ readme = "../README.md"
 categories = ["web-programming", "development-tools::testing", "api-bindings"]
 keywords = ["webdriver", "browser", "automation", "testing", "selenium"]
 
+[profile.dev]
+panic="abort"
+
 [features]
 default = []
 macros = ["rustenium-macros"]

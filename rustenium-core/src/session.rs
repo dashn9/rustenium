@@ -67,9 +67,10 @@ impl<T: ConnectionTransport> BidiSession<T> {
                 let command_result = self.send(command).await;
                 match command_result {
                     Ok(command_result) => {
-                        let command_result: NewResult = command_result.result.clone().try_into().expect(
-                            format!("Invalid command result: {:?}", command_result).as_str(),
-                        );
+                        let command_result: NewResult =
+                            command_result.result.clone().try_into().expect(
+                                format!("Invalid command result: {:?}", command_result).as_str(),
+                            );
                         self.id = Option::from(command_result.session_id);
                     }
                     Err(e) => panic!("Error creating new session: {}", e),
@@ -123,8 +124,14 @@ impl<T: ConnectionTransport> BidiSession<T> {
         let rx = self.send_and_get_receiver(command).await;
         match timeout(Duration::from_secs(100), rx).await {
             Ok(Ok(command_result)) => match command_result {
-                CommandResponseState::Success(response) => Ok(response),
-                CommandResponseState::Error(err) => Err(SessionSendError::ErrorResponse(err)),
+                CommandResponseState::Success(response) => {
+                    tracing::debug!(id = response.id, raw_message = %response.result, "Command response success");
+                    Ok(response)
+                }
+                CommandResponseState::Error(err) => {
+                    tracing::debug!(id = err.id, stacktrace = err.stacktrace, code = %err.error, "Command response failed");
+                    Err(SessionSendError::ErrorResponse(err))
+                }
             },
             Ok(Err(err)) => panic!("A recv error occurred: {}", err),
             // I might need to remove command from commands response subscriptions
@@ -145,7 +152,10 @@ impl<T: ConnectionTransport> BidiSession<T> {
 }
 
 impl<T: ConnectionTransport> BidiEventManagement for BidiSession<T> {
-    async fn send_event(&mut self, command: impl Into<Command>) -> Result<CommandResponse, SessionSendError> {
+    async fn send_event(
+        &mut self,
+        command: impl Into<Command>,
+    ) -> Result<CommandResponse, SessionSendError> {
         self.send(command).await
     }
 

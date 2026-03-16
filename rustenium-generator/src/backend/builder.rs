@@ -217,6 +217,10 @@ impl Builder {
                 build_fn_assigns.extend(quote! {
                     #field_name: Box::new(self.#field_name.ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(#field_name)))?),
                 })
+            } else if field.name == "extensible" {
+                build_fn_assigns.extend(quote! {
+                    #field_name: self.#field_name.unwrap_or_default(),
+                })
             } else {
                 build_fn_assigns.extend(quote! {
                     #field_name: self.#field_name.ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(#field_name)))?,
@@ -362,6 +366,10 @@ impl Builder {
                             #field_name : Box::new(self.#field_name.ok_or_else(||std::stringify!("Field `{}` is mandatory.", std::stringify!(#field_name)))?),
                         }
                     )
+            } else if field.name == "extensible" {
+                build_fn_assigns.extend(quote! {
+                    #field_name: self.#field_name.unwrap_or_default(),
+                })
             } else {
                 build_fn_assigns.extend(
                         quote!{

@@ -186,9 +186,7 @@ impl CookieBuilder {
                 .same_site
                 .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(same_site)))?,
             expiry: self.expiry,
-            extensible: self
-                .extensible
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(extensible)))?,
+            extensible: self.extensible.unwrap_or_default(),
         })
     }
 }
@@ -851,9 +849,7 @@ impl RequestDataBuilder {
             timings: self
                 .timings
                 .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(timings)))?,
-            extensible: self
-                .extensible
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(extensible)))?,
+            extensible: self.extensible.unwrap_or_default(),
         })
     }
 }

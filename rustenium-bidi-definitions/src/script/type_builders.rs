@@ -604,9 +604,7 @@ impl SharedReferenceBuilder {
                 .shared_id
                 .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(shared_id)))?,
             handle: self.handle,
-            extensible: self
-                .extensible
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(extensible)))?,
+            extensible: self.extensible.unwrap_or_default(),
         })
     }
 }
@@ -643,9 +641,7 @@ impl RemoteObjectReferenceBuilder {
                 .handle
                 .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(handle)))?,
             shared_id: self.shared_id,
-            extensible: self
-                .extensible
-                .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(extensible)))?,
+            extensible: self.extensible.unwrap_or_default(),
         })
     }
 }
