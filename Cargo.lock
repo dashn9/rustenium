@@ -689,7 +689,7 @@ dependencies = [
 
 [[package]]
 name = "rustenium-core"
-version = "0.1.2"
+version = "1.0.0"
 dependencies = [
  "fastwebsockets",
  "form_urlencoded",
@@ -708,7 +708,7 @@ dependencies = [
 
 [[package]]
 name = "rustenium-generator"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "anyhow",
  "heck",

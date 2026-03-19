@@ -11,15 +11,12 @@ readme = "../README.md"
 categories = ["web-programming", "development-tools::testing", "api-bindings"]
 keywords = ["webdriver", "browser", "automation", "testing", "selenium"]
 
-[profile.dev]
-panic="abort"
-
 [features]
 default = []
 macros = ["rustenium-macros"]
 
 [dependencies]
-rustenium-core = { version = "0.1.2", path = "../rustenium-core" }
+rustenium-core = { version = "1.0.0", path = "../rustenium-core" }
 rustenium-bidi-definitions = { version = "0.1.0", path = "../rustenium-bidi-definitions" }
 rustenium-macros = { version = "0.1.1", path = "../rustenium-macros", optional = true }
 tokio = { version = "1", features = ["full"] }
