@@ -2,6 +2,11 @@
 name = "rustenium-cdp-definitions"
 version = "0.1.0"
 edition = "2024"
+description = "Generated Chrome DevTools Protocol type definitions for Rustenium"
+license = "MIT"
+repository = "https://github.com/dashn9/rustenium"
+homepage = "https://github.com/dashn9/rustenium"
+documentation = "https://docs.rs/rustenium-cdp-definitions"
 
 [dependencies]
 serde = { version = "1.0.228", features = ["derive"] }
