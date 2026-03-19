@@ -18,7 +18,6 @@ use rustenium_bidi_definitions::Event;
 use rustenium_bidi_definitions::browsing_context::commands::{
     CaptureScreenshot, Create, LocateNodes, Navigate
 };
-use rustenium_bidi_definitions::browsing_context::events::BrowsingContextEvent;
 use rustenium_bidi_definitions::browsing_context::results::{
     CaptureScreenshotResult, CreateResult, LocateNodesResult, NavigateResult,
 };
@@ -26,13 +25,10 @@ use rustenium_bidi_definitions::network::command_builders::AddInterceptBuilder;
 use rustenium_bidi_definitions::network::events::NetworkEvent;
 use rustenium_bidi_definitions::network::results::AddInterceptResult;
 use rustenium_bidi_definitions::network::types::{InterceptPhase, UrlPattern};
-use rustenium_bidi_definitions::script::command_builders::{
-    AddPreloadScriptBuilder, CallFunctionBuilder, EvaluateBuilder, RemovePreloadScriptBuilder,
-};
 use rustenium_bidi_definitions::script::results::AddPreloadScriptResult;
 use rustenium_bidi_definitions::script::types::{
-    ChannelValue, ContextTarget, EvaluateResultException, EvaluateResultSuccess, LocalValue,
-    PreloadScript, ResultOwnership, SerializationOptions, SharedReference, Target,
+    EvaluateResultException, EvaluateResultSuccess,
+    PreloadScript,
 };
 use rustenium_bidi_definitions::session::results::SubscribeResult;
 use rustenium_bidi_definitions::session::types::CapabilitiesRequest;
@@ -41,12 +37,10 @@ use rustenium_bidi_definitions::{
     browsing_context::{
         events::ContextCreated,
         types::{
-            BrowsingContext as BidiBrowsingContext, ClipRectangle, CreateType, ImageFormat,
-            Locator, ReadinessState,
+            BrowsingContext as BidiBrowsingContext, CreateType,
         },
     },
 };
-use rustenium_core::contexts::BrowsingContextBuilder;
 use rustenium_core::error::{CommandResultError, SessionSendError};
 use rustenium_core::events::BidiEventManagement;
 use rustenium_core::session::SessionConnectionType;

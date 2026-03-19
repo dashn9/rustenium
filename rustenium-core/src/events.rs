@@ -99,7 +99,7 @@ pub trait BidiEventManagement {
     // I don't know what to do with UserContexts yet
     fn subscribe_events(
         &mut self,
-        mut bidi_event: BidiEvent,
+        bidi_event: BidiEvent,
     ) -> impl Future<Output = Result<Option<SubscribeResult>, CommandResultError>> {
         async move {
             let mut subscribe_event_command_builder =

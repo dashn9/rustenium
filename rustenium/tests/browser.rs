@@ -10,7 +10,7 @@ async fn open_browser() {
         wait: Some(ReadinessState::Complete),
         ..Default::default()
     }).await.unwrap();
-    let elements = browser.find_nodes(css!("body")).await.unwrap();
+    // let elements = browser.find_nodes(css!("body")).await.unwrap();
     sleep(Duration::from_secs(13)).await;
 }
 

@@ -5,16 +5,17 @@ Code generator that parses protocol definition files and outputs typed Rust modu
 ## Supported Frontends
 
 - **CDP** (Chrome DevTools Protocol) — parses `.pdl` files
+- **BiDi** (WebDriver BiDi) — parses `.cddl` files
 
 ## Usage
 
-Set the output directory via environment variable, then run:
+Set the output directories via environment variables, then run:
 
 ```sh
-CDP_OUT_DIR=../rustenium-cdp-definitions/src cargo run
+CDP_OUT_DIR=../rustenium-cdp-definitions/src BIDI_OUT_DIR=../rustenium-bidi-definitions/src cargo run
 ```
 
-The generator reads PDL files from `raw/pdl/` and writes Rust source to the specified output directory.
+The generator reads PDL files from `raw/pdl/` and CDDL files from `raw/cddl/`, writing Rust source to the specified output directories.
 
 ## Generated Structure
 
@@ -58,5 +59,6 @@ The generator reads PDL files from `raw/pdl/` and writes Rust source to the spec
 ## Assumptions
 
 - Input PDL files follow the Chromium PDL format.
+- Input CDDL files follow the WebDriver BiDi specification format.
 - `rustfmt` (2024 edition) is available on `PATH` for formatting output.
 - The output directory will be created if it doesn't exist; existing files are overwritten.

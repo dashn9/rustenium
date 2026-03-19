@@ -1,10 +1,9 @@
 use rustenium_bidi_definitions::browsing_context::command_builders::{
     CaptureScreenshotBuilder, CreateBuilder, LocateNodesBuilder, NavigateBuilder,
 };
-use rustenium_bidi_definitions::browsing_context::commands::CaptureScreenshotOrigin;
 use rustenium_bidi_definitions::browsing_context::results::NavigateResult;
 use rustenium_bidi_definitions::browsing_context::types::{
-    BrowsingContext, ClipRectangle, CreateType, ImageFormat, Locator, ReadinessState,
+    BrowsingContext, CreateType, Locator,
 };
 use rustenium_bidi_definitions::browser::types::UserContext;
 use rustenium_bidi_definitions::emulation::command_builders::SetTimezoneOverrideBuilder;
@@ -14,12 +13,11 @@ use rustenium_bidi_definitions::script::command_builders::{
     AddPreloadScriptBuilder, EvaluateBuilder, RemovePreloadScriptBuilder,
 };
 use rustenium_bidi_definitions::script::types::{
-    ChannelValue, ContextTarget, ResultOwnership, SerializationOptions,
-    SerializationOptionsIncludeShadowTree, SharedReference, Target,
+    ContextTarget, SerializationOptions,
+    SerializationOptionsIncludeShadowTree, Target,
 };
 use rustenium_bidi_definitions::session::results::SubscribeResult;
 use rustenium_bidi_definitions::session::types::ProxyConfiguration;
-use rustenium_bidi_definitions::network::types::UrlPattern;
 use rustenium_bidi_definitions::base::CommandResponse;
 use rustenium_core::error::{CommandResultError, SessionSendError};
 use rustenium_core::events::BidiEventManagement;
@@ -32,7 +30,6 @@ use crate::error::{
     EvaluateResultError, FindNodesError, InterceptNetworkError, OpenUrlError, ScreenshotError,
 };
 use crate::nodes::ChromeNode;
-use crate::input::BidiMouse;
 use super::capabilities::ChromeCapabilities;
 use std::sync::{Arc, Mutex};
 use std::collections::HashSet;

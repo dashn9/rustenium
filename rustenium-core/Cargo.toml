@@ -1,6 +1,6 @@
 [package]
 name = "rustenium-core"
-version = "0.1.2"
+version = "1.0.0"
 edition = "2024"
 description = "Core WebDriver BiDi protocol implementation for Rustenium"
 license = "MIT"

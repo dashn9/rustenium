@@ -1,6 +1,6 @@
 # Rustenium
 
-A modern, high-performance WebDriver BiDi automation library for Rust.
+The most robust, high-performance WebDriver BiDi automation library for Rust.
 
 Rustenium provides a powerful and ergonomic API for browser automation using the WebDriver BiDi protocol. It offers both low-level control and high-level abstractions for common automation tasks.
 
@@ -25,14 +25,14 @@ Add Rustenium to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-rustenium = "0.1.1"
+rustenium = "1.0.0"
 tokio = { version = "1", features = ["full"] }
 ```
 
 ## Quick Start
 
 ```rust
-use rustenium::browsers::{create_chrome_browser};
+use rustenium::browsers::create_chrome_browser;
 use rustenium_macros::css;
 
 #[tokio::main]
@@ -41,17 +41,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
   let mut browser = create_chrome_browser(None).await;
 
   // Navigate to a page
-  browser.open_url("https://example.com", None, None).await;
+  browser.navigate("https://example.com").await?;
 
   // Find and interact with elements
-  let search_box = browser.find_node(css!("input[type='search']"), None, None, None, None).await.expect("failed to search for node").expect("No node found");
-  search_box.screenshot(None, None, Some("./search_box_screenshot.png")).await?;
+  let search_box = browser.find_node(css!("input[type='search']")).await?.expect("No node found");
+  search_box.screenshot().await?;
 
-  let mut submit_button = browser.find_node(css!("button[type='submit']"), None, None, None, None).await.expect("failed to find node").expect("No node found");
-  browser.click_on_node_bidi(&mut submit_button, None, None).await?;
+  let mut submit_button = browser.find_node(css!("button[type='submit']")).await?.expect("No node found");
+  submit_button.mouse_click().await?;
 
   // Take a screenshot
-  browser.screenshot(None, None, None, None, Some("screenshot.png")).await?;
+  browser.screenshot().await?;
 
   Ok(())
 }
@@ -62,8 +62,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Browser Setup and Navigation
 
 ```rust
-use rustenium::browsers::{ChromeConfig, create_chrome_browser};
-use rustenium_bidi_commands::browsing_context::types::ReadinessState;
+use rustenium::browsers::{ChromeConfig, NavigateOptions, create_chrome_browser};
+use rustenium_bidi_definitions::browsing_context::types::ReadinessState;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -79,7 +79,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
   let mut browser = create_chrome_browser(Some(config)).await;
 
   // Navigate and wait for load
-  browser.open_url("https://example.com", Some(ReadinessState::Interactive), None).await;
+  browser.navigate_with_options("https://example.com", NavigateOptions {
+    wait: Some(ReadinessState::Interactive),
+    ..Default::default()
+  }).await?;
+
   Ok(())
 }
 ```
@@ -87,20 +91,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Finding Elements
 
 ```rust
-use rustenium::browsers::{create_chrome_browser};
-use rustenium_macros::css;
-use rustenium_macros::xpath;
+use rustenium::browsers::create_chrome_browser;
+use rustenium_macros::{css, xpath};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut browser = create_chrome_browser(None).await;
 
     // Using CSS selectors
-    let element = browser.find_node(css!("#my-id"), None, None, None, None).await;
-    let buttons = browser.find_nodes(css!(".btn-primary"), None, None, None, None).await;
+    let element = browser.find_node(css!("#my-id")).await?;
+    let buttons = browser.find_nodes(css!(".btn-primary")).await?;
 
     // Using XPath
-    let header = browser.find_nodes(xpath!("//h1[@class='title']"), None, None, None, None).await;
+    let headers = browser.find_nodes(xpath!("//h1[@class='title']")).await?;
     Ok(())
 }
 ```
@@ -108,22 +111,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Mouse Input - Precise Movements
 
 ```rust
-
-use rustenium::browsers::{create_chrome_browser};
+use rustenium::browsers::create_chrome_browser;
 use rustenium::input::{MouseMoveOptions, Point};
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut browser = create_chrome_browser(None).await;
 
-    let context_id = browser.get_active_context_id().unwrap();
+    let context_id = browser.get_active_context_id()?;
 
     // Instant, precise movements - Use this way only if you desire precise control
-    browser.mouse().move_to(Point { x: 100.0, y: 200.0 }, &context_id, Some(MouseMoveOptions {
+    browser.mouse().move_to(Point { x: 100.0, y: 200.0 }, &context_id, MouseMoveOptions {
         steps: Some(5),
-        origin: None,
-    })).await;
+        ..Default::default()
+    }).await?;
 
-    browser.mouse().click(None, &context_id, None).await?;
+    browser.mouse().click(None, &context_id, MouseClickOptions::default()).await?;
     Ok(())
 }
 ```
@@ -131,18 +134,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Mouse Input - Human-Like Movements
 
 ```rust
-use rustenium::browsers::{create_chrome_browser};
-use rustenium::input::{Mouse, Point};
+use rustenium::browsers::create_chrome_browser;
+use rustenium::input::{MouseMoveOptions, MouseClickOptions, Point};
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut browser = create_chrome_browser(None).await;
 
-    let context_id = browser.get_active_context_id().unwrap();
+    let context_id = browser.get_active_context_id()?;
 
     // Realistic movements with Bezier curves and jitter
-    browser.human_mouse().move_to(Point { x: 100.0, y: 200.0 }, &context_id, None).await?;
+    browser.human_mouse().move_to(Point { x: 100.0, y: 200.0 }, &context_id, MouseMoveOptions::default()).await?;
 
-    browser.human_mouse().click(None, &context_id, None).await?;
+    browser.human_mouse().click(None, &context_id, MouseClickOptions::default()).await?;
     Ok(())
 }
 ```
@@ -150,43 +154,46 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Keyboard Input
 
 ```rust
-use rustenium::browsers::{create_chrome_browser};
-use rustenium::input::{KeyboardTypeOptions};
-use rustenium::nodes::Node;
+use rustenium::browsers::create_chrome_browser;
+use rustenium::input::KeyboardTypeOptions;
 use rustenium_macros::css;
+use std::time::Duration;
 use tokio::time::sleep;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-  let mut  browser = create_chrome_browser(None).await;
+  let mut browser = create_chrome_browser(None).await;
 
-  let context_id = browser.get_active_context_id().unwrap();
+  let context_id = browser.get_active_context_id()?;
 
-  browser.open_url("https://example.com", None, None);
+  browser.navigate("https://example.com").await?;
 
-  let mut text = browser.wait_for_node(css!("#text"), None, None, None).await.expect("Unable to search for node").expect("No node exists");
+  let text = browser.wait_for_node(css!("#text")).await?.expect("No node exists");
 
-  browser.keyboard().down("Enter", &context_id).await.unwrap();
+  browser.keyboard().down("Enter", &context_id).await?;
   sleep(Duration::from_secs(1)).await;
-  browser.keyboard().up("Enter", &context_id).await.unwrap();
+  browser.keyboard().up("Enter", &context_id).await?;
 
-  browser.keyboard().type_text(&text.get_inner_text().await, &context_id, Some(KeyboardTypeOptions { delay: Some(3.6 as u64) })).await.unwrap();
+  browser.keyboard().type_text(&text.get_inner_text().await, &context_id, Some(KeyboardTypeOptions { delay: Some(36) })).await?;
 
   // Modifier key combinations
-  browser.keyboard().down("Control", &context_id).await.unwrap();
-  browser.keyboard().press("a", &context_id, None).await.unwrap(); // Ctrl+A
-  browser.keyboard().up("Control", &context_id).await.unwrap();
+  browser.keyboard().down("Control", &context_id).await?;
+  browser.keyboard().press("a", &context_id, None).await?; // Ctrl+A
+  browser.keyboard().up("Control", &context_id).await?;
+
+  Ok(())
 }
 ```
 
 ### Network Interception
 
 ```rust
-use rustenium::browsers::{create_chrome_browser};
+use rustenium::browsers::create_chrome_browser;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
   let mut browser = create_chrome_browser(None).await;
+
   // Intercept and handle network requests
   browser.on_request_bidi(|request| async move {
     println!("Request URL: {}", request.url());
@@ -197,10 +204,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
       return;
     }
     request.continue_().await;
-  }, None, None).await.unwrap();
+  }).await?;
 
   // Add authentication handler
-  browser.authenticate(String::from("username"), String::from("password"), None, None).await?;
+  browser.authenticate("username", "password").await?;
 
   Ok(())
 }
@@ -219,7 +226,7 @@ Support for Firefox and other browsers is planned for future releases.
 
 ## Requirements
 
-- Rust 1.75 or later
+- Rust 1.85 or later (2024 edition)
 - Chrome/Chromium browser installed (for Chrome automation)
 
 ## License

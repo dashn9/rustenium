@@ -1,4 +1,4 @@
-use rustenium_bidi_definitions::session::types::{CapabilitiesRequest, CapabilityRequest, ProxyConfiguration, UnhandledPromptBehavior, UserPromptHandler};
+use rustenium_bidi_definitions::session::types::{CapabilitiesRequest, CapabilityRequest, ProxyConfiguration, UnhandledPromptBehavior};
 use serde::{Serialize, Deserialize};
 use serde_json::Value;
 use std::collections::HashMap;

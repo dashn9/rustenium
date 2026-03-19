@@ -13,7 +13,7 @@ Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-rustenium = { version = "0.1.1", features = ["macros"] }
+rustenium = { version = "1.0.0", features = ["macros"] }
 ```
 
 Then use in your code:
@@ -23,10 +23,10 @@ use rustenium::css;
 use rustenium::xpath;
 
 // CSS selector
-let button = browser.find_element(css!("button.submit")).await?;
+let button = browser.find_node(css!("button.submit")).await?;
 
 // XPath selector
-let header = browser.find_element(xpath!("//h1[@class='title']")).await?;
+let header = browser.find_node(xpath!("//h1[@class='title']")).await?;
 ```
 
 ## Part of Rustenium
