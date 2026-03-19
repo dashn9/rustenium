@@ -1,6 +1,6 @@
 [package]
 name = "rustenium-macros"
-version = "0.1.1"
+version = "1.0.0"
 edition = "2024"
 description = "Convenience macros for Rustenium (css! and xpath! selectors)"
 license = "MIT"
