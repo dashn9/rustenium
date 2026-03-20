@@ -75,6 +75,7 @@
 //! Then use `css!()` and `xpath!()` macros for element selection.
 
 mod drivers;
+pub mod downloader;
 pub mod error;
 pub mod browsers;
 pub mod nodes;
@@ -85,8 +86,3 @@ pub mod input;
 pub use rustenium_macros::*;
 
 pub use drivers::*;
-
-
-#[cfg(test)]
-mod tests {
-}

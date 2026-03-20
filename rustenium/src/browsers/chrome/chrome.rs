@@ -273,6 +273,11 @@ impl ChromeBrowser {
     /// # }
     /// ```
     pub async fn new(mut config: ChromeConfig) -> ChromeBrowser {
+        if config.driver_executable_path.is_empty() {
+            config.driver_executable_path = crate::downloader::ensure_chromedriver()
+                .to_string_lossy()
+                .into_owned();
+        }
         let port = find_free_port().unwrap();
         config.port = Some(config.port.unwrap_or(port));
         let mut ct_config = ConnectionTransportConfig::default();
@@ -285,8 +290,12 @@ impl ChromeBrowser {
                 // Auto mode (port 0): Start Chrome ourselves, then attach
                 let chrome_port = find_free_port().unwrap();
                 let chrome_exe = config.chrome_executable_path
-                    .as_deref()
-                    .unwrap_or("google-chrome");
+                    .clone()
+                    .unwrap_or_else(|| {
+                        crate::downloader::ensure_chrome()
+                            .to_string_lossy()
+                            .into_owned()
+                    });
 
                 // Use user-specified or default tmp directory for user data
                 let user_data_dir = config.user_data_dir.clone().unwrap_or_else(|| {
