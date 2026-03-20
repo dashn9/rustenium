@@ -436,9 +436,9 @@ impl ChromeBrowser {
         let context = options.context_id.clone()
             .unwrap_or_else(|| self.driver.get_active_context_id().unwrap());
         let serialization_options = options.serialization_options.unwrap_or(SerializationOptions {
-            max_dom_depth: Some(99),
-            max_object_depth: Some(99),
-            include_shadow_tree: Some(SerializationOptionsIncludeShadowTree::Open),
+            max_dom_depth: Some(40),
+            max_object_depth: Some(0),
+            include_shadow_tree: Some(SerializationOptionsIncludeShadowTree::None),
         });
         let mut builder = LocateNodesBuilder::default()
             .context(context.clone())

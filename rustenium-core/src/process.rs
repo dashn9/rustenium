@@ -34,6 +34,7 @@ impl Process {
             .args(args_vec)
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
+            .kill_on_drop(true)
             .spawn()
             .expect("Failed to start process");
 
@@ -140,7 +141,23 @@ impl Process {
 impl Drop for Process {
     fn drop(&mut self) {
         if let Some(mut child) = self.child.take() {
-            let _ = child.kill(); // Ensure cleanup
+            if let Some(pid) = child.id() {
+                let pid_str = pid.to_string();
+                // Kill child processes (e.g. chrome spawned by chromedriver) then the process itself
+                #[cfg(unix)]
+                {
+                    let _ = std::process::Command::new("pkill")
+                        .args(["-9", "-P", &pid_str])
+                        .output();
+                }
+                #[cfg(windows)]
+                {
+                    let _ = std::process::Command::new("taskkill")
+                        .args(["/F", "/T", "/PID", &pid_str])
+                        .output();
+                }
+            }
+            let _ = child.kill();
         }
     }
 }
