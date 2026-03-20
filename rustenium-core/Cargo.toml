@@ -25,3 +25,11 @@ regex = "1.11.1"
 rand = "0.9.1"
 thiserror = "2.0.17"
 tracing = "0.1"
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+
+[[bench]]
+name = "core_benchmarks"
+harness = false
+
