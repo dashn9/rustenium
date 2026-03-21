@@ -1,7 +1,7 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion, BenchmarkId};
 use rustenium::browsers::{create_chrome_browser, ChromeBrowser, ChromeConfig, NavigateOptions, BrowserScreenshotOptions};
 use rustenium::nodes::Node;
-use rustenium::input::{Point, MouseClickOptions, MouseMoveOptions, bezier_curve, generate_trajectory, generate_durations, random_curve_params, weighted_pick, CurveParams, linear};
+use rustenium::input::{Point, MouseClickOptions, MouseMoveOptions, generate_trajectory, generate_durations, random_curve_params, CurveParams};
 use rustenium_bidi_definitions::browsing_context::types::ReadinessState;
 use rustenium_bidi_definitions::script::types::{RemoteValue, PrimitiveProtocolValue};
 use rustenium_macros::css;
@@ -10,7 +10,11 @@ use tokio::runtime::Runtime;
 fn launch_headless(rt: &Runtime) -> ChromeBrowser {
     rt.block_on(async {
         let mut config = ChromeConfig::default();
-        config.capabilities.add_arg("--headless");
+        config.remote_debugging_port = Some(0);
+        config.browser_flags = Some(vec![
+            "--headless=new".to_string(),
+            "--window-size=1280,720".to_string(),
+        ]);
         create_chrome_browser(Some(config)).await
     })
 }
@@ -23,8 +27,8 @@ fn nav_complete(browser: &mut ChromeBrowser, url: &str, rt: &Runtime) {
     });
 }
 
-fn teardown(browser: &mut ChromeBrowser, rt: &Runtime) {
-    rt.block_on(async { browser.end_bidi_session().await.unwrap() });
+fn teardown(browser: ChromeBrowser, rt: &Runtime) {
+    rt.block_on(async { browser.close().await.unwrap() });
 }
 
 fn extract_string(value: &RemoteValue) -> Option<String> {
@@ -56,20 +60,23 @@ fn bench_browser_lifecycle(c: &mut Criterion) {
 
     group.bench_function("cold_start_and_close", |b| {
         b.iter(|| {
-            let mut browser = launch_headless(&rt);
-            teardown(&mut browser, &rt);
+            let browser = launch_headless(&rt);
+            teardown(browser, &rt);
         });
     });
 
     group.bench_function("cold_start_auto_attach", |b| {
         b.iter(|| {
-            let mut browser = rt.block_on(async {
+            let browser = rt.block_on(async {
                 let mut config = ChromeConfig::default();
                 config.remote_debugging_port = Some(0);
-                config.capabilities.add_arg("--headless");
+                config.browser_flags = Some(vec![
+                    "--headless=new".to_string(),
+                    "--window-size=1280,720".to_string(),
+                ]);
                 create_chrome_browser(Some(config)).await
             });
-            teardown(&mut browser, &rt);
+            teardown(browser, &rt);
         });
     });
 
@@ -99,7 +106,7 @@ fn bench_navigation(c: &mut Criterion) {
             b.iter(|| {
                 nav_complete(&mut browser, black_box(url), &rt);
             });
-            teardown(&mut browser, &rt);
+            teardown(browser, &rt);
         });
     }
 
@@ -116,7 +123,7 @@ fn bench_navigation(c: &mut Criterion) {
                 nav_complete(&mut browser, black_box(url), &rt);
             }
         });
-        teardown(&mut browser, &rt);
+        teardown(browser, &rt);
     });
 
     group.finish();
@@ -152,7 +159,7 @@ fn bench_dom_queries(c: &mut Criterion) {
             });
         });
 
-        teardown(&mut browser, &rt);
+        teardown(browser, &rt);
     }
 
     // Complex page queries
@@ -205,7 +212,7 @@ fn bench_dom_queries(c: &mut Criterion) {
             });
         });
 
-        teardown(&mut browser, &rt);
+        teardown(browser, &rt);
     }
 
     group.finish();
@@ -265,8 +272,8 @@ fn bench_node_properties(c: &mut Criterion) {
         });
     });
 
-    teardown(&mut browser, &rt);
     group.finish();
+    teardown(browser, &rt);
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -314,8 +321,8 @@ fn bench_mouse_input(c: &mut Criterion) {
         });
     });
 
-    teardown(&mut browser, &rt);
     group.finish();
+    teardown(browser, &rt);
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -374,8 +381,8 @@ fn bench_keyboard_input(c: &mut Criterion) {
         });
     });
 
-    teardown(&mut browser, &rt);
     group.finish();
+    teardown(browser, &rt);
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -437,7 +444,7 @@ fn bench_script_eval(c: &mut Criterion) {
         });
     }
 
-    teardown(&mut browser, &rt);
+    teardown(browser, &rt);
 
     // DOM reads on complex page
     let mut browser = launch_headless(&rt);
@@ -463,8 +470,8 @@ fn bench_script_eval(c: &mut Criterion) {
         });
     }
 
-    teardown(&mut browser, &rt);
     group.finish();
+    teardown(browser, &rt);
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -494,7 +501,7 @@ fn bench_screenshots(c: &mut Criterion) {
             });
         });
 
-        teardown(&mut browser, &rt);
+        teardown(browser, &rt);
     }
 
     // Complex page
@@ -508,7 +515,7 @@ fn bench_screenshots(c: &mut Criterion) {
             });
         });
 
-        teardown(&mut browser, &rt);
+        teardown(browser, &rt);
     }
 
     // Cross-domain screenshots
@@ -529,7 +536,7 @@ fn bench_screenshots(c: &mut Criterion) {
             });
         }
 
-        teardown(&mut browser, &rt);
+        teardown(browser, &rt);
     }
 
     group.finish();
@@ -551,7 +558,7 @@ fn bench_context_management(c: &mut Criterion) {
                 black_box(browser.create_context_bidi(true).await.unwrap());
             });
         });
-        teardown(&mut browser, &rt);
+        teardown(browser, &rt);
     });
 
     group.bench_function("create_5_contexts", |b| {
@@ -563,7 +570,7 @@ fn bench_context_management(c: &mut Criterion) {
                 }
             });
         });
-        teardown(&mut browser, &rt);
+        teardown(browser, &rt);
     });
 
     group.finish();
@@ -598,8 +605,8 @@ fn bench_timezone_emulation(c: &mut Criterion) {
     });
 
     rt.block_on(async { browser.emulate_timezone(None).await.unwrap() });
-    teardown(&mut browser, &rt);
     group.finish();
+    teardown(browser, &rt);
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -637,7 +644,7 @@ fn bench_end_to_end(c: &mut Criterion) {
                 browser.keyboard().type_text("rustenium", &context, None).await.unwrap();
             });
         });
-        teardown(&mut browser, &rt);
+        teardown(browser, &rt);
     });
 
     group.bench_function("full_flow_wikipedia", |b| {
@@ -670,7 +677,7 @@ fn bench_end_to_end(c: &mut Criterion) {
                 black_box(extract_number(&eval.result));
             });
         });
-        teardown(&mut browser, &rt);
+        teardown(browser, &rt);
     });
 
     group.bench_function("multi_tab_flow", |b| {
@@ -704,7 +711,7 @@ fn bench_end_to_end(c: &mut Criterion) {
                 }
             });
         });
-        teardown(&mut browser, &rt);
+        teardown(browser, &rt);
     });
 
     group.finish();
@@ -737,27 +744,6 @@ fn bench_trajectory_generation(c: &mut Criterion) {
         });
     }
 
-    group.bench_function("bezier_curve_100pts_3cp", |b| {
-        let cps = vec![
-            Point { x: 0.0, y: 0.0 },
-            Point { x: 50.0, y: 100.0 },
-            Point { x: 100.0, y: 0.0 },
-        ];
-        b.iter(|| black_box(bezier_curve(100, &cps)));
-    });
-
-    group.bench_function("bezier_curve_200pts_6cp", |b| {
-        let cps = vec![
-            Point { x: 0.0, y: 0.0 },
-            Point { x: 20.0, y: 80.0 },
-            Point { x: 40.0, y: 10.0 },
-            Point { x: 60.0, y: 90.0 },
-            Point { x: 80.0, y: 20.0 },
-            Point { x: 100.0, y: 100.0 },
-        ];
-        b.iter(|| black_box(bezier_curve(200, &cps)));
-    });
-
     group.bench_function("trajectory_no_distortion", |b| {
         let from = Point { x: 0.0, y: 0.0 };
         let to = Point { x: 500.0, y: 300.0 };
@@ -768,7 +754,7 @@ fn bench_trajectory_generation(c: &mut Criterion) {
             distortion_mean: 0.0,
             distortion_stdev: 0.0,
             distortion_frequency: 0.0,
-            tween: linear,
+            tween: |t| t,
             target_points: 60,
         };
         b.iter(|| black_box(generate_trajectory(from, to, &params)));
@@ -784,7 +770,7 @@ fn bench_trajectory_generation(c: &mut Criterion) {
             distortion_mean: 1.0,
             distortion_stdev: 1.0,
             distortion_frequency: 0.7,
-            tween: linear,
+            tween: |t| t,
             target_points: 80,
         };
         b.iter(|| black_box(generate_trajectory(from, to, &params)));
@@ -796,20 +782,6 @@ fn bench_trajectory_generation(c: &mut Criterion) {
 
     group.bench_function("generate_durations_100", |b| {
         b.iter(|| black_box(generate_durations(100, 1.2, (0.004, 0.025))));
-    });
-
-    group.bench_function("zone_weighted_pick_1000", |b| {
-        let zone_weights: &[(usize, f64)] = &[
-            (0, 0.02), (1, 0.05), (2, 0.02),
-            (3, 0.05), (4, 0.15), (5, 0.05),
-            (6, 0.07), (7, 0.45), (8, 0.07),
-        ];
-        b.iter(|| {
-            let mut rng = rand::rng();
-            for _ in 0..1000 {
-                black_box(weighted_pick(&mut rng, zone_weights));
-            }
-        });
     });
 
     group.bench_function("swipe_trajectory_vertical", |b| {

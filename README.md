@@ -233,6 +233,12 @@ Support for Firefox and other browsers is planned for future releases.
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
+## Acknowledgements
+
+- [HumanCursor](https://github.com/riflosnake/HumanCursor) — the human-like mouse trajectory algorithm (Bezier curves, easing, Gaussian distortion) is ported from this excellent Python library
+- [Chromium Oxide](https://github.com/mattsse/chromium-oxide) — inspiration for the protocol definition code generator
+- [The Ish Bot](https://github.com/dashn9/ish-adf-bot) — some bot automation inspiration was borrowed from this project
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.

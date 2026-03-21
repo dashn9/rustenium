@@ -26,6 +26,10 @@ impl std::fmt::Display for ResponseReceiveTimeoutError {
 }
 
 #[derive(Debug, Error)]
+#[error("Failed to kill process")]
+pub struct ProcessKillError;
+
+#[derive(Debug, Error)]
 pub enum PostDataError {
     #[error("No POST data available")]
     NoPostData,

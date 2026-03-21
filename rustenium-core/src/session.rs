@@ -145,7 +145,7 @@ impl<T: ConnectionTransport> BidiSession<T> {
         let result = self.send(EndBuilder::default().build()).await;
 
         // Close the connection after ending the session
-        self.connection.close();
+        self.connection.close().await;
 
         result
     }

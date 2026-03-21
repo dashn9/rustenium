@@ -1,6 +1,6 @@
 use thiserror::Error;
 use rustenium_bidi_definitions::script::types::EvaluateResultException;
-use rustenium_core::error::{CommandResultError};
+use rustenium_core::error::{CommandResultError, ProcessKillError, SessionSendError};
 
 #[derive(Debug, Error)]
 pub enum ContextCreationError {
@@ -96,6 +96,14 @@ pub enum ScreenshotError {
     NoSharedId,
     #[error("Node does not have a context")]
     NoContext,
+}
+
+#[derive(Debug, Error)]
+pub enum BrowserCloseError {
+    #[error(transparent)]
+    SessionSendError(#[from] SessionSendError),
+    #[error(transparent)]
+    ProcessKillError(#[from] ProcessKillError),
 }
 
 #[derive(Debug, Error)]

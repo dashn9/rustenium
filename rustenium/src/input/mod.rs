@@ -1,14 +1,13 @@
 mod bidi;
 mod mouse;
-pub mod trajectory;
+mod trajectory;
 mod touch;
 mod human_mouse;
 mod human_touchscreen;
 
 pub use crate::input::{
     trajectory::{
-        bezier_point, bezier_curve, binomial, generate_trajectory, generate_durations,
-        random_curve_params, gauss, weighted_pick, CurveParams, EasingFn, EASING_FUNCTIONS, linear,
+        generate_trajectory, generate_durations, random_curve_params, CurveParams,
     },
     human_mouse::HumanMouse,
     human_touchscreen::HumanTouchscreen,

@@ -77,7 +77,7 @@ impl ConnectionTransportConfig {
 pub trait ConnectionTransport {
     fn send(&mut self, message: String) -> impl Future<Output=()> + Send;
     fn listen(&self, listener: UnboundedSender<String>) -> ();
-    fn close(&self) -> ();
+    fn close(&self) -> impl Future<Output=()> + Send;
     fn on_close(&self) -> ();
 }
 
@@ -99,12 +99,12 @@ impl ConnectionTransport for WebsocketConnectionTransport {
         WebsocketConnectionTransport::listener_loop(self.client_rx.clone(), self.client_tx.clone(), listener).unwrap();
     }
 
-    fn close(&self) -> () {
+    fn close(&self) -> impl Future<Output=()> + Send {
         let client_tx = self.client_tx.clone();
-        tokio::spawn(async move {
+        async move {
             let mut tx = client_tx.lock().await;
             let _ = tx.write_frame(Frame::close(1000, b"")).await;
-        });
+        }
     }
 
     fn on_close(&self) -> () {

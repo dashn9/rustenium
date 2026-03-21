@@ -28,7 +28,7 @@ pub struct KeyboardTypeOptions {
     pub delay: Option<u64>,
 }
 
-fn get_bidi_key_value(key: &str) -> Result<String, InputError> {
+pub(crate) fn get_bidi_key_value(key: &str) -> Result<String, InputError> {
     let key = match key {
         "\r" | "\n" => "Enter",
         _ => key,
@@ -144,86 +144,6 @@ fn get_bidi_key_value(key: &str) -> Result<String, InputError> {
     };
 
     Ok(value.to_string())
-}
-
-#[cfg(test)]
-mod tests {
-    use super::get_bidi_key_value;
-
-    #[test]
-    fn single_char_keys_pass_through() {
-        for ch in ['a', 'Z', '5', '!', ' '] {
-            let result = get_bidi_key_value(&ch.to_string()).unwrap();
-            assert_eq!(result, ch.to_string());
-        }
-    }
-
-    #[test]
-    fn special_keys_map_correctly() {
-        let cases = vec![
-            ("Enter", "\u{E007}"),
-            ("Tab", "\u{E004}"),
-            ("Backspace", "\u{E003}"),
-            ("Escape", "\u{E00C}"),
-            ("ArrowUp", "\u{E013}"),
-            ("ArrowDown", "\u{E015}"),
-            ("ArrowLeft", "\u{E012}"),
-            ("ArrowRight", "\u{E014}"),
-            ("F1", "\u{E031}"),
-            ("F12", "\u{E03C}"),
-            ("Shift", "\u{E008}"),
-            ("Control", "\u{E009}"),
-            ("Alt", "\u{E00A}"),
-            ("Meta", "\u{E03D}"),
-            ("Delete", "\u{E017}"),
-            ("Home", "\u{E011}"),
-            ("End", "\u{E010}"),
-            ("PageUp", "\u{E00E}"),
-            ("PageDown", "\u{E00F}"),
-        ];
-        for (key, expected) in cases {
-            assert_eq!(get_bidi_key_value(key).unwrap(), expected, "failed for key: {}", key);
-        }
-    }
-
-    #[test]
-    fn code_style_keys_map_to_chars() {
-        let cases = vec![
-            ("KeyA", "a"), ("KeyZ", "z"),
-            ("Digit0", "0"), ("Digit9", "9"),
-            ("Semicolon", ";"), ("Slash", "/"),
-            ("BracketLeft", "["), ("BracketRight", "]"),
-        ];
-        for (key, expected) in cases {
-            assert_eq!(get_bidi_key_value(key).unwrap(), expected, "failed for key: {}", key);
-        }
-    }
-
-    #[test]
-    fn newline_and_carriage_return_map_to_enter() {
-        assert_eq!(get_bidi_key_value("\n").unwrap(), "\u{E007}");
-        assert_eq!(get_bidi_key_value("\r").unwrap(), "\u{E007}");
-    }
-
-    #[test]
-    fn unknown_key_returns_error() {
-        let result = get_bidi_key_value("NonExistentKey");
-        assert!(result.is_err());
-    }
-
-    #[test]
-    fn left_right_modifier_variants() {
-        // Left variants
-        assert_eq!(get_bidi_key_value("ShiftLeft").unwrap(), "\u{E008}");
-        assert_eq!(get_bidi_key_value("ControlLeft").unwrap(), "\u{E009}");
-        assert_eq!(get_bidi_key_value("AltLeft").unwrap(), "\u{E00A}");
-        assert_eq!(get_bidi_key_value("MetaLeft").unwrap(), "\u{E03D}");
-        // Right variants
-        assert_eq!(get_bidi_key_value("ShiftRight").unwrap(), "\u{E050}");
-        assert_eq!(get_bidi_key_value("ControlRight").unwrap(), "\u{E051}");
-        assert_eq!(get_bidi_key_value("AltRight").unwrap(), "\u{E052}");
-        assert_eq!(get_bidi_key_value("MetaRight").unwrap(), "\u{E053}");
-    }
 }
 
 pub struct Keyboard<OT: ConnectionTransport> {
@@ -362,5 +282,83 @@ impl<OT: ConnectionTransport> Keyboard<OT> {
         self.session.lock().await.send(command).await
             .map_err(|e| InputError::CommandResultError(rustenium_core::error::CommandResultError::SessionSendError(e)))?;
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::get_bidi_key_value;
+
+    #[test]
+    fn single_char_keys_pass_through() {
+        for ch in ['a', 'Z', '5', '!', ' '] {
+            let result = get_bidi_key_value(&ch.to_string()).unwrap();
+            assert_eq!(result, ch.to_string());
+        }
+    }
+
+    #[test]
+    fn special_keys_map_correctly() {
+        let cases = vec![
+            ("Enter", "\u{E007}"),
+            ("Tab", "\u{E004}"),
+            ("Backspace", "\u{E003}"),
+            ("Escape", "\u{E00C}"),
+            ("ArrowUp", "\u{E013}"),
+            ("ArrowDown", "\u{E015}"),
+            ("ArrowLeft", "\u{E012}"),
+            ("ArrowRight", "\u{E014}"),
+            ("F1", "\u{E031}"),
+            ("F12", "\u{E03C}"),
+            ("Shift", "\u{E008}"),
+            ("Control", "\u{E009}"),
+            ("Alt", "\u{E00A}"),
+            ("Meta", "\u{E03D}"),
+            ("Delete", "\u{E017}"),
+            ("Home", "\u{E011}"),
+            ("End", "\u{E010}"),
+            ("PageUp", "\u{E00E}"),
+            ("PageDown", "\u{E00F}"),
+        ];
+        for (key, expected) in cases {
+            assert_eq!(get_bidi_key_value(key).unwrap(), expected, "failed for key: {}", key);
+        }
+    }
+
+    #[test]
+    fn code_style_keys_map_to_chars() {
+        let cases = vec![
+            ("KeyA", "a"), ("KeyZ", "z"),
+            ("Digit0", "0"), ("Digit9", "9"),
+            ("Semicolon", ";"), ("Slash", "/"),
+            ("BracketLeft", "["), ("BracketRight", "]"),
+        ];
+        for (key, expected) in cases {
+            assert_eq!(get_bidi_key_value(key).unwrap(), expected, "failed for key: {}", key);
+        }
+    }
+
+    #[test]
+    fn newline_and_carriage_return_map_to_enter() {
+        assert_eq!(get_bidi_key_value("\n").unwrap(), "\u{E007}");
+        assert_eq!(get_bidi_key_value("\r").unwrap(), "\u{E007}");
+    }
+
+    #[test]
+    fn unknown_key_returns_error() {
+        let result = get_bidi_key_value("NonExistentKey");
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn left_right_modifier_variants() {
+        assert_eq!(get_bidi_key_value("ShiftLeft").unwrap(), "\u{E008}");
+        assert_eq!(get_bidi_key_value("ControlLeft").unwrap(), "\u{E009}");
+        assert_eq!(get_bidi_key_value("AltLeft").unwrap(), "\u{E00A}");
+        assert_eq!(get_bidi_key_value("MetaLeft").unwrap(), "\u{E03D}");
+        assert_eq!(get_bidi_key_value("ShiftRight").unwrap(), "\u{E050}");
+        assert_eq!(get_bidi_key_value("ControlRight").unwrap(), "\u{E051}");
+        assert_eq!(get_bidi_key_value("AltRight").unwrap(), "\u{E052}");
+        assert_eq!(get_bidi_key_value("MetaRight").unwrap(), "\u{E053}");
     }
 }

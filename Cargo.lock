@@ -931,7 +931,7 @@ checksum = "719b953e2095829ee67db738b3bfa9fa368c94900df327b3f07fe6e794d2fe1f"
 
 [[package]]
 name = "rustenium"
-version = "1.0.0"
+version = "1.0.1"
 dependencies = [
  "base64 0.22.1",
  "criterion",
@@ -965,7 +965,7 @@ dependencies = [
 
 [[package]]
 name = "rustenium-core"
-version = "1.0.0"
+version = "1.0.1"
 dependencies = [
  "criterion",
  "fastwebsockets",

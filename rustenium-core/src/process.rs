@@ -5,6 +5,7 @@ use tokio::io::{AsyncBufReadExt, BufReader};
 use tokio::process::{Child, Command};
 use tokio::time::{timeout, Duration};
 
+#[derive(Debug)]
 pub struct Process {
     child: Option<Child>,
 }
@@ -138,12 +139,11 @@ impl Process {
     }
 }
 
-impl Drop for Process {
-    fn drop(&mut self) {
+impl Process {
+    pub fn kill(&mut self) -> Result<(), crate::error::ProcessKillError> {
         if let Some(mut child) = self.child.take() {
             if let Some(pid) = child.id() {
                 let pid_str = pid.to_string();
-                // Kill child processes (e.g. chrome spawned by chromedriver) then the process itself
                 #[cfg(unix)]
                 {
                     let _ = std::process::Command::new("pkill")
@@ -157,7 +157,16 @@ impl Drop for Process {
                         .output();
                 }
             }
-            let _ = child.kill();
+            child.start_kill().map_err(|_| crate::error::ProcessKillError)?;
+            Ok(())
+        } else {
+            Err(crate::error::ProcessKillError)
         }
+    }
+}
+
+impl Drop for Process {
+    fn drop(&mut self) {
+        let _ = self.kill();
     }
 }

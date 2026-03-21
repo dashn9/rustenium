@@ -54,7 +54,7 @@ where
         self.transport.send(data).await;
     }
 
-    pub fn close(&self) {
-        self.transport.close();
+    pub async fn close(&self) {
+        self.transport.close().await;
     }
 }

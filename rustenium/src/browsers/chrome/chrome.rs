@@ -245,6 +245,15 @@ pub struct ChromeBrowser {
     chrome_process: Option<Process>
 }
 
+impl std::fmt::Debug for ChromeBrowser {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("ChromeBrowser")
+            .field("config", &self.config)
+            .field("chrome_process", &self.chrome_process)
+            .finish_non_exhaustive()
+    }
+}
+
 impl BidiDrive<WebsocketConnectionTransport> for ChromeBrowser {}
 
 impl ChromeBrowser {
@@ -901,6 +910,18 @@ impl ChromeBrowser {
     /// Ends the BiDi session and cleans up resources.
     pub async fn end_bidi_session(&mut self) -> Result<(), SessionSendError> {
         self.driver.end_session().await
+    }
+
+    /// Closes the browser: ends the BiDi session, closes the WebSocket connection,
+    /// and kills the Chrome process if one was started.
+    pub async fn close(mut self) -> Result<(), crate::error::BrowserCloseError> {
+        tracing::debug!("Closing ChromeBrowser");
+        self.driver.end_session().await?;
+        if let Some(mut process) = self.chrome_process.take() {
+            process.kill()?;
+        }
+        tracing::debug!("ChromeBrowser closed");
+        Ok(())
     }
 }
 
