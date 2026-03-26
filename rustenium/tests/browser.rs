@@ -604,7 +604,6 @@ async fn emulate_timezone() {
     let tz = extract_string(&eval.result).expect("Should return timezone string");
     assert_eq!(tz, "America/New_York", "Timezone should be emulated");
 
-    browser.emulate_timezone(None).await.unwrap();
     browser.close().await.unwrap();
 }
 

@@ -1,50 +1,47 @@
+use super::capabilities::ChromeCapabilities;
+use crate::drivers::bidi::drivers::{BidiDrive, BidiDriver, DriverConfiguration};
+use crate::error::{
+    ContextCreationError, ContextIndexError, EmulationError, EvaluateResultError, FindNodesError,
+    InterceptNetworkError, OpenUrlError, ScreenshotError,
+};
+use crate::nodes::ChromeNode;
+use rustenium_bidi_definitions::Command;
+use rustenium_bidi_definitions::Event;
+use rustenium_bidi_definitions::base::CommandResponse;
+use rustenium_bidi_definitions::browser::types::UserContext;
 use rustenium_bidi_definitions::browsing_context::command_builders::{
     CaptureScreenshotBuilder, CreateBuilder, LocateNodesBuilder, NavigateBuilder,
 };
 use rustenium_bidi_definitions::browsing_context::results::NavigateResult;
-use rustenium_bidi_definitions::browsing_context::types::{
-    BrowsingContext, CreateType, Locator,
-};
-use rustenium_bidi_definitions::browser::types::UserContext;
+use rustenium_bidi_definitions::browsing_context::types::{BrowsingContext, CreateType, Locator};
 use rustenium_bidi_definitions::emulation::command_builders::SetTimezoneOverrideBuilder;
-use rustenium_bidi_definitions::Event;
-use rustenium_bidi_definitions::Command;
 use rustenium_bidi_definitions::script::command_builders::{
     AddPreloadScriptBuilder, EvaluateBuilder, RemovePreloadScriptBuilder,
 };
 use rustenium_bidi_definitions::script::types::{
-    ContextTarget, SerializationOptions,
-    SerializationOptionsIncludeShadowTree, Target,
+    ContextTarget, SerializationOptions, SerializationOptionsIncludeShadowTree, Target,
 };
 use rustenium_bidi_definitions::session::results::SubscribeResult;
 use rustenium_bidi_definitions::session::types::ProxyConfiguration;
-use rustenium_bidi_definitions::base::CommandResponse;
 use rustenium_core::error::{CommandResultError, SessionSendError};
 use rustenium_core::events::BidiEventManagement;
+use rustenium_core::process::Process;
 use rustenium_core::session::SessionConnectionType;
 use rustenium_core::transport::{ConnectionTransportConfig, WebsocketConnectionTransport};
-use rustenium_core::{find_free_port, BidiSession, NetworkRequest};
-use crate::drivers::bidi::drivers::{BidiDriver, BidiDrive, DriverConfiguration};
-use crate::error::{
-    ContextCreationError, ContextIndexError, EmulationError,
-    EvaluateResultError, FindNodesError, InterceptNetworkError, OpenUrlError, ScreenshotError,
-};
-use crate::nodes::ChromeNode;
-use super::capabilities::ChromeCapabilities;
-use std::sync::{Arc, Mutex};
+use rustenium_core::{BidiSession, NetworkRequest, find_free_port};
 use std::collections::HashSet;
 use std::future::Future;
-use rustenium_core::process::Process;
+use std::sync::{Arc, Mutex};
 
 pub mod options {
     use rustenium_bidi_definitions::browsing_context::commands::CaptureScreenshotOrigin;
     use rustenium_bidi_definitions::browsing_context::types::{
         BrowsingContext, ClipRectangle, CreateType, ImageFormat, ReadinessState,
     };
+    use rustenium_bidi_definitions::network::types::UrlPattern;
     use rustenium_bidi_definitions::script::types::{
         ChannelValue, ResultOwnership, SerializationOptions, SharedReference, Target,
     };
-    use rustenium_bidi_definitions::network::types::UrlPattern;
 
     #[derive(Debug, Clone, Default)]
     pub struct BrowserScreenshotOptions {
@@ -124,9 +121,9 @@ pub mod options {
 }
 
 pub use options::{
-    BrowserScreenshotOptions, NavigateOptions, CreateContextOptions,
-    FindNodesOptions, WaitForNodesOptions, OnRequestOptions, SubscribeEventsOptions,
-    EvaluateScriptOptions, AddPreloadScriptOptions, EmulateTimezoneOptions, AuthenticateOptions,
+    AddPreloadScriptOptions, AuthenticateOptions, BrowserScreenshotOptions, CreateContextOptions,
+    EmulateTimezoneOptions, EvaluateScriptOptions, FindNodesOptions, NavigateOptions,
+    OnRequestOptions, SubscribeEventsOptions, WaitForNodesOptions,
 };
 
 /// Configuration for Chrome browser and chromedriver.
@@ -242,7 +239,7 @@ impl DriverConfiguration for ChromeConfig {
 pub struct ChromeBrowser {
     config: ChromeConfig,
     driver: BidiDriver<WebsocketConnectionTransport>,
-    chrome_process: Option<Process>
+    chrome_process: Option<Process>,
 }
 
 impl std::fmt::Debug for ChromeBrowser {
@@ -298,13 +295,11 @@ impl ChromeBrowser {
             Some(0) => {
                 // Auto mode (port 0): Start Chrome ourselves, then attach
                 let chrome_port = find_free_port().unwrap();
-                let chrome_exe = config.chrome_executable_path
-                    .clone()
-                    .unwrap_or_else(|| {
-                        crate::downloader::ensure_chrome()
-                            .to_string_lossy()
-                            .into_owned()
-                    });
+                let chrome_exe = config.chrome_executable_path.clone().unwrap_or_else(|| {
+                    crate::downloader::ensure_chrome()
+                        .to_string_lossy()
+                        .into_owned()
+                });
 
                 // Use user-specified or default tmp directory for user data
                 let user_data_dir = config.user_data_dir.clone().unwrap_or_else(|| {
@@ -332,7 +327,10 @@ impl ChromeBrowser {
                 // Wait briefly for Chrome to start
                 tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
 
-                (Some(format!("localhost:{}", chrome_port)), Some(chrome_proc))
+                (
+                    Some(format!("localhost:{}", chrome_port)),
+                    Some(chrome_proc),
+                )
             }
             Some(port) => {
                 // Manual mode (specific port): Connect to existing Chrome on that port
@@ -367,7 +365,13 @@ impl ChromeBrowser {
         let capabilities = config.capabilities.clone().build();
 
         // Start chromedriver (it will attach to Chrome if debugger_address is set)
-        let result = Self::start(&config, &ct_config, SessionConnectionType::WebSocket, capabilities).await;
+        let result = Self::start(
+            &config,
+            &ct_config,
+            SessionConnectionType::WebSocket,
+            capabilities,
+        )
+        .await;
 
         let session = result.0;
         let driver_process = result.1;
@@ -382,7 +386,7 @@ impl ChromeBrowser {
                 Arc::new(Mutex::new(Vec::new())),
                 driver_process,
             ),
-            chrome_process
+            chrome_process,
         };
         browser.driver.listen_to_context_creation().await.unwrap();
         browser
@@ -392,7 +396,8 @@ impl ChromeBrowser {
 
     /// Navigates to the specified URL in the active context.
     pub async fn navigate(&mut self, url: &str) -> Result<NavigateResult, OpenUrlError> {
-        self.navigate_with_options(url, NavigateOptions::default()).await
+        self.navigate_with_options(url, NavigateOptions::default())
+            .await
     }
 
     /// Navigates to the specified URL with custom options (wait state, context).
@@ -401,7 +406,8 @@ impl ChromeBrowser {
         url: &str,
         options: NavigateOptions,
     ) -> Result<NavigateResult, OpenUrlError> {
-        let context = options.context_id
+        let context = options
+            .context_id
             .unwrap_or_else(|| self.driver.get_active_context_id().unwrap());
         let mut builder = NavigateBuilder::default().url(url).context(context);
         if let Some(wait) = options.wait {
@@ -415,9 +421,10 @@ impl ChromeBrowser {
     /// Creates a new browsing context (tab) with default options.
     pub async fn create_context_bidi(
         &mut self,
-        background: bool
+        background: bool,
     ) -> Result<rustenium_core::BrowsingContext, ContextCreationError> {
-        self.create_context_bidi_with_options(background, CreateContextOptions::default()).await
+        self.create_context_bidi_with_options(background, CreateContextOptions::default())
+            .await
     }
 
     /// Creates a new browsing context with custom options (type, reference context, background).
@@ -442,7 +449,8 @@ impl ChromeBrowser {
         &mut self,
         locator: Locator,
     ) -> Result<Vec<ChromeNode<WebsocketConnectionTransport>>, FindNodesError> {
-        self.find_nodes_with_options(locator, FindNodesOptions::default()).await
+        self.find_nodes_with_options(locator, FindNodesOptions::default())
+            .await
     }
 
     /// Finds all elements matching the given locator with custom options (context, count, serialization, start nodes).
@@ -451,13 +459,17 @@ impl ChromeBrowser {
         locator: Locator,
         options: FindNodesOptions,
     ) -> Result<Vec<ChromeNode<WebsocketConnectionTransport>>, FindNodesError> {
-        let context = options.context_id.clone()
+        let context = options
+            .context_id
+            .clone()
             .unwrap_or_else(|| self.driver.get_active_context_id().unwrap());
-        let serialization_options = options.serialization_options.unwrap_or(SerializationOptions {
-            max_dom_depth: Some(40),
-            max_object_depth: Some(0),
-            include_shadow_tree: Some(SerializationOptionsIncludeShadowTree::None),
-        });
+        let serialization_options = options
+            .serialization_options
+            .unwrap_or(SerializationOptions {
+                max_dom_depth: Some(40),
+                max_object_depth: Some(0),
+                include_shadow_tree: Some(SerializationOptionsIncludeShadowTree::None),
+            });
         let mut builder = LocateNodesBuilder::default()
             .context(context.clone())
             .locator(locator.clone())
@@ -490,7 +502,8 @@ impl ChromeBrowser {
         &mut self,
         locator: Locator,
     ) -> Result<Option<ChromeNode<WebsocketConnectionTransport>>, FindNodesError> {
-        self.find_node_with_options(locator, FindNodesOptions::default()).await
+        self.find_node_with_options(locator, FindNodesOptions::default())
+            .await
     }
 
     /// Finds the first element matching the given locator with custom options.
@@ -512,7 +525,8 @@ impl ChromeBrowser {
         &mut self,
         locator: Locator,
     ) -> Result<Vec<ChromeNode<WebsocketConnectionTransport>>, FindNodesError> {
-        self.wait_for_nodes_with_options(locator, WaitForNodesOptions::default()).await
+        self.wait_for_nodes_with_options(locator, WaitForNodesOptions::default())
+            .await
     }
 
     /// Waits for elements matching the locator with custom options (context, timeout, poll interval).
@@ -526,10 +540,15 @@ impl ChromeBrowser {
         let start = std::time::Instant::now();
 
         loop {
-            let nodes = self.find_nodes_with_options(
-                locator.clone(),
-                FindNodesOptions { context_id: options.context_id.clone(), ..Default::default() },
-            ).await?;
+            let nodes = self
+                .find_nodes_with_options(
+                    locator.clone(),
+                    FindNodesOptions {
+                        context_id: options.context_id.clone(),
+                        ..Default::default()
+                    },
+                )
+                .await?;
 
             if !nodes.is_empty() {
                 return Ok(nodes);
@@ -550,7 +569,8 @@ impl ChromeBrowser {
         &mut self,
         locator: Locator,
     ) -> Result<Option<ChromeNode<WebsocketConnectionTransport>>, FindNodesError> {
-        self.wait_for_node_with_options(locator, WaitForNodesOptions::default()).await
+        self.wait_for_node_with_options(locator, WaitForNodesOptions::default())
+            .await
     }
 
     /// Waits for a single element matching the locator with custom options.
@@ -568,15 +588,13 @@ impl ChromeBrowser {
     // ── Network interception ──────────────────────────────────────────────────
 
     /// Registers a handler called for each network request (all URLs, all contexts).
-    pub async fn on_request_bidi<F, Fut>(
-        &mut self,
-        handler: F,
-    ) -> Result<(), InterceptNetworkError>
+    pub async fn on_request_bidi<F, Fut>(&mut self, handler: F) -> Result<(), InterceptNetworkError>
     where
         F: Fn(NetworkRequest<WebsocketConnectionTransport>) -> Fut + Send + Sync + 'static,
         Fut: Future<Output = ()> + Send + 'static,
     {
-        self.on_request_bidi_with_options(handler, OnRequestOptions::default()).await
+        self.on_request_bidi_with_options(handler, OnRequestOptions::default())
+            .await
     }
 
     /// Registers a handler called for each network request with custom URL pattern and context filters.
@@ -611,7 +629,8 @@ impl ChromeBrowser {
         F: FnMut(Event) -> R + Send + Sync + 'static,
         R: Future<Output = ()> + Send + 'static,
     {
-        self.subscribe_events_with_options(events, handler, SubscribeEventsOptions::default()).await
+        self.subscribe_events_with_options(events, handler, SubscribeEventsOptions::default())
+            .await
     }
 
     /// Subscribes to browser events with context and user context filters.
@@ -639,17 +658,18 @@ impl ChromeBrowser {
                 bidi_event.add_user_context(uctx);
             }
         }
-        self.driver.session.lock().await.subscribe_events(bidi_event).await
+        self.driver
+            .session
+            .lock()
+            .await
+            .subscribe_events(bidi_event)
+            .await
     }
 
     /// Adds an event handler without sending a subscription command.
     ///
     /// Returns the auto-generated handler ID.
-    pub async fn add_event_handler<F, R>(
-        &mut self,
-        events: HashSet<&str>,
-        handler: F,
-    ) -> String
+    pub async fn add_event_handler<F, R>(&mut self, events: HashSet<&str>, handler: F) -> String
     where
         F: FnMut(Event) -> R + Send + Sync + 'static,
         R: Future<Output = ()> + Send + 'static,
@@ -664,8 +684,14 @@ impl ChromeBrowser {
         &mut self,
         expression: String,
         await_promise: bool,
-    ) -> Result<rustenium_bidi_definitions::script::types::EvaluateResultSuccess, EvaluateResultError> {
-        self.evaluate_script_bidi_with_options(expression, await_promise, EvaluateScriptOptions::default()).await
+    ) -> Result<rustenium_bidi_definitions::script::types::EvaluateResultSuccess, EvaluateResultError>
+    {
+        self.evaluate_script_bidi_with_options(
+            expression,
+            await_promise,
+            EvaluateScriptOptions::default(),
+        )
+        .await
     }
 
     /// Evaluates a JavaScript expression with custom options (target, result ownership, serialization).
@@ -674,7 +700,8 @@ impl ChromeBrowser {
         expression: String,
         await_promise: bool,
         options: EvaluateScriptOptions,
-    ) -> Result<rustenium_bidi_definitions::script::types::EvaluateResultSuccess, EvaluateResultError> {
+    ) -> Result<rustenium_bidi_definitions::script::types::EvaluateResultSuccess, EvaluateResultError>
+    {
         let target = options.target.unwrap_or_else(|| {
             let context = self.driver.get_active_context_id().unwrap();
             Target::ContextTarget(ContextTarget::new(context))
@@ -702,7 +729,11 @@ impl ChromeBrowser {
         &mut self,
         function_declaration: String,
     ) -> Result<String, EvaluateResultError> {
-        self.add_preload_script_bidi_with_options(function_declaration, AddPreloadScriptOptions::default()).await
+        self.add_preload_script_bidi_with_options(
+            function_declaration,
+            AddPreloadScriptOptions::default(),
+        )
+        .await
     }
 
     /// Adds a preload script with custom options (arguments, contexts, sandbox).
@@ -711,8 +742,8 @@ impl ChromeBrowser {
         function_declaration: String,
         options: AddPreloadScriptOptions,
     ) -> Result<String, EvaluateResultError> {
-        let mut builder = AddPreloadScriptBuilder::default()
-            .function_declaration(function_declaration);
+        let mut builder =
+            AddPreloadScriptBuilder::default().function_declaration(function_declaration);
         if let Some(args) = options.arguments {
             builder = builder.arguments(args);
         }
@@ -725,7 +756,10 @@ impl ChromeBrowser {
         if let Some(sandbox) = options.sandbox {
             builder = builder.sandbox(sandbox);
         }
-        self.driver.add_preload_script(builder.build().unwrap()).await.map(|ps| ps.into())
+        self.driver
+            .add_preload_script(builder.build().unwrap())
+            .await
+            .map(|ps| ps.into())
     }
 
     /// Removes a preload script by its ID.
@@ -733,7 +767,10 @@ impl ChromeBrowser {
         &mut self,
         script: String,
     ) -> Result<(), EvaluateResultError> {
-        let remove_cmd = RemovePreloadScriptBuilder::default().script(script).build().unwrap();
+        let remove_cmd = RemovePreloadScriptBuilder::default()
+            .script(script)
+            .build()
+            .unwrap();
         self.driver.remove_preload_script(remove_cmd).await
     }
 
@@ -741,7 +778,8 @@ impl ChromeBrowser {
 
     /// Captures a screenshot of the active browsing context and returns base64-encoded image data.
     pub async fn screenshot(&mut self) -> Result<String, ScreenshotError> {
-        self.screenshot_with_options(BrowserScreenshotOptions::default()).await
+        self.screenshot_with_options(BrowserScreenshotOptions::default())
+            .await
     }
 
     /// Captures a screenshot with custom options (context, origin, format, clip, save path).
@@ -749,8 +787,12 @@ impl ChromeBrowser {
     /// If `save_path` is a directory, saves with auto-generated filename (screenshot_TIMESTAMP.png).
     /// If `save_path` is a file path, saves to that exact location and returns the path.
     /// If `save_path` is `None`, returns base64-encoded image data.
-    pub async fn screenshot_with_options(&mut self, options: BrowserScreenshotOptions) -> Result<String, ScreenshotError> {
-        let context = options.context_id
+    pub async fn screenshot_with_options(
+        &mut self,
+        options: BrowserScreenshotOptions,
+    ) -> Result<String, ScreenshotError> {
+        let context = options
+            .context_id
             .unwrap_or_else(|| self.driver.get_active_context_id().unwrap());
         let mut builder = CaptureScreenshotBuilder::default().context(context);
         if let Some(origin) = options.origin {
@@ -763,7 +805,9 @@ impl ChromeBrowser {
             builder = builder.clip(clip);
         }
         let command = builder.build().unwrap();
-        self.driver.screenshot(command, options.save_path.as_deref()).await
+        self.driver
+            .screenshot(command, options.save_path.as_deref())
+            .await
     }
 
     // ── Emulation ─────────────────────────────────────────────────────────────
@@ -775,7 +819,8 @@ impl ChromeBrowser {
         &mut self,
         timezone: Option<String>,
     ) -> Result<(), EmulationError> {
-        self.emulate_timezone_with_options(timezone, EmulateTimezoneOptions::default()).await
+        self.emulate_timezone_with_options(timezone, EmulateTimezoneOptions::default())
+            .await
     }
 
     /// Emulates a timezone with custom context and user context filters.
@@ -784,8 +829,11 @@ impl ChromeBrowser {
     pub async fn emulate_timezone_with_options(
         &mut self,
         timezone: Option<String>,
-        options: EmulateTimezoneOptions,
+        mut options: EmulateTimezoneOptions,
     ) -> Result<(), EmulationError> {
+        if options.contexts.is_none() && options.user_contexts.is_none() {
+            options.contexts = Some(vec![self.driver.get_active_context_id().unwrap()]);
+        }
         let mut builder = SetTimezoneOverrideBuilder::default();
         if let Some(tz) = timezone {
             builder = builder.timezone(tz);
@@ -807,7 +855,8 @@ impl ChromeBrowser {
         username: impl Into<String> + Send + 'static,
         password: impl Into<String> + Send + 'static,
     ) -> Result<(), InterceptNetworkError> {
-        self.authenticate_with_options(username, password, AuthenticateOptions::default()).await
+        self.authenticate_with_options(username, password, AuthenticateOptions::default())
+            .await
     }
 
     /// Sets HTTP authentication credentials with URL pattern and context filters.
@@ -874,7 +923,9 @@ impl ChromeBrowser {
     /// # Ok(())
     /// # }
     /// ```
-    pub fn human_mouse(&self) -> &crate::input::HumanMouse<crate::input::BidiMouse<WebsocketConnectionTransport>> {
+    pub fn human_mouse(
+        &self,
+    ) -> &crate::input::HumanMouse<crate::input::BidiMouse<WebsocketConnectionTransport>> {
         self.driver.human_mouse.as_ref()
     }
 
@@ -903,7 +954,10 @@ impl ChromeBrowser {
     // ── Session ───────────────────────────────────────────────────────────────
 
     /// Sends a raw WebDriver BiDi command.
-    pub async fn send_bidi_command(&mut self, command: Command) -> Result<CommandResponse, SessionSendError> {
+    pub async fn send_bidi_command(
+        &mut self,
+        command: Command,
+    ) -> Result<CommandResponse, SessionSendError> {
         self.driver.send_command(command).await
     }
 
