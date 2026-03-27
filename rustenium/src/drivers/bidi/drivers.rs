@@ -51,7 +51,7 @@ use std::time::Duration;
 use tokio::sync::Mutex as TokioMutex;
 use tokio::time::sleep;
 
-use crate::input::{BidiMouse, HumanMouse, Keyboard};
+use crate::input::{BidiMouse, BidiKeyboard, HumanMouse};
 
 pub struct OnRequestBuilder<'a, T: ConnectionTransport + Send + Sync, F> {
     driver: &'a mut BidiDriver<T>,
@@ -227,7 +227,7 @@ pub struct BidiDriver<T: ConnectionTransport + Send + Sync> {
     pub driver_process: Process,
     pub mouse: Arc<BidiMouse<T>>,
     pub human_mouse: Arc<HumanMouse<BidiMouse<T>>>,
-    pub keyboard: Arc<Keyboard<T>>,
+    pub keyboard: Arc<BidiKeyboard<T>>,
 }
 
 impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
@@ -241,7 +241,7 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
     ) -> Self {
         let mouse = Arc::new(BidiMouse::new(session.clone()));
         let human_mouse = Arc::new(HumanMouse::new(BidiMouse::new(session.clone())));
-        let keyboard = Arc::new(Keyboard::new(session.clone()));
+        let keyboard = Arc::new(BidiKeyboard::new(session.clone()));
 
         Self {
             exe_path,

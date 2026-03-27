@@ -2,8 +2,8 @@ pub mod chrome;
 pub mod capabilities;
 
 pub use chrome::{
-    BrowserScreenshotOptions, NavigateOptions, CreateContextOptions,
-    FindNodesOptions, WaitForNodesOptions, OnRequestOptions, SubscribeEventsOptions,
-    EvaluateScriptOptions, AddPreloadScriptOptions, EmulateTimezoneOptions, AuthenticateOptions,
+    BrowserScreenshotOptionsBuilder, NavigateOptionsBuilder, CreateContextOptionsBuilder,
+    FindNodesOptionsBuilder, WaitForNodesOptionsBuilder, OnRequestOptionsBuilder,
+    SubscribeEventsOptionsBuilder, EvaluateScriptOptionsBuilder, AddPreloadScriptOptionsBuilder,
+    EmulateTimezoneOptionsBuilder, AuthenticateOptionsBuilder,
 };
-

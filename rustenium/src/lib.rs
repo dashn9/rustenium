@@ -60,7 +60,7 @@
 //! - [`nodes::ChromeNode`] - DOM element representation for Chrome
 //! - [`input::BidiMouse`] - Direct, instant mouse movements for fast automation
 //! - [`input::HumanMouse`] - Realistic mouse movements with Bezier curves and jitter
-//! - [`input::Keyboard`] - Keyboard input for typing text and pressing keys
+//! - [`input::BidiKeyboard`] - Keyboard input for typing text and pressing keys
 //! - [`input::Touchscreen`] - Multi-touch gesture support for mobile testing
 //!
 //! ## Macros

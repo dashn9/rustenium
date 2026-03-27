@@ -1,9 +1,15 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion, BenchmarkId};
-use rustenium::browsers::{create_chrome_browser, ChromeBrowser, ChromeConfig, NavigateOptions, BrowserScreenshotOptions};
+use criterion::{BenchmarkId, Criterion, black_box, criterion_group, criterion_main};
+use rustenium::browsers::{
+    BidiBrowser, BrowserScreenshotOptionsBuilder, ChromeBrowser, ChromeConfig,
+    NavigateOptionsBuilder, create_chrome_browser,
+};
+use rustenium::input::{
+    CurveParams, MouseClickOptions, MouseMoveOptions, Point, generate_durations,
+    generate_trajectory, random_curve_params,
+};
 use rustenium::nodes::Node;
-use rustenium::input::{Point, MouseClickOptions, MouseMoveOptions, generate_trajectory, generate_durations, random_curve_params, CurveParams};
 use rustenium_bidi_definitions::browsing_context::types::ReadinessState;
-use rustenium_bidi_definitions::script::types::{RemoteValue, PrimitiveProtocolValue};
+use rustenium_bidi_definitions::script::types::{PrimitiveProtocolValue, RemoteValue};
 use rustenium_macros::css;
 use tokio::runtime::Runtime;
 
@@ -21,9 +27,12 @@ fn launch_headless(rt: &Runtime) -> ChromeBrowser {
 
 fn nav_complete(browser: &mut ChromeBrowser, url: &str, rt: &Runtime) {
     rt.block_on(async {
-        browser.navigate_with_options(url, NavigateOptions {
-            wait: Some(ReadinessState::Complete), ..Default::default()
-        }).await.unwrap();
+        browser.navigate_with_options(
+            url,
+            NavigateOptionsBuilder::default()
+                .wait(ReadinessState::Complete)
+                .build(),
+        ).await.unwrap()
     });
 }
 
@@ -96,7 +105,10 @@ fn bench_navigation(c: &mut Criterion) {
         ("example.com", "https://example.com"),
         ("httpbin.org", "https://httpbin.org/html"),
         ("rust-lang.org", "https://www.rust-lang.org"),
-        ("wikipedia", "https://en.wikipedia.org/wiki/Rust_(programming_language)"),
+        (
+            "wikipedia",
+            "https://en.wikipedia.org/wiki/Rust_(programming_language)",
+        ),
         ("github", "https://github.com/nickel-org/nickel.rs"),
     ];
 
@@ -165,7 +177,11 @@ fn bench_dom_queries(c: &mut Criterion) {
     // Complex page queries
     {
         let mut browser = launch_headless(&rt);
-        nav_complete(&mut browser, "https://en.wikipedia.org/wiki/Rust_(programming_language)", &rt);
+        nav_complete(
+            &mut browser,
+            "https://en.wikipedia.org/wiki/Rust_(programming_language)",
+            &rt,
+        );
 
         group.bench_function("wikipedia_find_all", |b| {
             b.iter(|| {
@@ -187,13 +203,17 @@ fn bench_dom_queries(c: &mut Criterion) {
         ];
 
         for (label, sel) in selectors {
-            group.bench_with_input(BenchmarkId::new("wikipedia_selector", label), sel, |b, sel| {
-                b.iter(|| {
-                    rt.block_on(async {
-                        black_box(browser.find_nodes(css!(sel)).await.unwrap());
+            group.bench_with_input(
+                BenchmarkId::new("wikipedia_selector", label),
+                sel,
+                |b, sel| {
+                    b.iter(|| {
+                        rt.block_on(async {
+                            black_box(browser.find_nodes(css!(sel)).await.unwrap());
+                        });
                     });
-                });
-            });
+                },
+            );
         }
 
         group.bench_function("wikipedia_find_node_h1", |b| {
@@ -297,7 +317,10 @@ fn bench_mouse_input(c: &mut Criterion) {
             let y = (i as f64 * 7.3) % 600.0;
             i += 1;
             rt.block_on(async {
-                mouse.move_to(Point { x, y }, &context, MouseMoveOptions::default()).await.unwrap();
+                mouse
+                    .move_to(Point { x, y }, &context, MouseMoveOptions::default())
+                    .await
+                    .unwrap();
             });
         });
     });
@@ -306,7 +329,14 @@ fn bench_mouse_input(c: &mut Criterion) {
         let mouse = browser.mouse();
         b.iter(|| {
             rt.block_on(async {
-                mouse.click(Some(Point { x: 200.0, y: 200.0 }), &context, MouseClickOptions::default()).await.unwrap();
+                mouse
+                    .click(
+                        Some(Point { x: 200.0, y: 200.0 }),
+                        &context,
+                        MouseClickOptions::default(),
+                    )
+                    .await
+                    .unwrap();
             });
         });
     });
@@ -341,7 +371,10 @@ fn bench_keyboard_input(c: &mut Criterion) {
     let texts: &[(&str, &str)] = &[
         ("5_chars", "hello"),
         ("43_chars", "The quick brown fox jumps over the lazy dog"),
-        ("150_chars", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam."),
+        (
+            "150_chars",
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.",
+        ),
     ];
 
     for (label, text) in texts {
@@ -349,7 +382,10 @@ fn bench_keyboard_input(c: &mut Criterion) {
             let keyboard = browser.keyboard();
             b.iter(|| {
                 rt.block_on(async {
-                    keyboard.type_text(black_box(text), &context, None).await.unwrap();
+                    keyboard
+                        .type_text(black_box(text), &context, None)
+                        .await
+                        .unwrap();
                 });
             });
         });
@@ -357,11 +393,29 @@ fn bench_keyboard_input(c: &mut Criterion) {
 
     group.bench_function("press_special_keys", |b| {
         let keyboard = browser.keyboard();
-        let keys = ["Enter", "Tab", "Escape", "Backspace", "ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight", "Home", "End", "Delete", "F1", "F5", "F12"];
+        let keys = [
+            "Enter",
+            "Tab",
+            "Escape",
+            "Backspace",
+            "ArrowDown",
+            "ArrowUp",
+            "ArrowLeft",
+            "ArrowRight",
+            "Home",
+            "End",
+            "Delete",
+            "F1",
+            "F5",
+            "F12",
+        ];
         b.iter(|| {
             rt.block_on(async {
                 for key in &keys {
-                    keyboard.press(black_box(key), &context, None).await.unwrap();
+                    keyboard
+                        .press(black_box(key), &context, None)
+                        .await
+                        .unwrap();
                 }
             });
         });
@@ -406,14 +460,22 @@ fn bench_script_eval(c: &mut Criterion) {
         ("object_keys", "Object.keys({a:1, b:2}).length"),
         ("date_now", "Date.now()"),
         ("math_pi", "Math.PI"),
-        ("json_roundtrip", "JSON.parse(JSON.stringify({a:1,b:[2,3]})).a"),
+        (
+            "json_roundtrip",
+            "JSON.parse(JSON.stringify({a:1,b:[2,3]})).a",
+        ),
     ];
 
     for (label, script) in simple_scripts {
         group.bench_with_input(BenchmarkId::new("simple", label), script, |b, script| {
             b.iter(|| {
                 rt.block_on(async {
-                    black_box(browser.evaluate_script_bidi(script.to_string(), false).await.unwrap());
+                    black_box(
+                        browser
+                            .evaluate_script_bidi(script.to_string(), false)
+                            .await
+                            .unwrap(),
+                    );
                 });
             });
         });
@@ -422,23 +484,42 @@ fn bench_script_eval(c: &mut Criterion) {
     group.bench_function("repeated_1_plus_1", |b| {
         b.iter(|| {
             rt.block_on(async {
-                black_box(browser.evaluate_script_bidi("1 + 1".to_string(), false).await.unwrap());
+                black_box(
+                    browser
+                        .evaluate_script_bidi("1 + 1".to_string(), false)
+                        .await
+                        .unwrap(),
+                );
             });
         });
     });
 
     let heavy_scripts: &[(&str, &str)] = &[
-        ("sort_10k", "Array.from({length:10000}, (_,i)=>Math.random()).sort().length"),
-        ("fibonacci_30", "(function fib(n){return n<=1?n:fib(n-1)+fib(n-2)})(30)"),
+        (
+            "sort_10k",
+            "Array.from({length:10000}, (_,i)=>Math.random()).sort().length",
+        ),
+        (
+            "fibonacci_30",
+            "(function fib(n){return n<=1?n:fib(n-1)+fib(n-2)})(30)",
+        ),
         ("regex_10k", "'a'.repeat(10000).match(/a/g).length"),
-        ("json_1k_obj", "JSON.stringify(Object.fromEntries(Array.from({length:1000},(_,i)=>[`k${i}`,i]))).length"),
+        (
+            "json_1k_obj",
+            "JSON.stringify(Object.fromEntries(Array.from({length:1000},(_,i)=>[`k${i}`,i]))).length",
+        ),
     ];
 
     for (label, script) in heavy_scripts {
         group.bench_with_input(BenchmarkId::new("heavy", label), script, |b, script| {
             b.iter(|| {
                 rt.block_on(async {
-                    black_box(browser.evaluate_script_bidi(script.to_string(), false).await.unwrap());
+                    black_box(
+                        browser
+                            .evaluate_script_bidi(script.to_string(), false)
+                            .await
+                            .unwrap(),
+                    );
                 });
             });
         });
@@ -448,12 +529,19 @@ fn bench_script_eval(c: &mut Criterion) {
 
     // DOM reads on complex page
     let mut browser = launch_headless(&rt);
-    nav_complete(&mut browser, "https://en.wikipedia.org/wiki/Rust_(programming_language)", &rt);
+    nav_complete(
+        &mut browser,
+        "https://en.wikipedia.org/wiki/Rust_(programming_language)",
+        &rt,
+    );
 
     let dom_scripts: &[(&str, &str)] = &[
         ("document_title", "document.title"),
         ("location_href", "window.location.href"),
-        ("all_elements_count", "document.querySelectorAll('*').length"),
+        (
+            "all_elements_count",
+            "document.querySelectorAll('*').length",
+        ),
         ("links_count", "document.querySelectorAll('a').length"),
         ("body_text_length", "document.body.innerText.length"),
         ("computed_style", "getComputedStyle(document.body).fontSize"),
@@ -464,7 +552,12 @@ fn bench_script_eval(c: &mut Criterion) {
         group.bench_with_input(BenchmarkId::new("dom_read", label), script, |b, script| {
             b.iter(|| {
                 rt.block_on(async {
-                    black_box(browser.evaluate_script_bidi(script.to_string(), false).await.unwrap());
+                    black_box(
+                        browser
+                            .evaluate_script_bidi(script.to_string(), false)
+                            .await
+                            .unwrap(),
+                    );
                 });
             });
         });
@@ -507,7 +600,11 @@ fn bench_screenshots(c: &mut Criterion) {
     // Complex page
     {
         let mut browser = launch_headless(&rt);
-        nav_complete(&mut browser, "https://en.wikipedia.org/wiki/Rust_(programming_language)", &rt);
+        nav_complete(
+            &mut browser,
+            "https://en.wikipedia.org/wiki/Rust_(programming_language)",
+            &rt,
+        );
 
         group.bench_function("wikipedia_viewport", |b| {
             b.iter(|| {
@@ -589,16 +686,24 @@ fn bench_timezone_emulation(c: &mut Criterion) {
     nav_complete(&mut browser, "https://example.com", &rt);
 
     let timezones = [
-        "America/New_York", "America/Los_Angeles", "Europe/London",
-        "Europe/Berlin", "Asia/Tokyo", "Asia/Shanghai",
-        "Australia/Sydney", "Pacific/Auckland",
+        "America/New_York",
+        "America/Los_Angeles",
+        "Europe/London",
+        "Europe/Berlin",
+        "Asia/Tokyo",
+        "Asia/Shanghai",
+        "Australia/Sydney",
+        "Pacific/Auckland",
     ];
 
     group.bench_function("cycle_8_timezones", |b| {
         b.iter(|| {
             rt.block_on(async {
                 for tz in &timezones {
-                    browser.emulate_timezone(Some(tz.to_string())).await.unwrap();
+                    browser
+                        .emulate_timezone(Some(tz.to_string()))
+                        .await
+                        .unwrap();
                 }
             });
         });
@@ -622,9 +727,15 @@ fn bench_end_to_end(c: &mut Criterion) {
         let mut browser = launch_headless(&rt);
         b.iter(|| {
             rt.block_on(async {
-                browser.navigate_with_options("https://example.com", NavigateOptions {
-                    wait: Some(ReadinessState::Complete), ..Default::default()
-                }).await.unwrap();
+                browser
+                    .navigate_with_options(
+                        "https://example.com",
+                        NavigateOptionsBuilder::default()
+                            .wait(ReadinessState::Complete)
+                            .build(),
+                    )
+                    .await
+                    .unwrap();
 
                 let nodes = browser.find_nodes(css!("*")).await.unwrap();
                 black_box(nodes.len());
@@ -634,14 +745,21 @@ fn bench_end_to_end(c: &mut Criterion) {
 
                 black_box(browser.screenshot().await.unwrap());
 
-                let eval = browser.evaluate_script_bidi("document.title".to_string(), false).await.unwrap();
+                let eval = browser
+                    .evaluate_script_bidi("document.title".to_string(), false)
+                    .await
+                    .unwrap();
                 black_box(extract_string(&eval.result));
 
                 let mut links = browser.find_nodes(css!("a")).await.unwrap();
                 links[0].mouse_click().await.unwrap();
 
                 let context = browser.get_active_context_id().unwrap();
-                browser.keyboard().type_text("rustenium", &context, None).await.unwrap();
+                browser
+                    .keyboard()
+                    .type_text("rustenium", &context, None)
+                    .await
+                    .unwrap();
             });
         });
         teardown(browser, &rt);
@@ -651,12 +769,15 @@ fn bench_end_to_end(c: &mut Criterion) {
         let mut browser = launch_headless(&rt);
         b.iter(|| {
             rt.block_on(async {
-                browser.navigate_with_options(
-                    "https://en.wikipedia.org/wiki/Rust_(programming_language)",
-                    NavigateOptions {
-                        wait: Some(ReadinessState::Complete), ..Default::default()
-                    },
-                ).await.unwrap();
+                browser
+                    .navigate_with_options(
+                        "https://en.wikipedia.org/wiki/Rust_(programming_language)",
+                        NavigateOptionsBuilder::default()
+                            .wait(ReadinessState::Complete)
+                            .build(),
+                    )
+                    .await
+                    .unwrap();
 
                 let nodes = browser.find_nodes(css!("*")).await.unwrap();
                 black_box(nodes.len());
@@ -671,9 +792,13 @@ fn bench_end_to_end(c: &mut Criterion) {
 
                 black_box(browser.screenshot().await.unwrap());
 
-                let eval = browser.evaluate_script_bidi(
-                    "document.querySelectorAll('*').length".to_string(), false
-                ).await.unwrap();
+                let eval = browser
+                    .evaluate_script_bidi(
+                        "document.querySelectorAll('*').length".to_string(),
+                        false,
+                    )
+                    .await
+                    .unwrap();
                 black_box(extract_number(&eval.result));
             });
         });
@@ -697,17 +822,20 @@ fn bench_end_to_end(c: &mut Criterion) {
                 }
 
                 for (url, ctx) in urls.iter().zip(contexts.iter()) {
-                    browser.navigate_with_options(url, NavigateOptions {
-                        wait: Some(ReadinessState::Complete),
-                        context_id: Some(ctx.clone()),
-                    }).await.unwrap();
+                    browser
+                        .navigate_with_options(
+                            url,
+                            NavigateOptionsBuilder::default().wait(ReadinessState::Complete).context_id(ctx.clone()).build()
+                        )
+                        .await
+                        .unwrap();
                 }
 
                 for ctx in &contexts {
-                    black_box(browser.screenshot_with_options(BrowserScreenshotOptions {
-                        context_id: Some(ctx.clone()),
-                        ..Default::default()
-                    }).await.unwrap());
+                    black_box(
+                        browser
+                            .screenshot_with_options(BrowserScreenshotOptionsBuilder::default().context_id(ctx.clone()).build()).await.unwrap()
+                    );
                 }
             });
         });
@@ -725,10 +853,26 @@ fn bench_trajectory_generation(c: &mut Criterion) {
     let mut group = c.benchmark_group("trajectory_generation");
 
     let distances: &[(&str, Point, Point)] = &[
-        ("short_20px", Point { x: 100.0, y: 100.0 }, Point { x: 120.0, y: 100.0 }),
-        ("medium_200px", Point { x: 100.0, y: 100.0 }, Point { x: 300.0, y: 100.0 }),
-        ("long_800px", Point { x: 0.0, y: 0.0 }, Point { x: 600.0, y: 500.0 }),
-        ("diagonal_1000px", Point { x: 0.0, y: 0.0 }, Point { x: 707.0, y: 707.0 }),
+        (
+            "short_20px",
+            Point { x: 100.0, y: 100.0 },
+            Point { x: 120.0, y: 100.0 },
+        ),
+        (
+            "medium_200px",
+            Point { x: 100.0, y: 100.0 },
+            Point { x: 300.0, y: 100.0 },
+        ),
+        (
+            "long_800px",
+            Point { x: 0.0, y: 0.0 },
+            Point { x: 600.0, y: 500.0 },
+        ),
+        (
+            "diagonal_1000px",
+            Point { x: 0.0, y: 0.0 },
+            Point { x: 707.0, y: 707.0 },
+        ),
     ];
 
     for (label, from, to) in distances {

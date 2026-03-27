@@ -1,5 +1,6 @@
 mod bidi;
 mod mouse;
+mod keyboard;
 mod trajectory;
 mod touch;
 mod human_mouse;
@@ -11,11 +12,13 @@ pub use crate::input::{
     },
     human_mouse::HumanMouse,
     human_touchscreen::HumanTouchscreen,
-    touch::{Touch, SwipeOptions, ScrollOptions, Viewport},
+    touch::{Touch, SwipeOptions, ScrollOptions, Viewport, SwipeOptionsBuilder, ScrollOptionsBuilder},
     bidi::{
         mouse::BidiMouse,
-        keyboard::{Keyboard, KeyboardTypeOptions, KeyPressOptions},
-        touchscreen::{Touchscreen, TouchHandle, TouchMoveOptions}
+        keyboard::{BidiKeyboard, KeyPressOptions, KeyboardTypeOptions, KeyPressOptionsBuilder, KeyboardTypeOptionsBuilder},
+        touchscreen::{Touchscreen, TouchHandle, TouchMoveOptions, TouchMoveOptionsBuilder}
     },
-    mouse::{Point, Mouse, MouseButton, MouseClickOptions, MouseMoveOptions, MouseOptions, MouseWheelOptions}
+    keyboard::Keyboard,
+    mouse::{Point, Mouse, MouseButton, MouseClickOptions, MouseMoveOptions, MouseOptions, MouseWheelOptions,
+        MouseClickOptionsBuilder, MouseMoveOptionsBuilder, MouseOptionsBuilder, MouseWheelOptionsBuilder}
 };

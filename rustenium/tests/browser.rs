@@ -1,4 +1,4 @@
-use rustenium::browsers::{create_chrome_browser, ChromeBrowser, ChromeConfig, NavigateOptions};
+use rustenium::browsers::{create_chrome_browser, BidiBrowser, ChromeBrowser, ChromeConfig, NavigateOptionsBuilder};
 use rustenium::nodes::Node;
 use rustenium::input::{Point, MouseClickOptions};
 use rustenium_bidi_definitions::browsing_context::types::ReadinessState;
@@ -99,10 +99,7 @@ async fn navigate_to_url() {
 #[tokio::test]
 async fn navigate_with_wait_complete() {
     let mut browser = launch_headless().await;
-    let result = browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete),
-        ..Default::default()
-    }).await;
+    let result = browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await;
     assert!(result.is_ok());
     browser.close().await.unwrap();
 }
@@ -111,13 +108,9 @@ async fn navigate_with_wait_complete() {
 async fn navigate_multiple_pages() {
     let mut browser = launch_headless().await;
 
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
-    browser.navigate_with_options("https://httpbin.org/html", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://httpbin.org/html", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     browser.close().await.unwrap();
 }
@@ -127,9 +120,7 @@ async fn navigate_multiple_pages() {
 #[tokio::test]
 async fn find_nodes_body() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let nodes = browser.find_nodes(css!("body")).await.unwrap();
     assert!(!nodes.is_empty(), "Should find body element");
@@ -139,9 +130,7 @@ async fn find_nodes_body() {
 #[tokio::test]
 async fn find_nodes_heading() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let nodes = browser.find_nodes(css!("h1")).await.unwrap();
     assert!(!nodes.is_empty(), "Should find h1 on example.com");
@@ -151,9 +140,7 @@ async fn find_nodes_heading() {
 #[tokio::test]
 async fn find_nodes_paragraph() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let nodes = browser.find_nodes(css!("p")).await.unwrap();
     assert!(!nodes.is_empty(), "Should find paragraphs on example.com");
@@ -163,9 +150,7 @@ async fn find_nodes_paragraph() {
 #[tokio::test]
 async fn find_nodes_link() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let nodes = browser.find_nodes(css!("a")).await.unwrap();
     assert!(!nodes.is_empty(), "Should find anchor elements on example.com");
@@ -175,9 +160,7 @@ async fn find_nodes_link() {
 #[tokio::test]
 async fn find_nodes_nonexistent_returns_empty() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let nodes = browser.find_nodes(css!("#nonexistent-element-xyz")).await.unwrap();
     assert!(nodes.is_empty(), "Should return empty vec for nonexistent selector");
@@ -187,9 +170,7 @@ async fn find_nodes_nonexistent_returns_empty() {
 #[tokio::test]
 async fn find_node_returns_first() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let node = browser.find_node(css!("h1")).await.unwrap();
     assert!(node.is_some(), "Should find first h1");
@@ -199,9 +180,7 @@ async fn find_node_returns_first() {
 #[tokio::test]
 async fn find_node_nonexistent_returns_none() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let node = browser.find_node(css!("#nonexistent-element-xyz")).await.unwrap();
     assert!(node.is_none(), "Should return None for nonexistent selector");
@@ -213,9 +192,7 @@ async fn find_node_nonexistent_returns_none() {
 #[tokio::test]
 async fn wait_for_nodes_existing() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let nodes = browser.wait_for_nodes(css!("h1")).await.unwrap();
     assert!(!nodes.is_empty(), "wait_for_nodes should find existing h1");
@@ -225,9 +202,7 @@ async fn wait_for_nodes_existing() {
 #[tokio::test]
 async fn wait_for_node_existing() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let node = browser.wait_for_node(css!("body")).await.unwrap();
     assert!(node.is_some(), "wait_for_node should find existing body");
@@ -239,9 +214,7 @@ async fn wait_for_node_existing() {
 #[tokio::test]
 async fn get_inner_text() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let nodes = browser.find_nodes(css!("h1")).await.unwrap();
     let text = nodes[0].get_inner_text().await;
@@ -253,9 +226,7 @@ async fn get_inner_text() {
 #[tokio::test]
 async fn get_text_content() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let nodes = browser.find_nodes(css!("h1")).await.unwrap();
     let text = nodes[0].get_text_content().await;
@@ -266,9 +237,7 @@ async fn get_text_content() {
 #[tokio::test]
 async fn get_inner_html() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let nodes = browser.find_nodes(css!("body")).await.unwrap();
     let html = nodes[0].get_inner_html().await;
@@ -279,9 +248,7 @@ async fn get_inner_html() {
 #[tokio::test]
 async fn get_attribute_href() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let nodes = browser.find_nodes(css!("a")).await.unwrap();
     assert!(!nodes.is_empty(), "Should find anchor elements");
@@ -293,9 +260,7 @@ async fn get_attribute_href() {
 #[tokio::test]
 async fn get_attributes_returns_map() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let nodes = browser.find_nodes(css!("a")).await.unwrap();
     let attrs = nodes[0].get_attributes();
@@ -306,9 +271,7 @@ async fn get_attributes_returns_map() {
 #[tokio::test]
 async fn get_children_nodes() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let nodes = browser.find_nodes(css!("body")).await.unwrap();
     let children = nodes[0].get_children_nodes();
@@ -319,9 +282,7 @@ async fn get_children_nodes() {
 #[tokio::test]
 async fn node_context_id() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let context_id = browser.get_active_context_id().unwrap();
     let nodes = browser.find_nodes(css!("body")).await.unwrap();
@@ -334,9 +295,7 @@ async fn node_context_id() {
 #[tokio::test]
 async fn node_is_visible() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let nodes = browser.find_nodes(css!("h1")).await.unwrap();
     let visible = nodes[0].is_visible().await.unwrap();
@@ -347,9 +306,7 @@ async fn node_is_visible() {
 #[tokio::test]
 async fn node_scroll_into_view() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let nodes = browser.find_nodes(css!("p")).await.unwrap();
     let result = nodes[0].scroll_into_view().await;
@@ -360,9 +317,7 @@ async fn node_scroll_into_view() {
 #[tokio::test]
 async fn node_get_position() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let mut nodes = browser.find_nodes(css!("h1")).await.unwrap();
     let pos = nodes[0].get_position().await;
@@ -378,9 +333,7 @@ async fn node_get_position() {
 #[tokio::test]
 async fn node_mouse_move() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let mut nodes = browser.find_nodes(css!("h1")).await.unwrap();
     let result = nodes[0].mouse_move().await;
@@ -391,9 +344,7 @@ async fn node_mouse_move() {
 #[tokio::test]
 async fn node_mouse_click() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let mut nodes = browser.find_nodes(css!("a")).await.unwrap();
     assert!(!nodes.is_empty(), "Should find a link to click");
@@ -407,9 +358,7 @@ async fn node_mouse_click() {
 #[tokio::test]
 async fn mouse_move_to_point() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let context = browser.get_active_context_id().unwrap();
     let mouse = browser.mouse();
@@ -421,9 +370,7 @@ async fn mouse_move_to_point() {
 #[tokio::test]
 async fn mouse_click_at_point() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let context = browser.get_active_context_id().unwrap();
     let mouse = browser.mouse();
@@ -435,9 +382,7 @@ async fn mouse_click_at_point() {
 #[tokio::test]
 async fn mouse_down_and_up() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let context = browser.get_active_context_id().unwrap();
     let mouse = browser.mouse();
@@ -451,9 +396,7 @@ async fn mouse_down_and_up() {
 #[tokio::test]
 async fn keyboard_type_text() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let context = browser.get_active_context_id().unwrap();
     let keyboard = browser.keyboard();
@@ -465,9 +408,7 @@ async fn keyboard_type_text() {
 #[tokio::test]
 async fn keyboard_press_key() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let context = browser.get_active_context_id().unwrap();
     let keyboard = browser.keyboard();
@@ -479,9 +420,7 @@ async fn keyboard_press_key() {
 #[tokio::test]
 async fn keyboard_down_and_up() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let context = browser.get_active_context_id().unwrap();
     let keyboard = browser.keyboard();
@@ -495,9 +434,7 @@ async fn keyboard_down_and_up() {
 #[tokio::test]
 async fn evaluate_script_simple() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let result = browser.evaluate_script_bidi("1 + 1".to_string(), false).await;
     assert!(result.is_ok(), "evaluate_script should succeed");
@@ -507,9 +444,7 @@ async fn evaluate_script_simple() {
 #[tokio::test]
 async fn evaluate_script_returns_string() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let result = browser.evaluate_script_bidi("document.title".to_string(), false).await.unwrap();
     let title = extract_string(&result.result).expect("Should return a string");
@@ -520,9 +455,7 @@ async fn evaluate_script_returns_string() {
 #[tokio::test]
 async fn evaluate_script_returns_number() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let result = browser.evaluate_script_bidi(
         "document.querySelectorAll('p').length".to_string(),
@@ -564,9 +497,7 @@ async fn get_active_context_id() {
 #[tokio::test]
 async fn screenshot_returns_base64() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let data = browser.screenshot().await.unwrap();
     assert!(!data.is_empty(), "Screenshot data should not be empty");
@@ -576,9 +507,7 @@ async fn screenshot_returns_base64() {
 #[tokio::test]
 async fn node_screenshot_returns_base64() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let nodes = browser.find_nodes(css!("h1")).await.unwrap();
     let data = nodes[0].screenshot().await.unwrap();
@@ -591,9 +520,7 @@ async fn node_screenshot_returns_base64() {
 #[tokio::test]
 async fn emulate_timezone() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     browser.emulate_timezone(Some("America/New_York".to_string())).await.unwrap();
 
@@ -612,9 +539,7 @@ async fn emulate_timezone() {
 #[tokio::test]
 async fn delete_node() {
     let mut browser = launch_headless().await;
-    browser.navigate_with_options("https://example.com", NavigateOptions {
-        wait: Some(ReadinessState::Complete), ..Default::default()
-    }).await.unwrap();
+    browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
     let nodes = browser.find_nodes(css!("h1")).await.unwrap();
     assert!(!nodes.is_empty());

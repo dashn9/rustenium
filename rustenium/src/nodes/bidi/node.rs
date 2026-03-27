@@ -29,6 +29,23 @@ pub struct BidiNodeScreenshotOptions {
     pub save_path: Option<String>,
 }
 
+
+#[derive(Default, Clone)]
+pub struct BidiNodeScreenshotOptionsBuilder {
+    origin: Option<CaptureScreenshotOrigin>,
+    format: Option<ImageFormat>,
+    save_path: Option<String>,
+}
+
+impl BidiNodeScreenshotOptionsBuilder {
+    pub fn origin(mut self, v: impl Into<CaptureScreenshotOrigin>) -> Self { self.origin = Some(v.into()); self }
+    pub fn format(mut self, v: impl Into<ImageFormat>) -> Self { self.format = Some(v.into()); self }
+    pub fn save_path(mut self, v: impl Into<String>) -> Self { self.save_path = Some(v.into()); self }
+    pub fn build(self) -> BidiNodeScreenshotOptions {
+        BidiNodeScreenshotOptions { origin: self.origin, format: self.format, save_path: self.save_path }
+    }
+}
+
 pub(crate) struct BidiNode<
     T: ConnectionTransport = rustenium_core::transport::WebsocketConnectionTransport,
 > {

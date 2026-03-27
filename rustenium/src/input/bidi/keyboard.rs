@@ -17,15 +17,35 @@ use super::KEYBOARD_ID;
 /// Options for keyboard key press operations.
 #[derive(Debug, Clone, Default)]
 pub struct KeyPressOptions {
-    /// Delay in milliseconds between keydown and keyup events.
     pub delay: Option<u64>,
+}
+
+
+#[derive(Default, Clone)]
+pub struct KeyPressOptionsBuilder {
+    delay: Option<u64>,
+}
+
+impl KeyPressOptionsBuilder {
+    pub fn delay(mut self, v: u64) -> Self { self.delay = Some(v); self }
+    pub fn build(self) -> KeyPressOptions { KeyPressOptions { delay: self.delay } }
 }
 
 /// Options for keyboard text typing operations.
 #[derive(Debug, Clone, Default)]
 pub struct KeyboardTypeOptions {
-    /// Delay in milliseconds between each key press.
     pub delay: Option<u64>,
+}
+
+
+#[derive(Default, Clone)]
+pub struct KeyboardTypeOptionsBuilder {
+    delay: Option<u64>,
+}
+
+impl KeyboardTypeOptionsBuilder {
+    pub fn delay(mut self, v: u64) -> Self { self.delay = Some(v); self }
+    pub fn build(self) -> KeyboardTypeOptions { KeyboardTypeOptions { delay: self.delay } }
 }
 
 pub(crate) fn get_bidi_key_value(key: &str) -> Result<String, InputError> {
@@ -146,11 +166,11 @@ pub(crate) fn get_bidi_key_value(key: &str) -> Result<String, InputError> {
     Ok(value.to_string())
 }
 
-pub struct Keyboard<OT: ConnectionTransport> {
+pub struct BidiKeyboard<OT: ConnectionTransport> {
     session: Arc<Mutex<BidiSession<OT>>>,
 }
 
-impl<OT: ConnectionTransport> Keyboard<OT> {
+impl<OT: ConnectionTransport> BidiKeyboard<OT> {
     pub fn new(session: Arc<Mutex<BidiSession<OT>>>) -> Self {
         Self { session }
     }
@@ -282,6 +302,21 @@ impl<OT: ConnectionTransport> Keyboard<OT> {
         self.session.lock().await.send(command).await
             .map_err(|e| InputError::CommandResultError(rustenium_core::error::CommandResultError::SessionSendError(e)))?;
         Ok(())
+    }
+}
+
+impl<OT: ConnectionTransport> crate::input::keyboard::Keyboard for BidiKeyboard<OT> {
+    async fn down(&self, key: &str, context: &BrowsingContext) -> Result<(), InputError> {
+        self.down(key, context).await
+    }
+    async fn up(&self, key: &str, context: &BrowsingContext) -> Result<(), InputError> {
+        self.up(key, context).await
+    }
+    async fn press(&self, key: &str, context: &BrowsingContext, options: Option<KeyPressOptions>) -> Result<(), InputError> {
+        self.press(key, context, options).await
+    }
+    async fn type_text(&self, text: &str, context: &BrowsingContext, options: Option<KeyboardTypeOptions>) -> Result<(), InputError> {
+        self.type_text(text, context, options).await
     }
 }
 

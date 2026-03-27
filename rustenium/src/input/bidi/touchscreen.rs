@@ -19,8 +19,18 @@ use super::{FINGER_ID_PREFIX};
 /// Options for touch movement operations.
 #[derive(Debug, Clone, Default)]
 pub struct TouchMoveOptions {
-    /// Origin for the touch movement.
     pub origin: Option<Origin>,
+}
+
+
+#[derive(Default, Clone)]
+pub struct TouchMoveOptionsBuilder {
+    origin: Option<Origin>,
+}
+
+impl TouchMoveOptionsBuilder {
+    pub fn origin(mut self, v: Origin) -> Self { self.origin = Some(v); self }
+    pub fn build(self) -> TouchMoveOptions { TouchMoveOptions { origin: self.origin } }
 }
 
 /// Handle representing a single touch point for multi-touch gestures.

@@ -1,8 +1,12 @@
-mod chrome;
+pub mod chrome;
+mod bidi_browser;
+
+pub use bidi_browser::BidiBrowser;
 pub use chrome::chrome::{create_chrome_browser, ChromeBrowser, ChromeConfig};
 pub use chrome::capabilities::{ChromeCapabilities, ChromeOptions, PerfLoggingPrefs};
 pub use chrome::{
-    BrowserScreenshotOptions, NavigateOptions, CreateContextOptions,
-    FindNodesOptions, WaitForNodesOptions, OnRequestOptions, SubscribeEventsOptions,
-    EvaluateScriptOptions, AddPreloadScriptOptions, EmulateTimezoneOptions, AuthenticateOptions,
+    BrowserScreenshotOptionsBuilder, NavigateOptionsBuilder, CreateContextOptionsBuilder,
+    FindNodesOptionsBuilder, WaitForNodesOptionsBuilder, OnRequestOptionsBuilder,
+    SubscribeEventsOptionsBuilder, EvaluateScriptOptionsBuilder, AddPreloadScriptOptionsBuilder,
+    EmulateTimezoneOptionsBuilder, AuthenticateOptionsBuilder,
 };

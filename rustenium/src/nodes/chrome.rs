@@ -10,8 +10,7 @@ use rustenium_core::BidiSession;
 use crate::error::{EvaluateResultError, MouseInputError, ScreenshotError};
 use crate::input::{Mouse, MouseClickOptions, MouseMoveOptions};
 use crate::input::BidiMouse;
-pub use crate::nodes::bidi::node::BidiNodeScreenshotOptions;
-use crate::nodes::bidi::node::BidiNode;
+use crate::nodes::bidi::node::{BidiNode, BidiNodeScreenshotOptions};
 use crate::nodes::node::Node;
 use crate::nodes::NodePosition;
 
