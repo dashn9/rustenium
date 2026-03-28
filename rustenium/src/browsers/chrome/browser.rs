@@ -17,11 +17,9 @@ use std::sync::{Arc, Mutex};
 /// Configuration for Chrome browser and chromedriver.
 ///
 /// This struct configures both the chromedriver process and the Chrome browser instance.
-/// It supports three remote debugging modes via `remote_debugging_port`:
 ///
-/// - **Normal mode (`None`)**: Chromedriver launches and manages Chrome automatically
-/// - **Auto mode (`Some(0)`)**: Rustenium starts Chrome first, then chromedriver attaches to it
-/// - **Manual mode (`Some(port)`)**: Connect to an existing Chrome instance on the specified port
+/// - **Default (`None`)**: Rustenium starts Chrome and manages it internally
+/// - **Manual (`Some(port)`)**: Connect to an existing Chrome instance on the specified port
 ///
 /// # Examples
 ///
@@ -37,7 +35,6 @@ use std::sync::{Arc, Mutex};
 /// // Headless mode with custom Chrome
 /// let config = ChromeConfig {
 ///     driver_executable_path: "chromedriver".to_string(),
-///     remote_debugging_port: Some(0), // Auto mode
 ///     chrome_executable_path: Some("/usr/bin/google-chrome".to_string()),
 ///     browser_flags: Some(vec!["--headless".to_string()]),
 ///     ..Default::default()
@@ -66,22 +63,21 @@ pub struct ChromeConfig {
     /// Optional proxy configuration.
     pub proxy: Option<ProxyConfiguration>,
 
-    /// Chrome remote debugging port. Controls how Chrome is launched and managed:
-    /// - `None` (default): Normal mode - chromedriver launches Chrome
-    /// - `Some(0)`: Auto mode - Rustenium starts Chrome and manages it internally
-    /// - `Some(port)`: Manual mode - Connect to existing Chrome running on specified port
+    /// Chrome remote debugging port.
+    /// - `None` (default): Rustenium starts Chrome and manages it internally
+    /// - `Some(port)`: Connect to an existing Chrome instance running on the specified port
     pub remote_debugging_port: Option<u16>,
 
-    /// Path to Chrome executable. Used when `remote_debugging_port` is `Some(0)`.
+    /// Path to Chrome executable. Used in default mode (when `remote_debugging_port` is `None`).
     /// Defaults to "google-chrome" if not specified.
     pub chrome_executable_path: Option<String>,
 
-    /// Chrome user data directory. Used when `remote_debugging_port` is `Some(0)`.
+    /// Chrome user data directory. Used in default mode (when `remote_debugging_port` is `None`).
     /// If not specified, uses a temporary directory.
     pub user_data_dir: Option<String>,
 
     /// Additional Chrome command-line arguments (browser flags).
-    /// Used when `remote_debugging_port` is `Some(0)`.
+    /// Used in default mode (when `remote_debugging_port` is `None`).
     pub browser_flags: Option<Vec<String>>,
 }
 
@@ -177,20 +173,23 @@ impl ChromeBrowser {
         let mut ct_config = ConnectionTransportConfig::default();
         ct_config.host = config.host.clone().unwrap_or(String::from("localhost"));
         ct_config.port = port;
-        
-        let chrome_port = find_free_port().unwrap();
+
+        let chrome_port = config.remote_debugging_port.unwrap_or_else(|| find_free_port().unwrap());
 
         // Handle remote debugging modes FIRST, before modifying capabilities
         let (debugger_address, chrome_process) = match config.remote_debugging_port {
-            Some(0) => {
-                // Auto mode (port 0): Start Chrome ourselves, then attach
+            Some(port) => {
+                // Manual mode: Connect to an existing Chrome instance on the specified port
+                (format!("localhost:{}", port), None)
+            }
+            None => {
+                // Default: Start Chrome ourselves, then attach chromedriver
                 let chrome_exe = config.chrome_executable_path.clone().unwrap_or_else(|| {
                     crate::downloader::ensure_chrome()
                         .to_string_lossy()
                         .into_owned()
                 });
 
-                // Use user-specified or default tmp directory for user data
                 let user_data_dir = config.user_data_dir.clone().unwrap_or_else(|| {
                     std::env::temp_dir()
                         .join(format!("rustenium-chrome-{}", chrome_port))
@@ -205,7 +204,6 @@ impl ChromeBrowser {
                     "--no-default-browser-check".to_string(),
                 ];
 
-                // Add user-specified browser flags
                 if let Some(ref flags) = config.browser_flags {
                     chrome_args.extend(flags.iter().cloned());
                 }
@@ -217,24 +215,13 @@ impl ChromeBrowser {
                 tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
 
                 (
-                    Some(format!("localhost:{}", chrome_port)),
+                    format!("localhost:{}", chrome_port),
                     Some(chrome_proc),
                 )
             }
-            Some(port) => {
-                // Manual mode (specific port): Connect to existing Chrome on that port
-                (Some(format!("localhost:{}", port)), None)
-            }
-            None => {
-                // Normal mode: chromedriver will launch Chrome
-                (None, None)
-            }
         };
 
-        // Set debugger_address capability if attaching
-        if let Some(addr) = debugger_address {
-            config.capabilities.debugger_address(addr);
-        }
+        config.capabilities.debugger_address(debugger_address);
 
         // Continue with normal capability setup
         config.capabilities.add_arg("start-maximized".to_string());

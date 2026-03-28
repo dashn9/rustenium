@@ -11,6 +11,7 @@ use rustenium_core::WebsocketConnectionTransport;
 use rustenium_core::error::CdpSessionSendError;
 use rustenium_core::session::CdpSession;
 use rustenium_core::transport::{ConnectionTransport, ConnectionTransportConfig};
+use rustenium_core::CdpEventManagement;
 use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader};
 use tokio::net::TcpStream;
 use tokio::sync::Mutex as TokioMutex;
@@ -111,7 +112,6 @@ impl<T: ConnectionTransport + Send + Sync + 'static> CdpAdapter<T> {
 
     pub async fn listen_to_target_creation(&mut self) -> Result<(), CdpSessionSendError> {
         // Register handler for Target.targetCreated
-        use rustenium_core::CdpEventManagement;
         self.session.lock().await.add_event_handler(
             [TargetCreated::IDENTIFIER],
             move |event| async move {
@@ -125,7 +125,6 @@ impl<T: ConnectionTransport + Send + Sync + 'static> CdpAdapter<T> {
                 }
             },
         );
-        
         // Enable target discovery so Chrome sends Target.targetCreated events
         let command = SetDiscoverTargetsBuilder::default().discover(true).build().unwrap();
         self.send_command(command).await?;
