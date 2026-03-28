@@ -1,4 +1,5 @@
 use rustenium_bidi_definitions::base::ErrorResponse;
+use rustenium_cdp_definitions::base::ErrorResponse as CdpErrorResponse;
 use thiserror::Error;
 
 #[derive(Debug, Error)]
@@ -23,6 +24,22 @@ impl std::fmt::Display for ResponseReceiveTimeoutError {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         write!(f, "Could not receive response for command in time")
     }
+}
+
+#[derive(Debug, Error)]
+pub enum CdpSessionSendError {
+    #[error("CDP Error Response: {0}")]
+    ErrorResponse(CdpErrorResponse),
+    #[error("Could not receive response for CDP command in time")]
+    ResponseReceiveTimeoutError(ResponseReceiveTimeoutError),
+}
+
+#[derive(Debug, Error)]
+pub enum CdpCommandResultError {
+    #[error("Invalid Result gotten For CDP Command")]
+    InvalidResultTypeError(serde_json::Value),
+    #[error("Error Occurred with CDP Command")]
+    SessionSendError(CdpSessionSendError),
 }
 
 #[derive(Debug, Error)]

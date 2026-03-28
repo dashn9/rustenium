@@ -1,4 +1,4 @@
-use crate::error::{EvaluateResultError, InvalidPositionError, MouseInputError, ScreenshotError};
+use crate::error::bidi::{EvaluateResultError, InvalidPositionError, MouseInputError, ScreenshotError};
 use crate::input::{Mouse, MouseClickOptions, MouseMoveOptions};
 use crate::input::Point;
 use crate::nodes::NodePosition;

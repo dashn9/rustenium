@@ -3,7 +3,7 @@ use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
 use rustenium_core::transport::ConnectionTransport;
 use rand::Rng;
 
-use crate::error::InputError;
+use crate::error::bidi::InputError;
 use super::bidi::touchscreen::Touchscreen;
 use super::mouse::Point;
 use super::touch::{Touch, SwipeOptions, ScrollOptions, Viewport};

@@ -5,6 +5,8 @@ use rustenium_bidi_definitions::browsing_context::types::ReadinessState;
 use rustenium_bidi_definitions::script::types::{RemoteValue, PrimitiveProtocolValue};
 use rustenium_macros::css;
 
+
+
 // Auto attach mode is used because in manual mode chromedriver spawns Chrome
 // as its own child process, and Chrome's stdout/stderr (DevTools listening, GPU
 // errors) leak directly to the terminal with no reliable way to suppress them.
@@ -37,7 +39,6 @@ fn extract_number(value: &RemoteValue) -> Option<f64> {
         _ => None,
     }
 }
-
 // ── Browser creation ─────────────────────────────────────────────────────────
 
 #[tokio::test]
@@ -436,7 +437,7 @@ async fn evaluate_script_simple() {
     let mut browser = launch_headless().await;
     browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
-    let result = browser.evaluate_script_bidi("1 + 1".to_string(), false).await;
+    let result = browser.evaluate_script("1 + 1".to_string(), false).await;
     assert!(result.is_ok(), "evaluate_script should succeed");
     browser.close().await.unwrap();
 }
@@ -446,7 +447,7 @@ async fn evaluate_script_returns_string() {
     let mut browser = launch_headless().await;
     browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
-    let result = browser.evaluate_script_bidi("document.title".to_string(), false).await.unwrap();
+    let result = browser.evaluate_script("document.title".to_string(), false).await.unwrap();
     let title = extract_string(&result.result).expect("Should return a string");
     assert!(title.contains("Example Domain"), "title should contain 'Example Domain', got: {}", title);
     browser.close().await.unwrap();
@@ -457,7 +458,7 @@ async fn evaluate_script_returns_number() {
     let mut browser = launch_headless().await;
     browser.navigate_with_options("https://example.com", NavigateOptionsBuilder::default().wait(ReadinessState::Complete).build()).await.unwrap();
 
-    let result = browser.evaluate_script_bidi(
+    let result = browser.evaluate_script(
         "document.querySelectorAll('p').length".to_string(),
         false,
     ).await.unwrap();
@@ -471,7 +472,7 @@ async fn evaluate_script_returns_number() {
 #[tokio::test]
 async fn create_new_context() {
     let mut browser = launch_headless().await;
-    let new_context = browser.create_context_bidi(false).await;
+    let new_context = browser.create_context(false).await;
     assert!(new_context.is_ok(), "create_context should succeed");
     browser.close().await.unwrap();
 }
@@ -479,7 +480,7 @@ async fn create_new_context() {
 #[tokio::test]
 async fn create_background_context() {
     let mut browser = launch_headless().await;
-    let new_context = browser.create_context_bidi(true).await;
+    let new_context = browser.create_context(true).await;
     assert!(new_context.is_ok(), "create background context should succeed");
     browser.close().await.unwrap();
 }
@@ -524,7 +525,7 @@ async fn emulate_timezone() {
 
     browser.emulate_timezone(Some("America/New_York".to_string())).await.unwrap();
 
-    let eval = browser.evaluate_script_bidi(
+    let eval = browser.evaluate_script(
         "Intl.DateTimeFormat().resolvedOptions().timeZone".to_string(),
         false,
     ).await.unwrap();
@@ -555,8 +556,8 @@ async fn delete_node() {
 #[tokio::test]
 async fn end_session_cleanly() {
     let mut browser = launch_headless().await;
-    let result = browser.end_bidi_session().await;
-    assert!(result.is_ok(), "end_bidi_session should succeed");
+    let result = browser.end_session().await;
+    assert!(result.is_ok(), "end_session should succeed");
 }
 
 #[tokio::test]

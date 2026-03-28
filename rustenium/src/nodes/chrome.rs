@@ -7,7 +7,7 @@ use rustenium_bidi_definitions::script::types::{Handle, NodeRemoteValue, SharedI
 use rustenium_core::transport::ConnectionTransport;
 use rustenium_core::BidiSession;
 
-use crate::error::{EvaluateResultError, MouseInputError, ScreenshotError};
+use crate::error::bidi::{EvaluateResultError, MouseInputError, ScreenshotError};
 use crate::input::{Mouse, MouseClickOptions, MouseMoveOptions};
 use crate::input::BidiMouse;
 use crate::nodes::bidi::node::{BidiNode, BidiNodeScreenshotOptions};

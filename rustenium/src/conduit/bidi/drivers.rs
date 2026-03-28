@@ -2,16 +2,16 @@ use rustenium_bidi_definitions::emulation::commands::SetTimezoneOverride;
 use rustenium_bidi_definitions::script::commands::{
     AddPreloadScript, CallFunction, Evaluate, RemovePreloadScript,
 };
-use rustenium_core::BrowsingContext as Context;
+use crate::domain::context::BrowsingContext as Context;
 use rustenium_core::{
     BidiSession, NetworkRequest,
     process::Process,
     transport::{ConnectionTransport, ConnectionTransportConfig, WebsocketConnectionTransport},
 };
 
-use crate::error::{
+use crate::error::bidi::{
     ContextCreationError, ContextIndexError, EmulationError,
-    EvaluateResultError, FindNodesError, InterceptNetworkError, OpenUrlError,
+    EvaluateResultError, FindNodesError, InterceptNetworkError, NavigateError, ScreenshotError
 };
 use rustenium_bidi_definitions::Command;
 use rustenium_bidi_definitions::Event;
@@ -211,7 +211,7 @@ pub trait BidiDrive<T: ConnectionTransport> {
             let driver_process = Process::create(driver_config.exe_path(), driver_config.flags());
             let mut session = BidiSession::<T>::ws_new(connection_transport_config).await;
             session
-                .create_new_bidi_session(session_connection_type, capabilities)
+                .initialize(session_connection_type, capabilities)
                 .await;
             (Arc::new(TokioMutex::new(session)), driver_process)
         }
@@ -288,9 +288,10 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
             let bc = browsing_contexts.clone();
             async move {
                 if let Ok(context) = TryInto::<ContextCreated>::try_into(event) {
+                    tracing::debug!("[BiDiDriver]: BrowsingContext Created: ID: {}", context.params.context.as_ref());
                     bc.lock()
                         .unwrap()
-                        .push(Context::from_id(context.params.context, CreateType::Window));
+                        .push(Context::from_id(context.params.context, CreateType::Tab));
                 }
             }
         };
@@ -301,50 +302,27 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
             .await
             .create_event::<_, _, BidiSession<T>>(events, handler);
         let result = self.session.lock().await.subscribe_events(bidi_event).await;
-
         // Wait for 2s, to allow current BrowsingContext be updated via the event.
-        sleep(Duration::from_millis(2000)).await;
-        if self
-            .browsing_contexts
-            .lock()
-            .expect("Unable to acquire lock")
-            .len()
-            > 0
-        {
-            if let Ok(Some(result)) = &result {
-                match self
-                    .session
-                    .lock()
-                    .await
-                    .unsubscribe_events_by_ids(vec![result.subscription.clone()])
-                    .await
-                {
-                    Err(error) => {
-                        return Err(ContextCreationError::CommandResultError(error));
-                    }
-                    Ok(_) => {}
-                }
-            };
-        }
+        sleep(Duration::from_millis(800)).await;
         match result {
             Err(error) => Err(ContextCreationError::CommandResultError(error)),
             Ok(result) => Ok(result),
         }
     }
 
-    pub async fn navigate(&mut self, navigate: Navigate) -> Result<NavigateResult, OpenUrlError> {
+    pub async fn navigate(&mut self, navigate: Navigate) -> Result<NavigateResult, NavigateError> {
         // navigate.params.context = navigate.params.context.unwrap_or(self.get_active_context_id()?);
 
         let result_value = self
             .send_command(navigate)
             .await
             .map_err(|err| {
-                OpenUrlError::CommandResultError(CommandResultError::SessionSendError(err))
+                NavigateError::CommandResultError(CommandResultError::SessionSendError(err))
             })?
             .result;
 
         NavigateResult::try_from(result_value.clone()).map_err(|_| {
-            OpenUrlError::CommandResultError(CommandResultError::InvalidResultTypeError(
+            NavigateError::CommandResultError(CommandResultError::InvalidResultTypeError(
                 result_value,
             ))
         })
@@ -556,12 +534,12 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
         &mut self,
         capture_screenshot: CaptureScreenshot,
         save_path: Option<&str>,
-    ) -> Result<String, crate::error::ScreenshotError> {
+    ) -> Result<String, ScreenshotError> {
         let result_value = self
             .send_command(capture_screenshot)
             .await
             .map_err(|err| {
-                crate::error::ScreenshotError::CommandResultError(
+                ScreenshotError::CommandResultError(
                     CommandResultError::SessionSendError(err),
                 )
             })?
@@ -569,7 +547,7 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
 
         let screenshot_result =
             CaptureScreenshotResult::try_from(result_value.clone()).map_err(|_| {
-                crate::error::ScreenshotError::CommandResultError(
+                ScreenshotError::CommandResultError(
                     CommandResultError::InvalidResultTypeError(result_value),
                 )
             })?;
@@ -591,7 +569,7 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
             } else {
                 if let Some(parent) = path_obj.parent() {
                     if !parent.as_os_str().is_empty() && !parent.exists() {
-                        return Err(crate::error::ScreenshotError::InvalidPath(format!(
+                        return Err(ScreenshotError::InvalidPath(format!(
                             "Parent directory does not exist: {}",
                             parent.display()
                         )));
@@ -603,10 +581,10 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
             use base64::{Engine as _, engine::general_purpose};
             let decoded = general_purpose::STANDARD
                 .decode(&base64_data)
-                .map_err(|e| crate::error::ScreenshotError::Base64DecodeError(e.to_string()))?;
+                .map_err(|e| ScreenshotError::Base64DecodeError(e.to_string()))?;
 
             std::fs::write(&final_path, decoded)
-                .map_err(|e| crate::error::ScreenshotError::FileWriteError(e.to_string()))?;
+                .map_err(|e| ScreenshotError::FileWriteError(e.to_string()))?;
 
             Ok(final_path.to_string_lossy().to_string())
         } else {

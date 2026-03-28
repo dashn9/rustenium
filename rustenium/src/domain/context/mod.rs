@@ -4,10 +4,9 @@ use rustenium_bidi_definitions::browsing_context::types::{
     BrowsingContext as BrowsingContextDefinition, CreateType,
 };
 
-use crate::error::CommandResultError;
-use crate::session::BidiSession;
-use crate::transport::ConnectionTransport;
-
+use rustenium_core::error::CommandResultError;
+use rustenium_core::session::BidiSession;
+use rustenium_core::transport::ConnectionTransport;
 
 pub struct BrowsingContextBuilder<'a, T: ConnectionTransport> {
     session: &'a mut BidiSession<T>,
@@ -46,7 +45,8 @@ impl<'a, T: ConnectionTransport> BrowsingContextBuilder<'a, T> {
             .r#type(self.r#type.clone())
             .background(self.background);
         if let Some(reference_context) = self.reference_context {
-            create_browsing_context_command_builder = create_browsing_context_command_builder.reference_context(reference_context.id.clone());
+            create_browsing_context_command_builder = create_browsing_context_command_builder
+                .reference_context(reference_context.id.clone());
         }
         let context = self
             .session
@@ -68,6 +68,7 @@ impl<'a, T: ConnectionTransport> BrowsingContextBuilder<'a, T> {
         }
     }
 }
+
 #[derive(Clone)]
 pub struct BrowsingContext {
     pub r#type: CreateType,
@@ -75,7 +76,6 @@ pub struct BrowsingContext {
 }
 
 impl BrowsingContext {
-    /// Create a Context from existing ID and type
     pub fn from_id(
         id: impl Into<BrowsingContextDefinition>,
         context_type: CreateType,
@@ -86,7 +86,6 @@ impl BrowsingContext {
         }
     }
 
-    /// Get the context ID as a string reference
     pub fn id(&self) -> &BrowsingContextDefinition {
         &self.id
     }

@@ -1,12 +1,8 @@
-use crate::browsers::chrome::chrome::options::{
-    AddPreloadScriptOptions, AuthenticateOptions, BrowserScreenshotOptions, CreateContextOptions,
-    EmulateTimezoneOptions, EvaluateScriptOptions, FindNodesOptions, NavigateOptions,
-    OnRequestOptions, SubscribeEventsOptions, WaitForNodesOptions,
-};
-use crate::drivers::bidi::drivers::BidiDriver;
-use crate::error::{
+use crate::conduit::bidi::drivers::BidiDriver;
+use crate::domain::context::BrowsingContext as DomainBrowsingContext;
+use crate::error::bidi::{
     BrowserCloseError, ContextCreationError, ContextIndexError, EmulationError,
-    EvaluateResultError, FindNodesError, InterceptNetworkError, OpenUrlError, ScreenshotError,
+    EvaluateResultError, FindNodesError, InterceptNetworkError, NavigateError, ScreenshotError,
 };
 use crate::input::{BidiKeyboard, BidiMouse, HumanMouse};
 use crate::nodes::Node;
@@ -33,6 +29,297 @@ use rustenium_core::transport::ConnectionTransport;
 use rustenium_core::{BidiSession, NetworkRequest};
 use std::collections::HashSet;
 use std::future::Future;
+
+pub mod options {
+    use rustenium_bidi_definitions::browsing_context::commands::CaptureScreenshotOrigin;
+    use rustenium_bidi_definitions::browsing_context::types::{
+        BrowsingContext, ClipRectangle, CreateType, ImageFormat, ReadinessState,
+    };
+    use rustenium_bidi_definitions::network::types::UrlPattern;
+    use rustenium_bidi_definitions::script::types::{
+        ChannelValue, ResultOwnership, SerializationOptions, SharedReference, Target,
+    };
+
+    #[derive(Debug, Clone, Default)]
+    pub struct BrowserScreenshotOptions {
+        pub context_id: Option<BrowsingContext>,
+        pub origin: Option<CaptureScreenshotOrigin>,
+        pub format: Option<ImageFormat>,
+        pub clip: Option<ClipRectangle>,
+        pub save_path: Option<String>,
+    }
+
+    #[derive(Default, Clone)]
+    pub struct BrowserScreenshotOptionsBuilder {
+        context_id: Option<BrowsingContext>,
+        origin: Option<CaptureScreenshotOrigin>,
+        format: Option<ImageFormat>,
+        clip: Option<ClipRectangle>,
+        save_path: Option<String>,
+    }
+
+    impl BrowserScreenshotOptionsBuilder {
+        pub fn context_id(mut self, v: impl Into<BrowsingContext>) -> Self { self.context_id = Some(v.into()); self }
+        pub fn origin(mut self, v: impl Into<CaptureScreenshotOrigin>) -> Self { self.origin = Some(v.into()); self }
+        pub fn format(mut self, v: impl Into<ImageFormat>) -> Self { self.format = Some(v.into()); self }
+        pub fn clip(mut self, v: impl Into<ClipRectangle>) -> Self { self.clip = Some(v.into()); self }
+        pub fn save_path(mut self, v: impl Into<String>) -> Self { self.save_path = Some(v.into()); self }
+        pub fn build(self) -> BrowserScreenshotOptions {
+            BrowserScreenshotOptions {
+                context_id: self.context_id, origin: self.origin, format: self.format,
+                clip: self.clip, save_path: self.save_path,
+            }
+        }
+    }
+
+    #[derive(Debug, Clone, Default)]
+    pub struct NavigateOptions {
+        pub wait: Option<ReadinessState>,
+        pub context_id: Option<BrowsingContext>,
+    }
+
+    #[derive(Default, Clone)]
+    pub struct NavigateOptionsBuilder {
+        wait: Option<ReadinessState>,
+        context_id: Option<BrowsingContext>,
+    }
+
+    impl NavigateOptionsBuilder {
+        pub fn wait(mut self, v: impl Into<ReadinessState>) -> Self { self.wait = Some(v.into()); self }
+        pub fn context_id(mut self, v: impl Into<BrowsingContext>) -> Self { self.context_id = Some(v.into()); self }
+        pub fn build(self) -> NavigateOptions {
+            NavigateOptions { wait: self.wait, context_id: self.context_id }
+        }
+    }
+
+    #[derive(Debug, Clone, Default)]
+    pub struct CreateContextOptions {
+        pub context_type: Option<CreateType>,
+        pub reference_context: Option<BrowsingContext>,
+    }
+
+    #[derive(Default, Clone)]
+    pub struct CreateContextOptionsBuilder {
+        context_type: Option<CreateType>,
+        reference_context: Option<BrowsingContext>,
+    }
+
+    impl CreateContextOptionsBuilder {
+        pub fn context_type(mut self, v: impl Into<CreateType>) -> Self { self.context_type = Some(v.into()); self }
+        pub fn reference_context(mut self, v: impl Into<BrowsingContext>) -> Self { self.reference_context = Some(v.into()); self }
+        pub fn build(self) -> CreateContextOptions {
+            CreateContextOptions { context_type: self.context_type, reference_context: self.reference_context }
+        }
+    }
+
+    #[derive(Debug, Clone, Default)]
+    pub struct FindNodesOptions {
+        pub context_id: Option<BrowsingContext>,
+        pub max_node_count: Option<u64>,
+        pub serialization_options: Option<SerializationOptions>,
+        pub start_nodes: Option<Vec<SharedReference>>,
+    }
+
+    #[derive(Default, Clone)]
+    pub struct FindNodesOptionsBuilder {
+        context_id: Option<BrowsingContext>,
+        max_node_count: Option<u64>,
+        serialization_options: Option<SerializationOptions>,
+        start_nodes: Option<Vec<SharedReference>>,
+    }
+
+    impl FindNodesOptionsBuilder {
+        pub fn context_id(mut self, v: impl Into<BrowsingContext>) -> Self { self.context_id = Some(v.into()); self }
+        pub fn max_node_count(mut self, v: impl Into<u64>) -> Self { self.max_node_count = Some(v.into()); self }
+        pub fn serialization_options(mut self, v: impl Into<SerializationOptions>) -> Self { self.serialization_options = Some(v.into()); self }
+        pub fn start_nodes(mut self, v: Vec<SharedReference>) -> Self { self.start_nodes = Some(v); self }
+        pub fn build(self) -> FindNodesOptions {
+            FindNodesOptions {
+                context_id: self.context_id, max_node_count: self.max_node_count,
+                serialization_options: self.serialization_options, start_nodes: self.start_nodes,
+            }
+        }
+    }
+
+    #[derive(Debug, Clone, Default)]
+    pub struct WaitForNodesOptions {
+        pub context_id: Option<BrowsingContext>,
+        pub timeout_ms: Option<u64>,
+        pub poll_interval_ms: Option<u64>,
+    }
+
+    #[derive(Default, Clone)]
+    pub struct WaitForNodesOptionsBuilder {
+        context_id: Option<BrowsingContext>,
+        timeout_ms: Option<u64>,
+        poll_interval_ms: Option<u64>,
+    }
+
+    impl WaitForNodesOptionsBuilder {
+        pub fn context_id(mut self, v: impl Into<BrowsingContext>) -> Self { self.context_id = Some(v.into()); self }
+        pub fn timeout_ms(mut self, v: impl Into<u64>) -> Self { self.timeout_ms = Some(v.into()); self }
+        pub fn poll_interval_ms(mut self, v: impl Into<u64>) -> Self { self.poll_interval_ms = Some(v.into()); self }
+        pub fn build(self) -> WaitForNodesOptions {
+            WaitForNodesOptions {
+                context_id: self.context_id, timeout_ms: self.timeout_ms,
+                poll_interval_ms: self.poll_interval_ms,
+            }
+        }
+    }
+
+    #[derive(Debug, Clone, Default)]
+    pub struct OnRequestOptions {
+        pub url_patterns: Option<Vec<UrlPattern>>,
+        pub contexts: Option<Vec<String>>,
+    }
+
+    #[derive(Default, Clone)]
+    pub struct OnRequestOptionsBuilder {
+        url_patterns: Option<Vec<UrlPattern>>,
+        contexts: Option<Vec<String>>,
+    }
+
+    impl OnRequestOptionsBuilder {
+        pub fn url_patterns(mut self, v: Vec<UrlPattern>) -> Self { self.url_patterns = Some(v); self }
+        pub fn contexts(mut self, v: Vec<String>) -> Self { self.contexts = Some(v); self }
+        pub fn build(self) -> OnRequestOptions {
+            OnRequestOptions { url_patterns: self.url_patterns, contexts: self.contexts }
+        }
+    }
+
+    #[derive(Debug, Clone, Default)]
+    pub struct SubscribeEventsOptions {
+        pub browsing_contexts: Option<Vec<String>>,
+        pub user_contexts: Option<Vec<String>>,
+    }
+
+    #[derive(Default, Clone)]
+    pub struct SubscribeEventsOptionsBuilder {
+        browsing_contexts: Option<Vec<String>>,
+        user_contexts: Option<Vec<String>>,
+    }
+
+    impl SubscribeEventsOptionsBuilder {
+        pub fn browsing_contexts(mut self, v: Vec<String>) -> Self { self.browsing_contexts = Some(v); self }
+        pub fn user_contexts(mut self, v: Vec<String>) -> Self { self.user_contexts = Some(v); self }
+        pub fn build(self) -> SubscribeEventsOptions {
+            SubscribeEventsOptions { browsing_contexts: self.browsing_contexts, user_contexts: self.user_contexts }
+        }
+    }
+
+    #[derive(Debug, Clone, Default)]
+    pub struct EvaluateScriptOptions {
+        pub target: Option<Target>,
+        pub result_ownership: Option<ResultOwnership>,
+        pub serialization_options: Option<SerializationOptions>,
+        pub user_activation: Option<bool>,
+    }
+
+    #[derive(Default, Clone)]
+    pub struct EvaluateScriptOptionsBuilder {
+        target: Option<Target>,
+        result_ownership: Option<ResultOwnership>,
+        serialization_options: Option<SerializationOptions>,
+        user_activation: Option<bool>,
+    }
+
+    impl EvaluateScriptOptionsBuilder {
+        pub fn target(mut self, v: impl Into<Target>) -> Self { self.target = Some(v.into()); self }
+        pub fn result_ownership(mut self, v: impl Into<ResultOwnership>) -> Self { self.result_ownership = Some(v.into()); self }
+        pub fn serialization_options(mut self, v: impl Into<SerializationOptions>) -> Self { self.serialization_options = Some(v.into()); self }
+        pub fn user_activation(mut self, v: impl Into<bool>) -> Self { self.user_activation = Some(v.into()); self }
+        pub fn build(self) -> EvaluateScriptOptions {
+            EvaluateScriptOptions {
+                target: self.target, result_ownership: self.result_ownership,
+                serialization_options: self.serialization_options, user_activation: self.user_activation,
+            }
+        }
+    }
+
+    #[derive(Debug, Clone, Default)]
+    pub struct AddPreloadScriptOptions {
+        pub arguments: Option<Vec<ChannelValue>>,
+        pub contexts: Option<Vec<BrowsingContext>>,
+        pub user_contexts: Option<Vec<String>>,
+        pub sandbox: Option<String>,
+    }
+
+    #[derive(Default, Clone)]
+    pub struct AddPreloadScriptOptionsBuilder {
+        arguments: Option<Vec<ChannelValue>>,
+        contexts: Option<Vec<BrowsingContext>>,
+        user_contexts: Option<Vec<String>>,
+        sandbox: Option<String>,
+    }
+
+    impl AddPreloadScriptOptionsBuilder {
+        pub fn arguments(mut self, v: Vec<ChannelValue>) -> Self { self.arguments = Some(v); self }
+        pub fn contexts(mut self, v: Vec<BrowsingContext>) -> Self { self.contexts = Some(v); self }
+        pub fn user_contexts(mut self, v: Vec<String>) -> Self { self.user_contexts = Some(v); self }
+        pub fn sandbox(mut self, v: impl Into<String>) -> Self { self.sandbox = Some(v.into()); self }
+        pub fn build(self) -> AddPreloadScriptOptions {
+            AddPreloadScriptOptions {
+                arguments: self.arguments, contexts: self.contexts,
+                user_contexts: self.user_contexts, sandbox: self.sandbox,
+            }
+        }
+    }
+
+    #[derive(Debug, Clone, Default)]
+    pub struct EmulateTimezoneOptions {
+        pub contexts: Option<Vec<BrowsingContext>>,
+        pub user_contexts: Option<Vec<String>>,
+    }
+
+    #[derive(Default, Clone)]
+    pub struct EmulateTimezoneOptionsBuilder {
+        contexts: Option<Vec<BrowsingContext>>,
+        user_contexts: Option<Vec<String>>,
+    }
+
+    impl EmulateTimezoneOptionsBuilder {
+        pub fn contexts(mut self, v: Vec<BrowsingContext>) -> Self { self.contexts = Some(v); self }
+        pub fn user_contexts(mut self, v: Vec<String>) -> Self { self.user_contexts = Some(v); self }
+        pub fn build(self) -> EmulateTimezoneOptions {
+            EmulateTimezoneOptions { contexts: self.contexts, user_contexts: self.user_contexts }
+        }
+    }
+
+    #[derive(Debug, Clone, Default)]
+    pub struct AuthenticateOptions {
+        pub url_patterns: Option<Vec<UrlPattern>>,
+        pub contexts: Option<Vec<String>>,
+    }
+
+    #[derive(Default, Clone)]
+    pub struct AuthenticateOptionsBuilder {
+        url_patterns: Option<Vec<UrlPattern>>,
+        contexts: Option<Vec<String>>,
+    }
+
+    impl AuthenticateOptionsBuilder {
+        pub fn url_patterns(mut self, v: Vec<UrlPattern>) -> Self { self.url_patterns = Some(v); self }
+        pub fn contexts(mut self, v: Vec<String>) -> Self { self.contexts = Some(v); self }
+        pub fn build(self) -> AuthenticateOptions {
+            AuthenticateOptions { url_patterns: self.url_patterns, contexts: self.contexts }
+        }
+    }
+}
+
+
+pub use options::{
+    AddPreloadScriptOptions, AddPreloadScriptOptionsBuilder,
+    AuthenticateOptions, AuthenticateOptionsBuilder,
+    BrowserScreenshotOptions, BrowserScreenshotOptionsBuilder,
+    CreateContextOptions, CreateContextOptionsBuilder,
+    EmulateTimezoneOptions, EmulateTimezoneOptionsBuilder,
+    EvaluateScriptOptions, EvaluateScriptOptionsBuilder,
+    FindNodesOptions, FindNodesOptionsBuilder,
+    NavigateOptions, NavigateOptionsBuilder,
+    OnRequestOptions, OnRequestOptionsBuilder,
+    SubscribeEventsOptions, SubscribeEventsOptionsBuilder,
+    WaitForNodesOptions, WaitForNodesOptionsBuilder,
+};
 
 pub trait BidiBrowser: Send + Sync {
     type Transport: ConnectionTransport + Send + Sync + 'static;
@@ -65,7 +352,7 @@ pub trait BidiBrowser: Send + Sync {
     fn navigate(
         &mut self,
         url: &str,
-    ) -> impl Future<Output = Result<NavigateResult, OpenUrlError>> + Send {
+    ) -> impl Future<Output = Result<NavigateResult, NavigateError>> + Send {
         async move {
             self.navigate_with_options(url, NavigateOptions::default())
                 .await
@@ -77,7 +364,7 @@ pub trait BidiBrowser: Send + Sync {
         &mut self,
         url: &str,
         options: NavigateOptions,
-    ) -> impl Future<Output = Result<NavigateResult, OpenUrlError>> + Send {
+    ) -> impl Future<Output = Result<NavigateResult, NavigateError>> + Send {
         async move {
             let context = options
                 .context_id
@@ -93,23 +380,23 @@ pub trait BidiBrowser: Send + Sync {
     // ── Context ──────────────────────────────────────────────────────────────
 
     /// Creates a new browsing context (tab) with default options.
-    fn create_context_bidi(
+    fn create_context(
         &mut self,
         background: bool,
-    ) -> impl Future<Output = Result<rustenium_core::BrowsingContext, ContextCreationError>> + Send
+    ) -> impl Future<Output = Result<DomainBrowsingContext, ContextCreationError>> + Send
     {
         async move {
-            self.create_context_bidi_with_options(background, CreateContextOptions::default())
+            self.create_context_with_options(background, CreateContextOptions::default())
                 .await
         }
     }
 
     /// Creates a new browsing context with custom options (type, reference context, background).
-    fn create_context_bidi_with_options(
+    fn create_context_with_options(
         &mut self,
         background: bool,
         options: CreateContextOptions,
-    ) -> impl Future<Output = Result<rustenium_core::BrowsingContext, ContextCreationError>> + Send
+    ) -> impl Future<Output = Result<DomainBrowsingContext, ContextCreationError>> + Send
     {
         async move {
             let context_type = options.context_type.unwrap_or(CreateType::Tab);
@@ -283,7 +570,7 @@ pub trait BidiBrowser: Send + Sync {
     // ── Network interception ─────────────────────────────────────────────────
 
     /// Registers a handler called for each network request (all URLs, all contexts).
-    fn on_request_bidi<F, Fut>(
+    fn on_request<F, Fut>(
         &mut self,
         handler: F,
     ) -> impl Future<Output = Result<(), InterceptNetworkError>> + Send
@@ -292,13 +579,13 @@ pub trait BidiBrowser: Send + Sync {
         Fut: Future<Output = ()> + Send + 'static,
     {
         async move {
-            self.on_request_bidi_with_options(handler, OnRequestOptions::default())
+            self.on_request_with_options(handler, OnRequestOptions::default())
                 .await
         }
     }
 
     /// Registers a handler called for each network request with custom URL pattern and context filters.
-    fn on_request_bidi_with_options<F, Fut>(
+    fn on_request_with_options<F, Fut>(
         &mut self,
         handler: F,
         options: OnRequestOptions,
@@ -387,13 +674,13 @@ pub trait BidiBrowser: Send + Sync {
     // ── Script evaluation ────────────────────────────────────────────────────
 
     /// Evaluates a JavaScript expression in the active browsing context.
-    fn evaluate_script_bidi(
+    fn evaluate_script(
         &mut self,
         expression: String,
         await_promise: bool,
     ) -> impl Future<Output = Result<EvaluateResultSuccess, EvaluateResultError>> + Send {
         async move {
-            self.evaluate_script_bidi_with_options(
+            self.evaluate_script_with_options(
                 expression,
                 await_promise,
                 EvaluateScriptOptions::default(),
@@ -403,7 +690,7 @@ pub trait BidiBrowser: Send + Sync {
     }
 
     /// Evaluates a JavaScript expression with custom options (target, result ownership, serialization).
-    fn evaluate_script_bidi_with_options(
+    fn evaluate_script_with_options(
         &mut self,
         expression: String,
         await_promise: bool,
@@ -436,12 +723,12 @@ pub trait BidiBrowser: Send + Sync {
     // ── Preload scripts ──────────────────────────────────────────────────────
 
     /// Adds a preload script that runs in every new browsing context.
-    fn add_preload_script_bidi(
+    fn add_preload_script(
         &mut self,
         function_declaration: String,
     ) -> impl Future<Output = Result<String, EvaluateResultError>> + Send {
         async move {
-            self.add_preload_script_bidi_with_options(
+            self.add_preload_script_with_options(
                 function_declaration,
                 AddPreloadScriptOptions::default(),
             )
@@ -450,7 +737,7 @@ pub trait BidiBrowser: Send + Sync {
     }
 
     /// Adds a preload script with custom options (arguments, contexts, sandbox).
-    fn add_preload_script_bidi_with_options(
+    fn add_preload_script_with_options(
         &mut self,
         function_declaration: String,
         options: AddPreloadScriptOptions,
@@ -478,7 +765,7 @@ pub trait BidiBrowser: Send + Sync {
     }
 
     /// Removes a preload script by its ID.
-    fn remove_preload_script_bidi(
+    fn remove_preload_script(
         &mut self,
         script: String,
     ) -> impl Future<Output = Result<(), EvaluateResultError>> + Send {
@@ -673,7 +960,7 @@ pub trait BidiBrowser: Send + Sync {
     // ── Session ──────────────────────────────────────────────────────────────
 
     /// Sends a raw WebDriver BiDi command.
-    fn send_bidi_command(
+    fn send_command(
         &mut self,
         command: Command,
     ) -> impl Future<Output = Result<CommandResponse, SessionSendError>> + Send {
@@ -681,7 +968,7 @@ pub trait BidiBrowser: Send + Sync {
     }
 
     /// Ends the BiDi session and cleans up resources.
-    fn end_bidi_session(&mut self) -> impl Future<Output = Result<(), SessionSendError>> + Send {
+    fn end_session(&mut self) -> impl Future<Output = Result<(), SessionSendError>> + Send {
         async move { self.driver_mut().end_session().await }
     }
 }

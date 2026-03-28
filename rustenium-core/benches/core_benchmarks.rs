@@ -10,7 +10,7 @@ fn bench_transport_config_formatting(c: &mut Criterion) {
         protocol: ConnectionTransportProtocol::Ws,
         host: "127.0.0.1".to_string(),
         port: 9222,
-        path: "session",
+        path: "session".to_string(),
     };
 
     c.bench_function("full_endpoint", |b| {

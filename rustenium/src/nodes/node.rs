@@ -3,7 +3,7 @@ use std::future::Future;
 use serde::Deserialize;
 use rustenium_bidi_definitions::browsing_context::types::{BrowsingContext, Locator};
 use rustenium_bidi_definitions::script::types::{Handle, SharedId};
-use crate::error::EvaluateResultError;
+use crate::error::bidi::EvaluateResultError;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(u16)]

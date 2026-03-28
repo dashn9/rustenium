@@ -2,7 +2,7 @@ use std::future::Future;
 use std::sync::Arc;
 use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
 use tokio::sync::Mutex;
-use crate::error::InputError;
+use crate::error::bidi::InputError;
 
 #[derive(Debug, Clone, Default)]
 pub struct MouseMoveOptions {

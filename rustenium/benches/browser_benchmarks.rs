@@ -472,7 +472,7 @@ fn bench_script_eval(c: &mut Criterion) {
                 rt.block_on(async {
                     black_box(
                         browser
-                            .evaluate_script_bidi(script.to_string(), false)
+                            .evaluate_script(script.to_string(), false)
                             .await
                             .unwrap(),
                     );
@@ -486,7 +486,7 @@ fn bench_script_eval(c: &mut Criterion) {
             rt.block_on(async {
                 black_box(
                     browser
-                        .evaluate_script_bidi("1 + 1".to_string(), false)
+                        .evaluate_script("1 + 1".to_string(), false)
                         .await
                         .unwrap(),
                 );
@@ -516,7 +516,7 @@ fn bench_script_eval(c: &mut Criterion) {
                 rt.block_on(async {
                     black_box(
                         browser
-                            .evaluate_script_bidi(script.to_string(), false)
+                            .evaluate_script(script.to_string(), false)
                             .await
                             .unwrap(),
                     );
@@ -554,7 +554,7 @@ fn bench_script_eval(c: &mut Criterion) {
                 rt.block_on(async {
                     black_box(
                         browser
-                            .evaluate_script_bidi(script.to_string(), false)
+                            .evaluate_script(script.to_string(), false)
                             .await
                             .unwrap(),
                     );
@@ -652,7 +652,7 @@ fn bench_context_management(c: &mut Criterion) {
         let mut browser = launch_headless(&rt);
         b.iter(|| {
             rt.block_on(async {
-                black_box(browser.create_context_bidi(true).await.unwrap());
+                black_box(browser.create_context(true).await.unwrap());
             });
         });
         teardown(browser, &rt);
@@ -663,7 +663,7 @@ fn bench_context_management(c: &mut Criterion) {
         b.iter(|| {
             rt.block_on(async {
                 for _ in 0..5 {
-                    black_box(browser.create_context_bidi(true).await.unwrap());
+                    black_box(browser.create_context(true).await.unwrap());
                 }
             });
         });
@@ -746,7 +746,7 @@ fn bench_end_to_end(c: &mut Criterion) {
                 black_box(browser.screenshot().await.unwrap());
 
                 let eval = browser
-                    .evaluate_script_bidi("document.title".to_string(), false)
+                    .evaluate_script("document.title".to_string(), false)
                     .await
                     .unwrap();
                 black_box(extract_string(&eval.result));
@@ -793,7 +793,7 @@ fn bench_end_to_end(c: &mut Criterion) {
                 black_box(browser.screenshot().await.unwrap());
 
                 let eval = browser
-                    .evaluate_script_bidi(
+                    .evaluate_script(
                         "document.querySelectorAll('*').length".to_string(),
                         false,
                     )
@@ -816,7 +816,7 @@ fn bench_end_to_end(c: &mut Criterion) {
             rt.block_on(async {
                 let mut contexts = vec![browser.get_active_context_id().unwrap()];
                 for _ in 1..urls.len() {
-                    let ctx = browser.create_context_bidi(true).await.unwrap();
+                    let ctx = browser.create_context(true).await.unwrap();
                     let id: String = ctx.into();
                     contexts.push(id.into());
                 }

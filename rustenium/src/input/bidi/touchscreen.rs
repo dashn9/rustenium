@@ -10,7 +10,7 @@ use rustenium_bidi_definitions::input::types::{
 };
 use rustenium_core::BidiSession;
 use rustenium_core::transport::ConnectionTransport;
-use crate::error::InputError;
+use crate::error::bidi::InputError;
 use std::sync::Arc;
 use tokio::sync::Mutex;
 use crate::input::mouse::Point;

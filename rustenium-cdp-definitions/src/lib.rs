@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 #[macro_use]
 mod macros;
+pub mod base;
 pub mod browser_protocol;
 pub mod js_protocol;
 #[derive(Debug, Clone, PartialEq, Eq, Default, Serialize, Deserialize)]

@@ -19,7 +19,7 @@ pub struct ZeroBrowsingContextAtStartError;
 pub struct ContextIndexError{}
 
 #[derive(Debug, Error)]
-pub enum OpenUrlError {
+pub enum NavigateError {
     #[error(transparent)]
     ContextIndexError(#[from] ContextIndexError),
     #[error("An error occured executing command")]

@@ -6,7 +6,7 @@ mod transport_tests {
         let config = ConnectionTransportConfig::default();
         assert_eq!(config.host, "localhost");
         assert_eq!(config.port, 0);
-        assert_eq!(config.path, "session");
+        assert_eq!(config.path, "session".to_string());
     }
 
     #[test]
@@ -17,7 +17,7 @@ mod transport_tests {
                     protocol: ConnectionTransportProtocol::Ws,
                     host: "127.0.0.1".to_string(),
                     port: 9222,
-                    path: "session",
+                    path: "session".to_string(),
                 },
                 "ws://127.0.0.1:9222/session",
             ),
@@ -26,7 +26,7 @@ mod transport_tests {
                     protocol: ConnectionTransportProtocol::Wss,
                     host: "example.com".to_string(),
                     port: 443,
-                    path: "/custom/path",
+                    path: "/custom/path".to_string(),
                 },
                 "wss://example.com:443/custom/path",
             ),
@@ -35,7 +35,7 @@ mod transport_tests {
                     protocol: ConnectionTransportProtocol::Http,
                     host: "0.0.0.0".to_string(),
                     port: 8080,
-                    path: "api",
+                    path: "api".to_string(),
                 },
                 "http://0.0.0.0:8080/api",
             ),
@@ -48,8 +48,8 @@ mod transport_tests {
 
     #[test]
     fn path_leading_slash_handling() {
-        let no_slash = ConnectionTransportConfig { path: "no-slash", ..Default::default() };
-        let with_slash = ConnectionTransportConfig { path: "/already-slashed", ..Default::default() };
+        let no_slash = ConnectionTransportConfig { path: "no-slash".to_string(), ..Default::default() };
+        let with_slash = ConnectionTransportConfig { path: "/already-slashed".to_string(), ..Default::default() };
 
         assert_eq!(no_slash.path(), "/no-slash");
         assert_eq!(with_slash.path(), "/already-slashed");
@@ -88,23 +88,6 @@ mod connection_tests {
         for port in &ports {
             assert!(*port > 0);
         }
-    }
-}
-
-mod context_tests {
-    use crate::contexts::BrowsingContext;
-    use rustenium_bidi_definitions::browsing_context::types::CreateType;
-
-    #[test]
-    fn from_id_and_accessors() {
-        let ctx = BrowsingContext::from_id("ctx-123".to_string(), CreateType::Tab);
-        assert_eq!(ctx.id().as_ref(), "ctx-123");
-
-        let cloned = ctx.clone();
-        assert_eq!(cloned.id().as_ref(), "ctx-123");
-
-        let s: String = cloned.into();
-        assert_eq!(s, "ctx-123");
     }
 }
 

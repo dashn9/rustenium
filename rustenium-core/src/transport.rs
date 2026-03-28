@@ -44,7 +44,7 @@ pub struct ConnectionTransportConfig {
     pub protocol: ConnectionTransportProtocol,
     pub host: String,
     pub port: u16,
-    pub path:  &'static str,
+    pub path: String,
 }
 
 impl Default for ConnectionTransportConfig {
@@ -53,7 +53,7 @@ impl Default for ConnectionTransportConfig {
             protocol: ConnectionTransportProtocol::Ws,
             host: String::from("localhost"),
             port: 0,
-            path: "session",
+            path: "session".to_string(),
         }
     }
 }
@@ -62,7 +62,7 @@ impl ConnectionTransportConfig {
     pub fn full_endpoint(&self) -> String {
         format!("{}://{}{}", self.protocol, self.host_port(), self.path())
     }
-    
+
     pub fn host_port(&self) -> String {
         format!("{}:{}", self.host, self.port)
     }
@@ -72,6 +72,33 @@ impl ConnectionTransportConfig {
         format!("/{}", path_str)
     }
 
+    /// Parse a WebSocket URL (`ws://` or `wss://`) into a `ConnectionTransportConfig`.
+    pub fn from_ws_url(url: &str) -> Result<Self, String> {
+        let (protocol_str, rest) = url
+            .split_once("://")
+            .ok_or_else(|| format!("missing '://' in URL: {}", url))?;
+
+        let protocol = match protocol_str {
+            "ws" => ConnectionTransportProtocol::Ws,
+            "wss" => ConnectionTransportProtocol::Wss,
+            p => return Err(format!("unsupported WebSocket protocol: {}", p)),
+        };
+
+        let (host_port, path_tail) = rest.split_once('/').unwrap_or((rest, ""));
+        let (host, port_str) = host_port
+            .rsplit_once(':')
+            .ok_or_else(|| format!("missing port in URL: {}", url))?;
+        let port = port_str
+            .parse::<u16>()
+            .map_err(|e| format!("invalid port '{}': {}", port_str, e))?;
+
+        Ok(Self {
+            protocol,
+            host: host.to_string(),
+            port,
+            path: format!("/{}", path_tail),
+        })
+    }
 }
 
 pub trait ConnectionTransport {
@@ -120,6 +147,7 @@ impl WebsocketConnectionTransport {
         let retry_delay_ms = 400;
         let mut retries = 3;
 
+        tracing::debug!("[WebsocketConnectionTransport]: Connecting to websocket @ url: {}", connection_config.full_endpoint());
         let stream = loop {
             match TcpStream::connect(&addr_host).await {
                 Ok(stream) => break stream,
@@ -149,7 +177,6 @@ impl WebsocketConnectionTransport {
         let (mut ws, _) = handshake::client(&SpawnExecutor, req, stream).await.unwrap();
         ws = Self::configure_client(ws);
         let (rx, tx) = ws.split(tokio::io::split);
-        tracing::info!("Successfully connected to WebDriver");
 
         Ok(Self {
             client_rx: Arc::new(Mutex::new(rx)),

@@ -1,6 +1,6 @@
 use std::future::Future;
 use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
-use crate::error::InputError;
+use crate::error::bidi::InputError;
 use crate::input::bidi::keyboard::{KeyPressOptions, KeyboardTypeOptions};
 
 pub trait Keyboard {

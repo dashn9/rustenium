@@ -1,4 +1,4 @@
-use rustenium::error::*;
+use rustenium::error::bidi::*;
 
 #[tokio::test]
 async fn error_display_messages() {
@@ -18,8 +18,8 @@ async fn error_display_messages() {
 
 #[tokio::test]
 async fn context_index_error_converts_to_open_url_error() {
-    let err: OpenUrlError = ContextIndexError {}.into();
-    assert!(matches!(err, OpenUrlError::ContextIndexError(_)));
+    let err: NavigateError = ContextIndexError {}.into();
+    assert!(matches!(err, NavigateError::ContextIndexError(_)));
 }
 
 #[tokio::test]

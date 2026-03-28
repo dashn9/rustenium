@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = [ "rustenium", "rustenium-bidi-definitions", "rustenium-cdp-definitions","rustenium-core", "rustenium-generator", "rustenium-macros"]
+members = ["runner", "rustenium", "rustenium-bidi-definitions", "rustenium-cdp-definitions","rustenium-core", "rustenium-generator", "rustenium-macros"]
 
 [profile.dev]
 panic = "abort"
