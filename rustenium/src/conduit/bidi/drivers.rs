@@ -195,29 +195,6 @@ pub trait DriverConfiguration {
     fn flags(&self) -> Vec<String>;
 }
 
-pub trait BidiDrive<T: ConnectionTransport> {
-    fn start(
-        driver_config: &impl DriverConfiguration,
-        connection_transport_config: &ConnectionTransportConfig,
-        session_connection_type: SessionConnectionType,
-        capabilities: CapabilitiesRequest,
-    ) -> impl Future<
-        Output = (
-            Arc<TokioMutex<BidiSession<WebsocketConnectionTransport>>>,
-            Process,
-        ),
-    > {
-        async {
-            let driver_process = Process::create(driver_config.exe_path(), driver_config.flags());
-            let mut session = BidiSession::<T>::ws_new(connection_transport_config).await;
-            session
-                .initialize(session_connection_type, capabilities)
-                .await;
-            (Arc::new(TokioMutex::new(session)), driver_process)
-        }
-    }
-}
-
 pub struct BidiDriver<T: ConnectionTransport + Send + Sync> {
     pub exe_path: String,
     pub flags: Vec<String>,
@@ -609,4 +586,22 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
         self.session.lock().await.end_session().await?;
         Ok(())
     }
+}
+
+pub async fn start_bidi_driver(
+    driver_config: &impl DriverConfiguration,
+    connection_transport_config: &ConnectionTransportConfig,
+    session_connection_type: SessionConnectionType,
+    capabilities: CapabilitiesRequest,
+) -> (
+    Arc<TokioMutex<BidiSession<WebsocketConnectionTransport>>>,
+    Process,
+) {
+    let driver_process = Process::create(driver_config.exe_path(), driver_config.flags());
+    let mut session =
+        BidiSession::<WebsocketConnectionTransport>::ws_new(connection_transport_config).await;
+    session
+        .initialize(session_connection_type, capabilities)
+        .await;
+    (Arc::new(TokioMutex::new(session)), driver_process)
 }

@@ -1,8 +1,5 @@
-use std::sync::Arc;
-use tokio::sync::Mutex;
-use rustenium_core::transport::WebsocketConnectionTransport;
-use crate::conduit::cdp::adapter::CdpAdapter;
+use rustenium_cdp_definitions::browser_protocol::target::types::TargetId;
 
 pub trait Page {
-    fn adapter(&self) -> Arc<Mutex<CdpAdapter<WebsocketConnectionTransport>>>;
+    fn target_id(&self) -> &TargetId;
 }

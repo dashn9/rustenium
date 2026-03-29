@@ -66,7 +66,7 @@ impl<T: ConnectionTransport> BidiConnection<T> {
 
 pub struct CdpConnection<T: ConnectionTransport> {
     transport: T,
-    pub commands_response_subscriptions: Arc<Mutex<HashMap<u64, oneshot::Sender<CdpCommandResponseState>>>>,
+    pub commands_response_subscriptions: Arc<Mutex<HashMap<u16, oneshot::Sender<CdpCommandResponseState>>>>,
     event_listener: CdpEventListener,
 }
 

@@ -5,14 +5,14 @@ use crate::Command;
 #[derive(Debug, Clone, Serialize)]
 pub struct CommandMessage {
     #[serde(rename = "id")]
-    pub id: u64,
+    pub id: u16,
     #[serde(flatten)]
     pub command_data: Command,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CommandResponse {
-    pub id: u64,
+    pub id: u16,
     pub result: serde_json::Value,
 }
 
@@ -32,7 +32,7 @@ impl std::fmt::Display for ErrorInfo {
 pub struct ErrorResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub id: Option<u64>,
+    pub id: Option<u16>,
     pub error: ErrorInfo,
 }
 

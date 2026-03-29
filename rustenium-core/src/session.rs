@@ -220,7 +220,7 @@ impl<T: ConnectionTransport> CdpSession<T> {
         command: impl Into<CdpCommand>,
     ) -> oneshot::Receiver<CdpCommandResponseState> {
         let command_id = loop {
-            let id = rand::rng().random::<u32>() as u64;
+            let id = rand::rng().random::<u16>();
             if !self.connection.commands_response_subscriptions.lock().await.contains_key(&id) {
                 break id;
             }

@@ -151,6 +151,7 @@ impl CdpListener {
                         let _ = self.command_response_tx.send(CdpCommandResponseState::Success(r));
                     }
                     cdp_base::Message::ErrorResponse(e) => {
+                        tracing::debug!("[CdpListener]: Error Response: {}", e);
                         let _ = self.command_response_tx.send(CdpCommandResponseState::Error(e));
                     }
                     cdp_base::Message::Event(e) => {
@@ -163,14 +164,14 @@ impl CdpListener {
 }
 
 pub struct CdpCommandResponseListener {
-    subscriptions: Arc<Mutex<HashMap<u64, oneshot::Sender<CdpCommandResponseState>>>>,
+    subscriptions: Arc<Mutex<HashMap<u16, oneshot::Sender<CdpCommandResponseState>>>>,
     rx: UnboundedReceiver<CdpCommandResponseState>,
 }
 
 impl CdpCommandResponseListener {
     pub fn new(
         rx: UnboundedReceiver<CdpCommandResponseState>,
-        subscriptions: Arc<Mutex<HashMap<u64, oneshot::Sender<CdpCommandResponseState>>>>,
+        subscriptions: Arc<Mutex<HashMap<u16, oneshot::Sender<CdpCommandResponseState>>>>,
     ) -> Self {
         Self { rx, subscriptions }
     }
