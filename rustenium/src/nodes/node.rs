@@ -3,7 +3,9 @@ use std::future::Future;
 use serde::Deserialize;
 use rustenium_bidi_definitions::browsing_context::types::{BrowsingContext, Locator};
 use rustenium_bidi_definitions::script::types::{Handle, SharedId};
-use crate::error::bidi::EvaluateResultError;
+use crate::error::bidi::{EvaluateResultError, MouseInputError, ScreenshotError};
+use crate::input::{MouseClickOptions, MouseMoveOptions};
+use crate::nodes::bidi::node::BidiNodeScreenshotOptions;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(u16)]
@@ -89,4 +91,15 @@ pub trait Node {
 
     fn delete(&self) -> impl Future<Output = Result<(), EvaluateResultError>>;
 
+    fn mouse_move(&mut self) -> impl Future<Output = Result<(), MouseInputError>>;
+
+    fn mouse_move_with_options(&mut self, options: MouseMoveOptions) -> impl Future<Output = Result<(), MouseInputError>>;
+
+    fn mouse_click(&mut self) -> impl Future<Output = Result<(), MouseInputError>>;
+
+    fn mouse_click_with_options(&mut self, options: MouseClickOptions) -> impl Future<Output = Result<(), MouseInputError>>;
+
+    fn screenshot(&self) -> impl Future<Output = Result<String, ScreenshotError>>;
+
+    fn screenshot_with_options(&self, options: BidiNodeScreenshotOptions) -> impl Future<Output = Result<String, ScreenshotError>>;
 }

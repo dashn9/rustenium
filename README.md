@@ -7,10 +7,10 @@ Rustenium provides a powerful and ergonomic API for browser automation using the
 ## Features
 
 - **Dual Protocol Support**: Full WebDriver BiDi and Chrome DevTools Protocol (CDP) support
-- **Flexible Launch Modes**: Manage Chrome yourself, connect to an existing instance, or let chromedriver handle it
+- **Multi-Browser**: Chrome and Firefox support out of the box
+- **Flexible Launch Modes**: Manage the browser yourself, connect to an existing instance, or let the driver handle it
 - **Optional Protocols**: Enable BiDi, CDP, or both — connect and disconnect at runtime
-- **Chrome Support**: First-class support for Chrome/Chromium browsers
-- **Auto-Download**: Automatically downloads Chrome and chromedriver if not present
+- **Auto-Download**: Automatically downloads Chrome, chromedriver, and Firefox if not present
 - **Flexible Input Methods**:
   - **BidiMouse**: Direct, precise mouse movements for fast automation
   - **HumanMouse**: Realistic mouse movements with Bezier curves and jitter to mimic human behavior
@@ -36,30 +36,60 @@ rustenium = { version = "1.0.1", features = ["macros"] }
 tokio = { version = "1", features = ["full"] }
 ```
 
-## Launch Modes
+## Browser Support
 
-Rustenium supports three ways to launch Chrome:
+### Chrome
+
+Chrome uses chromedriver for BiDi and connects directly for CDP. Both protocols can be used independently or together.
 
 ```rust
-use rustenium::browsers::{ChromeConfig, ChromeLaunchMode};
+use rustenium::browsers::{chrome, ChromeConfig, ChromeLaunchMode};
 
-// SpawnAndAttach (default) — Rustenium starts Chrome and attaches chromedriver
-let config = ChromeConfig::default();
+// Default — Rustenium starts Chrome and attaches chromedriver
+let mut browser = chrome(None).await;
 
 // DriverManaged — Chromedriver spawns and manages Chrome
 let config = ChromeConfig {
     launch_mode: ChromeLaunchMode::DriverManaged,
     ..Default::default()
 };
+let mut browser = chrome(Some(config)).await;
 
 // Remote — Connect to an existing Chrome instance
 let config = ChromeConfig {
     launch_mode: ChromeLaunchMode::Remote(9222),
     ..Default::default()
 };
+let mut browser = chrome(Some(config)).await;
 ```
 
-## Protocol Selection
+### Firefox
+
+Firefox has built-in WebDriver BiDi support — no separate driver needed. Rustenium connects directly to Firefox's BiDi WebSocket.
+
+```rust
+use rustenium::browsers::{firefox, FirefoxConfig, FirefoxLaunchMode};
+
+// Default — Rustenium starts Firefox and connects directly
+let mut browser = firefox(None).await;
+
+// With custom config
+let config = FirefoxConfig {
+    remote_debugging_port: Some(9222),
+    browser_flags: Some(vec!["--headless".to_string()]),
+    ..Default::default()
+};
+let mut browser = firefox(Some(config)).await;
+
+// Remote — Connect to an existing Firefox instance
+let config = FirefoxConfig {
+    launch_mode: FirefoxLaunchMode::Remote(9222),
+    ..Default::default()
+};
+let mut browser = firefox(Some(config)).await;
+```
+
+## Protocol Selection (Chrome)
 
 BiDi is enabled by default. CDP is opt-in. You can use them independently or together,
 though note that CDP can become buggy in the presence of an active BiDi connection.
@@ -89,6 +119,8 @@ let config = ChromeConfig {
 You can also connect protocols at runtime:
 
 ```rust
+use rustenium::browsers::{ChromeBrowser, ChromeConfig};
+
 // Start with CDP only, then connect BiDi later
 let mut browser = ChromeBrowser::new(ChromeConfig {
     enable_bidi: false,
@@ -104,13 +136,13 @@ browser.connect_bidi().await; // connects BiDi without affecting CDP
 ## Quick Start
 
 ```rust
-use rustenium::browsers::create_chrome_browser;
+use rustenium::browsers::chrome;
 use rustenium_macros::css;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Create a Chrome browser instance
-    let mut browser = create_chrome_browser(None).await;
+    let mut browser = chrome(None).await;
 
     // Navigate to a page
     browser.navigate("https://example.com").await?;
@@ -137,7 +169,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Browser Setup and Navigation (BiDi)
 
 ```rust
-use rustenium::browsers::{ChromeConfig, NavigateOptionsBuilder, create_chrome_browser};
+use rustenium::browsers::{chrome, ChromeConfig, NavigateOptionsBuilder};
 use rustenium_bidi_definitions::browsing_context::types::ReadinessState;
 
 #[tokio::main]
@@ -148,7 +180,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .add_args(["--window-size=1920,1080"])
         .accept_insecure_certs(true);
 
-    let mut browser = create_chrome_browser(Some(config)).await;
+    let mut browser = chrome(Some(config)).await;
 
     // Navigate and wait for load
     browser.navigate_with_options("https://example.com",
@@ -177,13 +209,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }).await;
 
     // Navigate via CDP
-    browser.navigate("https://example.com").await?;
+    CdpBrowser::navigate(&mut browser, "https://example.com").await?;
 
     // Create a new tab
-    let tab = browser.create_tab("https://example.org").await?;
+    CdpBrowser::create_tab(&mut browser, "https://example.org").await?;
 
     // Emulate device metrics
-    browser.emulate_device_metrics(375, 812, 3.0, true).await?;
+    CdpBrowser::emulate_device_metrics(&mut browser, 375, 812, 3.0, true).await?;
 
     Ok(())
 }
@@ -192,12 +224,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Finding Elements
 
 ```rust
-use rustenium::browsers::create_chrome_browser;
+use rustenium::browsers::chrome;
 use rustenium_macros::{css, xpath};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut browser = create_chrome_browser(None).await;
+    let mut browser = chrome(None).await;
     browser.navigate("https://example.com").await?;
 
     // Using CSS selectors
@@ -218,12 +250,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Mouse Input — Precise Movements
 
 ```rust
-use rustenium::browsers::create_chrome_browser;
+use rustenium::browsers::chrome;
 use rustenium::input::{MouseMoveOptions, MouseClickOptions, Point};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut browser = create_chrome_browser(None).await;
+    let mut browser = chrome(None).await;
     let context_id = browser.get_active_context_id()?;
 
     // Instant, precise movements
@@ -242,12 +274,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Mouse Input — Human-Like Movements
 
 ```rust
-use rustenium::browsers::create_chrome_browser;
+use rustenium::browsers::chrome;
 use rustenium::input::{MouseMoveOptions, MouseClickOptions, Point};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut browser = create_chrome_browser(None).await;
+    let mut browser = chrome(None).await;
     let context_id = browser.get_active_context_id()?;
 
     // Realistic movements with Bezier curves and jitter
@@ -262,13 +294,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Keyboard Input
 
 ```rust
-use rustenium::browsers::create_chrome_browser;
+use rustenium::browsers::chrome;
 use rustenium::input::KeyboardTypeOptions;
 use rustenium_macros::css;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut browser = create_chrome_browser(None).await;
+    let mut browser = chrome(None).await;
     let context_id = browser.get_active_context_id()?;
 
     browser.navigate("https://example.com").await?;
@@ -295,11 +327,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Network Interception
 
 ```rust
-use rustenium::browsers::create_chrome_browser;
+use rustenium::browsers::chrome;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut browser = create_chrome_browser(None).await;
+    let mut browser = chrome(None).await;
 
     // Intercept and handle network requests
     browser.on_request(|request| async move {
@@ -325,11 +357,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Script Evaluation & Preload Scripts
 
 ```rust
-use rustenium::browsers::create_chrome_browser;
+use rustenium::browsers::chrome;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut browser = create_chrome_browser(None).await;
+    let mut browser = chrome(None).await;
 
     // Evaluate JavaScript
     let result = browser.evaluate_script(
@@ -353,14 +385,34 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 ### Timezone Emulation
 
 ```rust
-use rustenium::browsers::create_chrome_browser;
+use rustenium::browsers::chrome;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut browser = create_chrome_browser(None).await;
+    let mut browser = chrome(None).await;
 
     browser.emulate_timezone(Some("Asia/Tokyo".to_string())).await?;
     browser.navigate("https://example.com").await?;
+
+    browser.close().await?;
+    Ok(())
+}
+```
+
+### Firefox Example
+
+```rust
+use rustenium::browsers::firefox;
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let mut browser = firefox(None).await;
+
+    browser.navigate("https://example.com").await?;
+
+    // All BiDi features work the same as Chrome
+    let nodes = browser.find_nodes(css!("h1")).await?;
+    browser.screenshot().await?;
 
     browser.close().await?;
     Ok(())
@@ -380,15 +432,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ## Browser Support
 
-Currently supported browsers:
-- Chrome/Chromium (stable, beta, dev, canary)
-
-Support for Firefox and other browsers is planned for future releases.
+| Browser | BiDi | CDP | Auto-Download |
+|---|---|---|---|
+| Chrome/Chromium | Yes | Yes | Yes |
+| Firefox | Yes | No | Yes |
 
 ## Requirements
 
 - Rust 1.85 or later (2024 edition)
-- Chrome/Chromium browser (auto-downloaded if not present)
+- Chrome or Firefox (auto-downloaded if not present)
 
 ## License
 

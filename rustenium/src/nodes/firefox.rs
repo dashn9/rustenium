@@ -45,14 +45,6 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static> FirefoxNode<T, M>
         Self { bidi_node, children, mouse }
     }
 
-    pub async fn screenshot(&self) -> Result<String, ScreenshotError> {
-        self.bidi_node.screenshot(BidiNodeScreenshotOptions::default()).await
-    }
-
-    pub async fn screenshot_with_options(&self, options: BidiNodeScreenshotOptions) -> Result<String, ScreenshotError> {
-        self.bidi_node.screenshot(options).await
-    }
-
     pub async fn mouse_move(&mut self) -> Result<(), MouseInputError> {
         self.bidi_node.mouse_move(self.mouse.as_ref(), MouseMoveOptions::default()).await
     }
@@ -130,5 +122,29 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static> Node for FirefoxN
 
     async fn delete(&self) -> Result<(), EvaluateResultError> {
         self.bidi_node.delete().await
+    }
+
+    async fn mouse_move(&mut self) -> Result<(), MouseInputError> {
+        self.bidi_node.mouse_move(self.mouse.as_ref(), MouseMoveOptions::default()).await
+    }
+
+    async fn mouse_move_with_options(&mut self, options: MouseMoveOptions) -> Result<(), MouseInputError> {
+        self.bidi_node.mouse_move(self.mouse.as_ref(), options).await
+    }
+
+    async fn mouse_click(&mut self) -> Result<(), MouseInputError> {
+        self.bidi_node.mouse_click(self.mouse.as_ref(), MouseClickOptions::default()).await
+    }
+
+    async fn mouse_click_with_options(&mut self, options: MouseClickOptions) -> Result<(), MouseInputError> {
+        self.bidi_node.mouse_click(self.mouse.as_ref(), options).await
+    }
+
+    async fn screenshot(&self) -> Result<String, ScreenshotError> {
+        self.bidi_node.screenshot(BidiNodeScreenshotOptions::default()).await
+    }
+
+    async fn screenshot_with_options(&self, options: BidiNodeScreenshotOptions) -> Result<String, ScreenshotError> {
+        self.bidi_node.screenshot(options).await
     }
 }

@@ -145,7 +145,11 @@ impl FirefoxBrowser {
                     config.capabilities.base_capabilities.proxy = Some(proxy);
                 }
 
-                let firefox_proc = Process::create(firefox_exe, firefox_args);
+                let firefox_proc = Process::create_with_env(
+                    firefox_exe,
+                    firefox_args,
+                    [("MOZ_LAUNCHER_PROCESS".to_string(), "0".to_string())],
+                );
 
                 // Wait for Firefox to start
                 tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
@@ -251,8 +255,11 @@ impl BidiBrowser for FirefoxBrowser {
         if let Some(ref mut driver) = self.driver {
             driver.end_session().await?;
         }
-        if let Some(mut process) = self.firefox_process.take() {
-            process.kill()?;
+        // Drop the stored process (best-effort; may be stale if Firefox respawned)
+        drop(self.firefox_process.take());
+        // Kill by port to catch the actual Firefox process regardless of PID
+        if let Some(port) = self.config.remote_debugging_port {
+            rustenium_core::process::kill_process_on_port(port);
         }
         tracing::debug!("FirefoxBrowser closed");
         Ok(())

@@ -10,7 +10,7 @@ pub use chrome::capabilities::{ChromeCapabilities, ChromeOptions, PerfLoggingPre
 pub use firefox::browser::{firefox, FirefoxBrowser, FirefoxConfig, FirefoxLaunchMode};
 pub use firefox::capabilities::{FirefoxCapabilities, FirefoxOptions};
 pub use bidi_browser::{
-    BrowserScreenshotOptionsBuilder, NavigateOptionsBuilder, CreateContextOptionsBuilder,
+    NavigateOptions, BrowserScreenshotOptionsBuilder, NavigateOptionsBuilder, CreateContextOptionsBuilder,
     FindNodesOptionsBuilder, WaitForNodesOptionsBuilder, OnRequestOptionsBuilder,
     SubscribeEventsOptionsBuilder, EvaluateScriptOptionsBuilder, AddPreloadScriptOptionsBuilder,
     EmulateTimezoneOptionsBuilder, AuthenticateOptionsBuilder,

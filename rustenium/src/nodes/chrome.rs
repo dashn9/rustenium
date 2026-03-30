@@ -45,21 +45,6 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static> ChromeNode<T, M> 
         Self { bidi_node, children, mouse }
     }
 
-    // ── Screenshot ───────────────────────────────────────────────────────────
-
-    /// Captures a screenshot of the element and returns base64-encoded image data.
-    pub async fn screenshot(&self) -> Result<String, ScreenshotError> {
-        self.bidi_node.screenshot(BidiNodeScreenshotOptions::default()).await
-    }
-
-    /// Captures a screenshot of the element with custom options (format, origin, save path).
-    ///
-    /// If `save_path` is a directory, saves with an auto-generated filename.
-    /// If `save_path` is a file path, saves to that exact location and returns the path.
-    /// If `save_path` is `None`, returns base64-encoded image data.
-    pub async fn screenshot_with_options(&self, options: BidiNodeScreenshotOptions) -> Result<String, ScreenshotError> {
-        self.bidi_node.screenshot(options).await
-    }
 
     // ── Mouse move ───────────────────────────────────────────────────────────
 
@@ -152,5 +137,48 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static> Node for ChromeNo
 
     async fn delete(&self) -> Result<(), EvaluateResultError> {
         self.bidi_node.delete().await
+    }
+    
+    /// Scrolls the element into view and moves the mouse to its center.
+    async fn mouse_move(&mut self) -> Result<(), MouseInputError> {
+        self.bidi_node.mouse_move(self.mouse.as_ref(), MouseMoveOptions::default()).await
+    }
+
+    /// Scrolls the element into view and moves the mouse to its center with custom move options.
+    async fn mouse_move_with_options(&mut self, options: MouseMoveOptions) -> Result<(), MouseInputError> {
+        self.bidi_node.mouse_move(self.mouse.as_ref(), options).await
+    }
+
+    // ── Mouse click ──────────────────────────────────────────────────────────
+
+    /// Scrolls the element into view, moves the mouse to its center, and clicks.
+    async fn mouse_click(&mut self) -> Result<(), MouseInputError> {
+        self.bidi_node.mouse_click(self.mouse.as_ref(), MouseClickOptions::default()).await
+    }
+
+    /// Scrolls the element into view, moves the mouse to its center, and clicks with custom click options.
+    ///
+    /// # Example
+    /// ```ignore
+    /// // Double click
+    /// node.mouse_click_with_options(MouseClickOptions { count: Some(2), ..Default::default() }).await?;
+    /// ```
+    async fn mouse_click_with_options(&mut self, options: MouseClickOptions) -> Result<(), MouseInputError> {
+        self.bidi_node.mouse_click(self.mouse.as_ref(), options).await
+    }
+    // ── Screenshot ───────────────────────────────────────────────────────────
+
+    /// Captures a screenshot of the element and returns base64-encoded image data.
+    async fn screenshot(&self) -> Result<String, ScreenshotError> {
+        self.bidi_node.screenshot(BidiNodeScreenshotOptions::default()).await
+    }
+
+    /// Captures a screenshot of the element with custom options (format, origin, save path).
+    ///
+    /// If `save_path` is a directory, saves with an auto-generated filename.
+    /// If `save_path` is a file path, saves to that exact location and returns the path.
+    /// If `save_path` is `None`, returns base64-encoded image data.
+    async fn screenshot_with_options(&self, options: BidiNodeScreenshotOptions) -> Result<String, ScreenshotError> {
+        self.bidi_node.screenshot(options).await
     }
 }

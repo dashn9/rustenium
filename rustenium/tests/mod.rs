@@ -1,4 +1,3 @@
-mod browser;
 mod capabilities;
 mod config;
 mod mouse;

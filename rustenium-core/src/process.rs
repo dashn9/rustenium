@@ -11,31 +11,16 @@ pub struct Process {
 }
 
 impl Process {
-    pub fn create<S, I>(exe_path: S, args: I) -> Process
-    where
-        S: AsRef<str>,
-        I: IntoIterator<Item = String>,
-    {
-        let exe = exe_path.as_ref();
-        let args_vec: Vec<String> = args.into_iter().collect();
+    fn from_command(exe: &str, mut cmd: Command) -> Process {
+        tracing::info!("Starting process: '{}'", exe);
 
-        // Log the full command being executed with details
-        tracing::info!(
-            "Starting process with executable: '{}' and arguments: {:?}",
-            exe,
-            args_vec
-        );
-        tracing::info!("Full command: {} {}", exe, args_vec.join(" "));
-
-        let mut child = Command::new(exe)
-            .args(args_vec)
+        let mut child = cmd
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
             .kill_on_drop(true)
             .spawn()
             .expect("Failed to start process");
 
-        // Capture and log stdout
         if let Some(stdout) = child.stdout.take() {
             let exe_name = exe.to_string();
             tokio::spawn(async move {
@@ -44,20 +29,14 @@ impl Process {
                 loop {
                     line.clear();
                     match reader.read_line(&mut line).await {
-                        Ok(0) => break, // EOF
-                        Ok(_) => {
-                            tracing::debug!("[{} stdout] {}", exe_name, line.trim());
-                        }
-                        Err(e) => {
-                            tracing::error!("[{} stdout] Error reading: {}", exe_name, e);
-                            break;
-                        }
+                        Ok(0) => break,
+                        Ok(_) => { tracing::debug!("[{} stdout] {}", exe_name, line.trim()); }
+                        Err(e) => { tracing::error!("[{} stdout] Error reading: {}", exe_name, e); break; }
                     }
                 }
             });
         }
 
-        // Capture and log stderr
         if let Some(stderr) = child.stderr.take() {
             let exe_name = exe.to_string();
             tokio::spawn(async move {
@@ -66,22 +45,37 @@ impl Process {
                 loop {
                     line.clear();
                     match reader.read_line(&mut line).await {
-                        Ok(0) => break, // EOF
-                        Ok(_) => {
-                            tracing::debug!("[{} stderr] {}", exe_name, line.trim());
-                        }
-                        Err(e) => {
-                            tracing::error!("[{} stderr] Error reading: {}", exe_name, e);
-                            break;
-                        }
+                        Ok(0) => break,
+                        Ok(_) => { tracing::debug!("[{} stderr] {}", exe_name, line.trim()); }
+                        Err(e) => { tracing::error!("[{} stderr] Error reading: {}", exe_name, e); break; }
                     }
                 }
             });
         }
 
-        let child = Some(child);
+        Self { child: Some(child) }
+    }
 
-        return Self { child };
+    pub fn create<S, I>(exe_path: S, args: I) -> Process
+    where
+        S: AsRef<str>,
+        I: IntoIterator<Item = String>,
+    {
+        let exe = exe_path.as_ref();
+        let mut cmd = Command::new(exe);
+        cmd.args(args.into_iter().collect::<Vec<_>>());
+        Self::from_command(exe, cmd)
+    }
+
+    pub fn create_with_env<S, I>(exe_path: S, args: I, env: impl IntoIterator<Item = (String, String)>) -> Process
+    where
+        S: AsRef<str>,
+        I: IntoIterator<Item = String>,
+    {
+        let exe = exe_path.as_ref();
+        let mut cmd = Command::new(exe);
+        cmd.args(args.into_iter().collect::<Vec<_>>()).envs(env);
+        Self::from_command(exe, cmd)
     }
 
     #[deprecated]
@@ -201,5 +195,36 @@ impl Process {
 impl Drop for Process {
     fn drop(&mut self) {
         let _ = self.kill();
+    }
+}
+
+/// Kill the process listening on the given TCP port.
+/// Used as a fallback when the stored PID is stale (e.g. Firefox launcher respawn).
+pub fn kill_process_on_port(port: u16) {
+    tracing::debug!("[Process]: Killing process on port {}", port);
+
+    #[cfg(windows)]
+    {
+        // netstat -ano lists TCP connections with their PIDs
+        let Ok(out) = std::process::Command::new("netstat").args(["-ano"]).output() else { return };
+        let stdout = String::from_utf8_lossy(&out.stdout);
+        let needle = format!(":{}", port);
+        for line in stdout.lines() {
+            if line.contains(&needle) && line.contains("LISTENING") {
+                if let Some(pid_str) = line.split_whitespace().last() {
+                    tracing::debug!("[Process]: Found PID {} on port {}, killing", pid_str, port);
+                    let _ = std::process::Command::new("taskkill")
+                        .args(["/F", "/T", "/PID", pid_str])
+                        .output();
+                }
+            }
+        }
+    }
+
+    #[cfg(unix)]
+    {
+        let _ = std::process::Command::new("fuser")
+            .args(["-k", &format!("{}/tcp", port)])
+            .output();
     }
 }
