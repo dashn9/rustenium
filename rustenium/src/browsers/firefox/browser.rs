@@ -223,10 +223,14 @@ impl FirefoxBrowser {
         }
 
         let capabilities = config.capabilities.clone().build();
+
         let (session, process) = start_bidi_driver(
             config,
             ct_config,
-            SessionConnectionType::WebSocket,
+            SessionConnectionType::HttpFirst {
+                host: ct_config.host.clone(),
+                port: ct_config.port,
+            },
             capabilities,
         )
         .await;

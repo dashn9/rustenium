@@ -174,6 +174,11 @@ impl FirefoxCapabilities {
             .extensible
             .insert("moz:firefoxOptions".to_string(), firefox_opts_json);
 
+        // Request BiDi WebSocket URL from geckodriver
+        self.base_capabilities
+            .extensible
+            .insert("webSocketUrl".to_string(), serde_json::Value::Bool(true));
+
         CapabilitiesRequest {
             always_match: Some(self.base_capabilities),
             first_match: None,

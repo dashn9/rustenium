@@ -598,10 +598,11 @@ pub async fn start_bidi_driver(
     Process,
 ) {
     let driver_process = Process::create(driver_config.exe_path(), driver_config.flags());
-    let mut session =
-        BidiSession::<WebsocketConnectionTransport>::ws_new(connection_transport_config).await;
-    session
-        .initialize(session_connection_type, capabilities)
-        .await;
+    let session = BidiSession::<WebsocketConnectionTransport>::new(
+        connection_transport_config,
+        session_connection_type,
+        capabilities,
+    )
+    .await;
     (Arc::new(TokioMutex::new(session)), driver_process)
 }
