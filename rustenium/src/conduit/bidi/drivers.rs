@@ -43,7 +43,7 @@ use rustenium_bidi_definitions::{
 };
 use rustenium_core::error::{CommandResultError, SessionSendError};
 use rustenium_core::events::BidiEventManagement;
-use rustenium_core::session::SessionConnectionType;
+
 use std::collections::HashSet;
 use std::future::Future;
 use std::sync::{Arc, Mutex};
@@ -591,7 +591,6 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
 pub async fn start_bidi_driver(
     driver_config: &impl DriverConfiguration,
     connection_transport_config: &ConnectionTransportConfig,
-    session_connection_type: SessionConnectionType,
     capabilities: CapabilitiesRequest,
 ) -> (
     Arc<TokioMutex<BidiSession<WebsocketConnectionTransport>>>,
@@ -600,7 +599,6 @@ pub async fn start_bidi_driver(
     let driver_process = Process::create(driver_config.exe_path(), driver_config.flags());
     let session = BidiSession::<WebsocketConnectionTransport>::new(
         connection_transport_config,
-        session_connection_type,
         capabilities,
     )
     .await;

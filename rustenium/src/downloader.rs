@@ -65,50 +65,6 @@ pub fn ensure_chrome() -> PathBuf {
     path
 }
 
-// ── Geckodriver ──────────────────────────────────────────────────────────────
-
-const GECKODRIVER_VERSION: &str = "0.36.0";
-const GECKODRIVER_BASE_URL: &str = "https://github.com/mozilla/geckodriver/releases/download";
-
-/// Returns (platform_name, archive_extension) for geckodriver downloads.
-fn geckodriver_platform() -> (&'static str, &'static str) {
-    match (std::env::consts::OS, std::env::consts::ARCH) {
-        ("linux", "aarch64") => ("linux-aarch64", "tar.gz"),
-        ("linux", "x86") => ("linux32", "tar.gz"),
-        ("linux", _) => ("linux64", "tar.gz"),
-        ("macos", "aarch64") => ("macos-aarch64", "tar.gz"),
-        ("macos", _) => ("macos", "tar.gz"),
-        ("windows", "x86") => ("win32", "zip"),
-        ("windows", "aarch64") => ("win-aarch64", "zip"),
-        ("windows", _) => ("win64", "zip"),
-        (os, arch) => panic!("Unsupported platform for geckodriver: {os}/{arch}"),
-    }
-}
-
-/// Downloads geckodriver if not already cached. Returns the path to the executable.
-pub fn ensure_geckodriver() -> PathBuf {
-    let (plat, ext) = geckodriver_platform();
-    let dir = cache_dir("geckodriver", GECKODRIVER_VERSION, plat);
-    let name = exe_name("geckodriver");
-    if let Some(path) = find_exe(&dir, &name) {
-        make_executable(&path);
-        return path;
-    }
-
-    let url = format!(
-        "{GECKODRIVER_BASE_URL}/v{GECKODRIVER_VERSION}/geckodriver-v{GECKODRIVER_VERSION}-{plat}.{ext}"
-    );
-    tracing::info!("Downloading geckodriver {GECKODRIVER_VERSION} for {plat} ...");
-    download_and_extract(&url, &dir)
-        .unwrap_or_else(|e| panic!("Failed to download geckodriver: {e}"));
-
-    let path = find_exe(&dir, &name)
-        .unwrap_or_else(|| panic!("{name} not found after extraction in {dir:?}"));
-    make_executable(&path);
-    tracing::info!("geckodriver ready at {path:?}");
-    path
-}
-
 // ── Firefox ──────────────────────────────────────────────────────────────────
 
 const FIREFOX_VERSION: &str = "149.0";

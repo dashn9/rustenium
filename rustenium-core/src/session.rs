@@ -21,8 +21,6 @@ use serde_json;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
-use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader};
-use tokio::net::TcpStream;
 use tokio::sync::oneshot;
 use tokio::time::timeout;
 use tracing;
@@ -33,195 +31,45 @@ pub struct BidiSession<T: ConnectionTransport> {
     events: Arc<Mutex<Vec<BidiEvent>>>,
     /// Tracks network requests that have been handled, keyed by request ID
     pub handled_network_requests: Arc<Mutex<HashMap<String, NetworkRequestHandledState>>>,
-    /// If the session was created via HTTP-first flow, stores the driver address for DELETE /session
-    http_driver_addr: Option<String>,
-}
-
-pub enum SessionConnectionType {
-    /// Direct WebSocket BiDi (chromedriver) — connect WS, send session.new over BiDi.
-    WebSocket,
-    /// HTTP-first BiDi (geckodriver) — POST /session via HTTP to get webSocketUrl,
-    /// then connect WS to that URL.
-    HttpFirst { host: String, port: u16 },
 }
 
 impl BidiSession<WebsocketConnectionTransport> {
     pub async fn new(
         connection_config: &ConnectionTransportConfig,
-        connection_type: SessionConnectionType,
         capabilities: CapabilitiesRequest,
     ) -> Self {
-        match connection_type {
-            SessionConnectionType::WebSocket => {
-                let mut session = Self::connect_ws(connection_config).await;
+        let transport = WebsocketConnectionTransport::new(connection_config).await.unwrap();
+        tracing::info!("Connected to WebSocket at {}", connection_config.full_endpoint());
+        let connection = BidiConnection::new(transport);
+        connection.start_listeners();
 
-                let (_, event_tx) = session.event_dispatch().await;
-                session.connection.register_event_listener_channel(event_tx).await;
-
-                let command = NewBuilder::default()
-                    .capabilities(capabilities)
-                    .build()
-                    .unwrap();
-                let command_result = session.send(command).await;
-                match command_result {
-                    Ok(command_result) => {
-                        let result: NewResult = command_result.result.clone().try_into().expect(
-                            format!("Invalid command result: {:?}", command_result).as_str(),
-                        );
-                        session.id = result.session_id;
-                    }
-                    Err(e) => panic!("Error creating new session: {}", e),
-                }
-
-                session
-            }
-            SessionConnectionType::HttpFirst { host, port } => {
-                let (ws_url, session_id) =
-                    Self::post_session(&host, port, &capabilities).await
-                        .expect("Failed to create HTTP-first BiDi session");
-
-                let ws_config = ConnectionTransportConfig::from_ws_url(&ws_url)
-                    .expect("Failed to parse webSocketUrl from driver response");
-
-                let mut session = Self::connect_ws(&ws_config).await;
-                session.id = session_id;
-                session.http_driver_addr = Some(format!("{host}:{port}"));
-
-                let (_, event_tx) = session.event_dispatch().await;
-                session.connection.register_event_listener_channel(event_tx).await;
-
-                session
-            }
-        }
-    }
-
-    fn connect_ws(
-        config: &ConnectionTransportConfig,
-    ) -> impl std::future::Future<Output = Self> + '_ {
-        async move {
-            let transport = WebsocketConnectionTransport::new(config).await.unwrap();
-            tracing::info!("Connected to WebSocket at {}", config.full_endpoint());
-            let connection = BidiConnection::new(transport);
-            connection.start_listeners();
-            Self {
-                id: String::new(),
-                connection,
-                events: Arc::new(Mutex::new(Vec::new())),
-                handled_network_requests: Arc::new(Mutex::new(HashMap::new())),
-                http_driver_addr: None,
-            }
-        }
-    }
-
-    /// POST /session to the driver's HTTP endpoint.
-    /// Returns (ws_url, session_id) — the WebSocket URL is built from the session ID.
-    async fn post_session(
-        host: &str,
-        port: u16,
-        capabilities: &CapabilitiesRequest,
-    ) -> Result<(String, String), String> {
-        let addr = format!("{host}:{port}");
-        let body = serde_json::json!({ "capabilities": capabilities });
-        let body_str = serde_json::to_string(&body).unwrap();
-        tracing::debug!("[BidiSession]: POST /session to {addr} with body: {body_str}");
-
-        let mut retries = 5;
-        let stream = loop {
-            match TcpStream::connect(&addr).await {
-                Ok(s) => break s,
-                Err(e) if retries > 0 => {
-                    retries -= 1;
-                    tracing::debug!("Driver not ready at {addr}, retrying... ({retries} left)");
-                    tokio::time::sleep(Duration::from_millis(500)).await;
-                }
-                Err(e) => return Err(format!("connect to driver at {addr}: {e}")),
-            }
+        let mut session = Self {
+            id: String::new(),
+            connection,
+            events: Arc::new(Mutex::new(Vec::new())),
+            handled_network_requests: Arc::new(Mutex::new(HashMap::new())),
         };
 
-        let (reader, mut writer) = stream.into_split();
-        let request = format!(
-            "POST /session HTTP/1.1\r\n\
-             Host: {addr}\r\n\
-             Content-Type: application/json\r\n\
-             Content-Length: {}\r\n\
-             Connection: close\r\n\
-             \r\n\
-             {body_str}",
-            body_str.len()
-        );
-        writer.write_all(request.as_bytes()).await
-            .map_err(|e| format!("write request: {e}"))?;
+        let (_, event_tx) = session.event_dispatch().await;
+        session.connection.register_event_listener_channel(event_tx).await;
 
-        let mut buf_reader = BufReader::new(reader);
-        let mut content_length: Option<usize> = None;
-        loop {
-            let mut line = String::new();
-            buf_reader.read_line(&mut line).await
-                .map_err(|e| format!("read header: {e}"))?;
-            if line == "\r\n" || line.is_empty() {
-                break;
+        let command = NewBuilder::default()
+            .capabilities(capabilities)
+            .build()
+            .unwrap();
+        let command_result = session.send(command).await;
+        match command_result {
+            Ok(command_result) => {
+                let result: NewResult = command_result.result.clone().try_into().expect(
+                    format!("Invalid command result: {:?}", command_result).as_str(),
+                );
+                session.id = result.session_id;
             }
-            let lower = line.to_lowercase();
-            if let Some(val) = lower.strip_prefix("content-length:") {
-                content_length = val.trim().parse().ok();
-            }
+            Err(e) => panic!("Error creating new session: {}", e),
         }
 
-        let response_body = if let Some(len) = content_length {
-            let mut buf = vec![0u8; len];
-            tokio::io::AsyncReadExt::read_exact(&mut buf_reader, &mut buf).await
-                .map_err(|e| format!("read body: {e}"))?;
-            String::from_utf8(buf).map_err(|e| format!("invalid utf8: {e}"))?
-        } else {
-            let mut buf = String::new();
-            tokio::io::AsyncReadExt::read_to_string(&mut buf_reader, &mut buf).await
-                .map_err(|e| format!("read body: {e}"))?;
-            buf
-        };
-
-        tracing::debug!("Driver HTTP session response: {response_body}");
-
-        let json: serde_json::Value = serde_json::from_str(&response_body)
-            .map_err(|e| format!("parse driver response: {e}"))?;
-
-        let session_id = json["value"]["sessionId"]
-            .as_str()
-            .map(|s| s.to_string())
-            .unwrap_or_default();
-
-        let ws_url = json["value"]["capabilities"]["webSocketUrl"]
-            .as_str()
-            .map(|s| s.to_string())
-            .ok_or_else(|| format!(
-                "webSocketUrl not found in driver response (ensure webSocketUrl: true is in capabilities): {response_body}"
-            ))?;
-
-        Ok((ws_url, session_id))
+        session
     }
-
-}
-
-/// DELETE /session/{id} to end an HTTP-first session via WebDriver classic.
-async fn delete_session_http(addr: &str, session_id: &str) -> Result<(), String> {
-    let stream = TcpStream::connect(addr).await
-        .map_err(|e| format!("connect to driver at {addr}: {e}"))?;
-
-    let (reader, mut writer) = stream.into_split();
-    let request = format!(
-        "DELETE /session/{session_id} HTTP/1.1\r\n\
-         Host: {addr}\r\n\
-         Connection: close\r\n\
-         \r\n"
-    );
-    writer.write_all(request.as_bytes()).await
-        .map_err(|e| format!("write DELETE request: {e}"))?;
-
-    let mut buf_reader = BufReader::new(reader);
-    let mut buf = String::new();
-    let _ = tokio::io::AsyncReadExt::read_to_string(&mut buf_reader, &mut buf).await;
-    tracing::debug!("[BidiSession]: DELETE /session response: {buf}");
-
-    Ok(())
 }
 
 impl<T: ConnectionTransport> BidiSession<T> {
@@ -288,19 +136,6 @@ impl<T: ConnectionTransport> BidiSession<T> {
     }
 
     pub async fn end_session(&mut self) -> Result<CommandResponse, SessionSendError> {
-        if let Some(ref addr) = self.http_driver_addr {
-            // Session was created via HTTP (WebDriver classic) — must use DELETE /session/{id}
-            tracing::debug!("[BidiSession]: DELETE /session/{} to {}", self.id, addr);
-            let _ = delete_session_http(addr, &self.id).await;
-            self.connection.close().await;
-            return Ok(CommandResponse {
-                r#type: rustenium_bidi_definitions::base::SuccessEnum::Success,
-                id: 0,
-                result: serde_json::Value::Object(serde_json::Map::new()),
-                extensible: HashMap::new(),
-            });
-        }
-
         let result = self.send(EndBuilder::default().build()).await;
         self.connection.close().await;
         result

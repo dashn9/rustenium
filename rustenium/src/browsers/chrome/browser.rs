@@ -10,7 +10,7 @@ use rustenium_bidi_definitions::script::types::NodeRemoteValue;
 use rustenium_bidi_definitions::session::types::ProxyConfiguration;
 use rustenium_core::find_free_port;
 use rustenium_core::process::Process;
-use rustenium_core::session::SessionConnectionType;
+
 use rustenium_core::transport::{ConnectionTransportConfig, WebsocketConnectionTransport};
 use std::sync::{Arc, Mutex};
 
@@ -328,7 +328,6 @@ impl ChromeBrowser {
         let (session, process) = start_bidi_driver(
             config,
             ct_config,
-            SessionConnectionType::WebSocket,
             capabilities,
         )
         .await;

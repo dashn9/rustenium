@@ -3,7 +3,7 @@ use std::process::Stdio;
 use regex::Regex;
 use tokio::io::{AsyncBufReadExt, BufReader};
 use tokio::process::{Child, Command};
-use tokio::time::{timeout, Duration};
+use tokio::time::{Duration, timeout};
 
 #[derive(Debug)]
 pub struct Process {
@@ -25,11 +25,7 @@ impl Process {
             exe,
             args_vec
         );
-        tracing::info!(
-            "Full command: {} {}",
-            exe,
-            args_vec.join(" ")
-        );
+        tracing::info!("Full command: {} {}", exe, args_vec.join(" "));
 
         let mut child = Command::new(exe)
             .args(args_vec)
@@ -144,20 +140,57 @@ impl Process {
         if let Some(mut child) = self.child.take() {
             if let Some(pid) = child.id() {
                 let pid_str = pid.to_string();
+                tracing::debug!("[Process]: Killing process, PID: {}", pid_str);
+
                 #[cfg(unix)]
                 {
-                    let _ = std::process::Command::new("pkill")
+                    match std::process::Command::new("pkill")
                         .args(["-9", "-P", &pid_str])
-                        .output();
+                        .output()
+                    {
+                        Ok(output) => {
+                            tracing::debug!(
+                                "[Process]: pkill stdout: {}",
+                                String::from_utf8_lossy(&output.stdout)
+                            );
+                            tracing::debug!(
+                                "[Process]: pkill stderr: {}",
+                                String::from_utf8_lossy(&output.stderr)
+                            );
+                        }
+                        Err(e) => {
+                            tracing::error!("[Process]: Failed to execute pkill: {}", e);
+                        }
+                    }
                 }
+
                 #[cfg(windows)]
                 {
-                    let _ = std::process::Command::new("taskkill")
+                    match std::process::Command::new("taskkill")
                         .args(["/F", "/T", "/PID", &pid_str])
-                        .output();
+                        .output()
+                    {
+                        Ok(output) => {
+                            tracing::debug!(
+                                "[Process]: taskkill stdout: {}",
+                                String::from_utf8_lossy(&output.stdout)
+                            );
+                            tracing::debug!(
+                                "[Process]: taskkill stderr: {}",
+                                String::from_utf8_lossy(&output.stderr)
+                            );
+                        }
+                        Err(e) => {
+                            tracing::error!("[Process]: Failed to execute taskkill: {}", e);
+                        }
+                    }
                 }
             }
-            child.start_kill().map_err(|_| crate::error::ProcessKillError)?;
+
+            child
+                .start_kill()
+                .map_err(|_| crate::error::ProcessKillError)?;
+
             Ok(())
         } else {
             Err(crate::error::ProcessKillError)
