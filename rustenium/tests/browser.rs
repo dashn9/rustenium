@@ -1,4 +1,4 @@
-use rustenium::browsers::{create_chrome_browser, BidiBrowser, ChromeBrowser, ChromeConfig, NavigateOptionsBuilder};
+use rustenium::browsers::{chrome, BidiBrowser, ChromeBrowser, ChromeConfig, NavigateOptionsBuilder};
 use rustenium::nodes::Node;
 use rustenium::input::{Point, MouseClickOptions};
 use rustenium_bidi_definitions::browsing_context::types::ReadinessState;
@@ -19,7 +19,7 @@ async fn launch_headless() -> ChromeBrowser {
         "--headless=new".to_string(),
         "--window-size=1280,720".to_string(),
     ]);
-    create_chrome_browser(Some(config)).await
+    chrome(Some(config)).await
 }
 
 fn extract_string(value: &RemoteValue) -> Option<String> {
@@ -59,7 +59,7 @@ async fn create_browser_auto_attach_mode() {
         "--silent".to_string(),
     ]);
 
-    let browser = create_chrome_browser(Some(config)).await;
+    let browser = chrome(Some(config)).await;
     browser.close().await.unwrap();
 }
 
@@ -73,7 +73,7 @@ async fn create_browser_with_custom_capabilities() {
     ]);
     config.capabilities.accept_insecure_certs(true);
 
-    let browser = create_chrome_browser(Some(config)).await;
+    let browser = chrome(Some(config)).await;
     browser.close().await.unwrap();
 }
 
@@ -83,7 +83,7 @@ async fn create_browser_manual_mode() {
     config.capabilities
         .add_arg("--headless=new")
         .add_arg("--window-size=1280,720");
-    let browser = create_chrome_browser(Some(config)).await;
+    let browser = chrome(Some(config)).await;
     browser.close().await.unwrap();
 }
 

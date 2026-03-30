@@ -194,11 +194,6 @@ impl ChromeBrowser {
         if matches!(config.launch_mode, ChromeLaunchMode::DriverManaged) && !config.enable_bidi {
             panic!("Config Enable Bidi must be set to true to use DriverManaged Mode");
         }
-        if config.driver_executable_path.is_empty() {
-            config.driver_executable_path = crate::downloader::ensure_chromedriver()
-                .to_string_lossy()
-                .into_owned();
-        }
         let port = find_free_port().unwrap();
         config.port = Some(config.port.unwrap_or(port));
 
@@ -222,7 +217,7 @@ impl ChromeBrowser {
             (true, true) => {
                 let (cdp, bidi) = tokio::join!(
                     Self::init_cdp(&host, chrome_port),
-                    Self::init_bidi(&config, &ct_config),
+                    Self::init_bidi(&mut config, &ct_config),
                 );
                 (Some(cdp), Some(bidi))
             }
@@ -231,7 +226,7 @@ impl ChromeBrowser {
                 (Some(cdp), None)
             }
             (false, true) => {
-                let bidi = Self::init_bidi(&config, &ct_config).await;
+                let bidi = Self::init_bidi(&mut config, &ct_config).await;
                 (None, Some(bidi))
             }
             (false, false) => (None, None),
@@ -321,9 +316,14 @@ impl ChromeBrowser {
     }
 
     async fn init_bidi(
-        config: &ChromeConfig,
+        config: &mut ChromeConfig,
         ct_config: &ConnectionTransportConfig,
     ) -> BidiDriver<WebsocketConnectionTransport> {
+        if config.driver_executable_path.is_empty() {
+            config.driver_executable_path = crate::downloader::ensure_chromedriver()
+                .to_string_lossy()
+                .into_owned();
+        }
         let capabilities = config.capabilities.clone().build();
         let (session, process) = start_bidi_driver(
             config,
@@ -367,7 +367,7 @@ impl ChromeBrowser {
         let mut ct_config = ConnectionTransportConfig::default();
         ct_config.host = host;
         ct_config.port = port;
-        self.driver = Some(Self::init_bidi(&self.config, &ct_config).await);
+        self.driver = Some(Self::init_bidi(&mut self.config, &ct_config).await);
     }
 
     pub async fn connect_cdp(&mut self) {
@@ -459,7 +459,6 @@ impl CdpBrowser for ChromeBrowser {
     }
 }
 
-pub async fn create_chrome_browser(config: Option<ChromeConfig>) -> ChromeBrowser {
-    let chrome_browser = ChromeBrowser::new(config.unwrap_or_default()).await;
-    chrome_browser
+pub async fn chrome(config: Option<ChromeConfig>) -> ChromeBrowser {
+    ChromeBrowser::new(config.unwrap_or_default()).await
 }

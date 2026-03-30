@@ -17,7 +17,7 @@
 //! ## Quick Start
 //!
 //! ```no_run
-//! use rustenium::browsers::{ChromeBrowser, ChromeConfig, create_chrome_browser};
+//! use rustenium::browsers::{ChromeBrowser, ChromeConfig, chrome};
 //! use rustenium::css;
 //!
 //! #[tokio::main]
@@ -29,8 +29,8 @@
 //!     };
 //!     let mut browser = ChromeBrowser::new(config).await;
 //!
-//!     // Option 2: Using create_chrome_browser helper
-//!     let mut browser = create_chrome_browser(None).await; // Uses default config
+//!     // Option 2: Using chrome helper
+//!     let mut browser = chrome(None).await; // Uses default config
 //!
 //!     // Navigate to a page
 //!     browser.open_url("https://example.com", None, None).await?;
@@ -56,7 +56,7 @@
 //! - [`browsers::ChromeBrowser`] - Main browser automation interface
 //! - [`browsers::ChromeConfig`] - Browser configuration
 //! - [`browsers::ChromeCapabilities`] - Browser capabilities builder
-//! - [`browsers::create_chrome_browser()`] - Convenience function to create a browser
+//! - [`browsers::chrome()`] - Convenience function to create a browser
 //! - [`nodes::ChromeNode`] - DOM element representation for Chrome
 //! - [`input::BidiMouse`] - Direct, instant mouse movements for fast automation
 //! - [`input::HumanMouse`] - Realistic mouse movements with Bezier curves and jitter

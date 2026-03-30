@@ -1,7 +1,7 @@
 use criterion::{BenchmarkId, Criterion, black_box, criterion_group, criterion_main};
 use rustenium::browsers::{
     BidiBrowser, BrowserScreenshotOptionsBuilder, ChromeBrowser, ChromeConfig,
-    NavigateOptionsBuilder, create_chrome_browser,
+    NavigateOptionsBuilder, chrome,
 };
 use rustenium::input::{
     CurveParams, MouseClickOptions, MouseMoveOptions, Point, generate_durations,
@@ -21,7 +21,7 @@ fn launch_headless(rt: &Runtime) -> ChromeBrowser {
             "--headless=new".to_string(),
             "--window-size=1280,720".to_string(),
         ]);
-        create_chrome_browser(Some(config)).await
+        chrome(Some(config)).await
     })
 }
 
@@ -83,7 +83,7 @@ fn bench_browser_lifecycle(c: &mut Criterion) {
                     "--headless=new".to_string(),
                     "--window-size=1280,720".to_string(),
                 ]);
-                create_chrome_browser(Some(config)).await
+                chrome(Some(config)).await
             });
             teardown(browser, &rt);
         });
