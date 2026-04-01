@@ -1,6 +1,6 @@
 [package]
 name = "rustenium-core"
-version = "1.0.1"
+version = "1.1.0"
 edition = "2024"
 description = "Core WebDriver BiDi protocol implementation for Rustenium"
 license = "MIT"
@@ -12,8 +12,8 @@ categories = ["web-programming", "api-bindings"]
 keywords = ["webdriver", "bidi", "protocol", "websocket", "automation"]
 
 [dependencies]
-rustenium-bidi-definitions = { version = "0.1.0", path = "../rustenium-bidi-definitions" }
-rustenium-cdp-definitions = { version = "0.1.0", path = "../rustenium-cdp-definitions" }
+rustenium-bidi-definitions = { version = "0.1.1", path = "../rustenium-bidi-definitions" }
+rustenium-cdp-definitions = { version = "0.1.1", path = "../rustenium-cdp-definitions" }
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"

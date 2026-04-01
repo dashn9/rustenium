@@ -1,6 +1,6 @@
 [package]
 name = "rustenium-cdp-definitions"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 description = "Generated Chrome DevTools Protocol type definitions for Rustenium"
 license = "MIT"
