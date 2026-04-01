@@ -4,6 +4,8 @@ The most robust, high-performance multi-protocol browser automation library for 
 
 Rustenium provides a powerful and ergonomic API for browser automation using the WebDriver BiDi and Chrome DevTools Protocol (CDP). It offers both low-level control and high-level abstractions for common automation tasks, with the ability to use BiDi and CDP independently or together.
 
+Like Puppeteer / Playwright, but for RUST.
+
 ## Features
 
 - **Dual Protocol Support**: Full WebDriver BiDi and Chrome DevTools Protocol (CDP) support
