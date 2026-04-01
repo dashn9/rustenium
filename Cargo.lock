@@ -1331,7 +1331,7 @@ dependencies = [
 
 [[package]]
 name = "rustenium"
-version = "1.0.1"
+version = "1.1.0"
 dependencies = [
  "base64 0.22.1",
  "criterion",
@@ -1366,7 +1366,7 @@ dependencies = [
 
 [[package]]
 name = "rustenium-core"
-version = "1.0.1"
+version = "1.1.0"
 dependencies = [
  "criterion",
  "fastwebsockets",

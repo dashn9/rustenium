@@ -1,6 +1,6 @@
 [package]
 name = "rustenium"
-version = "1.0.1"
+version = "1.1.0"
 edition = "2024"
 description = "A modern, robust, high-performance WebDriver BiDi automation library for Rust"
 license = "MIT"
@@ -16,7 +16,7 @@ default = []
 macros = ["rustenium-macros"]
 
 [dependencies]
-rustenium-core = { version = "1.0.1", path = "../rustenium-core" }
+rustenium-core = { version = "1.1.0", path = "../rustenium-core" }
 rustenium-bidi-definitions = { version = "0.1.0", path = "../rustenium-bidi-definitions" }
 rustenium-cdp-definitions = { version = "0.1.0", path = "../rustenium-cdp-definitions" }
 rustenium-macros = { version = "1.0.0", path = "../rustenium-macros", optional = true }
