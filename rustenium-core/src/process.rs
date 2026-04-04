@@ -12,8 +12,6 @@ pub struct Process {
 
 impl Process {
     fn from_command(exe: &str, mut cmd: Command) -> Process {
-        tracing::info!("Starting process: '{}'", exe);
-
         let mut child = cmd
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
@@ -63,7 +61,9 @@ impl Process {
     {
         let exe = exe_path.as_ref();
         let mut cmd = Command::new(exe);
-        cmd.args(args.into_iter().collect::<Vec<_>>());
+        let args = args.into_iter().collect::<Vec<_>>();
+        tracing::info!("Starting process: '{}', args: {:?}", exe, args);
+        cmd.args(args);
         Self::from_command(exe, cmd)
     }
 

@@ -9,7 +9,7 @@ homepage = "https://github.com/dashn9/rustenium"
 documentation = "https://docs.rs/rustenium"
 readme = "../README.md"
 categories = ["web-programming", "development-tools::testing", "api-bindings"]
-keywords = ["webdriver", "browser", "automation", "testing", "selenium"]
+keywords = ["stealth", "cdp", "bidi", "webdriver", "browser", "automation", "testing", "selenium"]
 
 [features]
 default = []

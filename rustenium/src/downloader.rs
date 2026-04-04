@@ -225,6 +225,8 @@ fn find_exe(dir: &Path, name: &str) -> Option<PathBuf> {
     })
 }
 
+// TODO: If running on an OS with the missing dependency, you might get unzip failed: No such file or directory (os error 2)
+// Where in actuality, the actual error is: bash: unzip: command not found
 fn download_and_extract(url: &str, dest: &Path) -> Result<(), String> {
     std::fs::create_dir_all(dest).map_err(|e| e.to_string())?;
     let archive = dest.join("download_archive");

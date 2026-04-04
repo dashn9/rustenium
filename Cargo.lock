@@ -1320,8 +1320,8 @@ dependencies = [
 name = "runner"
 version = "0.1.0"
 dependencies = [
- "rustenium",
- "rustenium-bidi-definitions",
+ "rustenium 1.1.0",
+ "rustenium-bidi-definitions 0.1.1",
  "rustenium-identity",
  "serde_json",
  "tokio",
@@ -1336,10 +1336,28 @@ dependencies = [
  "base64 0.22.1",
  "criterion",
  "rand 0.9.1",
- "rustenium-bidi-definitions",
- "rustenium-cdp-definitions",
- "rustenium-core",
+ "rustenium-bidi-definitions 0.1.1",
+ "rustenium-cdp-definitions 0.1.1",
+ "rustenium-core 1.1.0",
  "rustenium-macros",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.17",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
+name = "rustenium"
+version = "1.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bab499e46fb31c496e42feac4039243ac5817b77177ed3e0a4d6c56043d637cd"
+dependencies = [
+ "base64 0.22.1",
+ "rand 0.9.1",
+ "rustenium-bidi-definitions 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rustenium-cdp-definitions 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rustenium-core 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde",
  "serde_json",
  "thiserror 2.0.17",
@@ -1357,8 +1375,29 @@ dependencies = [
 ]
 
 [[package]]
+name = "rustenium-bidi-definitions"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "92e8133b660c3485f5b5ccb1ad91dfce25751a684a2bba58956d23b18ec9c1d8"
+dependencies = [
+ "serde",
+ "serde_json",
+ "serde_valid",
+]
+
+[[package]]
 name = "rustenium-cdp-definitions"
 version = "0.1.1"
+dependencies = [
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "rustenium-cdp-definitions"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cc5f58211d846a093af3b1a24bc70f87b5cce0bfa8c15077622ab8d8c8a09f51"
 dependencies = [
  "serde",
  "serde_json",
@@ -1376,8 +1415,30 @@ dependencies = [
  "hyper-util",
  "rand 0.9.1",
  "regex",
- "rustenium-bidi-definitions",
- "rustenium-cdp-definitions",
+ "rustenium-bidi-definitions 0.1.1",
+ "rustenium-cdp-definitions 0.1.1",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.17",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
+name = "rustenium-core"
+version = "1.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c8c62b8cbc67ebd17d9500c22f0063f8bd9194fae9e050614e95ec6dee520c34"
+dependencies = [
+ "fastwebsockets",
+ "form_urlencoded",
+ "http-body-util",
+ "hyper",
+ "hyper-util",
+ "rand 0.9.1",
+ "regex",
+ "rustenium-bidi-definitions 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rustenium-cdp-definitions 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde",
  "serde_json",
  "thiserror 2.0.17",
@@ -1401,23 +1462,27 @@ dependencies = [
 
 [[package]]
 name = "rustenium-identity"
-version = "0.1.0"
+version = "0.1.2"
 dependencies = [
+ "base64 0.22.1",
+ "hyper",
+ "hyper-util",
  "rand 0.9.1",
  "reqwest",
- "rustenium",
- "rustenium-cdp-definitions",
+ "rustenium 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rustenium-cdp-definitions 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde",
  "serde_json",
  "thiserror 2.0.17",
  "tokio",
+ "tracing",
 ]
 
 [[package]]
 name = "rustenium-macros"
 version = "1.0.0"
 dependencies = [
- "rustenium-bidi-definitions",
+ "rustenium-bidi-definitions 0.1.1",
 ]
 
 [[package]]
