@@ -18,9 +18,14 @@ use super::KEYBOARD_ID;
 
 /// Randomised delay range in milliseconds.
 ///
-/// Produces naturally varying timing — each operation picks a value between
-/// `min` and `max` rather than a fixed duration.
-/// `min` may be 0 (allowing instant presses); `max` must be at least 1.
+/// Produces naturally varying timing — each operation picks a random integer value
+/// between `min` and `max` ms rather than a fixed duration.
+/// `min` may be 0 (allowing instant presses); `max` must be at least 1ms.
+///
+/// # Human latency reference
+/// - Fast typist:    `DelayRange::new(30, 80)`
+/// - Average typist: `DelayRange::new(60, 140)`
+/// - Slow/careful:   `DelayRange::new(100, 250)`
 #[derive(Debug, Clone, Copy)]
 pub struct DelayRange {
     pub min: u64,
@@ -58,6 +63,10 @@ impl KeyPressOptionsBuilder {
 /// `delay` controls the hold duration (KeyDown → KeyUp) per character.
 /// `gap_multiplier` scales the post-KeyUp pause relative to the hold; defaults to `1.2` (20% longer).
 /// When `delay` is `None`, all characters are batched into a single `performActions` call with no pauses.
+///
+/// # Reasonable human values
+/// - `delay`:          `DelayRange::new(60, 140)` for average typing speed
+/// - `gap_multiplier`: `1.1`–`1.3` — slightly longer pause between keys than the hold itself
 #[derive(Debug, Clone)]
 pub struct KeyboardTypeOptions {
     pub delay: Option<DelayRange>,

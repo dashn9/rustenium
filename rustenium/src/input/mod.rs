@@ -19,6 +19,6 @@ pub use crate::input::{
         touchscreen::{Touchscreen, TouchHandle, TouchMoveOptions, TouchMoveOptionsBuilder}
     },
     keyboard::Keyboard,
-    mouse::{Point, Mouse, MouseButton, ScrollDirection, MouseClickOptions, MouseMoveOptions, MouseOptions, MouseWheelOptions,
+    mouse::{Point, Mouse, MouseButton, MouseClickOptions, MouseMoveOptions, MouseOptions, MouseWheelOptions,
         MouseClickOptionsBuilder, MouseMoveOptionsBuilder, MouseOptionsBuilder, MouseWheelOptionsBuilder}
 };

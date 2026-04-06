@@ -4,7 +4,7 @@ use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
 use tokio::sync::Mutex;
 use rand::Rng;
 
-use super::mouse::{Mouse, MouseMoveOptions, MouseClickOptions, MouseOptions, MouseWheelOptions, Point, ScrollDirection};
+use super::mouse::{Mouse, MouseMoveOptions, MouseClickOptions, MouseOptions, MouseWheelOptions, Point};
 use super::trajectory::{random_curve_params, generate_trajectory};
 
 pub struct HumanMouse<M: Mouse> {
@@ -102,19 +102,24 @@ impl<M: Mouse> Mouse for HumanMouse<M> {
 }
 
 impl<M: Mouse> HumanMouse<M> {
-    /// Scrolls naturally in a direction by the given pixel distance.
-    /// Breaks the total scroll into multiple steps with slight per-step randomisation,
-    /// decelerating toward the end (ease-out).
+    /// Scrolls vertically by `y_distance` pixels.
+    ///
+    /// Positive values scroll down; negative values scroll up.
+    /// `x_distance` is reserved for future horizontal scroll support and is currently ignored.
+    ///
+    /// The total distance is split into ease-out steps with ±15 % per-step noise,
+    /// followed by a correction step to reach the exact target.
     pub async fn scroll(
         &self,
-        direction: ScrollDirection,
-        distance: u32,
+        y_distance: i32,
+        _x_distance: i32,
         context: &BrowsingContext,
     ) -> Result<(), InputError> {
-        if distance == 0 { return Ok(()); }
+        if y_distance == 0 { return Ok(()); }
 
         let mut rng = rand::rng();
-        let total = distance as f64;
+        let total = y_distance.unsigned_abs() as f64;
+        let sign = y_distance.signum() as i64;
         let steps = ((total / 40.0) as usize).max(3).min(20);
 
         let ease = |t: f64| -> f64 {
@@ -127,17 +132,10 @@ impl<M: Mouse> HumanMouse<M> {
             let t1 = (i + 1) as f64 / steps as f64;
             let ideal = (ease(t1) - ease(t0)) * total;
             let noise = 1.0 + rng.random_range(-0.15_f64..0.15_f64);
-            let step = (ideal * noise).max(1.0).round() as i64;
+            let step = (ideal * noise).max(1.0).round() as i64 * sign;
             accumulated += step as f64;
 
-            let (dx, dy) = match direction {
-                ScrollDirection::Up    => (0, -step),
-                ScrollDirection::Down  => (0,  step),
-                ScrollDirection::Left  => (-step, 0),
-                ScrollDirection::Right => ( step, 0),
-            };
-
-            self.mouse.wheel(context, MouseWheelOptions { delta_x: Some(dx), delta_y: Some(dy) }).await?;
+            self.mouse.wheel(context, MouseWheelOptions { delta_x: Some(0), delta_y: Some(step) }).await?;
 
             if i < steps - 1 {
                 tokio::time::sleep(tokio::time::Duration::from_millis(
@@ -147,15 +145,9 @@ impl<M: Mouse> HumanMouse<M> {
         }
 
         // Correction step if accumulated scroll drifted from target
-        let correction = (total - accumulated).round() as i64;
+        let correction = (y_distance as f64 - accumulated).round() as i64;
         if correction != 0 {
-            let (dx, dy) = match direction {
-                ScrollDirection::Up    => (0, -correction),
-                ScrollDirection::Down  => (0,  correction),
-                ScrollDirection::Left  => (-correction, 0),
-                ScrollDirection::Right => ( correction, 0),
-            };
-            self.mouse.wheel(context, MouseWheelOptions { delta_x: Some(dx), delta_y: Some(dy) }).await?;
+            self.mouse.wheel(context, MouseWheelOptions { delta_x: Some(0), delta_y: Some(correction) }).await?;
         }
 
         Ok(())

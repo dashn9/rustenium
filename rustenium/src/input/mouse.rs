@@ -92,14 +92,6 @@ impl MouseWheelOptionsBuilder {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum ScrollDirection {
-    Up,
-    Down,
-    Left,
-    Right,
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum MouseButton {
     Left = 0,
     Middle = 1,
