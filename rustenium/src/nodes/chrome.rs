@@ -7,26 +7,27 @@ use rustenium_bidi_definitions::script::types::{Handle, NodeRemoteValue, SharedI
 use rustenium_core::transport::ConnectionTransport;
 use rustenium_core::BidiSession;
 
-use crate::error::bidi::{EvaluateResultError, MouseInputError, ScreenshotError};
-use crate::input::{Mouse, MouseClickOptions, MouseMoveOptions};
-use crate::input::BidiMouse;
+use crate::error::bidi::{EvaluateResultError, InputError, MouseInputError, ScreenshotError};
+use crate::input::{BidiKeyboard, BidiMouse, Keyboard, Mouse, MouseClickOptions, MouseMoveOptions};
 use crate::nodes::bidi::node::{BidiNode, BidiNodeScreenshotOptions};
 use crate::nodes::node::Node;
 use crate::nodes::NodePosition;
 
-pub struct ChromeNode<T: ConnectionTransport, M: Mouse + Send + Sync = BidiMouse<T>> {
+pub struct ChromeNode<T: ConnectionTransport, M: Mouse + Send + Sync = BidiMouse<T>, K: Keyboard + Send + Sync = BidiKeyboard<T>> {
     bidi_node: BidiNode<T>,
-    children: Vec<ChromeNode<T, M>>,
+    children: Vec<ChromeNode<T, M, K>>,
     mouse: Arc<M>,
+    keyboard: Arc<K>,
 }
 
-impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static> ChromeNode<T, M> {
+impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Send + Sync + 'static> ChromeNode<T, M, K> {
     pub fn from_bidi(
         raw_bidi_node: NodeRemoteValue,
         locator: Locator,
         session: Arc<Mutex<BidiSession<T>>>,
         context: BrowsingContext,
         mouse: Arc<M>,
+        keyboard: Arc<K>,
     ) -> Self {
         let bidi_node = BidiNode::new(raw_bidi_node, locator.clone(), session.clone(), context.clone());
 
@@ -38,11 +39,12 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static> ChromeNode<T, M> 
                     session.clone(),
                     context.clone(),
                     mouse.clone(),
+                    keyboard.clone(),
                 )
             })
             .collect();
 
-        Self { bidi_node, children, mouse }
+        Self { bidi_node, children, mouse, keyboard }
     }
 
 
@@ -77,9 +79,9 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static> ChromeNode<T, M> 
     }
 }
 
-impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static> Node for ChromeNode<T, M> {
+impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Send + Sync + 'static> Node for ChromeNode<T, M, K> {
     #[allow(refining_impl_trait)]
-    fn get_children_nodes(&self) -> &Vec<ChromeNode<T, M>> {
+    fn get_children_nodes(&self) -> &Vec<ChromeNode<T, M, K>> {
         &self.children
     }
 
@@ -180,5 +182,9 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static> Node for ChromeNo
     /// If `save_path` is `None`, returns base64-encoded image data.
     async fn screenshot_with_options(&self, options: BidiNodeScreenshotOptions) -> Result<String, ScreenshotError> {
         self.bidi_node.screenshot(options).await
+    }
+
+    async fn type_text(&mut self, text: String) -> Result<(), InputError> {
+        self.bidi_node.type_text(self.keyboard.as_ref(), text).await
     }
 }

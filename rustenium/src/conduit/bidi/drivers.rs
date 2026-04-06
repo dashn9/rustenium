@@ -10,7 +10,7 @@ use rustenium_core::{
 };
 
 use crate::error::bidi::{
-    ContextCreationError, ContextIndexError, EmulationError,
+    ContextCloseError, ContextCreationError, ContextIndexError, EmulationError,
     EvaluateResultError, FindNodesError, InterceptNetworkError, NavigateError, ScreenshotError
 };
 use rustenium_bidi_definitions::Command;
@@ -51,7 +51,7 @@ use std::time::Duration;
 use tokio::sync::Mutex as TokioMutex;
 use tokio::time::sleep;
 
-use crate::input::{BidiMouse, BidiKeyboard, HumanMouse};
+use crate::input::{BidiMouse, BidiKeyboard, HumanMouse, HumanTouchscreen, Touchscreen};
 
 pub struct OnRequestBuilder<'a, T: ConnectionTransport + Send + Sync, F> {
     driver: &'a mut BidiDriver<T>,
@@ -205,6 +205,8 @@ pub struct BidiDriver<T: ConnectionTransport + Send + Sync> {
     pub mouse: Arc<BidiMouse<T>>,
     pub human_mouse: Arc<HumanMouse<BidiMouse<T>>>,
     pub keyboard: Arc<BidiKeyboard<T>>,
+    pub touchscreen: Arc<Touchscreen<T>>,
+    pub human_touchscreen: Arc<HumanTouchscreen<T>>,
 }
 
 impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
@@ -219,6 +221,8 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
         let mouse = Arc::new(BidiMouse::new(session.clone()));
         let human_mouse = Arc::new(HumanMouse::new(BidiMouse::new(session.clone())));
         let keyboard = Arc::new(BidiKeyboard::new(session.clone()));
+        let touchscreen = Arc::new(Touchscreen::new(session.clone()));
+        let human_touchscreen = Arc::new(HumanTouchscreen::new(touchscreen.clone()));
 
         Self {
             exe_path,
@@ -230,6 +234,8 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
             mouse,
             human_mouse,
             keyboard,
+            touchscreen,
+            human_touchscreen,
         }
     }
 
@@ -424,6 +430,18 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
         R: Future<Output = ()> + Send + 'static,
     {
         self.session.lock().await.add_event_handler(events, handler)
+    }
+
+    pub async fn close_context(
+        &mut self,
+        context: BidiBrowsingContext,
+    ) -> Result<(), ContextCloseError> {
+        use rustenium_bidi_definitions::browsing_context::command_builders::CloseBuilder;
+        let command = CloseBuilder::default().context(context).build().unwrap();
+        self.send_command(command).await.map_err(|err| {
+            ContextCloseError::CommandResultError(CommandResultError::SessionSendError(err))
+        })?;
+        Ok(())
     }
 
     pub async fn create_context(

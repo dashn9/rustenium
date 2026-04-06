@@ -1,10 +1,10 @@
 use crate::conduit::bidi::drivers::BidiDriver;
 use crate::domain::context::BrowsingContext as DomainBrowsingContext;
 use crate::error::bidi::{
-    BrowserCloseError, ContextCreationError, ContextIndexError, EmulationError,
+    BrowserCloseError, ContextCloseError, ContextCreationError, ContextIndexError, EmulationError,
     EvaluateResultError, FindNodesError, InterceptNetworkError, NavigateError, ScreenshotError,
 };
-use crate::input::{BidiKeyboard, BidiMouse, HumanMouse};
+use crate::input::{BidiKeyboard, BidiMouse, HumanMouse, HumanTouchscreen, Touchscreen};
 use crate::nodes::Node;
 use rustenium_bidi_definitions::base::CommandResponse;
 use rustenium_bidi_definitions::browser::types::UserContext;
@@ -378,6 +378,17 @@ pub trait BidiBrowser: Send + Sync {
     }
 
     // ── Context ──────────────────────────────────────────────────────────────
+
+    /// Closes a browsing context (tab/window).
+    fn close_context(
+        &mut self,
+        context: DomainBrowsingContext,
+    ) -> impl Future<Output = Result<(), ContextCloseError>> + Send
+    {
+        async move {
+            self.driver_mut().close_context(context.id().clone()).await
+        }
+    }
 
     /// Creates a new browsing context (tab) with default options.
     fn create_context(
@@ -951,6 +962,14 @@ pub trait BidiBrowser: Send + Sync {
     /// ```
     fn keyboard(&self) -> &BidiKeyboard<Self::Transport> {
         self.driver().keyboard.as_ref()
+    }
+
+    fn touchscreen(&self) -> &Touchscreen<Self::Transport> {
+        self.driver().touchscreen.as_ref()
+    }
+
+    fn human_touchscreen(&self) -> &HumanTouchscreen<Self::Transport> {
+        self.driver().human_touchscreen.as_ref()
     }
 
     fn get_active_context_id(&self) -> Result<BrowsingContext, ContextIndexError> {

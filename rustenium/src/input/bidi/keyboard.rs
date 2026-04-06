@@ -1,3 +1,4 @@
+use rand::Rng;
 use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
 use rustenium_bidi_definitions::input::command_builders::PerformActionsBuilder;
 use rustenium_bidi_definitions::input::type_builders::{
@@ -6,6 +7,7 @@ use rustenium_bidi_definitions::input::type_builders::{
 use rustenium_bidi_definitions::input::types::{
     KeySourceActionsType, KeyDownActionType, KeyUpActionType, PauseActionType,
 };
+use rustenium_core::error::CommandResultError;
 use rustenium_core::BidiSession;
 use rustenium_core::transport::ConnectionTransport;
 use crate::error::bidi::InputError;
@@ -14,38 +16,78 @@ use tokio::sync::Mutex;
 
 use super::KEYBOARD_ID;
 
-/// Options for keyboard key press operations.
-#[derive(Debug, Clone, Default)]
-pub struct KeyPressOptions {
-    pub delay: Option<u64>,
+/// Randomised delay range in milliseconds.
+///
+/// Produces naturally varying timing — each operation picks a value between
+/// `min` and `max` rather than a fixed duration.
+/// `min` may be 0 (allowing instant presses); `max` must be at least 1.
+#[derive(Debug, Clone, Copy)]
+pub struct DelayRange {
+    pub min: u64,
+    pub max: u64,
 }
 
+impl DelayRange {
+    /// Returns `None` if `max` is 0 or `min > max`.
+    pub fn new(min: u64, max: u64) -> Option<Self> {
+        if max == 0 || min > max { return None; }
+        Some(Self { min, max })
+    }
+}
+
+/// Options for a single key press (KeyDown → optional hold → KeyUp).
+///
+/// `delay` controls how long the key is held. When `None`, no pause is inserted.
+#[derive(Debug, Clone, Default)]
+pub struct KeyPressOptions {
+    pub delay: Option<DelayRange>,
+}
 
 #[derive(Default, Clone)]
 pub struct KeyPressOptionsBuilder {
-    delay: Option<u64>,
+    delay: Option<DelayRange>,
 }
 
 impl KeyPressOptionsBuilder {
-    pub fn delay(mut self, v: u64) -> Self { self.delay = Some(v); self }
+    pub fn delay(mut self, min: u64, max: u64) -> Self { self.delay = DelayRange::new(min, max); self }
     pub fn build(self) -> KeyPressOptions { KeyPressOptions { delay: self.delay } }
 }
 
-/// Options for keyboard text typing operations.
-#[derive(Debug, Clone, Default)]
+/// Options for typing a string of text character by character.
+///
+/// `delay` controls the hold duration (KeyDown → KeyUp) per character.
+/// `gap_multiplier` scales the post-KeyUp pause relative to the hold; defaults to `1.2` (20% longer).
+/// When `delay` is `None`, all characters are batched into a single `performActions` call with no pauses.
+#[derive(Debug, Clone)]
 pub struct KeyboardTypeOptions {
-    pub delay: Option<u64>,
+    pub delay: Option<DelayRange>,
+    pub gap_multiplier: f64,
 }
 
+impl Default for KeyboardTypeOptions {
+    fn default() -> Self {
+        Self { delay: None, gap_multiplier: 1.2 }
+    }
+}
 
-#[derive(Default, Clone)]
+#[derive(Clone)]
 pub struct KeyboardTypeOptionsBuilder {
-    delay: Option<u64>,
+    delay: Option<DelayRange>,
+    gap_multiplier: f64,
+}
+
+impl Default for KeyboardTypeOptionsBuilder {
+    fn default() -> Self {
+        Self { delay: None, gap_multiplier: 1.2 }
+    }
 }
 
 impl KeyboardTypeOptionsBuilder {
-    pub fn delay(mut self, v: u64) -> Self { self.delay = Some(v); self }
-    pub fn build(self) -> KeyboardTypeOptions { KeyboardTypeOptions { delay: self.delay } }
+    pub fn delay(mut self, min: u64, max: u64) -> Self { self.delay = DelayRange::new(min, max); self }
+    pub fn gap_multiplier(mut self, v: f64) -> Self { self.gap_multiplier = v; self }
+    pub fn build(self) -> KeyboardTypeOptions {
+        KeyboardTypeOptions { delay: self.delay, gap_multiplier: self.gap_multiplier }
+    }
 }
 
 pub(crate) fn get_bidi_key_value(key: &str) -> Result<String, InputError> {
@@ -193,7 +235,7 @@ impl<OT: ConnectionTransport> BidiKeyboard<OT> {
             .build().unwrap();
 
         self.session.lock().await.send(command).await
-            .map_err(|e| InputError::CommandResultError(rustenium_core::error::CommandResultError::SessionSendError(e)))?;
+            .map_err(|e| InputError::CommandResultError(CommandResultError::SessionSendError(e)))?;
         Ok(())
     }
 
@@ -215,7 +257,7 @@ impl<OT: ConnectionTransport> BidiKeyboard<OT> {
             .build().unwrap();
 
         self.session.lock().await.send(command).await
-            .map_err(|e| InputError::CommandResultError(rustenium_core::error::CommandResultError::SessionSendError(e)))?;
+            .map_err(|e| InputError::CommandResultError(CommandResultError::SessionSendError(e)))?;
         Ok(())
     }
 
@@ -226,7 +268,8 @@ impl<OT: ConnectionTransport> BidiKeyboard<OT> {
         options: Option<KeyPressOptions>,
     ) -> Result<(), InputError> {
         let key_value = get_bidi_key_value(key)?;
-        let options = options.unwrap_or_default();
+        let delay = options.and_then(|o| o.delay);
+        let mut rng = rand::rng();
 
         let mut key_actions = KeySourceActionsBuilder::default()
             .r#type(KeySourceActionsType::Key)
@@ -236,11 +279,12 @@ impl<OT: ConnectionTransport> BidiKeyboard<OT> {
                 .value(key_value.clone())
                 .build().unwrap());
 
-        if let Some(delay) = options.delay {
-            if delay > 0 {
+        if let Some(range) = delay {
+            let hold = rng.random_range(range.min..=range.max);
+            if hold > 0 {
                 key_actions = key_actions.action(PauseActionBuilder::default()
                     .r#type(PauseActionType::Pause)
-                    .duration(delay)
+                    .duration(hold)
                     .build().unwrap());
             }
         }
@@ -256,7 +300,7 @@ impl<OT: ConnectionTransport> BidiKeyboard<OT> {
             .build().unwrap();
 
         self.session.lock().await.send(command).await
-            .map_err(|e| InputError::CommandResultError(rustenium_core::error::CommandResultError::SessionSendError(e)))?;
+            .map_err(|e| InputError::CommandResultError(CommandResultError::SessionSendError(e)))?;
         Ok(())
     }
 
@@ -267,7 +311,9 @@ impl<OT: ConnectionTransport> BidiKeyboard<OT> {
         options: Option<KeyboardTypeOptions>,
     ) -> Result<(), InputError> {
         let options = options.unwrap_or_default();
-        let delay = options.delay.unwrap_or(0);
+        let delay = options.delay;
+        let gap_multiplier = options.gap_multiplier;
+        let mut rng = rand::rng();
 
         let mut key_actions = KeySourceActionsBuilder::default()
             .r#type(KeySourceActionsType::Key)
@@ -281,17 +327,31 @@ impl<OT: ConnectionTransport> BidiKeyboard<OT> {
                 .value(key_value.clone())
                 .build().unwrap());
 
-            if delay > 0 {
-                key_actions = key_actions.action(PauseActionBuilder::default()
-                    .r#type(PauseActionType::Pause)
-                    .duration(delay)
-                    .build().unwrap());
+            if let Some(range) = delay {
+                let hold = rng.random_range(range.min..=range.max);
+                if hold > 0 {
+                    key_actions = key_actions.action(PauseActionBuilder::default()
+                        .r#type(PauseActionType::Pause)
+                        .duration(hold)
+                        .build().unwrap());
+                }
             }
 
             key_actions = key_actions.action(KeyUpActionBuilder::default()
                 .r#type(KeyUpActionType::KeyUp)
                 .value(key_value)
                 .build().unwrap());
+
+            if let Some(range) = delay {
+                let hold = rng.random_range(range.min..=range.max);
+                let gap = ((hold as f64) * gap_multiplier).round() as u64;
+                if gap > 0 {
+                    key_actions = key_actions.action(PauseActionBuilder::default()
+                        .r#type(PauseActionType::Pause)
+                        .duration(gap)
+                        .build().unwrap());
+                }
+            }
         }
 
         let command = PerformActionsBuilder::default()
@@ -300,7 +360,7 @@ impl<OT: ConnectionTransport> BidiKeyboard<OT> {
             .build().unwrap();
 
         self.session.lock().await.send(command).await
-            .map_err(|e| InputError::CommandResultError(rustenium_core::error::CommandResultError::SessionSendError(e)))?;
+            .map_err(|e| InputError::CommandResultError(CommandResultError::SessionSendError(e)))?;
         Ok(())
     }
 }

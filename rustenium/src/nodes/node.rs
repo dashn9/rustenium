@@ -3,7 +3,7 @@ use std::future::Future;
 use serde::Deserialize;
 use rustenium_bidi_definitions::browsing_context::types::{BrowsingContext, Locator};
 use rustenium_bidi_definitions::script::types::{Handle, SharedId};
-use crate::error::bidi::{EvaluateResultError, MouseInputError, ScreenshotError};
+use crate::error::bidi::{EvaluateResultError, InputError, MouseInputError, ScreenshotError};
 use crate::input::{MouseClickOptions, MouseMoveOptions};
 use crate::nodes::bidi::node::BidiNodeScreenshotOptions;
 
@@ -102,4 +102,7 @@ pub trait Node {
     fn screenshot(&self) -> impl Future<Output = Result<String, ScreenshotError>>;
 
     fn screenshot_with_options(&self, options: BidiNodeScreenshotOptions) -> impl Future<Output = Result<String, ScreenshotError>>;
+
+    /// Focuses the element and types the given text into it.
+    fn type_text(&mut self, text: String) -> impl Future<Output = Result<(), InputError>>;
 }

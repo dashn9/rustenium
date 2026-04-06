@@ -247,6 +247,7 @@ impl BidiBrowser for FirefoxBrowser {
             driver.session.clone(),
             context,
             driver.mouse.clone(),
+            driver.keyboard.clone(),
         )
     }
 

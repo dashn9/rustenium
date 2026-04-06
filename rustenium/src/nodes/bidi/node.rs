@@ -421,6 +421,31 @@ impl<T: ConnectionTransport> BidiNode<T> {
         Ok(())
     }
 
+    pub async fn type_text<K: crate::input::Keyboard>(
+        &self,
+        keyboard: &K,
+        text: String,
+    ) -> Result<(), crate::error::bidi::InputError> {
+        if let Some(remote_reference) = self.shared_reference() {
+            let focus_cmd = CallFunctionBuilder::default()
+                .function_declaration(
+                    "function() { \
+                        if (!(this instanceof HTMLElement)) { \
+                            throw new Error('Cannot focus non-HTMLElement'); \
+                        } \
+                        this.focus(); \
+                    }".to_string(),
+                )
+                .await_promise(false)
+                .target(self.context_target())
+                .this(remote_reference)
+                .build()
+                .unwrap();
+            let _ = self.send_command(focus_cmd).await;
+        }
+        keyboard.type_text(&text, &self.context_id, None).await
+    }
+
     pub async fn mouse_move<M: Mouse>(
         &mut self,
         mouse: &M,

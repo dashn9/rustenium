@@ -15,10 +15,10 @@ pub use crate::input::{
     touch::{Touch, SwipeOptions, ScrollOptions, Viewport, SwipeOptionsBuilder, ScrollOptionsBuilder},
     bidi::{
         mouse::BidiMouse,
-        keyboard::{BidiKeyboard, KeyPressOptions, KeyboardTypeOptions, KeyPressOptionsBuilder, KeyboardTypeOptionsBuilder},
+        keyboard::{BidiKeyboard, DelayRange, KeyPressOptions, KeyboardTypeOptions, KeyPressOptionsBuilder, KeyboardTypeOptionsBuilder},
         touchscreen::{Touchscreen, TouchHandle, TouchMoveOptions, TouchMoveOptionsBuilder}
     },
     keyboard::Keyboard,
-    mouse::{Point, Mouse, MouseButton, MouseClickOptions, MouseMoveOptions, MouseOptions, MouseWheelOptions,
+    mouse::{Point, Mouse, MouseButton, ScrollDirection, MouseClickOptions, MouseMoveOptions, MouseOptions, MouseWheelOptions,
         MouseClickOptionsBuilder, MouseMoveOptionsBuilder, MouseOptionsBuilder, MouseWheelOptionsBuilder}
 };

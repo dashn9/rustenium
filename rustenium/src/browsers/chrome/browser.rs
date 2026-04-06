@@ -425,6 +425,7 @@ impl BidiBrowser for ChromeBrowser {
             driver.session.clone(),
             context,
             driver.mouse.clone(),
+            driver.keyboard.clone(),
         )
     }
 
