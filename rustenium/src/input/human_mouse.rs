@@ -101,6 +101,13 @@ impl<M: Mouse> Mouse for HumanMouse<M> {
     }
 }
 
+fn scroll_params(steps: usize) -> (Vec<f64>, Vec<u64>) {
+    let mut rng = rand::rng();
+    let noises: Vec<f64> = (0..steps).map(|_| 1.0 + rng.random_range(-0.15_f64..0.15_f64)).collect();
+    let delays: Vec<u64> = (0..steps - 1).map(|_| rng.random_range(12_u64..45_u64)).collect();
+    (noises, delays)
+}
+
 impl<M: Mouse> HumanMouse<M> {
     /// Scrolls vertically by `y_distance` pixels.
     ///
@@ -125,12 +132,7 @@ impl<M: Mouse> HumanMouse<M> {
             if t >= 1.0 { 1.0 } else { 1.0 - f64::powf(2.0, -10.0 * t) }
         };
 
-        let (noises, delays) = {
-            let mut rng = rand::rng();
-            let noises: Vec<f64> = (0..steps).map(|_| 1.0 + rng.random_range(-0.15_f64..0.15_f64)).collect();
-            let delays: Vec<u64> = (0..steps - 1).map(|_| rng.random_range(12_u64..45_u64)).collect();
-            (noises, delays)
-        };
+        let (noises, delays) = scroll_params(steps);
 
         let mut accumulated = 0.0_f64;
         for i in 0..steps {
