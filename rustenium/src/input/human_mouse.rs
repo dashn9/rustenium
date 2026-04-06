@@ -77,10 +77,14 @@ impl<M: Mouse> Mouse for HumanMouse<M> {
             self.move_to(p, context, MouseMoveOptions::default()).await?;
         }
 
-        let mut rng = rand::rng();
-        let click_delay = options.delay.unwrap_or(80 + rng.random_range(0..80));
         let count = options.count.unwrap_or(1);
         let button = options.button;
+        let (click_delay, pauses) = {
+            let mut rng = rand::rng();
+            let delay = options.delay.unwrap_or(80 + rng.random_range(0..80));
+            let pauses: Vec<u64> = (0..count.saturating_sub(1)).map(|_| 100 + rng.random_range(0..100)).collect();
+            (delay, pauses)
+        };
 
         for i in 0..count {
             self.mouse.down(context, MouseOptions { button }).await?;
@@ -88,8 +92,7 @@ impl<M: Mouse> Mouse for HumanMouse<M> {
             self.mouse.up(context, MouseOptions { button }).await?;
 
             if i < count - 1 {
-                let pause = 100 + rng.random_range(0..100);
-                tokio::time::sleep(tokio::time::Duration::from_millis(pause)).await;
+                tokio::time::sleep(tokio::time::Duration::from_millis(pauses[i as usize])).await;
             }
         }
 
@@ -99,13 +102,6 @@ impl<M: Mouse> Mouse for HumanMouse<M> {
     async fn wheel(&self, context: &BrowsingContext, options: MouseWheelOptions) -> Result<(), InputError> {
         self.mouse.wheel(context, options).await
     }
-}
-
-fn scroll_params(steps: usize) -> (Vec<f64>, Vec<u64>) {
-    let mut rng = rand::rng();
-    let noises: Vec<f64> = (0..steps).map(|_| 1.0 + rng.random_range(-0.15_f64..0.15_f64)).collect();
-    let delays: Vec<u64> = (0..steps - 1).map(|_| rng.random_range(12_u64..45_u64)).collect();
-    (noises, delays)
 }
 
 impl<M: Mouse> HumanMouse<M> {
@@ -132,7 +128,12 @@ impl<M: Mouse> HumanMouse<M> {
             if t >= 1.0 { 1.0 } else { 1.0 - f64::powf(2.0, -10.0 * t) }
         };
 
-        let (noises, delays) = scroll_params(steps);
+        let (noises, delays) = {
+            let mut rng = rand::rng();
+            let noises: Vec<f64> = (0..steps).map(|_| 1.0 + rng.random_range(-0.15_f64..0.15_f64)).collect();
+            let delays: Vec<u64> = (0..steps - 1).map(|_| rng.random_range(12_u64..45_u64)).collect();
+            (noises, delays)
+        };
 
         let mut accumulated = 0.0_f64;
         for i in 0..steps {
