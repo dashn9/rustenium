@@ -117,7 +117,6 @@ impl<M: Mouse> HumanMouse<M> {
     ) -> Result<(), InputError> {
         if y_distance == 0 { return Ok(()); }
 
-        let mut rng = rand::rng();
         let total = y_distance.unsigned_abs() as f64;
         let sign = y_distance.signum() as i64;
         let steps = ((total / 40.0) as usize).max(3).min(20);
@@ -126,21 +125,25 @@ impl<M: Mouse> HumanMouse<M> {
             if t >= 1.0 { 1.0 } else { 1.0 - f64::powf(2.0, -10.0 * t) }
         };
 
+        let (noises, delays) = {
+            let mut rng = rand::rng();
+            let noises: Vec<f64> = (0..steps).map(|_| 1.0 + rng.random_range(-0.15_f64..0.15_f64)).collect();
+            let delays: Vec<u64> = (0..steps - 1).map(|_| rng.random_range(12_u64..45_u64)).collect();
+            (noises, delays)
+        };
+
         let mut accumulated = 0.0_f64;
         for i in 0..steps {
             let t0 = i as f64 / steps as f64;
             let t1 = (i + 1) as f64 / steps as f64;
             let ideal = (ease(t1) - ease(t0)) * total;
-            let noise = 1.0 + rng.random_range(-0.15_f64..0.15_f64);
-            let step = (ideal * noise).max(1.0).round() as i64 * sign;
+            let step = (ideal * noises[i]).max(1.0).round() as i64 * sign;
             accumulated += step as f64;
 
             self.mouse.wheel(context, MouseWheelOptions { delta_x: Some(0), delta_y: Some(step) }).await?;
 
             if i < steps - 1 {
-                tokio::time::sleep(tokio::time::Duration::from_millis(
-                    rng.random_range(12_u64..45_u64)
-                )).await;
+                tokio::time::sleep(tokio::time::Duration::from_millis(delays[i])).await;
             }
         }
 
