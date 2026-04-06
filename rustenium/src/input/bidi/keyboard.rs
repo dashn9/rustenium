@@ -278,7 +278,10 @@ impl<OT: ConnectionTransport> BidiKeyboard<OT> {
     ) -> Result<(), InputError> {
         let key_value = get_bidi_key_value(key)?;
         let delay = options.and_then(|o| o.delay);
-        let mut rng = rand::rng();
+        let hold = delay.map(|range| {
+            let mut rng = rand::rng();
+            rng.random_range(range.min..=range.max)
+        });
 
         let mut key_actions = KeySourceActionsBuilder::default()
             .r#type(KeySourceActionsType::Key)
@@ -288,12 +291,11 @@ impl<OT: ConnectionTransport> BidiKeyboard<OT> {
                 .value(key_value.clone())
                 .build().unwrap());
 
-        if let Some(range) = delay {
-            let hold = rng.random_range(range.min..=range.max);
-            if hold > 0 {
+        if let Some(h) = hold {
+            if h > 0 {
                 key_actions = key_actions.action(PauseActionBuilder::default()
                     .r#type(PauseActionType::Pause)
-                    .duration(hold)
+                    .duration(h)
                     .build().unwrap());
             }
         }
@@ -322,13 +324,24 @@ impl<OT: ConnectionTransport> BidiKeyboard<OT> {
         let options = options.unwrap_or_default();
         let delay = options.delay;
         let gap_multiplier = options.gap_multiplier;
-        let mut rng = rand::rng();
+
+        let timings: Vec<(u64, u64)> = match delay {
+            None => vec![],
+            Some(range) => {
+                let mut rng = rand::rng();
+                text.chars().map(|_| {
+                    let hold = rng.random_range(range.min..=range.max);
+                    let gap = ((hold as f64) * gap_multiplier).round() as u64;
+                    (hold, gap)
+                }).collect()
+            }
+        };
 
         let mut key_actions = KeySourceActionsBuilder::default()
             .r#type(KeySourceActionsType::Key)
             .id(KEYBOARD_ID);
 
-        for ch in text.chars() {
+        for (i, ch) in text.chars().enumerate() {
             let key_value = get_bidi_key_value(&ch.to_string())?;
 
             key_actions = key_actions.action(KeyDownActionBuilder::default()
@@ -336,8 +349,7 @@ impl<OT: ConnectionTransport> BidiKeyboard<OT> {
                 .value(key_value.clone())
                 .build().unwrap());
 
-            if let Some(range) = delay {
-                let hold = rng.random_range(range.min..=range.max);
+            if let Some(&(hold, _)) = timings.get(i) {
                 if hold > 0 {
                     key_actions = key_actions.action(PauseActionBuilder::default()
                         .r#type(PauseActionType::Pause)
@@ -351,9 +363,7 @@ impl<OT: ConnectionTransport> BidiKeyboard<OT> {
                 .value(key_value)
                 .build().unwrap());
 
-            if let Some(range) = delay {
-                let hold = rng.random_range(range.min..=range.max);
-                let gap = ((hold as f64) * gap_multiplier).round() as u64;
+            if let Some(&(_, gap)) = timings.get(i) {
                 if gap > 0 {
                     key_actions = key_actions.action(PauseActionBuilder::default()
                         .r#type(PauseActionType::Pause)

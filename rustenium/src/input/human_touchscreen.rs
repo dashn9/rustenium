@@ -88,8 +88,7 @@ impl<OT: ConnectionTransport> HumanTouchscreen<OT> {
             handle.move_to(pt.x.max(0.0), pt.y.max(0.0), context).await?;
         }
 
-        let mut rng = rand::rng();
-        let lift_delay = 10 + rng.random_range(0..30);
+        let lift_delay = { let mut rng = rand::rng(); 10 + rng.random_range(0..30_u64) };
         tokio::time::sleep(tokio::time::Duration::from_millis(lift_delay)).await;
 
         handle.end(context).await?;
@@ -105,8 +104,7 @@ impl<OT: ConnectionTransport> Touch for HumanTouchscreen<OT> {
     ) -> Result<(), InputError> {
         let handle = self.touchscreen.touch_start(point.x, point.y, context, None).await?;
 
-        let mut rng = rand::rng();
-        let hold = 50 + rng.random_range(0..60);
+        let hold = { let mut rng = rand::rng(); 50 + rng.random_range(0..60_u64) };
         tokio::time::sleep(tokio::time::Duration::from_millis(hold)).await;
 
         handle.end(context).await?;
@@ -132,8 +130,7 @@ impl<OT: ConnectionTransport> Touch for HumanTouchscreen<OT> {
         options: ScrollOptions,
     ) -> Result<(), InputError> {
         let duration_ms = options.duration_ms.unwrap_or(600);
-        let mut rng = rand::rng();
-        let origin = zone_origin(&mut rng, viewport);
+        let origin = { let mut rng = rand::rng(); zone_origin(&mut rng, viewport) };
         self.swipe_internal(origin, point, duration_ms, context).await
     }
 
@@ -145,8 +142,7 @@ impl<OT: ConnectionTransport> Touch for HumanTouchscreen<OT> {
     ) -> Result<(), InputError> {
         let handle = self.touchscreen.touch_start(point.x, point.y, context, None).await?;
 
-        let mut rng = rand::rng();
-        let jitter = rng.random_range(0..50) as u64;
+        let jitter = { let mut rng = rand::rng(); rng.random_range(0..50_u64) };
         tokio::time::sleep(tokio::time::Duration::from_millis(hold_ms + jitter)).await;
 
         handle.end(context).await?;
