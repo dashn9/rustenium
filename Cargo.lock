@@ -1320,7 +1320,7 @@ dependencies = [
 name = "runner"
 version = "0.1.0"
 dependencies = [
- "rustenium 1.1.6",
+ "rustenium 1.1.7",
  "rustenium-bidi-definitions 0.1.1",
  "rustenium-identity",
  "serde_json",
@@ -1339,7 +1339,7 @@ dependencies = [
  "rand 0.9.1",
  "rustenium-bidi-definitions 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "rustenium-cdp-definitions 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "rustenium-core 1.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rustenium-core 1.1.0",
  "serde",
  "serde_json",
  "thiserror 2.0.17",
@@ -1349,14 +1349,14 @@ dependencies = [
 
 [[package]]
 name = "rustenium"
-version = "1.1.6"
+version = "1.1.7"
 dependencies = [
  "base64 0.22.1",
  "criterion",
  "rand 0.9.1",
  "rustenium-bidi-definitions 0.1.1",
  "rustenium-cdp-definitions 0.1.1",
- "rustenium-core 1.1.0",
+ "rustenium-core 1.1.1",
  "rustenium-macros",
  "serde",
  "serde_json",
@@ -1406,27 +1406,6 @@ dependencies = [
 [[package]]
 name = "rustenium-core"
 version = "1.1.0"
-dependencies = [
- "criterion",
- "fastwebsockets",
- "form_urlencoded",
- "http-body-util",
- "hyper",
- "hyper-util",
- "rand 0.9.1",
- "regex",
- "rustenium-bidi-definitions 0.1.1",
- "rustenium-cdp-definitions 0.1.1",
- "serde",
- "serde_json",
- "thiserror 2.0.17",
- "tokio",
- "tracing",
-]
-
-[[package]]
-name = "rustenium-core"
-version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c8c62b8cbc67ebd17d9500c22f0063f8bd9194fae9e050614e95ec6dee520c34"
 dependencies = [
@@ -1439,6 +1418,27 @@ dependencies = [
  "regex",
  "rustenium-bidi-definitions 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "rustenium-cdp-definitions 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.17",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
+name = "rustenium-core"
+version = "1.1.1"
+dependencies = [
+ "criterion",
+ "fastwebsockets",
+ "form_urlencoded",
+ "http-body-util",
+ "hyper",
+ "hyper-util",
+ "rand 0.9.1",
+ "regex",
+ "rustenium-bidi-definitions 0.1.1",
+ "rustenium-cdp-definitions 0.1.1",
  "serde",
  "serde_json",
  "thiserror 2.0.17",

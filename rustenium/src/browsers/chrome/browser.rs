@@ -1,6 +1,7 @@
 use super::capabilities::ChromeCapabilities;
 use crate::browsers::BidiBrowser;
 use crate::browsers::cdp_browser::CdpBrowser;
+use crate::cdp::adapter::fetch_ws_debugger_url_with_retry;
 use crate::conduit::bidi::drivers::{BidiDriver, DriverConfiguration, start_bidi_driver};
 use crate::conduit::cdp::adapter::{CdpAdapter, fetch_ws_debugger_url, start_cdp_session};
 use crate::error::bidi::BrowserCloseError;
@@ -345,7 +346,7 @@ impl ChromeBrowser {
     }
 
     async fn init_cdp(host: &str, chrome_port: u16) -> CdpAdapter<WebsocketConnectionTransport> {
-        let ws_debugger_url = fetch_ws_debugger_url(host, chrome_port).await.unwrap();
+        let ws_debugger_url = fetch_ws_debugger_url_with_retry(host, chrome_port).await.unwrap();
         let cdp_cc = ConnectionTransportConfig::from_ws_url(&ws_debugger_url).unwrap();
         let cdp_session = start_cdp_session(&cdp_cc).await;
         let mut cdp_adapter = CdpAdapter::new(cdp_session);

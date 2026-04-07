@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex as StdMutex};
+use std::time::Duration;
 
 use rustenium_cdp_definitions::Command;
 use rustenium_cdp_definitions::base::CommandResponse;
@@ -20,6 +21,7 @@ use rustenium_core::CdpEventManagement;
 use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader};
 use tokio::net::TcpStream;
 use tokio::sync::Mutex as TokioMutex;
+use tokio::time::sleep;
 
 #[derive(Clone)]
 pub struct CdpAdapter<T: ConnectionTransport + Send + Sync> {
@@ -143,6 +145,27 @@ impl<T: ConnectionTransport + Send + Sync + 'static> CdpAdapter<T> {
     pub async fn close(&mut self) {
         self.session.lock().await.close().await;
     }
+}
+
+pub async fn fetch_ws_debugger_url_with_retry(
+    host: &str,
+    chrome_port: u16,
+) -> Result<String, String> {
+    let mut last_err = None;
+
+    for attempt in 0..3 {
+        match fetch_ws_debugger_url(host, chrome_port).await {
+            Ok(url) => return Ok(url),
+            Err(e) => {
+                last_err = Some(e);
+                if attempt < 2 {
+                    sleep(Duration::from_millis(500)).await;
+                }
+            }
+        }
+    }
+
+    Err(last_err.expect("retry loop should always set an error"))
 }
 
 /// Fetches the first `webSocketDebuggerUrl` from the Chrome DevTools Protocol
