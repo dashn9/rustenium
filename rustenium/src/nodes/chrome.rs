@@ -399,16 +399,22 @@ impl AXNode {
             })
             .collect();
 
-        // Returns the resolved children for a node, squashing empty containers inline.
-        fn attach(id: &str, by_id: &mut HashMap<String, AXNode>, child_map: &HashMap<String, Vec<String>>, squash: bool) -> Vec<AXNode> {
+        // Squashes redundant empty ancestors: an empty node is removed only when its
+        // parent is also empty, so at most one empty container survives per chain.
+        fn attach(id: &str, by_id: &mut HashMap<String, AXNode>, child_map: &HashMap<String, Vec<String>>, squash: bool, parent_is_empty: bool) -> Vec<AXNode> {
             let child_ids = child_map.get(id).cloned().unwrap_or_default();
 
+            // Peek at whether this node is empty before recursing so children know.
+            let this_is_empty = squash && by_id.get(id).map_or(false, |n| n.is_empty_container());
+
             let children: Vec<AXNode> = child_ids.iter()
-                .flat_map(|cid| attach(cid, by_id, child_map, squash))
+                .flat_map(|cid| attach(cid, by_id, child_map, squash, this_is_empty))
                 .collect();
 
             if let Some(mut node) = by_id.remove(id) {
-                if squash && node.is_empty_container() {
+                // Only squash if both this node and its parent are empty containers —
+                // the outermost empty node in any chain is always kept.
+                if squash && node.is_empty_container() && parent_is_empty {
                     let grandparent = node.parent_id.clone();
                     return children.into_iter().map(|mut c| {
                         c.parent_id = grandparent.clone();
@@ -428,7 +434,7 @@ impl AXNode {
             .collect();
 
         roots.iter()
-            .flat_map(|root| attach(root, &mut by_id, &child_map, squash))
+            .flat_map(|root| attach(root, &mut by_id, &child_map, squash, false))
             .collect()
     }
 
@@ -507,21 +513,41 @@ mod tests {
     }
 
     #[test]
-    fn build_tree_squash_removes_empty_containers() {
-        // root(button) -> generic(no name) -> leaf(link "Click")
-        // generic should be removed; leaf promoted under root
+    fn build_tree_squash_keeps_first_empty_removes_deeper_ones() {
+        // root(real) -> empty1 -> empty2 -> leaf(real)
+        // empty1 is kept (its parent is real), empty2 is squashed (its parent is also empty)
         let flat = vec![
-            make_node("1", Some("button"), Some("Submit"), vec!["2"]),
-            make_node("2", Some("generic"), None, vec!["3"]),
-            make_node("3", Some("link"), Some("Click"), vec![]),
+            make_node("root", Some("main"), Some("Page"), vec!["e1"]),
+            make_node("e1", Some("generic"), None, vec!["e2"]),
+            make_node("e2", Some("generic"), None, vec!["leaf"]),
+            make_node("leaf", Some("link"), Some("Click"), vec![]),
         ];
         let tree = AXNode::build_tree(flat, true);
-        assert_eq!(tree.len(), 1);
-        assert_eq!(tree[0].node_id, "1");
+        assert_eq!(tree[0].node_id, "root");
         assert_eq!(tree[0].children.len(), 1);
-        assert_eq!(tree[0].children[0].node_id, "3");
-        // parent_id of promoted leaf should now point to root, not the removed generic
-        assert_eq!(tree[0].children[0].parent_id.as_deref(), Some("1"));
+        assert_eq!(tree[0].children[0].node_id, "e1");   // outermost empty kept
+        assert_eq!(tree[0].children[0].children.len(), 1);
+        assert_eq!(tree[0].children[0].children[0].node_id, "leaf"); // leaf promoted past e2
+        assert_eq!(tree[0].children[0].children[0].parent_id.as_deref(), Some("e1"));
+    }
+
+    #[test]
+    fn build_tree_squash_deep_chain_collapses_to_one_empty() {
+        // root -> e1 -> e2 -> e3 -> e4 -> leaf
+        // only e1 survives
+        let flat = vec![
+            make_node("root", Some("main"), Some("Page"), vec!["e1"]),
+            make_node("e1", Some("none"), None, vec!["e2"]),
+            make_node("e2", Some("group"), None, vec!["e3"]),
+            make_node("e3", Some("generic"), None, vec!["e4"]),
+            make_node("e4", Some("none"), None, vec!["leaf"]),
+            make_node("leaf", Some("button"), Some("Go"), vec![]),
+        ];
+        let tree = AXNode::build_tree(flat, true);
+        assert_eq!(tree[0].children[0].node_id, "e1");
+        assert_eq!(tree[0].children[0].children.len(), 1);
+        assert_eq!(tree[0].children[0].children[0].node_id, "leaf");
+        assert_eq!(tree[0].children[0].children[0].parent_id.as_deref(), Some("e1"));
     }
 
     #[test]
@@ -538,9 +564,9 @@ mod tests {
     }
 
     #[test]
-    fn build_tree_squash_promotes_multiple_children() {
-        // root -> generic(empty) -> [leaf1, leaf2]
-        // Both leaves should be promoted under root
+    fn build_tree_squash_single_empty_under_real_is_kept() {
+        // root(real) -> generic(empty) -> [a, b]
+        // single empty parent is kept — it groups the siblings
         let flat = vec![
             make_node("root", Some("main"), Some("Page"), vec!["mid"]),
             make_node("mid", Some("none"), None, vec!["a", "b"]),
@@ -548,22 +574,22 @@ mod tests {
             make_node("b", Some("button"), Some("No"), vec![]),
         ];
         let tree = AXNode::build_tree(flat, true);
-        assert_eq!(tree[0].children.len(), 2);
-        assert_eq!(tree[0].children[0].node_id, "a");
-        assert_eq!(tree[0].children[1].node_id, "b");
+        assert_eq!(tree[0].children.len(), 1);
+        assert_eq!(tree[0].children[0].node_id, "mid"); // empty parent kept
+        assert_eq!(tree[0].children[0].children.len(), 2);
     }
 
     #[test]
-    fn build_tree_squash_empty_root_promotes_children_to_top() {
-        // If the root itself is empty, its children become the new roots
+    fn build_tree_squash_empty_root_is_kept() {
+        // If the root itself is empty it is still kept (no parent above it)
         let flat = vec![
             make_node("root", Some("none"), None, vec!["a", "b"]),
             make_node("a", Some("button"), Some("Yes"), vec![]),
             make_node("b", Some("button"), Some("No"), vec![]),
         ];
         let tree = AXNode::build_tree(flat, true);
-        assert_eq!(tree.len(), 2);
-        assert_eq!(tree[0].node_id, "a");
-        assert_eq!(tree[1].node_id, "b");
+        assert_eq!(tree.len(), 1);
+        assert_eq!(tree[0].node_id, "root");
+        assert_eq!(tree[0].children.len(), 2);
     }
 }
