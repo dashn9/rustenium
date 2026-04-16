@@ -264,10 +264,10 @@ fn bench_node_properties(c: &mut Criterion) {
         });
     });
 
-    group.bench_function("get_inner_html", |b| {
+    group.bench_function("get_html", |b| {
         let nodes = rt.block_on(browser.find_nodes(css!("body"))).unwrap();
         b.iter(|| {
-            rt.block_on(async { black_box(nodes[0].get_inner_html().await) });
+            rt.block_on(async { black_box(nodes[0].get_html().await) });
         });
     });
 
@@ -588,7 +588,7 @@ fn bench_screenshots(c: &mut Criterion) {
         });
 
         group.bench_function("example_node_h1", |b| {
-            let nodes = rt.block_on(browser.find_nodes(css!("h1"))).unwrap();
+            let mut nodes = rt.block_on(browser.find_nodes(css!("h1"))).unwrap();
             b.iter(|| {
                 rt.block_on(async { black_box(nodes[0].screenshot().await.unwrap()) });
             });

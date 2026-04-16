@@ -2,13 +2,12 @@ use crate::error::bidi::{EvaluateResultError, InvalidPositionError, MouseInputEr
 use crate::input::{Mouse, MouseClickOptions, MouseMoveOptions};
 use crate::input::Point;
 use crate::nodes::NodePosition;
-use crate::nodes::node::NodeType;
+use crate::nodes::node::{NodeScreenShotOptions, NodeType};
 use rustenium_bidi_definitions::Command;
 use rustenium_bidi_definitions::base::CommandResponse;
 use rustenium_bidi_definitions::browsing_context::command_builders::CaptureScreenshotBuilder;
-use rustenium_bidi_definitions::browsing_context::commands::CaptureScreenshotOrigin;
 use rustenium_bidi_definitions::browsing_context::results::CaptureScreenshotResult;
-use rustenium_bidi_definitions::browsing_context::types::{BrowsingContext, ImageFormat, Locator};
+use rustenium_bidi_definitions::browsing_context::types::{BrowsingContext, Locator};
 use rustenium_bidi_definitions::script::command_builders::CallFunctionBuilder;
 use rustenium_bidi_definitions::script::results::{CallFunctionResult, EvaluateResult};
 use rustenium_bidi_definitions::script::type_builders::{ContextTargetBuilder, SharedReferenceBuilder};
@@ -22,30 +21,6 @@ use std::sync::Arc;
 use std::time::Duration;
 use tokio::sync::Mutex;
 use tokio::time::timeout;
-
-#[derive(Debug, Clone, Default)]
-pub struct BidiNodeScreenshotOptions {
-    pub origin: Option<CaptureScreenshotOrigin>,
-    pub format: Option<ImageFormat>,
-    pub save_path: Option<String>,
-}
-
-
-#[derive(Default, Clone)]
-pub struct BidiNodeScreenshotOptionsBuilder {
-    origin: Option<CaptureScreenshotOrigin>,
-    format: Option<ImageFormat>,
-    save_path: Option<String>,
-}
-
-impl BidiNodeScreenshotOptionsBuilder {
-    pub fn origin(mut self, v: impl Into<CaptureScreenshotOrigin>) -> Self { self.origin = Some(v.into()); self }
-    pub fn format(mut self, v: impl Into<ImageFormat>) -> Self { self.format = Some(v.into()); self }
-    pub fn save_path(mut self, v: impl Into<String>) -> Self { self.save_path = Some(v.into()); self }
-    pub fn build(self) -> BidiNodeScreenshotOptions {
-        BidiNodeScreenshotOptions { origin: self.origin, format: self.format, save_path: self.save_path }
-    }
-}
 
 pub(crate) struct BidiNode<
     T: ConnectionTransport = rustenium_core::transport::WebsocketConnectionTransport,
@@ -501,12 +476,15 @@ impl<T: ConnectionTransport> BidiNode<T> {
         Ok(())
     }
 
-    pub async fn screenshot(&self, options: BidiNodeScreenshotOptions) -> Result<String, ScreenshotError> {
+    pub async fn screenshot(&self, options: NodeScreenShotOptions) -> Result<String, ScreenshotError> {
         let mut builder = CaptureScreenshotBuilder::default().context(self.context_id.clone());
         if let Some(origin) = options.origin {
             builder = builder.origin(origin);
         }
-        if let Some(format) = options.format {
+        if let Some(mut format) = options.bidi_format {
+            if let Some(quality) = options.quality {
+                format.quality = Some(quality);
+            }
             builder = builder.format(format);
         }
         let command = builder.build().unwrap();
