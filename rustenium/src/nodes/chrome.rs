@@ -158,14 +158,14 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
     async fn get_inner_text(&self) -> String {
         match &self.inner {
             ChromeNodeInner::Bidi { node, .. } => node.get_inner_text().await.unwrap(),
-            ChromeNodeInner::Cdp { node: n, .. } => n.get_inner_text().await,
+            ChromeNodeInner::Cdp { node: n, .. } => n.get_inner_text().await.unwrap_or(String::new()),
         }
     }
 
     async fn get_text_content(&self) -> String {
         match &self.inner {
             ChromeNodeInner::Bidi { node, .. } => node.get_text_content().await.unwrap(),
-            ChromeNodeInner::Cdp { node: n, .. } => n.get_text_content().await,
+            ChromeNodeInner::Cdp { node: n, .. } => n.get_text_content().await.unwrap_or(String::new()),
         }
     }
 

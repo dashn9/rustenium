@@ -8,12 +8,10 @@ pub enum NodeActionError {
     Bidi(CommandResultError),
     #[error("CDP command failed")]
     Cdp(CdpCommandResultError),
-    #[error("CDP command build failed: {0}")]
-    CdpBuild(String),
+    #[error("Error occurred scrolling Node")]
+    ScrollError,
     #[error("Node does not have a shared ID")]
     NoSharedId,
-    #[error("{0}")]
-    Other(String),
 }
 
 /// Error from mouse input operations: move, click.

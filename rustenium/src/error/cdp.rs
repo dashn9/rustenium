@@ -35,8 +35,6 @@ pub enum NodesFetchError {
 
 #[derive(Debug, Error)]
 pub enum MouseInputError {
-    #[error("Failed to build CDP command: {0}")]
-    BuildError(String),
     #[error("An error occured executing CDP command")]
     CommandError(CdpCommandResultError),
     #[error("Mouse button '{0}' is already pressed")]
