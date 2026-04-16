@@ -2,6 +2,7 @@ use crate::error::bidi::{EvaluateResultError, InvalidPositionError, MouseInputEr
 use crate::input::{Mouse, MouseClickOptions, MouseMoveOptions};
 use crate::input::Point;
 use crate::nodes::NodePosition;
+use crate::nodes::node::NodeType;
 use rustenium_bidi_definitions::Command;
 use rustenium_bidi_definitions::base::CommandResponse;
 use rustenium_bidi_definitions::browsing_context::command_builders::CaptureScreenshotBuilder;
@@ -49,12 +50,29 @@ impl BidiNodeScreenshotOptionsBuilder {
 pub(crate) struct BidiNode<
     T: ConnectionTransport = rustenium_core::transport::WebsocketConnectionTransport,
 > {
-    _raw_node: NodeRemoteValue,
+    pub(crate) _raw_node: NodeRemoteValue,
     pub children: Vec<BidiNode<T>>,
     pub locator: Locator,
     pub position: Option<NodePosition>,
     pub session: Option<Arc<Mutex<BidiSession<T>>>>,
     pub context_id: BrowsingContext,
+}
+
+impl<T: ConnectionTransport> std::fmt::Debug for BidiNode<T> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let raw = &self._raw_node;
+        let local_name = raw.value.as_ref().and_then(|v| v.local_name.as_deref()).unwrap_or("?");
+        let shared_id = raw.shared_id.as_ref().map(|id| id.as_ref()).unwrap_or("?");
+        let attrs = raw.value.as_ref().and_then(|v| v.attributes.as_ref());
+        let mut dbg = f.debug_struct("Node");
+        dbg.field("tag", &local_name)
+           .field("shared_id", &shared_id);
+        if let Some(attrs) = attrs {
+            dbg.field("attributes", attrs);
+        }
+        dbg.field("children", &self.children.len())
+           .finish()
+    }
 }
 
 impl<T: ConnectionTransport> BidiNode<T> {
@@ -103,6 +121,15 @@ impl<T: ConnectionTransport> BidiNode<T> {
 
     pub fn get_raw_node_ref(&self) -> &NodeRemoteValue {
         &self._raw_node
+    }
+
+    pub fn get_local_name(&self) -> Option<&str> {
+        self._raw_node.value.as_ref()?.local_name.as_deref()
+    }
+
+    pub fn get_node_type(&self) -> Option<NodeType> {
+        let nt = self._raw_node.value.as_ref()?.node_type;
+        NodeType::from_u16(nt as u16)
     }
 
     async fn send_command(

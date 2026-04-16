@@ -1,10 +1,22 @@
 mod bidi_browser;
+mod cdp_browser;
 
 use rustenium::browsers::{chrome, ChromeConfig, ChromeBrowser};
 
 async fn launch() -> ChromeBrowser {
     let mut config = ChromeConfig::default();
     config.remote_debugging_port = Some(0);
+    config.browser_flags = Some(vec![
+        "--headless=new".to_string(),
+        "--window-size=1280,720".to_string(),
+    ]);
+    chrome(Some(config)).await
+}
+
+async fn launch_cdp() -> ChromeBrowser {
+    let mut config = ChromeConfig::default();
+    config.enable_bidi = false;
+    config.enable_cdp = true;
     config.browser_flags = Some(vec![
         "--headless=new".to_string(),
         "--window-size=1280,720".to_string(),
@@ -50,3 +62,15 @@ async fn launch() -> ChromeBrowser {
 #[tokio::test] async fn emulate_timezone() { bidi_browser::test_emulate_timezone(launch().await).await; }
 #[tokio::test] async fn delete_node() { bidi_browser::test_delete_node(launch().await).await; }
 #[tokio::test] async fn end_session_cleanly() { bidi_browser::test_end_session_cleanly(launch().await).await; }
+
+// ── CDP tests ─────────────────────────────────────────────────────────────────
+#[tokio::test] async fn cdp_navigate_to_url() { cdp_browser::test_navigate_to_url(launch_cdp().await).await; }
+#[tokio::test] async fn cdp_navigate_returns_frame_or_loader() { cdp_browser::test_navigate_returns_frame_or_loader(launch_cdp().await).await; }
+#[tokio::test] async fn cdp_navigate_multiple_pages() { cdp_browser::test_navigate_multiple_pages(launch_cdp().await).await; }
+#[tokio::test] async fn cdp_get_accessible_nodes_not_empty() { cdp_browser::test_get_accessible_nodes_not_empty(launch_cdp().await).await; }
+#[tokio::test] async fn cdp_get_accessible_nodes_squash_lte_full() { cdp_browser::test_get_accessible_nodes_squash_lte_full(launch_cdp().await).await; }
+#[tokio::test] async fn cdp_get_accessible_nodes_squash_no_blank_generic() { cdp_browser::test_get_accessible_nodes_squash_no_blank_generic(launch_cdp().await).await; }
+#[tokio::test] async fn cdp_fetch_node_by_node_id() { cdp_browser::test_fetch_node_by_node_id(launch_cdp().await).await; }
+#[tokio::test] async fn cdp_fetch_node_with_depth_returns_children() { cdp_browser::test_fetch_node_with_depth_returns_children(launch_cdp().await).await; }
+#[tokio::test] async fn cdp_emulate_device_metrics() { cdp_browser::test_emulate_device_metrics(launch_cdp().await).await; }
+#[tokio::test] async fn cdp_create_tab() { cdp_browser::test_create_tab(launch_cdp().await).await; }

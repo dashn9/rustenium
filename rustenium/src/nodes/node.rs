@@ -63,6 +63,10 @@ pub struct NodePosition {
 pub trait Node {
     fn get_children_nodes(&self) -> &Vec<impl Node>;
 
+    fn get_local_name(&self) -> Option<&str>;
+
+    fn get_node_type(&self) -> Option<NodeType>;
+
     fn get_bidi_locator(&self) -> &Locator;
 
     fn get_inner_text(&self) -> impl Future<Output = String>;

@@ -10,7 +10,7 @@ use rustenium_core::BidiSession;
 use crate::error::bidi::{EvaluateResultError, InputError, MouseInputError, ScreenshotError};
 use crate::input::{BidiKeyboard, BidiMouse, Keyboard, Mouse, MouseClickOptions, MouseMoveOptions};
 use crate::nodes::bidi::node::{BidiNode, BidiNodeScreenshotOptions};
-use crate::nodes::node::Node;
+use crate::nodes::node::{Node, NodeType};
 use crate::nodes::NodePosition;
 
 pub struct FirefoxNode<T: ConnectionTransport, M: Mouse + Send + Sync = BidiMouse<T>, K: Keyboard + Send + Sync = BidiKeyboard<T>> {
@@ -72,6 +72,14 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
 
     fn get_bidi_locator(&self) -> &Locator {
         &self.bidi_node.locator
+    }
+
+    fn get_local_name(&self) -> Option<&str> {
+        self.bidi_node.get_local_name()
+    }
+
+    fn get_node_type(&self) -> Option<NodeType> {
+        self.bidi_node.get_node_type()
     }
 
     async fn get_inner_text(&self) -> String {

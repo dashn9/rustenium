@@ -335,7 +335,7 @@ pub trait BidiBrowser: Send + Sync {
     fn driver_mut(&mut self) -> &mut BidiDriver<Self::Transport>;
 
     /// Construct a browser-specific node from raw BiDi data.
-    fn build_node(
+    fn build_bidi_node(
         &self,
         raw_node: NodeRemoteValue,
         locator: Locator,
@@ -470,7 +470,7 @@ pub trait BidiBrowser: Send + Sync {
                 .await?;
             let mut nodes = Vec::new();
             for node in node_result.nodes.iter() {
-                nodes.push(self.build_node(node.clone(), locator.clone(), context.clone()));
+                nodes.push(self.build_bidi_node(node.clone(), locator.clone(), context.clone()));
             }
             Ok(nodes)
         }
@@ -990,4 +990,5 @@ pub trait BidiBrowser: Send + Sync {
     fn end_session(&mut self) -> impl Future<Output = Result<(), SessionSendError>> + Send {
         async move { self.driver_mut().end_session().await }
     }
+
 }

@@ -24,3 +24,11 @@ pub enum EmulateDeviceMetricsError {
     #[error("An error occured executing command")]
     CommandResultError(CdpCommandResultError),
 }
+
+#[derive(Debug, Error)]
+pub enum NodesFetchError {
+    #[error("An error occured executing command")]
+    CommandResultError(CdpCommandResultError),
+    #[error("Failed to parse accessibility tree result")]
+    ParseError(String),
+}

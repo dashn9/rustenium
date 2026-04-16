@@ -1,15 +1,22 @@
 use crate::browsers::chrome::tab::ChromeTab;
 use crate::conduit::cdp::adapter::CdpAdapter;
-use crate::error::cdp::{CreateTabError, EmulateDeviceMetricsError, NavigateError};
+use crate::error::cdp::{CreateTabError, EmulateDeviceMetricsError, NavigateError, NodesFetchError};
 use rustenium_cdp_definitions::Command;
 use rustenium_cdp_definitions::base::CommandResponse;
 use rustenium_cdp_definitions::browser_protocol::emulation::commands::SetDeviceMetricsOverride;
 use rustenium_cdp_definitions::browser_protocol::emulation::types::ScreenOrientation;
+use rustenium_cdp_definitions::browser_protocol::accessibility::commands::GetFullAxTree;
+use rustenium_cdp_definitions::browser_protocol::accessibility::results::GetFullAxTreeResult;
+use rustenium_cdp_definitions::browser_protocol::dom::commands::DescribeNode;
+use rustenium_cdp_definitions::browser_protocol::dom::results::DescribeNodeResult;
+use rustenium_cdp_definitions::browser_protocol::dom::types::{BackendNodeId, NodeId, Node as DomNode};
+use rustenium_cdp_definitions::js_protocol::runtime::types::RemoteObjectId;
 use rustenium_cdp_definitions::browser_protocol::page::commands::Navigate;
 use rustenium_cdp_definitions::browser_protocol::page::results::NavigateResult;
 use rustenium_cdp_definitions::browser_protocol::page::types::{ReferrerPolicy, TransitionType, Viewport};
 use rustenium_cdp_definitions::browser_protocol::target::commands::CreateTarget;
-use rustenium_core::error::CdpSessionSendError;
+use rustenium_core::error::{CdpCommandResultError, CdpSessionSendError};
+use crate::nodes::AXNode;
 use rustenium_core::transport::WebsocketConnectionTransport;
 
 #[derive(Debug, Clone, Default)]
@@ -48,10 +55,14 @@ impl NavigateOptionsBuilder {
     }
 }
 
-pub trait CdpBrowser {
+pub trait CdpBrowser: Send + Sync {
+    type BrowserNode;
+
     fn adapter(&self) -> &CdpAdapter<WebsocketConnectionTransport>;
 
     fn adapter_mut(&mut self) -> &mut CdpAdapter<WebsocketConnectionTransport>;
+
+    fn build_cdp_node(&self, node: DomNode) -> Self::BrowserNode;
 
     fn navigate(
         &mut self,
@@ -190,6 +201,53 @@ pub trait CdpBrowser {
         let adapter = self.adapter_mut();
         async move { adapter.send_command(command).await }
     }
+
+    fn get_accessible_nodes(&mut self, squash: bool) -> impl Future<Output = Result<Vec<AXNode>, NodesFetchError>> + Send {
+        async move {
+            let result_value = self.adapter_mut()
+                .send_command(GetFullAxTree::builder().build())
+                .await
+                .map_err(|e| NodesFetchError::CommandResultError(CdpCommandResultError::SessionSendError(e)))?
+                .result;
+
+            let result = GetFullAxTreeResult::try_from(result_value)
+                .map_err(|e| NodesFetchError::ParseError(e.to_string()))?;
+
+            Ok(AXNode::build_tree(result.nodes, squash))
+        }
+    }
+
+    fn fetch_node(&mut self, options: FetchNodeOptions) -> impl Future<Output = Result<Self::BrowserNode, NodesFetchError>> + Send {
+        async move {
+            let mut builder = DescribeNode::builder();
+            if let Some(v) = options.node_id { builder = builder.node_id(v); }
+            if let Some(v) = options.backend_node_id { builder = builder.backend_node_id(v); }
+            if let Some(v) = options.object_id { builder = builder.object_id(v); }
+            if let Some(v) = options.depth { builder = builder.depth(v); }
+            if let Some(v) = options.pierce { builder = builder.pierce(v); }
+            let command = builder.build();
+
+            let result_value = self.adapter_mut()
+                .send_command(command)
+                .await
+                .map_err(|e| NodesFetchError::CommandResultError(CdpCommandResultError::SessionSendError(e)))?
+                .result;
+
+            let result = DescribeNodeResult::try_from(result_value)
+                .map_err(|e: serde_json::Error| NodesFetchError::ParseError(e.to_string()))?;
+
+            Ok(self.build_cdp_node(*result.node))
+        }
+    }
+}
+
+#[derive(Debug, Clone, Default)]
+pub struct FetchNodeOptions {
+    pub node_id: Option<NodeId>,
+    pub backend_node_id: Option<BackendNodeId>,
+    pub object_id: Option<RemoteObjectId>,
+    pub depth: Option<i64>,
+    pub pierce: Option<bool>,
 }
 
 #[derive(Debug, Clone, Default)]

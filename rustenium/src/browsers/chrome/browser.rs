@@ -3,11 +3,12 @@ use crate::browsers::BidiBrowser;
 use crate::browsers::cdp_browser::CdpBrowser;
 use crate::cdp::adapter::fetch_ws_debugger_url_with_retry;
 use crate::conduit::bidi::drivers::{BidiDriver, DriverConfiguration, start_bidi_driver};
-use crate::conduit::cdp::adapter::{CdpAdapter, fetch_ws_debugger_url, start_cdp_session};
+use crate::conduit::cdp::adapter::{CdpAdapter, start_cdp_session};
 use crate::error::bidi::BrowserCloseError;
-use crate::nodes::ChromeNode;
+use crate::nodes::{CdpNode, ChromeNode};
 use rustenium_bidi_definitions::browsing_context::types::{BrowsingContext, Locator};
 use rustenium_bidi_definitions::script::types::NodeRemoteValue;
+use rustenium_cdp_definitions::browser_protocol::dom::types::Node as DomNode;
 use rustenium_bidi_definitions::session::types::ProxyConfiguration;
 use rustenium_core::find_free_port;
 use rustenium_core::process::Process;
@@ -413,7 +414,7 @@ impl BidiBrowser for ChromeBrowser {
             .expect("BiDi is not enabled. Set `enable_bidi: true` in ChromeConfig.")
     }
 
-    fn build_node(
+    fn build_bidi_node(
         &self,
         raw_node: NodeRemoteValue,
         locator: Locator,
@@ -447,6 +448,8 @@ impl BidiBrowser for ChromeBrowser {
 }
 
 impl CdpBrowser for ChromeBrowser {
+    type BrowserNode = ChromeNode<WebsocketConnectionTransport>;
+
     fn adapter(&self) -> &CdpAdapter<WebsocketConnectionTransport> {
         self.cdp_adapter
             .as_ref()
@@ -457,6 +460,10 @@ impl CdpBrowser for ChromeBrowser {
         self.cdp_adapter
             .as_mut()
             .expect("CDP is not enabled. Set `enable_cdp: true` in ChromeConfig.")
+    }
+
+    fn build_cdp_node(&self, node: DomNode) -> Self::BrowserNode {
+        ChromeNode::from_dom(CdpNode::from_dom(node))
     }
 }
 

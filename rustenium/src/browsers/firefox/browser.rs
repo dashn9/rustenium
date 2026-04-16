@@ -234,7 +234,7 @@ impl BidiBrowser for FirefoxBrowser {
             .expect("BiDi driver is not initialized.")
     }
 
-    fn build_node(
+    fn build_bidi_node(
         &self,
         raw_node: NodeRemoteValue,
         locator: Locator,
