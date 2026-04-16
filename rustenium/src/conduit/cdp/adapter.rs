@@ -2,12 +2,23 @@ use std::collections::HashMap;
 use std::sync::{Arc, Mutex as StdMutex};
 use std::time::Duration;
 
+use crate::input::{CdpKeyboard, CdpMouse, CdpTouchscreen, HumanMouse};
+
 use rustenium_cdp_definitions::Command;
 use rustenium_cdp_definitions::base::CommandResponse;
 use rustenium_core::error::CdpCommandResultError;
+use rustenium_cdp_definitions::browser_protocol::dom::commands::{
+    DescribeNode, GetDocument, QuerySelector, QuerySelectorAll,
+};
+use rustenium_cdp_definitions::browser_protocol::dom::results::{
+    DescribeNodeResult, GetDocumentResult, QuerySelectorResult, QuerySelectorAllResult,
+};
+use rustenium_cdp_definitions::browser_protocol::dom::types::Node as DomNode;
 use rustenium_cdp_definitions::browser_protocol::emulation::commands::SetDeviceMetricsOverride;
 use rustenium_cdp_definitions::browser_protocol::page::commands::Navigate;
 use rustenium_cdp_definitions::browser_protocol::page::results::NavigateResult;
+use rustenium_cdp_definitions::browser_protocol::page::commands::CaptureScreenshot;
+use rustenium_cdp_definitions::browser_protocol::page::results::CaptureScreenshotResult;
 use rustenium_cdp_definitions::browser_protocol::target::command_builders::SetDiscoverTargetsBuilder;
 use rustenium_cdp_definitions::browser_protocol::target::commands::CreateTarget;
 use rustenium_cdp_definitions::browser_protocol::target::events::{TargetCreated, TargetDestroyed};
@@ -27,16 +38,32 @@ use tokio::time::sleep;
 pub struct CdpAdapter<T: ConnectionTransport + Send + Sync> {
     pub session: Arc<TokioMutex<CdpSession<T>>>,
     pub page_targets: Arc<StdMutex<HashMap<TargetId, TargetInfo>>>,
+    pub mouse: Arc<CdpMouse>,
+    pub human_mouse: Arc<HumanMouse<CdpMouse>>,
+    pub keyboard: Arc<CdpKeyboard>,
+    pub touchscreen: Arc<CdpTouchscreen>,
 }
 
-impl<T: ConnectionTransport + Send + Sync + 'static> CdpAdapter<T> {
-    pub fn new(session: Arc<TokioMutex<CdpSession<T>>>) -> Self {
+impl CdpAdapter<WebsocketConnectionTransport> {
+    pub fn new(session: Arc<TokioMutex<CdpSession<WebsocketConnectionTransport>>>) -> Self {
+        let modifiers = Arc::new(StdMutex::new(0i64));
+        let mouse = CdpMouse::new(session.clone(), modifiers.clone());
+        let human_mouse = Arc::new(HumanMouse::new(mouse.clone()));
+        let mouse = Arc::new(mouse);
+        let keyboard = Arc::new(CdpKeyboard::new(session.clone(), modifiers));
+        let touchscreen = Arc::new(CdpTouchscreen::new(session.clone()));
         Self {
             session,
             page_targets: Arc::new(StdMutex::new(HashMap::new())),
+            mouse,
+            human_mouse,
+            keyboard,
+            touchscreen,
         }
     }
+}
 
+impl<T: ConnectionTransport + Send + Sync> CdpAdapter<T> {
     pub async fn listen_to_target_creation(&mut self) -> Result<(), CdpSessionSendError> {
         let page_targets = self.page_targets.clone();
         self.session.lock().await.add_event_handler(
@@ -128,6 +155,26 @@ impl<T: ConnectionTransport + Send + Sync + 'static> CdpAdapter<T> {
         Ok(result.target_id)
     }
 
+    pub async fn fetch_node(
+        &mut self,
+        command: DescribeNode,
+    ) -> Result<DomNode, crate::error::cdp::NodesFetchError> {
+        let result_value = self
+            .send_command(command)
+            .await
+            .map_err(|err| {
+                crate::error::cdp::NodesFetchError::CommandResultError(
+                    CdpCommandResultError::SessionSendError(err),
+                )
+            })?
+            .result;
+
+        let result = DescribeNodeResult::try_from(result_value)
+            .map_err(|e| crate::error::cdp::NodesFetchError::ParseError(e.to_string()))?;
+
+        Ok(*result.node)
+    }
+
     pub async fn emulate_device_metrics(
         &mut self,
         command: SetDeviceMetricsOverride,
@@ -140,6 +187,129 @@ impl<T: ConnectionTransport + Send + Sync + 'static> CdpAdapter<T> {
                 )
             })?;
         Ok(())
+    }
+
+    /// Returns the root document `NodeId` via `DOM.getDocument`.
+    async fn get_root_node_id(&mut self) -> Result<rustenium_cdp_definitions::browser_protocol::dom::types::NodeId, crate::error::cdp::LocateError> {
+        let result_value = self
+            .send_command(GetDocument::builder().depth(0).build())
+            .await
+            .map_err(|e| crate::error::cdp::LocateError::CommandResultError(CdpCommandResultError::SessionSendError(e)))?
+            .result;
+        let doc = GetDocumentResult::try_from(result_value)
+            .map_err(|e| crate::error::cdp::LocateError::ParseError(e.to_string()))?;
+        Ok(*doc.root.node_id)
+    }
+
+    /// Describe a node by `NodeId`, returning the full `DomNode` subtree.
+    async fn describe_by_id(
+        &mut self,
+        node_id: rustenium_cdp_definitions::browser_protocol::dom::types::NodeId,
+    ) -> Result<DomNode, crate::error::cdp::LocateError> {
+        let result_value = self
+            .send_command(
+                DescribeNode::builder()
+                    .node_id(node_id)
+                    .depth(-1)
+                    .build(),
+            )
+            .await
+            .map_err(|e| crate::error::cdp::LocateError::CommandResultError(CdpCommandResultError::SessionSendError(e)))?
+            .result;
+        DescribeNodeResult::try_from(result_value)
+            .map(|r| *r.node)
+            .map_err(|e| crate::error::cdp::LocateError::ParseError(e.to_string()))
+    }
+
+    /// Find the first element matching `selector` (CSS). Returns `None` if not found.
+    pub async fn locate(&mut self, selector: &str) -> Result<Option<DomNode>, crate::error::cdp::LocateError> {
+        let root_id = self.get_root_node_id().await?;
+        let cmd = QuerySelector::builder()
+            .node_id(root_id)
+            .selector(selector)
+            .build()
+            .map_err(|e| crate::error::cdp::LocateError::ParseError(e))?;
+        let result_value = self
+            .send_command(cmd)
+            .await
+            .map_err(|e| crate::error::cdp::LocateError::CommandResultError(CdpCommandResultError::SessionSendError(e)))?
+            .result;
+        let qs = QuerySelectorResult::try_from(result_value)
+            .map_err(|e| crate::error::cdp::LocateError::ParseError(e.to_string()))?;
+        let node_id = *qs.node_id;
+        // nodeId of 0 means no match
+        if *node_id.inner() == 0 {
+            return Ok(None);
+        }
+        Ok(Some(self.describe_by_id(node_id).await?))
+    }
+
+    /// Find all elements matching `selector` (CSS).
+    pub async fn locate_all(&mut self, selector: &str) -> Result<Vec<DomNode>, crate::error::cdp::LocateError> {
+        let root_id = self.get_root_node_id().await?;
+        let cmd = QuerySelectorAll::builder()
+            .node_id(root_id)
+            .selector(selector)
+            .build()
+            .map_err(|e| crate::error::cdp::LocateError::ParseError(e))?;
+        let result_value = self
+            .send_command(cmd)
+            .await
+            .map_err(|e| crate::error::cdp::LocateError::CommandResultError(CdpCommandResultError::SessionSendError(e)))?
+            .result;
+        let ids = QuerySelectorAllResult::try_from(result_value)
+            .map_err(|e| crate::error::cdp::LocateError::ParseError(e.to_string()))?
+            .node_ids;
+        let mut nodes = Vec::with_capacity(ids.len());
+        for id in ids {
+            nodes.push(self.describe_by_id(id).await?);
+        }
+        Ok(nodes)
+    }
+
+    /// Poll until the first element matching `selector` appears, or `timeout` elapses.
+    pub async fn wait_for(&mut self, selector: &str, timeout: Duration) -> Result<DomNode, crate::error::cdp::LocateError> {
+        let interval = Duration::from_millis(100);
+        let start = tokio::time::Instant::now();
+        loop {
+            if let Some(node) = self.locate(selector).await? {
+                return Ok(node);
+            }
+            if start.elapsed() >= timeout {
+                return Err(crate::error::cdp::LocateError::Timeout(selector.to_string()));
+            }
+            sleep(interval).await;
+        }
+    }
+
+    /// Poll until at least one element matching `selector` appears, or `timeout` elapses.
+    pub async fn wait_for_all(&mut self, selector: &str, timeout: Duration) -> Result<Vec<DomNode>, crate::error::cdp::LocateError> {
+        let interval = Duration::from_millis(100);
+        let start = tokio::time::Instant::now();
+        loop {
+            let nodes = self.locate_all(selector).await?;
+            if !nodes.is_empty() {
+                return Ok(nodes);
+            }
+            if start.elapsed() >= timeout {
+                return Err(crate::error::cdp::LocateError::Timeout(selector.to_string()));
+            }
+            sleep(interval).await;
+        }
+    }
+
+    pub async fn screenshot(&mut self) -> Result<String, crate::error::cdp::ScreenshotError> {
+        let cmd = CaptureScreenshot::builder().build();
+        let result_value = self
+            .send_command(cmd)
+            .await
+            .map_err(|e| crate::error::cdp::ScreenshotError::CommandResultError(
+                CdpCommandResultError::SessionSendError(e),
+            ))?
+            .result;
+        let result = CaptureScreenshotResult::try_from(result_value)
+            .map_err(|e| crate::error::cdp::ScreenshotError::ParseError(e.to_string()))?;
+        Ok(String::from(result.data))
     }
 
     pub async fn close(&mut self) {

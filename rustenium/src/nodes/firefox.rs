@@ -7,7 +7,7 @@ use rustenium_bidi_definitions::script::types::{Handle, NodeRemoteValue, SharedI
 use rustenium_core::transport::ConnectionTransport;
 use rustenium_core::BidiSession;
 
-use crate::error::bidi::{EvaluateResultError, InputError, MouseInputError, ScreenshotError};
+use crate::error::node::{NodeActionError, NodeInputError, NodeMouseError, NodeScreenshotError};
 use crate::input::{BidiKeyboard, BidiMouse, Keyboard, Mouse, MouseClickOptions, MouseMoveOptions};
 use crate::nodes::bidi::node::{BidiNode, BidiNodeScreenshotOptions};
 use crate::nodes::node::{Node, NodeType};
@@ -47,20 +47,20 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
         Self { bidi_node, children, mouse, keyboard }
     }
 
-    pub async fn mouse_move(&mut self) -> Result<(), MouseInputError> {
-        self.bidi_node.mouse_move(self.mouse.as_ref(), MouseMoveOptions::default()).await
+    pub async fn mouse_move(&mut self) -> Result<(), NodeMouseError> {
+        self.bidi_node.mouse_move(self.mouse.as_ref(), MouseMoveOptions::default()).await.map_err(|e| NodeMouseError::Other(e.to_string()))
     }
 
-    pub async fn mouse_move_with_options(&mut self, options: MouseMoveOptions) -> Result<(), MouseInputError> {
-        self.bidi_node.mouse_move(self.mouse.as_ref(), options).await
+    pub async fn mouse_move_with_options(&mut self, options: MouseMoveOptions) -> Result<(), NodeMouseError> {
+        self.bidi_node.mouse_move(self.mouse.as_ref(), options).await.map_err(|e| NodeMouseError::Other(e.to_string()))
     }
 
-    pub async fn mouse_click(&mut self) -> Result<(), MouseInputError> {
-        self.bidi_node.mouse_click(self.mouse.as_ref(), MouseClickOptions::default()).await
+    pub async fn mouse_click(&mut self) -> Result<(), NodeMouseError> {
+        self.bidi_node.mouse_click(self.mouse.as_ref(), MouseClickOptions::default()).await.map_err(|e| NodeMouseError::Other(e.to_string()))
     }
 
-    pub async fn mouse_click_with_options(&mut self, options: MouseClickOptions) -> Result<(), MouseInputError> {
-        self.bidi_node.mouse_click(self.mouse.as_ref(), options).await
+    pub async fn mouse_click_with_options(&mut self, options: MouseClickOptions) -> Result<(), NodeMouseError> {
+        self.bidi_node.mouse_click(self.mouse.as_ref(), options).await.map_err(|e| NodeMouseError::Other(e.to_string()))
     }
 }
 
@@ -90,7 +90,7 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
         self.bidi_node.get_text_content().await.unwrap()
     }
 
-    async fn get_inner_html(&self) -> String {
+    async fn get_html(&self) -> String {
         self.bidi_node.get_inner_html().await.unwrap()
     }
 
@@ -122,43 +122,43 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
         self.bidi_node.position = Some(position);
     }
 
-    async fn scroll_into_view(&self) -> Result<(), EvaluateResultError> {
-        self.bidi_node.scroll_into_view().await
+    async fn scroll_into_view(&self) -> Result<(), NodeActionError> {
+        self.bidi_node.scroll_into_view().await.map_err(|e| NodeActionError::Other(e.to_string()))
     }
 
-    async fn is_visible(&self) -> Result<bool, EvaluateResultError> {
-        self.bidi_node.is_visible().await
+    async fn is_visible(&self) -> Result<bool, NodeActionError> {
+        self.bidi_node.is_visible().await.map_err(|e| NodeActionError::Other(e.to_string()))
     }
 
-    async fn delete(&self) -> Result<(), EvaluateResultError> {
-        self.bidi_node.delete().await
+    async fn delete(&self) -> Result<(), NodeActionError> {
+        self.bidi_node.delete().await.map_err(|e| NodeActionError::Other(e.to_string()))
     }
 
-    async fn mouse_move(&mut self) -> Result<(), MouseInputError> {
-        self.bidi_node.mouse_move(self.mouse.as_ref(), MouseMoveOptions::default()).await
+    async fn mouse_move(&mut self) -> Result<(), NodeMouseError> {
+        self.bidi_node.mouse_move(self.mouse.as_ref(), MouseMoveOptions::default()).await.map_err(|e| NodeMouseError::Other(e.to_string()))
     }
 
-    async fn mouse_move_with_options(&mut self, options: MouseMoveOptions) -> Result<(), MouseInputError> {
-        self.bidi_node.mouse_move(self.mouse.as_ref(), options).await
+    async fn mouse_move_with_options(&mut self, options: MouseMoveOptions) -> Result<(), NodeMouseError> {
+        self.bidi_node.mouse_move(self.mouse.as_ref(), options).await.map_err(|e| NodeMouseError::Other(e.to_string()))
     }
 
-    async fn mouse_click(&mut self) -> Result<(), MouseInputError> {
-        self.bidi_node.mouse_click(self.mouse.as_ref(), MouseClickOptions::default()).await
+    async fn mouse_click(&mut self) -> Result<(), NodeMouseError> {
+        self.bidi_node.mouse_click(self.mouse.as_ref(), MouseClickOptions::default()).await.map_err(|e| NodeMouseError::Other(e.to_string()))
     }
 
-    async fn mouse_click_with_options(&mut self, options: MouseClickOptions) -> Result<(), MouseInputError> {
-        self.bidi_node.mouse_click(self.mouse.as_ref(), options).await
+    async fn mouse_click_with_options(&mut self, options: MouseClickOptions) -> Result<(), NodeMouseError> {
+        self.bidi_node.mouse_click(self.mouse.as_ref(), options).await.map_err(|e| NodeMouseError::Other(e.to_string()))
     }
 
-    async fn screenshot(&self) -> Result<String, ScreenshotError> {
-        self.bidi_node.screenshot(BidiNodeScreenshotOptions::default()).await
+    async fn screenshot(&self) -> Result<String, NodeScreenshotError> {
+        self.bidi_node.screenshot(BidiNodeScreenshotOptions::default()).await.map_err(|e| NodeScreenshotError::Other(e.to_string()))
     }
 
-    async fn screenshot_with_options(&self, options: BidiNodeScreenshotOptions) -> Result<String, ScreenshotError> {
-        self.bidi_node.screenshot(options).await
+    async fn screenshot_with_options(&self, options: BidiNodeScreenshotOptions) -> Result<String, NodeScreenshotError> {
+        self.bidi_node.screenshot(options).await.map_err(|e| NodeScreenshotError::Other(e.to_string()))
     }
 
-    async fn type_text(&mut self, text: String) -> Result<(), InputError> {
-        self.bidi_node.type_text(self.keyboard.as_ref(), text).await
+    async fn type_text(&mut self, text: String) -> Result<(), NodeInputError> {
+        self.bidi_node.type_text(self.keyboard.as_ref(), text).await.map_err(|e| NodeInputError::Other(e.to_string()))
     }
 }

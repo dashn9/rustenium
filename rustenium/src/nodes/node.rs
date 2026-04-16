@@ -3,7 +3,7 @@ use std::future::Future;
 use serde::Deserialize;
 use rustenium_bidi_definitions::browsing_context::types::{BrowsingContext, Locator};
 use rustenium_bidi_definitions::script::types::{Handle, SharedId};
-use crate::error::bidi::{EvaluateResultError, InputError, MouseInputError, ScreenshotError};
+use crate::error::node::{NodeActionError, NodeInputError, NodeMouseError, NodeScreenshotError};
 use crate::input::{MouseClickOptions, MouseMoveOptions};
 use crate::nodes::bidi::node::BidiNodeScreenshotOptions;
 
@@ -73,7 +73,7 @@ pub trait Node {
 
     fn get_text_content(&self) -> impl Future<Output = String>;
 
-    fn get_inner_html(&self) -> impl Future<Output = String>;
+    fn get_html(&self) -> impl Future<Output = String>;
 
     fn get_attribute(&self, attribute_name: &str) -> Option<serde_json::Value>;
 
@@ -89,24 +89,24 @@ pub trait Node {
 
     fn set_position(&mut self, position: NodePosition) -> ();
 
-    fn scroll_into_view(&self) -> impl Future<Output = Result<(), EvaluateResultError>>;
+    fn scroll_into_view(&self) -> impl Future<Output = Result<(), NodeActionError>>;
 
-    fn is_visible(&self) -> impl Future<Output = Result<bool, EvaluateResultError>>;
+    fn is_visible(&self) -> impl Future<Output = Result<bool, NodeActionError>>;
 
-    fn delete(&self) -> impl Future<Output = Result<(), EvaluateResultError>>;
+    fn delete(&self) -> impl Future<Output = Result<(), NodeActionError>>;
 
-    fn mouse_move(&mut self) -> impl Future<Output = Result<(), MouseInputError>>;
+    fn mouse_move(&mut self) -> impl Future<Output = Result<(), NodeMouseError>>;
 
-    fn mouse_move_with_options(&mut self, options: MouseMoveOptions) -> impl Future<Output = Result<(), MouseInputError>>;
+    fn mouse_move_with_options(&mut self, options: MouseMoveOptions) -> impl Future<Output = Result<(), NodeMouseError>>;
 
-    fn mouse_click(&mut self) -> impl Future<Output = Result<(), MouseInputError>>;
+    fn mouse_click(&mut self) -> impl Future<Output = Result<(), NodeMouseError>>;
 
-    fn mouse_click_with_options(&mut self, options: MouseClickOptions) -> impl Future<Output = Result<(), MouseInputError>>;
+    fn mouse_click_with_options(&mut self, options: MouseClickOptions) -> impl Future<Output = Result<(), NodeMouseError>>;
 
-    fn screenshot(&self) -> impl Future<Output = Result<String, ScreenshotError>>;
+    fn screenshot(&self) -> impl Future<Output = Result<String, NodeScreenshotError>>;
 
-    fn screenshot_with_options(&self, options: BidiNodeScreenshotOptions) -> impl Future<Output = Result<String, ScreenshotError>>;
+    fn screenshot_with_options(&self, options: BidiNodeScreenshotOptions) -> impl Future<Output = Result<String, NodeScreenshotError>>;
 
     /// Focuses the element and types the given text into it.
-    fn type_text(&mut self, text: String) -> impl Future<Output = Result<(), InputError>>;
+    fn type_text(&mut self, text: String) -> impl Future<Output = Result<(), NodeInputError>>;
 }

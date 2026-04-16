@@ -1,4 +1,5 @@
 mod bidi;
+pub mod cdp;
 mod mouse;
 mod keyboard;
 mod trajectory;
@@ -18,6 +19,7 @@ pub use crate::input::{
         keyboard::{BidiKeyboard, DelayRange, KeyPressOptions, KeyboardTypeOptions, KeyPressOptionsBuilder, KeyboardTypeOptionsBuilder},
         touchscreen::{Touchscreen, TouchHandle, TouchMoveOptions, TouchMoveOptionsBuilder}
     },
+    cdp::{CdpMouse, CdpKeyboard, CdpTouchscreen, CdpTouchHandle},
     keyboard::Keyboard,
     mouse::{Point, Mouse, MouseButton, MouseClickOptions, MouseMoveOptions, MouseOptions, MouseWheelOptions,
         MouseClickOptionsBuilder, MouseMoveOptionsBuilder, MouseOptionsBuilder, MouseWheelOptionsBuilder}

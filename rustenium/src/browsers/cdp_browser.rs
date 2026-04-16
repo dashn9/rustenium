@@ -1,6 +1,7 @@
 use crate::browsers::chrome::tab::ChromeTab;
 use crate::conduit::cdp::adapter::CdpAdapter;
-use crate::error::cdp::{CreateTabError, EmulateDeviceMetricsError, NavigateError, NodesFetchError};
+use crate::error::cdp::{CreateTabError, EmulateDeviceMetricsError, LocateError, NavigateError, NodesFetchError, ScreenshotError};
+use std::time::Duration;
 use rustenium_cdp_definitions::Command;
 use rustenium_cdp_definitions::base::CommandResponse;
 use rustenium_cdp_definitions::browser_protocol::emulation::commands::SetDeviceMetricsOverride;
@@ -8,7 +9,6 @@ use rustenium_cdp_definitions::browser_protocol::emulation::types::ScreenOrienta
 use rustenium_cdp_definitions::browser_protocol::accessibility::commands::GetFullAxTree;
 use rustenium_cdp_definitions::browser_protocol::accessibility::results::GetFullAxTreeResult;
 use rustenium_cdp_definitions::browser_protocol::dom::commands::DescribeNode;
-use rustenium_cdp_definitions::browser_protocol::dom::results::DescribeNodeResult;
 use rustenium_cdp_definitions::browser_protocol::dom::types::{BackendNodeId, NodeId, Node as DomNode};
 use rustenium_cdp_definitions::js_protocol::runtime::types::RemoteObjectId;
 use rustenium_cdp_definitions::browser_protocol::page::commands::Navigate;
@@ -217,6 +217,61 @@ pub trait CdpBrowser: Send + Sync {
         }
     }
 
+    fn screenshot(&mut self) -> impl Future<Output = Result<String, ScreenshotError>> + Send {
+        let adapter = self.adapter_mut();
+        async move { adapter.screenshot().await }
+    }
+
+    // ── Locating ─────────────────────────────────────────────────────────────
+
+    /// Find the first element matching `selector`. Returns `None` if not found.
+    fn locate(
+        &mut self,
+        selector: Selector,
+    ) -> impl Future<Output = Result<Option<Self::BrowserNode>, LocateError>> + Send {
+        async move {
+            match self.adapter_mut().locate(selector.as_str()).await? {
+                Some(node) => Ok(Some(self.build_cdp_node(node))),
+                None => Ok(None),
+            }
+        }
+    }
+
+    /// Find all elements matching `selector`.
+    fn locate_all(
+        &mut self,
+        selector: Selector,
+    ) -> impl Future<Output = Result<Vec<Self::BrowserNode>, LocateError>> + Send {
+        async move {
+            let nodes = self.adapter_mut().locate_all(selector.as_str()).await?;
+            Ok(nodes.into_iter().map(|n| self.build_cdp_node(n)).collect())
+        }
+    }
+
+    /// Poll until the first element matching `selector` appears, or `timeout` elapses.
+    fn wait_for(
+        &mut self,
+        selector: Selector,
+        timeout: Duration,
+    ) -> impl Future<Output = Result<Self::BrowserNode, LocateError>> + Send {
+        async move {
+            let node = self.adapter_mut().wait_for(selector.as_str(), timeout).await?;
+            Ok(self.build_cdp_node(node))
+        }
+    }
+
+    /// Poll until at least one element matching `selector` appears, or `timeout` elapses.
+    fn wait_for_all(
+        &mut self,
+        selector: Selector,
+        timeout: Duration,
+    ) -> impl Future<Output = Result<Vec<Self::BrowserNode>, LocateError>> + Send {
+        async move {
+            let nodes = self.adapter_mut().wait_for_all(selector.as_str(), timeout).await?;
+            Ok(nodes.into_iter().map(|n| self.build_cdp_node(n)).collect())
+        }
+    }
+
     fn fetch_node(&mut self, options: FetchNodeOptions) -> impl Future<Output = Result<Self::BrowserNode, NodesFetchError>> + Send {
         async move {
             let mut builder = DescribeNode::builder();
@@ -227,16 +282,8 @@ pub trait CdpBrowser: Send + Sync {
             if let Some(v) = options.pierce { builder = builder.pierce(v); }
             let command = builder.build();
 
-            let result_value = self.adapter_mut()
-                .send_command(command)
-                .await
-                .map_err(|e| NodesFetchError::CommandResultError(CdpCommandResultError::SessionSendError(e)))?
-                .result;
-
-            let result = DescribeNodeResult::try_from(result_value)
-                .map_err(|e: serde_json::Error| NodesFetchError::ParseError(e.to_string()))?;
-
-            Ok(self.build_cdp_node(*result.node))
+            let dom_node = self.adapter_mut().fetch_node(command).await?;
+            Ok(self.build_cdp_node(dom_node))
         }
     }
 }
@@ -355,6 +402,30 @@ impl CreateTabOptionsBuilder {
             hidden: self.hidden,
             focus: self.focus,
         }
+    }
+}
+
+/// A CSS selector used to locate DOM elements.
+#[derive(Debug, Clone)]
+pub enum Selector {
+    Css(String),
+}
+
+impl Selector {
+    pub fn css(selector: impl Into<String>) -> Self {
+        Selector::Css(selector.into())
+    }
+
+    pub fn as_str(&self) -> &str {
+        match self {
+            Selector::Css(s) => s.as_str(),
+        }
+    }
+}
+
+impl<S: Into<String>> From<S> for Selector {
+    fn from(s: S) -> Self {
+        Selector::Css(s.into())
     }
 }
 

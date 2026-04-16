@@ -1,21 +1,22 @@
-use std::collections::HashMap;
-use std::sync::Arc;
-use tokio::sync::Mutex;
 use rustenium_cdp_definitions::browser_protocol::accessibility::types::{
     AxNode as CdpAxNode, AxProperty, AxValue,
 };
+use rustenium_cdp_definitions::browser_protocol::dom::types::Node as DomNode;
+use std::collections::HashMap;
+use std::sync::Arc;
+use tokio::sync::Mutex;
 
 use rustenium_bidi_definitions::browsing_context::types::{BrowsingContext, Locator};
 use rustenium_bidi_definitions::script::types::{Handle, NodeRemoteValue, SharedId};
+use rustenium_core::{BidiSession, CdpSession};
 use rustenium_core::transport::ConnectionTransport;
-use rustenium_core::BidiSession;
 
-use crate::error::bidi::{EvaluateResultError, InputError, MouseInputError, ScreenshotError};
+use crate::error::node::{NodeActionError, NodeInputError, NodeMouseError, NodeScreenshotError};
 use crate::input::{BidiKeyboard, BidiMouse, Keyboard, Mouse, MouseClickOptions, MouseMoveOptions};
+use crate::nodes::NodePosition;
 use crate::nodes::bidi::node::{BidiNode, BidiNodeScreenshotOptions};
 use crate::nodes::cdp::CdpNode;
 use crate::nodes::node::{Node, NodeType};
-use crate::nodes::NodePosition;
 
 enum ChromeNodeInner<T: ConnectionTransport, M: Mouse + Send + Sync, K: Keyboard + Send + Sync> {
     Bidi {
@@ -23,24 +24,36 @@ enum ChromeNodeInner<T: ConnectionTransport, M: Mouse + Send + Sync, K: Keyboard
         mouse: Arc<M>,
         keyboard: Arc<K>,
     },
-    Cdp(CdpNode),
+    Cdp {
+        node: CdpNode<T>,
+        mouse: Arc<M>,
+        keyboard: Arc<K>,
+    },
 }
 
-pub struct ChromeNode<T: ConnectionTransport, M: Mouse + Send + Sync = BidiMouse<T>, K: Keyboard + Send + Sync = BidiKeyboard<T>> {
+pub struct ChromeNode<
+    T: ConnectionTransport,
+    M: Mouse + Send + Sync = BidiMouse<T>,
+    K: Keyboard + Send + Sync = BidiKeyboard<T>,
+> {
     inner: ChromeNodeInner<T, M, K>,
     children: Vec<ChromeNode<T, M, K>>,
 }
 
-impl<T: ConnectionTransport, M: Mouse + Send + Sync, K: Keyboard + Send + Sync> std::fmt::Debug for ChromeNode<T, M, K> {
+impl<T: ConnectionTransport, M: Mouse + Send + Sync, K: Keyboard + Send + Sync> std::fmt::Debug
+    for ChromeNode<T, M, K>
+{
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match &self.inner {
             ChromeNodeInner::Bidi { node, .. } => node.fmt(f),
-            ChromeNodeInner::Cdp(n) => n.fmt(f),
+            ChromeNodeInner::Cdp { node: n, .. } => n.fmt(f),
         }
     }
 }
 
-impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Send + Sync + 'static> ChromeNode<T, M, K> {
+impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Send + Sync + 'static>
+    ChromeNode<T, M, K>
+{
     pub fn from_bidi(
         raw_bidi_node: NodeRemoteValue,
         locator: Locator,
@@ -49,9 +62,16 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
         mouse: Arc<M>,
         keyboard: Arc<K>,
     ) -> Self {
-        let bidi_node = BidiNode::new(raw_bidi_node, locator.clone(), session.clone(), context.clone());
+        let bidi_node = BidiNode::new(
+            raw_bidi_node,
+            locator.clone(),
+            session.clone(),
+            context.clone(),
+        );
 
-        let children = bidi_node.children.iter()
+        let children = bidi_node
+            .children
+            .iter()
             .map(|bidi_child| {
                 ChromeNode::from_bidi(
                     bidi_child.get_raw_node_ref().clone(),
@@ -65,17 +85,33 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
             .collect();
 
         Self {
-            inner: ChromeNodeInner::Bidi { node: bidi_node, mouse, keyboard },
+            inner: ChromeNodeInner::Bidi {
+                node: bidi_node,
+                mouse,
+                keyboard,
+            },
             children,
         }
     }
 
-    pub fn from_dom(cdp_node: CdpNode) -> Self {
-        let children = cdp_node.children.iter()
-            .map(|c| ChromeNode::from_dom(c.clone()))
+    pub fn from_cdp(
+        raw_cdp_node: DomNode,
+        session: Arc<Mutex<CdpSession<T>>>,
+        mouse: Arc<M>,
+        keyboard: Arc<K>,
+    ) -> Self {
+        let cdp_node = CdpNode::new(raw_cdp_node, session.clone());
+        let children = cdp_node
+            .children
+            .iter()
+            .map(|c| ChromeNode::from_cdp(c.raw_node.clone(), session.clone(), mouse.clone(), keyboard.clone()))
             .collect();
         Self {
-            inner: ChromeNodeInner::Cdp(cdp_node),
+            inner: ChromeNodeInner::Cdp {
+                node: cdp_node,
+                mouse,
+                keyboard,
+            },
             children,
         }
     }
@@ -83,12 +119,14 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
     fn bidi_node_mut(&mut self) -> &mut BidiNode<T> {
         match &mut self.inner {
             ChromeNodeInner::Bidi { node, .. } => node,
-            ChromeNodeInner::Cdp(_) => panic!("Not a BiDi node"),
+            ChromeNodeInner::Cdp { .. } => panic!("Not a BiDi node"),
         }
     }
 }
 
-impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Send + Sync + 'static> Node for ChromeNode<T, M, K> {
+impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Send + Sync + 'static>
+    Node for ChromeNode<T, M, K>
+{
     #[allow(refining_impl_trait)]
     fn get_children_nodes(&self) -> &Vec<ChromeNode<T, M, K>> {
         &self.children
@@ -97,56 +135,61 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
     fn get_bidi_locator(&self) -> &Locator {
         match &self.inner {
             ChromeNodeInner::Bidi { node, .. } => &node.locator,
-            ChromeNodeInner::Cdp(_) => unimplemented!("get_bidi_locator not available for CDP-sourced nodes"),
+            ChromeNodeInner::Cdp { .. } => {
+                unimplemented!("get_bidi_locator not available for CDP-sourced nodes")
+            }
         }
     }
 
     fn get_local_name(&self) -> Option<&str> {
         match &self.inner {
             ChromeNodeInner::Bidi { node, .. } => node.get_local_name(),
-            ChromeNodeInner::Cdp(n) => Some(n.get_local_name()),
+            ChromeNodeInner::Cdp { node: n, .. } => Some(n.get_local_name()),
         }
     }
 
     fn get_node_type(&self) -> Option<NodeType> {
         match &self.inner {
             ChromeNodeInner::Bidi { node, .. } => node.get_node_type(),
-            ChromeNodeInner::Cdp(n) => n.get_node_type(),
+            ChromeNodeInner::Cdp { node: n, .. } => n.get_node_type(),
         }
     }
 
     async fn get_inner_text(&self) -> String {
         match &self.inner {
             ChromeNodeInner::Bidi { node, .. } => node.get_inner_text().await.unwrap(),
-            ChromeNodeInner::Cdp(_) => unimplemented!("get_inner_text not available for CDP-sourced nodes"),
+            ChromeNodeInner::Cdp { node: n, .. } => n.get_inner_text().await,
         }
     }
 
     async fn get_text_content(&self) -> String {
         match &self.inner {
             ChromeNodeInner::Bidi { node, .. } => node.get_text_content().await.unwrap(),
-            ChromeNodeInner::Cdp(_) => unimplemented!("get_text_content not available for CDP-sourced nodes"),
+            ChromeNodeInner::Cdp { node: n, .. } => n.get_text_content().await,
         }
     }
 
-    async fn get_inner_html(&self) -> String {
+    async fn get_html(&self) -> String {
         match &self.inner {
             ChromeNodeInner::Bidi { node, .. } => node.get_inner_html().await.unwrap(),
-            ChromeNodeInner::Cdp(_) => unimplemented!("get_inner_html not available for CDP-sourced nodes"),
+            ChromeNodeInner::Cdp { node: n, .. } => n.get_html().await,
         }
     }
 
     fn get_attribute(&self, attribute_name: &str) -> Option<serde_json::Value> {
         match &self.inner {
             ChromeNodeInner::Bidi { node, .. } => node.get_attribute(attribute_name),
-            ChromeNodeInner::Cdp(n) => n.get_attribute(attribute_name).map(|v| serde_json::Value::String(v.to_string())),
+            ChromeNodeInner::Cdp { node: n, .. } => n
+                .get_attribute(attribute_name)
+                .map(|v| serde_json::Value::String(v.to_string())),
         }
     }
 
     fn get_attributes(&self) -> HashMap<String, serde_json::Value> {
         match &self.inner {
             ChromeNodeInner::Bidi { node, .. } => node.get_attributes(),
-            ChromeNodeInner::Cdp(n) => n.get_attributes()
+            ChromeNodeInner::Cdp { node: n, .. } => n
+                .get_attributes()
                 .iter()
                 .map(|(k, v)| (k.clone(), serde_json::Value::String(v.clone())))
                 .collect(),
@@ -156,120 +199,187 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
     async fn get_position(&mut self) -> Option<&NodePosition> {
         match &mut self.inner {
             ChromeNodeInner::Bidi { node, .. } => node.get_position().await.unwrap_or(None),
-            ChromeNodeInner::Cdp(_) => unimplemented!("get_position not available for CDP-sourced nodes"),
+            ChromeNodeInner::Cdp { .. } => {
+                unimplemented!("get_position not available for CDP-sourced nodes")
+            }
         }
     }
 
     fn get_context_id(&self) -> &BrowsingContext {
         match &self.inner {
             ChromeNodeInner::Bidi { node, .. } => &node.context_id,
-            ChromeNodeInner::Cdp(_) => unimplemented!("get_context_id not available for CDP-sourced nodes"),
+            ChromeNodeInner::Cdp { .. } => {
+                unimplemented!("get_context_id not available for CDP-sourced nodes")
+            }
         }
     }
 
     fn get_shared_id(&self) -> Option<&SharedId> {
         match &self.inner {
             ChromeNodeInner::Bidi { node, .. } => node.get_raw_node_ref().shared_id.as_ref(),
-            ChromeNodeInner::Cdp(_) => unimplemented!("get_shared_id not available for CDP-sourced nodes"),
+            ChromeNodeInner::Cdp { .. } => {
+                unimplemented!("get_shared_id not available for CDP-sourced nodes")
+            }
         }
     }
 
     fn get_handle(&self) -> &Option<Handle> {
         match &self.inner {
             ChromeNodeInner::Bidi { node, .. } => &node.get_raw_node_ref().handle,
-            ChromeNodeInner::Cdp(_) => unimplemented!("get_handle not available for CDP-sourced nodes"),
+            ChromeNodeInner::Cdp { .. } => {
+                unimplemented!("get_handle not available for CDP-sourced nodes")
+            }
         }
     }
 
     fn set_position(&mut self, position: NodePosition) -> () {
         match &mut self.inner {
             ChromeNodeInner::Bidi { node, .. } => node.position = Some(position),
-            ChromeNodeInner::Cdp(_) => unimplemented!("set_position not available for CDP-sourced nodes"),
+            ChromeNodeInner::Cdp { .. } => {
+                unimplemented!("set_position not available for CDP-sourced nodes")
+            }
         }
     }
 
-    async fn scroll_into_view(&self) -> Result<(), EvaluateResultError> {
+    async fn scroll_into_view(&self) -> Result<(), NodeActionError> {
         match &self.inner {
-            ChromeNodeInner::Bidi { node, .. } => node.scroll_into_view().await,
-            ChromeNodeInner::Cdp(_) => unimplemented!("scroll_into_view not available for CDP-sourced nodes"),
+            ChromeNodeInner::Bidi { node, .. } => node
+                .scroll_into_view()
+                .await
+                .map_err(|e| NodeActionError::Other(e.to_string())),
+            ChromeNodeInner::Cdp { .. } => {
+                unimplemented!("scroll_into_view not available for CDP-sourced nodes")
+            }
         }
     }
 
-    async fn is_visible(&self) -> Result<bool, EvaluateResultError> {
+    async fn is_visible(&self) -> Result<bool, NodeActionError> {
         match &self.inner {
-            ChromeNodeInner::Bidi { node, .. } => node.is_visible().await,
-            ChromeNodeInner::Cdp(_) => unimplemented!("is_visible not available for CDP-sourced nodes"),
+            ChromeNodeInner::Bidi { node, .. } => node
+                .is_visible()
+                .await
+                .map_err(|e| NodeActionError::Other(e.to_string())),
+            ChromeNodeInner::Cdp { .. } => {
+                unimplemented!("is_visible not available for CDP-sourced nodes")
+            }
         }
     }
 
-    async fn delete(&self) -> Result<(), EvaluateResultError> {
+    async fn delete(&self) -> Result<(), NodeActionError> {
         match &self.inner {
-            ChromeNodeInner::Bidi { node, .. } => node.delete().await,
-            ChromeNodeInner::Cdp(_) => unimplemented!("delete not available for CDP-sourced nodes"),
+            ChromeNodeInner::Bidi { node, .. } => node
+                .delete()
+                .await
+                .map_err(|e| NodeActionError::Other(e.to_string())),
+            ChromeNodeInner::Cdp { .. } => unimplemented!("delete not available for CDP-sourced nodes"),
         }
     }
 
-    async fn mouse_move(&mut self) -> Result<(), MouseInputError> {
+    async fn mouse_move(&mut self) -> Result<(), NodeMouseError> {
         match &self.inner {
             ChromeNodeInner::Bidi { mouse, .. } => {
                 let mouse = mouse.clone();
-                self.bidi_node_mut().mouse_move(mouse.as_ref(), MouseMoveOptions::default()).await
+                self.bidi_node_mut()
+                    .mouse_move(mouse.as_ref(), MouseMoveOptions::default())
+                    .await
+                    .map_err(|e| NodeMouseError::Other(e.to_string()))
             }
-            ChromeNodeInner::Cdp(_) => unimplemented!("mouse_move not available for CDP-sourced nodes"),
+            ChromeNodeInner::Cdp { .. } => {
+                unimplemented!("mouse_move not available for CDP-sourced nodes")
+            }
         }
     }
 
-    async fn mouse_move_with_options(&mut self, options: MouseMoveOptions) -> Result<(), MouseInputError> {
+    async fn mouse_move_with_options(
+        &mut self,
+        options: MouseMoveOptions,
+    ) -> Result<(), NodeMouseError> {
         match &self.inner {
             ChromeNodeInner::Bidi { mouse, .. } => {
                 let mouse = mouse.clone();
-                self.bidi_node_mut().mouse_move(mouse.as_ref(), options).await
+                self.bidi_node_mut()
+                    .mouse_move(mouse.as_ref(), options)
+                    .await
+                    .map_err(|e| NodeMouseError::Other(e.to_string()))
             }
-            ChromeNodeInner::Cdp(_) => unimplemented!("mouse_move_with_options not available for CDP-sourced nodes"),
+            ChromeNodeInner::Cdp { .. } => {
+                unimplemented!("mouse_move_with_options not available for CDP-sourced nodes")
+            }
         }
     }
 
-    async fn mouse_click(&mut self) -> Result<(), MouseInputError> {
+    async fn mouse_click(&mut self) -> Result<(), NodeMouseError> {
         match &self.inner {
             ChromeNodeInner::Bidi { mouse, .. } => {
                 let mouse = mouse.clone();
-                self.bidi_node_mut().mouse_click(mouse.as_ref(), MouseClickOptions::default()).await
+                self.bidi_node_mut()
+                    .mouse_click(mouse.as_ref(), MouseClickOptions::default())
+                    .await
+                    .map_err(|e| NodeMouseError::Other(e.to_string()))
             }
-            ChromeNodeInner::Cdp(_) => unimplemented!("mouse_click not available for CDP-sourced nodes"),
+            ChromeNodeInner::Cdp { .. } => {
+                unimplemented!("mouse_click not available for CDP-sourced nodes")
+            }
         }
     }
 
-    async fn mouse_click_with_options(&mut self, options: MouseClickOptions) -> Result<(), MouseInputError> {
+    async fn mouse_click_with_options(
+        &mut self,
+        options: MouseClickOptions,
+    ) -> Result<(), NodeMouseError> {
         match &self.inner {
             ChromeNodeInner::Bidi { mouse, .. } => {
                 let mouse = mouse.clone();
-                self.bidi_node_mut().mouse_click(mouse.as_ref(), options).await
+                self.bidi_node_mut()
+                    .mouse_click(mouse.as_ref(), options)
+                    .await
+                    .map_err(|e| NodeMouseError::Other(e.to_string()))
             }
-            ChromeNodeInner::Cdp(_) => unimplemented!("mouse_click_with_options not available for CDP-sourced nodes"),
+            ChromeNodeInner::Cdp { .. } => {
+                unimplemented!("mouse_click_with_options not available for CDP-sourced nodes")
+            }
         }
     }
 
-    async fn screenshot(&self) -> Result<String, ScreenshotError> {
+    async fn screenshot(&self) -> Result<String, NodeScreenshotError> {
         match &self.inner {
-            ChromeNodeInner::Bidi { node, .. } => node.screenshot(BidiNodeScreenshotOptions::default()).await,
-            ChromeNodeInner::Cdp(_) => unimplemented!("screenshot not available for CDP-sourced nodes"),
+            ChromeNodeInner::Bidi { node, .. } => node
+                .screenshot(BidiNodeScreenshotOptions::default())
+                .await
+                .map_err(|e| NodeScreenshotError::Other(e.to_string())),
+            ChromeNodeInner::Cdp { .. } => {
+                unimplemented!("screenshot not available for CDP-sourced nodes")
+            }
         }
     }
 
-    async fn screenshot_with_options(&self, options: BidiNodeScreenshotOptions) -> Result<String, ScreenshotError> {
+    async fn screenshot_with_options(
+        &self,
+        options: BidiNodeScreenshotOptions,
+    ) -> Result<String, NodeScreenshotError> {
         match &self.inner {
-            ChromeNodeInner::Bidi { node, .. } => node.screenshot(options).await,
-            ChromeNodeInner::Cdp(_) => unimplemented!("screenshot_with_options not available for CDP-sourced nodes"),
+            ChromeNodeInner::Bidi { node, .. } => node
+                .screenshot(options)
+                .await
+                .map_err(|e| NodeScreenshotError::Other(e.to_string())),
+            ChromeNodeInner::Cdp { .. } => {
+                unimplemented!("screenshot_with_options not available for CDP-sourced nodes")
+            }
         }
     }
 
-    async fn type_text(&mut self, text: String) -> Result<(), InputError> {
+    async fn type_text(&mut self, text: String) -> Result<(), NodeInputError> {
         match &self.inner {
             ChromeNodeInner::Bidi { keyboard, .. } => {
                 let keyboard = keyboard.clone();
-                self.bidi_node_mut().type_text(keyboard.as_ref(), text).await
+                self.bidi_node_mut()
+                    .type_text(keyboard.as_ref(), text)
+                    .await
+                    .map_err(|e| NodeInputError::Other(e.to_string()))
             }
-            ChromeNodeInner::Cdp(_) => unimplemented!("type_text not available for CDP-sourced nodes"),
+            ChromeNodeInner::Cdp { .. } => {
+                unimplemented!("type_text not available for CDP-sourced nodes")
+            }
         }
     }
 }
@@ -304,27 +414,56 @@ pub struct AXNode {
 impl std::fmt::Debug for AXNode {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "node_id: {}", self.node_id)?;
-        if let Some(role) = self.role_str() { write!(f, " | role: {}", role)?; }
-        if let Some(chrome_role) = self.chrome_role.as_ref().and_then(|v| v.value.as_ref()).and_then(|v| v.as_str()) {
+        if let Some(role) = self.role_str() {
+            write!(f, " | role: {}", role)?;
+        }
+        if let Some(chrome_role) = self
+            .chrome_role
+            .as_ref()
+            .and_then(|v| v.value.as_ref())
+            .and_then(|v| v.as_str())
+        {
             write!(f, " | chrome_role: {}", chrome_role)?;
         }
-        if let Some(name) = self.name_str() { write!(f, " | name: {}", name)?; }
-        if let Some(desc) = self.description_str() { write!(f, " | description: {}", desc)?; }
-        if let Some(val) = self.value_str() { write!(f, " | value: {}", val)?; }
-        if let Some(id) = self.backend_dom_node_id { write!(f, " | backend_node_id: {}", id)?; }
-        if let Some(ref fid) = self.frame_id { write!(f, " | frame_id: {}", fid)?; }
-        if let Some(ref pid) = self.parent_id { write!(f, " | parent_id: {}", pid)?; }
+        if let Some(name) = self.name_str() {
+            write!(f, " | name: {}", name)?;
+        }
+        if let Some(desc) = self.description_str() {
+            write!(f, " | description: {}", desc)?;
+        }
+        if let Some(val) = self.value_str() {
+            write!(f, " | value: {}", val)?;
+        }
+        if let Some(id) = self.backend_dom_node_id {
+            write!(f, " | backend_node_id: {}", id)?;
+        }
+        if let Some(ref fid) = self.frame_id {
+            write!(f, " | frame_id: {}", fid)?;
+        }
+        if let Some(ref pid) = self.parent_id {
+            write!(f, " | parent_id: {}", pid)?;
+        }
         if self.ignored {
             write!(f, " | ignored")?;
             for r in &self.ignored_reasons {
                 let key = format!("{:?}", r.name).to_lowercase();
-                let val = r.value.value.as_ref().map(|v| v.to_string()).unwrap_or_default();
+                let val = r
+                    .value
+                    .value
+                    .as_ref()
+                    .map(|v| v.to_string())
+                    .unwrap_or_default();
                 write!(f, "\n  ignored_reason {}: {}", key, val)?;
             }
         }
         for p in &self.properties {
             let key = format!("{:?}", p.name).to_lowercase();
-            let val = p.value.value.as_ref().map(|v| v.to_string()).unwrap_or_default();
+            let val = p
+                .value
+                .value
+                .as_ref()
+                .map(|v| v.to_string())
+                .unwrap_or_default();
             write!(f, "\n  {}: {}", key, val)?;
         }
         for child in &self.children {
@@ -360,9 +499,9 @@ impl AXNode {
 
     /// Find a property by its raw CDP name (e.g. `"checked"`, `"expanded"`).
     pub fn get_property(&self, name: &str) -> Option<&AxValue> {
-        self.properties.iter().find_map(|p| {
-            (format!("{:?}", p.name).to_lowercase() == name).then_some(&p.value)
-        })
+        self.properties
+            .iter()
+            .find_map(|p| (format!("{:?}", p.name).to_lowercase() == name).then_some(&p.value))
     }
 
     fn is_empty_container(&self) -> bool {
@@ -370,7 +509,9 @@ impl AXNode {
         blank(self.name_str())
             && blank(self.value_str())
             && blank(self.description_str())
-            && self.role_str().map_or(true, |r| matches!(r, "none" | "generic" | "group"))
+            && self
+                .role_str()
+                .map_or(true, |r| matches!(r, "none" | "generic" | "group"))
     }
 
     /// Build a proper tree from the flat list returned by CDP `getFullAXTree`.
@@ -379,15 +520,20 @@ impl AXNode {
     pub fn build_tree(flat: Vec<CdpAxNode>, squash: bool) -> Vec<AXNode> {
         use std::collections::{HashMap, HashSet};
 
-        let child_map: HashMap<String, Vec<String>> = flat.iter().map(|n| {
-            let id: String = n.node_id.clone().into();
-            let children = n.child_ids.clone()
-                .unwrap_or_default()
-                .into_iter()
-                .map(Into::into)
-                .collect();
-            (id, children)
-        }).collect();
+        let child_map: HashMap<String, Vec<String>> = flat
+            .iter()
+            .map(|n| {
+                let id: String = n.node_id.clone().into();
+                let children = n
+                    .child_ids
+                    .clone()
+                    .unwrap_or_default()
+                    .into_iter()
+                    .map(Into::into)
+                    .collect();
+                (id, children)
+            })
+            .collect();
 
         let child_set: HashSet<&String> = child_map.values().flatten().collect();
 
@@ -401,13 +547,20 @@ impl AXNode {
 
         // Squashes redundant empty ancestors: an empty node is removed only when its
         // parent is also empty, so at most one empty container survives per chain.
-        fn attach(id: &str, by_id: &mut HashMap<String, AXNode>, child_map: &HashMap<String, Vec<String>>, squash: bool, parent_is_empty: bool) -> Vec<AXNode> {
+        fn attach(
+            id: &str,
+            by_id: &mut HashMap<String, AXNode>,
+            child_map: &HashMap<String, Vec<String>>,
+            squash: bool,
+            parent_is_empty: bool,
+        ) -> Vec<AXNode> {
             let child_ids = child_map.get(id).cloned().unwrap_or_default();
 
             // Peek at whether this node is empty before recursing so children know.
             let this_is_empty = squash && by_id.get(id).map_or(false, |n| n.is_empty_container());
 
-            let children: Vec<AXNode> = child_ids.iter()
+            let children: Vec<AXNode> = child_ids
+                .iter()
                 .flat_map(|cid| attach(cid, by_id, child_map, squash, this_is_empty))
                 .collect();
 
@@ -416,10 +569,13 @@ impl AXNode {
                 // the outermost empty node in any chain is always kept.
                 if squash && node.is_empty_container() && parent_is_empty {
                     let grandparent = node.parent_id.clone();
-                    return children.into_iter().map(|mut c| {
-                        c.parent_id = grandparent.clone();
-                        c
-                    }).collect();
+                    return children
+                        .into_iter()
+                        .map(|mut c| {
+                            c.parent_id = grandparent.clone();
+                            c
+                        })
+                        .collect();
                 }
                 node.children = children;
                 vec![node]
@@ -428,12 +584,14 @@ impl AXNode {
             }
         }
 
-        let roots: Vec<String> = child_map.keys()
+        let roots: Vec<String> = child_map
+            .keys()
             .filter(|id| !child_set.contains(id))
             .cloned()
             .collect();
 
-        roots.iter()
+        roots
+            .iter()
             .flat_map(|root| attach(root, &mut by_id, &child_map, squash, false))
             .collect()
     }
@@ -464,7 +622,12 @@ mod tests {
         AxNodeId, AxValue, AxValueType,
     };
 
-    fn make_node(id: &str, role: Option<&str>, name: Option<&str>, children: Vec<&str>) -> CdpAxNode {
+    fn make_node(
+        id: &str,
+        role: Option<&str>,
+        name: Option<&str>,
+        children: Vec<&str>,
+    ) -> CdpAxNode {
         CdpAxNode {
             node_id: AxNodeId::new(id),
             ignored: false,
@@ -525,10 +688,13 @@ mod tests {
         let tree = AXNode::build_tree(flat, true);
         assert_eq!(tree[0].node_id, "root");
         assert_eq!(tree[0].children.len(), 1);
-        assert_eq!(tree[0].children[0].node_id, "e1");   // outermost empty kept
+        assert_eq!(tree[0].children[0].node_id, "e1"); // outermost empty kept
         assert_eq!(tree[0].children[0].children.len(), 1);
         assert_eq!(tree[0].children[0].children[0].node_id, "leaf"); // leaf promoted past e2
-        assert_eq!(tree[0].children[0].children[0].parent_id.as_deref(), Some("e1"));
+        assert_eq!(
+            tree[0].children[0].children[0].parent_id.as_deref(),
+            Some("e1")
+        );
     }
 
     #[test]
@@ -547,7 +713,10 @@ mod tests {
         assert_eq!(tree[0].children[0].node_id, "e1");
         assert_eq!(tree[0].children[0].children.len(), 1);
         assert_eq!(tree[0].children[0].children[0].node_id, "leaf");
-        assert_eq!(tree[0].children[0].children[0].parent_id.as_deref(), Some("e1"));
+        assert_eq!(
+            tree[0].children[0].children[0].parent_id.as_deref(),
+            Some("e1")
+        );
     }
 
     #[test]

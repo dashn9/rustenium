@@ -5,7 +5,8 @@ use crate::cdp::adapter::fetch_ws_debugger_url_with_retry;
 use crate::conduit::bidi::drivers::{BidiDriver, DriverConfiguration, start_bidi_driver};
 use crate::conduit::cdp::adapter::{CdpAdapter, start_cdp_session};
 use crate::error::bidi::BrowserCloseError;
-use crate::nodes::{CdpNode, ChromeNode};
+use crate::input::cdp::{CdpKeyboard, CdpMouse};
+use crate::nodes::ChromeNode;
 use rustenium_bidi_definitions::browsing_context::types::{BrowsingContext, Locator};
 use rustenium_bidi_definitions::script::types::NodeRemoteValue;
 use rustenium_cdp_definitions::browser_protocol::dom::types::Node as DomNode;
@@ -448,7 +449,7 @@ impl BidiBrowser for ChromeBrowser {
 }
 
 impl CdpBrowser for ChromeBrowser {
-    type BrowserNode = ChromeNode<WebsocketConnectionTransport>;
+    type BrowserNode = ChromeNode<WebsocketConnectionTransport, CdpMouse, CdpKeyboard>;
 
     fn adapter(&self) -> &CdpAdapter<WebsocketConnectionTransport> {
         self.cdp_adapter
@@ -462,8 +463,9 @@ impl CdpBrowser for ChromeBrowser {
             .expect("CDP is not enabled. Set `enable_cdp: true` in ChromeConfig.")
     }
 
-    fn build_cdp_node(&self, node: DomNode) -> Self::BrowserNode {
-        ChromeNode::from_dom(CdpNode::from_dom(node))
+    fn build_cdp_node(&self, raw_node: DomNode) -> Self::BrowserNode {
+        let adapter = self.cdp_adapter.as_ref().expect("CDP not enabled");
+        ChromeNode::from_cdp(raw_node, adapter.session.clone(), adapter.mouse.clone(), adapter.keyboard.clone())
     }
 }
 
