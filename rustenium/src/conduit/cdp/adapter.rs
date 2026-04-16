@@ -40,7 +40,7 @@ pub struct CdpAdapter<T: ConnectionTransport + Send + Sync> {
     pub page_targets: Arc<StdMutex<HashMap<TargetId, TargetInfo>>>,
     pub mouse: Arc<CdpMouse>,
     pub human_mouse: Arc<HumanMouse<CdpMouse>>,
-    pub keyboard: Arc<CdpKeyboard>,
+    pub keyboard: Arc<CdpKeyboard<T>>,
     pub touchscreen: Arc<CdpTouchscreen>,
 }
 

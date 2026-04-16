@@ -1322,6 +1322,7 @@ version = "0.1.0"
 dependencies = [
  "rustenium",
  "rustenium-bidi-definitions",
+ "rustenium-cdp-definitions",
  "rustenium-identity",
  "serde_json",
  "tokio",
@@ -1331,7 +1332,7 @@ dependencies = [
 
 [[package]]
 name = "rustenium"
-version = "1.1.7"
+version = "1.1.8"
 dependencies = [
  "base64 0.22.1",
  "criterion",

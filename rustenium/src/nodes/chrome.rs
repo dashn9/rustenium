@@ -14,9 +14,9 @@ use rustenium_core::transport::ConnectionTransport;
 use crate::error::node::{NodeActionError, NodeInputError, NodeMouseError, NodeScreenshotError};
 use crate::input::{BidiKeyboard, BidiMouse, Keyboard, Mouse, MouseClickOptions, MouseMoveOptions};
 use crate::nodes::NodePosition;
-use crate::nodes::bidi::node::{BidiNode, BidiNodeScreenshotOptions};
+use crate::nodes::bidi::node::BidiNode;
 use crate::nodes::cdp::CdpNode;
-use crate::nodes::node::{Node, NodeType};
+use crate::nodes::node::{Node, NodeScreenShotOptions, NodeType};
 
 enum ChromeNodeInner<T: ConnectionTransport, M: Mouse + Send + Sync, K: Keyboard + Send + Sync> {
     Bidi {
@@ -115,13 +115,6 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
             children,
         }
     }
-
-    fn bidi_node_mut(&mut self) -> &mut BidiNode<T> {
-        match &mut self.inner {
-            ChromeNodeInner::Bidi { node, .. } => node,
-            ChromeNodeInner::Cdp { .. } => panic!("Not a BiDi node"),
-        }
-    }
 }
 
 impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Send + Sync + 'static>
@@ -199,8 +192,8 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
     async fn get_position(&mut self) -> Option<&NodePosition> {
         match &mut self.inner {
             ChromeNodeInner::Bidi { node, .. } => node.get_position().await.unwrap_or(None),
-            ChromeNodeInner::Cdp { .. } => {
-                unimplemented!("get_position not available for CDP-sourced nodes")
+            ChromeNodeInner::Cdp { node, .. } => {
+                node.get_position().await
             }
         }
     }
@@ -243,10 +236,9 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
 
     async fn scroll_into_view(&self) -> Result<(), NodeActionError> {
         match &self.inner {
-            ChromeNodeInner::Bidi { node, .. } => node
-                .scroll_into_view()
-                .await
-                .map_err(|e| NodeActionError::Other(e.to_string())),
+            ChromeNodeInner::Bidi { node, .. } => {
+                node.scroll_into_view().await.map_err(NodeActionError::from)
+            }
             ChromeNodeInner::Cdp { .. } => {
                 unimplemented!("scroll_into_view not available for CDP-sourced nodes")
             }
@@ -255,10 +247,9 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
 
     async fn is_visible(&self) -> Result<bool, NodeActionError> {
         match &self.inner {
-            ChromeNodeInner::Bidi { node, .. } => node
-                .is_visible()
-                .await
-                .map_err(|e| NodeActionError::Other(e.to_string())),
+            ChromeNodeInner::Bidi { node, .. } => {
+                node.is_visible().await.map_err(NodeActionError::from)
+            }
             ChromeNodeInner::Cdp { .. } => {
                 unimplemented!("is_visible not available for CDP-sourced nodes")
             }
@@ -267,25 +258,23 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
 
     async fn delete(&self) -> Result<(), NodeActionError> {
         match &self.inner {
-            ChromeNodeInner::Bidi { node, .. } => node
-                .delete()
-                .await
-                .map_err(|e| NodeActionError::Other(e.to_string())),
+            ChromeNodeInner::Bidi { node, .. } => node.delete().await.map_err(NodeActionError::from),
             ChromeNodeInner::Cdp { .. } => unimplemented!("delete not available for CDP-sourced nodes"),
         }
     }
 
     async fn mouse_move(&mut self) -> Result<(), NodeMouseError> {
-        match &self.inner {
-            ChromeNodeInner::Bidi { mouse, .. } => {
+        match &mut self.inner {
+            ChromeNodeInner::Bidi { node, mouse, .. } => {
                 let mouse = mouse.clone();
-                self.bidi_node_mut()
+                node
                     .mouse_move(mouse.as_ref(), MouseMoveOptions::default())
                     .await
-                    .map_err(|e| NodeMouseError::Other(e.to_string()))
+                    .map_err(NodeMouseError::from)
             }
-            ChromeNodeInner::Cdp { .. } => {
-                unimplemented!("mouse_move not available for CDP-sourced nodes")
+            ChromeNodeInner::Cdp { node, mouse, .. } => {
+                let mouse = mouse.clone();
+                node.mouse_move(mouse.as_ref(), MouseMoveOptions::default()).await
             }
         }
     }
@@ -294,31 +283,30 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
         &mut self,
         options: MouseMoveOptions,
     ) -> Result<(), NodeMouseError> {
-        match &self.inner {
-            ChromeNodeInner::Bidi { mouse, .. } => {
+        match &mut self.inner {
+            ChromeNodeInner::Bidi { node, mouse, .. } => {
                 let mouse = mouse.clone();
-                self.bidi_node_mut()
-                    .mouse_move(mouse.as_ref(), options)
-                    .await
-                    .map_err(|e| NodeMouseError::Other(e.to_string()))
+                node.mouse_move(mouse.as_ref(), options).await.map_err(NodeMouseError::from)
             }
-            ChromeNodeInner::Cdp { .. } => {
-                unimplemented!("mouse_move_with_options not available for CDP-sourced nodes")
+            ChromeNodeInner::Cdp { node, mouse, .. } => {
+                let mouse = mouse.clone();
+                node.mouse_move(mouse.as_ref(), options).await
             }
         }
     }
 
     async fn mouse_click(&mut self) -> Result<(), NodeMouseError> {
-        match &self.inner {
-            ChromeNodeInner::Bidi { mouse, .. } => {
+        match &mut self.inner {
+            ChromeNodeInner::Bidi { node, mouse, .. } => {
                 let mouse = mouse.clone();
-                self.bidi_node_mut()
+                node
                     .mouse_click(mouse.as_ref(), MouseClickOptions::default())
                     .await
-                    .map_err(|e| NodeMouseError::Other(e.to_string()))
+                    .map_err(NodeMouseError::from)
             }
-            ChromeNodeInner::Cdp { .. } => {
-                unimplemented!("mouse_click not available for CDP-sourced nodes")
+            ChromeNodeInner::Cdp { node, mouse, .. } => {
+                let mouse = mouse.clone();
+                node.mouse_click(mouse.as_ref(), MouseClickOptions::default()).await
             }
         }
     }
@@ -327,55 +315,53 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
         &mut self,
         options: MouseClickOptions,
     ) -> Result<(), NodeMouseError> {
-        match &self.inner {
-            ChromeNodeInner::Bidi { mouse, .. } => {
+        match &mut self.inner {
+            ChromeNodeInner::Bidi { node, mouse, .. } => {
                 let mouse = mouse.clone();
-                self.bidi_node_mut()
-                    .mouse_click(mouse.as_ref(), options)
-                    .await
-                    .map_err(|e| NodeMouseError::Other(e.to_string()))
+                node.mouse_click(mouse.as_ref(), options).await.map_err(NodeMouseError::from)
             }
-            ChromeNodeInner::Cdp { .. } => {
-                unimplemented!("mouse_click_with_options not available for CDP-sourced nodes")
+            ChromeNodeInner::Cdp { node, mouse, .. } => {
+                let mouse = mouse.clone();
+                node.mouse_click(mouse.as_ref(), options).await
             }
         }
     }
 
-    async fn screenshot(&self) -> Result<String, NodeScreenshotError> {
-        match &self.inner {
+    async fn screenshot(&mut self) -> Result<String, NodeScreenshotError> {
+        match &mut self.inner {
             ChromeNodeInner::Bidi { node, .. } => node
-                .screenshot(BidiNodeScreenshotOptions::default())
+                .screenshot(NodeScreenShotOptions::default())
                 .await
-                .map_err(|e| NodeScreenshotError::Other(e.to_string())),
-            ChromeNodeInner::Cdp { .. } => {
-                unimplemented!("screenshot not available for CDP-sourced nodes")
+                .map_err(NodeScreenshotError::from),
+            ChromeNodeInner::Cdp { node, .. } => {
+                node.screenshot(NodeScreenShotOptions::default()).await
             }
         }
     }
 
     async fn screenshot_with_options(
-        &self,
-        options: BidiNodeScreenshotOptions,
+        &mut self,
+        options: NodeScreenShotOptions,
     ) -> Result<String, NodeScreenshotError> {
-        match &self.inner {
-            ChromeNodeInner::Bidi { node, .. } => node
-                .screenshot(options)
-                .await
-                .map_err(|e| NodeScreenshotError::Other(e.to_string())),
-            ChromeNodeInner::Cdp { .. } => {
-                unimplemented!("screenshot_with_options not available for CDP-sourced nodes")
+        match &mut self.inner {
+            ChromeNodeInner::Bidi { node, .. } => {
+                node.screenshot(options).await.map_err(NodeScreenshotError::from)
+            }
+            ChromeNodeInner::Cdp { node, .. } => {
+                let screenshot = node.screenshot(options).await?;
+                Ok(screenshot)
             }
         }
     }
 
     async fn type_text(&mut self, text: String) -> Result<(), NodeInputError> {
-        match &self.inner {
-            ChromeNodeInner::Bidi { keyboard, .. } => {
+        match &mut self.inner {
+            ChromeNodeInner::Bidi { node, keyboard, .. } => {
                 let keyboard = keyboard.clone();
-                self.bidi_node_mut()
+                node
                     .type_text(keyboard.as_ref(), text)
                     .await
-                    .map_err(|e| NodeInputError::Other(e.to_string()))
+                    .map_err(NodeInputError::from)
             }
             ChromeNodeInner::Cdp { .. } => {
                 unimplemented!("type_text not available for CDP-sourced nodes")

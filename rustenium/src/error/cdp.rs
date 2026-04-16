@@ -47,8 +47,6 @@ pub enum MouseInputError {
 pub enum InputError {
     #[error("Unknown key: \"{0}\"")]
     UnknownKey(String),
-    #[error("Failed to build CDP command: {0}")]
-    BuildError(String),
     #[error("An error occured executing CDP command")]
     CommandError(CdpCommandResultError),
 }

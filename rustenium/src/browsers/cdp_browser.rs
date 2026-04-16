@@ -1,6 +1,7 @@
 use crate::browsers::chrome::tab::ChromeTab;
 use crate::conduit::cdp::adapter::CdpAdapter;
 use crate::error::cdp::{CreateTabError, EmulateDeviceMetricsError, LocateError, NavigateError, NodesFetchError, ScreenshotError};
+use crate::input::{CdpKeyboard, CdpMouse, CdpTouchscreen, HumanMouse};
 use std::time::Duration;
 use rustenium_cdp_definitions::Command;
 use rustenium_cdp_definitions::base::CommandResponse;
@@ -62,7 +63,7 @@ pub trait CdpBrowser: Send + Sync {
 
     fn adapter_mut(&mut self) -> &mut CdpAdapter<WebsocketConnectionTransport>;
 
-    fn build_cdp_node(&self, node: DomNode) -> Self::BrowserNode;
+    fn build_node(&self, node: DomNode) -> Self::BrowserNode;
 
     fn navigate(
         &mut self,
@@ -231,7 +232,7 @@ pub trait CdpBrowser: Send + Sync {
     ) -> impl Future<Output = Result<Option<Self::BrowserNode>, LocateError>> + Send {
         async move {
             match self.adapter_mut().locate(selector.as_str()).await? {
-                Some(node) => Ok(Some(self.build_cdp_node(node))),
+                Some(node) => Ok(Some(self.build_node(node))),
                 None => Ok(None),
             }
         }
@@ -244,7 +245,7 @@ pub trait CdpBrowser: Send + Sync {
     ) -> impl Future<Output = Result<Vec<Self::BrowserNode>, LocateError>> + Send {
         async move {
             let nodes = self.adapter_mut().locate_all(selector.as_str()).await?;
-            Ok(nodes.into_iter().map(|n| self.build_cdp_node(n)).collect())
+            Ok(nodes.into_iter().map(|n| self.build_node(n)).collect())
         }
     }
 
@@ -256,7 +257,7 @@ pub trait CdpBrowser: Send + Sync {
     ) -> impl Future<Output = Result<Self::BrowserNode, LocateError>> + Send {
         async move {
             let node = self.adapter_mut().wait_for(selector.as_str(), timeout).await?;
-            Ok(self.build_cdp_node(node))
+            Ok(self.build_node(node))
         }
     }
 
@@ -268,7 +269,7 @@ pub trait CdpBrowser: Send + Sync {
     ) -> impl Future<Output = Result<Vec<Self::BrowserNode>, LocateError>> + Send {
         async move {
             let nodes = self.adapter_mut().wait_for_all(selector.as_str(), timeout).await?;
-            Ok(nodes.into_iter().map(|n| self.build_cdp_node(n)).collect())
+            Ok(nodes.into_iter().map(|n| self.build_node(n)).collect())
         }
     }
 
@@ -283,20 +284,70 @@ pub trait CdpBrowser: Send + Sync {
             let command = builder.build();
 
             let dom_node = self.adapter_mut().fetch_node(command).await?;
-            Ok(self.build_cdp_node(dom_node))
+            Ok(self.build_node(dom_node))
         }
+    }
+
+    fn human_mouse(&self) -> &HumanMouse<CdpMouse> {
+        self.adapter().human_mouse.as_ref()
+    }
+
+    fn mouse(&self) -> &CdpMouse {
+        self.adapter().mouse.as_ref()
+    }
+    
+    fn keyboard(&self) -> &CdpKeyboard<WebsocketConnectionTransport> {
+        self.adapter().keyboard.as_ref()
+    }
+
+    fn touchscreen(&self) -> &CdpTouchscreen {
+        self.adapter().touchscreen.as_ref()
     }
 }
 
 #[derive(Debug, Clone, Default)]
 pub struct FetchNodeOptions {
-    pub node_id: Option<NodeId>,
-    pub backend_node_id: Option<BackendNodeId>,
-    pub object_id: Option<RemoteObjectId>,
-    pub depth: Option<i64>,
-    pub pierce: Option<bool>,
+    node_id: Option<NodeId>,
+    backend_node_id: Option<BackendNodeId>,
+    object_id: Option<RemoteObjectId>,
+    depth: Option<i64>,
+    pierce: Option<bool>,
 }
 
+impl FetchNodeOptions {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn node_id(mut self, node_id: NodeId) -> Self {
+        self.node_id = Some(node_id);
+        self
+    }
+
+    pub fn backend_node_id(mut self, backend_node_id: BackendNodeId) -> Self {
+        self.backend_node_id = Some(backend_node_id);
+        self
+    }
+
+    pub fn object_id(mut self, object_id: RemoteObjectId) -> Self {
+        self.object_id = Some(object_id);
+        self
+    }
+
+    pub fn depth(mut self, depth: i64) -> Self {
+        self.depth = Some(depth);
+        self
+    }
+
+    pub fn pierce(mut self, pierce: bool) -> Self {
+        self.pierce = Some(pierce);
+        self
+    }
+
+    pub fn build(self) -> Self {
+        self
+    }
+}
 #[derive(Debug, Clone, Default)]
 pub struct CreateTabOptions {
     pub left: Option<i64>,

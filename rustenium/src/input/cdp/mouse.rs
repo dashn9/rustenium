@@ -1,12 +1,12 @@
-use std::sync::{Arc, Mutex};
 use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
 use rustenium_cdp_definitions::browser_protocol::input::commands::{
     DispatchMouseEvent, DispatchMouseEventType,
 };
 use rustenium_cdp_definitions::browser_protocol::input::types::MouseButton as CdpMouseButton;
+use rustenium_core::WebsocketConnectionTransport;
 use rustenium_core::error::{CdpCommandResultError, CommandResultError};
 use rustenium_core::session::CdpSession;
-use rustenium_core::WebsocketConnectionTransport;
+use std::sync::{Arc, Mutex};
 use tokio::sync::Mutex as TokioMutex;
 use tokio::sync::Mutex as AsyncMutex;
 
@@ -45,7 +45,11 @@ impl CdpMouse {
         Self {
             session,
             modifiers,
-            state: Arc::new(Mutex::new(CdpMouseState { x: 0.0, y: 0.0, buttons: 0 })),
+            state: Arc::new(Mutex::new(CdpMouseState {
+                x: 0.0,
+                y: 0.0,
+                buttons: 0,
+            })),
             last_position: Arc::new(AsyncMutex::new(Point::default())),
         }
     }
@@ -71,12 +75,19 @@ impl CdpMouse {
     }
 
     fn active_from_flags(flags: i64) -> CdpMouseButton {
-        if flags & FLAG_LEFT != 0 { CdpMouseButton::Left }
-        else if flags & FLAG_RIGHT != 0 { CdpMouseButton::Right }
-        else if flags & FLAG_MIDDLE != 0 { CdpMouseButton::Middle }
-        else if flags & FLAG_BACK != 0 { CdpMouseButton::Back }
-        else if flags & FLAG_FORWARD != 0 { CdpMouseButton::Forward }
-        else { CdpMouseButton::None }
+        if flags & FLAG_LEFT != 0 {
+            CdpMouseButton::Left
+        } else if flags & FLAG_RIGHT != 0 {
+            CdpMouseButton::Right
+        } else if flags & FLAG_MIDDLE != 0 {
+            CdpMouseButton::Middle
+        } else if flags & FLAG_BACK != 0 {
+            CdpMouseButton::Back
+        } else if flags & FLAG_FORWARD != 0 {
+            CdpMouseButton::Forward
+        } else {
+            CdpMouseButton::None
+        }
     }
 
     /// Move the mouse to `(x, y)` in `steps` interpolated steps.
@@ -100,9 +111,10 @@ impl CdpMouse {
                 .buttons(buttons)
                 .modifiers(modifiers)
                 .build()
-                .map_err(MouseInputError::BuildError)?;
-            self.session.lock().await.send(cmd).await
-                .map_err(|e| MouseInputError::CommandError(CdpCommandResultError::SessionSendError(e)))?;
+                .unwrap();
+            self.session.lock().await.send(cmd).await.map_err(|e| {
+                MouseInputError::CommandError(CdpCommandResultError::SessionSendError(e))
+            })?;
         }
 
         {
@@ -121,7 +133,10 @@ impl CdpMouse {
         let (x, y, buttons) = {
             let mut s = self.state.lock().unwrap();
             if s.buttons & flag != 0 {
-                return Err(MouseInputError::ButtonAlreadyPressed(format!("{:?}", button)));
+                return Err(MouseInputError::ButtonAlreadyPressed(format!(
+                    "{:?}",
+                    button
+                )));
             }
             s.buttons |= flag;
             (s.x, s.y, s.buttons)
@@ -135,9 +150,10 @@ impl CdpMouse {
             .modifiers(modifiers)
             .click_count(click_count)
             .build()
-            .map_err(MouseInputError::BuildError)?;
-        self.session.lock().await.send(cmd).await
-            .map_err(|e| MouseInputError::CommandError(CdpCommandResultError::SessionSendError(e)))?;
+            .unwrap();
+        self.session.lock().await.send(cmd).await.map_err(|e| {
+            MouseInputError::CommandError(CdpCommandResultError::SessionSendError(e))
+        })?;
         Ok(())
     }
 
@@ -162,14 +178,20 @@ impl CdpMouse {
             .modifiers(modifiers)
             .click_count(click_count)
             .build()
-            .map_err(MouseInputError::BuildError)?;
-        self.session.lock().await.send(cmd).await
-            .map_err(|e| MouseInputError::CommandError(CdpCommandResultError::SessionSendError(e)))?;
+            .unwrap();
+        self.session.lock().await.send(cmd).await.map_err(|e| {
+            MouseInputError::CommandError(CdpCommandResultError::SessionSendError(e))
+        })?;
         Ok(())
     }
 
     /// Move to `(x, y)` then click `count` times with optional delay between press and release.
-    pub async fn click(&self, x: f64, y: f64, options: MouseClickOptions) -> Result<(), MouseInputError> {
+    pub async fn click(
+        &self,
+        x: f64,
+        y: f64,
+        options: MouseClickOptions,
+    ) -> Result<(), MouseInputError> {
         let button = options.button.unwrap_or(MouseButton::Left);
         let count = options.count.unwrap_or(1) as i64;
         let delay_ms = options.delay.unwrap_or(0);
@@ -206,9 +228,10 @@ impl CdpMouse {
             .delta_x(options.delta_x.unwrap_or(0) as f64)
             .delta_y(options.delta_y.unwrap_or(0) as f64)
             .build()
-            .map_err(MouseInputError::BuildError)?;
-        self.session.lock().await.send(cmd).await
-            .map_err(|e| MouseInputError::CommandError(CdpCommandResultError::SessionSendError(e)))?;
+            .unwrap();
+        self.session.lock().await.send(cmd).await.map_err(|e| {
+            MouseInputError::CommandError(CdpCommandResultError::SessionSendError(e))
+        })?;
         Ok(())
     }
 
@@ -274,7 +297,9 @@ impl Mouse for CdpMouse {
         options: MouseMoveOptions,
     ) -> Result<(), InputError> {
         let steps = options.steps.unwrap_or(1).max(1);
-        self.move_to(point.x, point.y, steps).await.map_err(|e| to_input_err(e))
+        self.move_to(point.x, point.y, steps)
+            .await
+            .map_err(|e| to_input_err(e))
     }
 
     async fn down(

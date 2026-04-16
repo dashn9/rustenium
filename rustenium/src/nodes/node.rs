@@ -2,10 +2,12 @@ use std::collections::HashMap;
 use std::future::Future;
 use serde::Deserialize;
 use rustenium_bidi_definitions::browsing_context::types::{BrowsingContext, Locator};
+use rustenium_bidi_definitions::browsing_context::commands::CaptureScreenshotOrigin;
+use rustenium_bidi_definitions::browsing_context::types::ImageFormat;
+use rustenium_cdp_definitions::browser_protocol::page::commands::CaptureScreenshotFormat;
 use rustenium_bidi_definitions::script::types::{Handle, SharedId};
 use crate::error::node::{NodeActionError, NodeInputError, NodeMouseError, NodeScreenshotError};
 use crate::input::{MouseClickOptions, MouseMoveOptions};
-use crate::nodes::bidi::node::BidiNodeScreenshotOptions;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(u16)]
@@ -60,6 +62,19 @@ pub struct NodePosition {
     pub height: f64,
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct NodeScreenShotOptions {
+    pub origin: Option<CaptureScreenshotOrigin>,
+    pub bidi_format: Option<ImageFormat>,
+    pub cdp_format: Option<CaptureScreenshotFormat>,
+    /// Normalized quality in the range `0.0..=1.0`.
+    pub quality: Option<f64>,
+    pub from_surface: Option<bool>,
+    pub capture_beyond_viewport: Option<bool>,
+    pub optimize_for_speed: Option<bool>,
+    pub save_path: Option<String>,
+}
+
 pub trait Node {
     fn get_children_nodes(&self) -> &Vec<impl Node>;
 
@@ -103,9 +118,9 @@ pub trait Node {
 
     fn mouse_click_with_options(&mut self, options: MouseClickOptions) -> impl Future<Output = Result<(), NodeMouseError>>;
 
-    fn screenshot(&self) -> impl Future<Output = Result<String, NodeScreenshotError>>;
+    fn screenshot(&mut self) -> impl Future<Output = Result<String, NodeScreenshotError>>;
 
-    fn screenshot_with_options(&self, options: BidiNodeScreenshotOptions) -> impl Future<Output = Result<String, NodeScreenshotError>>;
+    fn screenshot_with_options(&mut self, options: NodeScreenShotOptions) -> impl Future<Output = Result<String, NodeScreenshotError>>;
 
     /// Focuses the element and types the given text into it.
     fn type_text(&mut self, text: String) -> impl Future<Output = Result<(), NodeInputError>>;

@@ -1,7 +1,10 @@
-use crate::error::node::{NodeActionError, NodeInputError, NodeMouseError, NodeScreenshotError};
+use crate::error::node::{
+    CdpNodeActionError, CdpNodeInputError, CdpNodeScreenshotError, NodeActionError,
+    NodeInputError, NodeMouseError, NodeScreenshotError,
+};
 use crate::input::{Mouse, MouseClickOptions, MouseMoveOptions};
 use crate::nodes::NodePosition;
-use crate::nodes::node::NodeType;
+use crate::nodes::node::{NodeScreenShotOptions, NodeType};
 use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
 use rustenium_cdp_definitions::browser_protocol::dom::commands::{
     Focus, GetBoxModel, GetOuterHtml, RemoveNode, ResolveNode, ScrollIntoViewIfNeeded,
@@ -178,14 +181,14 @@ impl<T: ConnectionTransport> CdpNode<T> {
         self.send(cmd)
             .await
             .map(|_| ())
-            .map_err(NodeActionError::Cdp)
+            .map_err(NodeActionError::from)
     }
 
     pub async fn is_visible(&self) -> Result<bool, NodeActionError> {
         let cmd = GetBoxModel::builder()
             .backend_node_id(self.backend_node_id())
             .build();
-        let resp = self.send(cmd).await.map_err(NodeActionError::Cdp)?;
+        let resp = self.send(cmd).await.map_err(NodeActionError::from)?;
         match GetBoxModelResult::try_from(resp.result) {
             Ok(r) => Ok(r.model.width > 0 && r.model.height > 0),
             Err(_) => Ok(false),
@@ -196,11 +199,11 @@ impl<T: ConnectionTransport> CdpNode<T> {
         let cmd = RemoveNode::builder()
             .node_id(self.node_id())
             .build()
-            .map_err(NodeActionError::Other)?;
+            .unwrap();
         self.send(cmd)
             .await
             .map(|_| ())
-            .map_err(NodeActionError::Cdp)
+            .map_err(NodeActionError::from)
     }
 
     pub async fn focus(&self) -> Result<(), NodeActionError> {
@@ -210,7 +213,7 @@ impl<T: ConnectionTransport> CdpNode<T> {
         self.send(cmd)
             .await
             .map(|_| ())
-            .map_err(NodeActionError::Cdp)
+            .map_err(NodeActionError::from)
     }
 
     // ── Convenience getters ───────────────────────────────────────────────
@@ -267,12 +270,12 @@ impl<T: ConnectionTransport> CdpNode<T> {
         let resolve_cmd = ResolveNode::builder()
             .backend_node_id(self.backend_node_id())
             .build();
-        let resolve_resp = self.send(resolve_cmd).await.map_err(NodeActionError::Cdp)?;
+        let resolve_resp = self.send(resolve_cmd).await.map_err(NodeActionError::from)?;
         let object_id = ResolveNodeResult::try_from(resolve_resp.result)
-            .map_err(|e| NodeActionError::Other(e.to_string()))?
+            .map_err(|error| NodeActionError::Cdp(CdpNodeActionError::Decode(error.to_string())))?
             .object
             .object_id
-            .ok_or_else(|| NodeActionError::Other("no object_id from resolveNode".into()))?;
+            .ok_or(NodeActionError::Cdp(CdpNodeActionError::MissingObjectId))?;
 
         let call_cmd = CallFunctionOn::builder()
             .function_declaration(fn_body)
@@ -280,9 +283,9 @@ impl<T: ConnectionTransport> CdpNode<T> {
             .return_by_value(true)
             .build().unwrap();
 
-        let call_resp = self.send(call_cmd).await.map_err(NodeActionError::Cdp)?;
+        let call_resp = self.send(call_cmd).await.map_err(NodeActionError::from)?;
         Ok(CallFunctionOnResult::try_from(call_resp.result)
-            .map_err(|e| NodeActionError::Other(e.to_string()))?
+            .map_err(|error| NodeActionError::Cdp(CdpNodeActionError::Decode(error.to_string())))?
             .result
             .value
             .and_then(|v| v.as_str().map(ToOwned::to_owned))
@@ -303,22 +306,72 @@ impl<T: ConnectionTransport> CdpNode<T> {
 
     // ── Screenshot ────────────────────────────────────────────────────────
 
-    /// Captures a screenshot of this node's bounding box, returning base64 PNG.
-    pub async fn screenshot(&mut self) -> Result<String, NodeScreenshotError> {
+    pub async fn screenshot(
+        &mut self,
+        options: NodeScreenShotOptions,
+    ) -> Result<String, NodeScreenshotError> {
         self.get_position().await;
         let pos = self
             .position
             .as_ref()
-            .ok_or_else(|| NodeScreenshotError::Other("could not determine node position".into()))?;
+            .ok_or(NodeScreenshotError::Cdp(CdpNodeScreenshotError::NoPosition))?;
         let clip = Viewport { x: pos.x, y: pos.y, width: pos.width, height: pos.height, scale: 1.0 };
-        let cmd = CaptureScreenshot::builder().clip(clip).build();
+        let mut cmd = CaptureScreenshot::builder().clip(clip);
+        if let Some(format) = options.cdp_format {
+            cmd = cmd.format(format);
+        }
+        if let Some(quality) = options.quality {
+            cmd = cmd.quality((quality.clamp(0.0, 1.0) * 100.0).round() as i64);
+        }
+        if let Some(from_surface) = options.from_surface {
+            cmd = cmd.from_surface(from_surface);
+        }
+        if let Some(capture_beyond_viewport) = options.capture_beyond_viewport {
+            cmd = cmd.capture_beyond_viewport(capture_beyond_viewport);
+        }
+        if let Some(optimize_for_speed) = options.optimize_for_speed {
+            cmd = cmd.optimize_for_speed(optimize_for_speed);
+        }
+        let cmd = cmd.build();
         let resp = self
             .send(cmd)
             .await
-            .map_err(|e| NodeScreenshotError::Other(e.to_string()))?;
+            .map_err(NodeScreenshotError::from)?;
         let result = CaptureScreenshotResult::try_from(resp.result)
-            .map_err(|e| NodeScreenshotError::Other(e.to_string()))?;
-        Ok(String::from(result.data))
+            .map_err(|error| NodeScreenshotError::Cdp(CdpNodeScreenshotError::Decode(error.to_string())))?;
+        let screenshot = String::from(result.data);
+
+        if let Some(path) = options.save_path {
+            let path = std::path::PathBuf::from(path);
+            let final_path = if path.is_dir() {
+                let timestamp = std::time::SystemTime::now()
+                    .duration_since(std::time::UNIX_EPOCH)
+                    .map(|duration| duration.as_millis())
+                    .unwrap_or(0);
+                path.join(format!("screenshot_{timestamp}.png"))
+            } else {
+                if let Some(parent) = path.parent() {
+                    if !parent.as_os_str().is_empty() && !parent.exists() {
+                        return Err(NodeScreenshotError::InvalidPath(format!(
+                            "Parent directory does not exist: {}",
+                            parent.display()
+                        )));
+                    }
+                }
+                path
+            };
+
+            use base64::{engine::general_purpose, Engine as _};
+            let decoded = general_purpose::STANDARD
+                .decode(&screenshot)
+                .map_err(|error| NodeScreenshotError::Base64DecodeError(error.to_string()))?;
+            std::fs::write(&final_path, decoded)
+                .map_err(|error| NodeScreenshotError::FileWriteError(error.to_string()))?;
+
+            Ok(final_path.to_string_lossy().to_string())
+        } else {
+            Ok(screenshot)
+        }
     }
 
     // ── Mouse input ───────────────────────────────────────────────────────
@@ -331,7 +384,7 @@ impl<T: ConnectionTransport> CdpNode<T> {
     ) -> Result<(), NodeMouseError> {
         self.scroll_into_view()
             .await
-            .map_err(|e| NodeMouseError::Other(e.to_string()))?;
+            .map_err(NodeMouseError::from)?;
         self.get_position().await;
         let pos = self.position.as_ref().ok_or(NodeMouseError::InvalidPosition)?;
         let center = crate::input::Point {
@@ -341,7 +394,7 @@ impl<T: ConnectionTransport> CdpNode<T> {
         mouse
             .move_to(center, &BrowsingContext::from(String::new()), options)
             .await
-            .map_err(|e| NodeMouseError::Other(e.to_string()))
+            .map_err(|error| NodeMouseError::Driver(error.to_string()))
     }
 
     /// Click the centre of this node using the provided mouse driver.
@@ -354,24 +407,22 @@ impl<T: ConnectionTransport> CdpNode<T> {
         mouse
             .click(None, &BrowsingContext::from(String::new()), options)
             .await
-            .map_err(|e| NodeMouseError::Other(e.to_string()))
+            .map_err(|error| NodeMouseError::Driver(error.to_string()))
     }
 
     // ── Keyboard input ────────────────────────────────────────────────────
 
     /// Focus this node and insert `text` via `Input.insertText`.
     pub async fn type_text(&self, text: impl Into<String>) -> Result<(), NodeInputError> {
-        self.focus()
-            .await
-            .map_err(|e| NodeInputError::Other(e.to_string()))?;
+        self.focus().await.map_err(NodeInputError::from)?;
         let cmd = InsertText::builder()
             .text(text)
             .build()
-            .map_err(NodeInputError::CdpBuild)?;
+            .unwrap();
         self.send(cmd)
             .await
             .map(|_| ())
-            .map_err(NodeInputError::Cdp)
+            .map_err(|error| NodeInputError::Cdp(CdpNodeInputError::Command(error)))
     }
 }
 

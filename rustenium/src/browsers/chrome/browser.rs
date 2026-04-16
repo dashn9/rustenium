@@ -415,7 +415,7 @@ impl BidiBrowser for ChromeBrowser {
             .expect("BiDi is not enabled. Set `enable_bidi: true` in ChromeConfig.")
     }
 
-    fn build_bidi_node(
+    fn build_node(
         &self,
         raw_node: NodeRemoteValue,
         locator: Locator,
@@ -449,7 +449,7 @@ impl BidiBrowser for ChromeBrowser {
 }
 
 impl CdpBrowser for ChromeBrowser {
-    type BrowserNode = ChromeNode<WebsocketConnectionTransport, CdpMouse, CdpKeyboard>;
+    type BrowserNode = ChromeNode<WebsocketConnectionTransport, CdpMouse, CdpKeyboard<WebsocketConnectionTransport>>;
 
     fn adapter(&self) -> &CdpAdapter<WebsocketConnectionTransport> {
         self.cdp_adapter
@@ -463,7 +463,7 @@ impl CdpBrowser for ChromeBrowser {
             .expect("CDP is not enabled. Set `enable_cdp: true` in ChromeConfig.")
     }
 
-    fn build_cdp_node(&self, raw_node: DomNode) -> Self::BrowserNode {
+    fn build_node(&self, raw_node: DomNode) -> Self::BrowserNode {
         let adapter = self.cdp_adapter.as_ref().expect("CDP not enabled");
         ChromeNode::from_cdp(raw_node, adapter.session.clone(), adapter.mouse.clone(), adapter.keyboard.clone())
     }
