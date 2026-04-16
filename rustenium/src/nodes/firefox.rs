@@ -13,11 +13,18 @@ use crate::nodes::bidi::node::{BidiNode, BidiNodeScreenshotOptions};
 use crate::nodes::node::{Node, NodeType};
 use crate::nodes::NodePosition;
 
+
 pub struct FirefoxNode<T: ConnectionTransport, M: Mouse + Send + Sync = BidiMouse<T>, K: Keyboard + Send + Sync = BidiKeyboard<T>> {
     bidi_node: BidiNode<T>,
     children: Vec<FirefoxNode<T, M, K>>,
     mouse: Arc<M>,
     keyboard: Arc<K>,
+}
+
+impl<T: ConnectionTransport, M: Mouse + Send + Sync, K: Keyboard + Send + Sync> std::fmt::Debug for FirefoxNode<T, M, K> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        self.bidi_node.fmt(f)
+    }
 }
 
 impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Send + Sync + 'static> FirefoxNode<T, M, K> {

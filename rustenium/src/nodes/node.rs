@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::fmt::Debug;
 use std::future::Future;
 use serde::Deserialize;
 use rustenium_bidi_definitions::browsing_context::types::{BrowsingContext, Locator};
@@ -60,7 +61,7 @@ pub struct NodePosition {
     pub height: f64,
 }
 
-pub trait Node {
+pub trait Node: Debug {
     fn get_children_nodes(&self) -> &Vec<impl Node>;
 
     fn get_local_name(&self) -> Option<&str>;
