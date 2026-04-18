@@ -12,7 +12,18 @@ use crate::error::bidi::InputError as BidiInputError;
 use crate::error::cdp::InputError;
 use crate::input::Keyboard;
 use crate::input::bidi::keyboard::{KeyPressOptions, KeyboardTypeOptions};
-use crate::input::cdp::keymap::key_definition;
+use crate::input::cdp::keymap::{KeyDefinition, key_definition};
+
+/// Per-event description resolved from a `KeyDefinition` against current
+/// modifier state. Mirrors the description object puppeteer's CDP keyboard
+/// builds before each `Input.dispatchKeyEvent`.
+struct KeyDescription {
+    key: &'static str,
+    code: &'static str,
+    text: Option<&'static str>,
+    key_code: Option<i64>,
+    location: i64,
+}
 use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
 use rustenium_core::error::CommandResultError;
 
@@ -44,55 +55,93 @@ impl<OT: ConnectionTransport> CdpKeyboard<OT> {
         }
     }
 
+    /// Compute the per-event description (`key`, `code`, `text`, `key_code`,
+    /// `location`) for `def` against the current modifier state. Mirrors
+    /// puppeteer's `_keyDescriptionForString` exactly so that, for example,
+    /// `press("J")` types `J` and `press("@")` types `@` regardless of whether
+    /// Shift is currently held.
+    fn describe(def: &KeyDefinition, modifiers: i64) -> KeyDescription {
+        let shift_active = modifiers & 8 != 0;
+
+        let key = if shift_active && def.shift_key.is_some() {
+            def.shift_key.unwrap()
+        } else {
+            def.key.unwrap_or("")
+        };
+
+        let key_code = if shift_active && def.shift_key_code.is_some() {
+            def.shift_key_code
+        } else {
+            def.key_code
+        };
+
+        let code = def.code.unwrap_or("");
+        let location = def.location.unwrap_or(0);
+
+        // Default text from a single-char key value, then explicit overrides.
+        let mut text: Option<&str> = if key.chars().count() == 1 {
+            Some(key)
+        } else {
+            None
+        };
+        if let Some(t) = def.text {
+            text = Some(t);
+        }
+        if shift_active {
+            if let Some(t) = def.shift_text {
+                text = Some(t);
+            }
+        }
+        // Any modifier other than Shift suppresses text (it's a shortcut, not typing).
+        if modifiers & !8 != 0 {
+            text = None;
+        }
+
+        KeyDescription { key, code, text, key_code, location }
+    }
+
     /// Press a key down. Uses the keymap for non-printable keys; falls back gracefully.
     pub async fn down(&self, key: &str) -> Result<(), InputError> {
+        tracing::info!(key, "keyboard down start");
         let def = key_definition(key).ok_or_else(|| InputError::UnknownKey(key.to_string()))?;
 
-        let auto_repeat = self.pressed_keys.lock().unwrap().contains(def.code);
+        // Description is computed against the *current* modifiers, before this
+        // keydown updates them — so pressing Shift itself emits a Shift keydown
+        // without the shift bit influencing its own description.
+        let modifiers_before = *self.modifiers.lock().unwrap();
+        let desc = Self::describe(&def, modifiers_before);
+
+        let auto_repeat = self.pressed_keys.lock().unwrap().contains(desc.code);
         self.pressed_keys
             .lock()
             .unwrap()
-            .insert(def.code.to_string());
+            .insert(desc.code.to_string());
 
-        let shift_active = *self.modifiers.lock().unwrap() & 8 != 0;
-        let effective_key = if shift_active {
-            def.shift_key.unwrap_or(def.key)
-        } else {
-            def.key
-        };
-        *self.modifiers.lock().unwrap() |= Self::modifier_bit(effective_key);
+        // Update modifier bitmask if this key is a modifier.
+        *self.modifiers.lock().unwrap() |= Self::modifier_bit(desc.key);
+        let modifiers_now = *self.modifiers.lock().unwrap();
 
-        // Resolve text: single-char key → use as text, unless non-shift modifiers are held
-        let text = if shift_active {
-            def.shift_text.or(def.text)
-        } else {
-            def.text
-        };
-        let has_non_shift_modifier = *self.modifiers.lock().unwrap() & !8 != 0;
-        let text = if has_non_shift_modifier { None } else { text };
-
-        let event_type = if text.is_some() {
+        let event_type = if desc.text.is_some() {
             DispatchKeyEventType::KeyDown
         } else {
             DispatchKeyEventType::RawKeyDown
         };
 
-        let modifiers = *self.modifiers.lock().unwrap();
         let mut builder = DispatchKeyEvent::builder()
             .r#type(event_type)
-            .modifiers(modifiers)
-            .code(def.code)
-            .key(effective_key)
+            .modifiers(modifiers_now)
+            .code(desc.code)
+            .key(desc.key)
             .auto_repeat(auto_repeat)
-            .is_keypad(def.location.unwrap_or(0) == 3);
+            .is_keypad(desc.location == 3);
 
-        if let Some(kc) = def.key_code {
+        if let Some(kc) = desc.key_code {
             builder = builder.windows_virtual_key_code(kc);
         }
-        if let Some(loc) = def.location {
-            builder = builder.location(loc);
+        if desc.location != 0 {
+            builder = builder.location(desc.location);
         }
-        if let Some(t) = text {
+        if let Some(t) = desc.text {
             builder = builder.text(t).unmodified_text(t);
         }
 
@@ -103,34 +152,33 @@ impl<OT: ConnectionTransport> CdpKeyboard<OT> {
             .send(cmd)
             .await
             .map_err(|e| InputError::CommandError(CdpCommandResultError::SessionSendError(e)))?;
+        tracing::info!(key, "keyboard down done");
         Ok(())
     }
 
     /// Release a key.
     pub async fn up(&self, key: &str) -> Result<(), InputError> {
+        tracing::info!(key, "keyboard up start");
         let def = key_definition(key).ok_or_else(|| InputError::UnknownKey(key.to_string()))?;
 
-        let shift_active = *self.modifiers.lock().unwrap() & 8 != 0;
-        let effective_key = if shift_active {
-            def.shift_key.unwrap_or(def.key)
-        } else {
-            def.key
-        };
-        *self.modifiers.lock().unwrap() &= !Self::modifier_bit(effective_key);
-        self.pressed_keys.lock().unwrap().remove(def.code);
+        let modifiers_before = *self.modifiers.lock().unwrap();
+        let desc = Self::describe(&def, modifiers_before);
 
-        let modifiers = *self.modifiers.lock().unwrap();
+        *self.modifiers.lock().unwrap() &= !Self::modifier_bit(desc.key);
+        self.pressed_keys.lock().unwrap().remove(desc.code);
+        let modifiers_now = *self.modifiers.lock().unwrap();
+
         let mut builder = DispatchKeyEvent::builder()
             .r#type(DispatchKeyEventType::KeyUp)
-            .modifiers(modifiers)
-            .code(def.code)
-            .key(effective_key);
+            .modifiers(modifiers_now)
+            .code(desc.code)
+            .key(desc.key);
 
-        if let Some(kc) = def.key_code {
+        if let Some(kc) = desc.key_code {
             builder = builder.windows_virtual_key_code(kc);
         }
-        if let Some(loc) = def.location {
-            builder = builder.location(loc);
+        if desc.location != 0 {
+            builder = builder.location(desc.location);
         }
 
         let cmd = builder.build().unwrap();
@@ -140,16 +188,20 @@ impl<OT: ConnectionTransport> CdpKeyboard<OT> {
             .send(cmd)
             .await
             .map_err(|e| InputError::CommandError(CdpCommandResultError::SessionSendError(e)))?;
+        tracing::info!(key, "keyboard up done");
         Ok(())
     }
 
     /// Press and release a key (optionally holding for `delay_ms` between down and up).
     pub async fn press(&self, key: &str, delay_ms: u64) -> Result<(), InputError> {
+        tracing::info!(key, "keyboard press start");
         self.down(key).await?;
         if delay_ms > 0 {
             tokio::time::sleep(tokio::time::Duration::from_millis(delay_ms)).await;
         }
-        self.up(key).await
+        self.up(key).await?;
+        tracing::info!(key, "keyboard press done");
+        Ok(())
     }
 
     /// Send a raw character via `Input.insertText` (bypasses key definitions).
@@ -167,8 +219,10 @@ impl<OT: ConnectionTransport> CdpKeyboard<OT> {
     /// Type `text`, using `press()` for known keys and `send_character()` for others.
     /// `delay_ms` is inserted between each character.
     pub async fn type_text(&self, text: &str, delay_ms: u64) -> Result<(), InputError> {
+        tracing::info!(text, "keyboard type_text start");
         for ch in text.chars() {
             let s = ch.to_string();
+            tracing::debug!(key = s, "keyboard type_text key");
             if key_definition(&s).is_some() {
                 self.press(&s, delay_ms).await?;
             } else {
@@ -178,6 +232,7 @@ impl<OT: ConnectionTransport> CdpKeyboard<OT> {
                 self.send_character(&s).await?;
             }
         }
+        tracing::info!(text, "keyboard type_text done");
         Ok(())
     }
 }

@@ -1,7 +1,5 @@
 use std::future::Future;
-use std::sync::Arc;
 use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
-use tokio::sync::Mutex;
 use crate::error::bidi::InputError;
 
 #[derive(Debug, Clone, Default)]
@@ -107,7 +105,8 @@ pub struct Point {
 }
 
 pub trait Mouse {
-    fn get_last_position(&self) -> Arc<Mutex<Point>>;
+    fn get_last_position(&self) -> Point;
+
     fn set_last_position(&self, point: Point);
 
     fn reset(&self, context: &BrowsingContext) -> impl Future<Output = Result<(), InputError>>;

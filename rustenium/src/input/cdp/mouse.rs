@@ -8,7 +8,6 @@ use rustenium_core::error::{CdpCommandResultError, CommandResultError};
 use rustenium_core::session::CdpSession;
 use std::sync::{Arc, Mutex};
 use tokio::sync::Mutex as TokioMutex;
-use tokio::sync::Mutex as AsyncMutex;
 
 use crate::error::bidi::InputError;
 use crate::error::cdp::MouseInputError;
@@ -23,8 +22,7 @@ const FLAG_BACK: i64 = 1 << 3;
 const FLAG_FORWARD: i64 = 1 << 4;
 
 struct CdpMouseState {
-    x: f64,
-    y: f64,
+    position: Point,
     buttons: i64,
 }
 
@@ -34,7 +32,6 @@ pub struct CdpMouse {
     /// Modifier bitmask (Alt=1, Ctrl=2, Meta=4, Shift=8) — shared with CdpKeyboard.
     pub modifiers: Arc<Mutex<i64>>,
     state: Arc<Mutex<CdpMouseState>>,
-    last_position: Arc<AsyncMutex<Point>>,
 }
 
 impl CdpMouse {
@@ -46,11 +43,9 @@ impl CdpMouse {
             session,
             modifiers,
             state: Arc::new(Mutex::new(CdpMouseState {
-                x: 0.0,
-                y: 0.0,
+                position: Point { x: 0.0, y: 0.0 },
                 buttons: 0,
             })),
-            last_position: Arc::new(AsyncMutex::new(Point::default())),
         }
     }
 
@@ -91,18 +86,20 @@ impl CdpMouse {
     }
 
     /// Move the mouse to `(x, y)` in `steps` interpolated steps.
-    pub async fn move_to(&self, x: f64, y: f64, steps: usize) -> Result<(), MouseInputError> {
+    pub async fn move_to(&self, point: Point, steps: usize) -> Result<(), MouseInputError> {
+        tracing::info!(x = point.x, y = point.y, steps, "cdp mouse move_to start");
         let steps = steps.max(1);
         let modifiers = *self.modifiers.lock().unwrap();
         let (from_x, from_y, buttons) = {
             let s = self.state.lock().unwrap();
-            (s.x, s.y, s.buttons)
+            (s.position.x, s.position.y, s.buttons)
         };
 
         for i in 1..=steps {
             let t = i as f64 / steps as f64;
-            let cx = from_x + (x - from_x) * t;
-            let cy = from_y + (y - from_y) * t;
+            let cx = from_x + (point.x - from_x) * t;
+            let cy = from_y + (point.y - from_y) * t;
+            tracing::debug!(step = i, x = cx, y = cy, "cdp mouse move_to step");
             let cmd = DispatchMouseEvent::builder()
                 .r#type(DispatchMouseEventType::MouseMoved)
                 .x(cx)
@@ -119,15 +116,21 @@ impl CdpMouse {
 
         {
             let mut s = self.state.lock().unwrap();
-            s.x = x;
-            s.y = y;
+            s.position.x = point.x;
+            s.position.y = point.y;
         }
-        *self.last_position.lock().await = Point { x, y };
+        tracing::info!(x = point.x, y = point.y, "cdp mouse move_to done");
         Ok(())
     }
 
     /// Press a mouse button down.
-    pub async fn down(&self, button: MouseButton, click_count: i64) -> Result<(), MouseInputError> {
+    pub async fn down(
+        &self,
+        point: Option<Point>,
+        button: MouseButton,
+        click_count: i64,
+    ) -> Result<(), MouseInputError> {
+        tracing::info!(button = ?button, "cdp mouse down start");
         let flag = Self::flag(button);
         let modifiers = *self.modifiers.lock().unwrap();
         let (x, y, buttons) = {
@@ -139,7 +142,11 @@ impl CdpMouse {
                 )));
             }
             s.buttons |= flag;
-            (s.x, s.y, s.buttons)
+            let (x, y) = match point {
+                Some(p) => (p.x, p.y),
+                None => (s.position.x, s.position.y),
+            };
+            (x, y, s.buttons)
         };
         let cmd = DispatchMouseEvent::builder()
             .r#type(DispatchMouseEventType::MousePressed)
@@ -154,11 +161,18 @@ impl CdpMouse {
         self.session.lock().await.send(cmd).await.map_err(|e| {
             MouseInputError::CommandError(CdpCommandResultError::SessionSendError(e))
         })?;
+        tracing::info!(button = ?button, "cdp mouse down done");
         Ok(())
     }
 
     /// Release a mouse button.
-    pub async fn up(&self, button: MouseButton, click_count: i64) -> Result<(), MouseInputError> {
+    pub async fn up(
+        &self,
+        point: Option<Point>,
+        button: MouseButton,
+        click_count: i64,
+    ) -> Result<(), MouseInputError> {
+        tracing::info!(button = ?button, "cdp mouse up start");
         let flag = Self::flag(button);
         let modifiers = *self.modifiers.lock().unwrap();
         let (x, y, buttons) = {
@@ -167,8 +181,13 @@ impl CdpMouse {
                 return Err(MouseInputError::ButtonNotPressed(format!("{:?}", button)));
             }
             s.buttons &= !flag;
-            (s.x, s.y, s.buttons)
+            let (x, y) = match point {
+                Some(p) => (p.x, p.y),
+                None => (s.position.x, s.position.y),
+            };
+            (x, y, s.buttons)
         };
+
         let cmd = DispatchMouseEvent::builder()
             .r#type(DispatchMouseEventType::MouseReleased)
             .x(x)
@@ -182,41 +201,43 @@ impl CdpMouse {
         self.session.lock().await.send(cmd).await.map_err(|e| {
             MouseInputError::CommandError(CdpCommandResultError::SessionSendError(e))
         })?;
+        tracing::info!(button = ?button, "cdp mouse up done");
         Ok(())
     }
 
     /// Move to `(x, y)` then click `count` times with optional delay between press and release.
     pub async fn click(
         &self,
-        x: f64,
-        y: f64,
+        point: Option<Point>,
         options: MouseClickOptions,
     ) -> Result<(), MouseInputError> {
+        tracing::info!(x = point.map(|p| p.x), y = point.map(|p| p.y), count = options.count, "cdp mouse click start");
         let button = options.button.unwrap_or(MouseButton::Left);
         let count = options.count.unwrap_or(1) as i64;
         let delay_ms = options.delay.unwrap_or(0);
 
-        self.move_to(x, y, 1).await?;
-
         for i in 1..count {
-            self.down(button, i).await?;
-            self.up(button, i).await?;
+            tracing::debug!(n = i, "cdp mouse click press");
+            self.down(point, button, i).await?;
+            self.up(point, button, i).await?;
         }
 
-        self.down(button, count).await?;
+        self.down(point, button, count).await?;
         if delay_ms > 0 {
             tokio::time::sleep(tokio::time::Duration::from_millis(delay_ms)).await;
         }
-        self.up(button, count).await?;
+        self.up(point, button, count).await?;
+        tracing::info!("cdp mouse click done");
         Ok(())
     }
 
     /// Dispatch a mouse wheel event at the current cursor position.
     pub async fn wheel(&self, options: MouseWheelOptions) -> Result<(), MouseInputError> {
+        tracing::info!(delta_x = options.delta_x, delta_y = options.delta_y, "cdp mouse wheel start");
         let modifiers = *self.modifiers.lock().unwrap();
         let (x, y, buttons) = {
             let s = self.state.lock().unwrap();
-            (s.x, s.y, s.buttons)
+            (s.position.x, s.position.y, s.buttons)
         };
         let cmd = DispatchMouseEvent::builder()
             .r#type(DispatchMouseEventType::MouseWheel)
@@ -232,11 +253,13 @@ impl CdpMouse {
         self.session.lock().await.send(cmd).await.map_err(|e| {
             MouseInputError::CommandError(CdpCommandResultError::SessionSendError(e))
         })?;
+        tracing::info!("cdp mouse wheel done");
         Ok(())
     }
 
     /// Reset the mouse to the origin, releasing any held buttons.
     pub async fn reset(&self) -> Result<(), MouseInputError> {
+        tracing::info!("cdp mouse reset start");
         let held: Vec<MouseButton> = {
             let s = self.state.lock().unwrap();
             [
@@ -252,18 +275,20 @@ impl CdpMouse {
             .collect()
         };
         for btn in held {
-            self.up(btn, 1).await?;
+            tracing::debug!(button = ?btn, "cdp mouse reset releasing button");
+            self.up(None, btn, 1).await?;
         }
-        let (cx, cy) = self.position();
-        if cx != 0.0 || cy != 0.0 {
-            self.move_to(0.0, 0.0, 1).await?;
+        let pos = self.position();
+        if pos.x != 0.0 || pos.y != 0.0 {
+            self.move_to(Point {x: 0.0, y: 0.0}, 0).await?;
         }
+        tracing::info!("cdp mouse reset done");
         Ok(())
     }
 
-    pub fn position(&self) -> (f64, f64) {
+    pub fn position(&self) -> Point {
         let s = self.state.lock().unwrap();
-        (s.x, s.y)
+        s.position
     }
 }
 
@@ -276,13 +301,13 @@ fn to_input_err(e: impl std::fmt::Display) -> InputError {
 }
 
 impl Mouse for CdpMouse {
-    fn get_last_position(&self) -> Arc<AsyncMutex<Point>> {
-        self.last_position.clone()
+    fn get_last_position(&self) -> Point {
+        self.position()
     }
 
     fn set_last_position(&self, point: Point) {
-        if let Ok(mut lp) = self.last_position.try_lock() {
-            *lp = point;
+        if let Ok(mut state) = self.state.try_lock() {
+            state.position = point;
         }
     }
 
@@ -297,7 +322,7 @@ impl Mouse for CdpMouse {
         options: MouseMoveOptions,
     ) -> Result<(), InputError> {
         let steps = options.steps.unwrap_or(1).max(1);
-        self.move_to(point.x, point.y, steps)
+        self.move_to(point, steps)
             .await
             .map_err(|e| to_input_err(e))
     }
@@ -308,7 +333,7 @@ impl Mouse for CdpMouse {
         options: MouseOptions,
     ) -> Result<(), InputError> {
         let button = options.button.unwrap_or(MouseButton::Left);
-        self.down(button, 1).await.map_err(|e| to_input_err(e))
+        self.down(None, button, 1).await.map_err(|e| to_input_err(e))
     }
 
     async fn up(
@@ -317,7 +342,7 @@ impl Mouse for CdpMouse {
         options: MouseOptions,
     ) -> Result<(), InputError> {
         let button = options.button.unwrap_or(MouseButton::Left);
-        self.up(button, 1).await.map_err(|e| to_input_err(e))
+        self.up(None, button, 1).await.map_err(|e| to_input_err(e))
     }
 
     async fn click(
@@ -326,11 +351,7 @@ impl Mouse for CdpMouse {
         _context: &BrowsingContext,
         options: MouseClickOptions,
     ) -> Result<(), InputError> {
-        let (x, y) = match point {
-            Some(p) => (p.x, p.y),
-            None => self.position(),
-        };
-        self.click(x, y, options).await.map_err(|e| to_input_err(e))
+        self.click(point, options).await.map_err(|e| to_input_err(e))
     }
 
     async fn wheel(

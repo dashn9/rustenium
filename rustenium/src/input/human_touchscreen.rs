@@ -68,22 +68,22 @@ impl<OT: ConnectionTransport> HumanTouchscreen<OT> {
         let params = random_curve_params(from, to);
         let trajectory = generate_trajectory(from, to, &params);
 
-        if trajectory.is_empty() {
+        if trajectory.points.is_empty() {
             return Ok(());
         }
 
         let durations = generate_durations(
-            trajectory.len(),
+            trajectory.points.len(),
             duration_ms as f64 / 1000.0,
             (0.004, 0.025),
         );
 
-        let first = trajectory[0];
+        let first = trajectory.points[0];
         let handle = self.touchscreen
             .touch_start(first.x.max(0.0), first.y.max(0.0), context, None)
             .await?;
 
-        for (i, pt) in trajectory.iter().enumerate().skip(1) {
+        for (i, pt) in trajectory.points.iter().enumerate().skip(1) {
             tokio::time::sleep(tokio::time::Duration::from_secs_f64(durations[i])).await;
             handle.move_to(pt.x.max(0.0), pt.y.max(0.0), context).await?;
         }

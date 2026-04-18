@@ -100,7 +100,13 @@ pub fn random_curve_params(_from: Point, _to: Point) -> CurveParams {
     }
 }
 
-pub fn generate_trajectory(from: Point, to: Point, params: &CurveParams) -> Vec<Point> {
+pub struct Trajectory {
+    pub points: Vec<Point>,
+    /// Delay in milliseconds before dispatching each point; len == points.len() - 1.
+    pub step_delays_ms: Vec<u64>,
+}
+
+pub fn generate_trajectory(from: Point, to: Point, params: &CurveParams) -> Trajectory {
     let mut rng = rand::rng();
 
     let left = from.x.min(to.x) - params.offset_boundary_x;
@@ -129,13 +135,33 @@ pub fn generate_trajectory(from: Point, to: Point, params: &CurveParams) -> Vec<
 
     let tween = params.tween;
     let n = params.target_points.max(2);
-    (0..n)
+    let sampled: Vec<Point> = (0..n)
         .map(|i| {
             let t = i as f64 / (n - 1) as f64;
             let index = (tween(t) * (points.len() - 1) as f64) as usize;
             points[index.min(points.len() - 1)]
         })
-        .collect()
+        .collect();
+
+    // Total move duration based on Euclidean distance.
+    // The spatial easing already encodes slow/fast regions, so uniform-ish step delays
+    // naturally reproduce the acceleration curve — jitter adds per-step hand tremor.
+    let dist = ((to.x - from.x).powi(2) + (to.y - from.y).powi(2)).sqrt();
+    let total_ms = {
+        let base = (80.0 + dist * 1.1).clamp(120.0, 1400.0);
+        (base * rng.random_range(0.88_f64..1.12_f64)) as u64
+    };
+
+    let step_delays_ms = if n < 2 {
+        vec![]
+    } else {
+        let per = (total_ms as f64 / (n - 1) as f64).max(1.0);
+        (0..n - 1)
+            .map(|_| (per * rng.random_range(0.78_f64..1.22_f64)).round().max(1.0) as u64)
+            .collect()
+    };
+
+    Trajectory { points: sampled, step_delays_ms }
 }
 
 // ── Utilities ────────────────────────────────────────────────────────────────

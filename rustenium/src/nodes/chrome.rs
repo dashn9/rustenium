@@ -1,15 +1,15 @@
 use rustenium_cdp_definitions::browser_protocol::accessibility::types::{
     AxNode as CdpAxNode, AxProperty, AxValue,
 };
-use rustenium_cdp_definitions::browser_protocol::dom::types::Node as DomNode;
+use rustenium_cdp_definitions::browser_protocol::dom::types::{Node as DomNode, NodeId};
 use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::sync::Mutex;
 
 use rustenium_bidi_definitions::browsing_context::types::{BrowsingContext, Locator};
 use rustenium_bidi_definitions::script::types::{Handle, NodeRemoteValue, SharedId};
-use rustenium_core::{BidiSession, CdpSession};
 use rustenium_core::transport::ConnectionTransport;
+use rustenium_core::{BidiSession, CdpSession};
 
 use crate::error::node::{NodeActionError, NodeInputError, NodeMouseError, NodeScreenshotError};
 use crate::input::{BidiKeyboard, BidiMouse, Keyboard, Mouse, MouseClickOptions, MouseMoveOptions};
@@ -104,7 +104,14 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
         let children = cdp_node
             .children
             .iter()
-            .map(|c| ChromeNode::from_cdp(c.raw_node.clone(), session.clone(), mouse.clone(), keyboard.clone()))
+            .map(|c| {
+                ChromeNode::from_cdp(
+                    c.raw_node.clone(),
+                    session.clone(),
+                    mouse.clone(),
+                    keyboard.clone(),
+                )
+            })
             .collect();
         Self {
             inner: ChromeNodeInner::Cdp {
@@ -113,6 +120,15 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
                 keyboard,
             },
             children,
+        }
+    }
+
+    pub fn node_id(&self) -> NodeId {
+        match &self.inner {
+            ChromeNodeInner::Bidi { .. } => {
+                unimplemented!("get_node_id not available for BiDi-sourced nodes")
+            }
+            ChromeNodeInner::Cdp { node, .. } => *node.raw_node.node_id.clone(),
         }
     }
 }
@@ -151,14 +167,18 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
     async fn get_inner_text(&self) -> String {
         match &self.inner {
             ChromeNodeInner::Bidi { node, .. } => node.get_inner_text().await.unwrap(),
-            ChromeNodeInner::Cdp { node: n, .. } => n.get_inner_text().await.unwrap_or(String::new()),
+            ChromeNodeInner::Cdp { node: n, .. } => {
+                n.get_inner_text().await.unwrap_or(String::new())
+            }
         }
     }
 
     async fn get_text_content(&self) -> String {
         match &self.inner {
             ChromeNodeInner::Bidi { node, .. } => node.get_text_content().await.unwrap(),
-            ChromeNodeInner::Cdp { node: n, .. } => n.get_text_content().await.unwrap_or(String::new()),
+            ChromeNodeInner::Cdp { node: n, .. } => {
+                n.get_text_content().await.unwrap_or(String::new())
+            }
         }
     }
 
@@ -192,9 +212,7 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
     async fn get_position(&mut self) -> Option<&NodePosition> {
         match &mut self.inner {
             ChromeNodeInner::Bidi { node, .. } => node.get_position().await.unwrap_or(None),
-            ChromeNodeInner::Cdp { node, .. } => {
-                node.get_position().await
-            }
+            ChromeNodeInner::Cdp { node, .. } => node.get_position().await,
         }
     }
 
@@ -258,8 +276,12 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
 
     async fn delete(&self) -> Result<(), NodeActionError> {
         match &self.inner {
-            ChromeNodeInner::Bidi { node, .. } => node.delete().await.map_err(NodeActionError::from),
-            ChromeNodeInner::Cdp { .. } => unimplemented!("delete not available for CDP-sourced nodes"),
+            ChromeNodeInner::Bidi { node, .. } => {
+                node.delete().await.map_err(NodeActionError::from)
+            }
+            ChromeNodeInner::Cdp { .. } => {
+                unimplemented!("delete not available for CDP-sourced nodes")
+            }
         }
     }
 
@@ -267,14 +289,14 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
         match &mut self.inner {
             ChromeNodeInner::Bidi { node, mouse, .. } => {
                 let mouse = mouse.clone();
-                node
-                    .mouse_move(mouse.as_ref(), MouseMoveOptions::default())
+                node.mouse_move(mouse.as_ref(), MouseMoveOptions::default())
                     .await
                     .map_err(NodeMouseError::from)
             }
             ChromeNodeInner::Cdp { node, mouse, .. } => {
                 let mouse = mouse.clone();
-                node.mouse_move(mouse.as_ref(), MouseMoveOptions::default()).await
+                node.mouse_move(mouse.as_ref(), MouseMoveOptions::default())
+                    .await
             }
         }
     }
@@ -286,7 +308,9 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
         match &mut self.inner {
             ChromeNodeInner::Bidi { node, mouse, .. } => {
                 let mouse = mouse.clone();
-                node.mouse_move(mouse.as_ref(), options).await.map_err(NodeMouseError::from)
+                node.mouse_move(mouse.as_ref(), options)
+                    .await
+                    .map_err(NodeMouseError::from)
             }
             ChromeNodeInner::Cdp { node, mouse, .. } => {
                 let mouse = mouse.clone();
@@ -299,14 +323,14 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
         match &mut self.inner {
             ChromeNodeInner::Bidi { node, mouse, .. } => {
                 let mouse = mouse.clone();
-                node
-                    .mouse_click(mouse.as_ref(), MouseClickOptions::default())
+                node.mouse_click(mouse.as_ref(), MouseClickOptions::default())
                     .await
                     .map_err(NodeMouseError::from)
             }
             ChromeNodeInner::Cdp { node, mouse, .. } => {
                 let mouse = mouse.clone();
-                node.mouse_click(mouse.as_ref(), MouseClickOptions::default()).await
+                node.mouse_click(mouse.as_ref(), MouseClickOptions::default())
+                    .await
             }
         }
     }
@@ -318,7 +342,9 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
         match &mut self.inner {
             ChromeNodeInner::Bidi { node, mouse, .. } => {
                 let mouse = mouse.clone();
-                node.mouse_click(mouse.as_ref(), options).await.map_err(NodeMouseError::from)
+                node.mouse_click(mouse.as_ref(), options)
+                    .await
+                    .map_err(NodeMouseError::from)
             }
             ChromeNodeInner::Cdp { node, mouse, .. } => {
                 let mouse = mouse.clone();
@@ -344,9 +370,10 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
         options: NodeScreenShotOptions,
     ) -> Result<String, NodeScreenshotError> {
         match &mut self.inner {
-            ChromeNodeInner::Bidi { node, .. } => {
-                node.screenshot(options).await.map_err(NodeScreenshotError::from)
-            }
+            ChromeNodeInner::Bidi { node, .. } => node
+                .screenshot(options)
+                .await
+                .map_err(NodeScreenshotError::from),
             ChromeNodeInner::Cdp { node, .. } => {
                 let screenshot = node.screenshot(options).await?;
                 Ok(screenshot)
@@ -358,8 +385,7 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
         match &mut self.inner {
             ChromeNodeInner::Bidi { node, keyboard, .. } => {
                 let keyboard = keyboard.clone();
-                node
-                    .type_text(keyboard.as_ref(), text)
+                node.type_text(keyboard.as_ref(), text)
                     .await
                     .map_err(NodeInputError::from)
             }

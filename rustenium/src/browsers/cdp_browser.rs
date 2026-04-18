@@ -1,24 +1,37 @@
 use crate::browsers::chrome::tab::ChromeTab;
 use crate::conduit::cdp::adapter::CdpAdapter;
-use crate::error::cdp::{CreateTabError, EmulateDeviceMetricsError, LocateError, NavigateError, NodesFetchError, ScreenshotError};
+use crate::error::cdp::{
+    CreateTabError, EmulateDeviceMetricsError, EvaluateScriptError, LocateError, NavigateError,
+    NodesFetchError, PreloadScriptError, ScreenshotError,
+};
 use crate::input::{CdpKeyboard, CdpMouse, CdpTouchscreen, HumanMouse};
-use std::time::Duration;
+use crate::nodes::AXNode;
 use rustenium_cdp_definitions::Command;
 use rustenium_cdp_definitions::base::CommandResponse;
-use rustenium_cdp_definitions::browser_protocol::emulation::commands::SetDeviceMetricsOverride;
-use rustenium_cdp_definitions::browser_protocol::emulation::types::ScreenOrientation;
 use rustenium_cdp_definitions::browser_protocol::accessibility::commands::GetFullAxTree;
 use rustenium_cdp_definitions::browser_protocol::accessibility::results::GetFullAxTreeResult;
 use rustenium_cdp_definitions::browser_protocol::dom::commands::DescribeNode;
-use rustenium_cdp_definitions::browser_protocol::dom::types::{BackendNodeId, NodeId, Node as DomNode};
-use rustenium_cdp_definitions::js_protocol::runtime::types::RemoteObjectId;
-use rustenium_cdp_definitions::browser_protocol::page::commands::Navigate;
+use rustenium_cdp_definitions::browser_protocol::dom::types::{
+    BackendNodeId, Node as DomNode, NodeId,
+};
+use rustenium_cdp_definitions::browser_protocol::emulation::commands::SetDeviceMetricsOverride;
+use rustenium_cdp_definitions::browser_protocol::emulation::types::ScreenOrientation;
+use rustenium_cdp_definitions::browser_protocol::page::command_builders::CaptureScreenshotBuilder;
+use rustenium_cdp_definitions::browser_protocol::page::commands::{CaptureScreenshotFormat, Navigate};
 use rustenium_cdp_definitions::browser_protocol::page::results::NavigateResult;
-use rustenium_cdp_definitions::browser_protocol::page::types::{ReferrerPolicy, TransitionType, Viewport};
+use rustenium_cdp_definitions::browser_protocol::page::type_builders::ViewportBuilder;
+use rustenium_cdp_definitions::browser_protocol::page::types::{
+    ReferrerPolicy, TransitionType, Viewport,
+};
+use rustenium_cdp_definitions::browser_protocol::page::command_builders::AddScriptToEvaluateOnNewDocumentBuilder;
+use rustenium_cdp_definitions::browser_protocol::page::commands::RemoveScriptToEvaluateOnNewDocument;
+use rustenium_cdp_definitions::browser_protocol::page::types::ScriptIdentifier;
 use rustenium_cdp_definitions::browser_protocol::target::commands::CreateTarget;
+use rustenium_cdp_definitions::js_protocol::runtime::results::EvaluateResult;
+use rustenium_cdp_definitions::js_protocol::runtime::types::RemoteObjectId;
 use rustenium_core::error::{CdpCommandResultError, CdpSessionSendError};
-use crate::nodes::AXNode;
 use rustenium_core::transport::WebsocketConnectionTransport;
+use std::time::Duration;
 
 #[derive(Debug, Clone, Default)]
 pub struct NavigateOptions {
@@ -32,6 +45,61 @@ pub struct NavigateOptionsBuilder {
     referrer: Option<String>,
     transition_type: Option<TransitionType>,
     referrer_policy: Option<ReferrerPolicy>,
+}
+
+#[derive(Debug, Clone, Default)]
+pub struct BrowserScreenshotOptions {
+    pub full: bool,
+    pub format: Option<CaptureScreenshotFormat>,
+    pub viewport: Option<Viewport>,
+    pub quality: Option<f64>,
+    pub save_path: Option<String>,
+}
+
+#[derive(Clone, Default)]
+pub struct BrowserScreenshotOptionsBuilder {
+    full: bool,
+    format: Option<CaptureScreenshotFormat>,
+    viewport: Option<Viewport>,
+    quality: Option<f64>,
+    save_path: Option<String>,
+}
+
+impl BrowserScreenshotOptionsBuilder {
+    pub fn full(mut self, full: bool) -> Self {
+        self.full = full;
+        self
+    }
+
+    pub fn format(mut self, format: impl Into<CaptureScreenshotFormat>) -> Self {
+        self.format = Some(format.into());
+        self
+    }
+
+    pub fn viewport(mut self, viewport: Viewport) -> Self {
+        self.viewport = Some(viewport);
+        self
+    }
+    
+    pub fn quality(mut self, quality: f64) -> Self {
+        self.quality = Some(quality);
+        self
+    }
+
+    pub fn save_path(mut self, save_path: impl Into<String>) -> Self {
+        self.save_path = Some(save_path.into());
+        self
+    }
+
+    pub fn build(self) -> BrowserScreenshotOptions {
+        BrowserScreenshotOptions {
+            full: self.full,
+            format: self.format,
+            viewport: self.viewport,
+            quality: self.quality,
+            save_path: self.save_path,
+        }
+    }
 }
 
 impl NavigateOptionsBuilder {
@@ -181,15 +249,33 @@ pub trait CdpBrowser: Send + Sync {
             .height(height)
             .device_scale_factor(device_scale_factor)
             .mobile(mobile);
-        if let Some(v) = options.scale { builder = builder.scale(v); }
-        if let Some(v) = options.screen_width { builder = builder.screen_width(v); }
-        if let Some(v) = options.screen_height { builder = builder.screen_height(v); }
-        if let Some(v) = options.position_x { builder = builder.position_x(v); }
-        if let Some(v) = options.position_y { builder = builder.position_y(v); }
-        if let Some(v) = options.dont_set_visible_size { builder = builder.dont_set_visible_size(v); }
-        if let Some(v) = options.screen_orientation { builder = builder.screen_orientation(v); }
-        if let Some(v) = options.viewport { builder = builder.viewport(v); }
-        if let Some(v) = options.scrollbar_type { builder = builder.scrollbar_type(v); }
+        if let Some(v) = options.scale {
+            builder = builder.scale(v);
+        }
+        if let Some(v) = options.screen_width {
+            builder = builder.screen_width(v);
+        }
+        if let Some(v) = options.screen_height {
+            builder = builder.screen_height(v);
+        }
+        if let Some(v) = options.position_x {
+            builder = builder.position_x(v);
+        }
+        if let Some(v) = options.position_y {
+            builder = builder.position_y(v);
+        }
+        if let Some(v) = options.dont_set_visible_size {
+            builder = builder.dont_set_visible_size(v);
+        }
+        if let Some(v) = options.screen_orientation {
+            builder = builder.screen_orientation(v);
+        }
+        if let Some(v) = options.viewport {
+            builder = builder.viewport(v);
+        }
+        if let Some(v) = options.scrollbar_type {
+            builder = builder.scrollbar_type(v);
+        }
         let command = builder.build().unwrap();
         let adapter = self.adapter_mut();
         async move { adapter.emulate_device_metrics(command).await }
@@ -203,12 +289,18 @@ pub trait CdpBrowser: Send + Sync {
         async move { adapter.send_command(command).await }
     }
 
-    fn get_accessible_nodes(&mut self, squash: bool) -> impl Future<Output = Result<Vec<AXNode>, NodesFetchError>> + Send {
+    fn get_accessible_nodes(
+        &mut self,
+        squash: bool,
+    ) -> impl Future<Output = Result<Vec<AXNode>, NodesFetchError>> + Send {
         async move {
-            let result_value = self.adapter_mut()
+            let result_value = self
+                .adapter_mut()
                 .send_command(GetFullAxTree::builder().build())
                 .await
-                .map_err(|e| NodesFetchError::CommandResultError(CdpCommandResultError::SessionSendError(e)))?
+                .map_err(|e| {
+                    NodesFetchError::CommandResultError(CdpCommandResultError::SessionSendError(e))
+                })?
                 .result;
 
             let result = GetFullAxTreeResult::try_from(result_value)
@@ -219,8 +311,51 @@ pub trait CdpBrowser: Send + Sync {
     }
 
     fn screenshot(&mut self) -> impl Future<Output = Result<String, ScreenshotError>> + Send {
+        async move {
+            self.screenshot_with_options(BrowserScreenshotOptions::default())
+                .await
+        }
+    }
+
+    fn screenshot_with_options(
+        &mut self,
+        opts: BrowserScreenshotOptions,
+    ) -> impl Future<Output = Result<String, ScreenshotError>> + Send {
         let adapter = self.adapter_mut();
-        async move { adapter.screenshot().await }
+        let mut cmd = CaptureScreenshotBuilder::default();
+
+        if let Some(format) = opts.format {
+            cmd = cmd.format(format);
+        }
+
+        if let Some(quality) = opts.quality {
+            cmd = cmd.quality((quality * 100.) as i64)
+        }
+
+        if let Some(viewport) = opts.viewport {
+            cmd = cmd.clip(viewport);
+        }
+
+        async move {
+            if opts.full {
+                let layout_metrics = adapter
+                    .layout_metrics()
+                    .await
+                    .map_err(|e| ScreenshotError::CommandResultError(e))?;
+                cmd = cmd.capture_beyond_viewport(true);
+                cmd = cmd.clip(
+                    ViewportBuilder::default()
+                        .x(layout_metrics.css_content_size.x)
+                        .y(layout_metrics.css_content_size.y)
+                        .height(layout_metrics.css_content_size.height)
+                        .width(layout_metrics.css_content_size.width)
+                        .scale(1.)
+                        .build()
+                        .unwrap(),
+                );
+            };
+            adapter.screenshot(cmd.build(), opts.save_path).await
+        }
     }
 
     // ── Locating ─────────────────────────────────────────────────────────────
@@ -256,7 +391,10 @@ pub trait CdpBrowser: Send + Sync {
         timeout: Duration,
     ) -> impl Future<Output = Result<Self::BrowserNode, LocateError>> + Send {
         async move {
-            let node = self.adapter_mut().wait_for(selector.as_str(), timeout).await?;
+            let node = self
+                .adapter_mut()
+                .wait_for(selector.as_str(), timeout)
+                .await?;
             Ok(self.build_node(node))
         }
     }
@@ -268,19 +406,35 @@ pub trait CdpBrowser: Send + Sync {
         timeout: Duration,
     ) -> impl Future<Output = Result<Vec<Self::BrowserNode>, LocateError>> + Send {
         async move {
-            let nodes = self.adapter_mut().wait_for_all(selector.as_str(), timeout).await?;
+            let nodes = self
+                .adapter_mut()
+                .wait_for_all(selector.as_str(), timeout)
+                .await?;
             Ok(nodes.into_iter().map(|n| self.build_node(n)).collect())
         }
     }
 
-    fn fetch_node(&mut self, options: FetchNodeOptions) -> impl Future<Output = Result<Self::BrowserNode, NodesFetchError>> + Send {
+    fn fetch_node(
+        &mut self,
+        options: FetchNodeOptions,
+    ) -> impl Future<Output = Result<Self::BrowserNode, NodesFetchError>> + Send {
         async move {
             let mut builder = DescribeNode::builder();
-            if let Some(v) = options.node_id { builder = builder.node_id(v); }
-            if let Some(v) = options.backend_node_id { builder = builder.backend_node_id(v); }
-            if let Some(v) = options.object_id { builder = builder.object_id(v); }
-            if let Some(v) = options.depth { builder = builder.depth(v); }
-            if let Some(v) = options.pierce { builder = builder.pierce(v); }
+            if let Some(v) = options.node_id {
+                builder = builder.node_id(v);
+            }
+            if let Some(v) = options.backend_node_id {
+                builder = builder.backend_node_id(v);
+            }
+            if let Some(v) = options.object_id {
+                builder = builder.object_id(v);
+            }
+            if let Some(v) = options.depth {
+                builder = builder.depth(v);
+            }
+            if let Some(v) = options.pierce {
+                builder = builder.pierce(v);
+            }
             let command = builder.build();
 
             let dom_node = self.adapter_mut().fetch_node(command).await?;
@@ -295,13 +449,62 @@ pub trait CdpBrowser: Send + Sync {
     fn mouse(&self) -> &CdpMouse {
         self.adapter().mouse.as_ref()
     }
-    
+
     fn keyboard(&self) -> &CdpKeyboard<WebsocketConnectionTransport> {
         self.adapter().keyboard.as_ref()
     }
 
     fn touchscreen(&self) -> &CdpTouchscreen {
         self.adapter().touchscreen.as_ref()
+    }
+
+    fn evaluate_script(
+        &mut self,
+        expression: impl Into<String>,
+        await_promise: bool,
+    ) -> impl Future<Output = Result<EvaluateResult, EvaluateScriptError>> + Send {
+        let expression = expression.into();
+        let adapter = self.adapter_mut();
+        async move { adapter.evaluate_script(&expression, await_promise).await }
+    }
+
+    fn add_preload_script(
+        &mut self,
+        source: impl Into<String>,
+    ) -> impl Future<Output = Result<ScriptIdentifier, PreloadScriptError>> + Send {
+        self.add_preload_script_with_options(source, AddPreloadScriptOptions::default())
+    }
+
+    fn add_preload_script_with_options(
+        &mut self,
+        source: impl Into<String>,
+        options: AddPreloadScriptOptions,
+    ) -> impl Future<Output = Result<ScriptIdentifier, PreloadScriptError>> + Send {
+        let mut builder = AddScriptToEvaluateOnNewDocumentBuilder::default().source(source);
+        if let Some(v) = options.world_name {
+            builder = builder.world_name(v);
+        }
+        if let Some(v) = options.include_command_line_api {
+            builder = builder.include_command_line_api(v);
+        }
+        if let Some(v) = options.run_immediately {
+            builder = builder.run_immediately(v);
+        }
+        let command = builder.build().unwrap();
+        let adapter = self.adapter_mut();
+        async move { adapter.add_preload_script(command).await }
+    }
+
+    fn remove_preload_script(
+        &mut self,
+        identifier: impl Into<ScriptIdentifier>,
+    ) -> impl Future<Output = Result<(), PreloadScriptError>> + Send {
+        let command = RemoveScriptToEvaluateOnNewDocument::builder()
+            .identifier(identifier)
+            .build()
+            .unwrap();
+        let adapter = self.adapter_mut();
+        async move { adapter.remove_preload_script(command).await }
     }
 }
 
@@ -480,6 +683,28 @@ impl<S: Into<String>> From<S> for Selector {
     }
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct AddPreloadScriptOptions {
+    pub world_name: Option<String>,
+    pub include_command_line_api: Option<bool>,
+    pub run_immediately: Option<bool>,
+}
+
+impl AddPreloadScriptOptions {
+    pub fn world_name(mut self, v: impl Into<String>) -> Self {
+        self.world_name = Some(v.into());
+        self
+    }
+    pub fn include_command_line_api(mut self, v: bool) -> Self {
+        self.include_command_line_api = Some(v);
+        self
+    }
+    pub fn run_immediately(mut self, v: bool) -> Self {
+        self.run_immediately = Some(v);
+        self
+    }
+}
+
 use rustenium_cdp_definitions::browser_protocol::emulation::commands::SetDeviceMetricsOverrideScrollbarType;
 
 #[derive(Debug, Clone, Default)]
@@ -509,15 +734,42 @@ pub struct EmulateDeviceMetricsOptionsBuilder {
 }
 
 impl EmulateDeviceMetricsOptionsBuilder {
-    pub fn scale(mut self, v: f64) -> Self { self.scale = Some(v); self }
-    pub fn screen_width(mut self, v: i64) -> Self { self.screen_width = Some(v); self }
-    pub fn screen_height(mut self, v: i64) -> Self { self.screen_height = Some(v); self }
-    pub fn position_x(mut self, v: i64) -> Self { self.position_x = Some(v); self }
-    pub fn position_y(mut self, v: i64) -> Self { self.position_y = Some(v); self }
-    pub fn dont_set_visible_size(mut self, v: bool) -> Self { self.dont_set_visible_size = Some(v); self }
-    pub fn screen_orientation(mut self, v: ScreenOrientation) -> Self { self.screen_orientation = Some(v); self }
-    pub fn viewport(mut self, v: Viewport) -> Self { self.viewport = Some(v); self }
-    pub fn scrollbar_type(mut self, v: SetDeviceMetricsOverrideScrollbarType) -> Self { self.scrollbar_type = Some(v); self }
+    pub fn scale(mut self, v: f64) -> Self {
+        self.scale = Some(v);
+        self
+    }
+    pub fn screen_width(mut self, v: i64) -> Self {
+        self.screen_width = Some(v);
+        self
+    }
+    pub fn screen_height(mut self, v: i64) -> Self {
+        self.screen_height = Some(v);
+        self
+    }
+    pub fn position_x(mut self, v: i64) -> Self {
+        self.position_x = Some(v);
+        self
+    }
+    pub fn position_y(mut self, v: i64) -> Self {
+        self.position_y = Some(v);
+        self
+    }
+    pub fn dont_set_visible_size(mut self, v: bool) -> Self {
+        self.dont_set_visible_size = Some(v);
+        self
+    }
+    pub fn screen_orientation(mut self, v: ScreenOrientation) -> Self {
+        self.screen_orientation = Some(v);
+        self
+    }
+    pub fn viewport(mut self, v: Viewport) -> Self {
+        self.viewport = Some(v);
+        self
+    }
+    pub fn scrollbar_type(mut self, v: SetDeviceMetricsOverrideScrollbarType) -> Self {
+        self.scrollbar_type = Some(v);
+        self
+    }
     pub fn build(self) -> EmulateDeviceMetricsOptions {
         EmulateDeviceMetricsOptions {
             scale: self.scale,

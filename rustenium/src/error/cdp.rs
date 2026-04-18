@@ -62,9 +62,31 @@ pub enum LocateError {
 }
 
 #[derive(Debug, Error)]
+pub enum EvaluateScriptError {
+    #[error("An error occured executing command")]
+    CommandResultError(CdpCommandResultError),
+    #[error("Failed to parse evaluate result: {0}")]
+    ParseError(String),
+}
+
+#[derive(Debug, Error)]
+pub enum PreloadScriptError {
+    #[error("An error occured executing command")]
+    CommandResultError(CdpCommandResultError),
+    #[error("Failed to parse preload script result: {0}")]
+    ParseError(String),
+}
+
+#[derive(Debug, Error)]
 pub enum ScreenshotError {
     #[error("An error occured executing command")]
     CommandResultError(CdpCommandResultError),
     #[error("Failed to parse screenshot result: {0}")]
     ParseError(String),
+    #[error("Invalid path: {0}")]
+    InvalidPath(String),
+    #[error("Failed to decode base64 data: {0}")]
+    Base64DecodeError(String),
+    #[error("Failed to write file: {0}")]
+    FileWriteError(String),
 }
