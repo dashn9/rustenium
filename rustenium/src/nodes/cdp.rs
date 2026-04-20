@@ -146,32 +146,35 @@ impl<T: ConnectionTransport> CdpNode<T> {
             .map_err(CdpCommandResultError::SessionSendError)
     }
 
-    pub async fn get_position(&mut self) -> Option<&NodePosition> {
-        if self.position.is_none() {
-            let cmd = GetBoxModel::builder()
-                .backend_node_id(self.backend_node_id())
-                .build();
-            if let Ok(resp) = self.send(cmd).await {
-                if let Ok(result) = GetBoxModelResult::try_from(resp.result) {
-                    let q = result.model.content.inner();
-                    if q.len() >= 8 {
-                        let xs = [q[0], q[2], q[4], q[6]];
-                        let ys = [q[1], q[3], q[5], q[7]];
-                        let x = xs.iter().copied().fold(f64::INFINITY, f64::min);
-                        let y = ys.iter().copied().fold(f64::INFINITY, f64::min);
-                        self.position = Some(NodePosition {
-                            x,
-                            y,
-                            scroll_x: 0.0,
-                            scroll_y: 0.0,
-                            width: result.model.width as f64,
-                            height: result.model.height as f64,
-                        });
-                    }
-                }
-            }
+    pub async fn update_position(&mut self) -> Result<bool, NodeActionError> {
+        let script = "function() {
+    if (!this) { return null; }
+    const rect = this.getBoundingClientRect();
+    const scroll_x = window.pageXOffset || document.documentElement.scrollLeft;
+    const scroll_y = window.pageYOffset || document.documentElement.scrollTop;
+    return JSON.stringify({
+        x: rect.x,
+        y: rect.y,
+        width: rect.width,
+        height: rect.height,
+        scroll_x: rect.x + scroll_x,
+        scroll_y: rect.y + scroll_y
+    });
+}";
+        let json = self.eval(script).await?;
+        let position: Option<NodePosition> = serde_json::from_str(&json).ok();
+        if let Some(pos) = position {
+            self.position = Some(pos);
+            return Ok(true);
         }
-        self.position.as_ref()
+        Ok(false)
+    }
+
+    pub async fn get_position(&mut self) -> Result<Option<&NodePosition>, NodeActionError> {
+        if self.position.is_none() {
+            self.update_position().await?;
+        }
+        Ok(self.position.as_ref())
     }
 
     pub async fn scroll_into_view(&self) -> Result<(), NodeActionError> {
@@ -310,7 +313,7 @@ impl<T: ConnectionTransport> CdpNode<T> {
         &mut self,
         options: NodeScreenShotOptions,
     ) -> Result<String, NodeScreenshotError> {
-        self.get_position().await;
+        self.get_position().await.ok();
         let pos = self
             .position
             .as_ref()
@@ -385,7 +388,7 @@ impl<T: ConnectionTransport> CdpNode<T> {
         self.scroll_into_view()
             .await
             .map_err(NodeMouseError::from)?;
-        self.get_position().await;
+        self.get_position().await.ok();
         let pos = self.position.as_ref().ok_or(NodeMouseError::InvalidPosition)?;
         let center = crate::input::Point {
             x: pos.x + pos.width / 2.0,

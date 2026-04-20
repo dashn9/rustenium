@@ -212,7 +212,7 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
     async fn get_position(&mut self) -> Option<&NodePosition> {
         match &mut self.inner {
             ChromeNodeInner::Bidi { node, .. } => node.get_position().await.unwrap_or(None),
-            ChromeNodeInner::Cdp { node, .. } => node.get_position().await,
+            ChromeNodeInner::Cdp { node, .. } => node.get_position().await.unwrap_or(None),
         }
     }
 
@@ -257,8 +257,8 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
             ChromeNodeInner::Bidi { node, .. } => {
                 node.scroll_into_view().await.map_err(NodeActionError::from)
             }
-            ChromeNodeInner::Cdp { .. } => {
-                unimplemented!("scroll_into_view not available for CDP-sourced nodes")
+            ChromeNodeInner::Cdp { node, .. } => {
+                node.scroll_into_view().await
             }
         }
     }

@@ -4,6 +4,7 @@ use rustenium_cdp_definitions::browser_protocol::input::commands::{
 use rustenium_core::error::CdpCommandResultError;
 use rustenium_core::session::CdpSession;
 use rustenium_core::transport::ConnectionTransport;
+use rand::Rng;
 use std::collections::HashSet;
 use std::sync::{Arc, Mutex};
 use tokio::sync::Mutex as TokioMutex;
@@ -11,7 +12,7 @@ use tokio::sync::Mutex as TokioMutex;
 use crate::error::bidi::InputError as BidiInputError;
 use crate::error::cdp::InputError;
 use crate::input::Keyboard;
-use crate::input::bidi::keyboard::{KeyPressOptions, KeyboardTypeOptions};
+use crate::input::bidi::keyboard::{DelayRange, KeyPressOptions, KeyboardTypeOptions};
 use crate::input::cdp::keymap::{KeyDefinition, key_definition};
 
 /// Per-event description resolved from a `KeyDefinition` against current
@@ -102,7 +103,7 @@ impl<OT: ConnectionTransport> CdpKeyboard<OT> {
 
     /// Press a key down. Uses the keymap for non-printable keys; falls back gracefully.
     pub async fn down(&self, key: &str) -> Result<(), InputError> {
-        tracing::info!(key, "keyboard down start");
+        tracing::debug!(key, "keyboard down start");
         let def = key_definition(key).ok_or_else(|| InputError::UnknownKey(key.to_string()))?;
 
         // Description is computed against the *current* modifiers, before this
@@ -152,13 +153,13 @@ impl<OT: ConnectionTransport> CdpKeyboard<OT> {
             .send(cmd)
             .await
             .map_err(|e| InputError::CommandError(CdpCommandResultError::SessionSendError(e)))?;
-        tracing::info!(key, "keyboard down done");
+        tracing::debug!(key, "keyboard down done");
         Ok(())
     }
 
     /// Release a key.
     pub async fn up(&self, key: &str) -> Result<(), InputError> {
-        tracing::info!(key, "keyboard up start");
+        tracing::debug!(key, "keyboard up start");
         let def = key_definition(key).ok_or_else(|| InputError::UnknownKey(key.to_string()))?;
 
         let modifiers_before = *self.modifiers.lock().unwrap();
@@ -188,20 +189,44 @@ impl<OT: ConnectionTransport> CdpKeyboard<OT> {
             .send(cmd)
             .await
             .map_err(|e| InputError::CommandError(CdpCommandResultError::SessionSendError(e)))?;
-        tracing::info!(key, "keyboard up done");
+        tracing::debug!(key, "keyboard up done");
         Ok(())
     }
 
     /// Press and release a key (optionally holding for `delay_ms` between down and up).
     pub async fn press(&self, key: &str, delay_ms: u64) -> Result<(), InputError> {
-        tracing::info!(key, "keyboard press start");
+        tracing::debug!(key, "keyboard press start");
         self.down(key).await?;
         if delay_ms > 0 {
             tokio::time::sleep(tokio::time::Duration::from_millis(delay_ms)).await;
         }
         self.up(key).await?;
-        tracing::info!(key, "keyboard press done");
+        tracing::debug!(key, "keyboard press done");
         Ok(())
+    }
+
+    /// Hold a key down for `hold_for` milliseconds, firing autoRepeat keydown events
+    /// at random intervals sampled from `step_range`, then release.
+    /// The first repeat is delayed 3–5× longer than normal to mirror OS initial-repeat latency.
+    pub async fn hold_press(&self, key: &str, hold_for: u64, step_range: DelayRange) -> Result<(), InputError> {
+        self.down(key).await?;
+        let initial = {
+            let mut rng = rand::rng();
+            rng.random_range(step_range.min..=step_range.max) * rng.random_range(3u64..=5u64)
+        };
+        let mut elapsed = initial.min(hold_for);
+        tokio::time::sleep(tokio::time::Duration::from_millis(elapsed)).await;
+        while elapsed < hold_for {
+            self.down(key).await?;
+            let step = {
+                let mut rng = rand::rng();
+                rng.random_range(step_range.min..=step_range.max)
+            };
+            let sleep = step.min(hold_for - elapsed);
+            tokio::time::sleep(tokio::time::Duration::from_millis(sleep)).await;
+            elapsed += sleep;
+        }
+        self.up(key).await
     }
 
     /// Send a raw character via `Input.insertText` (bypasses key definitions).
@@ -219,7 +244,7 @@ impl<OT: ConnectionTransport> CdpKeyboard<OT> {
     /// Type `text`, using `press()` for known keys and `send_character()` for others.
     /// `delay_ms` is inserted between each character.
     pub async fn type_text(&self, text: &str, delay_ms: u64) -> Result<(), InputError> {
-        tracing::info!(text, "keyboard type_text start");
+        tracing::debug!(text, "keyboard type_text start");
         for ch in text.chars() {
             let s = ch.to_string();
             tracing::debug!(key = s, "keyboard type_text key");
@@ -232,7 +257,7 @@ impl<OT: ConnectionTransport> CdpKeyboard<OT> {
                 self.send_character(&s).await?;
             }
         }
-        tracing::info!(text, "keyboard type_text done");
+        tracing::debug!(text, "keyboard type_text done");
         Ok(())
     }
 }

@@ -33,7 +33,7 @@ impl<OT: ConnectionTransport> BidiMouse<OT> {
     }
 
     pub async fn reset(&self, context: &BrowsingContext) -> Result<(), InputError> {
-        tracing::info!("bidi mouse reset start");
+        tracing::debug!("bidi mouse reset start");
         *self.last_position.try_lock().unwrap() = Point::default();
 
         let command = ReleaseActionsBuilder::default()
@@ -42,7 +42,7 @@ impl<OT: ConnectionTransport> BidiMouse<OT> {
 
         self.session.lock().await.send(command).await
             .map_err(|e| InputError::CommandResultError(rustenium_core::error::CommandResultError::SessionSendError(e)))?;
-        tracing::info!("bidi mouse reset done");
+        tracing::debug!("bidi mouse reset done");
         Ok(())
     }
 
@@ -52,7 +52,7 @@ impl<OT: ConnectionTransport> BidiMouse<OT> {
         context: &BrowsingContext,
         options: MouseMoveOptions,
     ) -> Result<(), InputError> {
-        tracing::info!(x = point.x, y = point.y, "bidi mouse move_to start");
+        tracing::debug!(x = point.x, y = point.y, "bidi mouse move_to start");
         let last_point = *self.last_position.try_lock().unwrap();
         let to = Point { x: point.x.round(), y: point.y.round() };
 
@@ -97,7 +97,7 @@ impl<OT: ConnectionTransport> BidiMouse<OT> {
 
         self.session.lock().await.send(command).await
             .map_err(|e| InputError::CommandResultError(rustenium_core::error::CommandResultError::SessionSendError(e)))?;
-        tracing::info!(x = to.x, y = to.y, "bidi mouse move_to done");
+        tracing::debug!(x = to.x, y = to.y, "bidi mouse move_to done");
         Ok(())
     }
 
@@ -106,7 +106,7 @@ impl<OT: ConnectionTransport> BidiMouse<OT> {
         context: &BrowsingContext,
         options: MouseOptions,
     ) -> Result<(), InputError> {
-        tracing::info!(button = ?options.button, "bidi mouse down start");
+        tracing::debug!(button = ?options.button, "bidi mouse down start");
         let button = options.button.unwrap_or(MouseButton::Left) as u64;
 
         let command = PerformActionsBuilder::default()
@@ -126,7 +126,7 @@ impl<OT: ConnectionTransport> BidiMouse<OT> {
 
         self.session.lock().await.send(command).await
             .map_err(|e| InputError::CommandResultError(rustenium_core::error::CommandResultError::SessionSendError(e)))?;
-        tracing::info!("bidi mouse down done");
+        tracing::debug!("bidi mouse down done");
         Ok(())
     }
 
@@ -135,7 +135,7 @@ impl<OT: ConnectionTransport> BidiMouse<OT> {
         context: &BrowsingContext,
         options: MouseOptions,
     ) -> Result<(), InputError> {
-        tracing::info!(button = ?options.button, "bidi mouse up start");
+        tracing::debug!(button = ?options.button, "bidi mouse up start");
         let button = options.button.unwrap_or(MouseButton::Left) as u64;
 
         let command = PerformActionsBuilder::default()
@@ -154,7 +154,7 @@ impl<OT: ConnectionTransport> BidiMouse<OT> {
 
         self.session.lock().await.send(command).await
             .map_err(|e| InputError::CommandResultError(rustenium_core::error::CommandResultError::SessionSendError(e)))?;
-        tracing::info!("bidi mouse up done");
+        tracing::debug!("bidi mouse up done");
         Ok(())
     }
 
@@ -164,7 +164,7 @@ impl<OT: ConnectionTransport> BidiMouse<OT> {
         context: &BrowsingContext,
         options: MouseClickOptions,
     ) -> Result<(), InputError> {
-        tracing::info!(x = point.map(|p| p.x), y = point.map(|p| p.y), count = options.count, "bidi mouse click start");
+        tracing::debug!(x = point.map(|p| p.x), y = point.map(|p| p.y), count = options.count, "bidi mouse click start");
         let button = options.button.unwrap_or(MouseButton::Left) as u64;
         let count = options.count.unwrap_or(1);
 
@@ -220,7 +220,7 @@ impl<OT: ConnectionTransport> BidiMouse<OT> {
 
         self.session.lock().await.send(command).await
             .map_err(|e| InputError::CommandResultError(rustenium_core::error::CommandResultError::SessionSendError(e)))?;
-        tracing::info!("bidi mouse click done");
+        tracing::debug!("bidi mouse click done");
         Ok(())
     }
 
@@ -229,7 +229,7 @@ impl<OT: ConnectionTransport> BidiMouse<OT> {
         context: &BrowsingContext,
         options: MouseWheelOptions,
     ) -> Result<(), InputError> {
-        tracing::info!(delta_x = options.delta_x, delta_y = options.delta_y, "bidi mouse wheel start");
+        tracing::debug!(delta_x = options.delta_x, delta_y = options.delta_y, "bidi mouse wheel start");
         let last_point = *self.last_position.try_lock().unwrap();
 
         let command = PerformActionsBuilder::default()
@@ -251,7 +251,7 @@ impl<OT: ConnectionTransport> BidiMouse<OT> {
 
         self.session.lock().await.send(command).await
             .map_err(|e| InputError::CommandResultError(rustenium_core::error::CommandResultError::SessionSendError(e)))?;
-        tracing::info!("bidi mouse wheel done");
+        tracing::debug!("bidi mouse wheel done");
         Ok(())
     }
 }

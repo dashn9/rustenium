@@ -227,7 +227,7 @@ impl<OT: ConnectionTransport> BidiKeyboard<OT> {
     }
 
     pub async fn down(&self, key: &str, context: &BrowsingContext) -> Result<(), InputError> {
-        tracing::info!(key, "keyboard down start");
+        tracing::debug!(key, "keyboard down start");
         let key_value = get_bidi_key_value(key)?;
 
         let command = PerformActionsBuilder::default()
@@ -246,12 +246,12 @@ impl<OT: ConnectionTransport> BidiKeyboard<OT> {
 
         self.session.lock().await.send(command).await
             .map_err(|e| InputError::CommandResultError(CommandResultError::SessionSendError(e)))?;
-        tracing::info!(key, "keyboard down done");
+        tracing::debug!(key, "keyboard down done");
         Ok(())
     }
 
     pub async fn up(&self, key: &str, context: &BrowsingContext) -> Result<(), InputError> {
-        tracing::info!(key, "keyboard up start");
+        tracing::debug!(key, "keyboard up start");
         let key_value = get_bidi_key_value(key)?;
 
         let command = PerformActionsBuilder::default()
@@ -270,7 +270,7 @@ impl<OT: ConnectionTransport> BidiKeyboard<OT> {
 
         self.session.lock().await.send(command).await
             .map_err(|e| InputError::CommandResultError(CommandResultError::SessionSendError(e)))?;
-        tracing::info!(key, "keyboard up done");
+        tracing::debug!(key, "keyboard up done");
         Ok(())
     }
 
@@ -280,7 +280,7 @@ impl<OT: ConnectionTransport> BidiKeyboard<OT> {
         context: &BrowsingContext,
         options: Option<KeyPressOptions>,
     ) -> Result<(), InputError> {
-        tracing::info!(key, "keyboard press start");
+        tracing::debug!(key, "keyboard press start");
         let key_value = get_bidi_key_value(key)?;
         let delay = options.and_then(|o| o.delay);
         let hold = delay.map(|range| {
@@ -317,7 +317,7 @@ impl<OT: ConnectionTransport> BidiKeyboard<OT> {
 
         self.session.lock().await.send(command).await
             .map_err(|e| InputError::CommandResultError(CommandResultError::SessionSendError(e)))?;
-        tracing::info!(key, "keyboard press done");
+        tracing::debug!(key, "keyboard press done");
         Ok(())
     }
 
@@ -327,7 +327,7 @@ impl<OT: ConnectionTransport> BidiKeyboard<OT> {
         context: &BrowsingContext,
         options: Option<KeyboardTypeOptions>,
     ) -> Result<(), InputError> {
-        tracing::info!(text, "keyboard type_text start");
+        tracing::debug!(text, "keyboard type_text start");
         let options = options.unwrap_or_default();
         let delay = options.delay;
         let gap_multiplier = options.gap_multiplier;
@@ -388,7 +388,7 @@ impl<OT: ConnectionTransport> BidiKeyboard<OT> {
 
         self.session.lock().await.send(command).await
             .map_err(|e| InputError::CommandResultError(CommandResultError::SessionSendError(e)))?;
-        tracing::info!("keyboard type_text done");
+        tracing::debug!("keyboard type_text done");
         Ok(())
     }
 }

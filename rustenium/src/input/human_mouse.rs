@@ -29,9 +29,9 @@ impl<M: Mouse> Mouse for HumanMouse<M> {
     }
 
     async fn reset(&self, context: &BrowsingContext) -> Result<(), InputError> {
-        tracing::info!("mouse reset");
+        tracing::debug!("mouse reset");
         let result = self.mouse.reset(context).await;
-        tracing::info!("mouse reset done");
+        tracing::debug!("mouse reset done");
         result
     }
 
@@ -44,12 +44,12 @@ impl<M: Mouse> Mouse for HumanMouse<M> {
         let from = self.mouse.get_last_position();
         let to = Point { x: point.x.round(), y: point.y.round() };
 
-        tracing::info!(from_x = from.x, from_y = from.y, to_x = to.x, to_y = to.y, "mouse move_to start");
+        tracing::debug!(from_x = from.x, from_y = from.y, to_x = to.x, to_y = to.y, "mouse move_to start");
 
         let dist = ((to.x - from.x).powi(2) + (to.y - from.y).powi(2)).sqrt();
         if dist < 1.0 {
             let result = self.mouse.move_to(to, context, options).await;
-            tracing::info!("mouse move_to done");
+            tracing::debug!("mouse move_to done");
             return result;
         }
 
@@ -71,21 +71,21 @@ impl<M: Mouse> Mouse for HumanMouse<M> {
 
         self.mouse.move_to(to, context, MouseMoveOptions { steps: Some(1), origin: options.origin }).await?;
 
-        tracing::info!(x = to.x, y = to.y, "mouse move_to done");
+        tracing::debug!(x = to.x, y = to.y, "mouse move_to done");
         Ok(())
     }
 
     async fn down(&self, context: &BrowsingContext, options: MouseOptions) -> Result<(), InputError> {
-        tracing::info!(button = ?options.button, "mouse down");
+        tracing::debug!(button = ?options.button, "mouse down");
         let result = self.mouse.down(context, options).await;
-        tracing::info!("mouse down done");
+        tracing::debug!("mouse down done");
         result
     }
 
     async fn up(&self, context: &BrowsingContext, options: MouseOptions) -> Result<(), InputError> {
-        tracing::info!(button = ?options.button, "mouse up");
+        tracing::debug!(button = ?options.button, "mouse up");
         let result = self.mouse.up(context, options).await;
-        tracing::info!("mouse up done");
+        tracing::debug!("mouse up done");
         result
     }
 
@@ -96,7 +96,7 @@ impl<M: Mouse> Mouse for HumanMouse<M> {
         options: MouseClickOptions,
     ) -> Result<(), InputError> {
         let count = options.count.unwrap_or(1);
-        tracing::info!(x = point.map(|p| p.x), y = point.map(|p| p.y), count, button = ?options.button, "mouse click start");
+        tracing::debug!(x = point.map(|p| p.x), y = point.map(|p| p.y), count, button = ?options.button, "mouse click start");
 
         if let Some(p) = point {
             self.move_to(p, context, MouseMoveOptions::default()).await?;
@@ -121,14 +121,14 @@ impl<M: Mouse> Mouse for HumanMouse<M> {
             }
         }
 
-        tracing::info!("mouse click done");
+        tracing::debug!("mouse click done");
         Ok(())
     }
 
     async fn wheel(&self, context: &BrowsingContext, options: MouseWheelOptions) -> Result<(), InputError> {
-        tracing::info!(delta_x = options.delta_x, delta_y = options.delta_y, "mouse wheel start");
+        tracing::debug!(delta_x = options.delta_x, delta_y = options.delta_y, "mouse wheel start");
         let result = self.mouse.wheel(context, options).await;
-        tracing::info!("mouse wheel done");
+        tracing::debug!("mouse wheel done");
         result
     }
 }
@@ -142,7 +142,7 @@ impl<M: Mouse> HumanMouse<M> {
     ) -> Result<(), InputError> {
         if y_distance == 0 { return Ok(()); }
 
-        tracing::info!(y_distance, "mouse scroll start");
+        tracing::debug!(y_distance, "mouse scroll start");
 
         let total = y_distance.unsigned_abs() as f64;
         let sign = y_distance.signum() as i64;
@@ -181,7 +181,7 @@ impl<M: Mouse> HumanMouse<M> {
             self.mouse.wheel(context, MouseWheelOptions { delta_x: Some(0), delta_y: Some(correction) }).await?;
         }
 
-        tracing::info!(y_distance, "mouse scroll done");
+        tracing::debug!(y_distance, "mouse scroll done");
         Ok(())
     }
 }
