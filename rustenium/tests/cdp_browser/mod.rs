@@ -1,5 +1,5 @@
 use rustenium::browsers::{ChromeBrowser, BidiBrowser, cdp_browser::{CdpBrowser, FetchNodeOptions}};
-use rustenium::nodes::AXNode;
+use rustenium::nodes::{AXNode, Node};
 use rustenium_cdp_definitions::browser_protocol::dom::types::NodeId;
 
 pub async fn test_navigate_to_url(mut browser: ChromeBrowser) {
@@ -11,9 +11,10 @@ pub async fn test_navigate_to_url(mut browser: ChromeBrowser) {
 pub async fn test_navigate_returns_frame_or_loader(mut browser: ChromeBrowser) {
     let result = <ChromeBrowser as CdpBrowser>::navigate(&mut browser, "https://example.com").await.unwrap();
     assert!(
-        result.frame_id.is_some() || result.loader_id.is_some(),
+        !result.frame_id.inner().is_empty() || result.loader_id.is_some(),
         "navigate result should contain frame or loader id"
     );
+    assert!(result.error_text.is_none(), "navigation should not error, got: {:?}", result.error_text);
     browser.close().await.unwrap();
 }
 
@@ -71,13 +72,9 @@ pub async fn test_fetch_node_by_node_id(mut browser: ChromeBrowser) {
     <ChromeBrowser as CdpBrowser>::navigate(&mut browser, "https://example.com").await.unwrap();
     let node = <ChromeBrowser as CdpBrowser>::fetch_node(
         &mut browser,
-        FetchNodeOptions {
-            node_id: Some(NodeId::new(1)),
-            depth: Some(1),
-            ..Default::default()
-        },
+        FetchNodeOptions::new().node_id(NodeId::new(1)).depth(1),
     ).await.unwrap();
-    assert!(node.node_type > 0, "fetched node should have a valid node type");
+    assert!(node.get_node_type().is_some(), "fetched node should have a valid node type");
     browser.close().await.unwrap();
 }
 
@@ -85,14 +82,14 @@ pub async fn test_fetch_node_with_depth_returns_children(mut browser: ChromeBrow
     <ChromeBrowser as CdpBrowser>::navigate(&mut browser, "https://example.com").await.unwrap();
     let shallow = <ChromeBrowser as CdpBrowser>::fetch_node(
         &mut browser,
-        FetchNodeOptions { node_id: Some(NodeId::new(1)), depth: Some(1), ..Default::default() },
+        FetchNodeOptions::new().node_id(NodeId::new(1)).depth(1),
     ).await.unwrap();
     let deep = <ChromeBrowser as CdpBrowser>::fetch_node(
         &mut browser,
-        FetchNodeOptions { node_id: Some(NodeId::new(1)), depth: Some(5), ..Default::default() },
+        FetchNodeOptions::new().node_id(NodeId::new(1)).depth(5),
     ).await.unwrap();
     assert!(
-        deep.children.len() >= shallow.children.len(),
+        deep.get_children_nodes().len() >= shallow.get_children_nodes().len(),
         "deeper fetch should return at least as many children"
     );
     browser.close().await.unwrap();

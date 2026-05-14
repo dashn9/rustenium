@@ -106,6 +106,25 @@ pub struct Trajectory {
     pub step_delays_ms: Vec<u64>,
 }
 
+impl Trajectory {
+    pub fn len(&self) -> usize {
+        self.points.len()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.points.is_empty()
+    }
+}
+
+impl<'a> IntoIterator for &'a Trajectory {
+    type Item = &'a Point;
+    type IntoIter = std::slice::Iter<'a, Point>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.points.iter()
+    }
+}
+
 pub fn generate_trajectory(from: Point, to: Point, params: &CurveParams) -> Trajectory {
     let mut rng = rand::rng();
 

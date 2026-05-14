@@ -120,7 +120,7 @@ pub async fn test_get_text_content(mut browser: impl BidiBrowser) {
 pub async fn test_get_inner_html(mut browser: impl BidiBrowser) {
     browser.navigate_with_options("https://example.com", nav_opts()).await.unwrap();
     let nodes = browser.find_nodes(css!("body")).await.unwrap();
-    let html = nodes[0].get_inner_html().await;
+    let html = nodes[0].get_html().await;
     assert!(html.contains("<h1>"), "body innerHTML should contain <h1>");
     browser.close().await.unwrap();
 }
@@ -292,7 +292,7 @@ pub async fn test_screenshot_returns_base64(mut browser: impl BidiBrowser) {
 
 pub async fn test_node_screenshot_returns_base64(mut browser: impl BidiBrowser) {
     browser.navigate_with_options("https://example.com", nav_opts()).await.unwrap();
-    let nodes = browser.find_nodes(css!("h1")).await.unwrap();
+    let mut nodes = browser.find_nodes(css!("h1")).await.unwrap();
     let data = nodes[0].screenshot().await.unwrap();
     assert!(!data.is_empty(), "Node screenshot data should not be empty");
     browser.close().await.unwrap();
