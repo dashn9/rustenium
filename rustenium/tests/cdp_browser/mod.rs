@@ -1,4 +1,4 @@
-use rustenium::browsers::{ChromeBrowser, BidiBrowser, cdp_browser::{CdpBrowser, FetchNodeOptions}};
+use rustenium::browsers::{ChromeBrowser, BidiBrowser, cdp_browser::{AddPreloadScriptOptions, CdpBrowser, FetchNodeOptions}};
 use rustenium::nodes::{AXNode, Node};
 use rustenium_cdp_definitions::browser_protocol::dom::types::NodeId;
 
@@ -104,5 +104,53 @@ pub async fn test_emulate_device_metrics(mut browser: ChromeBrowser) {
 pub async fn test_create_tab(mut browser: ChromeBrowser) {
     let result = <ChromeBrowser as CdpBrowser>::create_tab(&mut browser, "https://example.com").await;
     assert!(result.is_ok(), "create_tab should succeed");
+    browser.close().await.unwrap();
+}
+
+pub async fn test_preload_script_add_runs_and_remove(mut browser: ChromeBrowser) {
+    let script_id = <ChromeBrowser as CdpBrowser>::add_preload_script_with_options(
+        &mut browser,
+        "globalThis.__rustenium_preload__ = 'ran';",
+        AddPreloadScriptOptions::default().run_immediately(true),
+    )
+    .await
+    .expect("add_preload_script_with_options should succeed");
+    assert!(!script_id.inner().is_empty(), "identifier should not be empty");
+
+    <ChromeBrowser as CdpBrowser>::navigate(&mut browser, "https://example.com")
+        .await
+        .unwrap();
+    let ran = <ChromeBrowser as CdpBrowser>::evaluate_script(
+        &mut browser,
+        "globalThis.__rustenium_preload__",
+        false,
+    )
+    .await
+    .unwrap();
+    assert_eq!(
+        ran.result.value,
+        Some(serde_json::json!("ran")),
+        "preload script should set the global on navigation"
+    );
+
+    <ChromeBrowser as CdpBrowser>::remove_preload_script(&mut browser, script_id)
+        .await
+        .expect("remove_preload_script should succeed");
+    <ChromeBrowser as CdpBrowser>::navigate(&mut browser, "https://example.org")
+        .await
+        .unwrap();
+    let after = <ChromeBrowser as CdpBrowser>::evaluate_script(
+        &mut browser,
+        "typeof globalThis.__rustenium_preload__",
+        false,
+    )
+    .await
+    .unwrap();
+    assert_eq!(
+        after.result.value,
+        Some(serde_json::json!("undefined")),
+        "removed preload should not run on subsequent navigation"
+    );
+
     browser.close().await.unwrap();
 }

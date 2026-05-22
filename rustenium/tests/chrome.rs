@@ -74,3 +74,4 @@ async fn launch_cdp() -> ChromeBrowser {
 #[tokio::test] async fn cdp_fetch_node_with_depth_returns_children() { cdp_browser::test_fetch_node_with_depth_returns_children(launch_cdp().await).await; }
 #[tokio::test] async fn cdp_emulate_device_metrics() { cdp_browser::test_emulate_device_metrics(launch_cdp().await).await; }
 #[tokio::test] async fn cdp_create_tab() { cdp_browser::test_create_tab(launch_cdp().await).await; }
+#[tokio::test] async fn cdp_preload_script_add_runs_and_remove() { cdp_browser::test_preload_script_add_runs_and_remove(launch_cdp().await).await; }

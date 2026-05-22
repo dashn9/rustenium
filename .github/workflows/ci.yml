@@ -1,0 +1,75 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: -D warnings
+  # `runner` depends on an out-of-tree `rustenium-identity` crate and is a
+  # local-only harness. Skip it everywhere on CI.
+  WORKSPACE_FLAGS: --workspace --exclude runner
+
+jobs:
+  lint:
+    name: fmt + clippy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+      - name: rustfmt
+        run: cargo fmt --all -- --check
+      - name: clippy
+        run: cargo clippy ${{ env.WORKSPACE_FLAGS }} --all-targets -- -D warnings
+
+  unit:
+    name: unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: build
+        run: cargo build ${{ env.WORKSPACE_FLAGS }} --all-targets
+      # Run library + doc tests but skip the chrome/firefox integration suites,
+      # which spawn real browsers and run in dedicated jobs below.
+      - name: cargo test (no browser)
+        run: |
+          cargo test ${{ env.WORKSPACE_FLAGS }} --lib --bins --doc
+          cargo test -p rustenium --tests \
+            -- --skip chrome --skip firefox
+
+  chrome-integration:
+    name: chrome integration
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+      - name: chrome tests
+        env:
+          # Tests pass --headless=new; this just makes the binary discoverable.
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+        run: cargo test -p rustenium --test chrome -- --test-threads=1
+
+  firefox-integration:
+    name: firefox integration
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - uses: browser-actions/setup-firefox@v1
+        with:
+          firefox-version: latest
+      - name: firefox tests
+        run: cargo test -p rustenium --test firefox -- --test-threads=1
