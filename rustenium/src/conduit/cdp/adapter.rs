@@ -15,7 +15,9 @@ use rustenium_cdp_definitions::browser_protocol::dom::results::{
 };
 use rustenium_cdp_definitions::browser_protocol::dom::types::Node as DomNode;
 use rustenium_cdp_definitions::browser_protocol::emulation::commands::SetDeviceMetricsOverride;
-use rustenium_cdp_definitions::browser_protocol::page::command_builders::GetLayoutMetricsBuilder;
+use rustenium_cdp_definitions::browser_protocol::page::command_builders::{
+    EnableBuilder as PageEnableBuilder, GetLayoutMetricsBuilder,
+};
 use rustenium_cdp_definitions::browser_protocol::page::commands::{AddScriptToEvaluateOnNewDocument, CaptureScreenshot, RemoveScriptToEvaluateOnNewDocument};
 use rustenium_cdp_definitions::browser_protocol::page::commands::Navigate;
 use rustenium_cdp_definitions::browser_protocol::page::results::{AddScriptToEvaluateOnNewDocumentResult, CaptureScreenshotResult, GetLayoutMetricsResult};
@@ -117,6 +119,14 @@ impl<T: ConnectionTransport + Send + Sync> CdpAdapter<T> {
             .unwrap();
         self.send_command(command).await?;
 
+        Ok(())
+    }
+
+    /// Enables the Page domain on the attached target. Required for
+    /// `Page.addScriptToEvaluateOnNewDocument` to actually inject scripts.
+    pub async fn enable_page_domain(&mut self) -> Result<(), CdpSessionSendError> {
+        let command = PageEnableBuilder::default().build();
+        self.send_command(command).await?;
         Ok(())
     }
 
