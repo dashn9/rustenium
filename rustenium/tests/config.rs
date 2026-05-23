@@ -33,7 +33,13 @@ async fn config_with_custom_values() {
     assert_eq!(config.port, Some(4444));
     assert!(config.sandbox);
     assert_eq!(config.remote_debugging_port, Some(0));
-    assert_eq!(config.chrome_executable_path.as_deref(), Some("/usr/bin/google-chrome"));
+    assert_eq!(
+        config.chrome_executable_path.as_deref(),
+        Some("/usr/bin/google-chrome")
+    );
     assert_eq!(config.user_data_dir.as_deref(), Some("/tmp/chrome-profile"));
-    assert_eq!(config.browser_flags.as_ref().unwrap(), &["--headless".to_string()]);
+    assert_eq!(
+        config.browser_flags.as_ref().unwrap(),
+        &["--headless".to_string()]
+    );
 }

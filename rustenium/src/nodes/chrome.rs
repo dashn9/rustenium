@@ -18,6 +18,10 @@ use crate::nodes::bidi::node::BidiNode;
 use crate::nodes::cdp::CdpNode;
 use crate::nodes::node::{Node, NodeScreenShotOptions, NodeType};
 
+// Bidi and Cdp variants are intentionally near-equal in size — both hold a node
+// plus the same Arc<M>/Arc<K> handles — so boxing one wouldn't measurably
+// shrink the enum and would add a heap indirection on every node access.
+#[allow(clippy::large_enum_variant)]
 enum ChromeNodeInner<T: ConnectionTransport, M: Mouse + Send + Sync, K: Keyboard + Send + Sync> {
     Bidi {
         node: BidiNode<T>,
@@ -27,6 +31,7 @@ enum ChromeNodeInner<T: ConnectionTransport, M: Mouse + Send + Sync, K: Keyboard
     Cdp {
         node: CdpNode<T>,
         mouse: Arc<M>,
+        #[allow(dead_code)]
         keyboard: Arc<K>,
     },
 }
@@ -243,7 +248,7 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
         }
     }
 
-    fn set_position(&mut self, position: NodePosition) -> () {
+    fn set_position(&mut self, position: NodePosition) {
         match &mut self.inner {
             ChromeNodeInner::Bidi { node, .. } => node.position = Some(position),
             ChromeNodeInner::Cdp { .. } => {
@@ -257,9 +262,7 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
             ChromeNodeInner::Bidi { node, .. } => {
                 node.scroll_into_view().await.map_err(NodeActionError::from)
             }
-            ChromeNodeInner::Cdp { node, .. } => {
-                node.scroll_into_view().await
-            }
+            ChromeNodeInner::Cdp { node, .. } => node.scroll_into_view().await,
         }
     }
 
@@ -517,13 +520,13 @@ impl AXNode {
     }
 
     fn is_empty_container(&self) -> bool {
-        let blank = |s: Option<&str>| s.map_or(true, |v| v.trim().is_empty());
+        let blank = |s: Option<&str>| s.is_none_or(|v| v.trim().is_empty());
         blank(self.name_str())
             && blank(self.value_str())
             && blank(self.description_str())
             && self
                 .role_str()
-                .map_or(true, |r| matches!(r, "none" | "generic" | "group"))
+                .is_none_or(|r| matches!(r, "none" | "generic" | "group"))
     }
 
     /// Build a proper tree from the flat list returned by CDP `getFullAXTree`.
@@ -569,7 +572,7 @@ impl AXNode {
             let child_ids = child_map.get(id).cloned().unwrap_or_default();
 
             // Peek at whether this node is empty before recursing so children know.
-            let this_is_empty = squash && by_id.get(id).map_or(false, |n| n.is_empty_container());
+            let this_is_empty = squash && by_id.get(id).is_some_and(|n| n.is_empty_container());
 
             let children: Vec<AXNode> = child_ids
                 .iter()

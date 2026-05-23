@@ -1,8 +1,8 @@
+use crate::domain::context::BrowsingContext as Context;
 use rustenium_bidi_definitions::emulation::commands::SetTimezoneOverride;
 use rustenium_bidi_definitions::script::commands::{
     AddPreloadScript, CallFunction, Evaluate, RemovePreloadScript,
 };
-use crate::domain::context::BrowsingContext as Context;
 use rustenium_core::{
     BidiSession, NetworkRequest,
     process::Process,
@@ -11,12 +11,12 @@ use rustenium_core::{
 
 use crate::error::bidi::{
     ContextCloseError, ContextCreationError, ContextIndexError, EmulationError,
-    EvaluateResultError, FindNodesError, InterceptNetworkError, NavigateError, ScreenshotError
+    EvaluateResultError, FindNodesError, InterceptNetworkError, NavigateError, ScreenshotError,
 };
 use rustenium_bidi_definitions::Command;
 use rustenium_bidi_definitions::Event;
 use rustenium_bidi_definitions::browsing_context::commands::{
-    CaptureScreenshot, Create, LocateNodes, Navigate
+    CaptureScreenshot, Create, LocateNodes, Navigate,
 };
 use rustenium_bidi_definitions::browsing_context::results::{
     CaptureScreenshotResult, CreateResult, LocateNodesResult, NavigateResult,
@@ -27,8 +27,7 @@ use rustenium_bidi_definitions::network::results::AddInterceptResult;
 use rustenium_bidi_definitions::network::types::{InterceptPhase, UrlPattern};
 use rustenium_bidi_definitions::script::results::AddPreloadScriptResult;
 use rustenium_bidi_definitions::script::types::{
-    EvaluateResultException, EvaluateResultSuccess,
-    PreloadScript,
+    EvaluateResultException, EvaluateResultSuccess, PreloadScript,
 };
 use rustenium_bidi_definitions::session::results::SubscribeResult;
 use rustenium_bidi_definitions::session::types::CapabilitiesRequest;
@@ -36,9 +35,7 @@ use rustenium_bidi_definitions::{
     base::CommandResponse,
     browsing_context::{
         events::ContextCreated,
-        types::{
-            BrowsingContext as BidiBrowsingContext, CreateType,
-        },
+        types::{BrowsingContext as BidiBrowsingContext, CreateType},
     },
 };
 use rustenium_core::error::{CommandResultError, SessionSendError};
@@ -51,7 +48,7 @@ use std::time::Duration;
 use tokio::sync::Mutex as TokioMutex;
 use tokio::time::sleep;
 
-use crate::input::{BidiMouse, BidiKeyboard, HumanMouse, HumanTouchscreen, Touchscreen};
+use crate::input::{BidiKeyboard, BidiMouse, HumanMouse, HumanTouchscreen, Touchscreen};
 
 pub struct OnRequestBuilder<'a, T: ConnectionTransport + Send + Sync, F> {
     driver: &'a mut BidiDriver<T>,
@@ -271,7 +268,10 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
             let bc = browsing_contexts.clone();
             async move {
                 if let Ok(context) = TryInto::<ContextCreated>::try_into(event) {
-                    tracing::debug!("[BiDiDriver]: BrowsingContext Created: ID: {}", context.params.context.as_ref());
+                    tracing::debug!(
+                        "[BiDiDriver]: BrowsingContext Created: ID: {}",
+                        context.params.context.as_ref()
+                    );
                     bc.lock()
                         .unwrap()
                         .push(Context::from_id(context.params.context, CreateType::Tab));
@@ -508,7 +508,7 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
             .await
             .subscribe_events(bidi_event)
             .await
-            .map_err(|e| InterceptNetworkError::CommandResultError(e))?;
+            .map_err(InterceptNetworkError::CommandResultError)?;
 
         Ok(())
     }
@@ -534,17 +534,15 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
             .send_command(capture_screenshot)
             .await
             .map_err(|err| {
-                ScreenshotError::CommandResultError(
-                    CommandResultError::SessionSendError(err),
-                )
+                ScreenshotError::CommandResultError(CommandResultError::SessionSendError(err))
             })?
             .result;
 
         let screenshot_result =
             CaptureScreenshotResult::try_from(result_value.clone()).map_err(|_| {
-                ScreenshotError::CommandResultError(
-                    CommandResultError::InvalidResultTypeError(result_value),
-                )
+                ScreenshotError::CommandResultError(CommandResultError::InvalidResultTypeError(
+                    result_value,
+                ))
             })?;
 
         let base64_data = screenshot_result.data;
@@ -562,14 +560,13 @@ impl<T: ConnectionTransport + Send + Sync + 'static> BidiDriver<T> {
                 let filename = format!("screenshot_{}.png", timestamp);
                 path_obj.join(filename)
             } else {
-                if let Some(parent) = path_obj.parent() {
-                    if !parent.as_os_str().is_empty() && !parent.exists() {
+                if let Some(parent) = path_obj.parent()
+                    && !parent.as_os_str().is_empty() && !parent.exists() {
                         return Err(ScreenshotError::InvalidPath(format!(
                             "Parent directory does not exist: {}",
                             parent.display()
                         )));
                     }
-                }
                 path_obj.to_path_buf()
             };
 
@@ -615,10 +612,8 @@ pub async fn start_bidi_driver(
     Process,
 ) {
     let driver_process = Process::create(driver_config.exe_path(), driver_config.flags());
-    let session = BidiSession::<WebsocketConnectionTransport>::new(
-        connection_transport_config,
-        capabilities,
-    )
-    .await;
+    let session =
+        BidiSession::<WebsocketConnectionTransport>::new(connection_transport_config, capabilities)
+            .await;
     (Arc::new(TokioMutex::new(session)), driver_process)
 }

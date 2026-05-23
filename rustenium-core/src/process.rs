@@ -28,8 +28,13 @@ impl Process {
                     line.clear();
                     match reader.read_line(&mut line).await {
                         Ok(0) => break,
-                        Ok(_) => { tracing::debug!("[{} stdout] {}", exe_name, line.trim()); }
-                        Err(e) => { tracing::error!("[{} stdout] Error reading: {}", exe_name, e); break; }
+                        Ok(_) => {
+                            tracing::debug!("[{} stdout] {}", exe_name, line.trim());
+                        }
+                        Err(e) => {
+                            tracing::error!("[{} stdout] Error reading: {}", exe_name, e);
+                            break;
+                        }
                     }
                 }
             });
@@ -44,8 +49,13 @@ impl Process {
                     line.clear();
                     match reader.read_line(&mut line).await {
                         Ok(0) => break,
-                        Ok(_) => { tracing::debug!("[{} stderr] {}", exe_name, line.trim()); }
-                        Err(e) => { tracing::error!("[{} stderr] Error reading: {}", exe_name, e); break; }
+                        Ok(_) => {
+                            tracing::debug!("[{} stderr] {}", exe_name, line.trim());
+                        }
+                        Err(e) => {
+                            tracing::error!("[{} stderr] Error reading: {}", exe_name, e);
+                            break;
+                        }
                     }
                 }
             });
@@ -67,7 +77,11 @@ impl Process {
         Self::from_command(exe, cmd)
     }
 
-    pub fn create_with_env<S, I>(exe_path: S, args: I, env: impl IntoIterator<Item = (String, String)>) -> Process
+    pub fn create_with_env<S, I>(
+        exe_path: S,
+        args: I,
+        env: impl IntoIterator<Item = (String, String)>,
+    ) -> Process
     where
         S: AsRef<str>,
         I: IntoIterator<Item = String>,
@@ -91,13 +105,11 @@ impl Process {
         let mut stderr_lines = BufReader::new(stderr).lines();
 
         let check_line = |_label: &str, line: Result<Option<String>, _>| -> Option<String> {
-            if let Ok(Some(line)) = line {
-                if let Some(captures) = regex.captures(&line) {
-                    if let Some(url) = captures.get(1) {
+            if let Ok(Some(line)) = line
+                && let Some(captures) = regex.captures(&line)
+                    && let Some(url) = captures.get(1) {
                         return Some(url.as_str().into());
                     }
-                }
-            }
             None
         };
 
@@ -206,18 +218,22 @@ pub fn kill_process_on_port(port: u16) {
     #[cfg(windows)]
     {
         // netstat -ano lists TCP connections with their PIDs
-        let Ok(out) = std::process::Command::new("netstat").args(["-ano"]).output() else { return };
+        let Ok(out) = std::process::Command::new("netstat")
+            .args(["-ano"])
+            .output()
+        else {
+            return;
+        };
         let stdout = String::from_utf8_lossy(&out.stdout);
         let needle = format!(":{}", port);
         for line in stdout.lines() {
-            if line.contains(&needle) && line.contains("LISTENING") {
-                if let Some(pid_str) = line.split_whitespace().last() {
+            if line.contains(&needle) && line.contains("LISTENING")
+                && let Some(pid_str) = line.split_whitespace().last() {
                     tracing::debug!("[Process]: Found PID {} on port {}, killing", pid_str, port);
                     let _ = std::process::Command::new("taskkill")
                         .args(["/F", "/T", "/PID", pid_str])
                         .output();
                 }
-            }
         }
     }
 

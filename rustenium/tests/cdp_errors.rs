@@ -68,7 +68,7 @@ fn screenshot_error_variants_display_message() {
 fn create_tab_error_wraps_create_target_error() {
     use rustenium_core::error::CdpCommandResultError;
     let inner = CreateTargetError::CommandResultError(
-        CdpCommandResultError::InvalidResultTypeError(serde_json::Value::Null)
+        CdpCommandResultError::InvalidResultTypeError(serde_json::Value::Null),
     );
     let err = CreateTabError::CreateTargetError(inner);
     assert!(matches!(err, CreateTabError::CreateTargetError(_)));

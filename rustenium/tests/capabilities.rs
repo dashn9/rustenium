@@ -3,7 +3,10 @@ use rustenium::browsers::{ChromeCapabilities, ChromeOptions, PerfLoggingPrefs};
 #[tokio::test]
 async fn default_capabilities() {
     let caps = ChromeCapabilities::default();
-    assert_eq!(caps.base_capabilities.browser_name.as_deref(), Some("chrome"));
+    assert_eq!(
+        caps.base_capabilities.browser_name.as_deref(),
+        Some("chrome")
+    );
     assert!(caps.base_capabilities.accept_insecure_certs.is_none());
     assert!(caps.base_capabilities.proxy.is_none());
     assert!(caps.chrome_options.args.is_none());
@@ -24,11 +27,23 @@ async fn builder_methods() {
         .minidump_path("/tmp/dumps");
 
     assert_eq!(caps.base_capabilities.accept_insecure_certs, Some(true));
-    assert_eq!(caps.base_capabilities.browser_version.as_deref(), Some("120"));
-    assert_eq!(caps.base_capabilities.platform_name.as_deref(), Some("linux"));
-    assert_eq!(caps.chrome_options.binary.as_deref(), Some("/usr/bin/chrome"));
+    assert_eq!(
+        caps.base_capabilities.browser_version.as_deref(),
+        Some("120")
+    );
+    assert_eq!(
+        caps.base_capabilities.platform_name.as_deref(),
+        Some("linux")
+    );
+    assert_eq!(
+        caps.chrome_options.binary.as_deref(),
+        Some("/usr/bin/chrome")
+    );
     assert_eq!(caps.chrome_options.detach, Some(true));
-    assert_eq!(caps.chrome_options.debugger_address.as_deref(), Some("localhost:9222"));
+    assert_eq!(
+        caps.chrome_options.debugger_address.as_deref(),
+        Some("localhost:9222")
+    );
     assert_eq!(caps.chrome_options.enable_extension_targets, Some(true));
     assert_eq!(caps.chrome_options.use_automation_extension, Some(false));
 }
@@ -72,14 +87,20 @@ async fn add_extension_accumulates() {
 async fn add_exclude_switch_accumulates() {
     let mut caps = ChromeCapabilities::default();
     caps.add_exclude_switch("enable-automation");
-    assert_eq!(caps.chrome_options.exclude_switches.as_ref().unwrap(), &["enable-automation"]);
+    assert_eq!(
+        caps.chrome_options.exclude_switches.as_ref().unwrap(),
+        &["enable-automation"]
+    );
 }
 
 #[tokio::test]
 async fn add_pref_accumulates() {
     let mut caps = ChromeCapabilities::default();
     caps.add_pref("download.default_directory", serde_json::json!("/tmp"))
-        .add_pref("profile.managed_default_content_settings.images", serde_json::json!(2));
+        .add_pref(
+            "profile.managed_default_content_settings.images",
+            serde_json::json!(2),
+        );
     assert_eq!(caps.chrome_options.prefs.as_ref().unwrap().len(), 2);
 }
 
@@ -87,7 +108,10 @@ async fn add_pref_accumulates() {
 async fn add_window_type_accumulates() {
     let mut caps = ChromeCapabilities::default();
     caps.add_window_type("webview");
-    assert_eq!(caps.chrome_options.window_types.as_ref().unwrap(), &["webview"]);
+    assert_eq!(
+        caps.chrome_options.window_types.as_ref().unwrap(),
+        &["webview"]
+    );
 }
 
 #[tokio::test]
@@ -110,7 +134,11 @@ async fn chrome_options_skip_serializing_none_fields() {
     let opts = ChromeOptions::default();
     let json = serde_json::to_value(&opts).unwrap();
     let obj = json.as_object().unwrap();
-    assert!(obj.is_empty(), "Default ChromeOptions should serialize to empty object, got: {:?}", obj);
+    assert!(
+        obj.is_empty(),
+        "Default ChromeOptions should serialize to empty object, got: {:?}",
+        obj
+    );
 }
 
 #[tokio::test]
@@ -131,7 +159,8 @@ async fn chrome_options_serializes_set_fields() {
 #[tokio::test]
 async fn perf_logging_prefs_builder() {
     let mut prefs = PerfLoggingPrefs::new();
-    prefs.enable_network(true)
+    prefs
+        .enable_network(true)
         .enable_page(false)
         .trace_categories("devtools.timeline")
         .buffer_usage_reporting_interval(500);

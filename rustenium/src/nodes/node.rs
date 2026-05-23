@@ -1,20 +1,20 @@
+use crate::error::node::{NodeActionError, NodeInputError, NodeMouseError, NodeScreenshotError};
+use crate::input::{MouseClickOptions, MouseMoveOptions};
+use rustenium_bidi_definitions::browsing_context::commands::CaptureScreenshotOrigin;
+use rustenium_bidi_definitions::browsing_context::types::ImageFormat;
+use rustenium_bidi_definitions::browsing_context::types::{BrowsingContext, Locator};
+use rustenium_bidi_definitions::script::types::{Handle, SharedId};
+use rustenium_cdp_definitions::browser_protocol::page::commands::CaptureScreenshotFormat;
+use serde::Deserialize;
 use std::collections::HashMap;
 use std::fmt::Debug;
 use std::future::Future;
-use serde::Deserialize;
-use rustenium_bidi_definitions::browsing_context::types::{BrowsingContext, Locator};
-use rustenium_bidi_definitions::browsing_context::commands::CaptureScreenshotOrigin;
-use rustenium_bidi_definitions::browsing_context::types::ImageFormat;
-use rustenium_cdp_definitions::browser_protocol::page::commands::CaptureScreenshotFormat;
-use rustenium_bidi_definitions::script::types::{Handle, SharedId};
-use crate::error::node::{NodeActionError, NodeInputError, NodeMouseError, NodeScreenshotError};
-use crate::input::{MouseClickOptions, MouseMoveOptions};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(u16)]
 pub enum NodeType {
     Element = 1,
-    Attribute = 2,   
+    Attribute = 2,
     Text = 3,
     CDataSection = 4,
     ProcessingInstruction = 7,
@@ -113,15 +113,24 @@ pub trait Node {
 
     fn mouse_move(&mut self) -> impl Future<Output = Result<(), NodeMouseError>>;
 
-    fn mouse_move_with_options(&mut self, options: MouseMoveOptions) -> impl Future<Output = Result<(), NodeMouseError>>;
+    fn mouse_move_with_options(
+        &mut self,
+        options: MouseMoveOptions,
+    ) -> impl Future<Output = Result<(), NodeMouseError>>;
 
     fn mouse_click(&mut self) -> impl Future<Output = Result<(), NodeMouseError>>;
 
-    fn mouse_click_with_options(&mut self, options: MouseClickOptions) -> impl Future<Output = Result<(), NodeMouseError>>;
+    fn mouse_click_with_options(
+        &mut self,
+        options: MouseClickOptions,
+    ) -> impl Future<Output = Result<(), NodeMouseError>>;
 
     fn screenshot(&mut self) -> impl Future<Output = Result<String, NodeScreenshotError>>;
 
-    fn screenshot_with_options(&mut self, options: NodeScreenShotOptions) -> impl Future<Output = Result<String, NodeScreenshotError>>;
+    fn screenshot_with_options(
+        &mut self,
+        options: NodeScreenShotOptions,
+    ) -> impl Future<Output = Result<String, NodeScreenshotError>>;
 
     /// Focuses the element and types the given text into it.
     fn type_text(&mut self, text: String) -> impl Future<Output = Result<(), NodeInputError>>;

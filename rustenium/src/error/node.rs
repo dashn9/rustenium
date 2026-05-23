@@ -1,6 +1,6 @@
-use thiserror::Error;
 use rustenium_bidi_definitions::script::types::EvaluateResultException;
 use rustenium_core::error::{CdpCommandResultError, CommandResultError};
+use thiserror::Error;
 
 use crate::error::bidi::{
     ContextIndexError, EvaluateResultError, InputError as BidiInputError,

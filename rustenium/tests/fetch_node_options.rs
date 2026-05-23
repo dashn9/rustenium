@@ -52,7 +52,10 @@ fn builder_chains_all_fields() {
 
 #[test]
 fn build_returns_same_type() {
-    let opts = FetchNodeOptions::new().node_id(NodeId::new(7)).depth(3).build();
+    let opts = FetchNodeOptions::new()
+        .node_id(NodeId::new(7))
+        .depth(3)
+        .build();
     let dbg = format!("{:?}", opts);
     assert!(dbg.contains("7"));
     assert!(dbg.contains("3"));

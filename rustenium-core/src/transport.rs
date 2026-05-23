@@ -1,18 +1,20 @@
-use std::{error::Error, future::Future};
-use std::fmt::{Display};
-use std::sync::Arc;
-use fastwebsockets::{handshake, Frame, OpCode, WebSocket, WebSocketError, WebSocketRead, WebSocketWrite};
+use fastwebsockets::{
+    Frame, OpCode, WebSocket, WebSocketError, WebSocketRead, WebSocketWrite, handshake,
+};
 use hyper::{
+    Request,
     body::Bytes,
     header::{CONNECTION, UPGRADE},
     upgrade::Upgraded,
-    Request,
 };
 use hyper_util::rt::TokioIo;
+use std::fmt::Display;
+use std::sync::Arc;
+use std::{error::Error, future::Future};
 use tokio::io::{ReadHalf, WriteHalf};
 use tokio::net::TcpStream;
-use tokio::sync::mpsc::UnboundedSender;
 use tokio::sync::Mutex;
+use tokio::sync::mpsc::UnboundedSender;
 
 #[derive(Debug, Clone)]
 pub enum ConnectionTransportProtocol {
@@ -102,9 +104,9 @@ impl ConnectionTransportConfig {
 }
 
 pub trait ConnectionTransport {
-    fn send(&mut self, message: String) -> impl Future<Output=()> + Send;
+    fn send(&mut self, message: String) -> impl Future<Output = ()> + Send;
     fn listen(&self, listener: UnboundedSender<String>) -> ();
-    fn close(&self) -> impl Future<Output=()> + Send;
+    fn close(&self) -> impl Future<Output = ()> + Send;
     fn on_close(&self) -> ();
 }
 
@@ -114,19 +116,26 @@ pub struct WebsocketConnectionTransport {
 }
 
 impl ConnectionTransport for WebsocketConnectionTransport {
-    fn send(&mut self, message: String) -> impl Future<Output=()> + Send
-    {
-        async move {
-            let frame = Frame::text(fastwebsockets::Payload::from(message.as_bytes()));
-            self.client_tx.lock().await.write_frame(frame).await.unwrap();
-        }
+    async fn send(&mut self, message: String) {
+        let frame = Frame::text(fastwebsockets::Payload::from(message.as_bytes()));
+        self.client_tx
+            .lock()
+            .await
+            .write_frame(frame)
+            .await
+            .unwrap();
     }
 
-    fn listen(&self, listener: UnboundedSender<String>) -> () {
-        WebsocketConnectionTransport::listener_loop(self.client_rx.clone(), self.client_tx.clone(), listener).unwrap();
+    fn listen(&self, listener: UnboundedSender<String>) {
+        WebsocketConnectionTransport::listener_loop(
+            self.client_rx.clone(),
+            self.client_tx.clone(),
+            listener,
+        )
+        .unwrap();
     }
 
-    fn close(&self) -> impl Future<Output=()> + Send {
+    fn close(&self) -> impl Future<Output = ()> + Send {
         let client_tx = self.client_tx.clone();
         async move {
             let mut tx = client_tx.lock().await;
@@ -140,19 +149,27 @@ impl ConnectionTransport for WebsocketConnectionTransport {
 }
 
 impl WebsocketConnectionTransport {
-    pub async fn new(connection_config: &ConnectionTransportConfig) -> Result<Self, Box<dyn Error>> {
+    pub async fn new(
+        connection_config: &ConnectionTransportConfig,
+    ) -> Result<Self, Box<dyn Error>> {
         let addr_host = connection_config.host_port();
 
         // Retry on connection refused (driver starting up)
         let retry_delay_ms = 400;
         let mut retries = 3;
 
-        tracing::debug!("[WebsocketConnectionTransport]: Connecting to websocket @ url: {}", connection_config.full_endpoint());
+        tracing::debug!(
+            "[WebsocketConnectionTransport]: Connecting to websocket @ url: {}",
+            connection_config.full_endpoint()
+        );
         let stream = loop {
             match TcpStream::connect(&addr_host).await {
                 Ok(stream) => break stream,
                 Err(e) if e.kind() == std::io::ErrorKind::ConnectionRefused && retries > 0 => {
-                    tracing::warn!("Connection refused, retrying... ({} attempts remaining)", retries);
+                    tracing::warn!(
+                        "Connection refused, retrying... ({} attempts remaining)",
+                        retries
+                    );
                     retries -= 1;
                     tokio::time::sleep(tokio::time::Duration::from_millis(retry_delay_ms)).await;
                 }
@@ -172,15 +189,18 @@ impl WebsocketConnectionTransport {
                 fastwebsockets::handshake::generate_key(),
             )
             .header("Sec-WebSocket-Version", "13")
-            .body(http_body_util::Empty::<Bytes>::new()).unwrap();
+            .body(http_body_util::Empty::<Bytes>::new())
+            .unwrap();
 
-        let (mut ws, _) = handshake::client(&SpawnExecutor, req, stream).await.unwrap();
+        let (mut ws, _) = handshake::client(&SpawnExecutor, req, stream)
+            .await
+            .unwrap();
         ws = Self::configure_client(ws);
         let (rx, tx) = ws.split(tokio::io::split);
 
         Ok(Self {
             client_rx: Arc::new(Mutex::new(rx)),
-            client_tx: Arc::new(Mutex::new(tx))
+            client_tx: Arc::new(Mutex::new(tx)),
         })
     }
 
@@ -191,23 +211,31 @@ impl WebsocketConnectionTransport {
 
         ws
     }
-    pub fn listener_loop(ws_rx: Arc<Mutex<WebSocketRead<ReadHalf<TokioIo<Upgraded>>>>>, ws_tx: Arc<Mutex<WebSocketWrite<WriteHalf<TokioIo<Upgraded>>>>>, tx: UnboundedSender<String>) -> Result<(), WebSocketError>
-    {
+    pub fn listener_loop(
+        ws_rx: Arc<Mutex<WebSocketRead<ReadHalf<TokioIo<Upgraded>>>>>,
+        ws_tx: Arc<Mutex<WebSocketWrite<WriteHalf<TokioIo<Upgraded>>>>>,
+        tx: UnboundedSender<String>,
+    ) -> Result<(), WebSocketError> {
         tokio::spawn(async move {
             loop {
                 let mut ws_rx_half = ws_rx.lock().await;
-                let frame = match ws_rx_half.read_frame(&mut |frame| async {
-                    // Handles obligated send
-                    let mut ws_write_half = ws_tx.lock().await;
-                    return ws_write_half.write_frame(frame).await;
-                }).await {
+                let frame = match ws_rx_half
+                    .read_frame(&mut |frame| async {
+                        // Handles obligated send
+                        let mut ws_write_half = ws_tx.lock().await;
+                        return ws_write_half.write_frame(frame).await;
+                    })
+                    .await
+                {
                     Ok(frame) => frame,
                     // Err(WebSocketError::IoError(e)) if e.kind() == std::io::ErrorKind::ConnectionAborted => {
                     //     tracing::warn!("WebSocket connection aborted: {}. Exiting listener loop.", e);
                     //     break;
                     // }
                     Err(WebSocketError::UnexpectedEOF) => {
-                        tracing::warn!("WebSocket connection closed (unexpected EOF). Exiting listener loop.");
+                        tracing::warn!(
+                            "WebSocket connection closed (unexpected EOF). Exiting listener loop."
+                        );
                         break;
                     }
                     Err(e) => {

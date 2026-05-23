@@ -1,5 +1,7 @@
-use rustenium_bidi_definitions::session::types::{CapabilitiesRequest, CapabilityRequest, ProxyConfiguration, UnhandledPromptBehavior};
-use serde::{Serialize, Deserialize};
+use rustenium_bidi_definitions::session::types::{
+    CapabilitiesRequest, CapabilityRequest, ProxyConfiguration, UnhandledPromptBehavior,
+};
+use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashMap;
 
@@ -323,10 +325,9 @@ impl ChromeCapabilities {
         // Serialize chrome_options and add to extensible under goog:chromeOptions
         let chrome_opts_json = serde_json::to_value(&self.chrome_options).unwrap();
 
-        self.base_capabilities.extensible.insert(
-            "goog:chromeOptions".to_string(),
-            chrome_opts_json,
-        );
+        self.base_capabilities
+            .extensible
+            .insert("goog:chromeOptions".to_string(), chrome_opts_json);
 
         // Create CapabilitiesRequest
         CapabilitiesRequest {

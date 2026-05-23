@@ -15,24 +15,29 @@ use tokio::runtime::Runtime;
 
 fn launch_headless(rt: &Runtime) -> ChromeBrowser {
     rt.block_on(async {
-        let mut config = ChromeConfig::default();
-        config.remote_debugging_port = Some(0);
-        config.browser_flags = Some(vec![
-            "--headless=new".to_string(),
-            "--window-size=1280,720".to_string(),
-        ]);
+        let config = ChromeConfig {
+            remote_debugging_port: Some(0),
+            browser_flags: Some(vec![
+                "--headless=new".to_string(),
+                "--window-size=1280,720".to_string(),
+            ]),
+            ..ChromeConfig::default()
+        };
         chrome(Some(config)).await
     })
 }
 
 fn nav_complete(browser: &mut ChromeBrowser, url: &str, rt: &Runtime) {
     rt.block_on(async {
-        browser.navigate_with_options(
-            url,
-            NavigateOptionsBuilder::default()
-                .wait(ReadinessState::Complete)
-                .build(),
-        ).await.unwrap()
+        browser
+            .navigate_with_options(
+                url,
+                NavigateOptionsBuilder::default()
+                    .wait(ReadinessState::Complete)
+                    .build(),
+            )
+            .await
+            .unwrap()
     });
 }
 
@@ -77,12 +82,14 @@ fn bench_browser_lifecycle(c: &mut Criterion) {
     group.bench_function("cold_start_auto_attach", |b| {
         b.iter(|| {
             let browser = rt.block_on(async {
-                let mut config = ChromeConfig::default();
-                config.remote_debugging_port = Some(0);
-                config.browser_flags = Some(vec![
-                    "--headless=new".to_string(),
-                    "--window-size=1280,720".to_string(),
-                ]);
+                let config = ChromeConfig {
+                    remote_debugging_port: Some(0),
+                    browser_flags: Some(vec![
+                        "--headless=new".to_string(),
+                        "--window-size=1280,720".to_string(),
+                    ]),
+                    ..ChromeConfig::default()
+                };
                 chrome(Some(config)).await
             });
             teardown(browser, &rt);
@@ -793,10 +800,7 @@ fn bench_end_to_end(c: &mut Criterion) {
                 black_box(browser.screenshot().await.unwrap());
 
                 let eval = browser
-                    .evaluate_script(
-                        "document.querySelectorAll('*').length".to_string(),
-                        false,
-                    )
+                    .evaluate_script("document.querySelectorAll('*').length".to_string(), false)
                     .await
                     .unwrap();
                 black_box(extract_number(&eval.result));
@@ -825,7 +829,10 @@ fn bench_end_to_end(c: &mut Criterion) {
                     browser
                         .navigate_with_options(
                             url,
-                            NavigateOptionsBuilder::default().wait(ReadinessState::Complete).context_id(ctx.clone()).build()
+                            NavigateOptionsBuilder::default()
+                                .wait(ReadinessState::Complete)
+                                .context_id(ctx.clone())
+                                .build(),
                         )
                         .await
                         .unwrap();
@@ -834,7 +841,13 @@ fn bench_end_to_end(c: &mut Criterion) {
                 for ctx in &contexts {
                     black_box(
                         browser
-                            .screenshot_with_options(BrowserScreenshotOptionsBuilder::default().context_id(ctx.clone()).build()).await.unwrap()
+                            .screenshot_with_options(
+                                BrowserScreenshotOptionsBuilder::default()
+                                    .context_id(ctx.clone())
+                                    .build(),
+                            )
+                            .await
+                            .unwrap(),
                     );
                 }
             });

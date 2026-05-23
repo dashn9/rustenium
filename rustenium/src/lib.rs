@@ -74,14 +74,13 @@
 //!
 //! Then use `css!()` and `xpath!()` macros for element selection.
 
+pub mod browsers;
 mod conduit;
 pub mod domain;
 pub mod downloader;
 pub mod error;
-pub mod browsers;
-pub mod nodes;
 pub mod input;
-
+pub mod nodes;
 
 #[cfg(feature = "macros")]
 pub use rustenium_macros::*;

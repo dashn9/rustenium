@@ -140,12 +140,18 @@ fn bidi_screenshot_error_file_write_converts() {
 fn bidi_screenshot_error_no_shared_id_converts() {
     use rustenium::error::bidi::ScreenshotError;
     let err: NodeScreenshotError = ScreenshotError::NoSharedId.into();
-    assert!(matches!(err, NodeScreenshotError::Bidi(BidiNodeScreenshotError::NoSharedId)));
+    assert!(matches!(
+        err,
+        NodeScreenshotError::Bidi(BidiNodeScreenshotError::NoSharedId)
+    ));
 }
 
 #[test]
 fn bidi_screenshot_error_no_context_converts() {
     use rustenium::error::bidi::ScreenshotError;
     let err: NodeScreenshotError = ScreenshotError::NoContext.into();
-    assert!(matches!(err, NodeScreenshotError::Bidi(BidiNodeScreenshotError::NoContext)));
+    assert!(matches!(
+        err,
+        NodeScreenshotError::Bidi(BidiNodeScreenshotError::NoContext)
+    ));
 }

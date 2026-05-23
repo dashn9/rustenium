@@ -9,7 +9,10 @@ fn default_config() {
     assert!(config.firefox_executable_path.is_none());
     assert!(config.profile_dir.is_none());
     assert!(config.browser_flags.is_none());
-    assert!(matches!(config.launch_mode, FirefoxLaunchMode::SpawnAndAttach));
+    assert!(matches!(
+        config.launch_mode,
+        FirefoxLaunchMode::SpawnAndAttach
+    ));
 }
 
 #[test]
@@ -26,15 +29,27 @@ fn config_with_custom_values() {
 
     assert_eq!(config.host.as_deref(), Some("127.0.0.1"));
     assert_eq!(config.remote_debugging_port, Some(2828));
-    assert_eq!(config.firefox_executable_path.as_deref(), Some("/usr/bin/firefox"));
+    assert_eq!(
+        config.firefox_executable_path.as_deref(),
+        Some("/usr/bin/firefox")
+    );
     assert_eq!(config.profile_dir.as_deref(), Some("/tmp/ff-profile"));
-    assert_eq!(config.browser_flags.as_ref().unwrap(), &["-headless".to_string()]);
-    assert!(matches!(config.launch_mode, FirefoxLaunchMode::Remote(9999)));
+    assert_eq!(
+        config.browser_flags.as_ref().unwrap(),
+        &["-headless".to_string()]
+    );
+    assert!(matches!(
+        config.launch_mode,
+        FirefoxLaunchMode::Remote(9999)
+    ));
 }
 
 #[test]
 fn launch_mode_default_is_spawn_and_attach() {
-    assert!(matches!(FirefoxLaunchMode::default(), FirefoxLaunchMode::SpawnAndAttach));
+    assert!(matches!(
+        FirefoxLaunchMode::default(),
+        FirefoxLaunchMode::SpawnAndAttach
+    ));
 }
 
 #[test]

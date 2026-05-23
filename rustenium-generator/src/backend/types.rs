@@ -1,7 +1,10 @@
-use crate::backend::base_types::{Command, Constraint, DomainDirection, Event, Item, Module, Param, Type, TypeDef, TypeRef, Variant};
+use crate::backend::base_types::{
+    Command, Constraint, DomainDirection, Event, Item, Module, Param, Type, TypeDef, TypeRef,
+    Variant,
+};
 use heck::{ToSnakeCase, ToUpperCamelCase};
 use proc_macro2::{Ident, TokenStream};
-use quote::{quote, ToTokens};
+use quote::{ToTokens, quote};
 use std::slice::Iter;
 
 pub struct ModuleDataTypeIter<'a> {
@@ -89,7 +92,9 @@ impl<'a> ModuleDatatype<'a> {
     pub fn ident_name(&self) -> String {
         match self {
             ModuleDatatype::Type(_ty) => self.name().to_upper_camel_case(),
-            ModuleDatatype::Command(cmd) => format!("{}Params", cmd.method.name.to_upper_camel_case()),
+            ModuleDatatype::Command(cmd) => {
+                format!("{}Params", cmd.method.name.to_upper_camel_case())
+            }
             ModuleDatatype::Event(event) => format!("{}Params", event.name.to_upper_camel_case()),
         }
     }
@@ -97,8 +102,12 @@ impl<'a> ModuleDatatype<'a> {
     /// For commands/events: the method struct name (e.g. `EvaluateMethod`)
     pub fn method_ident_name(&self) -> Option<String> {
         match self {
-            ModuleDatatype::Command(cmd) => Some(format!("{}Method", cmd.method.name.to_upper_camel_case())),
-            ModuleDatatype::Event(event) => Some(format!("{}Method", event.name.to_upper_camel_case())),
+            ModuleDatatype::Command(cmd) => {
+                Some(format!("{}Method", cmd.method.name.to_upper_camel_case()))
+            }
+            ModuleDatatype::Event(event) => {
+                Some(format!("{}Method", event.name.to_upper_camel_case()))
+            }
             _ => None,
         }
     }
@@ -378,10 +387,22 @@ impl FieldDefinition {
             };
             for c in constraints {
                 match c {
-                    Constraint::Ge(v) => { let lit = val_lit(*v); validation_attr.extend(quote! { #[validate(minimum = #lit)] }); }
-                    Constraint::Gt(v) => { let lit = val_lit(*v); validation_attr.extend(quote! { #[validate(exclusive_minimum = #lit)] }); }
-                    Constraint::Le(v) => { let lit = val_lit(*v); validation_attr.extend(quote! { #[validate(maximum = #lit)] }); }
-                    Constraint::Lt(v) => { let lit = val_lit(*v); validation_attr.extend(quote! { #[validate(exclusive_maximum = #lit)] }); }
+                    Constraint::Ge(v) => {
+                        let lit = val_lit(*v);
+                        validation_attr.extend(quote! { #[validate(minimum = #lit)] });
+                    }
+                    Constraint::Gt(v) => {
+                        let lit = val_lit(*v);
+                        validation_attr.extend(quote! { #[validate(exclusive_minimum = #lit)] });
+                    }
+                    Constraint::Le(v) => {
+                        let lit = val_lit(*v);
+                        validation_attr.extend(quote! { #[validate(maximum = #lit)] });
+                    }
+                    Constraint::Lt(v) => {
+                        let lit = val_lit(*v);
+                        validation_attr.extend(quote! { #[validate(exclusive_maximum = #lit)] });
+                    }
                 }
             }
         }
@@ -397,7 +418,11 @@ impl FieldDefinition {
     }
 
     pub fn default_fn_name(&self, struct_name: &str) -> String {
-        format!("default_{}_{}", struct_name.to_snake_case(), self.name_ident)
+        format!(
+            "default_{}_{}",
+            struct_name.to_snake_case(),
+            self.name_ident
+        )
     }
 
     /// Generate a free function for serde default, prefixed with struct name to avoid collisions.

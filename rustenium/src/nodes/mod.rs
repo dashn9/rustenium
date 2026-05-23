@@ -1,11 +1,10 @@
+mod bidi;
+mod cdp;
 mod chrome;
 mod firefox;
 mod node;
-mod bidi;
-mod cdp;
 
-pub use node::{Node, NodePosition, NodeScreenShotOptions, NodeType};
+pub use cdp::CdpNode;
 pub use chrome::{AXNode, ChromeNode};
 pub use firefox::FirefoxNode;
-pub use cdp::CdpNode;
-
+pub use node::{Node, NodePosition, NodeScreenShotOptions, NodeType};

@@ -128,7 +128,10 @@ pub fn group_enum_closed(enum_name: &Ident, entries: &[(Ident, TokenStream)]) ->
 }
 
 /// Generate a closed `group_enum!` with `identifier()` method.
-pub fn group_enum_closed_identifiable(enum_name: &Ident, entries: &[(Ident, TokenStream)]) -> TokenStream {
+pub fn group_enum_closed_identifiable(
+    enum_name: &Ident,
+    entries: &[(Ident, TokenStream)],
+) -> TokenStream {
     if entries.is_empty() {
         return TokenStream::default();
     }
@@ -144,7 +147,10 @@ pub fn group_enum_closed_identifiable(enum_name: &Ident, entries: &[(Ident, Toke
 }
 
 /// Generate an open `group_enum!` with `identifier()` method.
-pub fn group_enum_open_identifiable(enum_name: &Ident, entries: &[(Ident, TokenStream)]) -> TokenStream {
+pub fn group_enum_open_identifiable(
+    enum_name: &Ident,
+    entries: &[(Ident, TokenStream)],
+) -> TokenStream {
     if entries.is_empty() {
         return TokenStream::default();
     }

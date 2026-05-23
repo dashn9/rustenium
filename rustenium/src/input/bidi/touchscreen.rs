@@ -1,20 +1,20 @@
+use super::FINGER_ID_PREFIX;
+use crate::error::bidi::InputError;
+use crate::input::mouse::Point;
 use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
 use rustenium_bidi_definitions::input::command_builders::PerformActionsBuilder;
 use rustenium_bidi_definitions::input::type_builders::{
-    PointerSourceActionsBuilder, PointerDownActionBuilder, PointerUpActionBuilder,
-    PointerMoveActionBuilder, PointerCommonPropertiesBuilder, PointerParametersBuilder,
+    PointerCommonPropertiesBuilder, PointerDownActionBuilder, PointerMoveActionBuilder,
+    PointerParametersBuilder, PointerSourceActionsBuilder, PointerUpActionBuilder,
 };
 use rustenium_bidi_definitions::input::types::{
-    PointerSourceActionsType, PointerDownActionType, PointerUpActionType,
-    PointerMoveActionType, PointerCommonProperties, PointerType, Origin,
+    Origin, PointerCommonProperties, PointerDownActionType, PointerMoveActionType,
+    PointerSourceActionsType, PointerType, PointerUpActionType,
 };
 use rustenium_core::BidiSession;
 use rustenium_core::transport::ConnectionTransport;
-use crate::error::bidi::InputError;
 use std::sync::Arc;
 use tokio::sync::Mutex;
-use crate::input::mouse::Point;
-use super::{FINGER_ID_PREFIX};
 
 /// Options for touch movement operations.
 #[derive(Debug, Clone, Default)]
@@ -22,15 +22,21 @@ pub struct TouchMoveOptions {
     pub origin: Option<Origin>,
 }
 
-
 #[derive(Default, Clone)]
 pub struct TouchMoveOptionsBuilder {
     origin: Option<Origin>,
 }
 
 impl TouchMoveOptionsBuilder {
-    pub fn origin(mut self, v: Origin) -> Self { self.origin = Some(v); self }
-    pub fn build(self) -> TouchMoveOptions { TouchMoveOptions { origin: self.origin } }
+    pub fn origin(mut self, v: Origin) -> Self {
+        self.origin = Some(v);
+        self
+    }
+    pub fn build(self) -> TouchMoveOptions {
+        TouchMoveOptions {
+            origin: self.origin,
+        }
+    }
 }
 
 /// Handle representing a single touch point for multi-touch gestures.
@@ -67,7 +73,10 @@ impl<OT: ConnectionTransport> TouchHandle<OT> {
             touchscreen,
             id,
             bidi_id: format!("{}_{}", FINGER_ID_PREFIX, id),
-            position: Arc::new(Mutex::new(Point { x: x.round(), y: y.round() })),
+            position: Arc::new(Mutex::new(Point {
+                x: x.round(),
+                y: y.round(),
+            })),
             started: Arc::new(Mutex::new(false)),
             properties,
         }
@@ -109,21 +118,32 @@ impl<OT: ConnectionTransport> TouchHandle<OT> {
                 PointerSourceActionsBuilder::default()
                     .r#type(PointerSourceActionsType::Pointer)
                     .id(self.bidi_id.clone())
-                    .parameters(PointerParametersBuilder::default().pointer_type(PointerType::Touch).build())
+                    .parameters(
+                        PointerParametersBuilder::default()
+                            .pointer_type(PointerType::Touch)
+                            .build(),
+                    )
                     .action(move_action.build().unwrap())
-                    .action(PointerDownActionBuilder::default()
-                        .r#type(PointerDownActionType::PointerDown)
-                        .button(0u64)
-                        .pointer_common_properties(self.properties.clone())
-                        .build().unwrap())
-                    .build().unwrap()
+                    .action(
+                        PointerDownActionBuilder::default()
+                            .r#type(PointerDownActionType::PointerDown)
+                            .button(0u64)
+                            .pointer_common_properties(self.properties.clone())
+                            .build()
+                            .unwrap(),
+                    )
+                    .build()
+                    .unwrap(),
             )
-            .build().unwrap();
+            .build()
+            .unwrap();
 
         let mut session = self.session.lock().await;
-        session.send(command)
-            .await
-            .map_err(|e| InputError::CommandResultError(rustenium_core::error::CommandResultError::SessionSendError(e)))?;
+        session.send(command).await.map_err(|e| {
+            InputError::CommandResultError(
+                rustenium_core::error::CommandResultError::SessionSendError(e),
+            )
+        })?;
         *started = true;
         Ok(())
     }
@@ -143,7 +163,10 @@ impl<OT: ConnectionTransport> TouchHandle<OT> {
         y: f64,
         context: &BrowsingContext,
     ) -> Result<(), InputError> {
-        let new_position = Point { x: x.round(), y: y.round() };
+        let new_position = Point {
+            x: x.round(),
+            y: y.round(),
+        };
 
         let command = PerformActionsBuilder::default()
             .context(context.clone())
@@ -151,23 +174,34 @@ impl<OT: ConnectionTransport> TouchHandle<OT> {
                 PointerSourceActionsBuilder::default()
                     .r#type(PointerSourceActionsType::Pointer)
                     .id(self.bidi_id.clone())
-                    .parameters(PointerParametersBuilder::default().pointer_type(PointerType::Touch).build())
-                    .action(PointerMoveActionBuilder::default()
-                        .r#type(PointerMoveActionType::PointerMove)
-                        .x(new_position.x)
-                        .y(new_position.y)
-                        .pointer_common_properties(self.properties.clone())
-                        .build().unwrap())
-                    .build().unwrap()
+                    .parameters(
+                        PointerParametersBuilder::default()
+                            .pointer_type(PointerType::Touch)
+                            .build(),
+                    )
+                    .action(
+                        PointerMoveActionBuilder::default()
+                            .r#type(PointerMoveActionType::PointerMove)
+                            .x(new_position.x)
+                            .y(new_position.y)
+                            .pointer_common_properties(self.properties.clone())
+                            .build()
+                            .unwrap(),
+                    )
+                    .build()
+                    .unwrap(),
             )
-            .build().unwrap();
+            .build()
+            .unwrap();
 
         *self.position.lock().await = new_position;
 
         let mut session = self.session.lock().await;
-        session.send(command)
-            .await
-            .map_err(|e| InputError::CommandResultError(rustenium_core::error::CommandResultError::SessionSendError(e)))?;
+        session.send(command).await.map_err(|e| {
+            InputError::CommandResultError(
+                rustenium_core::error::CommandResultError::SessionSendError(e),
+            )
+        })?;
         Ok(())
     }
 
@@ -182,19 +216,30 @@ impl<OT: ConnectionTransport> TouchHandle<OT> {
                 PointerSourceActionsBuilder::default()
                     .r#type(PointerSourceActionsType::Pointer)
                     .id(self.bidi_id.clone())
-                    .parameters(PointerParametersBuilder::default().pointer_type(PointerType::Touch).build())
-                    .action(PointerUpActionBuilder::default()
-                        .r#type(PointerUpActionType::PointerUp)
-                        .button(0u64)
-                        .build().unwrap())
-                    .build().unwrap()
+                    .parameters(
+                        PointerParametersBuilder::default()
+                            .pointer_type(PointerType::Touch)
+                            .build(),
+                    )
+                    .action(
+                        PointerUpActionBuilder::default()
+                            .r#type(PointerUpActionType::PointerUp)
+                            .button(0u64)
+                            .build()
+                            .unwrap(),
+                    )
+                    .build()
+                    .unwrap(),
             )
-            .build().unwrap();
+            .build()
+            .unwrap();
 
         let mut session = self.session.lock().await;
-        session.send(command)
-            .await
-            .map_err(|e| InputError::CommandResultError(rustenium_core::error::CommandResultError::SessionSendError(e)))?;
+        session.send(command).await.map_err(|e| {
+            InputError::CommandResultError(
+                rustenium_core::error::CommandResultError::SessionSendError(e),
+            )
+        })?;
 
         // Remove this handle from the touchscreen
         self.touchscreen.remove_handle(self.id).await;
@@ -274,13 +319,7 @@ impl<OT: ConnectionTransport> Touchscreen<OT> {
         *counter += 1;
         drop(counter);
 
-        let touch = TouchHandle::new(
-            self.session.clone(),
-            self.clone(),
-            id,
-            x,
-            y,
-        );
+        let touch = TouchHandle::new(self.session.clone(), self.clone(), id, x, y);
 
         touch.start(context, options).await?;
 

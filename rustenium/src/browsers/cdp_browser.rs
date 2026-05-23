@@ -16,16 +16,18 @@ use rustenium_cdp_definitions::browser_protocol::dom::types::{
 };
 use rustenium_cdp_definitions::browser_protocol::emulation::commands::SetDeviceMetricsOverride;
 use rustenium_cdp_definitions::browser_protocol::emulation::types::ScreenOrientation;
+use rustenium_cdp_definitions::browser_protocol::page::command_builders::AddScriptToEvaluateOnNewDocumentBuilder;
 use rustenium_cdp_definitions::browser_protocol::page::command_builders::CaptureScreenshotBuilder;
-use rustenium_cdp_definitions::browser_protocol::page::commands::{CaptureScreenshotFormat, Navigate};
+use rustenium_cdp_definitions::browser_protocol::page::commands::RemoveScriptToEvaluateOnNewDocument;
+use rustenium_cdp_definitions::browser_protocol::page::commands::{
+    CaptureScreenshotFormat, Navigate,
+};
 use rustenium_cdp_definitions::browser_protocol::page::results::NavigateResult;
 use rustenium_cdp_definitions::browser_protocol::page::type_builders::ViewportBuilder;
+use rustenium_cdp_definitions::browser_protocol::page::types::ScriptIdentifier;
 use rustenium_cdp_definitions::browser_protocol::page::types::{
     ReferrerPolicy, TransitionType, Viewport,
 };
-use rustenium_cdp_definitions::browser_protocol::page::command_builders::AddScriptToEvaluateOnNewDocumentBuilder;
-use rustenium_cdp_definitions::browser_protocol::page::commands::RemoveScriptToEvaluateOnNewDocument;
-use rustenium_cdp_definitions::browser_protocol::page::types::ScriptIdentifier;
 use rustenium_cdp_definitions::browser_protocol::target::commands::CreateTarget;
 use rustenium_cdp_definitions::js_protocol::runtime::results::EvaluateResult;
 use rustenium_cdp_definitions::js_protocol::runtime::types::RemoteObjectId;
@@ -80,7 +82,7 @@ impl BrowserScreenshotOptionsBuilder {
         self.viewport = Some(viewport);
         self
     }
-    
+
     pub fn quality(mut self, quality: f64) -> Self {
         self.quality = Some(quality);
         self
@@ -341,7 +343,7 @@ pub trait CdpBrowser: Send + Sync {
                 let layout_metrics = adapter
                     .layout_metrics()
                     .await
-                    .map_err(|e| ScreenshotError::CommandResultError(e))?;
+                    .map_err(ScreenshotError::CommandResultError)?;
                 cmd = cmd.capture_beyond_viewport(true);
                 cmd = cmd.clip(
                     ViewportBuilder::default()

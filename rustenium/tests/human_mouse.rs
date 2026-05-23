@@ -1,5 +1,5 @@
 use rustenium::input::{
-    Point, generate_trajectory, generate_durations, random_curve_params, CurveParams,
+    CurveParams, Point, generate_durations, generate_trajectory, random_curve_params,
 };
 
 #[test]
@@ -82,7 +82,12 @@ fn generate_durations_sum_matches_total() {
     let total = 2.5;
     let durations = generate_durations(20, total, (0.004, 0.025));
     let sum: f64 = durations.iter().sum();
-    assert!((sum - total).abs() < 1e-9, "sum {} should equal total {}", sum, total);
+    assert!(
+        (sum - total).abs() < 1e-9,
+        "sum {} should equal total {}",
+        sum,
+        total
+    );
 }
 
 #[test]

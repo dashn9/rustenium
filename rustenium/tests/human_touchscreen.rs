@@ -1,5 +1,5 @@
 use rustenium::input::{
-    Point, generate_trajectory, generate_durations, random_curve_params, CurveParams,
+    CurveParams, Point, generate_durations, generate_trajectory, random_curve_params,
 };
 
 #[test]
@@ -58,6 +58,10 @@ fn vertical_swipe_trajectory_stays_reasonable() {
     let traj = generate_trajectory(from, to, &params);
     assert_eq!(traj.len(), 30);
     for pt in &traj {
-        assert!(pt.x > 300.0 && pt.x < 420.0, "x should stay near center, got {}", pt.x);
+        assert!(
+            pt.x > 300.0 && pt.x < 420.0,
+            "x should stay near center, got {}",
+            pt.x
+        );
     }
 }

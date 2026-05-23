@@ -18,18 +18,22 @@ use rustenium_cdp_definitions::browser_protocol::emulation::commands::SetDeviceM
 use rustenium_cdp_definitions::browser_protocol::page::command_builders::{
     EnableBuilder as PageEnableBuilder, GetLayoutMetricsBuilder,
 };
-use rustenium_cdp_definitions::browser_protocol::page::commands::{AddScriptToEvaluateOnNewDocument, CaptureScreenshot, RemoveScriptToEvaluateOnNewDocument};
 use rustenium_cdp_definitions::browser_protocol::page::commands::Navigate;
-use rustenium_cdp_definitions::browser_protocol::page::results::{AddScriptToEvaluateOnNewDocumentResult, CaptureScreenshotResult, GetLayoutMetricsResult};
-use rustenium_cdp_definitions::browser_protocol::page::types::ScriptIdentifier;
-use rustenium_cdp_definitions::js_protocol::runtime::command_builders::EvaluateBuilder as RuntimeEvaluateBuilder;
-use rustenium_cdp_definitions::js_protocol::runtime::results::EvaluateResult;
+use rustenium_cdp_definitions::browser_protocol::page::commands::{
+    AddScriptToEvaluateOnNewDocument, CaptureScreenshot, RemoveScriptToEvaluateOnNewDocument,
+};
 use rustenium_cdp_definitions::browser_protocol::page::results::NavigateResult;
+use rustenium_cdp_definitions::browser_protocol::page::results::{
+    AddScriptToEvaluateOnNewDocumentResult, CaptureScreenshotResult, GetLayoutMetricsResult,
+};
+use rustenium_cdp_definitions::browser_protocol::page::types::ScriptIdentifier;
 use rustenium_cdp_definitions::browser_protocol::target::command_builders::SetDiscoverTargetsBuilder;
 use rustenium_cdp_definitions::browser_protocol::target::commands::CreateTarget;
 use rustenium_cdp_definitions::browser_protocol::target::events::{TargetCreated, TargetDestroyed};
 use rustenium_cdp_definitions::browser_protocol::target::results::CreateTargetResult;
 use rustenium_cdp_definitions::browser_protocol::target::types::{TargetId, TargetInfo};
+use rustenium_cdp_definitions::js_protocol::runtime::command_builders::EvaluateBuilder as RuntimeEvaluateBuilder;
+use rustenium_cdp_definitions::js_protocol::runtime::results::EvaluateResult;
 use rustenium_core::CdpEventManagement;
 use rustenium_core::WebsocketConnectionTransport;
 use rustenium_core::error::CdpCommandResultError;
@@ -263,7 +267,7 @@ impl<T: ConnectionTransport + Send + Sync> CdpAdapter<T> {
             .node_id(root_id)
             .selector(selector)
             .build()
-            .map_err(|e| crate::error::cdp::LocateError::ParseError(e))?;
+            .map_err(crate::error::cdp::LocateError::ParseError)?;
         let result_value = self
             .send_command(cmd)
             .await
@@ -293,7 +297,7 @@ impl<T: ConnectionTransport + Send + Sync> CdpAdapter<T> {
             .node_id(root_id)
             .selector(selector)
             .build()
-            .map_err(|e| crate::error::cdp::LocateError::ParseError(e))?;
+            .map_err(crate::error::cdp::LocateError::ParseError)?;
         let result_value = self
             .send_command(cmd)
             .await
@@ -356,13 +360,17 @@ impl<T: ConnectionTransport + Send + Sync> CdpAdapter<T> {
         }
     }
 
-    pub async fn layout_metrics(&mut self) -> Result<GetLayoutMetricsResult, CdpCommandResultError> {
+    pub async fn layout_metrics(
+        &mut self,
+    ) -> Result<GetLayoutMetricsResult, CdpCommandResultError> {
         let result_value = self
-            .send_command(GetLayoutMetricsBuilder::default().build())
-            .await.map_err(|e| CdpCommandResultError::SessionSendError(e))?
+            .send_command(GetLayoutMetricsBuilder.build())
+            .await
+            .map_err(CdpCommandResultError::SessionSendError)?
             .result;
-        
-        GetLayoutMetricsResult::try_from(result_value.clone()).map_err(|_| CdpCommandResultError::InvalidResultTypeError(result_value))
+
+        GetLayoutMetricsResult::try_from(result_value.clone())
+            .map_err(|_| CdpCommandResultError::InvalidResultTypeError(result_value))
     }
 
     pub async fn screenshot(
@@ -396,14 +404,13 @@ impl<T: ConnectionTransport + Send + Sync> CdpAdapter<T> {
                 let filename = format!("screenshot_{}.png", timestamp);
                 path_obj.join(filename)
             } else {
-                if let Some(parent) = path_obj.parent() {
-                    if !parent.as_os_str().is_empty() && !parent.exists() {
+                if let Some(parent) = path_obj.parent()
+                    && !parent.as_os_str().is_empty() && !parent.exists() {
                         return Err(ScreenshotError::InvalidPath(format!(
                             "Parent directory does not exist: {}",
                             parent.display()
                         )));
                     }
-                }
                 path_obj.to_path_buf()
             };
 

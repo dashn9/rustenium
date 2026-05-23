@@ -1,7 +1,7 @@
-use std::future::Future;
-use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
 use crate::error::bidi::InputError;
 use crate::input::bidi::keyboard::{KeyPressOptions, KeyboardTypeOptions};
+use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
+use std::future::Future;
 
 pub trait Keyboard {
     fn down(

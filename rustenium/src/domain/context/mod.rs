@@ -76,10 +76,7 @@ pub struct BrowsingContext {
 }
 
 impl BrowsingContext {
-    pub fn from_id(
-        id: impl Into<BrowsingContextDefinition>,
-        context_type: CreateType,
-    ) -> Self {
+    pub fn from_id(id: impl Into<BrowsingContextDefinition>, context_type: CreateType) -> Self {
         Self {
             r#type: context_type,
             id: id.into(),

@@ -3,7 +3,10 @@ use rustenium::browsers::{FirefoxCapabilities, FirefoxOptions};
 #[test]
 fn default_capabilities() {
     let caps = FirefoxCapabilities::default();
-    assert_eq!(caps.base_capabilities.browser_name.as_deref(), Some("firefox"));
+    assert_eq!(
+        caps.base_capabilities.browser_name.as_deref(),
+        Some("firefox")
+    );
     assert!(caps.base_capabilities.accept_insecure_certs.is_none());
     assert!(caps.base_capabilities.proxy.is_none());
     assert!(caps.firefox_options.args.is_none());
@@ -21,9 +24,18 @@ fn builder_base_fields() {
         .platform_name("linux");
 
     assert_eq!(caps.base_capabilities.accept_insecure_certs, Some(true));
-    assert_eq!(caps.base_capabilities.browser_name.as_deref(), Some("firefox-esr"));
-    assert_eq!(caps.base_capabilities.browser_version.as_deref(), Some("115"));
-    assert_eq!(caps.base_capabilities.platform_name.as_deref(), Some("linux"));
+    assert_eq!(
+        caps.base_capabilities.browser_name.as_deref(),
+        Some("firefox-esr")
+    );
+    assert_eq!(
+        caps.base_capabilities.browser_version.as_deref(),
+        Some("115")
+    );
+    assert_eq!(
+        caps.base_capabilities.platform_name.as_deref(),
+        Some("linux")
+    );
 }
 
 #[test]
@@ -33,8 +45,14 @@ fn builder_firefox_options() {
         .profile("/tmp/ff-profile")
         .log_level("debug");
 
-    assert_eq!(caps.firefox_options.binary.as_deref(), Some("/usr/bin/firefox"));
-    assert_eq!(caps.firefox_options.profile.as_deref(), Some("/tmp/ff-profile"));
+    assert_eq!(
+        caps.firefox_options.binary.as_deref(),
+        Some("/usr/bin/firefox")
+    );
+    assert_eq!(
+        caps.firefox_options.profile.as_deref(),
+        Some("/tmp/ff-profile")
+    );
     assert_eq!(caps.firefox_options.log.as_ref().unwrap().level, "debug");
 }
 
@@ -73,7 +91,10 @@ fn add_pref_accumulates() {
         .add_pref("browser.startup.page", serde_json::json!(0));
     let prefs = caps.firefox_options.prefs.as_ref().unwrap();
     assert_eq!(prefs.len(), 2);
-    assert_eq!(prefs.get("browser.startup.page").unwrap(), &serde_json::json!(0));
+    assert_eq!(
+        prefs.get("browser.startup.page").unwrap(),
+        &serde_json::json!(0)
+    );
 }
 
 #[test]
@@ -109,7 +130,11 @@ fn firefox_options_skip_serializing_none_fields() {
     let opts = FirefoxOptions::default();
     let json = serde_json::to_value(&opts).unwrap();
     let obj = json.as_object().unwrap();
-    assert!(obj.is_empty(), "Default FirefoxOptions should serialize to empty object, got: {:?}", obj);
+    assert!(
+        obj.is_empty(),
+        "Default FirefoxOptions should serialize to empty object, got: {:?}",
+        obj
+    );
 }
 
 #[test]

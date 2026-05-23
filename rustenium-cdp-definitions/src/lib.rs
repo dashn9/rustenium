@@ -1,3 +1,7 @@
+// Generated CDP protocol enums vary widely in variant size. Boxing them would
+// alter the public/serialized shape, so we accept the imbalance.
+#![allow(clippy::large_enum_variant)]
+
 use serde::{Deserialize, Serialize};
 #[macro_use]
 mod macros;

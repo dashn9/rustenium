@@ -211,7 +211,12 @@ impl CdpMouse {
         point: Option<Point>,
         options: MouseClickOptions,
     ) -> Result<(), MouseInputError> {
-        tracing::debug!(x = point.map(|p| p.x), y = point.map(|p| p.y), count = options.count, "cdp mouse click start");
+        tracing::debug!(
+            x = point.map(|p| p.x),
+            y = point.map(|p| p.y),
+            count = options.count,
+            "cdp mouse click start"
+        );
         let button = options.button.unwrap_or(MouseButton::Left);
         let count = options.count.unwrap_or(1) as i64;
         let delay_ms = options.delay.unwrap_or(0);
@@ -233,7 +238,11 @@ impl CdpMouse {
 
     /// Dispatch a mouse wheel event at the current cursor position.
     pub async fn wheel(&self, options: MouseWheelOptions) -> Result<(), MouseInputError> {
-        tracing::debug!(delta_x = options.delta_x, delta_y = options.delta_y, "cdp mouse wheel start");
+        tracing::debug!(
+            delta_x = options.delta_x,
+            delta_y = options.delta_y,
+            "cdp mouse wheel start"
+        );
         let modifiers = *self.modifiers.lock().unwrap();
         let (x, y, buttons) = {
             let s = self.state.lock().unwrap();
@@ -280,7 +289,7 @@ impl CdpMouse {
         }
         let pos = self.position();
         if pos.x != 0.0 || pos.y != 0.0 {
-            self.move_to(Point {x: 0.0, y: 0.0}, 0).await?;
+            self.move_to(Point { x: 0.0, y: 0.0 }, 0).await?;
         }
         tracing::debug!("cdp mouse reset done");
         Ok(())
@@ -312,7 +321,7 @@ impl Mouse for CdpMouse {
     }
 
     async fn reset(&self, _context: &BrowsingContext) -> Result<(), InputError> {
-        self.reset().await.map_err(|e| to_input_err(e))
+        self.reset().await.map_err(to_input_err)
     }
 
     async fn move_to(
@@ -324,7 +333,7 @@ impl Mouse for CdpMouse {
         let steps = options.steps.unwrap_or(1).max(1);
         self.move_to(point, steps)
             .await
-            .map_err(|e| to_input_err(e))
+            .map_err(to_input_err)
     }
 
     async fn down(
@@ -333,7 +342,9 @@ impl Mouse for CdpMouse {
         options: MouseOptions,
     ) -> Result<(), InputError> {
         let button = options.button.unwrap_or(MouseButton::Left);
-        self.down(None, button, 1).await.map_err(|e| to_input_err(e))
+        self.down(None, button, 1)
+            .await
+            .map_err(to_input_err)
     }
 
     async fn up(
@@ -342,7 +353,7 @@ impl Mouse for CdpMouse {
         options: MouseOptions,
     ) -> Result<(), InputError> {
         let button = options.button.unwrap_or(MouseButton::Left);
-        self.up(None, button, 1).await.map_err(|e| to_input_err(e))
+        self.up(None, button, 1).await.map_err(to_input_err)
     }
 
     async fn click(
@@ -351,7 +362,9 @@ impl Mouse for CdpMouse {
         _context: &BrowsingContext,
         options: MouseClickOptions,
     ) -> Result<(), InputError> {
-        self.click(point, options).await.map_err(|e| to_input_err(e))
+        self.click(point, options)
+            .await
+            .map_err(to_input_err)
     }
 
     async fn wheel(
@@ -359,6 +372,6 @@ impl Mouse for CdpMouse {
         _context: &BrowsingContext,
         options: MouseWheelOptions,
     ) -> Result<(), InputError> {
-        self.wheel(options).await.map_err(|e| to_input_err(e))
+        self.wheel(options).await.map_err(to_input_err)
     }
 }

@@ -1,6 +1,6 @@
-use thiserror::Error;
 use rustenium_bidi_definitions::script::types::EvaluateResultException;
 use rustenium_core::error::{CommandResultError, ProcessKillError, SessionSendError};
+use thiserror::Error;
 
 #[derive(Debug, Error)]
 pub enum ContextCloseError {
@@ -22,7 +22,7 @@ pub struct ZeroBrowsingContextAtStartError;
 
 #[derive(Debug, Error)]
 #[error("Context does not exist for this ")]
-pub struct ContextIndexError{}
+pub struct ContextIndexError {}
 
 #[derive(Debug, Error)]
 pub enum NavigateError {

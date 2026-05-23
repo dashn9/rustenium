@@ -59,15 +59,33 @@ pub mod options {
     }
 
     impl BrowserScreenshotOptionsBuilder {
-        pub fn context_id(mut self, v: impl Into<BrowsingContext>) -> Self { self.context_id = Some(v.into()); self }
-        pub fn origin(mut self, v: impl Into<CaptureScreenshotOrigin>) -> Self { self.origin = Some(v.into()); self }
-        pub fn format(mut self, v: impl Into<ImageFormat>) -> Self { self.format = Some(v.into()); self }
-        pub fn clip(mut self, v: impl Into<ClipRectangle>) -> Self { self.clip = Some(v.into()); self }
-        pub fn save_path(mut self, v: impl Into<String>) -> Self { self.save_path = Some(v.into()); self }
+        pub fn context_id(mut self, v: impl Into<BrowsingContext>) -> Self {
+            self.context_id = Some(v.into());
+            self
+        }
+        pub fn origin(mut self, v: impl Into<CaptureScreenshotOrigin>) -> Self {
+            self.origin = Some(v.into());
+            self
+        }
+        pub fn format(mut self, v: impl Into<ImageFormat>) -> Self {
+            self.format = Some(v.into());
+            self
+        }
+        pub fn clip(mut self, v: impl Into<ClipRectangle>) -> Self {
+            self.clip = Some(v.into());
+            self
+        }
+        pub fn save_path(mut self, v: impl Into<String>) -> Self {
+            self.save_path = Some(v.into());
+            self
+        }
         pub fn build(self) -> BrowserScreenshotOptions {
             BrowserScreenshotOptions {
-                context_id: self.context_id, origin: self.origin, format: self.format,
-                clip: self.clip, save_path: self.save_path,
+                context_id: self.context_id,
+                origin: self.origin,
+                format: self.format,
+                clip: self.clip,
+                save_path: self.save_path,
             }
         }
     }
@@ -85,10 +103,19 @@ pub mod options {
     }
 
     impl NavigateOptionsBuilder {
-        pub fn wait(mut self, v: impl Into<ReadinessState>) -> Self { self.wait = Some(v.into()); self }
-        pub fn context_id(mut self, v: impl Into<BrowsingContext>) -> Self { self.context_id = Some(v.into()); self }
+        pub fn wait(mut self, v: impl Into<ReadinessState>) -> Self {
+            self.wait = Some(v.into());
+            self
+        }
+        pub fn context_id(mut self, v: impl Into<BrowsingContext>) -> Self {
+            self.context_id = Some(v.into());
+            self
+        }
         pub fn build(self) -> NavigateOptions {
-            NavigateOptions { wait: self.wait, context_id: self.context_id }
+            NavigateOptions {
+                wait: self.wait,
+                context_id: self.context_id,
+            }
         }
     }
 
@@ -105,10 +132,19 @@ pub mod options {
     }
 
     impl CreateContextOptionsBuilder {
-        pub fn context_type(mut self, v: impl Into<CreateType>) -> Self { self.context_type = Some(v.into()); self }
-        pub fn reference_context(mut self, v: impl Into<BrowsingContext>) -> Self { self.reference_context = Some(v.into()); self }
+        pub fn context_type(mut self, v: impl Into<CreateType>) -> Self {
+            self.context_type = Some(v.into());
+            self
+        }
+        pub fn reference_context(mut self, v: impl Into<BrowsingContext>) -> Self {
+            self.reference_context = Some(v.into());
+            self
+        }
         pub fn build(self) -> CreateContextOptions {
-            CreateContextOptions { context_type: self.context_type, reference_context: self.reference_context }
+            CreateContextOptions {
+                context_type: self.context_type,
+                reference_context: self.reference_context,
+            }
         }
     }
 
@@ -129,14 +165,28 @@ pub mod options {
     }
 
     impl FindNodesOptionsBuilder {
-        pub fn context_id(mut self, v: impl Into<BrowsingContext>) -> Self { self.context_id = Some(v.into()); self }
-        pub fn max_node_count(mut self, v: impl Into<u64>) -> Self { self.max_node_count = Some(v.into()); self }
-        pub fn serialization_options(mut self, v: impl Into<SerializationOptions>) -> Self { self.serialization_options = Some(v.into()); self }
-        pub fn start_nodes(mut self, v: Vec<SharedReference>) -> Self { self.start_nodes = Some(v); self }
+        pub fn context_id(mut self, v: impl Into<BrowsingContext>) -> Self {
+            self.context_id = Some(v.into());
+            self
+        }
+        pub fn max_node_count(mut self, v: impl Into<u64>) -> Self {
+            self.max_node_count = Some(v.into());
+            self
+        }
+        pub fn serialization_options(mut self, v: impl Into<SerializationOptions>) -> Self {
+            self.serialization_options = Some(v.into());
+            self
+        }
+        pub fn start_nodes(mut self, v: Vec<SharedReference>) -> Self {
+            self.start_nodes = Some(v);
+            self
+        }
         pub fn build(self) -> FindNodesOptions {
             FindNodesOptions {
-                context_id: self.context_id, max_node_count: self.max_node_count,
-                serialization_options: self.serialization_options, start_nodes: self.start_nodes,
+                context_id: self.context_id,
+                max_node_count: self.max_node_count,
+                serialization_options: self.serialization_options,
+                start_nodes: self.start_nodes,
             }
         }
     }
@@ -156,12 +206,22 @@ pub mod options {
     }
 
     impl WaitForNodesOptionsBuilder {
-        pub fn context_id(mut self, v: impl Into<BrowsingContext>) -> Self { self.context_id = Some(v.into()); self }
-        pub fn timeout_ms(mut self, v: impl Into<u64>) -> Self { self.timeout_ms = Some(v.into()); self }
-        pub fn poll_interval_ms(mut self, v: impl Into<u64>) -> Self { self.poll_interval_ms = Some(v.into()); self }
+        pub fn context_id(mut self, v: impl Into<BrowsingContext>) -> Self {
+            self.context_id = Some(v.into());
+            self
+        }
+        pub fn timeout_ms(mut self, v: impl Into<u64>) -> Self {
+            self.timeout_ms = Some(v.into());
+            self
+        }
+        pub fn poll_interval_ms(mut self, v: impl Into<u64>) -> Self {
+            self.poll_interval_ms = Some(v.into());
+            self
+        }
         pub fn build(self) -> WaitForNodesOptions {
             WaitForNodesOptions {
-                context_id: self.context_id, timeout_ms: self.timeout_ms,
+                context_id: self.context_id,
+                timeout_ms: self.timeout_ms,
                 poll_interval_ms: self.poll_interval_ms,
             }
         }
@@ -180,10 +240,19 @@ pub mod options {
     }
 
     impl OnRequestOptionsBuilder {
-        pub fn url_patterns(mut self, v: Vec<UrlPattern>) -> Self { self.url_patterns = Some(v); self }
-        pub fn contexts(mut self, v: Vec<String>) -> Self { self.contexts = Some(v); self }
+        pub fn url_patterns(mut self, v: Vec<UrlPattern>) -> Self {
+            self.url_patterns = Some(v);
+            self
+        }
+        pub fn contexts(mut self, v: Vec<String>) -> Self {
+            self.contexts = Some(v);
+            self
+        }
         pub fn build(self) -> OnRequestOptions {
-            OnRequestOptions { url_patterns: self.url_patterns, contexts: self.contexts }
+            OnRequestOptions {
+                url_patterns: self.url_patterns,
+                contexts: self.contexts,
+            }
         }
     }
 
@@ -200,10 +269,19 @@ pub mod options {
     }
 
     impl SubscribeEventsOptionsBuilder {
-        pub fn browsing_contexts(mut self, v: Vec<String>) -> Self { self.browsing_contexts = Some(v); self }
-        pub fn user_contexts(mut self, v: Vec<String>) -> Self { self.user_contexts = Some(v); self }
+        pub fn browsing_contexts(mut self, v: Vec<String>) -> Self {
+            self.browsing_contexts = Some(v);
+            self
+        }
+        pub fn user_contexts(mut self, v: Vec<String>) -> Self {
+            self.user_contexts = Some(v);
+            self
+        }
         pub fn build(self) -> SubscribeEventsOptions {
-            SubscribeEventsOptions { browsing_contexts: self.browsing_contexts, user_contexts: self.user_contexts }
+            SubscribeEventsOptions {
+                browsing_contexts: self.browsing_contexts,
+                user_contexts: self.user_contexts,
+            }
         }
     }
 
@@ -224,14 +302,28 @@ pub mod options {
     }
 
     impl EvaluateScriptOptionsBuilder {
-        pub fn target(mut self, v: impl Into<Target>) -> Self { self.target = Some(v.into()); self }
-        pub fn result_ownership(mut self, v: impl Into<ResultOwnership>) -> Self { self.result_ownership = Some(v.into()); self }
-        pub fn serialization_options(mut self, v: impl Into<SerializationOptions>) -> Self { self.serialization_options = Some(v.into()); self }
-        pub fn user_activation(mut self, v: impl Into<bool>) -> Self { self.user_activation = Some(v.into()); self }
+        pub fn target(mut self, v: impl Into<Target>) -> Self {
+            self.target = Some(v.into());
+            self
+        }
+        pub fn result_ownership(mut self, v: impl Into<ResultOwnership>) -> Self {
+            self.result_ownership = Some(v.into());
+            self
+        }
+        pub fn serialization_options(mut self, v: impl Into<SerializationOptions>) -> Self {
+            self.serialization_options = Some(v.into());
+            self
+        }
+        pub fn user_activation(mut self, v: impl Into<bool>) -> Self {
+            self.user_activation = Some(v.into());
+            self
+        }
         pub fn build(self) -> EvaluateScriptOptions {
             EvaluateScriptOptions {
-                target: self.target, result_ownership: self.result_ownership,
-                serialization_options: self.serialization_options, user_activation: self.user_activation,
+                target: self.target,
+                result_ownership: self.result_ownership,
+                serialization_options: self.serialization_options,
+                user_activation: self.user_activation,
             }
         }
     }
@@ -253,14 +345,28 @@ pub mod options {
     }
 
     impl AddPreloadScriptOptionsBuilder {
-        pub fn arguments(mut self, v: Vec<ChannelValue>) -> Self { self.arguments = Some(v); self }
-        pub fn contexts(mut self, v: Vec<BrowsingContext>) -> Self { self.contexts = Some(v); self }
-        pub fn user_contexts(mut self, v: Vec<String>) -> Self { self.user_contexts = Some(v); self }
-        pub fn sandbox(mut self, v: impl Into<String>) -> Self { self.sandbox = Some(v.into()); self }
+        pub fn arguments(mut self, v: Vec<ChannelValue>) -> Self {
+            self.arguments = Some(v);
+            self
+        }
+        pub fn contexts(mut self, v: Vec<BrowsingContext>) -> Self {
+            self.contexts = Some(v);
+            self
+        }
+        pub fn user_contexts(mut self, v: Vec<String>) -> Self {
+            self.user_contexts = Some(v);
+            self
+        }
+        pub fn sandbox(mut self, v: impl Into<String>) -> Self {
+            self.sandbox = Some(v.into());
+            self
+        }
         pub fn build(self) -> AddPreloadScriptOptions {
             AddPreloadScriptOptions {
-                arguments: self.arguments, contexts: self.contexts,
-                user_contexts: self.user_contexts, sandbox: self.sandbox,
+                arguments: self.arguments,
+                contexts: self.contexts,
+                user_contexts: self.user_contexts,
+                sandbox: self.sandbox,
             }
         }
     }
@@ -278,10 +384,19 @@ pub mod options {
     }
 
     impl EmulateTimezoneOptionsBuilder {
-        pub fn contexts(mut self, v: Vec<BrowsingContext>) -> Self { self.contexts = Some(v); self }
-        pub fn user_contexts(mut self, v: Vec<String>) -> Self { self.user_contexts = Some(v); self }
+        pub fn contexts(mut self, v: Vec<BrowsingContext>) -> Self {
+            self.contexts = Some(v);
+            self
+        }
+        pub fn user_contexts(mut self, v: Vec<String>) -> Self {
+            self.user_contexts = Some(v);
+            self
+        }
         pub fn build(self) -> EmulateTimezoneOptions {
-            EmulateTimezoneOptions { contexts: self.contexts, user_contexts: self.user_contexts }
+            EmulateTimezoneOptions {
+                contexts: self.contexts,
+                user_contexts: self.user_contexts,
+            }
         }
     }
 
@@ -298,27 +413,31 @@ pub mod options {
     }
 
     impl AuthenticateOptionsBuilder {
-        pub fn url_patterns(mut self, v: Vec<UrlPattern>) -> Self { self.url_patterns = Some(v); self }
-        pub fn contexts(mut self, v: Vec<String>) -> Self { self.contexts = Some(v); self }
+        pub fn url_patterns(mut self, v: Vec<UrlPattern>) -> Self {
+            self.url_patterns = Some(v);
+            self
+        }
+        pub fn contexts(mut self, v: Vec<String>) -> Self {
+            self.contexts = Some(v);
+            self
+        }
         pub fn build(self) -> AuthenticateOptions {
-            AuthenticateOptions { url_patterns: self.url_patterns, contexts: self.contexts }
+            AuthenticateOptions {
+                url_patterns: self.url_patterns,
+                contexts: self.contexts,
+            }
         }
     }
 }
 
-
 pub use options::{
-    AddPreloadScriptOptions, AddPreloadScriptOptionsBuilder,
-    AuthenticateOptions, AuthenticateOptionsBuilder,
-    BrowserScreenshotOptions, BrowserScreenshotOptionsBuilder,
-    CreateContextOptions, CreateContextOptionsBuilder,
-    EmulateTimezoneOptions, EmulateTimezoneOptionsBuilder,
-    EvaluateScriptOptions, EvaluateScriptOptionsBuilder,
-    FindNodesOptions, FindNodesOptionsBuilder,
-    NavigateOptions, NavigateOptionsBuilder,
-    OnRequestOptions, OnRequestOptionsBuilder,
-    SubscribeEventsOptions, SubscribeEventsOptionsBuilder,
-    WaitForNodesOptions, WaitForNodesOptionsBuilder,
+    AddPreloadScriptOptions, AddPreloadScriptOptionsBuilder, AuthenticateOptions,
+    AuthenticateOptionsBuilder, BrowserScreenshotOptions, BrowserScreenshotOptionsBuilder,
+    CreateContextOptions, CreateContextOptionsBuilder, EmulateTimezoneOptions,
+    EmulateTimezoneOptionsBuilder, EvaluateScriptOptions, EvaluateScriptOptionsBuilder,
+    FindNodesOptions, FindNodesOptionsBuilder, NavigateOptions, NavigateOptionsBuilder,
+    OnRequestOptions, OnRequestOptionsBuilder, SubscribeEventsOptions,
+    SubscribeEventsOptionsBuilder, WaitForNodesOptions, WaitForNodesOptionsBuilder,
 };
 
 pub trait BidiBrowser: Send + Sync {
@@ -383,19 +502,15 @@ pub trait BidiBrowser: Send + Sync {
     fn close_context(
         &mut self,
         context: DomainBrowsingContext,
-    ) -> impl Future<Output = Result<(), ContextCloseError>> + Send
-    {
-        async move {
-            self.driver_mut().close_context(context.id().clone()).await
-        }
+    ) -> impl Future<Output = Result<(), ContextCloseError>> + Send {
+        async move { self.driver_mut().close_context(context.id().clone()).await }
     }
 
     /// Creates a new browsing context (tab) with default options.
     fn create_context(
         &mut self,
         background: bool,
-    ) -> impl Future<Output = Result<DomainBrowsingContext, ContextCreationError>> + Send
-    {
+    ) -> impl Future<Output = Result<DomainBrowsingContext, ContextCreationError>> + Send {
         async move {
             self.create_context_with_options(background, CreateContextOptions::default())
                 .await
@@ -407,8 +522,7 @@ pub trait BidiBrowser: Send + Sync {
         &mut self,
         background: bool,
         options: CreateContextOptions,
-    ) -> impl Future<Output = Result<DomainBrowsingContext, ContextCreationError>> + Send
-    {
+    ) -> impl Future<Output = Result<DomainBrowsingContext, ContextCreationError>> + Send {
         async move {
             let context_type = options.context_type.unwrap_or(CreateType::Tab);
             let mut builder = CreateBuilder::default().r#type(context_type);
@@ -990,5 +1104,4 @@ pub trait BidiBrowser: Send + Sync {
     fn end_session(&mut self) -> impl Future<Output = Result<(), SessionSendError>> + Send {
         async move { self.driver_mut().end_session().await }
     }
-
 }

@@ -37,7 +37,11 @@ fn add_module_property_to_module<'a>(mod_prop: ModuleProperty<'a>, module: &mut 
             module.commands.push(c);
             // Ensure every command has a corresponding result entry
             let result_name = Cow::Owned(format!("{}Result", name));
-            if !module.command_results.iter().any(|cr| cr.name == result_name) {
+            if !module
+                .command_results
+                .iter()
+                .any(|cr| cr.name == result_name)
+            {
                 module.command_results.push(CommandResult {
                     description: Some(Cow::Owned(format!("Result for {} command", name))),
                     name: result_name,
@@ -48,7 +52,11 @@ fn add_module_property_to_module<'a>(mod_prop: ModuleProperty<'a>, module: &mut 
             }
         }
         ModuleProperty::CommandResult(cr) => {
-            if let Some(existing) = module.command_results.iter_mut().find(|r| r.name == cr.name) {
+            if let Some(existing) = module
+                .command_results
+                .iter_mut()
+                .find(|r| r.name == cr.name)
+            {
                 *existing = cr;
             } else {
                 module.command_results.push(cr);
@@ -87,12 +95,12 @@ pub fn parse_pdl<'a>(input: &'a str) -> Result<Protocol<'a>, Error> {
         let line_num = idx + 1;
 
         let trim_line = line.trim();
-        if trim_line.starts_with('#') {
+        if let Some(rest) = trim_line.strip_prefix('#') {
             if let Some(desc) = description.as_mut() {
                 desc.push('\n');
-                desc.push_str(trim_line[1..].trim_start());
+                desc.push_str(rest.trim_start());
             } else {
-                description = Some(trim_line[1..].trim_start().to_string());
+                description = Some(rest.trim_start().to_string());
             }
             continue;
         }
@@ -102,11 +110,10 @@ pub fn parse_pdl<'a>(input: &'a str) -> Result<Protocol<'a>, Error> {
         }
 
         if let Some(caps) = regex!("^(experimental )?(deprecated )?domain (.*)").captures(line) {
-            if let Some(module) = protocol.modules.last_mut() {
-                if let Some(mod_prop) = mod_prop.take() {
+            if let Some(module) = protocol.modules.last_mut()
+                && let Some(mod_prop) = mod_prop.take() {
                     add_module_property_to_module(mod_prop, module);
                 }
-            }
 
             let module = Module {
                 description: description.take().map(Cow::Owned),
@@ -276,12 +283,9 @@ pub fn parse_pdl<'a>(input: &'a str) -> Result<Protocol<'a>, Error> {
                     }))
                 }
                 "parameters" | "properties" => {
-                    match mod_prop {
-                        // typedef is the only one with the optional parameters
-                        Some(ModuleProperty::Type(ref mut mod_prop)) => {
-                            mod_prop.parameters = Some(Item::Properties(vec![]))
-                        }
-                        _ => (),
+                    // typedef is the only one with the optional parameters
+                    if let Some(ModuleProperty::Type(ref mut mod_prop)) = mod_prop {
+                        mod_prop.parameters = Some(Item::Properties(vec![]))
                     }
                 }
                 _ => unreachable!(),
@@ -334,12 +338,11 @@ pub fn parse_pdl<'a>(input: &'a str) -> Result<Protocol<'a>, Error> {
                 module: borrowed!(caps.get(1)).unwrap(),
                 name: None,
             };
-            if let Some(desc) = description.as_ref() {
-                if let Some(caps) = regex!("^Use '([^']+)' instead$").captures(desc) {
+            if let Some(desc) = description.as_ref()
+                && let Some(caps) = regex!("^Use '([^']+)' instead$").captures(desc) {
                     let name = caps.get(1).unwrap().as_str();
                     redirect.name = name.rsplit('.').next().map(str::to_string).map(Cow::Owned);
                 }
-            }
             match mod_prop
                 .as_mut()
                 .ok_or_else(|| format_err!("line {}: missing item declaration", line_num))?
@@ -415,11 +418,10 @@ pub fn parse_pdl<'a>(input: &'a str) -> Result<Protocol<'a>, Error> {
         bail!("line {}: unknown token `{}`", line_num, line)
     }
 
-    if let Some(module) = protocol.modules.last_mut() {
-        if let Some(mod_prop) = mod_prop.take() {
+    if let Some(module) = protocol.modules.last_mut()
+        && let Some(mod_prop) = mod_prop.take() {
             add_module_property_to_module(mod_prop, module);
         }
-    }
     protocol.version = version.ok_or_else(|| format_err!("Missing version"))?;
     Ok(protocol)
 }

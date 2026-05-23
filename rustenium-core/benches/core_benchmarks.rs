@@ -1,8 +1,10 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
-use rustenium_core::transport::{ConnectionTransportConfig, ConnectionTransportProtocol};
-use rustenium_core::find_free_port;
+use criterion::{Criterion, black_box, criterion_group, criterion_main};
+use rustenium_bidi_definitions::base::{
+    CommandResponse, ErrorCode, ErrorEnum, ErrorResponse, Message, SuccessEnum,
+};
 use rustenium_core::CommandResponseState;
-use rustenium_bidi_definitions::base::{CommandResponse, ErrorCode, ErrorResponse, ErrorEnum, Message, SuccessEnum};
+use rustenium_core::find_free_port;
+use rustenium_core::transport::{ConnectionTransportConfig, ConnectionTransportProtocol};
 use std::collections::HashMap;
 
 fn bench_transport_config_formatting(c: &mut Criterion) {
@@ -17,13 +19,9 @@ fn bench_transport_config_formatting(c: &mut Criterion) {
         b.iter(|| black_box(config.full_endpoint()))
     });
 
-    c.bench_function("host_port", |b| {
-        b.iter(|| black_box(config.host_port()))
-    });
+    c.bench_function("host_port", |b| b.iter(|| black_box(config.host_port())));
 
-    c.bench_function("path", |b| {
-        b.iter(|| black_box(config.path()))
-    });
+    c.bench_function("path", |b| b.iter(|| black_box(config.path())));
 }
 
 fn bench_find_free_port(c: &mut Criterion) {
@@ -35,12 +33,14 @@ fn bench_find_free_port(c: &mut Criterion) {
 fn bench_message_parsing(c: &mut Criterion) {
     let success_json = serde_json::json!({
         "type": "success", "id": 1, "result": {"status": "ok"}
-    }).to_string();
+    })
+    .to_string();
 
     let error_json = serde_json::json!({
         "type": "error", "id": 5, "error": "unknown command",
         "message": "bad", "stacktrace": ""
-    }).to_string();
+    })
+    .to_string();
 
     let event_json = serde_json::json!({
         "type": "event", "method": "browsingContext.load",

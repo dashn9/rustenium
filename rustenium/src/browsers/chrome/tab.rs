@@ -1,5 +1,5 @@
-use rustenium_cdp_definitions::browser_protocol::target::types::TargetId;
 use crate::domain::cdp::page::Page;
+use rustenium_cdp_definitions::browser_protocol::target::types::TargetId;
 
 pub struct ChromeTab {
     target_id: TargetId,

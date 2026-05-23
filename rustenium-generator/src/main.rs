@@ -1,7 +1,7 @@
 use std::path::Path;
 
-use crate::frontend::bidi::cddl_to_bidi;
 use crate::backend::base_types::DomainDirection;
+use crate::frontend::bidi::cddl_to_bidi;
 use crate::frontend::cdp::pdl_to_cdp;
 
 mod backend;

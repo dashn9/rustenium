@@ -1,17 +1,14 @@
 use rustenium::input::{
-    KeyPressOptionsBuilder, KeyboardTypeOptionsBuilder, DelayRange,
+    DelayRange, KeyPressOptionsBuilder, KeyboardTypeOptionsBuilder, MouseButton,
     MouseClickOptionsBuilder, MouseMoveOptionsBuilder, MouseOptionsBuilder,
-    MouseWheelOptionsBuilder, MouseButton,
-    ScrollOptionsBuilder, SwipeOptionsBuilder, TouchMoveOptionsBuilder,
+    MouseWheelOptionsBuilder, ScrollOptionsBuilder, SwipeOptionsBuilder, TouchMoveOptionsBuilder,
 };
 
 // ── Mouse option builders ─────────────────────────────────────────────────────
 
 #[test]
 fn mouse_move_options_builder_sets_fields() {
-    let opts = MouseMoveOptionsBuilder::default()
-        .steps(10)
-        .build();
+    let opts = MouseMoveOptionsBuilder::default().steps(10).build();
     assert_eq!(opts.steps, Some(10));
     assert!(opts.origin.is_none());
 }
@@ -45,13 +42,18 @@ fn mouse_click_options_builder_partial() {
 
 #[test]
 fn mouse_options_builder_sets_button() {
-    let opts = MouseOptionsBuilder::default().button(MouseButton::Middle).build();
+    let opts = MouseOptionsBuilder::default()
+        .button(MouseButton::Middle)
+        .build();
     assert_eq!(opts.button, Some(MouseButton::Middle));
 }
 
 #[test]
 fn mouse_wheel_options_builder_sets_deltas() {
-    let opts = MouseWheelOptionsBuilder::default().delta_x(20).delta_y(-40).build();
+    let opts = MouseWheelOptionsBuilder::default()
+        .delta_x(20)
+        .delta_y(-40)
+        .build();
     assert_eq!(opts.delta_x, Some(20));
     assert_eq!(opts.delta_y, Some(-40));
 }

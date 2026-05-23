@@ -185,7 +185,7 @@ pub trait BidiEventManagement {
             let unsubscribe_command = UnsubscribeBuilder::default()
                 .unsubscribe_parameters(UnsubscribeParameters::UnsubscribeByAttributesRequest(
                     UnsubscribeByAttributesRequestBuilder::default()
-                        .events(events.clone().into_iter())
+                        .events(events.clone())
                         .build()
                         .unwrap(),
                 ))
@@ -264,7 +264,7 @@ pub trait BidiEventManagement {
             (
                 tokio::spawn(async move {
                     while let Some(event) = rx.recv().await {
-                        let event: Event = event.event_data.try_into().unwrap();
+                        let event: Event = event.event_data;
                         let event_method = event.identifier().to_string();
                         // Manually handling context check was abandoned, too much variation/nesting of context
                         for bidi_event in bidi_events.lock().unwrap().iter() {

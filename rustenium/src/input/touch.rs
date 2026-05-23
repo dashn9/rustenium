@@ -1,13 +1,12 @@
-use std::future::Future;
-use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
-use crate::error::bidi::InputError;
 use super::mouse::Point;
+use crate::error::bidi::InputError;
+use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
+use std::future::Future;
 
 #[derive(Debug, Clone, Default)]
 pub struct SwipeOptions {
     pub duration_ms: Option<u64>,
 }
-
 
 #[derive(Default, Clone)]
 pub struct SwipeOptionsBuilder {
@@ -15,8 +14,15 @@ pub struct SwipeOptionsBuilder {
 }
 
 impl SwipeOptionsBuilder {
-    pub fn duration_ms(mut self, v: u64) -> Self { self.duration_ms = Some(v); self }
-    pub fn build(self) -> SwipeOptions { SwipeOptions { duration_ms: self.duration_ms } }
+    pub fn duration_ms(mut self, v: u64) -> Self {
+        self.duration_ms = Some(v);
+        self
+    }
+    pub fn build(self) -> SwipeOptions {
+        SwipeOptions {
+            duration_ms: self.duration_ms,
+        }
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -30,15 +36,21 @@ pub struct ScrollOptions {
     pub duration_ms: Option<u64>,
 }
 
-
 #[derive(Default, Clone)]
 pub struct ScrollOptionsBuilder {
     duration_ms: Option<u64>,
 }
 
 impl ScrollOptionsBuilder {
-    pub fn duration_ms(mut self, v: u64) -> Self { self.duration_ms = Some(v); self }
-    pub fn build(self) -> ScrollOptions { ScrollOptions { duration_ms: self.duration_ms } }
+    pub fn duration_ms(mut self, v: u64) -> Self {
+        self.duration_ms = Some(v);
+        self
+    }
+    pub fn build(self) -> ScrollOptions {
+        ScrollOptions {
+            duration_ms: self.duration_ms,
+        }
+    }
 }
 
 pub trait Touch {

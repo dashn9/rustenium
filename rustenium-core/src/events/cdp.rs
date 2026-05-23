@@ -77,7 +77,10 @@ pub trait CdpEventManagement {
             let cdp_events = self.get_events().clone();
             let handle = tokio::spawn(async move {
                 while let Some(event) = rx.recv().await {
-                    tracing::debug!("[CdpEventManagement] CDP Event received: {}", &event.identifier());
+                    tracing::debug!(
+                        "[CdpEventManagement] CDP Event received: {}",
+                        &event.identifier()
+                    );
                     for cdp_event in cdp_events.lock().unwrap().iter() {
                         if cdp_event.methods.contains(&event.identifier().to_string()) {
                             let ch = Arc::clone(&cdp_event.handler);

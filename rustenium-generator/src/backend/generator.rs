@@ -1,7 +1,7 @@
 use std::borrow::Cow;
-use std::collections::{HashMap};
+use std::collections::HashMap;
 use std::fs;
-use std::io::{self, Error, ErrorKind};
+use std::io::{self, Error};
 use std::ops::Deref;
 use std::path::{Path, PathBuf};
 
@@ -9,10 +9,20 @@ use heck::{ToSnakeCase, ToUpperCamelCase};
 use proc_macro2::{Ident, TokenStream};
 use quote::{format_ident, quote};
 
-use crate::backend::base_types::{DomainDirection, Module, Param, Protocol, Type, TypeRef, Variant};
+use crate::backend::base_types::{
+    DomainDirection, Module, Param, Protocol, Type, TypeRef, Variant,
+};
 use crate::backend::builder::Builder;
 use crate::backend::event;
 use crate::backend::types::{FieldDefinition, FieldType, ModuleDatatype};
+
+/// Per-module bookkeeping carried through compilation:
+/// `(module_snake, module_camel, type_idents, command_idents, event_idents)`.
+type ModuleInfo = (String, String, Vec<Ident>, Vec<Ident>, Vec<Ident>);
+
+/// Per-protocol bookkeeping:
+/// `(protocol_snake, protocol_camel, modules, protocol_mod_content)`.
+type ProtocolInfo = (String, String, Vec<ModuleInfo>, TokenStream);
 
 #[derive(Debug, Clone)]
 pub struct Generator {
@@ -55,12 +65,19 @@ impl Generator {
     pub fn compile_protocols(&mut self, protocols: &[Protocol]) -> io::Result<()> {
         let target_base: PathBuf = self.out_dir.clone().map(Ok).unwrap_or_else(|| {
             std::env::var_os("OUT_DIR")
-                .ok_or_else(|| Error::new(ErrorKind::Other, "OUT_DIR environment variable is not set"))
+                .ok_or_else(|| {
+                    Error::other("OUT_DIR environment variable is not set")
+                })
                 .map(Into::into)
         })?;
 
-        fs::create_dir_all(&target_base)
-            .unwrap_or_else(|e| panic!("Unable to create directory {}: {}", target_base.display(), e));
+        fs::create_dir_all(&target_base).unwrap_or_else(|e| {
+            panic!(
+                "Unable to create directory {}: {}",
+                target_base.display(),
+                e
+            )
+        });
 
         let macros_path = target_base.join("macros.rs");
         fs::write(&macros_path, event::GROUP_ENUM_MACRO)
@@ -71,12 +88,12 @@ impl Generator {
         for protocol in protocols.iter() {
             let ps = protocol.name.unwrap_or("").to_snake_case();
             for module in &protocol.modules {
-                self.module_protocol_map.insert(module.name.to_string(), ps.clone());
+                self.module_protocol_map
+                    .insert(module.name.to_string(), ps.clone());
             }
         }
 
-        // (proto_snake, proto_camel, modules, protocol_mod_content)
-        let mut protocol_infos: Vec<(String, String, Vec<(String, String, Vec<Ident>, Vec<Ident>, Vec<Ident>)>, TokenStream)> = Vec::new();
+        let mut protocol_infos: Vec<ProtocolInfo> = Vec::new();
 
         let flat = protocols.len() == 1 && protocols[0].name.is_none();
 
@@ -88,27 +105,31 @@ impl Generator {
                 target_base.clone()
             } else {
                 let dir = target_base.join(&protocol_snake);
-                fs::create_dir_all(&dir)
-                    .unwrap_or_else(|e| panic!("Unable to create directory {}: {}", dir.display(), e));
+                fs::create_dir_all(&dir).unwrap_or_else(|e| {
+                    panic!("Unable to create directory {}: {}", dir.display(), e)
+                });
                 dir
             };
 
-            let mut module_infos: Vec<(String, String, Vec<Ident>, Vec<Ident>, Vec<Ident>)> = Vec::new();
+            let mut module_infos: Vec<ModuleInfo> = Vec::new();
 
             let with_deprecated = self.with_deprecated;
             let with_experimental = self.with_experimental;
-            let modules_to_process: Vec<_> = protocol.modules.iter()
+            let modules_to_process: Vec<_> = protocol
+                .modules
+                .iter()
                 .filter(|d| with_deprecated || !d.deprecated)
                 .filter(|d| with_experimental || !d.experimental)
                 .collect();
 
             for module in &modules_to_process {
                 let mod_name = module.name.to_snake_case();
-                let parts = self.generate_module_files(module, &protocol_snake, flat);
+                let parts = self.generate_module_files(module, flat);
 
                 let module_dir = protocol_dir.join(&mod_name);
-                fs::create_dir_all(&module_dir)
-                    .unwrap_or_else(|e| panic!("Unable to create directory {}: {}", module_dir.display(), e));
+                fs::create_dir_all(&module_dir).unwrap_or_else(|e| {
+                    panic!("Unable to create directory {}: {}", module_dir.display(), e)
+                });
 
                 let mut sub_mods = Vec::new();
                 for (file_name, content) in [
@@ -121,28 +142,44 @@ impl Generator {
                 ] {
                     if !content.is_empty() {
                         let file_path = module_dir.join(format!("{file_name}.rs"));
-                        fs::write(&file_path, content.to_string())
-                            .unwrap_or_else(|e| panic!("Unable to write {}: {}", file_path.display(), e));
+                        fs::write(&file_path, content.to_string()).unwrap_or_else(|e| {
+                            panic!("Unable to write {}: {}", file_path.display(), e)
+                        });
                         sub_mods.push(file_name.to_string());
                     }
                 }
 
-                let sub_mod_decls: Vec<_> = sub_mods.iter().map(|name| {
-                    let mod_ident = format_ident!("{}", name);
-                    quote! { pub mod #mod_ident; }
-                }).collect();
+                let sub_mod_decls: Vec<_> = sub_mods
+                    .iter()
+                    .map(|name| {
+                        let mod_ident = format_ident!("{}", name);
+                        quote! { pub mod #mod_ident; }
+                    })
+                    .collect();
 
                 let module_mod_content = quote! { #(#sub_mod_decls)* };
                 let module_mod_path = module_dir.join("mod.rs");
-                fs::write(&module_mod_path, module_mod_content.to_string())
-                    .unwrap_or_else(|e| panic!("Unable to write {}: {}", module_mod_path.display(), e));
+                fs::write(&module_mod_path, module_mod_content.to_string()).unwrap_or_else(|e| {
+                    panic!("Unable to write {}: {}", module_mod_path.display(), e)
+                });
 
-                module_infos.push((mod_name, module.name.to_upper_camel_case(), parts.type_leaves, parts.command_leaves, parts.event_leaves));
+                module_infos.push((
+                    mod_name,
+                    module.name.to_upper_camel_case(),
+                    parts.type_leaves,
+                    parts.command_leaves,
+                    parts.event_leaves,
+                ));
             }
 
-            let (ts, cs, es) = if flat { ("Type", "Command", "Event") } else { ("Types", "Commands", "Events") };
+            let (ts, cs, es) = if flat {
+                ("Type", "Command", "Event")
+            } else {
+                ("Types", "Commands", "Events")
+            };
 
-            let type_entries: Vec<_> = module_infos.iter()
+            let type_entries: Vec<_> = module_infos
+                .iter()
                 .filter(|(_, _, tl, _, _)| !tl.is_empty())
                 .map(|(name, mcamel, _, _, _)| {
                     let mod_id = format_ident!("{}", name);
@@ -152,7 +189,8 @@ impl Generator {
                 })
                 .collect();
 
-            let cmd_entries: Vec<_> = module_infos.iter()
+            let cmd_entries: Vec<_> = module_infos
+                .iter()
                 .filter(|(_, _, _, cl, _)| !cl.is_empty())
                 .map(|(name, mcamel, _, _, _)| {
                     let mod_id = format_ident!("{}", name);
@@ -162,7 +200,8 @@ impl Generator {
                 })
                 .collect();
 
-            let evt_entries: Vec<_> = module_infos.iter()
+            let evt_entries: Vec<_> = module_infos
+                .iter()
                 .filter(|(_, _, _, _, el)| !el.is_empty())
                 .map(|(name, mcamel, _, _, _)| {
                     let mod_id = format_ident!("{}", name);
@@ -172,7 +211,10 @@ impl Generator {
                 })
                 .collect();
 
-            let protocol_camel = protocol.name.map(|n| n.to_upper_camel_case()).unwrap_or_default();
+            let protocol_camel = protocol
+                .name
+                .map(|n| n.to_upper_camel_case())
+                .unwrap_or_default();
 
             // Build transitive entries: leaf => protocol_enum via module_enum
             let mut proto_transitive: Vec<(TokenStream, TokenStream, TokenStream)> = Vec::new();
@@ -183,27 +225,44 @@ impl Generator {
                 let mod_id = format_ident!("{}", mod_name);
                 for leaf in type_leaves {
                     let me = format_ident!("{}{}", mcamel, ts);
-                    proto_transitive.push((quote!(#mod_id::types::#leaf), quote!(#mod_id::types::#me), quote!(#proto_type_name)));
+                    proto_transitive.push((
+                        quote!(#mod_id::types::#leaf),
+                        quote!(#mod_id::types::#me),
+                        quote!(#proto_type_name),
+                    ));
                 }
                 for leaf in cmd_leaves {
                     let me = format_ident!("{}{}", mcamel, cs);
-                    proto_transitive.push((quote!(#mod_id::commands::#leaf), quote!(#mod_id::commands::#me), quote!(#proto_cmd_name)));
+                    proto_transitive.push((
+                        quote!(#mod_id::commands::#leaf),
+                        quote!(#mod_id::commands::#me),
+                        quote!(#proto_cmd_name),
+                    ));
                 }
                 for leaf in evt_leaves {
                     let me = format_ident!("{}{}", mcamel, es);
-                    proto_transitive.push((quote!(#mod_id::events::#leaf), quote!(#mod_id::events::#me), quote!(#proto_evt_name)));
+                    proto_transitive.push((
+                        quote!(#mod_id::events::#leaf),
+                        quote!(#mod_id::events::#me),
+                        quote!(#proto_evt_name),
+                    ));
                 }
             }
 
             let protocol_type_group = event::group_enum_closed(&proto_type_name, &type_entries);
-            let protocol_cmd_group = event::group_enum_closed_identifiable(&proto_cmd_name, &cmd_entries);
-            let protocol_evt_group = event::group_enum_open_identifiable(&proto_evt_name, &evt_entries);
+            let protocol_cmd_group =
+                event::group_enum_closed_identifiable(&proto_cmd_name, &cmd_entries);
+            let protocol_evt_group =
+                event::group_enum_open_identifiable(&proto_evt_name, &evt_entries);
             let protocol_transitive = event::impl_from_transitive(&proto_transitive);
 
-            let mod_decls: Vec<_> = module_infos.iter().map(|(name, _, _, _, _)| {
-                let mod_ident = format_ident!("{}", name);
-                quote! { pub mod #mod_ident; }
-            }).collect();
+            let mod_decls: Vec<_> = module_infos
+                .iter()
+                .map(|(name, _, _, _, _)| {
+                    let mod_ident = format_ident!("{}", name);
+                    quote! { pub mod #mod_ident; }
+                })
+                .collect();
 
             let protocol_mod_content = quote! {
                 #(#mod_decls)*
@@ -218,11 +277,17 @@ impl Generator {
 
             if !flat {
                 let protocol_mod_path = protocol_dir.join("mod.rs");
-                fs::write(&protocol_mod_path, protocol_mod_content.to_string())
-                    .unwrap_or_else(|e| panic!("Unable to write {}: {}", protocol_mod_path.display(), e));
+                fs::write(&protocol_mod_path, protocol_mod_content.to_string()).unwrap_or_else(
+                    |e| panic!("Unable to write {}: {}", protocol_mod_path.display(), e),
+                );
             }
 
-            protocol_infos.push((protocol_snake, protocol_camel, module_infos, protocol_mod_content));
+            protocol_infos.push((
+                protocol_snake,
+                protocol_camel,
+                module_infos,
+                protocol_mod_content,
+            ));
         }
 
         let top_mod_content = if flat {
@@ -254,11 +319,18 @@ impl Generator {
                 #proto_content
             }
         } else {
-            let has_types = |modules: &Vec<(String, String, Vec<Ident>, Vec<Ident>, Vec<Ident>)>| modules.iter().any(|(_, _, tl, _, _)| !tl.is_empty());
-            let has_cmds = |modules: &Vec<(String, String, Vec<Ident>, Vec<Ident>, Vec<Ident>)>| modules.iter().any(|(_, _, _, cl, _)| !cl.is_empty());
-            let has_evts = |modules: &Vec<(String, String, Vec<Ident>, Vec<Ident>, Vec<Ident>)>| modules.iter().any(|(_, _, _, _, el)| !el.is_empty());
+            let has_types = |modules: &Vec<ModuleInfo>| {
+                modules.iter().any(|(_, _, tl, _, _)| !tl.is_empty())
+            };
+            let has_cmds = |modules: &Vec<ModuleInfo>| {
+                modules.iter().any(|(_, _, _, cl, _)| !cl.is_empty())
+            };
+            let has_evts = |modules: &Vec<ModuleInfo>| {
+                modules.iter().any(|(_, _, _, _, el)| !el.is_empty())
+            };
 
-            let top_type_entries: Vec<_> = protocol_infos.iter()
+            let top_type_entries: Vec<_> = protocol_infos
+                .iter()
                 .filter(|(_, _, modules, _)| has_types(modules))
                 .map(|(name, pcamel, _, _)| {
                     let mod_id = format_ident!("{}", name);
@@ -268,7 +340,8 @@ impl Generator {
                 })
                 .collect();
 
-            let top_cmd_entries: Vec<_> = protocol_infos.iter()
+            let top_cmd_entries: Vec<_> = protocol_infos
+                .iter()
                 .filter(|(_, _, modules, _)| has_cmds(modules))
                 .map(|(name, pcamel, _, _)| {
                     let mod_id = format_ident!("{}", name);
@@ -278,7 +351,8 @@ impl Generator {
                 })
                 .collect();
 
-            let top_evt_entries: Vec<_> = protocol_infos.iter()
+            let top_evt_entries: Vec<_> = protocol_infos
+                .iter()
                 .filter(|(_, _, modules, _)| has_evts(modules))
                 .map(|(name, pcamel, _, _)| {
                     let mod_id = format_ident!("{}", name);
@@ -299,25 +373,58 @@ impl Generator {
                     let mod_id = format_ident!("{}", mod_name);
                     if !type_leaves.is_empty() {
                         let me = format_ident!("{}Types", mcamel);
-                        top_transitive.push((quote!(#proto_id::#mod_id::types::#me), quote!(#proto_id::#proto_type_enum), quote!(Type)));
-                        for leaf in type_leaves { top_transitive.push((quote!(#proto_id::#mod_id::types::#leaf), quote!(#proto_id::#proto_type_enum), quote!(Type))); }
+                        top_transitive.push((
+                            quote!(#proto_id::#mod_id::types::#me),
+                            quote!(#proto_id::#proto_type_enum),
+                            quote!(Type),
+                        ));
+                        for leaf in type_leaves {
+                            top_transitive.push((
+                                quote!(#proto_id::#mod_id::types::#leaf),
+                                quote!(#proto_id::#proto_type_enum),
+                                quote!(Type),
+                            ));
+                        }
                     }
                     if !cmd_leaves.is_empty() {
                         let me = format_ident!("{}Commands", mcamel);
-                        top_transitive.push((quote!(#proto_id::#mod_id::commands::#me), quote!(#proto_id::#proto_cmd_enum), quote!(Command)));
-                        for leaf in cmd_leaves { top_transitive.push((quote!(#proto_id::#mod_id::commands::#leaf), quote!(#proto_id::#proto_cmd_enum), quote!(Command))); }
+                        top_transitive.push((
+                            quote!(#proto_id::#mod_id::commands::#me),
+                            quote!(#proto_id::#proto_cmd_enum),
+                            quote!(Command),
+                        ));
+                        for leaf in cmd_leaves {
+                            top_transitive.push((
+                                quote!(#proto_id::#mod_id::commands::#leaf),
+                                quote!(#proto_id::#proto_cmd_enum),
+                                quote!(Command),
+                            ));
+                        }
                     }
                     if !evt_leaves.is_empty() {
                         let me = format_ident!("{}Events", mcamel);
-                        top_transitive.push((quote!(#proto_id::#mod_id::events::#me), quote!(#proto_id::#proto_evt_enum), quote!(Event)));
-                        for leaf in evt_leaves { top_transitive.push((quote!(#proto_id::#mod_id::events::#leaf), quote!(#proto_id::#proto_evt_enum), quote!(Event))); }
+                        top_transitive.push((
+                            quote!(#proto_id::#mod_id::events::#me),
+                            quote!(#proto_id::#proto_evt_enum),
+                            quote!(Event),
+                        ));
+                        for leaf in evt_leaves {
+                            top_transitive.push((
+                                quote!(#proto_id::#mod_id::events::#leaf),
+                                quote!(#proto_id::#proto_evt_enum),
+                                quote!(Event),
+                            ));
+                        }
                     }
                 }
             }
 
-            let top_type_group = event::group_enum_closed(&format_ident!("Type"), &top_type_entries);
-            let top_cmd_group = event::group_enum_closed_identifiable(&format_ident!("Command"), &top_cmd_entries);
-            let top_evt_group = event::group_enum_open_identifiable(&format_ident!("Event"), &top_evt_entries);
+            let top_type_group =
+                event::group_enum_closed(&format_ident!("Type"), &top_type_entries);
+            let top_cmd_group =
+                event::group_enum_closed_identifiable(&format_ident!("Command"), &top_cmd_entries);
+            let top_evt_group =
+                event::group_enum_open_identifiable(&format_ident!("Event"), &top_evt_entries);
             let top_transitive_impls = event::impl_from_transitive(&top_transitive);
 
             let event_message = if !top_evt_entries.is_empty() {
@@ -333,10 +440,13 @@ impl Generator {
                 TokenStream::default()
             };
 
-            let top_mod_decls: Vec<_> = protocol_infos.iter().map(|(name, _, _, _)| {
-                let mod_ident = format_ident!("{}", name);
-                quote! { pub mod #mod_ident; }
-            }).collect();
+            let top_mod_decls: Vec<_> = protocol_infos
+                .iter()
+                .map(|(name, _, _, _)| {
+                    let mod_ident = format_ident!("{}", name);
+                    quote! { pub mod #mod_ident; }
+                })
+                .collect();
 
             quote! {
                 use serde::{Serialize, Deserialize};
@@ -378,7 +488,7 @@ impl Generator {
         Ok(())
     }
 
-    pub fn generate_module_files(&mut self, module: &Module, current_protocol: &str, flat: bool) -> ModuleParts {
+    pub fn generate_module_files(&mut self, module: &Module, flat: bool) -> ModuleParts {
         let with_deprecated = self.with_deprecated;
         let with_experimental = self.with_experimental;
 
@@ -405,7 +515,7 @@ impl Generator {
             let camel_name = dt.name().to_upper_camel_case();
 
             let local_same_file = is_type;
-            let (def, builder_tokens) = self.generate_type(module, &dt, current_protocol, local_same_file);
+            let (def, builder_tokens) = self.generate_type(module, &dt, local_same_file);
             if is_type {
                 types_stream.extend(def);
                 type_builders_stream.extend(builder_tokens);
@@ -445,7 +555,10 @@ impl Generator {
                     // Type alias result — bare ident if target is a result in same module, else projected path
                     let ref0 = &refs[0];
                     let is_local_result = ref0.module.as_deref() == Some(module.name.as_ref())
-                        && module.command_results.iter().any(|r| r.name.as_ref() == ref0.name.as_ref());
+                        && module
+                            .command_results
+                            .iter()
+                            .any(|r| r.name.as_ref() == ref0.name.as_ref());
                     let ty = if is_local_result {
                         let i = format_ident!("{}", ref0.name.to_upper_camel_case());
                         quote! { #i }
@@ -455,11 +568,14 @@ impl Generator {
                     results_stream.extend(quote! { pub type #name = #ty; });
                 } else {
                     // TypeChoice result → untagged enum
-                    let variant_data: Vec<_> = refs.iter().map(|tr| {
-                        let v = format_ident!("{}", tr.name.to_upper_camel_case());
-                        let ty = self.projected_type(module, tr, false);
-                        (v, ty)
-                    }).collect();
+                    let variant_data: Vec<_> = refs
+                        .iter()
+                        .map(|tr| {
+                            let v = format_ident!("{}", tr.name.to_upper_camel_case());
+                            let ty = self.projected_type(module, tr, false);
+                            (v, ty)
+                        })
+                        .collect();
                     let variants = variant_data.iter().map(|(v, ty)| quote! { #v(#ty) });
                     let from_impls = variant_data.iter().map(|(v, ty)| quote! {
                         impl From<#ty> for #name { fn from(val: #ty) -> Self { #name::#v(val) } }
@@ -478,7 +594,9 @@ impl Generator {
                     });
                 }
             } else {
-                let params = cr.parameters.iter()
+                let params = cr
+                    .parameters
+                    .iter()
                     .filter(|p| with_deprecated || !p.deprecated)
                     .filter(|p| with_experimental || !p.experimental);
 
@@ -495,7 +613,13 @@ impl Generator {
                     }
 
                     let field_name = format_ident!("{}", generate_field_name(param.name.as_ref()));
-                    let mut ty = self.generate_field_type(module, cr.name.as_ref(), param.name.as_ref(), &param.r#type, current_protocol, false);
+                    let mut ty = self.generate_field_type(
+                        module,
+                        cr.name.as_ref(),
+                        param.name.as_ref(),
+                        &param.r#type,
+                        false,
+                    );
                     ty.needs_box = ty.needs_box || param.is_circular_dep;
 
                     let field = FieldDefinition {
@@ -511,7 +635,9 @@ impl Generator {
                         default_fns.extend(default_fn);
                     }
 
-                    builder.fields.push((field.generate_meta(param, &returns_name), field));
+                    builder
+                        .fields
+                        .push((field.generate_meta(param, &returns_name), field));
                 }
 
                 if builder.fields.is_empty() {
@@ -548,33 +674,60 @@ impl Generator {
         }
 
         // Group enums
-        let type_entries: Vec<_> = type_idents.iter().map(|(v, t)| (v.clone(), quote!(#t))).collect();
-        let cmd_entries: Vec<_> = command_idents.iter().map(|(v, t)| (v.clone(), quote!(#t))).collect();
-        let evt_entries: Vec<_> = event_idents.iter().map(|(v, t)| (v.clone(), quote!(#t))).collect();
+        let type_entries: Vec<_> = type_idents
+            .iter()
+            .map(|(v, t)| (v.clone(), quote!(#t)))
+            .collect();
+        let cmd_entries: Vec<_> = command_idents
+            .iter()
+            .map(|(v, t)| (v.clone(), quote!(#t)))
+            .collect();
+        let evt_entries: Vec<_> = event_idents
+            .iter()
+            .map(|(v, t)| (v.clone(), quote!(#t)))
+            .collect();
 
         let module_camel = module.name.to_upper_camel_case();
 
-        let (ts, cs, es) = if flat { ("Type", "Command", "Event") } else { ("Types", "Commands", "Events") };
+        let (ts, cs, es) = if flat {
+            ("Type", "Command", "Event")
+        } else {
+            ("Types", "Commands", "Events")
+        };
         if !type_entries.is_empty() {
-            types_stream.extend(event::group_enum_closed(&format_ident!("{}{}", module_camel, ts), &type_entries));
+            types_stream.extend(event::group_enum_closed(
+                &format_ident!("{}{}", module_camel, ts),
+                &type_entries,
+            ));
         }
         if !cmd_entries.is_empty() {
-            commands_stream.extend(event::group_enum_closed_identifiable(&format_ident!("{}{}", module_camel, cs), &cmd_entries));
+            commands_stream.extend(event::group_enum_closed_identifiable(
+                &format_ident!("{}{}", module_camel, cs),
+                &cmd_entries,
+            ));
         }
         if !evt_entries.is_empty() {
-            events_stream.extend(event::group_enum_closed_identifiable(&format_ident!("{}{}", module_camel, es), &evt_entries));
+            events_stream.extend(event::group_enum_closed_identifiable(
+                &format_ident!("{}{}", module_camel, es),
+                &evt_entries,
+            ));
         }
 
         let serde_import = quote! { use serde::{Serialize, Deserialize}; };
 
         let wrap = |stream: TokenStream| -> TokenStream {
-            if stream.is_empty() { stream }
-            else { let imp = serde_import.clone(); quote! { #imp #stream } }
+            if stream.is_empty() {
+                stream
+            } else {
+                let imp = serde_import.clone();
+                quote! { #imp #stream }
+            }
         };
 
         let wrap_builder = |stream: TokenStream, source_mod: &str| -> TokenStream {
-            if stream.is_empty() { stream }
-            else {
+            if stream.is_empty() {
+                stream
+            } else {
                 let source = format_ident!("{}", source_mod);
                 quote! { use super::#source::*; #stream }
             }
@@ -593,24 +746,48 @@ impl Generator {
         }
     }
 
-    fn generate_type(&mut self, module: &Module, dt: &ModuleDatatype, current_protocol: &str, local_same_file: bool) -> (TokenStream, TokenStream) {
+    fn generate_type(
+        &mut self,
+        module: &Module,
+        dt: &ModuleDatatype,
+        local_same_file: bool,
+    ) -> (TokenStream, TokenStream) {
         let (def, builder) = if let Some(type_refs) = dt.as_type_choice() {
-            (self.generate_type_choice_enum(module, dt, type_refs, local_same_file), TokenStream::default())
+            (
+                self.generate_type_choice_enum(module, dt, type_refs, local_same_file),
+                TokenStream::default(),
+            )
         } else if let Some(vars) = dt.as_enum() {
-            (self.generate_enum(&Variant::from(dt), vars), TokenStream::default())
+            (
+                self.generate_enum(&Variant::from(dt), vars),
+                TokenStream::default(),
+            )
         } else {
             let with_deprecated = self.with_deprecated;
             let with_experimental = self.with_experimental;
-            let params = dt.params()
+            let params = dt
+                .params()
                 .filter(|dt| with_deprecated || !dt.deprecated)
                 .filter(|dt| with_experimental || !dt.experimental);
 
-            let (mut stream, params_builder) = self.generate_struct(module, dt, dt.ident_name(), params, current_protocol, local_same_file);
+            let (mut stream, params_builder) = self.generate_struct(
+                module,
+                dt,
+                dt.ident_name(),
+                params,
+                local_same_file,
+            );
 
             let domain_direction_const = match dt.direction() {
-                Some(DomainDirection::Remote) => quote! { pub const DOMAIN_DIRECTION: &'static str = "remote"; },
-                Some(DomainDirection::Local) => quote! { pub const DOMAIN_DIRECTION: &'static str = "local"; },
-                Some(DomainDirection::All) => quote! { pub const DOMAIN_DIRECTION: &'static str = "all"; },
+                Some(DomainDirection::Remote) => {
+                    quote! { pub const DOMAIN_DIRECTION: &'static str = "remote"; }
+                }
+                Some(DomainDirection::Local) => {
+                    quote! { pub const DOMAIN_DIRECTION: &'static str = "local"; }
+                }
+                Some(DomainDirection::All) => {
+                    quote! { pub const DOMAIN_DIRECTION: &'static str = "all"; }
+                }
                 None => TokenStream::default(),
             };
 
@@ -690,7 +867,6 @@ impl Generator {
         dt: &ModuleDatatype,
         struct_ident: String,
         params: T,
-        current_protocol: &str,
         local_same_file: bool,
     ) -> (TokenStream, Builder)
     where
@@ -718,7 +894,13 @@ impl Generator {
             }
 
             let field_name = format_ident!("{}", generate_field_name(param.name.as_ref()));
-            let mut ty = self.generate_field_type(module, dt.name(), param.name.as_ref(), &param.r#type, current_protocol, local_same_file);
+            let mut ty = self.generate_field_type(
+                module,
+                dt.name(),
+                param.name.as_ref(),
+                &param.r#type,
+                local_same_file,
+            );
             ty.needs_box = ty.needs_box || param.is_circular_dep;
 
             let field = FieldDefinition {
@@ -734,7 +916,9 @@ impl Generator {
                 default_fns.extend(default_fn);
             }
 
-            builder.fields.push((field.generate_meta(param, &struct_ident), field));
+            builder
+                .fields
+                .push((field.generate_meta(param, &struct_ident), field));
         }
 
         let serde_derives = if has_validation {
@@ -747,8 +931,12 @@ impl Generator {
         if builder.fields.is_empty() {
             if let ModuleDatatype::Type(tydef) = dt {
                 // Newtypes: only add Default for primitive/string inner types
-                let derives = if tydef.extends.is_integer() || tydef.extends.is_string()
-                    || matches!(tydef.extends, Type::Number | Type::Boolean | Type::Object | Type::Any) {
+                let derives = if tydef.extends.is_integer()
+                    || tydef.extends.is_string()
+                    || matches!(
+                        tydef.extends,
+                        Type::Number | Type::Boolean | Type::Object | Type::Any
+                    ) {
                     quote! { #[derive(Debug, Clone, PartialEq, Default)] }
                 } else {
                     quote! { #[derive(Debug, Clone, PartialEq)] }
@@ -759,7 +947,13 @@ impl Generator {
                     #derives
                     #serde_derives
                 };
-                let wrapped_ty = self.generate_field_type(module, dt.name(), dt.name(), &tydef.extends, current_protocol, local_same_file);
+                let wrapped_ty = self.generate_field_type(
+                    module,
+                    dt.name(),
+                    dt.name(),
+                    &tydef.extends,
+                    local_same_file,
+                );
 
                 let struct_def = quote! {
                     pub struct #name(#wrapped_ty);
@@ -852,7 +1046,13 @@ impl Generator {
     }
 
     fn generate_enum(&mut self, ident: &Variant, variants: &[Variant]) -> TokenStream {
-        let enum_name = ident.name.as_ref().rsplit('.').next().unwrap().to_upper_camel_case();
+        let enum_name = ident
+            .name
+            .as_ref()
+            .rsplit('.')
+            .next()
+            .unwrap()
+            .to_upper_camel_case();
         let name = format_ident!("{}", enum_name);
 
         let vars = variants.iter().map(|v| {
@@ -899,7 +1099,10 @@ impl Generator {
         for tr in type_refs {
             let variant_name = format_ident!("{}", tr.name.to_upper_camel_case());
             let is_empty = tr.module.is_none()
-                && !module.types.iter().any(|t| t.name.as_ref() == tr.name.as_ref());
+                && !module
+                    .types
+                    .iter()
+                    .any(|t| t.name.as_ref() == tr.name.as_ref());
 
             if is_empty {
                 variants.push(quote! { #variant_name {} });
@@ -941,7 +1144,6 @@ impl Generator {
         parent: &str,
         param_name: &str,
         ty: &Type,
-        current_protocol: &str,
         local_same_file: bool,
     ) -> FieldType {
         match ty {
@@ -951,7 +1153,9 @@ impl Generator {
             Type::Boolean => FieldType::new(quote! { bool }),
             Type::String => FieldType::new(quote! { String }),
             Type::Object | Type::Any => FieldType::new(quote! { serde_json::Value }),
-            Type::Extensible => FieldType::new(quote! { std::collections::HashMap<String, serde_json::Value> }),
+            Type::Extensible => {
+                FieldType::new(quote! { std::collections::HashMap<String, serde_json::Value> })
+            }
             Type::Binary => FieldType::new(quote! { crate::Binary }),
             Type::Enum(_) => {
                 let ty = format_ident!("{}", subenum_name(parent, param_name));
@@ -961,7 +1165,13 @@ impl Generator {
                 let ty = if let Type::Ref(type_ref) = ty.deref() {
                     self.projected_type(module, type_ref, local_same_file)
                 } else {
-                    let ty = self.generate_field_type(module, parent, param_name, ty, current_protocol, local_same_file);
+                    let ty = self.generate_field_type(
+                        module,
+                        parent,
+                        param_name,
+                        ty,
+                        local_same_file,
+                    );
                     quote! { #ty }
                 };
                 FieldType::new_vec(ty)
@@ -977,7 +1187,12 @@ impl Generator {
         }
     }
 
-    fn projected_type(&self, module: &Module, type_ref: &TypeRef, local_same_file: bool) -> TokenStream {
+    fn projected_type(
+        &self,
+        module: &Module,
+        type_ref: &TypeRef,
+        local_same_file: bool,
+    ) -> TokenStream {
         let ident = format_ident!("{}", type_ref.name.to_upper_camel_case());
 
         let is_local = match &type_ref.module {
@@ -1029,7 +1244,11 @@ pub(crate) fn generate_enum_field_name(name: &str) -> String {
 }
 
 fn subenum_name(parent: &str, inner: &str) -> String {
-    format!("{}{}", parent.to_upper_camel_case(), generate_enum_field_name(inner))
+    format!(
+        "{}{}",
+        parent.to_upper_camel_case(),
+        generate_enum_field_name(inner)
+    )
 }
 
 pub fn fmt(out_dir: &Path) {

@@ -1,4 +1,6 @@
-use rustenium::input::{Point, MouseButton, MouseClickOptions, MouseMoveOptions, MouseOptions, MouseWheelOptions};
+use rustenium::input::{
+    MouseButton, MouseClickOptions, MouseMoveOptions, MouseOptions, MouseWheelOptions, Point,
+};
 
 #[tokio::test]
 async fn point_default_is_origin() {

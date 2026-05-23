@@ -13,21 +13,19 @@ use std::sync::{Arc, Mutex};
 
 /// How Firefox is launched and managed.
 #[derive(Debug, Clone)]
+#[derive(Default)]
 pub enum FirefoxLaunchMode {
     /// Rustenium starts Firefox and connects to its BiDi WebSocket directly (default).
+    #[default]
     SpawnAndAttach,
     /// Connect to an existing Firefox instance on the specified remote debugging port.
     Remote(u16),
 }
 
-impl Default for FirefoxLaunchMode {
-    fn default() -> Self {
-        FirefoxLaunchMode::SpawnAndAttach
-    }
-}
 
 /// Configuration for Firefox browser.
 #[derive(Debug, Clone)]
+#[derive(Default)]
 pub struct FirefoxConfig {
     /// Host (default: localhost).
     pub host: Option<String>,
@@ -55,20 +53,6 @@ pub struct FirefoxConfig {
     pub browser_flags: Option<Vec<String>>,
 }
 
-impl Default for FirefoxConfig {
-    fn default() -> Self {
-        FirefoxConfig {
-            host: None,
-            capabilities: FirefoxCapabilities::default(),
-            proxy: None,
-            launch_mode: FirefoxLaunchMode::default(),
-            remote_debugging_port: None,
-            firefox_executable_path: None,
-            profile_dir: None,
-            browser_flags: None,
-        }
-    }
-}
 
 pub struct FirefoxBrowser {
     config: FirefoxConfig,
@@ -98,9 +82,11 @@ impl FirefoxBrowser {
 
         let firefox_process = Self::init_firefox(&mut config, firefox_port).await;
 
-        let mut ct_config = ConnectionTransportConfig::default();
-        ct_config.host = host;
-        ct_config.port = firefox_port;
+        let ct_config = ConnectionTransportConfig {
+            host,
+            port: firefox_port,
+            ..ConnectionTransportConfig::default()
+        };
 
         let driver = Self::init_bidi(&mut config, &ct_config).await;
 
@@ -203,9 +189,11 @@ impl FirefoxBrowser {
             .clone()
             .unwrap_or(String::from("localhost"));
         let port = self.config.remote_debugging_port.unwrap();
-        let mut ct_config = ConnectionTransportConfig::default();
-        ct_config.host = host;
-        ct_config.port = port;
+        let ct_config = ConnectionTransportConfig {
+            host,
+            port,
+            ..ConnectionTransportConfig::default()
+        };
         self.driver = Some(Self::init_bidi(&mut self.config, &ct_config).await);
     }
 

@@ -1,6 +1,8 @@
-use crate::error::bidi::{EvaluateResultError, InvalidPositionError, MouseInputError, ScreenshotError};
-use crate::input::{Mouse, MouseClickOptions, MouseMoveOptions};
+use crate::error::bidi::{
+    EvaluateResultError, InvalidPositionError, MouseInputError, ScreenshotError,
+};
 use crate::input::Point;
+use crate::input::{Mouse, MouseClickOptions, MouseMoveOptions};
 use crate::nodes::NodePosition;
 use crate::nodes::node::{NodeScreenShotOptions, NodeType};
 use rustenium_bidi_definitions::Command;
@@ -10,7 +12,9 @@ use rustenium_bidi_definitions::browsing_context::results::CaptureScreenshotResu
 use rustenium_bidi_definitions::browsing_context::types::{BrowsingContext, Locator};
 use rustenium_bidi_definitions::script::command_builders::CallFunctionBuilder;
 use rustenium_bidi_definitions::script::results::{CallFunctionResult, EvaluateResult};
-use rustenium_bidi_definitions::script::type_builders::{ContextTargetBuilder, SharedReferenceBuilder};
+use rustenium_bidi_definitions::script::type_builders::{
+    ContextTargetBuilder, SharedReferenceBuilder,
+};
 use rustenium_bidi_definitions::script::types::{
     ContextTarget, NodeRemoteValue, PrimitiveProtocolValue, RemoteReference, RemoteValue,
 };
@@ -36,17 +40,19 @@ pub(crate) struct BidiNode<
 impl<T: ConnectionTransport> std::fmt::Debug for BidiNode<T> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let raw = &self._raw_node;
-        let local_name = raw.value.as_ref().and_then(|v| v.local_name.as_deref()).unwrap_or("?");
+        let local_name = raw
+            .value
+            .as_ref()
+            .and_then(|v| v.local_name.as_deref())
+            .unwrap_or("?");
         let shared_id = raw.shared_id.as_ref().map(|id| id.as_ref()).unwrap_or("?");
         let attrs = raw.value.as_ref().and_then(|v| v.attributes.as_ref());
         let mut dbg = f.debug_struct("Node");
-        dbg.field("tag", &local_name)
-           .field("shared_id", &shared_id);
+        dbg.field("tag", &local_name).field("shared_id", &shared_id);
         if let Some(attrs) = attrs {
             dbg.field("attributes", attrs);
         }
-        dbg.field("children", &self.children.len())
-           .finish()
+        dbg.field("children", &self.children.len()).finish()
     }
 }
 
@@ -59,8 +65,8 @@ impl<T: ConnectionTransport> BidiNode<T> {
     ) -> Self {
         let mut children = Vec::new();
         let context_id = context_id.into();
-        if let Some(node_properties) = &_raw_node.value {
-            if let Some(node_properties_children) = node_properties.children.clone() {
+        if let Some(node_properties) = &_raw_node.value
+            && let Some(node_properties_children) = node_properties.children.clone() {
                 children.extend(Self::process_node_value_to_children(
                     node_properties_children,
                     &locator,
@@ -68,7 +74,6 @@ impl<T: ConnectionTransport> BidiNode<T> {
                     context_id.clone(),
                 ));
             }
-        }
         Self {
             _raw_node,
             children,
@@ -87,8 +92,12 @@ impl<T: ConnectionTransport> BidiNode<T> {
     ) -> Vec<BidiNode<T>> {
         let mut chrome_node_children = Vec::new();
         for child in children {
-            let chrome_node =
-                BidiNode::new(child, locator.to_owned(), session.clone(), context_id.clone());
+            let chrome_node = BidiNode::new(
+                child,
+                locator.to_owned(),
+                session.clone(),
+                context_id.clone(),
+            );
             chrome_node_children.push(chrome_node);
         }
         chrome_node_children
@@ -111,7 +120,7 @@ impl<T: ConnectionTransport> BidiNode<T> {
         &self,
         command: impl Into<Command>,
     ) -> Result<CommandResponse, SessionSendError> {
-        let session = self.session.as_ref().ok_or_else(|| {
+        let session = self.session.as_ref().ok_or({
             SessionSendError::ResponseReceiveTimeoutError(ResponseReceiveTimeoutError)
         })?;
 
@@ -150,9 +159,7 @@ impl<T: ConnectionTransport> BidiNode<T> {
             .unwrap()
     }
 
-    pub async fn get_position(
-        &mut self,
-    ) -> Result<Option<&NodePosition>, EvaluateResultError> {
+    pub async fn get_position(&mut self) -> Result<Option<&NodePosition>, EvaluateResultError> {
         if self.position.is_none() {
             self.update_position().await?;
         }
@@ -436,7 +443,8 @@ impl<T: ConnectionTransport> BidiNode<T> {
                             throw new Error('Cannot focus non-HTMLElement'); \
                         } \
                         this.focus(); \
-                    }".to_string(),
+                    }"
+                    .to_string(),
                 )
                 .await_promise(false)
                 .target(self.context_target())
@@ -454,10 +462,7 @@ impl<T: ConnectionTransport> BidiNode<T> {
         options: MouseMoveOptions,
     ) -> Result<(), MouseInputError> {
         self.scroll_into_view().await?;
-        let position = self
-            .get_position()
-            .await?
-            .ok_or(InvalidPositionError)?;
+        let position = self.get_position().await?.ok_or(InvalidPositionError)?;
         let center = Point {
             x: position.x + position.width / 2.0,
             y: position.y + position.height / 2.0,
@@ -476,7 +481,10 @@ impl<T: ConnectionTransport> BidiNode<T> {
         Ok(())
     }
 
-    pub async fn screenshot(&self, options: NodeScreenShotOptions) -> Result<String, ScreenshotError> {
+    pub async fn screenshot(
+        &self,
+        options: NodeScreenShotOptions,
+    ) -> Result<String, ScreenshotError> {
         let mut builder = CaptureScreenshotBuilder::default().context(self.context_id.clone());
         if let Some(origin) = options.origin {
             builder = builder.origin(origin);
@@ -504,7 +512,7 @@ impl<T: ConnectionTransport> BidiNode<T> {
             Err(err) => {
                 return Err(ScreenshotError::CommandResultError(
                     CommandResultError::SessionSendError(err),
-                ))
+                ));
             }
         };
 
@@ -518,14 +526,13 @@ impl<T: ConnectionTransport> BidiNode<T> {
                     .unwrap_or(0);
                 path_obj.join(format!("screenshot_{}.png", timestamp))
             } else {
-                if let Some(parent) = path_obj.parent() {
-                    if !parent.as_os_str().is_empty() && !parent.exists() {
+                if let Some(parent) = path_obj.parent()
+                    && !parent.as_os_str().is_empty() && !parent.exists() {
                         return Err(ScreenshotError::InvalidPath(format!(
                             "Parent directory does not exist: {}",
                             parent.display()
                         )));
                     }
-                }
                 path_obj.to_path_buf()
             };
 

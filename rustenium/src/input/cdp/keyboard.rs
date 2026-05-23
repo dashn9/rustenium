@@ -1,10 +1,10 @@
+use rand::Rng;
 use rustenium_cdp_definitions::browser_protocol::input::commands::{
     DispatchKeyEvent, DispatchKeyEventType, InsertText,
 };
 use rustenium_core::error::CdpCommandResultError;
 use rustenium_core::session::CdpSession;
 use rustenium_core::transport::ConnectionTransport;
-use rand::Rng;
 use std::collections::HashSet;
 use std::sync::{Arc, Mutex};
 use tokio::sync::Mutex as TokioMutex;
@@ -64,10 +64,9 @@ impl<OT: ConnectionTransport> CdpKeyboard<OT> {
     fn describe(def: &KeyDefinition, modifiers: i64) -> KeyDescription {
         let shift_active = modifiers & 8 != 0;
 
-        let key = if shift_active && def.shift_key.is_some() {
-            def.shift_key.unwrap()
-        } else {
-            def.key.unwrap_or("")
+        let key = match (shift_active, def.shift_key) {
+            (true, Some(k)) => k,
+            _ => def.key.unwrap_or(""),
         };
 
         let key_code = if shift_active && def.shift_key_code.is_some() {
@@ -88,17 +87,22 @@ impl<OT: ConnectionTransport> CdpKeyboard<OT> {
         if let Some(t) = def.text {
             text = Some(t);
         }
-        if shift_active {
-            if let Some(t) = def.shift_text {
+        if shift_active
+            && let Some(t) = def.shift_text {
                 text = Some(t);
             }
-        }
         // Any modifier other than Shift suppresses text (it's a shortcut, not typing).
         if modifiers & !8 != 0 {
             text = None;
         }
 
-        KeyDescription { key, code, text, key_code, location }
+        KeyDescription {
+            key,
+            code,
+            text,
+            key_code,
+            location,
+        }
     }
 
     /// Press a key down. Uses the keymap for non-printable keys; falls back gracefully.
@@ -208,7 +212,12 @@ impl<OT: ConnectionTransport> CdpKeyboard<OT> {
     /// Hold a key down for `hold_for` milliseconds, firing autoRepeat keydown events
     /// at random intervals sampled from `step_range`, then release.
     /// The first repeat is delayed 3–5× longer than normal to mirror OS initial-repeat latency.
-    pub async fn hold_press(&self, key: &str, hold_for: u64, step_range: DelayRange) -> Result<(), InputError> {
+    pub async fn hold_press(
+        &self,
+        key: &str,
+        hold_for: u64,
+        step_range: DelayRange,
+    ) -> Result<(), InputError> {
         self.down(key).await?;
         let initial = {
             let mut rng = rand::rng();

@@ -1,6 +1,4 @@
-use rustenium::browsers::{
-    BrowserScreenshotOptionsBuilder, NavigateOptionsBuilder,
-};
+use rustenium::browsers::{BrowserScreenshotOptionsBuilder, NavigateOptionsBuilder};
 use rustenium_bidi_definitions::browsing_context::types::ReadinessState;
 
 // ── NavigateOptions ───────────────────────────────────────────────────────────

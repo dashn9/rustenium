@@ -30,7 +30,10 @@ pub fn ensure_chromedriver() -> PathBuf {
         "{CHROME_BASE_URL}/{CHROME_VERSION}/{0}/chromedriver-{0}.zip",
         chrome_platform()
     );
-    tracing::info!("Downloading chromedriver {CHROME_VERSION} for {} ...", chrome_platform());
+    tracing::info!(
+        "Downloading chromedriver {CHROME_VERSION} for {} ...",
+        chrome_platform()
+    );
     download_and_extract(&url, &dir)
         .unwrap_or_else(|e| panic!("Failed to download chromedriver: {e}"));
 
@@ -54,9 +57,11 @@ pub fn ensure_chrome() -> PathBuf {
         "{CHROME_BASE_URL}/{CHROME_VERSION}/{0}/chrome-{0}.zip",
         chrome_platform()
     );
-    tracing::info!("Downloading Chrome {CHROME_VERSION} for {} ...", chrome_platform());
-    download_and_extract(&url, &dir)
-        .unwrap_or_else(|e| panic!("Failed to download Chrome: {e}"));
+    tracing::info!(
+        "Downloading Chrome {CHROME_VERSION} for {} ...",
+        chrome_platform()
+    );
+    download_and_extract(&url, &dir).unwrap_or_else(|e| panic!("Failed to download Chrome: {e}"));
 
     let path = find_exe(&dir, &name)
         .unwrap_or_else(|| panic!("{name} not found after extraction in {dir:?}"));
@@ -81,8 +86,7 @@ pub fn ensure_firefox() -> PathBuf {
     }
 
     tracing::info!("Downloading Firefox {FIREFOX_VERSION} for {plat} ...");
-    download_firefox(&dir)
-        .unwrap_or_else(|e| panic!("Failed to download Firefox: {e}"));
+    download_firefox(&dir).unwrap_or_else(|e| panic!("Failed to download Firefox: {e}"));
 
     let path = find_exe(&dir, &name)
         .unwrap_or_else(|| panic!("{name} not found after extraction in {dir:?}"));
@@ -125,10 +129,7 @@ fn download_firefox(dest: &Path) -> Result<(), String> {
             // Firefox installer supports /S (silent) and /D= (install directory)
             // /D= must be the last arg with no quotes and use backslashes
             let install_dir = dest.to_str().unwrap().replace('/', "\\");
-            run(
-                &exe_str,
-                &["/S", &format!("/D={install_dir}")],
-            )?;
+            run(&exe_str, &["/S", &format!("/D={install_dir}")])?;
 
             let _ = std::fs::remove_file(&exe);
             Ok(())
@@ -147,12 +148,23 @@ fn download_firefox(dest: &Path) -> Result<(), String> {
 
             run(
                 "hdiutil",
-                &["attach", "-nobrowse", "-readonly", "-mountpoint", mount_str, dmg_str],
+                &[
+                    "attach",
+                    "-nobrowse",
+                    "-readonly",
+                    "-mountpoint",
+                    mount_str,
+                    dmg_str,
+                ],
             )?;
 
             let copy_result = run(
                 "cp",
-                &["-R", &format!("{mount_str}/Firefox.app"), dest.to_str().unwrap()],
+                &[
+                    "-R",
+                    &format!("{mount_str}/Firefox.app"),
+                    dest.to_str().unwrap(),
+                ],
             );
 
             // Always attempt to detach, even if copy failed
@@ -185,14 +197,11 @@ pub fn find_system_firefox() -> Option<PathBuf> {
         if p.exists() {
             return Some(p);
         }
-    } else {
-        if let Ok(output) = Command::new("which").arg("firefox").output() {
-            if output.status.success() {
-                let path = String::from_utf8_lossy(&output.stdout).trim().to_string();
-                if !path.is_empty() {
-                    return Some(PathBuf::from(path));
-                }
-            }
+    } else if let Ok(output) = Command::new("which").arg("firefox").output()
+    && output.status.success() {
+        let path = String::from_utf8_lossy(&output.stdout).trim().to_string();
+        if !path.is_empty() {
+            return Some(PathBuf::from(path));
         }
     }
     None

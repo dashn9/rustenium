@@ -1,16 +1,16 @@
+use crate::error::bidi::InputError;
 use rand::Rng;
 use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
 use rustenium_bidi_definitions::input::command_builders::PerformActionsBuilder;
 use rustenium_bidi_definitions::input::type_builders::{
-    KeySourceActionsBuilder, KeyDownActionBuilder, KeyUpActionBuilder, PauseActionBuilder,
+    KeyDownActionBuilder, KeySourceActionsBuilder, KeyUpActionBuilder, PauseActionBuilder,
 };
 use rustenium_bidi_definitions::input::types::{
-    KeySourceActionsType, KeyDownActionType, KeyUpActionType, PauseActionType,
+    KeyDownActionType, KeySourceActionsType, KeyUpActionType, PauseActionType,
 };
-use rustenium_core::error::CommandResultError;
 use rustenium_core::BidiSession;
+use rustenium_core::error::CommandResultError;
 use rustenium_core::transport::ConnectionTransport;
-use crate::error::bidi::InputError;
 use std::sync::Arc;
 use tokio::sync::Mutex;
 
@@ -35,7 +35,9 @@ pub struct DelayRange {
 impl DelayRange {
     /// Returns `None` if `max` is 0 or `min > max`.
     pub fn new(min: u64, max: u64) -> Option<Self> {
-        if max == 0 || min > max { return None; }
+        if max == 0 || min > max {
+            return None;
+        }
         Some(Self { min, max })
     }
 }
@@ -54,8 +56,13 @@ pub struct KeyPressOptionsBuilder {
 }
 
 impl KeyPressOptionsBuilder {
-    pub fn delay(mut self, min: u64, max: u64) -> Self { self.delay = DelayRange::new(min, max); self }
-    pub fn build(self) -> KeyPressOptions { KeyPressOptions { delay: self.delay } }
+    pub fn delay(mut self, min: u64, max: u64) -> Self {
+        self.delay = DelayRange::new(min, max);
+        self
+    }
+    pub fn build(self) -> KeyPressOptions {
+        KeyPressOptions { delay: self.delay }
+    }
 }
 
 /// Options for typing a string of text character by character.
@@ -75,7 +82,10 @@ pub struct KeyboardTypeOptions {
 
 impl Default for KeyboardTypeOptions {
     fn default() -> Self {
-        Self { delay: None, gap_multiplier: 1.2 }
+        Self {
+            delay: None,
+            gap_multiplier: 1.2,
+        }
     }
 }
 
@@ -87,15 +97,27 @@ pub struct KeyboardTypeOptionsBuilder {
 
 impl Default for KeyboardTypeOptionsBuilder {
     fn default() -> Self {
-        Self { delay: None, gap_multiplier: 1.2 }
+        Self {
+            delay: None,
+            gap_multiplier: 1.2,
+        }
     }
 }
 
 impl KeyboardTypeOptionsBuilder {
-    pub fn delay(mut self, min: u64, max: u64) -> Self { self.delay = DelayRange::new(min, max); self }
-    pub fn gap_multiplier(mut self, v: f64) -> Self { self.gap_multiplier = v; self }
+    pub fn delay(mut self, min: u64, max: u64) -> Self {
+        self.delay = DelayRange::new(min, max);
+        self
+    }
+    pub fn gap_multiplier(mut self, v: f64) -> Self {
+        self.gap_multiplier = v;
+        self
+    }
     pub fn build(self) -> KeyboardTypeOptions {
-        KeyboardTypeOptions { delay: self.delay, gap_multiplier: self.gap_multiplier }
+        KeyboardTypeOptions {
+            delay: self.delay,
+            gap_multiplier: self.gap_multiplier,
+        }
     }
 }
 
@@ -236,15 +258,24 @@ impl<OT: ConnectionTransport> BidiKeyboard<OT> {
                 KeySourceActionsBuilder::default()
                     .r#type(KeySourceActionsType::Key)
                     .id(KEYBOARD_ID)
-                    .action(KeyDownActionBuilder::default()
-                        .r#type(KeyDownActionType::KeyDown)
-                        .value(key_value)
-                        .build().unwrap())
-                    .build().unwrap()
+                    .action(
+                        KeyDownActionBuilder::default()
+                            .r#type(KeyDownActionType::KeyDown)
+                            .value(key_value)
+                            .build()
+                            .unwrap(),
+                    )
+                    .build()
+                    .unwrap(),
             )
-            .build().unwrap();
+            .build()
+            .unwrap();
 
-        self.session.lock().await.send(command).await
+        self.session
+            .lock()
+            .await
+            .send(command)
+            .await
             .map_err(|e| InputError::CommandResultError(CommandResultError::SessionSendError(e)))?;
         tracing::debug!(key, "keyboard down done");
         Ok(())
@@ -260,15 +291,24 @@ impl<OT: ConnectionTransport> BidiKeyboard<OT> {
                 KeySourceActionsBuilder::default()
                     .r#type(KeySourceActionsType::Key)
                     .id(KEYBOARD_ID)
-                    .action(KeyUpActionBuilder::default()
-                        .r#type(KeyUpActionType::KeyUp)
-                        .value(key_value)
-                        .build().unwrap())
-                    .build().unwrap()
+                    .action(
+                        KeyUpActionBuilder::default()
+                            .r#type(KeyUpActionType::KeyUp)
+                            .value(key_value)
+                            .build()
+                            .unwrap(),
+                    )
+                    .build()
+                    .unwrap(),
             )
-            .build().unwrap();
+            .build()
+            .unwrap();
 
-        self.session.lock().await.send(command).await
+        self.session
+            .lock()
+            .await
+            .send(command)
+            .await
             .map_err(|e| InputError::CommandResultError(CommandResultError::SessionSendError(e)))?;
         tracing::debug!(key, "keyboard up done");
         Ok(())
@@ -291,31 +331,44 @@ impl<OT: ConnectionTransport> BidiKeyboard<OT> {
         let mut key_actions = KeySourceActionsBuilder::default()
             .r#type(KeySourceActionsType::Key)
             .id(KEYBOARD_ID)
-            .action(KeyDownActionBuilder::default()
-                .r#type(KeyDownActionType::KeyDown)
-                .value(key_value.clone())
-                .build().unwrap());
+            .action(
+                KeyDownActionBuilder::default()
+                    .r#type(KeyDownActionType::KeyDown)
+                    .value(key_value.clone())
+                    .build()
+                    .unwrap(),
+            );
 
-        if let Some(h) = hold {
-            if h > 0 {
-                key_actions = key_actions.action(PauseActionBuilder::default()
-                    .r#type(PauseActionType::Pause)
-                    .duration(h)
-                    .build().unwrap());
+        if let Some(h) = hold
+            && h > 0 {
+                key_actions = key_actions.action(
+                    PauseActionBuilder::default()
+                        .r#type(PauseActionType::Pause)
+                        .duration(h)
+                        .build()
+                        .unwrap(),
+                );
             }
-        }
 
-        key_actions = key_actions.action(KeyUpActionBuilder::default()
-            .r#type(KeyUpActionType::KeyUp)
-            .value(key_value)
-            .build().unwrap());
+        key_actions = key_actions.action(
+            KeyUpActionBuilder::default()
+                .r#type(KeyUpActionType::KeyUp)
+                .value(key_value)
+                .build()
+                .unwrap(),
+        );
 
         let command = PerformActionsBuilder::default()
             .context(context.clone())
             .action(key_actions.build().unwrap())
-            .build().unwrap();
+            .build()
+            .unwrap();
 
-        self.session.lock().await.send(command).await
+        self.session
+            .lock()
+            .await
+            .send(command)
+            .await
             .map_err(|e| InputError::CommandResultError(CommandResultError::SessionSendError(e)))?;
         tracing::debug!(key, "keyboard press done");
         Ok(())
@@ -336,11 +389,13 @@ impl<OT: ConnectionTransport> BidiKeyboard<OT> {
             None => vec![],
             Some(range) => {
                 let mut rng = rand::rng();
-                text.chars().map(|_| {
-                    let hold = rng.random_range(range.min..=range.max);
-                    let gap = ((hold as f64) * gap_multiplier).round() as u64;
-                    (hold, gap)
-                }).collect()
+                text.chars()
+                    .map(|_| {
+                        let hold = rng.random_range(range.min..=range.max);
+                        let gap = ((hold as f64) * gap_multiplier).round() as u64;
+                        (hold, gap)
+                    })
+                    .collect()
             }
         };
 
@@ -352,41 +407,56 @@ impl<OT: ConnectionTransport> BidiKeyboard<OT> {
             tracing::debug!(key = %ch, "keyboard type_text key");
             let key_value = get_bidi_key_value(&ch.to_string())?;
 
-            key_actions = key_actions.action(KeyDownActionBuilder::default()
-                .r#type(KeyDownActionType::KeyDown)
-                .value(key_value.clone())
-                .build().unwrap());
+            key_actions = key_actions.action(
+                KeyDownActionBuilder::default()
+                    .r#type(KeyDownActionType::KeyDown)
+                    .value(key_value.clone())
+                    .build()
+                    .unwrap(),
+            );
 
-            if let Some(&(hold, _)) = timings.get(i) {
-                if hold > 0 {
-                    key_actions = key_actions.action(PauseActionBuilder::default()
-                        .r#type(PauseActionType::Pause)
-                        .duration(hold)
-                        .build().unwrap());
+            if let Some(&(hold, _)) = timings.get(i)
+                && hold > 0 {
+                    key_actions = key_actions.action(
+                        PauseActionBuilder::default()
+                            .r#type(PauseActionType::Pause)
+                            .duration(hold)
+                            .build()
+                            .unwrap(),
+                    );
                 }
-            }
 
-            key_actions = key_actions.action(KeyUpActionBuilder::default()
-                .r#type(KeyUpActionType::KeyUp)
-                .value(key_value)
-                .build().unwrap());
+            key_actions = key_actions.action(
+                KeyUpActionBuilder::default()
+                    .r#type(KeyUpActionType::KeyUp)
+                    .value(key_value)
+                    .build()
+                    .unwrap(),
+            );
 
-            if let Some(&(_, gap)) = timings.get(i) {
-                if gap > 0 {
-                    key_actions = key_actions.action(PauseActionBuilder::default()
-                        .r#type(PauseActionType::Pause)
-                        .duration(gap)
-                        .build().unwrap());
+            if let Some(&(_, gap)) = timings.get(i)
+                && gap > 0 {
+                    key_actions = key_actions.action(
+                        PauseActionBuilder::default()
+                            .r#type(PauseActionType::Pause)
+                            .duration(gap)
+                            .build()
+                            .unwrap(),
+                    );
                 }
-            }
         }
 
         let command = PerformActionsBuilder::default()
             .context(context.clone())
             .action(key_actions.build().unwrap())
-            .build().unwrap();
+            .build()
+            .unwrap();
 
-        self.session.lock().await.send(command).await
+        self.session
+            .lock()
+            .await
+            .send(command)
+            .await
             .map_err(|e| InputError::CommandResultError(CommandResultError::SessionSendError(e)))?;
         tracing::debug!("keyboard type_text done");
         Ok(())
@@ -400,10 +470,20 @@ impl<OT: ConnectionTransport> crate::input::keyboard::Keyboard for BidiKeyboard<
     async fn up(&self, key: &str, context: &BrowsingContext) -> Result<(), InputError> {
         self.up(key, context).await
     }
-    async fn press(&self, key: &str, context: &BrowsingContext, options: Option<KeyPressOptions>) -> Result<(), InputError> {
+    async fn press(
+        &self,
+        key: &str,
+        context: &BrowsingContext,
+        options: Option<KeyPressOptions>,
+    ) -> Result<(), InputError> {
         self.press(key, context, options).await
     }
-    async fn type_text(&self, text: &str, context: &BrowsingContext, options: Option<KeyboardTypeOptions>) -> Result<(), InputError> {
+    async fn type_text(
+        &self,
+        text: &str,
+        context: &BrowsingContext,
+        options: Option<KeyboardTypeOptions>,
+    ) -> Result<(), InputError> {
         self.type_text(text, context, options).await
     }
 }
@@ -444,20 +524,34 @@ mod tests {
             ("PageDown", "\u{E00F}"),
         ];
         for (key, expected) in cases {
-            assert_eq!(get_bidi_key_value(key).unwrap(), expected, "failed for key: {}", key);
+            assert_eq!(
+                get_bidi_key_value(key).unwrap(),
+                expected,
+                "failed for key: {}",
+                key
+            );
         }
     }
 
     #[test]
     fn code_style_keys_map_to_chars() {
         let cases = vec![
-            ("KeyA", "a"), ("KeyZ", "z"),
-            ("Digit0", "0"), ("Digit9", "9"),
-            ("Semicolon", ";"), ("Slash", "/"),
-            ("BracketLeft", "["), ("BracketRight", "]"),
+            ("KeyA", "a"),
+            ("KeyZ", "z"),
+            ("Digit0", "0"),
+            ("Digit9", "9"),
+            ("Semicolon", ";"),
+            ("Slash", "/"),
+            ("BracketLeft", "["),
+            ("BracketRight", "]"),
         ];
         for (key, expected) in cases {
-            assert_eq!(get_bidi_key_value(key).unwrap(), expected, "failed for key: {}", key);
+            assert_eq!(
+                get_bidi_key_value(key).unwrap(),
+                expected,
+                "failed for key: {}",
+                key
+            );
         }
     }
 

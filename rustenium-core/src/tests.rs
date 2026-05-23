@@ -48,8 +48,14 @@ mod transport_tests {
 
     #[test]
     fn path_leading_slash_handling() {
-        let no_slash = ConnectionTransportConfig { path: "no-slash".to_string(), ..Default::default() };
-        let with_slash = ConnectionTransportConfig { path: "/already-slashed".to_string(), ..Default::default() };
+        let no_slash = ConnectionTransportConfig {
+            path: "no-slash".to_string(),
+            ..Default::default()
+        };
+        let with_slash = ConnectionTransportConfig {
+            path: "/already-slashed".to_string(),
+            ..Default::default()
+        };
 
         assert_eq!(no_slash.path(), "/no-slash");
         assert_eq!(with_slash.path(), "/already-slashed");
@@ -98,27 +104,27 @@ mod error_tests {
     fn error_display_messages() {
         let cases: Vec<(Box<dyn std::error::Error>, &str)> = vec![
             (
-                Box::new(SessionSendError::ResponseReceiveTimeoutError(ResponseReceiveTimeoutError)),
+                Box::new(SessionSendError::ResponseReceiveTimeoutError(
+                    ResponseReceiveTimeoutError,
+                )),
                 "receive response",
             ),
             (
-                Box::new(CommandResultError::InvalidResultTypeError(serde_json::json!({}))),
+                Box::new(CommandResultError::InvalidResultTypeError(
+                    serde_json::json!({}),
+                )),
                 "Invalid Result",
             ),
-            (
-                Box::new(PostDataError::NoPostData),
-                "POST data",
-            ),
-            (
-                Box::new(PostDataError::NotJsonObject),
-                "not a JSON object",
-            ),
+            (Box::new(PostDataError::NoPostData), "POST data"),
+            (Box::new(PostDataError::NotJsonObject), "not a JSON object"),
         ];
 
         for (err, expected_substr) in cases {
             assert!(
                 format!("{}", err).contains(expected_substr),
-                "Expected '{}' to contain '{}'", err, expected_substr
+                "Expected '{}' to contain '{}'",
+                err,
+                expected_substr
             );
         }
     }
@@ -132,12 +138,14 @@ mod error_tests {
 }
 
 mod listener_tests {
-    use crate::listeners::{CommandResponseState, Listener, CommandResponseListener, EventListener};
+    use crate::listeners::{
+        CommandResponseListener, CommandResponseState, EventListener, Listener,
+    };
     use rustenium_bidi_definitions::base::{CommandResponse, SuccessEnum};
-    use tokio::sync::mpsc::unbounded_channel;
     use std::collections::HashMap;
     use std::sync::Arc;
     use tokio::sync::Mutex;
+    use tokio::sync::mpsc::unbounded_channel;
 
     #[test]
     fn command_response_state_serialization_roundtrip() {
@@ -180,12 +188,19 @@ mod listener_tests {
 
         Listener::new(raw_rx, cmd_tx, evt_tx).start();
 
-        raw_tx.send(serde_json::json!({
-            "type": "success", "id": 1, "result": {}
-        }).to_string()).unwrap();
+        raw_tx
+            .send(
+                serde_json::json!({
+                    "type": "success", "id": 1, "result": {}
+                })
+                .to_string(),
+            )
+            .unwrap();
 
         tokio::time::timeout(std::time::Duration::from_secs(2), cmd_rx.recv())
-            .await.unwrap().unwrap()
+            .await
+            .unwrap()
+            .unwrap()
     }
 
     async fn route_error_response() -> CommandResponseState {
@@ -195,13 +210,20 @@ mod listener_tests {
 
         Listener::new(raw_rx, cmd_tx, evt_tx).start();
 
-        raw_tx.send(serde_json::json!({
-            "type": "error", "id": 5, "error": "unknown command",
-            "message": "bad", "stacktrace": ""
-        }).to_string()).unwrap();
+        raw_tx
+            .send(
+                serde_json::json!({
+                    "type": "error", "id": 5, "error": "unknown command",
+                    "message": "bad", "stacktrace": ""
+                })
+                .to_string(),
+            )
+            .unwrap();
 
         tokio::time::timeout(std::time::Duration::from_secs(2), cmd_rx.recv())
-            .await.unwrap().unwrap()
+            .await
+            .unwrap()
+            .unwrap()
     }
 
     async fn skip_invalid_then_route_valid() -> CommandResponseState {
@@ -212,12 +234,19 @@ mod listener_tests {
         Listener::new(raw_rx, cmd_tx, evt_tx).start();
 
         raw_tx.send("not valid json".to_string()).unwrap();
-        raw_tx.send(serde_json::json!({
-            "type": "success", "id": 99, "result": {}
-        }).to_string()).unwrap();
+        raw_tx
+            .send(
+                serde_json::json!({
+                    "type": "success", "id": 99, "result": {}
+                })
+                .to_string(),
+            )
+            .unwrap();
 
         tokio::time::timeout(std::time::Duration::from_secs(2), cmd_rx.recv())
-            .await.unwrap().unwrap()
+            .await
+            .unwrap()
+            .unwrap()
     }
 
     #[tokio::test]
@@ -230,15 +259,19 @@ mod listener_tests {
 
         CommandResponseListener::new(cmd_rx, subscriptions).start();
 
-        cmd_tx.send(CommandResponseState::Success(CommandResponse {
-            r#type: SuccessEnum::Success,
-            id: 7,
-            result: serde_json::json!({"done": true}),
-            extensible: HashMap::new(),
-        })).unwrap();
+        cmd_tx
+            .send(CommandResponseState::Success(CommandResponse {
+                r#type: SuccessEnum::Success,
+                id: 7,
+                result: serde_json::json!({"done": true}),
+                extensible: HashMap::new(),
+            }))
+            .unwrap();
 
         let result = tokio::time::timeout(std::time::Duration::from_secs(2), oneshot_rx)
-            .await.unwrap().unwrap();
+            .await
+            .unwrap()
+            .unwrap();
         assert!(matches!(result, CommandResponseState::Success(r) if r.id == 7));
     }
 }
@@ -251,7 +284,10 @@ mod process_tests {
         #[cfg(unix)]
         let proc = Process::create("echo", vec!["hello".to_string()]);
         #[cfg(windows)]
-        let proc = Process::create("cmd", vec!["/C".to_string(), "echo".to_string(), "hello".to_string()]);
+        let proc = Process::create(
+            "cmd",
+            vec!["/C".to_string(), "echo".to_string(), "hello".to_string()],
+        );
 
         drop(proc);
     }

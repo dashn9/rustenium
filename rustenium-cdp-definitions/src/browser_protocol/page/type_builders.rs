@@ -139,7 +139,7 @@ impl PermissionsPolicyBlockLocatorBuilder {
     }
     pub fn build(self) -> Result<PermissionsPolicyBlockLocator, String> {
         Ok(PermissionsPolicyBlockLocator {
-            frame_id: Box::new(self.frame_id.ok_or_else(|| {
+            frame_id: Box::new(self.frame_id.ok_or({
                 std::stringify!("Field `{}` is mandatory.", std::stringify!(frame_id))
             })?),
             block_reason: self.block_reason.ok_or_else(|| {
@@ -650,7 +650,7 @@ impl FrameResourceTreeBuilder {
     }
     pub fn build(self) -> Result<FrameResourceTree, String> {
         Ok(FrameResourceTree {
-            frame: Box::new(self.frame.ok_or_else(|| {
+            frame: Box::new(self.frame.ok_or({
                 std::stringify!("Field `{}` is mandatory.", std::stringify!(frame))
             })?),
             child_frames: self.child_frames,
@@ -693,7 +693,7 @@ impl FrameTreeBuilder {
     }
     pub fn build(self) -> Result<FrameTree, String> {
         Ok(FrameTree {
-            frame: Box::new(self.frame.ok_or_else(|| {
+            frame: Box::new(self.frame.ok_or({
                 std::stringify!("Field `{}` is mandatory.", std::stringify!(frame))
             })?),
             child_frames: self.child_frames,

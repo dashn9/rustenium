@@ -13,10 +13,8 @@ pub fn cddl_to_bidi(cddl_locations: &[(&Path, DomainDirection)], out_dir: &Path)
         })
         .collect();
 
-    let input_refs: Vec<(&str, DomainDirection)> = inputs
-        .iter()
-        .map(|(s, dir)| (s.as_str(), *dir))
-        .collect();
+    let input_refs: Vec<(&str, DomainDirection)> =
+        inputs.iter().map(|(s, dir)| (s.as_str(), *dir)).collect();
 
     let protocol = parser::parse_cddl(&input_refs);
 

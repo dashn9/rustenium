@@ -120,7 +120,14 @@ fn node_position_fields_accessible() {
 
 #[test]
 fn node_position_equality() {
-    let a = NodePosition { x: 1.0, y: 2.0, scroll_x: 0.0, scroll_y: 0.0, width: 10.0, height: 10.0 };
+    let a = NodePosition {
+        x: 1.0,
+        y: 2.0,
+        scroll_x: 0.0,
+        scroll_y: 0.0,
+        width: 10.0,
+        height: 10.0,
+    };
     let b = a.clone();
     assert_eq!(a, b);
 }

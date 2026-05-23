@@ -1,9 +1,11 @@
 use crate::error::bidi::InputError;
-use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
 use rand::Rng;
+use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
 
-use super::mouse::{Mouse, MouseMoveOptions, MouseClickOptions, MouseOptions, MouseWheelOptions, Point};
-use super::trajectory::{random_curve_params, generate_trajectory};
+use super::mouse::{
+    Mouse, MouseClickOptions, MouseMoveOptions, MouseOptions, MouseWheelOptions, Point,
+};
+use super::trajectory::{generate_trajectory, random_curve_params};
 
 pub struct HumanMouse<M: Mouse> {
     mouse: M,
@@ -42,9 +44,18 @@ impl<M: Mouse> Mouse for HumanMouse<M> {
         options: MouseMoveOptions,
     ) -> Result<(), InputError> {
         let from = self.mouse.get_last_position();
-        let to = Point { x: point.x.round(), y: point.y.round() };
+        let to = Point {
+            x: point.x.round(),
+            y: point.y.round(),
+        };
 
-        tracing::debug!(from_x = from.x, from_y = from.y, to_x = to.x, to_y = to.y, "mouse move_to start");
+        tracing::debug!(
+            from_x = from.x,
+            from_y = from.y,
+            to_x = to.x,
+            to_y = to.y,
+            "mouse move_to start"
+        );
 
         let dist = ((to.x - from.x).powi(2) + (to.y - from.y).powi(2)).sqrt();
         if dist < 1.0 {
@@ -58,24 +69,46 @@ impl<M: Mouse> Mouse for HumanMouse<M> {
 
         for (i, pt) in traj.points.iter().enumerate() {
             tracing::debug!(x = pt.x, y = pt.y, step = i, "mouse move_to step");
-            self.mouse.move_to(
-                Point { x: pt.x.max(0.0), y: pt.y.max(0.0) },
-                context,
-                MouseMoveOptions { steps: Some(1), origin: options.origin.clone() },
-            ).await?;
+            self.mouse
+                .move_to(
+                    Point {
+                        x: pt.x.max(0.0),
+                        y: pt.y.max(0.0),
+                    },
+                    context,
+                    MouseMoveOptions {
+                        steps: Some(1),
+                        origin: options.origin.clone(),
+                    },
+                )
+                .await?;
 
             if i < traj.step_delays_ms.len() {
-                tokio::time::sleep(tokio::time::Duration::from_millis(traj.step_delays_ms[i])).await;
+                tokio::time::sleep(tokio::time::Duration::from_millis(traj.step_delays_ms[i]))
+                    .await;
             }
         }
 
-        self.mouse.move_to(to, context, MouseMoveOptions { steps: Some(1), origin: options.origin }).await?;
+        self.mouse
+            .move_to(
+                to,
+                context,
+                MouseMoveOptions {
+                    steps: Some(1),
+                    origin: options.origin,
+                },
+            )
+            .await?;
 
         tracing::debug!(x = to.x, y = to.y, "mouse move_to done");
         Ok(())
     }
 
-    async fn down(&self, context: &BrowsingContext, options: MouseOptions) -> Result<(), InputError> {
+    async fn down(
+        &self,
+        context: &BrowsingContext,
+        options: MouseOptions,
+    ) -> Result<(), InputError> {
         tracing::debug!(button = ?options.button, "mouse down");
         let result = self.mouse.down(context, options).await;
         tracing::debug!("mouse down done");
@@ -99,14 +132,17 @@ impl<M: Mouse> Mouse for HumanMouse<M> {
         tracing::debug!(x = point.map(|p| p.x), y = point.map(|p| p.y), count, button = ?options.button, "mouse click start");
 
         if let Some(p) = point {
-            self.move_to(p, context, MouseMoveOptions::default()).await?;
+            self.move_to(p, context, MouseMoveOptions::default())
+                .await?;
         }
 
         let button = options.button;
         let (click_delay, pauses) = {
             let mut rng = rand::rng();
             let delay = options.delay.unwrap_or(80 + rng.random_range(0..80));
-            let pauses: Vec<u64> = (0..count.saturating_sub(1)).map(|_| 100 + rng.random_range(0..100)).collect();
+            let pauses: Vec<u64> = (0..count.saturating_sub(1))
+                .map(|_| 100 + rng.random_range(0..100))
+                .collect();
             (delay, pauses)
         };
 
@@ -125,8 +161,16 @@ impl<M: Mouse> Mouse for HumanMouse<M> {
         Ok(())
     }
 
-    async fn wheel(&self, context: &BrowsingContext, options: MouseWheelOptions) -> Result<(), InputError> {
-        tracing::debug!(delta_x = options.delta_x, delta_y = options.delta_y, "mouse wheel start");
+    async fn wheel(
+        &self,
+        context: &BrowsingContext,
+        options: MouseWheelOptions,
+    ) -> Result<(), InputError> {
+        tracing::debug!(
+            delta_x = options.delta_x,
+            delta_y = options.delta_y,
+            "mouse wheel start"
+        );
         let result = self.mouse.wheel(context, options).await;
         tracing::debug!("mouse wheel done");
         result
@@ -140,22 +184,32 @@ impl<M: Mouse> HumanMouse<M> {
         _x_distance: i32,
         context: &BrowsingContext,
     ) -> Result<(), InputError> {
-        if y_distance == 0 { return Ok(()); }
+        if y_distance == 0 {
+            return Ok(());
+        }
 
         tracing::debug!(y_distance, "mouse scroll start");
 
         let total = y_distance.unsigned_abs() as f64;
         let sign = y_distance.signum() as i64;
-        let steps = ((total / 40.0) as usize).max(3).min(20);
+        let steps = ((total / 40.0) as usize).clamp(3, 20);
 
         let ease = |t: f64| -> f64 {
-            if t >= 1.0 { 1.0 } else { 1.0 - f64::powf(2.0, -10.0 * t) }
+            if t >= 1.0 {
+                1.0
+            } else {
+                1.0 - f64::powf(2.0, -10.0 * t)
+            }
         };
 
         let (noises, delays) = {
             let mut rng = rand::rng();
-            let noises: Vec<f64> = (0..steps).map(|_| 1.0 + rng.random_range(-0.15_f64..0.15_f64)).collect();
-            let delays: Vec<u64> = (0..steps - 1).map(|_| rng.random_range(12_u64..45_u64)).collect();
+            let noises: Vec<f64> = (0..steps)
+                .map(|_| 1.0 + rng.random_range(-0.15_f64..0.15_f64))
+                .collect();
+            let delays: Vec<u64> = (0..steps - 1)
+                .map(|_| rng.random_range(12_u64..45_u64))
+                .collect();
             (noises, delays)
         };
 
@@ -168,7 +222,15 @@ impl<M: Mouse> HumanMouse<M> {
             accumulated += step as f64;
 
             tracing::debug!(step = i, delta_y = step, "mouse scroll step");
-            self.mouse.wheel(context, MouseWheelOptions { delta_x: Some(0), delta_y: Some(step) }).await?;
+            self.mouse
+                .wheel(
+                    context,
+                    MouseWheelOptions {
+                        delta_x: Some(0),
+                        delta_y: Some(step),
+                    },
+                )
+                .await?;
 
             if i < steps - 1 {
                 tokio::time::sleep(tokio::time::Duration::from_millis(delays[i])).await;
@@ -178,7 +240,15 @@ impl<M: Mouse> HumanMouse<M> {
         let correction = (y_distance as f64 - accumulated).round() as i64;
         if correction != 0 {
             tracing::debug!(correction, "mouse scroll correction");
-            self.mouse.wheel(context, MouseWheelOptions { delta_x: Some(0), delta_y: Some(correction) }).await?;
+            self.mouse
+                .wheel(
+                    context,
+                    MouseWheelOptions {
+                        delta_x: Some(0),
+                        delta_y: Some(correction),
+                    },
+                )
+                .await?;
         }
 
         tracing::debug!(y_distance, "mouse scroll done");

@@ -1,40 +1,109 @@
-use rand::Rng;
 use super::mouse::Point;
+use rand::Rng;
 
 // ── Easing functions ─────────────────────────────────────────────────────────
 
-fn ease_out_cubic(t: f64) -> f64 { let t = t - 1.0; t * t * t + 1.0 }
-fn ease_out_quart(t: f64) -> f64 { let t = t - 1.0; -(t * t * t * t - 1.0) }
-fn ease_out_quint(t: f64) -> f64 { let t = t - 1.0; t * t * t * t * t + 1.0 }
-fn ease_out_expo(t: f64) -> f64 { if t == 1.0 { 1.0 } else { -f64::powf(2.0, -10.0 * t) + 1.0 } }
-fn ease_out_sine(t: f64) -> f64 { (t * std::f64::consts::FRAC_PI_2).sin() }
-fn ease_out_circ(t: f64) -> f64 { let t = t - 1.0; (1.0 - t * t).sqrt() }
-fn ease_in_out_cubic(t: f64) -> f64 { if t < 0.5 { 4.0 * t * t * t } else { let t = 2.0 * t - 2.0; 0.5 * t * t * t + 1.0 } }
-fn ease_in_out_quart(t: f64) -> f64 { if t < 0.5 { 8.0 * t * t * t * t } else { let t = t - 1.0; -8.0 * t * t * t * t + 1.0 } }
-fn ease_in_out_quint(t: f64) -> f64 { if t < 0.5 { 16.0 * t * t * t * t * t } else { let t = 2.0 * t - 2.0; 0.5 * t * t * t * t * t + 1.0 } }
-fn ease_in_out_sine(t: f64) -> f64 { -0.5 * ((std::f64::consts::PI * t).cos() - 1.0) }
+fn ease_out_cubic(t: f64) -> f64 {
+    let t = t - 1.0;
+    t * t * t + 1.0
+}
+fn ease_out_quart(t: f64) -> f64 {
+    let t = t - 1.0;
+    -(t * t * t * t - 1.0)
+}
+fn ease_out_quint(t: f64) -> f64 {
+    let t = t - 1.0;
+    t * t * t * t * t + 1.0
+}
+fn ease_out_expo(t: f64) -> f64 {
+    if t == 1.0 {
+        1.0
+    } else {
+        -f64::powf(2.0, -10.0 * t) + 1.0
+    }
+}
+fn ease_out_sine(t: f64) -> f64 {
+    (t * std::f64::consts::FRAC_PI_2).sin()
+}
+fn ease_out_circ(t: f64) -> f64 {
+    let t = t - 1.0;
+    (1.0 - t * t).sqrt()
+}
+fn ease_in_out_cubic(t: f64) -> f64 {
+    if t < 0.5 {
+        4.0 * t * t * t
+    } else {
+        let t = 2.0 * t - 2.0;
+        0.5 * t * t * t + 1.0
+    }
+}
+fn ease_in_out_quart(t: f64) -> f64 {
+    if t < 0.5 {
+        8.0 * t * t * t * t
+    } else {
+        let t = t - 1.0;
+        -8.0 * t * t * t * t + 1.0
+    }
+}
+fn ease_in_out_quint(t: f64) -> f64 {
+    if t < 0.5 {
+        16.0 * t * t * t * t * t
+    } else {
+        let t = 2.0 * t - 2.0;
+        0.5 * t * t * t * t * t + 1.0
+    }
+}
+fn ease_in_out_sine(t: f64) -> f64 {
+    -0.5 * ((std::f64::consts::PI * t).cos() - 1.0)
+}
 fn ease_in_out_expo(t: f64) -> f64 {
-    if t == 0.0 { return 0.0; }
-    if t == 1.0 { return 1.0; }
-    if t < 0.5 { 0.5 * f64::powf(2.0, 20.0 * t - 10.0) } else { 1.0 - 0.5 * f64::powf(2.0, -20.0 * t + 10.0) }
+    if t == 0.0 {
+        return 0.0;
+    }
+    if t == 1.0 {
+        return 1.0;
+    }
+    if t < 0.5 {
+        0.5 * f64::powf(2.0, 20.0 * t - 10.0)
+    } else {
+        1.0 - 0.5 * f64::powf(2.0, -20.0 * t + 10.0)
+    }
 }
 fn ease_in_out_circ(t: f64) -> f64 {
-    if t < 0.5 { 0.5 * (1.0 - (1.0 - 4.0 * t * t).sqrt()) } else { 0.5 * ((1.0 - (2.0 * t - 2.0).powi(2)).sqrt() + 1.0) }
+    if t < 0.5 {
+        0.5 * (1.0 - (1.0 - 4.0 * t * t).sqrt())
+    } else {
+        0.5 * ((1.0 - (2.0 * t - 2.0).powi(2)).sqrt() + 1.0)
+    }
 }
-pub(crate) fn linear(t: f64) -> f64 { t }
+pub(crate) fn linear(t: f64) -> f64 {
+    t
+}
 
 pub(crate) type EasingFn = fn(f64) -> f64;
 
 pub(crate) const EASING_FUNCTIONS: &[EasingFn] = &[
-    ease_out_expo, ease_in_out_quint, ease_in_out_sine, ease_in_out_quart,
-    ease_in_out_expo, ease_in_out_cubic, ease_in_out_circ, linear,
-    ease_out_sine, ease_out_quart, ease_out_quint, ease_out_cubic, ease_out_circ,
+    ease_out_expo,
+    ease_in_out_quint,
+    ease_in_out_sine,
+    ease_in_out_quart,
+    ease_in_out_expo,
+    ease_in_out_cubic,
+    ease_in_out_circ,
+    linear,
+    ease_out_sine,
+    ease_out_quart,
+    ease_out_quint,
+    ease_out_cubic,
+    ease_out_circ,
 ];
 
 // ── Bezier (N-degree) ────────────────────────────────────────────────────────
 
 fn binomial(n: u64, k: u64) -> f64 {
-    if k > n { return 0.0; }
+    if k > n {
+        return 0.0;
+    }
     let mut result = 1.0;
     for i in 0..k {
         result *= (n - i) as f64 / (i + 1) as f64;
@@ -80,23 +149,42 @@ pub fn random_curve_params(_from: Point, _to: Point) -> CurveParams {
     let mut rng = rand::rng();
 
     let tween = EASING_FUNCTIONS[rng.random_range(0..EASING_FUNCTIONS.len())];
-    let offset_boundary_x = weighted_range_pick(&mut rng, &[(20, 45, 0.2), (45, 75, 0.65), (75, 100, 0.15)]);
-    let offset_boundary_y = weighted_range_pick(&mut rng, &[(20, 45, 0.2), (45, 75, 0.65), (75, 100, 0.15)]);
+    let offset_boundary_x =
+        weighted_range_pick(&mut rng, &[(20, 45, 0.2), (45, 75, 0.65), (75, 100, 0.15)]);
+    let offset_boundary_y =
+        weighted_range_pick(&mut rng, &[(20, 45, 0.2), (45, 75, 0.65), (75, 100, 0.15)]);
 
-    let knots_count = weighted_pick(&mut rng, &[
-        (1, 0.15), (2, 0.36), (3, 0.17), (4, 0.12), (5, 0.08),
-        (6, 0.04), (7, 0.03), (8, 0.02), (9, 0.015), (10, 0.005),
-    ]);
+    let knots_count = weighted_pick(
+        &mut rng,
+        &[
+            (1, 0.15),
+            (2, 0.36),
+            (3, 0.17),
+            (4, 0.12),
+            (5, 0.08),
+            (6, 0.04),
+            (7, 0.03),
+            (8, 0.02),
+            (9, 0.015),
+            (10, 0.005),
+        ],
+    );
 
     let distortion_mean = rng.random_range(80..=110) as f64 / 100.0;
     let distortion_stdev = rng.random_range(85..=110) as f64 / 100.0;
     let distortion_frequency = rng.random_range(25..=70) as f64 / 100.0;
-    let target_points = weighted_range_pick(&mut rng, &[(35, 45, 0.53), (45, 60, 0.32), (60, 80, 0.15)]) as usize;
+    let target_points =
+        weighted_range_pick(&mut rng, &[(35, 45, 0.53), (45, 60, 0.32), (60, 80, 0.15)]) as usize;
 
     CurveParams {
-        offset_boundary_x, offset_boundary_y, knots_count,
-        distortion_mean, distortion_stdev, distortion_frequency,
-        tween, target_points,
+        offset_boundary_x,
+        offset_boundary_y,
+        knots_count,
+        distortion_mean,
+        distortion_stdev,
+        distortion_frequency,
+        tween,
+        target_points,
     }
 }
 
@@ -176,11 +264,18 @@ pub fn generate_trajectory(from: Point, to: Point, params: &CurveParams) -> Traj
     } else {
         let per = (total_ms as f64 / (n - 1) as f64).max(1.0);
         (0..n - 1)
-            .map(|_| (per * rng.random_range(0.78_f64..1.22_f64)).round().max(1.0) as u64)
+            .map(|_| {
+                (per * rng.random_range(0.78_f64..1.22_f64))
+                    .round()
+                    .max(1.0) as u64
+            })
             .collect()
     };
 
-    Trajectory { points: sampled, step_delays_ms }
+    Trajectory {
+        points: sampled,
+        step_delays_ms,
+    }
 }
 
 // ── Utilities ────────────────────────────────────────────────────────────────
@@ -194,7 +289,10 @@ fn weighted_range_pick(rng: &mut impl Rng, ranges: &[(i32, i32, f64)]) -> f64 {
             return rng.random_range(lo..hi) as f64;
         }
     }
-    ranges.last().map(|r| rng.random_range(r.0..r.1) as f64).unwrap_or(50.0)
+    ranges
+        .last()
+        .map(|r| rng.random_range(r.0..r.1) as f64)
+        .unwrap_or(50.0)
 }
 
 pub(crate) fn weighted_pick(rng: &mut impl Rng, items: &[(usize, f64)]) -> usize {
@@ -202,7 +300,9 @@ pub(crate) fn weighted_pick(rng: &mut impl Rng, items: &[(usize, f64)]) -> usize
     let mut roll = rng.random_range(0.0..total);
     for &(val, weight) in items {
         roll -= weight;
-        if roll <= 0.0 { return val; }
+        if roll <= 0.0 {
+            return val;
+        }
     }
     items.last().map(|i| i.0).unwrap_or(2)
 }
@@ -215,7 +315,9 @@ pub(crate) fn gauss(rng: &mut impl Rng, mean: f64, stdev: f64) -> f64 {
 
 /// Generate `count` random durations in `latency_range` that sum to `total_secs`.
 pub fn generate_durations(count: usize, total_secs: f64, latency_range: (f64, f64)) -> Vec<f64> {
-    if count == 0 { return vec![]; }
+    if count == 0 {
+        return vec![];
+    }
     let mut rng = rand::rng();
     let mut durations: Vec<f64> = (0..count)
         .map(|_| rng.random_range(latency_range.0..=latency_range.1))
@@ -223,15 +325,17 @@ pub fn generate_durations(count: usize, total_secs: f64, latency_range: (f64, f6
     let sum: f64 = durations.iter().sum();
     if sum > 0.0 {
         let scale = total_secs / sum;
-        for d in &mut durations { *d *= scale; }
+        for d in &mut durations {
+            *d *= scale;
+        }
     }
     durations
 }
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use super::super::mouse::Point;
+    use super::*;
 
     #[test]
     fn bezier_point_at_t0_returns_start() {
@@ -321,7 +425,11 @@ mod tests {
             let at_0 = f(0.0);
             let at_1 = f(1.0);
             assert!((at_0).abs() < 1e-9, "easing(0) should be ~0, got {}", at_0);
-            assert!((at_1 - 1.0).abs() < 1e-9, "easing(1) should be ~1, got {}", at_1);
+            assert!(
+                (at_1 - 1.0).abs() < 1e-9,
+                "easing(1) should be ~1, got {}",
+                at_1
+            );
         }
     }
 
@@ -342,7 +450,11 @@ mod tests {
             sum += gauss(&mut rng, 1.0, 1.0);
         }
         let mean = sum / n as f64;
-        assert!((mean - 1.0).abs() < 0.2, "gauss mean should be ~1.0, got {}", mean);
+        assert!(
+            (mean - 1.0).abs() < 0.2,
+            "gauss mean should be ~1.0, got {}",
+            mean
+        );
     }
 
     #[test]
@@ -360,7 +472,7 @@ mod tests {
         let items: &[(usize, f64)] = &[(1, 0.5), (2, 0.3), (3, 0.2)];
         for _ in 0..100 {
             let v = weighted_pick(&mut rng, items);
-            assert!(v >= 1 && v <= 3);
+            assert!((1..=3).contains(&v));
         }
     }
 
@@ -370,8 +482,14 @@ mod tests {
         let items: &[(usize, f64)] = &[(1, 0.99), (2, 0.01)];
         let mut count_1 = 0;
         for _ in 0..1000 {
-            if weighted_pick(&mut rng, items) == 1 { count_1 += 1; }
+            if weighted_pick(&mut rng, items) == 1 {
+                count_1 += 1;
+            }
         }
-        assert!(count_1 > 900, "heavily weighted item should appear >90%, got {}", count_1);
+        assert!(
+            count_1 > 900,
+            "heavily weighted item should appear >90%, got {}",
+            count_1
+        );
     }
 }

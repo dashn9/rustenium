@@ -9,8 +9,8 @@ use crate::input::cdp::{CdpKeyboard, CdpMouse};
 use crate::nodes::ChromeNode;
 use rustenium_bidi_definitions::browsing_context::types::{BrowsingContext, Locator};
 use rustenium_bidi_definitions::script::types::NodeRemoteValue;
-use rustenium_cdp_definitions::browser_protocol::dom::types::Node as DomNode;
 use rustenium_bidi_definitions::session::types::ProxyConfiguration;
+use rustenium_cdp_definitions::browser_protocol::dom::types::Node as DomNode;
 use rustenium_core::find_free_port;
 use rustenium_core::process::Process;
 
@@ -19,8 +19,10 @@ use std::sync::{Arc, Mutex};
 
 /// How Chrome is launched and managed.
 #[derive(Debug, Clone)]
+#[derive(Default)]
 pub enum ChromeLaunchMode {
     /// Rustenium starts Chrome and attaches chromedriver to it (default).
+    #[default]
     SpawnAndAttach,
     /// Connect to an existing Chrome instance on the specified debugging port.
     Remote(u16),
@@ -28,11 +30,6 @@ pub enum ChromeLaunchMode {
     DriverManaged,
 }
 
-impl Default for ChromeLaunchMode {
-    fn default() -> Self {
-        ChromeLaunchMode::SpawnAndAttach
-    }
-}
 
 /// Configuration for Chrome browser and chromedriver.
 ///
@@ -212,9 +209,11 @@ impl ChromeBrowser {
 
         let chrome_process = Self::init_chrome(&mut config, chrome_port).await;
 
-        let mut ct_config = ConnectionTransportConfig::default();
-        ct_config.host = host.clone();
-        ct_config.port = port;
+        let ct_config = ConnectionTransportConfig {
+            host: host.clone(),
+            port,
+            ..ConnectionTransportConfig::default()
+        };
 
         let (cdp_adapter, driver) = match (config.enable_cdp, config.enable_bidi) {
             (true, true) => {
@@ -328,12 +327,7 @@ impl ChromeBrowser {
                 .into_owned();
         }
         let capabilities = config.capabilities.clone().build();
-        let (session, process) = start_bidi_driver(
-            config,
-            ct_config,
-            capabilities,
-        )
-        .await;
+        let (session, process) = start_bidi_driver(config, ct_config, capabilities).await;
 
         let mut driver = BidiDriver::new(
             String::from("chromedriver"),
@@ -348,7 +342,9 @@ impl ChromeBrowser {
     }
 
     async fn init_cdp(host: &str, chrome_port: u16) -> CdpAdapter<WebsocketConnectionTransport> {
-        let ws_debugger_url = fetch_ws_debugger_url_with_retry(host, chrome_port).await.unwrap();
+        let ws_debugger_url = fetch_ws_debugger_url_with_retry(host, chrome_port)
+            .await
+            .unwrap();
         let cdp_cc = ConnectionTransportConfig::from_ws_url(&ws_debugger_url).unwrap();
         let cdp_session = start_cdp_session(&cdp_cc).await;
         let mut cdp_adapter = CdpAdapter::new(cdp_session);
@@ -367,9 +363,11 @@ impl ChromeBrowser {
             .clone()
             .unwrap_or(String::from("localhost"));
         let port = self.config.port.unwrap();
-        let mut ct_config = ConnectionTransportConfig::default();
-        ct_config.host = host;
-        ct_config.port = port;
+        let ct_config = ConnectionTransportConfig {
+            host,
+            port,
+            ..ConnectionTransportConfig::default()
+        };
         self.driver = Some(Self::init_bidi(&mut self.config, &ct_config).await);
     }
 
@@ -450,7 +448,11 @@ impl BidiBrowser for ChromeBrowser {
 }
 
 impl CdpBrowser for ChromeBrowser {
-    type BrowserNode = ChromeNode<WebsocketConnectionTransport, CdpMouse, CdpKeyboard<WebsocketConnectionTransport>>;
+    type BrowserNode = ChromeNode<
+        WebsocketConnectionTransport,
+        CdpMouse,
+        CdpKeyboard<WebsocketConnectionTransport>,
+    >;
 
     fn adapter(&self) -> &CdpAdapter<WebsocketConnectionTransport> {
         self.cdp_adapter
@@ -466,7 +468,12 @@ impl CdpBrowser for ChromeBrowser {
 
     fn build_node(&self, raw_node: DomNode) -> Self::BrowserNode {
         let adapter = self.cdp_adapter.as_ref().expect("CDP not enabled");
-        ChromeNode::from_cdp(raw_node, adapter.session.clone(), adapter.mouse.clone(), adapter.keyboard.clone())
+        ChromeNode::from_cdp(
+            raw_node,
+            adapter.session.clone(),
+            adapter.mouse.clone(),
+            adapter.keyboard.clone(),
+        )
     }
 }
 

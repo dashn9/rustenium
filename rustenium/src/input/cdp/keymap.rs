@@ -63,8 +63,12 @@ pub fn key_definition(input: &str) -> Option<KeyDefinition> {
         "Help" => kd!(key_code: 6, code: "Help", key: "Help"),
         "Backspace" => kd!(key_code: 8, code: "Backspace", key: "Backspace"),
         "Tab" => kd!(key_code: 9, code: "Tab", key: "Tab"),
-        "Numpad5" => kd!(key_code: 12, shift_key_code: 101, key: "Clear", code: "Numpad5", shift_key: "5", location: 3),
-        "NumpadEnter" => kd!(key_code: 13, code: "NumpadEnter", key: "Enter", text: "\r", location: 3),
+        "Numpad5" => {
+            kd!(key_code: 12, shift_key_code: 101, key: "Clear", code: "Numpad5", shift_key: "5", location: 3)
+        }
+        "NumpadEnter" => {
+            kd!(key_code: 13, code: "NumpadEnter", key: "Enter", text: "\r", location: 3)
+        }
         "Enter" | "\r" | "\n" => kd!(key_code: 13, code: "Enter", key: "Enter", text: "\r"),
         "ShiftLeft" => kd!(key_code: 16, code: "ShiftLeft", key: "Shift", location: 1),
         "ShiftRight" => kd!(key_code: 16, code: "ShiftRight", key: "Shift", location: 2),
@@ -78,29 +82,49 @@ pub fn key_definition(input: &str) -> Option<KeyDefinition> {
         "Convert" => kd!(key_code: 28, code: "Convert", key: "Convert"),
         "NonConvert" => kd!(key_code: 29, code: "NonConvert", key: "NonConvert"),
         "Space" => kd!(key_code: 32, code: "Space", key: " "),
-        "Numpad9" => kd!(key_code: 33, shift_key_code: 105, key: "PageUp", code: "Numpad9", shift_key: "9", location: 3),
+        "Numpad9" => {
+            kd!(key_code: 33, shift_key_code: 105, key: "PageUp", code: "Numpad9", shift_key: "9", location: 3)
+        }
         "PageUp" => kd!(key_code: 33, code: "PageUp", key: "PageUp"),
-        "Numpad3" => kd!(key_code: 34, shift_key_code: 99, key: "PageDown", code: "Numpad3", shift_key: "3", location: 3),
+        "Numpad3" => {
+            kd!(key_code: 34, shift_key_code: 99, key: "PageDown", code: "Numpad3", shift_key: "3", location: 3)
+        }
         "PageDown" => kd!(key_code: 34, code: "PageDown", key: "PageDown"),
         "End" => kd!(key_code: 35, code: "End", key: "End"),
-        "Numpad1" => kd!(key_code: 35, shift_key_code: 97, key: "End", code: "Numpad1", shift_key: "1", location: 3),
+        "Numpad1" => {
+            kd!(key_code: 35, shift_key_code: 97, key: "End", code: "Numpad1", shift_key: "1", location: 3)
+        }
         "Home" => kd!(key_code: 36, code: "Home", key: "Home"),
-        "Numpad7" => kd!(key_code: 36, shift_key_code: 103, key: "Home", code: "Numpad7", shift_key: "7", location: 3),
+        "Numpad7" => {
+            kd!(key_code: 36, shift_key_code: 103, key: "Home", code: "Numpad7", shift_key: "7", location: 3)
+        }
         "ArrowLeft" => kd!(key_code: 37, code: "ArrowLeft", key: "ArrowLeft"),
-        "Numpad4" => kd!(key_code: 37, shift_key_code: 100, key: "ArrowLeft", code: "Numpad4", shift_key: "4", location: 3),
-        "Numpad8" => kd!(key_code: 38, shift_key_code: 104, key: "ArrowUp", code: "Numpad8", shift_key: "8", location: 3),
+        "Numpad4" => {
+            kd!(key_code: 37, shift_key_code: 100, key: "ArrowLeft", code: "Numpad4", shift_key: "4", location: 3)
+        }
+        "Numpad8" => {
+            kd!(key_code: 38, shift_key_code: 104, key: "ArrowUp", code: "Numpad8", shift_key: "8", location: 3)
+        }
         "ArrowUp" => kd!(key_code: 38, code: "ArrowUp", key: "ArrowUp"),
         "ArrowRight" => kd!(key_code: 39, code: "ArrowRight", key: "ArrowRight"),
-        "Numpad6" => kd!(key_code: 39, shift_key_code: 102, key: "ArrowRight", code: "Numpad6", shift_key: "6", location: 3),
-        "Numpad2" => kd!(key_code: 40, shift_key_code: 98, key: "ArrowDown", code: "Numpad2", shift_key: "2", location: 3),
+        "Numpad6" => {
+            kd!(key_code: 39, shift_key_code: 102, key: "ArrowRight", code: "Numpad6", shift_key: "6", location: 3)
+        }
+        "Numpad2" => {
+            kd!(key_code: 40, shift_key_code: 98, key: "ArrowDown", code: "Numpad2", shift_key: "2", location: 3)
+        }
         "ArrowDown" => kd!(key_code: 40, code: "ArrowDown", key: "ArrowDown"),
         "Select" => kd!(key_code: 41, code: "Select", key: "Select"),
         "Open" => kd!(key_code: 43, code: "Open", key: "Execute"),
         "PrintScreen" => kd!(key_code: 44, code: "PrintScreen", key: "PrintScreen"),
         "Insert" => kd!(key_code: 45, code: "Insert", key: "Insert"),
-        "Numpad0" => kd!(key_code: 45, shift_key_code: 96, key: "Insert", code: "Numpad0", shift_key: "0", location: 3),
+        "Numpad0" => {
+            kd!(key_code: 45, shift_key_code: 96, key: "Insert", code: "Numpad0", shift_key: "0", location: 3)
+        }
         "Delete" => kd!(key_code: 46, code: "Delete", key: "Delete"),
-        "NumpadDecimal" => kd!(key_code: 46, shift_key_code: 110, code: "NumpadDecimal", key: "\0", shift_key: ".", location: 3),
+        "NumpadDecimal" => {
+            kd!(key_code: 46, shift_key_code: 110, code: "NumpadDecimal", key: "\0", shift_key: ".", location: 3)
+        }
         "Digit0" => kd!(key_code: 48, code: "Digit0", shift_key: ")", key: "0"),
         "Digit1" => kd!(key_code: 49, code: "Digit1", shift_key: "!", key: "1"),
         "Digit2" => kd!(key_code: 50, code: "Digit2", shift_key: "@", key: "2"),
@@ -174,7 +198,9 @@ pub fn key_definition(input: &str) -> Option<KeyDefinition> {
         "AudioVolumeDown" => kd!(key_code: 174, code: "AudioVolumeDown", key: "AudioVolumeDown"),
         "AudioVolumeUp" => kd!(key_code: 175, code: "AudioVolumeUp", key: "AudioVolumeUp"),
         "MediaTrackNext" => kd!(key_code: 176, code: "MediaTrackNext", key: "MediaTrackNext"),
-        "MediaTrackPrevious" => kd!(key_code: 177, code: "MediaTrackPrevious", key: "MediaTrackPrevious"),
+        "MediaTrackPrevious" => {
+            kd!(key_code: 177, code: "MediaTrackPrevious", key: "MediaTrackPrevious")
+        }
         "MediaStop" => kd!(key_code: 178, code: "MediaStop", key: "MediaStop"),
         "MediaPlayPause" => kd!(key_code: 179, code: "MediaPlayPause", key: "MediaPlayPause"),
         "Semicolon" => kd!(key_code: 186, code: "Semicolon", shift_key: ":", key: ";"),

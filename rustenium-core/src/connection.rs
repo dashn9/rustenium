@@ -1,13 +1,13 @@
-use std::{collections::HashMap, net::TcpListener};
-use std::sync::Arc;
 use rustenium_bidi_definitions::base::EventResponse;
 use rustenium_cdp_definitions::base;
-use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
-use tokio::sync::{oneshot, Mutex};
+use std::sync::Arc;
+use std::{collections::HashMap, net::TcpListener};
+use tokio::sync::mpsc::{UnboundedSender, unbounded_channel};
+use tokio::sync::{Mutex, oneshot};
 
 use crate::listeners::{
-    CommandResponseListener, CommandResponseState, EventListener, Listener,
     CdpCommandResponseListener, CdpCommandResponseState, CdpEventListener, CdpListener,
+    CommandResponseListener, CommandResponseState, EventListener, Listener,
 };
 use crate::transport::ConnectionTransport;
 
@@ -21,7 +21,8 @@ pub fn find_free_port() -> std::io::Result<u16> {
 
 pub struct BidiConnection<T: ConnectionTransport> {
     transport: T,
-    pub commands_response_subscriptions: Arc<Mutex<HashMap<u64, oneshot::Sender<CommandResponseState>>>>,
+    pub commands_response_subscriptions:
+        Arc<Mutex<HashMap<u64, oneshot::Sender<CommandResponseState>>>>,
     event_listener: EventListener,
 }
 
@@ -34,13 +35,17 @@ impl<T: ConnectionTransport> BidiConnection<T> {
         }
     }
 
-    pub async fn register_event_listener_channel(&mut self, channel: UnboundedSender<EventResponse>) {
+    pub async fn register_event_listener_channel(
+        &mut self,
+        channel: UnboundedSender<EventResponse>,
+    ) {
         self.event_listener.listeners.lock().await.push(channel);
     }
 
     pub fn start_listeners(&self) {
         let (listener_tx, listener_rx) = unbounded_channel::<String>();
-        let (command_response_tx, command_response_rx) = unbounded_channel::<CommandResponseState>();
+        let (command_response_tx, command_response_rx) =
+            unbounded_channel::<CommandResponseState>();
         let (event_tx, event_rx) = unbounded_channel::<EventResponse>();
 
         self.transport.listen(listener_tx);
@@ -48,7 +53,10 @@ impl<T: ConnectionTransport> BidiConnection<T> {
         let listener = Listener::new(listener_rx, command_response_tx, event_tx);
         listener.start();
 
-        let commands_response_listener = CommandResponseListener::new(command_response_rx, self.commands_response_subscriptions.clone());
+        let commands_response_listener = CommandResponseListener::new(
+            command_response_rx,
+            self.commands_response_subscriptions.clone(),
+        );
         commands_response_listener.start();
         self.event_listener.start(event_rx);
     }
@@ -66,7 +74,8 @@ impl<T: ConnectionTransport> BidiConnection<T> {
 
 pub struct CdpConnection<T: ConnectionTransport> {
     transport: T,
-    pub commands_response_subscriptions: Arc<Mutex<HashMap<u16, oneshot::Sender<CdpCommandResponseState>>>>,
+    pub commands_response_subscriptions:
+        Arc<Mutex<HashMap<u16, oneshot::Sender<CdpCommandResponseState>>>>,
     event_listener: CdpEventListener,
 }
 
@@ -79,13 +88,17 @@ impl<T: ConnectionTransport> CdpConnection<T> {
         }
     }
 
-    pub async fn register_event_listener_channel(&mut self, channel: UnboundedSender<base::EventResponse>) {
+    pub async fn register_event_listener_channel(
+        &mut self,
+        channel: UnboundedSender<base::EventResponse>,
+    ) {
         self.event_listener.listeners.lock().await.push(channel);
     }
 
     pub fn start_listeners(&self) {
         let (listener_tx, listener_rx) = unbounded_channel::<String>();
-        let (command_response_tx, command_response_rx) = unbounded_channel::<CdpCommandResponseState>();
+        let (command_response_tx, command_response_rx) =
+            unbounded_channel::<CdpCommandResponseState>();
         let (event_tx, event_rx) = unbounded_channel::<base::EventResponse>();
 
         self.transport.listen(listener_tx);
@@ -93,7 +106,10 @@ impl<T: ConnectionTransport> CdpConnection<T> {
         let listener = CdpListener::new(listener_rx, command_response_tx, event_tx);
         listener.start();
 
-        let commands_response_listener = CdpCommandResponseListener::new(command_response_rx, self.commands_response_subscriptions.clone());
+        let commands_response_listener = CdpCommandResponseListener::new(
+            command_response_rx,
+            self.commands_response_subscriptions.clone(),
+        );
         commands_response_listener.start();
         self.event_listener.start(event_rx);
     }

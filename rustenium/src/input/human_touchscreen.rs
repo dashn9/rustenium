@@ -1,15 +1,15 @@
-use std::sync::Arc;
+use rand::Rng;
 use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
 use rustenium_core::transport::ConnectionTransport;
-use rand::Rng;
+use std::sync::Arc;
 
-use crate::error::bidi::InputError;
 use super::bidi::touchscreen::Touchscreen;
 use super::mouse::Point;
-use super::touch::{Touch, SwipeOptions, ScrollOptions, Viewport};
+use super::touch::{ScrollOptions, SwipeOptions, Touch, Viewport};
 use super::trajectory::{
-    generate_trajectory, generate_durations, random_curve_params, weighted_pick,
+    generate_durations, generate_trajectory, random_curve_params, weighted_pick,
 };
+use crate::error::bidi::InputError;
 
 // ── 9-zone grid ─────────────────────────────────────────────────────────────
 //
@@ -79,16 +79,22 @@ impl<OT: ConnectionTransport> HumanTouchscreen<OT> {
         );
 
         let first = trajectory.points[0];
-        let handle = self.touchscreen
+        let handle = self
+            .touchscreen
             .touch_start(first.x.max(0.0), first.y.max(0.0), context, None)
             .await?;
 
         for (i, pt) in trajectory.points.iter().enumerate().skip(1) {
             tokio::time::sleep(tokio::time::Duration::from_secs_f64(durations[i])).await;
-            handle.move_to(pt.x.max(0.0), pt.y.max(0.0), context).await?;
+            handle
+                .move_to(pt.x.max(0.0), pt.y.max(0.0), context)
+                .await?;
         }
 
-        let lift_delay = { let mut rng = rand::rng(); 10 + rng.random_range(0..30_u64) };
+        let lift_delay = {
+            let mut rng = rand::rng();
+            10 + rng.random_range(0..30_u64)
+        };
         tokio::time::sleep(tokio::time::Duration::from_millis(lift_delay)).await;
 
         handle.end(context).await?;
@@ -97,14 +103,16 @@ impl<OT: ConnectionTransport> HumanTouchscreen<OT> {
 }
 
 impl<OT: ConnectionTransport> Touch for HumanTouchscreen<OT> {
-    async fn tap(
-        &self,
-        point: Point,
-        context: &BrowsingContext,
-    ) -> Result<(), InputError> {
-        let handle = self.touchscreen.touch_start(point.x, point.y, context, None).await?;
+    async fn tap(&self, point: Point, context: &BrowsingContext) -> Result<(), InputError> {
+        let handle = self
+            .touchscreen
+            .touch_start(point.x, point.y, context, None)
+            .await?;
 
-        let hold = { let mut rng = rand::rng(); 50 + rng.random_range(0..60_u64) };
+        let hold = {
+            let mut rng = rand::rng();
+            50 + rng.random_range(0..60_u64)
+        };
         tokio::time::sleep(tokio::time::Duration::from_millis(hold)).await;
 
         handle.end(context).await?;
@@ -130,8 +138,12 @@ impl<OT: ConnectionTransport> Touch for HumanTouchscreen<OT> {
         options: ScrollOptions,
     ) -> Result<(), InputError> {
         let duration_ms = options.duration_ms.unwrap_or(600);
-        let origin = { let mut rng = rand::rng(); zone_origin(&mut rng, viewport) };
-        self.swipe_internal(origin, point, duration_ms, context).await
+        let origin = {
+            let mut rng = rand::rng();
+            zone_origin(&mut rng, viewport)
+        };
+        self.swipe_internal(origin, point, duration_ms, context)
+            .await
     }
 
     async fn long_press(
@@ -140,9 +152,15 @@ impl<OT: ConnectionTransport> Touch for HumanTouchscreen<OT> {
         hold_ms: u64,
         context: &BrowsingContext,
     ) -> Result<(), InputError> {
-        let handle = self.touchscreen.touch_start(point.x, point.y, context, None).await?;
+        let handle = self
+            .touchscreen
+            .touch_start(point.x, point.y, context, None)
+            .await?;
 
-        let jitter = { let mut rng = rand::rng(); rng.random_range(0..50_u64) };
+        let jitter = {
+            let mut rng = rand::rng();
+            rng.random_range(0..50_u64)
+        };
         tokio::time::sleep(tokio::time::Duration::from_millis(hold_ms + jitter)).await;
 
         handle.end(context).await?;

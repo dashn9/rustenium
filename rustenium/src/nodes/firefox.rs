@@ -4,30 +4,37 @@ use tokio::sync::Mutex;
 
 use rustenium_bidi_definitions::browsing_context::types::{BrowsingContext, Locator};
 use rustenium_bidi_definitions::script::types::{Handle, NodeRemoteValue, SharedId};
-use rustenium_core::transport::ConnectionTransport;
 use rustenium_core::BidiSession;
+use rustenium_core::transport::ConnectionTransport;
 
 use crate::error::node::{NodeActionError, NodeInputError, NodeMouseError, NodeScreenshotError};
 use crate::input::{BidiKeyboard, BidiMouse, Keyboard, Mouse, MouseClickOptions, MouseMoveOptions};
+use crate::nodes::NodePosition;
 use crate::nodes::bidi::node::BidiNode;
 use crate::nodes::node::{Node, NodeScreenShotOptions, NodeType};
-use crate::nodes::NodePosition;
 
-
-pub struct FirefoxNode<T: ConnectionTransport, M: Mouse + Send + Sync = BidiMouse<T>, K: Keyboard + Send + Sync = BidiKeyboard<T>> {
+pub struct FirefoxNode<
+    T: ConnectionTransport,
+    M: Mouse + Send + Sync = BidiMouse<T>,
+    K: Keyboard + Send + Sync = BidiKeyboard<T>,
+> {
     bidi_node: BidiNode<T>,
     children: Vec<FirefoxNode<T, M, K>>,
     mouse: Arc<M>,
     keyboard: Arc<K>,
 }
 
-impl<T: ConnectionTransport, M: Mouse + Send + Sync, K: Keyboard + Send + Sync> std::fmt::Debug for FirefoxNode<T, M, K> {
+impl<T: ConnectionTransport, M: Mouse + Send + Sync, K: Keyboard + Send + Sync> std::fmt::Debug
+    for FirefoxNode<T, M, K>
+{
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         self.bidi_node.fmt(f)
     }
 }
 
-impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Send + Sync + 'static> FirefoxNode<T, M, K> {
+impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Send + Sync + 'static>
+    FirefoxNode<T, M, K>
+{
     pub fn from_bidi(
         raw_bidi_node: NodeRemoteValue,
         locator: Locator,
@@ -36,9 +43,16 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
         mouse: Arc<M>,
         keyboard: Arc<K>,
     ) -> Self {
-        let bidi_node = BidiNode::new(raw_bidi_node, locator.clone(), session.clone(), context.clone());
+        let bidi_node = BidiNode::new(
+            raw_bidi_node,
+            locator.clone(),
+            session.clone(),
+            context.clone(),
+        );
 
-        let children = bidi_node.children.iter()
+        let children = bidi_node
+            .children
+            .iter()
             .map(|bidi_child| {
                 FirefoxNode::from_bidi(
                     bidi_child.get_raw_node_ref().clone(),
@@ -51,7 +65,12 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
             })
             .collect();
 
-        Self { bidi_node, children, mouse, keyboard }
+        Self {
+            bidi_node,
+            children,
+            mouse,
+            keyboard,
+        }
     }
 
     pub async fn mouse_move(&mut self) -> Result<(), NodeMouseError> {
@@ -61,7 +80,10 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
             .map_err(NodeMouseError::from)
     }
 
-    pub async fn mouse_move_with_options(&mut self, options: MouseMoveOptions) -> Result<(), NodeMouseError> {
+    pub async fn mouse_move_with_options(
+        &mut self,
+        options: MouseMoveOptions,
+    ) -> Result<(), NodeMouseError> {
         self.bidi_node
             .mouse_move(self.mouse.as_ref(), options)
             .await
@@ -75,7 +97,10 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
             .map_err(NodeMouseError::from)
     }
 
-    pub async fn mouse_click_with_options(&mut self, options: MouseClickOptions) -> Result<(), NodeMouseError> {
+    pub async fn mouse_click_with_options(
+        &mut self,
+        options: MouseClickOptions,
+    ) -> Result<(), NodeMouseError> {
         self.bidi_node
             .mouse_click(self.mouse.as_ref(), options)
             .await
@@ -83,7 +108,9 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
     }
 }
 
-impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Send + Sync + 'static> Node for FirefoxNode<T, M, K> {
+impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Send + Sync + 'static>
+    Node for FirefoxNode<T, M, K>
+{
     #[allow(refining_impl_trait)]
     fn get_children_nodes(&self) -> &Vec<FirefoxNode<T, M, K>> {
         &self.children
@@ -137,16 +164,22 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
         &self.bidi_node.get_raw_node_ref().handle
     }
 
-    fn set_position(&mut self, position: NodePosition) -> () {
+    fn set_position(&mut self, position: NodePosition) {
         self.bidi_node.position = Some(position);
     }
 
     async fn scroll_into_view(&self) -> Result<(), NodeActionError> {
-        self.bidi_node.scroll_into_view().await.map_err(NodeActionError::from)
+        self.bidi_node
+            .scroll_into_view()
+            .await
+            .map_err(NodeActionError::from)
     }
 
     async fn is_visible(&self) -> Result<bool, NodeActionError> {
-        self.bidi_node.is_visible().await.map_err(NodeActionError::from)
+        self.bidi_node
+            .is_visible()
+            .await
+            .map_err(NodeActionError::from)
     }
 
     async fn delete(&self) -> Result<(), NodeActionError> {
@@ -160,7 +193,10 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
             .map_err(NodeMouseError::from)
     }
 
-    async fn mouse_move_with_options(&mut self, options: MouseMoveOptions) -> Result<(), NodeMouseError> {
+    async fn mouse_move_with_options(
+        &mut self,
+        options: MouseMoveOptions,
+    ) -> Result<(), NodeMouseError> {
         self.bidi_node
             .mouse_move(self.mouse.as_ref(), options)
             .await
@@ -174,7 +210,10 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
             .map_err(NodeMouseError::from)
     }
 
-    async fn mouse_click_with_options(&mut self, options: MouseClickOptions) -> Result<(), NodeMouseError> {
+    async fn mouse_click_with_options(
+        &mut self,
+        options: MouseClickOptions,
+    ) -> Result<(), NodeMouseError> {
         self.bidi_node
             .mouse_click(self.mouse.as_ref(), options)
             .await
@@ -188,7 +227,10 @@ impl<T: ConnectionTransport, M: Mouse + Send + Sync + 'static, K: Keyboard + Sen
             .map_err(NodeScreenshotError::from)
     }
 
-    async fn screenshot_with_options(&mut self, options: NodeScreenShotOptions) -> Result<String, NodeScreenshotError> {
+    async fn screenshot_with_options(
+        &mut self,
+        options: NodeScreenShotOptions,
+    ) -> Result<String, NodeScreenshotError> {
         self.bidi_node
             .screenshot(options)
             .await

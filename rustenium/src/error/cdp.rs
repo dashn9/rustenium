@@ -1,5 +1,5 @@
-use thiserror::Error;
 use rustenium_core::error::CdpCommandResultError;
+use thiserror::Error;
 
 #[derive(Debug, Error)]
 pub enum NavigateError {

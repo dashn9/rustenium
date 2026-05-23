@@ -5,9 +5,9 @@ use rustenium_cdp_definitions::browser_protocol::input::commands::{
     DispatchTouchEvent, DispatchTouchEventMethod, DispatchTouchEventParams, DispatchTouchEventType,
 };
 use rustenium_cdp_definitions::browser_protocol::input::types::TouchPoint;
+use rustenium_core::WebsocketConnectionTransport;
 use rustenium_core::error::CdpCommandResultError;
 use rustenium_core::session::CdpSession;
-use rustenium_core::WebsocketConnectionTransport;
 use tokio::sync::Mutex as TokioMutex;
 
 use crate::error::cdp::InputError;
@@ -33,7 +33,10 @@ impl TouchHandle {
             session,
             touchscreen,
             id,
-            position: Arc::new(Mutex::new(Point { x: x.round(), y: y.round() })),
+            position: Arc::new(Mutex::new(Point {
+                x: x.round(),
+                y: y.round(),
+            })),
         }
     }
 
@@ -48,7 +51,10 @@ impl TouchHandle {
 
     /// Move this touch point to a new position.
     pub async fn move_to(&self, x: f64, y: f64) -> Result<(), InputError> {
-        let new_pos = Point { x: x.round(), y: y.round() };
+        let new_pos = Point {
+            x: x.round(),
+            y: y.round(),
+        };
         let cmd = DispatchTouchEvent {
             method: DispatchTouchEventMethod::DispatchTouchEvent,
             params: DispatchTouchEventParams::new(
@@ -56,7 +62,11 @@ impl TouchHandle {
                 vec![Self::make_point(new_pos.x, new_pos.y, self.id)],
             ),
         };
-        self.session.lock().await.send(cmd).await
+        self.session
+            .lock()
+            .await
+            .send(cmd)
+            .await
             .map_err(|e| InputError::CommandError(CdpCommandResultError::SessionSendError(e)))?;
         *self.position.lock().await = new_pos;
         Ok(())
@@ -68,7 +78,11 @@ impl TouchHandle {
             method: DispatchTouchEventMethod::DispatchTouchEvent,
             params: DispatchTouchEventParams::new(DispatchTouchEventType::TouchEnd, vec![]),
         };
-        self.session.lock().await.send(cmd).await
+        self.session
+            .lock()
+            .await
+            .send(cmd)
+            .await
             .map_err(|e| InputError::CommandError(CdpCommandResultError::SessionSendError(e)))?;
         self.touchscreen.remove_handle(self.id).await;
         Ok(())
@@ -111,12 +125,22 @@ impl Touchscreen {
             method: DispatchTouchEventMethod::DispatchTouchEvent,
             params: DispatchTouchEventParams::new(DispatchTouchEventType::TouchStart, vec![p]),
         };
-        self.session.lock().await.send(cmd).await
+        self.session
+            .lock()
+            .await
+            .send(cmd)
+            .await
             .map_err(|e| InputError::CommandError(CdpCommandResultError::SessionSendError(e)))?;
 
         self.touches.lock().await.push(id);
 
-        Ok(TouchHandle::new(self.session.clone(), self.clone(), id, x, y))
+        Ok(TouchHandle::new(
+            self.session.clone(),
+            self.clone(),
+            id,
+            x,
+            y,
+        ))
     }
 
     pub(crate) async fn remove_handle(&self, id: usize) {

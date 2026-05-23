@@ -3,16 +3,27 @@ use rustenium::error::bidi::*;
 #[tokio::test]
 async fn error_display_messages() {
     let cases: Vec<(Box<dyn std::error::Error>, &str)> = vec![
-        (Box::new(ZeroBrowsingContextAtStartError), "No Browsing Context"),
+        (
+            Box::new(ZeroBrowsingContextAtStartError),
+            "No Browsing Context",
+        ),
         (Box::new(ContextIndexError {}), "Context does not exist"),
         (Box::new(InvalidPositionError), "valid position"),
-        (Box::new(InputError::UnknownKey("Foo".into())), "Unknown key"),
+        (
+            Box::new(InputError::UnknownKey("Foo".into())),
+            "Unknown key",
+        ),
         (Box::new(InputError::TouchAlreadyStarted), "already started"),
     ];
 
     for (err, expected_substr) in cases {
         let msg = format!("{}", err);
-        assert!(msg.contains(expected_substr), "'{}' should contain '{}'", msg, expected_substr);
+        assert!(
+            msg.contains(expected_substr),
+            "'{}' should contain '{}'",
+            msg,
+            expected_substr
+        );
     }
 }
 

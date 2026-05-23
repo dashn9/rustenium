@@ -1,3 +1,9 @@
+// Protocol-defined enums (`Message`, `Event`, etc.) carry variants whose sizes
+// reflect the upstream WebDriver BiDi spec. Boxing them would change the
+// public/serialized representation and break consumers, so we accept the size
+// imbalance the lint flags.
+#![allow(clippy::large_enum_variant)]
+
 use serde::{Deserialize, Serialize};
 #[macro_use]
 mod macros;

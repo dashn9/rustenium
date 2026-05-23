@@ -25,13 +25,13 @@ impl BackendNodeBuilder {
     }
     pub fn build(self) -> Result<BackendNode, String> {
         Ok(BackendNode {
-            node_type: Box::new(self.node_type.ok_or_else(|| {
+            node_type: Box::new(self.node_type.ok_or({
                 std::stringify!("Field `{}` is mandatory.", std::stringify!(node_type))
             })?),
             node_name: self
                 .node_name
                 .ok_or_else(|| format!("Field `{}` is mandatory.", std::stringify!(node_name)))?,
-            backend_node_id: Box::new(self.backend_node_id.ok_or_else(|| {
+            backend_node_id: Box::new(self.backend_node_id.ok_or({
                 std::stringify!("Field `{}` is mandatory.", std::stringify!(backend_node_id))
             })?),
         })
@@ -296,14 +296,14 @@ impl NodeBuilder {
     }
     pub fn build(self) -> Result<Node, String> {
         Ok(Node {
-            node_id: Box::new(self.node_id.ok_or_else(|| {
+            node_id: Box::new(self.node_id.ok_or({
                 std::stringify!("Field `{}` is mandatory.", std::stringify!(node_id))
             })?),
             parent_id: self.parent_id,
-            backend_node_id: Box::new(self.backend_node_id.ok_or_else(|| {
+            backend_node_id: Box::new(self.backend_node_id.ok_or({
                 std::stringify!("Field `{}` is mandatory.", std::stringify!(backend_node_id))
             })?),
-            node_type: Box::new(self.node_type.ok_or_else(|| {
+            node_type: Box::new(self.node_type.ok_or({
                 std::stringify!("Field `{}` is mandatory.", std::stringify!(node_type))
             })?),
             node_name: self

@@ -4,12 +4,17 @@ use crate::{BidiSession, CommandResponseState};
 use form_urlencoded;
 use rustenium_bidi_definitions::Command;
 use rustenium_bidi_definitions::network::command_builders::{
-    ContinueRequestBuilder, ContinueWithAuthBuilder, FailRequestBuilder, ProvideResponseBuilder
+    ContinueRequestBuilder, ContinueWithAuthBuilder, FailRequestBuilder, ProvideResponseBuilder,
 };
-use rustenium_bidi_definitions::network::events::{AuthRequiredParams, BeforeRequestSentParams
+use rustenium_bidi_definitions::network::events::{AuthRequiredParams, BeforeRequestSentParams};
+use rustenium_bidi_definitions::network::type_builders::{
+    ContinueWithAuthCredentialsBuilder, ContinueWithAuthNoCredentialsBuilder,
 };
-use rustenium_bidi_definitions::network::type_builders::{ContinueWithAuthCredentialsBuilder, ContinueWithAuthNoCredentialsBuilder};
-use rustenium_bidi_definitions::network::types::{AuthCredentials, BaseParameters, ContinueWithAuthCredentialsAction, ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion, ContinueWithAuthNoCredentialsAction, Header, Request};
+use rustenium_bidi_definitions::network::types::{
+    AuthCredentials, BaseParameters, ContinueWithAuthCredentialsAction,
+    ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion,
+    ContinueWithAuthNoCredentialsAction, Header, Request,
+};
 use tokio::sync::oneshot;
 
 /// How a network request was handled
@@ -50,7 +55,10 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
         }
     }
 
-    pub fn from_auth_required(params: AuthRequiredParams, session: Arc<Mutex<BidiSession<T>>>) -> Self {
+    pub fn from_auth_required(
+        params: AuthRequiredParams,
+        session: Arc<Mutex<BidiSession<T>>>,
+    ) -> Self {
         NetworkRequest {
             base: params.base_parameters,
             session,
@@ -180,7 +188,10 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
         &self,
         continue_request: ContinueRequestBuilder,
     ) -> oneshot::Receiver<CommandResponseState> {
-        let continue_request = continue_request.request(self.base.request.request.clone()).build().unwrap();
+        let continue_request = continue_request
+            .request(self.base.request.request.clone())
+            .build()
+            .unwrap();
         let rx = self
             .session
             .lock()
@@ -196,7 +207,8 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
     pub async fn abort(&self) -> oneshot::Receiver<CommandResponseState> {
         let command = FailRequestBuilder::default()
             .request(self.base.request.request.clone())
-            .build().unwrap();
+            .build()
+            .unwrap();
 
         let rx = self
             .session
@@ -211,9 +223,12 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
     /// Provide a custom response
     pub async fn respond(
         &self,
-        provide_response_builder: ProvideResponseBuilder
+        provide_response_builder: ProvideResponseBuilder,
     ) -> oneshot::Receiver<CommandResponseState> {
-        let command = provide_response_builder.request(self.request_id().clone()).build().unwrap();
+        let command = provide_response_builder
+            .request(self.request_id().clone())
+            .build()
+            .unwrap();
 
         let rx = self
             .session
@@ -231,19 +246,21 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
         &self,
         credentials: AuthCredentials,
     ) -> Result<(), SessionSendError> {
-        let command = 
+        let command =
                 ContinueWithAuthBuilder::default().continue_with_auth_credentials_continue_with_auth_no_credentials_union(ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion::ContinueWithAuthCredentials(
                     ContinueWithAuthCredentialsBuilder::default().action(ContinueWithAuthCredentialsAction::ProvideCredentials).credentials(
                         credentials).build().unwrap())).request(self.request_id().clone()).build().unwrap();
 
         self.session.lock().await.send(command).await.map(|_| ())
     }
-    pub async fn continue_with_no_auth(&self, action: ContinueWithAuthNoCredentialsAction) -> Result<(), SessionSendError> {
+    pub async fn continue_with_no_auth(
+        &self,
+        action: ContinueWithAuthNoCredentialsAction,
+    ) -> Result<(), SessionSendError> {
         let command = ContinueWithAuthBuilder::default().continue_with_auth_credentials_continue_with_auth_no_credentials_union(ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion::ContinueWithAuthNoCredentials(
                     ContinueWithAuthNoCredentialsBuilder::default().action(action).build().unwrap()
                 )).request(self.request_id().clone()).build().unwrap();
 
-                
         self.session.lock().await.send(command).await.map(|_| ())
     }
 }

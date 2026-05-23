@@ -1,9 +1,6 @@
 use crate::error::{CdpSessionSendError, ResponseReceiveTimeoutError, SessionSendError};
 use crate::events::{BidiEvent, BidiEventManagement, CdpEvent, CdpEventManagement};
-use crate::listeners::{
-    CdpCommandResponseState,
-    CommandResponseState,
-};
+use crate::listeners::{CdpCommandResponseState, CommandResponseState};
 use crate::network::NetworkRequestHandledState;
 use crate::{
     connection::{BidiConnection, CdpConnection},
@@ -38,8 +35,13 @@ impl BidiSession<WebsocketConnectionTransport> {
         connection_config: &ConnectionTransportConfig,
         capabilities: CapabilitiesRequest,
     ) -> Self {
-        let transport = WebsocketConnectionTransport::new(connection_config).await.unwrap();
-        tracing::info!("Connected to WebSocket at {}", connection_config.full_endpoint());
+        let transport = WebsocketConnectionTransport::new(connection_config)
+            .await
+            .unwrap();
+        tracing::info!(
+            "Connected to WebSocket at {}",
+            connection_config.full_endpoint()
+        );
         let connection = BidiConnection::new(transport);
         connection.start_listeners();
 
@@ -51,7 +53,10 @@ impl BidiSession<WebsocketConnectionTransport> {
         };
 
         let (_, event_tx) = session.event_dispatch().await;
-        session.connection.register_event_listener_channel(event_tx).await;
+        session
+            .connection
+            .register_event_listener_channel(event_tx)
+            .await;
 
         let command = NewBuilder::default()
             .capabilities(capabilities)
@@ -60,9 +65,11 @@ impl BidiSession<WebsocketConnectionTransport> {
         let command_result = session.send(command).await;
         match command_result {
             Ok(command_result) => {
-                let result: NewResult = command_result.result.clone().try_into().expect(
-                    format!("Invalid command result: {:?}", command_result).as_str(),
-                );
+                let result: NewResult = command_result
+                    .result
+                    .clone()
+                    .try_into()
+                    .unwrap_or_else(|_| panic!("Invalid command result: {:?}", command_result));
                 session.id = result.session_id;
             }
             Err(e) => panic!("Error creating new session: {}", e),
@@ -136,7 +143,7 @@ impl<T: ConnectionTransport> BidiSession<T> {
     }
 
     pub async fn end_session(&mut self) -> Result<CommandResponse, SessionSendError> {
-        let result = self.send(EndBuilder::default().build()).await;
+        let result = self.send(EndBuilder.build()).await;
         self.connection.close().await;
         result
     }
@@ -205,7 +212,13 @@ impl<T: ConnectionTransport> CdpSession<T> {
     ) -> oneshot::Receiver<CdpCommandResponseState> {
         let command_id = loop {
             let id = rand::rng().random::<u16>();
-            if !self.connection.commands_response_subscriptions.lock().await.contains_key(&id) {
+            if !self
+                .connection
+                .commands_response_subscriptions
+                .lock()
+                .await
+                .contains_key(&id)
+            {
                 break id;
             }
         };
@@ -213,11 +226,15 @@ impl<T: ConnectionTransport> CdpSession<T> {
         let command: CdpCommand = command.into();
         let msg = cdp_base::CommandMessage {
             id: command_id,
-            command_data: command.into(),
+            command_data: command,
         };
 
         let (tx, rx) = oneshot::channel::<CdpCommandResponseState>();
-        self.connection.commands_response_subscriptions.lock().await.insert(command_id, tx);
+        self.connection
+            .commands_response_subscriptions
+            .lock()
+            .await
+            .insert(command_id, tx);
 
         let raw = serde_json::to_string(&msg).unwrap();
         tracing::debug!(command_id = %command_id, raw_message = %raw, "Sending CDP command");

@@ -1,6 +1,6 @@
 use crate::error::node::{
-    CdpNodeActionError, CdpNodeInputError, CdpNodeScreenshotError, NodeActionError,
-    NodeInputError, NodeMouseError, NodeScreenshotError,
+    CdpNodeActionError, CdpNodeInputError, CdpNodeScreenshotError, NodeActionError, NodeInputError,
+    NodeMouseError, NodeScreenshotError,
 };
 use crate::input::{Mouse, MouseClickOptions, MouseMoveOptions};
 use crate::nodes::NodePosition;
@@ -12,7 +12,9 @@ use rustenium_cdp_definitions::browser_protocol::dom::commands::{
 use rustenium_cdp_definitions::browser_protocol::dom::results::{
     GetBoxModelResult, GetOuterHtmlResult, ResolveNodeResult,
 };
-use rustenium_cdp_definitions::browser_protocol::dom::types::{BackendNodeId, Node as DomNode, NodeId};
+use rustenium_cdp_definitions::browser_protocol::dom::types::{
+    BackendNodeId, Node as DomNode, NodeId,
+};
 use rustenium_cdp_definitions::browser_protocol::input::commands::InsertText;
 use rustenium_cdp_definitions::browser_protocol::page::commands::CaptureScreenshot;
 use rustenium_cdp_definitions::browser_protocol::page::results::CaptureScreenshotResult;
@@ -40,7 +42,12 @@ pub struct CdpNode<T: ConnectionTransport = rustenium_core::transport::Websocket
 
 impl<T: ConnectionTransport> std::fmt::Debug for CdpNode<T> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "node_id: {:?} | type: {}", self.node_id(), self.node_name())?;
+        write!(
+            f,
+            "node_id: {:?} | type: {}",
+            self.node_id(),
+            self.node_name()
+        )?;
         if !self.local_name().is_empty() {
             write!(f, " | local_name: {}", self.local_name())?;
         }
@@ -62,10 +69,7 @@ impl<T: ConnectionTransport> std::fmt::Debug for CdpNode<T> {
 
 impl<T: ConnectionTransport> CdpNode<T> {
     /// Build a `CdpNode` from a CDP `DomNode` and a shared CDP session.
-    pub fn new(
-        raw_node: DomNode,
-        session: Arc<TokioMutex<CdpSession<T>>>,
-    ) -> Self {
+    pub fn new(raw_node: DomNode, session: Arc<TokioMutex<CdpSession<T>>>) -> Self {
         let attributes = parse_flat_attributes(raw_node.attributes.clone().unwrap_or_default());
         let children = raw_node
             .children
@@ -273,7 +277,10 @@ impl<T: ConnectionTransport> CdpNode<T> {
         let resolve_cmd = ResolveNode::builder()
             .backend_node_id(self.backend_node_id())
             .build();
-        let resolve_resp = self.send(resolve_cmd).await.map_err(NodeActionError::from)?;
+        let resolve_resp = self
+            .send(resolve_cmd)
+            .await
+            .map_err(NodeActionError::from)?;
         let object_id = ResolveNodeResult::try_from(resolve_resp.result)
             .map_err(|error| NodeActionError::Cdp(CdpNodeActionError::Decode(error.to_string())))?
             .object
@@ -284,7 +291,8 @@ impl<T: ConnectionTransport> CdpNode<T> {
             .function_declaration(fn_body)
             .object_id(object_id)
             .return_by_value(true)
-            .build().unwrap();
+            .build()
+            .unwrap();
 
         let call_resp = self.send(call_cmd).await.map_err(NodeActionError::from)?;
         Ok(CallFunctionOnResult::try_from(call_resp.result)
@@ -297,14 +305,12 @@ impl<T: ConnectionTransport> CdpNode<T> {
 
     /// Returns the `innerText` of this node.
     pub async fn get_inner_text(&self) -> Result<String, NodeActionError> {
-        self.eval("function(){return this.innerText}")
-            .await
+        self.eval("function(){return this.innerText}").await
     }
 
     /// Returns the `textContent` of this node.
     pub async fn get_text_content(&self) -> Result<String, NodeActionError> {
-        self.eval("function(){return this.textContent}")
-            .await
+        self.eval("function(){return this.textContent}").await
     }
 
     // ── Screenshot ────────────────────────────────────────────────────────
@@ -318,7 +324,13 @@ impl<T: ConnectionTransport> CdpNode<T> {
             .position
             .as_ref()
             .ok_or(NodeScreenshotError::Cdp(CdpNodeScreenshotError::NoPosition))?;
-        let clip = Viewport { x: pos.x, y: pos.y, width: pos.width, height: pos.height, scale: 1.0 };
+        let clip = Viewport {
+            x: pos.x,
+            y: pos.y,
+            width: pos.width,
+            height: pos.height,
+            scale: 1.0,
+        };
         let mut cmd = CaptureScreenshot::builder().clip(clip);
         if let Some(format) = options.cdp_format {
             cmd = cmd.format(format);
@@ -336,12 +348,10 @@ impl<T: ConnectionTransport> CdpNode<T> {
             cmd = cmd.optimize_for_speed(optimize_for_speed);
         }
         let cmd = cmd.build();
-        let resp = self
-            .send(cmd)
-            .await
-            .map_err(NodeScreenshotError::from)?;
-        let result = CaptureScreenshotResult::try_from(resp.result)
-            .map_err(|error| NodeScreenshotError::Cdp(CdpNodeScreenshotError::Decode(error.to_string())))?;
+        let resp = self.send(cmd).await.map_err(NodeScreenshotError::from)?;
+        let result = CaptureScreenshotResult::try_from(resp.result).map_err(|error| {
+            NodeScreenshotError::Cdp(CdpNodeScreenshotError::Decode(error.to_string()))
+        })?;
         let screenshot = String::from(result.data);
 
         if let Some(path) = options.save_path {
@@ -353,18 +363,17 @@ impl<T: ConnectionTransport> CdpNode<T> {
                     .unwrap_or(0);
                 path.join(format!("screenshot_{timestamp}.png"))
             } else {
-                if let Some(parent) = path.parent() {
-                    if !parent.as_os_str().is_empty() && !parent.exists() {
+                if let Some(parent) = path.parent()
+                    && !parent.as_os_str().is_empty() && !parent.exists() {
                         return Err(NodeScreenshotError::InvalidPath(format!(
                             "Parent directory does not exist: {}",
                             parent.display()
                         )));
                     }
-                }
                 path
             };
 
-            use base64::{engine::general_purpose, Engine as _};
+            use base64::{Engine as _, engine::general_purpose};
             let decoded = general_purpose::STANDARD
                 .decode(&screenshot)
                 .map_err(|error| NodeScreenshotError::Base64DecodeError(error.to_string()))?;
@@ -389,7 +398,10 @@ impl<T: ConnectionTransport> CdpNode<T> {
             .await
             .map_err(NodeMouseError::from)?;
         self.get_position().await.ok();
-        let pos = self.position.as_ref().ok_or(NodeMouseError::InvalidPosition)?;
+        let pos = self
+            .position
+            .as_ref()
+            .ok_or(NodeMouseError::InvalidPosition)?;
         let center = crate::input::Point {
             x: pos.x + pos.width / 2.0,
             y: pos.y + pos.height / 2.0,
@@ -418,10 +430,7 @@ impl<T: ConnectionTransport> CdpNode<T> {
     /// Focus this node and insert `text` via `Input.insertText`.
     pub async fn type_text(&self, text: impl Into<String>) -> Result<(), NodeInputError> {
         self.focus().await.map_err(NodeInputError::from)?;
-        let cmd = InsertText::builder()
-            .text(text)
-            .build()
-            .unwrap();
+        let cmd = InsertText::builder().text(text).build().unwrap();
         self.send(cmd)
             .await
             .map(|_| ())
