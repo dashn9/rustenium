@@ -103,24 +103,25 @@ pub fn parse_cddl(inputs: &[(&str, DomainDirection)]) -> Protocol<'static> {
 
     for name in commands.iter().chain(events.iter()) {
         if let Some(body) = rule_map.get(name.as_str())
-            && let Some(pt) = extract_value(body, "params:") {
-                // Only exclude if it's a struct body and not referenced elsewhere as a type
-                if let Some(pt_body) = rule_map.get(pt.as_str()) {
-                    if pt_body.trim().starts_with('{') {
-                        let referenced_elsewhere = rules.iter().any(|r| {
-                            !commands.contains(r.name.as_str())
-                                && !events.contains(r.name.as_str())
-                                && r.name != pt
-                                && r.body.contains(&pt)
-                        });
-                        if !referenced_elsewhere {
-                            param_types.insert(pt);
-                        }
+            && let Some(pt) = extract_value(body, "params:")
+        {
+            // Only exclude if it's a struct body and not referenced elsewhere as a type
+            if let Some(pt_body) = rule_map.get(pt.as_str()) {
+                if pt_body.trim().starts_with('{') {
+                    let referenced_elsewhere = rules.iter().any(|r| {
+                        !commands.contains(r.name.as_str())
+                            && !events.contains(r.name.as_str())
+                            && r.name != pt
+                            && r.body.contains(&pt)
+                    });
+                    if !referenced_elsewhere {
+                        param_types.insert(pt);
                     }
-                } else {
-                    param_types.insert(pt);
                 }
+            } else {
+                param_types.insert(pt);
             }
+        }
     }
 
     // Group rules by module
@@ -164,11 +165,11 @@ pub fn parse_cddl(inputs: &[(&str, DomainDirection)]) -> Protocol<'static> {
             }
         } else if !param_types.contains(name)
             && let Some((mut td, synthetic)) = parse_typedef(name, type_name, &rule.body)
-            {
-                td.direction = dir;
-                module.types.push(td);
-                module.types.extend(synthetic);
-            }
+        {
+            td.direction = dir;
+            module.types.push(td);
+            module.types.extend(synthetic);
+        }
     }
 
     // Upsert overrides: add/replace params on existing typedefs, or insert new ones
@@ -223,18 +224,19 @@ fn split_rules(input: &str) -> Vec<(String, String)> {
         }
 
         if !trimmed.is_empty()
-            && let Some(eq_pos) = trimmed.find(" = ") {
-                let candidate_name = &trimmed[..eq_pos];
-                if !candidate_name.contains(' ') {
-                    if let Some(name) = current_name.take() {
-                        rules.push((name, current_body.trim().to_string()));
-                    }
-                    current_name = Some(candidate_name.to_string());
-                    current_body = trimmed[eq_pos + 3..].to_string();
-                    current_body.push('\n');
-                    continue;
+            && let Some(eq_pos) = trimmed.find(" = ")
+        {
+            let candidate_name = &trimmed[..eq_pos];
+            if !candidate_name.contains(' ') {
+                if let Some(name) = current_name.take() {
+                    rules.push((name, current_body.trim().to_string()));
                 }
+                current_name = Some(candidate_name.to_string());
+                current_body = trimmed[eq_pos + 3..].to_string();
+                current_body.push('\n');
+                continue;
             }
+        }
 
         if current_name.is_some() && !trimmed.is_empty() {
             current_body.push_str(trimmed);
@@ -280,9 +282,7 @@ fn extract_quoted(body: &str, key: &str) -> Option<String> {
 fn extract_value(body: &str, key: &str) -> Option<String> {
     let idx = body.find(key)?;
     let after = body[idx + key.len()..].trim_start();
-    let end = after
-        .find([',', ')', '}', '\n'])
-        .unwrap_or(after.len());
+    let end = after.find([',', ')', '}', '\n']).unwrap_or(after.len());
     let val = after[..end].trim();
     if val.is_empty() {
         None
@@ -698,8 +698,7 @@ fn parse_struct_fields(
                 } else {
                     format!("{}{}", parent_name, field_camel)
                 };
-                let (inner_params, inner_types) =
-                    parse_struct_fields(&nested_body, &type_name);
+                let (inner_params, inner_types) = parse_struct_fields(&nested_body, &type_name);
                 nested_body.clear();
                 synthetics.extend(inner_types);
                 synthetics.push(synthetic_td(
@@ -835,20 +834,12 @@ fn extract_constraints(s: &str) -> (Option<String>, Option<Vec<Constraint>>) {
     while let Some(idx) = remaining.find(" .") {
         let after = &remaining[idx + 2..];
         if let Some(rest) = after.strip_prefix("default ") {
-            let val = rest
-                .split([',', ')', '}'])
-                .next()
-                .unwrap_or("")
-                .trim();
+            let val = rest.split([',', ')', '}']).next().unwrap_or("").trim();
             if !val.is_empty() {
                 default_value = Some(val.to_string());
             }
         } else if let Some((tag, rest)) = parse_constraint_tag(after) {
-            let val = rest
-                .split([',', ')', '}', ' '])
-                .next()
-                .unwrap_or("")
-                .trim();
+            let val = rest.split([',', ')', '}', ' ']).next().unwrap_or("").trim();
             if let Ok(n) = val.parse::<f64>() {
                 let c = match tag {
                     "ge" => Constraint::Ge(n),
@@ -1280,12 +1271,13 @@ fn apply_overrides(modules: &mut HashMap<String, Module<'static>>) {
             .types
             .iter_mut()
             .find(|t| t.name.as_ref() == type_name)
-            && let Some(Item::TypeChoice(refs)) = &mut td.parameters {
-                refs.push(TypeRef {
-                    module: None,
-                    name: o(catch_all),
-                });
-            }
+            && let Some(Item::TypeChoice(refs)) = &mut td.parameters
+        {
+            refs.push(TypeRef {
+                module: None,
+                name: o(catch_all),
+            });
+        }
     }
 
     for (mod_name, type_name, variants) in enum_overrides {
@@ -1296,12 +1288,13 @@ fn apply_overrides(modules: &mut HashMap<String, Module<'static>>) {
             .types
             .iter_mut()
             .find(|t| t.name.as_ref() == type_name)
-            && let Some(Item::Enum(existing)) = &mut td.parameters {
-                existing.extend(variants.iter().map(|v| Variant {
-                    description: None,
-                    name: o(*v),
-                }));
-            }
+            && let Some(Item::Enum(existing)) = &mut td.parameters
+        {
+            existing.extend(variants.iter().map(|v| Variant {
+                description: None,
+                name: o(*v),
+            }));
+        }
     }
 
     for (mod_name, type_name, field_name, new_type, force_optional) in field_overrides {
@@ -1321,12 +1314,12 @@ fn apply_overrides(modules: &mut HashMap<String, Module<'static>>) {
             .iter_mut()
             .find(|t| t.name.as_ref() == type_name)
             && let Some(Item::Properties(params)) = &mut td.parameters
-                && let Some(p) = params
-                    .iter_mut()
-                    .find(|p| p.raw_name.as_ref() == field_name)
-                {
-                    apply(p);
-                }
+            && let Some(p) = params
+                .iter_mut()
+                .find(|p| p.raw_name.as_ref() == field_name)
+        {
+            apply(p);
+        }
         if let Some(cr) = module
             .command_results
             .iter_mut()
@@ -1335,9 +1328,9 @@ fn apply_overrides(modules: &mut HashMap<String, Module<'static>>) {
                 .parameters
                 .iter_mut()
                 .find(|p| p.raw_name.as_ref() == field_name)
-            {
-                apply(p);
-            }
+        {
+            apply(p);
+        }
     }
 
     for (mod_name, name, refs) in synthetic_choices {

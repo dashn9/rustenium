@@ -66,14 +66,15 @@ impl<T: ConnectionTransport> BidiNode<T> {
         let mut children = Vec::new();
         let context_id = context_id.into();
         if let Some(node_properties) = &_raw_node.value
-            && let Some(node_properties_children) = node_properties.children.clone() {
-                children.extend(Self::process_node_value_to_children(
-                    node_properties_children,
-                    &locator,
-                    session.clone(),
-                    context_id.clone(),
-                ));
-            }
+            && let Some(node_properties_children) = node_properties.children.clone()
+        {
+            children.extend(Self::process_node_value_to_children(
+                node_properties_children,
+                &locator,
+                session.clone(),
+                context_id.clone(),
+            ));
+        }
         Self {
             _raw_node,
             children,
@@ -527,12 +528,14 @@ impl<T: ConnectionTransport> BidiNode<T> {
                 path_obj.join(format!("screenshot_{}.png", timestamp))
             } else {
                 if let Some(parent) = path_obj.parent()
-                    && !parent.as_os_str().is_empty() && !parent.exists() {
-                        return Err(ScreenshotError::InvalidPath(format!(
-                            "Parent directory does not exist: {}",
-                            parent.display()
-                        )));
-                    }
+                    && !parent.as_os_str().is_empty()
+                    && !parent.exists()
+                {
+                    return Err(ScreenshotError::InvalidPath(format!(
+                        "Parent directory does not exist: {}",
+                        parent.display()
+                    )));
+                }
                 path_obj.to_path_buf()
             };
 

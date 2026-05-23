@@ -82,21 +82,23 @@ impl CommandResponseListener {
                     CommandResponseState::Success(command_response) => {
                         let sender = self.subscriptions.lock().await.remove(&command_response.id);
                         if let Some(sender) = sender
-                            && !sender.is_closed() {
-                                sender
-                                    .send(CommandResponseState::Success(command_response))
-                                    .unwrap();
-                            }
+                            && !sender.is_closed()
+                        {
+                            sender
+                                .send(CommandResponseState::Success(command_response))
+                                .unwrap();
+                        }
                     }
                     CommandResponseState::Error(error_response) => {
                         let id = error_response.id;
                         if let Some(id) = id
                             && let Some(sender) = self.subscriptions.lock().await.remove(&id)
-                                && !sender.is_closed() {
-                                    sender
-                                        .send(CommandResponseState::Error(error_response))
-                                        .unwrap();
-                                }
+                            && !sender.is_closed()
+                        {
+                            sender
+                                .send(CommandResponseState::Error(error_response))
+                                .unwrap();
+                        }
                     }
                 }
             }
@@ -205,9 +207,10 @@ impl CdpCommandResponseListener {
                 };
                 if let Some(id) = id
                     && let Some(sender) = self.subscriptions.lock().await.remove(&id)
-                        && !sender.is_closed() {
-                            let _ = sender.send(response);
-                        }
+                    && !sender.is_closed()
+                {
+                    let _ = sender.send(response);
+                }
             }
         });
     }

@@ -38,7 +38,8 @@ jobs:
       # and firefox suites spawn real browsers and run in dedicated jobs.
       - name: cargo test (no browser)
         run: |
-          cargo test --workspace --lib --bins --doc
+          cargo test --workspace --lib --bins
+          cargo test --workspace --doc
           cargo test -p rustenium --tests -- --skip chrome --skip firefox
 
   chrome-integration:
@@ -52,7 +53,7 @@ jobs:
         with:
           chrome-version: stable
       - name: chrome tests
-        run: cargo test -p rustenium --test chrome -- --test-threads=1
+        run: cargo test -p rustenium --test chrome -- --test-threads=2
 
   firefox-integration:
     name: firefox integration
@@ -65,4 +66,4 @@ jobs:
         with:
           firefox-version: latest
       - name: firefox tests
-        run: cargo test -p rustenium --test firefox -- --test-threads=1
+        run: cargo test -p rustenium --test firefox -- --test-threads=2

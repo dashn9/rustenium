@@ -247,15 +247,16 @@ impl<OT: ConnectionTransport> BidiMouse<OT> {
         pointer_actions = pointer_actions.action(pointer_down);
 
         if let Some(delay) = options.delay
-            && delay > 0 {
-                pointer_actions = pointer_actions.action(
-                    PauseActionBuilder::default()
-                        .r#type(PauseActionType::Pause)
-                        .duration(delay)
-                        .build()
-                        .unwrap(),
-                );
-            }
+            && delay > 0
+        {
+            pointer_actions = pointer_actions.action(
+                PauseActionBuilder::default()
+                    .r#type(PauseActionType::Pause)
+                    .duration(delay)
+                    .build()
+                    .unwrap(),
+            );
+        }
 
         pointer_actions = pointer_actions.action(pointer_up);
 

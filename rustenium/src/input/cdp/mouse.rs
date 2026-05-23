@@ -331,9 +331,7 @@ impl Mouse for CdpMouse {
         options: MouseMoveOptions,
     ) -> Result<(), InputError> {
         let steps = options.steps.unwrap_or(1).max(1);
-        self.move_to(point, steps)
-            .await
-            .map_err(to_input_err)
+        self.move_to(point, steps).await.map_err(to_input_err)
     }
 
     async fn down(
@@ -342,9 +340,7 @@ impl Mouse for CdpMouse {
         options: MouseOptions,
     ) -> Result<(), InputError> {
         let button = options.button.unwrap_or(MouseButton::Left);
-        self.down(None, button, 1)
-            .await
-            .map_err(to_input_err)
+        self.down(None, button, 1).await.map_err(to_input_err)
     }
 
     async fn up(
@@ -362,9 +358,7 @@ impl Mouse for CdpMouse {
         _context: &BrowsingContext,
         options: MouseClickOptions,
     ) -> Result<(), InputError> {
-        self.click(point, options)
-            .await
-            .map_err(to_input_err)
+        self.click(point, options).await.map_err(to_input_err)
     }
 
     async fn wheel(

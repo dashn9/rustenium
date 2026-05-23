@@ -405,12 +405,14 @@ impl<T: ConnectionTransport + Send + Sync> CdpAdapter<T> {
                 path_obj.join(filename)
             } else {
                 if let Some(parent) = path_obj.parent()
-                    && !parent.as_os_str().is_empty() && !parent.exists() {
-                        return Err(ScreenshotError::InvalidPath(format!(
-                            "Parent directory does not exist: {}",
-                            parent.display()
-                        )));
-                    }
+                    && !parent.as_os_str().is_empty()
+                    && !parent.exists()
+                {
+                    return Err(ScreenshotError::InvalidPath(format!(
+                        "Parent directory does not exist: {}",
+                        parent.display()
+                    )));
+                }
                 path_obj.to_path_buf()
             };
 

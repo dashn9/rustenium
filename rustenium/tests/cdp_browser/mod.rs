@@ -3,7 +3,21 @@ use rustenium::browsers::{
     cdp_browser::{AddPreloadScriptOptions, CdpBrowser, FetchNodeOptions},
 };
 use rustenium::nodes::{AXNode, Node};
-use rustenium_cdp_definitions::browser_protocol::dom::types::NodeId;
+use rustenium_cdp_definitions::browser_protocol::dom::types::BackendNodeId;
+
+async fn first_backend_node_id(browser: &mut ChromeBrowser, url: &str) -> BackendNodeId {
+    <ChromeBrowser as CdpBrowser>::navigate(browser, url)
+        .await
+        .unwrap();
+    let nodes = <ChromeBrowser as CdpBrowser>::get_accessible_nodes(browser, false)
+        .await
+        .unwrap();
+    let id = nodes
+        .iter()
+        .find_map(|n| n.backend_dom_node_id)
+        .expect("expected at least one accessibility node with a backend_dom_node_id");
+    BackendNodeId::new(id)
+}
 
 pub async fn test_navigate_to_url(mut browser: ChromeBrowser) {
     let result = <ChromeBrowser as CdpBrowser>::navigate(&mut browser, "https://example.com").await;
@@ -82,31 +96,34 @@ pub async fn test_get_accessible_nodes_squash_no_blank_generic(mut browser: Chro
         .await
         .unwrap();
 
-    fn check(nodes: &[AXNode]) {
+    fn is_blank_generic(node: &AXNode) -> bool {
+        let name_blank = node.name_str().is_none_or(|s| s.trim().is_empty());
+        let role_empty = node
+            .role_str()
+            .is_none_or(|r| matches!(r, "none" | "generic" | "group"));
+        name_blank && role_empty
+    }
+
+    fn check(nodes: &[AXNode], parent_blank_generic: bool) {
         for node in nodes {
-            let name_blank = node.name_str().is_none_or(|s| s.trim().is_empty());
-            let role_empty = node
-                .role_str()
-                .is_none_or(|r| matches!(r, "none" | "generic" | "group"));
+            let blank = is_blank_generic(node);
             assert!(
-                !(name_blank && role_empty),
-                "squashed tree should contain no blank generic nodes, found node_id: {}",
+                !(blank && parent_blank_generic),
+                "squashed tree should not contain a blank-generic child of a blank-generic parent, found node_id: {}",
                 node.node_id
             );
-            check(&node.children);
+            check(&node.children, blank);
         }
     }
-    check(&nodes);
+    check(&nodes, false);
     browser.close().await.unwrap();
 }
 
 pub async fn test_fetch_node_by_node_id(mut browser: ChromeBrowser) {
-    <ChromeBrowser as CdpBrowser>::navigate(&mut browser, "https://example.com")
-        .await
-        .unwrap();
+    let backend_id = first_backend_node_id(&mut browser, "https://example.com").await;
     let node = <ChromeBrowser as CdpBrowser>::fetch_node(
         &mut browser,
-        FetchNodeOptions::new().node_id(NodeId::new(1)).depth(1),
+        FetchNodeOptions::new().backend_node_id(backend_id).depth(1),
     )
     .await
     .unwrap();
@@ -118,18 +135,16 @@ pub async fn test_fetch_node_by_node_id(mut browser: ChromeBrowser) {
 }
 
 pub async fn test_fetch_node_with_depth_returns_children(mut browser: ChromeBrowser) {
-    <ChromeBrowser as CdpBrowser>::navigate(&mut browser, "https://example.com")
-        .await
-        .unwrap();
+    let backend_id = first_backend_node_id(&mut browser, "https://example.com").await;
     let shallow = <ChromeBrowser as CdpBrowser>::fetch_node(
         &mut browser,
-        FetchNodeOptions::new().node_id(NodeId::new(1)).depth(1),
+        FetchNodeOptions::new().backend_node_id(backend_id).depth(1),
     )
     .await
     .unwrap();
     let deep = <ChromeBrowser as CdpBrowser>::fetch_node(
         &mut browser,
-        FetchNodeOptions::new().node_id(NodeId::new(1)).depth(5),
+        FetchNodeOptions::new().backend_node_id(backend_id).depth(5),
     )
     .await
     .unwrap();

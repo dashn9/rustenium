@@ -111,9 +111,10 @@ pub fn parse_pdl<'a>(input: &'a str) -> Result<Protocol<'a>, Error> {
 
         if let Some(caps) = regex!("^(experimental )?(deprecated )?domain (.*)").captures(line) {
             if let Some(module) = protocol.modules.last_mut()
-                && let Some(mod_prop) = mod_prop.take() {
-                    add_module_property_to_module(mod_prop, module);
-                }
+                && let Some(mod_prop) = mod_prop.take()
+            {
+                add_module_property_to_module(mod_prop, module);
+            }
 
             let module = Module {
                 description: description.take().map(Cow::Owned),
@@ -339,10 +340,11 @@ pub fn parse_pdl<'a>(input: &'a str) -> Result<Protocol<'a>, Error> {
                 name: None,
             };
             if let Some(desc) = description.as_ref()
-                && let Some(caps) = regex!("^Use '([^']+)' instead$").captures(desc) {
-                    let name = caps.get(1).unwrap().as_str();
-                    redirect.name = name.rsplit('.').next().map(str::to_string).map(Cow::Owned);
-                }
+                && let Some(caps) = regex!("^Use '([^']+)' instead$").captures(desc)
+            {
+                let name = caps.get(1).unwrap().as_str();
+                redirect.name = name.rsplit('.').next().map(str::to_string).map(Cow::Owned);
+            }
             match mod_prop
                 .as_mut()
                 .ok_or_else(|| format_err!("line {}: missing item declaration", line_num))?
@@ -419,9 +421,10 @@ pub fn parse_pdl<'a>(input: &'a str) -> Result<Protocol<'a>, Error> {
     }
 
     if let Some(module) = protocol.modules.last_mut()
-        && let Some(mod_prop) = mod_prop.take() {
-            add_module_property_to_module(mod_prop, module);
-        }
+        && let Some(mod_prop) = mod_prop.take()
+    {
+        add_module_property_to_module(mod_prop, module);
+    }
     protocol.version = version.ok_or_else(|| format_err!("Missing version"))?;
     Ok(protocol)
 }

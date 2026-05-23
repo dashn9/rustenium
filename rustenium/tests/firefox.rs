@@ -4,7 +4,6 @@ use rustenium::browsers::{FirefoxBrowser, FirefoxConfig, firefox};
 
 async fn launch() -> FirefoxBrowser {
     let config = FirefoxConfig {
-        remote_debugging_port: Some(0),
         browser_flags: Some(vec!["--headless".to_string()]),
         ..FirefoxConfig::default()
     };

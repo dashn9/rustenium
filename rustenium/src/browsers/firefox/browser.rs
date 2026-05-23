@@ -12,8 +12,7 @@ use rustenium_core::transport::{ConnectionTransportConfig, WebsocketConnectionTr
 use std::sync::{Arc, Mutex};
 
 /// How Firefox is launched and managed.
-#[derive(Debug, Clone)]
-#[derive(Default)]
+#[derive(Debug, Clone, Default)]
 pub enum FirefoxLaunchMode {
     /// Rustenium starts Firefox and connects to its BiDi WebSocket directly (default).
     #[default]
@@ -22,10 +21,8 @@ pub enum FirefoxLaunchMode {
     Remote(u16),
 }
 
-
 /// Configuration for Firefox browser.
-#[derive(Debug, Clone)]
-#[derive(Default)]
+#[derive(Debug, Clone, Default)]
 pub struct FirefoxConfig {
     /// Host (default: localhost).
     pub host: Option<String>,
@@ -52,7 +49,6 @@ pub struct FirefoxConfig {
     /// Additional Firefox command-line arguments.
     pub browser_flags: Option<Vec<String>>,
 }
-
 
 pub struct FirefoxBrowser {
     config: FirefoxConfig,

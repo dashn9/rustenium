@@ -87,10 +87,9 @@ impl<OT: ConnectionTransport> CdpKeyboard<OT> {
         if let Some(t) = def.text {
             text = Some(t);
         }
-        if shift_active
-            && let Some(t) = def.shift_text {
-                text = Some(t);
-            }
+        if shift_active && let Some(t) = def.shift_text {
+            text = Some(t);
+        }
         // Any modifier other than Shift suppresses text (it's a shortcut, not typing).
         if modifiers & !8 != 0 {
             text = None;

@@ -65,9 +65,7 @@ impl Generator {
     pub fn compile_protocols(&mut self, protocols: &[Protocol]) -> io::Result<()> {
         let target_base: PathBuf = self.out_dir.clone().map(Ok).unwrap_or_else(|| {
             std::env::var_os("OUT_DIR")
-                .ok_or_else(|| {
-                    Error::other("OUT_DIR environment variable is not set")
-                })
+                .ok_or_else(|| Error::other("OUT_DIR environment variable is not set"))
                 .map(Into::into)
         })?;
 
@@ -319,15 +317,12 @@ impl Generator {
                 #proto_content
             }
         } else {
-            let has_types = |modules: &Vec<ModuleInfo>| {
-                modules.iter().any(|(_, _, tl, _, _)| !tl.is_empty())
-            };
-            let has_cmds = |modules: &Vec<ModuleInfo>| {
-                modules.iter().any(|(_, _, _, cl, _)| !cl.is_empty())
-            };
-            let has_evts = |modules: &Vec<ModuleInfo>| {
-                modules.iter().any(|(_, _, _, _, el)| !el.is_empty())
-            };
+            let has_types =
+                |modules: &Vec<ModuleInfo>| modules.iter().any(|(_, _, tl, _, _)| !tl.is_empty());
+            let has_cmds =
+                |modules: &Vec<ModuleInfo>| modules.iter().any(|(_, _, _, cl, _)| !cl.is_empty());
+            let has_evts =
+                |modules: &Vec<ModuleInfo>| modules.iter().any(|(_, _, _, _, el)| !el.is_empty());
 
             let top_type_entries: Vec<_> = protocol_infos
                 .iter()
@@ -770,13 +765,8 @@ impl Generator {
                 .filter(|dt| with_deprecated || !dt.deprecated)
                 .filter(|dt| with_experimental || !dt.experimental);
 
-            let (mut stream, params_builder) = self.generate_struct(
-                module,
-                dt,
-                dt.ident_name(),
-                params,
-                local_same_file,
-            );
+            let (mut stream, params_builder) =
+                self.generate_struct(module, dt, dt.ident_name(), params, local_same_file);
 
             let domain_direction_const = match dt.direction() {
                 Some(DomainDirection::Remote) => {
@@ -1165,13 +1155,8 @@ impl Generator {
                 let ty = if let Type::Ref(type_ref) = ty.deref() {
                     self.projected_type(module, type_ref, local_same_file)
                 } else {
-                    let ty = self.generate_field_type(
-                        module,
-                        parent,
-                        param_name,
-                        ty,
-                        local_same_file,
-                    );
+                    let ty =
+                        self.generate_field_type(module, parent, param_name, ty, local_same_file);
                     quote! { #ty }
                 };
                 FieldType::new_vec(ty)

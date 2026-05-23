@@ -340,15 +340,16 @@ impl<OT: ConnectionTransport> BidiKeyboard<OT> {
             );
 
         if let Some(h) = hold
-            && h > 0 {
-                key_actions = key_actions.action(
-                    PauseActionBuilder::default()
-                        .r#type(PauseActionType::Pause)
-                        .duration(h)
-                        .build()
-                        .unwrap(),
-                );
-            }
+            && h > 0
+        {
+            key_actions = key_actions.action(
+                PauseActionBuilder::default()
+                    .r#type(PauseActionType::Pause)
+                    .duration(h)
+                    .build()
+                    .unwrap(),
+            );
+        }
 
         key_actions = key_actions.action(
             KeyUpActionBuilder::default()
@@ -416,15 +417,16 @@ impl<OT: ConnectionTransport> BidiKeyboard<OT> {
             );
 
             if let Some(&(hold, _)) = timings.get(i)
-                && hold > 0 {
-                    key_actions = key_actions.action(
-                        PauseActionBuilder::default()
-                            .r#type(PauseActionType::Pause)
-                            .duration(hold)
-                            .build()
-                            .unwrap(),
-                    );
-                }
+                && hold > 0
+            {
+                key_actions = key_actions.action(
+                    PauseActionBuilder::default()
+                        .r#type(PauseActionType::Pause)
+                        .duration(hold)
+                        .build()
+                        .unwrap(),
+                );
+            }
 
             key_actions = key_actions.action(
                 KeyUpActionBuilder::default()
@@ -435,15 +437,16 @@ impl<OT: ConnectionTransport> BidiKeyboard<OT> {
             );
 
             if let Some(&(_, gap)) = timings.get(i)
-                && gap > 0 {
-                    key_actions = key_actions.action(
-                        PauseActionBuilder::default()
-                            .r#type(PauseActionType::Pause)
-                            .duration(gap)
-                            .build()
-                            .unwrap(),
-                    );
-                }
+                && gap > 0
+            {
+                key_actions = key_actions.action(
+                    PauseActionBuilder::default()
+                        .r#type(PauseActionType::Pause)
+                        .duration(gap)
+                        .build()
+                        .unwrap(),
+                );
+            }
         }
 
         let command = PerformActionsBuilder::default()

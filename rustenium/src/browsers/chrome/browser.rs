@@ -18,8 +18,7 @@ use rustenium_core::transport::{ConnectionTransportConfig, WebsocketConnectionTr
 use std::sync::{Arc, Mutex};
 
 /// How Chrome is launched and managed.
-#[derive(Debug, Clone)]
-#[derive(Default)]
+#[derive(Debug, Clone, Default)]
 pub enum ChromeLaunchMode {
     /// Rustenium starts Chrome and attaches chromedriver to it (default).
     #[default]
@@ -29,7 +28,6 @@ pub enum ChromeLaunchMode {
     /// Let chromedriver spawn and manage Chrome.
     DriverManaged,
 }
-
 
 /// Configuration for Chrome browser and chromedriver.
 ///

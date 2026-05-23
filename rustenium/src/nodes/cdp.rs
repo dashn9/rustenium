@@ -364,12 +364,14 @@ impl<T: ConnectionTransport> CdpNode<T> {
                 path.join(format!("screenshot_{timestamp}.png"))
             } else {
                 if let Some(parent) = path.parent()
-                    && !parent.as_os_str().is_empty() && !parent.exists() {
-                        return Err(NodeScreenshotError::InvalidPath(format!(
-                            "Parent directory does not exist: {}",
-                            parent.display()
-                        )));
-                    }
+                    && !parent.as_os_str().is_empty()
+                    && !parent.exists()
+                {
+                    return Err(NodeScreenshotError::InvalidPath(format!(
+                        "Parent directory does not exist: {}",
+                        parent.display()
+                    )));
+                }
                 path
             };
 

@@ -198,7 +198,8 @@ pub fn find_system_firefox() -> Option<PathBuf> {
             return Some(p);
         }
     } else if let Ok(output) = Command::new("which").arg("firefox").output()
-    && output.status.success() {
+        && output.status.success()
+    {
         let path = String::from_utf8_lossy(&output.stdout).trim().to_string();
         if !path.is_empty() {
             return Some(PathBuf::from(path));

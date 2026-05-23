@@ -107,9 +107,10 @@ impl Process {
         let check_line = |_label: &str, line: Result<Option<String>, _>| -> Option<String> {
             if let Ok(Some(line)) = line
                 && let Some(captures) = regex.captures(&line)
-                    && let Some(url) = captures.get(1) {
-                        return Some(url.as_str().into());
-                    }
+                && let Some(url) = captures.get(1)
+            {
+                return Some(url.as_str().into());
+            }
             None
         };
 
@@ -227,13 +228,15 @@ pub fn kill_process_on_port(port: u16) {
         let stdout = String::from_utf8_lossy(&out.stdout);
         let needle = format!(":{}", port);
         for line in stdout.lines() {
-            if line.contains(&needle) && line.contains("LISTENING")
-                && let Some(pid_str) = line.split_whitespace().last() {
-                    tracing::debug!("[Process]: Found PID {} on port {}, killing", pid_str, port);
-                    let _ = std::process::Command::new("taskkill")
-                        .args(["/F", "/T", "/PID", pid_str])
-                        .output();
-                }
+            if line.contains(&needle)
+                && line.contains("LISTENING")
+                && let Some(pid_str) = line.split_whitespace().last()
+            {
+                tracing::debug!("[Process]: Found PID {} on port {}, killing", pid_str, port);
+                let _ = std::process::Command::new("taskkill")
+                    .args(["/F", "/T", "/PID", pid_str])
+                    .output();
+            }
         }
     }
 
