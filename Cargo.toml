@@ -1,6 +1,8 @@
 [workspace]
 resolver = "2"
-members = ["runner", "rustenium", "rustenium-bidi-definitions", "rustenium-cdp-definitions","rustenium-core", "rustenium-generator", "rustenium-macros"]
+members = ["rustenium", "rustenium-bidi-definitions", "rustenium-cdp-definitions","rustenium-core", "rustenium-generator", "rustenium-macros"]
+# `runner` is a local-only harness (gitignored); not part of the workspace.
+exclude = ["runner"]
 
 [profile.dev]
 panic = "abort"
