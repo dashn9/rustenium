@@ -564,6 +564,7 @@ impl AXNode {
         // parent is also empty, so at most one empty container survives per chain.
         fn attach(
             id: &str,
+            parent_id: Option<&str>,
             by_id: &mut HashMap<String, AXNode>,
             child_map: &HashMap<String, Vec<String>>,
             squash: bool,
@@ -576,14 +577,13 @@ impl AXNode {
 
             let children: Vec<AXNode> = child_ids
                 .iter()
-                .flat_map(|cid| attach(cid, by_id, child_map, squash, this_is_empty))
+                .flat_map(|cid| attach(cid, Some(id), by_id, child_map, squash, this_is_empty))
                 .collect();
 
             if let Some(mut node) = by_id.remove(id) {
-                // Only squash if both this node and its parent are empty containers —
-                // the outermost empty node in any chain is always kept.
+                node.parent_id = parent_id.map(str::to_string);
                 if squash && node.is_empty_container() && parent_is_empty {
-                    let grandparent = node.parent_id.clone();
+                    let grandparent = parent_id.map(str::to_string);
                     return children
                         .into_iter()
                         .map(|mut c| {
@@ -607,7 +607,7 @@ impl AXNode {
 
         roots
             .iter()
-            .flat_map(|root| attach(root, &mut by_id, &child_map, squash, false))
+            .flat_map(|root| attach(root, None, &mut by_id, &child_map, squash, false))
             .collect()
     }
 

@@ -42,6 +42,9 @@ jobs:
           cargo test --workspace --doc
           cargo test -p rustenium --tests -- --skip chrome --skip firefox
 
+  # Serialized (threads=1, firefox after chrome) — the browser downloader has no
+  # lock, so concurrent callers race the unzip. To parallelize, add a file lock
+  # in `rustenium/src/downloader.rs` (e.g. fs2::FileExt::lock_exclusive).
   chrome-integration:
     name: chrome integration
     runs-on: ubuntu-latest
@@ -53,10 +56,11 @@ jobs:
         with:
           chrome-version: stable
       - name: chrome tests
-        run: cargo test -p rustenium --test chrome -- --test-threads=2
+        run: cargo test -p rustenium --test chrome -- --test-threads=1
 
   firefox-integration:
     name: firefox integration
+    needs: chrome-integration
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -66,4 +70,4 @@ jobs:
         with:
           firefox-version: latest
       - name: firefox tests
-        run: cargo test -p rustenium --test firefox -- --test-threads=2
+        run: cargo test -p rustenium --test firefox -- --test-threads=1
