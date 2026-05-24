@@ -17,8 +17,9 @@
 //! ## Quick Start
 //!
 //! ```no_run
-//! use rustenium::browsers::{ChromeBrowser, ChromeConfig, chrome};
-//! use rustenium::css;
+//! use rustenium::browsers::{BidiBrowser, ChromeBrowser, ChromeConfig, chrome};
+//! use rustenium::nodes::Node;
+//! use rustenium_macros::css;
 //!
 //! #[tokio::main]
 //! async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -33,10 +34,10 @@
 //!     let mut browser = chrome(None).await; // Uses default config
 //!
 //!     // Navigate to a page
-//!     browser.open_url("https://example.com", None, None).await?;
+//!     browser.navigate("https://example.com").await?;
 //!
 //!     // Find elements using CSS selectors
-//!     let nodes = browser.find_nodes(css!("h1"), None, None, None, None).await?;
+//!     let nodes = browser.find_nodes(css!("h1")).await?;
 //!
 //!     // Get text content
 //!     if let Some(node) = nodes.first() {
@@ -45,7 +46,7 @@
 //!     }
 //!
 //!     // Clean up
-//!     browser.end_bidi_session().await?;
+//!     browser.end_session().await?;
 //!
 //!     Ok(())
 //! }

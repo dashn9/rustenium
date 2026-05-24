@@ -257,11 +257,11 @@ impl<OT: ConnectionTransport> TouchHandle<OT> {
 ///
 /// ```no_run
 /// # use rustenium::input::{Touchscreen, TouchMoveOptions};
-/// # use rustenium_bidi_commands::browsing_context::types::BrowsingContext;
+/// # use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
 /// # use std::sync::Arc;
 /// # use tokio::sync::Mutex;
-/// # use rustenium_core::Session;
-/// # async fn example(session: Arc<Mutex<Session<rustenium_core::transport::WebsocketConnectionTransport>>>, context: BrowsingContext) -> Result<(), Box<dyn std::error::Error>> {
+/// # use rustenium_core::BidiSession;
+/// # async fn example(session: Arc<Mutex<BidiSession<rustenium_core::transport::WebsocketConnectionTransport>>>, context: BrowsingContext) -> Result<(), Box<dyn std::error::Error>> {
 /// let touchscreen = Arc::new(Touchscreen::new(session));
 ///
 /// // Simulate a pinch gesture with two fingers

@@ -1026,13 +1026,13 @@ pub trait BidiBrowser: Send + Sync {
     /// # Examples
     ///
     /// ```no_run
-    /// # use rustenium::browsers::ChromeBrowser;
+    /// # use rustenium::browsers::{BidiBrowser, ChromeBrowser};
     /// # use rustenium::input::Point;
-    /// # use rustenium_bidi_commands::browsing_context::types::BrowsingContext;
+    /// # use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
     /// # async fn example(browser: ChromeBrowser, context: BrowsingContext) -> Result<(), Box<dyn std::error::Error>> {
     /// let mouse = browser.mouse();
-    /// mouse.move_to(Point { x: 100.0, y: 200.0 }, &context, None).await?;
-    /// mouse.click(None, &context, None).await?;
+    /// mouse.move_to(Point { x: 100.0, y: 200.0 }, &context, Default::default()).await?;
+    /// mouse.click(None, &context, Default::default()).await?;
     /// # Ok(())
     /// # }
     /// ```
@@ -1045,14 +1045,14 @@ pub trait BidiBrowser: Send + Sync {
     /// # Examples
     ///
     /// ```no_run
-    /// # use rustenium::browsers::ChromeBrowser;
-    /// # use rustenium::input::Point;
-    /// # use rustenium_bidi_commands::browsing_context::types::BrowsingContext;
+    /// # use rustenium::browsers::{BidiBrowser, ChromeBrowser};
+    /// # use rustenium::input::{Mouse, Point};
+    /// # use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
     /// # async fn example(browser: ChromeBrowser, context: BrowsingContext) -> Result<(), Box<dyn std::error::Error>> {
     /// let human_mouse = browser.human_mouse();
     /// // Moves with natural curve and realistic delays
-    /// human_mouse.move_to(Point { x: 300.0, y: 400.0 }, &context, None).await?;
-    /// human_mouse.click(None, &context, None).await?;
+    /// human_mouse.move_to(Point { x: 300.0, y: 400.0 }, &context, Default::default()).await?;
+    /// human_mouse.click(None, &context, Default::default()).await?;
     /// # Ok(())
     /// # }
     /// ```
@@ -1065,12 +1065,12 @@ pub trait BidiBrowser: Send + Sync {
     /// # Examples
     ///
     /// ```no_run
-    /// # use rustenium::browsers::ChromeBrowser;
-    /// # use rustenium_bidi_commands::browsing_context::types::BrowsingContext;
+    /// # use rustenium::browsers::{BidiBrowser, ChromeBrowser};
+    /// # use rustenium_bidi_definitions::browsing_context::types::BrowsingContext;
     /// # async fn example(browser: ChromeBrowser, context: BrowsingContext) -> Result<(), Box<dyn std::error::Error>> {
     /// let keyboard = browser.keyboard();
-    /// keyboard.type_text("Hello, World!", &context).await?;
-    /// keyboard.press("Enter", &context).await?;
+    /// keyboard.type_text("Hello, World!", &context, None).await?;
+    /// keyboard.press("Enter", &context, None).await?;
     /// # Ok(())
     /// # }
     /// ```

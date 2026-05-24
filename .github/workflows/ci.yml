@@ -40,7 +40,21 @@ jobs:
         run: |
           cargo test --workspace --lib --bins
           cargo test --workspace --doc
-          cargo test -p rustenium --tests -- --skip chrome --skip firefox
+          cargo test -p rustenium \
+            --test browser_options \
+            --test builders \
+            --test capabilities \
+            --test cdp_errors \
+            --test config \
+            --test errors \
+            --test fetch_node_options \
+            --test firefox_capabilities \
+            --test firefox_config \
+            --test human_mouse \
+            --test human_touchscreen \
+            --test mouse \
+            --test node_errors \
+            --test node_types
 
   # Serialized (threads=1, firefox after chrome) — the browser downloader has no
   # lock, so concurrent callers race the unzip. To parallelize, add a file lock
@@ -60,7 +74,6 @@ jobs:
 
   firefox-integration:
     name: firefox integration
-    needs: chrome-integration
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
