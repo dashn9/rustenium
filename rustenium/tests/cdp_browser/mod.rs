@@ -1,9 +1,10 @@
 use rustenium::browsers::{
     BidiBrowser, ChromeBrowser,
-    cdp_browser::{AddPreloadScriptOptions, CdpBrowser, FetchNodeOptions},
+    cdp_browser::{AddPreloadScriptOptions, CdpBrowser, FetchNodeOptions, WaitUntil},
 };
 use rustenium::nodes::{AXNode, Node};
 use rustenium_cdp_definitions::browser_protocol::dom::types::BackendNodeId;
+use std::time::Duration;
 
 async fn first_backend_node_id(browser: &mut ChromeBrowser, url: &str) -> BackendNodeId {
     <ChromeBrowser as CdpBrowser>::navigate(browser, url)
@@ -167,6 +168,65 @@ pub async fn test_create_tab(mut browser: ChromeBrowser) {
     let result =
         <ChromeBrowser as CdpBrowser>::create_tab(&mut browser, "https://example.com").await;
     assert!(result.is_ok(), "create_tab should succeed");
+    browser.close().await.unwrap();
+}
+
+pub async fn test_wait_for_navigation(mut browser: ChromeBrowser) {
+    <ChromeBrowser as CdpBrowser>::navigate(&mut browser, "https://example.com")
+        .await
+        .unwrap();
+
+    <ChromeBrowser as CdpBrowser>::evaluate_script(
+        &mut browser,
+        "setTimeout(() => { location.href = 'https://example.com/?nav=1'; }, 500)",
+        false,
+    )
+    .await
+    .unwrap();
+
+    <ChromeBrowser as CdpBrowser>::wait_for_navigation(
+        &mut browser,
+        WaitUntil::Load,
+        Duration::from_secs(30),
+    )
+    .await
+    .expect("should observe a cross-document navigation started after arming");
+
+    let loaded = <ChromeBrowser as CdpBrowser>::evaluate_script(
+        &mut browser,
+        "location.search + '|' + document.readyState",
+        false,
+    )
+    .await
+    .unwrap();
+    assert_eq!(
+        loaded.result.value,
+        Some(serde_json::json!("?nav=1|complete")),
+        "should return only once the new document has finished loading"
+    );
+
+    <ChromeBrowser as CdpBrowser>::evaluate_script(
+        &mut browser,
+        "setTimeout(() => { history.pushState({}, '', '/?nav=2'); }, 500)",
+        false,
+    )
+    .await
+    .unwrap();
+
+    <ChromeBrowser as CdpBrowser>::wait_for_navigation(
+        &mut browser,
+        WaitUntil::Load,
+        Duration::from_secs(30),
+    )
+    .await
+    .expect("should observe a same-document navigation, which fires no lifecycle events");
+
+    let pushed =
+        <ChromeBrowser as CdpBrowser>::evaluate_script(&mut browser, "location.search", false)
+            .await
+            .unwrap();
+    assert_eq!(pushed.result.value, Some(serde_json::json!("?nav=2")));
+
     browser.close().await.unwrap();
 }
 

@@ -348,6 +348,7 @@ impl ChromeBrowser {
         let mut cdp_adapter = CdpAdapter::new(cdp_session);
         cdp_adapter.listen_to_target_creation().await.unwrap();
         cdp_adapter.enable_page_domain().await.unwrap();
+        cdp_adapter.enable_lifecycle_events().await.unwrap();
         cdp_adapter
     }
 

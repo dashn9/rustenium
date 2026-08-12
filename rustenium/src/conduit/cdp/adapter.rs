@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::sync::{Arc, Mutex as StdMutex};
 use std::time::Duration;
 
-use crate::error::cdp::ScreenshotError;
+use crate::error::cdp::{ScreenshotError, WaitForNavigationError};
 use crate::input::{CdpKeyboard, CdpMouse, CdpTouchscreen, HumanMouse};
 
 use rustenium_cdp_definitions::Command;
@@ -20,13 +20,18 @@ use rustenium_cdp_definitions::browser_protocol::page::command_builders::{
 };
 use rustenium_cdp_definitions::browser_protocol::page::commands::Navigate;
 use rustenium_cdp_definitions::browser_protocol::page::commands::{
-    AddScriptToEvaluateOnNewDocument, CaptureScreenshot, RemoveScriptToEvaluateOnNewDocument,
+    AddScriptToEvaluateOnNewDocument, CaptureScreenshot, GetFrameTree,
+    RemoveScriptToEvaluateOnNewDocument, SetLifecycleEventsEnabled,
+};
+use rustenium_cdp_definitions::browser_protocol::page::events::{
+    LifecycleEvent, NavigatedWithinDocument,
 };
 use rustenium_cdp_definitions::browser_protocol::page::results::NavigateResult;
 use rustenium_cdp_definitions::browser_protocol::page::results::{
-    AddScriptToEvaluateOnNewDocumentResult, CaptureScreenshotResult, GetLayoutMetricsResult,
+    AddScriptToEvaluateOnNewDocumentResult, CaptureScreenshotResult, GetFrameTreeResult,
+    GetLayoutMetricsResult,
 };
-use rustenium_cdp_definitions::browser_protocol::page::types::ScriptIdentifier;
+use rustenium_cdp_definitions::browser_protocol::page::types::{FrameId, ScriptIdentifier};
 use rustenium_cdp_definitions::browser_protocol::target::command_builders::SetDiscoverTargetsBuilder;
 use rustenium_cdp_definitions::browser_protocol::target::commands::CreateTarget;
 use rustenium_cdp_definitions::browser_protocol::target::events::{TargetCreated, TargetDestroyed};
@@ -38,12 +43,35 @@ use rustenium_core::CdpEventManagement;
 use rustenium_core::WebsocketConnectionTransport;
 use rustenium_core::error::CdpCommandResultError;
 use rustenium_core::error::CdpSessionSendError;
+use rustenium_core::error::EventWaitError;
 use rustenium_core::session::CdpSession;
 use rustenium_core::transport::{ConnectionTransport, ConnectionTransportConfig};
 use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader};
 use tokio::net::TcpStream;
 use tokio::sync::Mutex as TokioMutex;
 use tokio::time::sleep;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum WaitUntil {
+    Commit,
+    DomContentLoaded,
+    #[default]
+    Load,
+    NetworkAlmostIdle,
+    NetworkIdle,
+}
+
+impl WaitUntil {
+    fn lifecycle_name(&self) -> &'static str {
+        match self {
+            WaitUntil::Commit => "init",
+            WaitUntil::DomContentLoaded => "DOMContentLoaded",
+            WaitUntil::Load => "load",
+            WaitUntil::NetworkAlmostIdle => "networkAlmostIdle",
+            WaitUntil::NetworkIdle => "networkIdle",
+        }
+    }
+}
 
 #[derive(Clone)]
 pub struct CdpAdapter<T: ConnectionTransport + Send + Sync> {
@@ -132,6 +160,66 @@ impl<T: ConnectionTransport + Send + Sync> CdpAdapter<T> {
         let command = PageEnableBuilder::default().build();
         self.send_command(command).await?;
         Ok(())
+    }
+
+    pub async fn enable_lifecycle_events(&mut self) -> Result<(), CdpSessionSendError> {
+        let command = SetLifecycleEventsEnabled::builder()
+            .enabled(true)
+            .build()
+            .unwrap();
+        self.send_command(command).await?;
+        Ok(())
+    }
+
+    async fn frame_tree(&mut self) -> Result<GetFrameTreeResult, CdpCommandResultError> {
+        let result_value = self
+            .send_command(GetFrameTree::builder().build())
+            .await
+            .map_err(CdpCommandResultError::SessionSendError)?
+            .result;
+
+        GetFrameTreeResult::try_from(result_value.clone())
+            .map_err(|_| CdpCommandResultError::InvalidResultTypeError(result_value))
+    }
+
+    pub async fn main_frame_id(&mut self) -> Result<FrameId, CdpCommandResultError> {
+        Ok(self.frame_tree().await?.frame_tree.frame.id)
+    }
+
+    pub async fn wait_for_navigation(
+        &mut self,
+        frame_id: FrameId,
+        wait_until: WaitUntil,
+        timeout: Duration,
+    ) -> Result<(), WaitForNavigationError> {
+        let target_name = wait_until.lifecycle_name();
+        let waiter = self.session.lock().await.subscribe_once(
+            [
+                LifecycleEvent::IDENTIFIER,
+                NavigatedWithinDocument::IDENTIFIER,
+            ],
+            move |event| {
+                let Some(event_frame) = event.params.get("frameId").and_then(|v| v.as_str()) else {
+                    return false;
+                };
+                if event_frame != frame_id.as_ref() {
+                    return false;
+                }
+                if event.method == NavigatedWithinDocument::IDENTIFIER {
+                    return true;
+                }
+                event.params.get("name").and_then(|v| v.as_str()) == Some(target_name)
+            },
+        );
+
+        waiter
+            .wait(timeout)
+            .await
+            .map(|_| ())
+            .map_err(|e| match e {
+                EventWaitError::Timeout => WaitForNavigationError::Timeout(timeout),
+                EventWaitError::Cancelled => WaitForNavigationError::Cancelled,
+            })
     }
 
     pub async fn send_command(

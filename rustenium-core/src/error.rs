@@ -43,6 +43,14 @@ pub enum CdpCommandResultError {
 }
 
 #[derive(Debug, Error)]
+pub enum EventWaitError {
+    #[error("Timed out waiting for a matching event")]
+    Timeout,
+    #[error("Event wait was cancelled before a matching event arrived")]
+    Cancelled,
+}
+
+#[derive(Debug, Error)]
 #[error("Failed to kill process")]
 pub struct ProcessKillError;
 

@@ -2,7 +2,7 @@ use crate::browsers::chrome::tab::ChromeTab;
 use crate::conduit::cdp::adapter::CdpAdapter;
 use crate::error::cdp::{
     CreateTabError, EmulateDeviceMetricsError, EvaluateScriptError, LocateError, NavigateError,
-    NodesFetchError, PreloadScriptError, ScreenshotError,
+    NodesFetchError, PreloadScriptError, ScreenshotError, WaitForNavigationError,
 };
 use crate::input::{CdpKeyboard, CdpMouse, CdpTouchscreen, HumanMouse};
 use crate::nodes::AXNode;
@@ -34,6 +34,8 @@ use rustenium_cdp_definitions::js_protocol::runtime::types::RemoteObjectId;
 use rustenium_core::error::{CdpCommandResultError, CdpSessionSendError};
 use rustenium_core::transport::WebsocketConnectionTransport;
 use std::time::Duration;
+
+pub use crate::conduit::cdp::adapter::WaitUntil;
 
 #[derive(Debug, Clone, Default)]
 pub struct NavigateOptions {
@@ -160,6 +162,23 @@ pub trait CdpBrowser: Send + Sync {
         let command = builder.build().unwrap();
         let adapter = self.adapter_mut();
         async move { adapter.navigate(command).await }
+    }
+
+    fn wait_for_navigation(
+        &mut self,
+        wait_until: WaitUntil,
+        timeout: Duration,
+    ) -> impl Future<Output = Result<(), WaitForNavigationError>> + Send {
+        async move {
+            let adapter = self.adapter_mut();
+            let frame_id = adapter
+                .main_frame_id()
+                .await
+                .map_err(WaitForNavigationError::CommandResultError)?;
+            adapter
+                .wait_for_navigation(frame_id, wait_until, timeout)
+                .await
+        }
     }
 
     fn create_tab(

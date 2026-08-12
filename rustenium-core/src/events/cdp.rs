@@ -1,11 +1,14 @@
+use crate::error::EventWaitError;
 use rustenium_cdp_definitions::base::EventResponse;
 use std::fmt;
 use std::future::Future;
 use std::pin::Pin;
 use std::sync::Arc;
 use std::sync::Mutex as StdMutex;
+use std::time::Duration;
 use tokio::sync::Mutex;
 use tokio::sync::mpsc::{UnboundedSender, unbounded_channel};
+use tokio::sync::oneshot;
 use tokio::task::JoinHandle;
 
 type CdpEventHandler = Arc<
@@ -31,6 +34,39 @@ impl fmt::Debug for CdpEvent {
             .field("methods", &self.methods)
             .field("handler", &"<CdpEventHandler>")
             .finish()
+    }
+}
+
+/// A pending wait for a single matching event.
+///
+/// The handler is registered when the waiter is created, so arm it *before*
+/// triggering whatever produces the event. Deregisters itself on drop, and
+/// holds no session lock while awaiting.
+pub struct EventWaiter {
+    id: String,
+    events: Arc<StdMutex<Vec<CdpEvent>>>,
+    rx: oneshot::Receiver<EventResponse>,
+}
+
+impl EventWaiter {
+    pub async fn wait(mut self, timeout: Duration) -> Result<EventResponse, EventWaitError> {
+        match tokio::time::timeout(timeout, &mut self.rx).await {
+            Ok(Ok(event)) => Ok(event),
+            Ok(Err(_)) => Err(EventWaitError::Cancelled),
+            Err(_) => Err(EventWaitError::Timeout),
+        }
+    }
+}
+
+impl fmt::Debug for EventWaiter {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("EventWaiter").field("id", &self.id).finish()
+    }
+}
+
+impl Drop for EventWaiter {
+    fn drop(&mut self) {
+        self.events.lock().unwrap().retain(|e| e.id != self.id);
     }
 }
 
@@ -67,6 +103,34 @@ pub trait CdpEventManagement {
 
     fn remove_cdp_event_handler(&mut self, id: &str) {
         self.get_events().lock().unwrap().retain(|e| e.id != id);
+    }
+
+    fn subscribe_once<P>(
+        &mut self,
+        methods: impl IntoIterator<Item = impl Into<String>>,
+        predicate: P,
+    ) -> EventWaiter
+    where
+        P: Fn(&EventResponse) -> bool + Send + Sync + 'static,
+    {
+        let (tx, rx) = oneshot::channel::<EventResponse>();
+        let tx = Arc::new(StdMutex::new(Some(tx)));
+        let id = self.add_event_handler(methods, move |event| {
+            let matched = predicate(&event);
+            let tx = tx.clone();
+            async move {
+                if matched
+                    && let Some(tx) = tx.lock().unwrap().take()
+                {
+                    let _ = tx.send(event);
+                }
+            }
+        });
+        EventWaiter {
+            id,
+            events: self.get_events().clone(),
+            rx,
+        }
     }
 
     fn event_dispatch(

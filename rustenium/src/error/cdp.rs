@@ -1,10 +1,21 @@
 use rustenium_core::error::CdpCommandResultError;
+use std::time::Duration;
 use thiserror::Error;
 
 #[derive(Debug, Error)]
 pub enum NavigateError {
     #[error("An error occured executing command")]
     CommandResultError(CdpCommandResultError),
+}
+
+#[derive(Debug, Error)]
+pub enum WaitForNavigationError {
+    #[error("An error occured executing command")]
+    CommandResultError(CdpCommandResultError),
+    #[error("Timed out after {0:?} waiting for navigation")]
+    Timeout(Duration),
+    #[error("Navigation wait was cancelled before it completed")]
+    Cancelled,
 }
 
 #[derive(Debug, Error)]
