@@ -1,4 +1,5 @@
 use crate::browsers::chrome::tab::ChromeTab;
+use crate::conduit::cdp::target_manager::TargetManager;
 use crate::conduit::cdp::adapter::CdpAdapter;
 use crate::error::cdp::{
     CreateTabError, EmulateDeviceMetricsError, EvaluateScriptError, LocateError, NavigateError,
@@ -128,12 +129,35 @@ impl NavigateOptionsBuilder {
     }
 }
 
+/// Persistent per-target *overrides*: they configure a session, and every target
+/// derives its own values from that configuration, so each target needs its own
+/// copy or the browser disagrees with itself. All of these are verified to take
+/// effect on a worker session, not just a page.
+///
+/// This is an allowlist of overrides, never of operations. `Page.navigate`,
+/// `Runtime.evaluate` and friends act on one specific target and must not be
+/// replicated. It is also per-command rather than per-domain, because
+/// `Emulation.setDeviceMetricsOverride` shares the domain but describes a
+/// viewport, which a worker does not have and will reject.
+const REPLICATED_OVERRIDES: &[&str] = &[
+    "Emulation.setUserAgentOverride",
+    "Emulation.setTimezoneOverride",
+    "Emulation.setLocaleOverride",
+    "Emulation.setHardwareConcurrencyOverride",
+    "Network.setUserAgentOverride",
+];
+
 pub trait CdpBrowser: Send + Sync {
     type BrowserNode;
 
     fn adapter(&self) -> &CdpAdapter<WebsocketConnectionTransport>;
 
     fn adapter_mut(&mut self) -> &mut CdpAdapter<WebsocketConnectionTransport>;
+
+    /// Internal. Target tracking is infrastructure — consumers use
+    /// `add_init_script` / `targets` / `workers` on the browser, or `ChromeTab`.
+    #[doc(hidden)]
+    fn target_manager(&self) -> &TargetManager<WebsocketConnectionTransport>;
 
     fn build_node(&self, node: DomNode) -> Self::BrowserNode;
 
@@ -231,13 +255,14 @@ pub trait CdpBrowser: Send + Sync {
             builder = builder.focus(v);
         }
         let command = builder.build().unwrap();
+        let manager = self.target_manager().clone();
         let adapter = self.adapter_mut();
         async move {
             let target_id = adapter
                 .create_target(command)
                 .await
                 .map_err(CreateTabError::CreateTargetError)?;
-            Ok(ChromeTab::new(target_id))
+            Ok(ChromeTab::new(target_id, manager))
         }
     }
 
@@ -306,8 +331,31 @@ pub trait CdpBrowser: Send + Sync {
         &mut self,
         command: Command,
     ) -> impl Future<Output = Result<CommandResponse, CdpSessionSendError>> + Send {
+        // Overrides are replicated to every target automatically.
+        //
+        // These configure a session rather than the browser, and each target
+        // derives its own values from that configuration. Applying one only to the
+        // page leaves workers and cross-origin iframes computing theirs from
+        // unconfigured state, so the browser ends up disagreeing with itself.
+        // Configuring the browser should mean the whole browser, hence a default
+        // rather than a second call the caller has to remember.
+        //
+        // Re-applying an override is idempotent, so the page receiving it both
+        // directly and via replication is harmless.
+        let replicate = REPLICATED_OVERRIDES.contains(&command.identifier());
+        let pending = if replicate {
+            Some((self.target_manager().clone(), command.clone()))
+        } else {
+            None
+        };
         let adapter = self.adapter_mut();
-        async move { adapter.send_command(command).await }
+        async move {
+            let response = adapter.send_command(command).await?;
+            if let Some((manager, command)) = pending {
+                manager.add_target_command(command).await;
+            }
+            Ok(response)
+        }
     }
 
     fn get_accessible_nodes(
