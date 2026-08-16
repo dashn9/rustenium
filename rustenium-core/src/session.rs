@@ -214,6 +214,25 @@ impl<T: ConnectionTransport> CdpSession<T> {
         self.send_and_get_receiver_for(command, session_id).await
     }
 
+    /// Recursively merge `extension` into `target`. Objects merge key by key;
+    /// anything else overwrites. Depth matters: extending a nested field must not
+    /// discard its siblings.
+    fn merge_json(target: &mut serde_json::Value, extension: &serde_json::Value) {
+        match (target, extension) {
+            (serde_json::Value::Object(t), serde_json::Value::Object(e)) => {
+                for (key, value) in e {
+                    match t.get_mut(key) {
+                        Some(existing) => Self::merge_json(existing, value),
+                        None => {
+                            t.insert(key.clone(), value.clone());
+                        }
+                    }
+                }
+            }
+            (t, e) => *t = e.clone(),
+        }
+    }
+
     /// Send addressed at an explicit session rather than this one's.
     ///
     /// A connection to the browser endpoint multiplexes every attached target,
@@ -225,6 +244,27 @@ impl<T: ConnectionTransport> CdpSession<T> {
     pub async fn send_and_get_receiver_for(
         &mut self,
         command: impl Into<CdpCommand>,
+        session_id: Option<String>,
+    ) -> oneshot::Receiver<CdpCommandResponseState> {
+        self.send_and_get_receiver_extended(command, None, session_id)
+            .await
+    }
+
+    /// As above, with extra fields merged into the command's `params`.
+    ///
+    /// The generated bindings can only express what the vendored protocol
+    /// definition describes, and that lags the browser in both directions: fields
+    /// added to newer builds are absent, and fields marked deprecated are dropped
+    /// even where the browser still honours them and offers no replacement. This
+    /// is the escape hatch for both, without waiting on a regeneration.
+    ///
+    /// Merging is recursive, so extending one key of a nested object leaves its
+    /// siblings intact. The command is still a typed one, so `identifier()` and
+    /// anything keyed on it continue to work.
+    pub async fn send_and_get_receiver_extended(
+        &mut self,
+        command: impl Into<CdpCommand>,
+        extensions: Option<serde_json::Value>,
         session_id: Option<String>,
     ) -> oneshot::Receiver<CdpCommandResponseState> {
         let command_id = loop {
@@ -254,7 +294,19 @@ impl<T: ConnectionTransport> CdpSession<T> {
             .await
             .insert(command_id, tx);
 
-        let raw = serde_json::to_string(&msg).unwrap();
+        let raw = match extensions {
+            None => serde_json::to_string(&msg).unwrap(),
+            Some(ext) => {
+                let mut value = serde_json::to_value(&msg).unwrap();
+                if let Some(object) = value.as_object_mut() {
+                    let params = object
+                        .entry("params")
+                        .or_insert_with(|| serde_json::Value::Object(Default::default()));
+                    Self::merge_json(params, &ext);
+                }
+                value.to_string()
+            }
+        };
         tracing::debug!(command_id = %command_id, raw_message = %raw, "Sending CDP command");
         self.connection.send(raw).await;
 
@@ -275,7 +327,20 @@ impl<T: ConnectionTransport> CdpSession<T> {
         command: impl Into<CdpCommand>,
         session_id: Option<String>,
     ) -> Result<cdp_base::CommandResponse, CdpSessionSendError> {
-        let rx = self.send_and_get_receiver_for(command, session_id).await;
+        self.send_extended(command, None, session_id).await
+    }
+
+    /// `send_to`, with extra fields merged into `params`.
+    /// See `send_and_get_receiver_extended`.
+    pub async fn send_extended(
+        &mut self,
+        command: impl Into<CdpCommand>,
+        extensions: Option<serde_json::Value>,
+        session_id: Option<String>,
+    ) -> Result<cdp_base::CommandResponse, CdpSessionSendError> {
+        let rx = self
+            .send_and_get_receiver_extended(command, extensions, session_id)
+            .await;
         match timeout(Duration::from_secs(20), rx).await {
             Ok(Ok(state)) => match state {
                 CdpCommandResponseState::Success(response) => {

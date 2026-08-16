@@ -173,6 +173,21 @@ impl<T: ConnectionTransport + Send + Sync> CdpAdapter<T> {
         self.session.lock().await.send(command).await
     }
 
+    /// `send_command`, with extra fields merged into the command's `params`.
+    /// See `CdpSession::send_and_get_receiver_extended`.
+    pub async fn send_command_extended(
+        &mut self,
+        command: impl Into<Command>,
+        extensions: serde_json::Value,
+    ) -> Result<CommandResponse, CdpSessionSendError> {
+        let session_id = self.session.lock().await.session_id.clone();
+        self.session
+            .lock()
+            .await
+            .send_extended(command, Some(extensions), session_id)
+            .await
+    }
+
     pub async fn navigate(
         &mut self,
         command: Navigate,

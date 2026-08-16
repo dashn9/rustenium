@@ -90,11 +90,12 @@ async fn fire<T: ConnectionTransport + Send + Sync>(
     session: &Arc<TokioMutex<CdpSession<T>>>,
     session_id: &str,
     command: impl Into<Command>,
+    extensions: Option<serde_json::Value>,
 ) {
     let _ = session
         .lock()
         .await
-        .send_and_get_receiver_for(command, Some(session_id.to_string()))
+        .send_and_get_receiver_extended(command, extensions, Some(session_id.to_string()))
         .await;
 }
 
@@ -179,7 +180,7 @@ pub struct TargetManager<T: ConnectionTransport + Send + Sync> {
     /// Sent to every target as it attaches, before any init script. Emulation
     /// overrides live here: they configure a session, so applying one only to the
     /// page leaves other targets computing their values from unconfigured state.
-    target_commands: Arc<StdMutex<Vec<Command>>>,
+    target_commands: Arc<StdMutex<Vec<(Command, Option<serde_json::Value>)>>>,
 }
 
 // Hand-written rather than derived: every field is an Arc, so cloning a manager
@@ -218,6 +219,15 @@ impl<T: ConnectionTransport + Send + Sync + 'static> TargetManager<T> {
     /// Failures are logged at debug, not warn: page-only commands (device metrics,
     /// touch emulation) are expected to be rejected by worker targets.
     pub async fn add_target_command(&self, command: Command) {
+        self.add_target_command_extended(command, None).await;
+    }
+
+    /// As above, with extra fields merged into the command's `params`.
+    pub async fn add_target_command_extended(
+        &self,
+        command: Command,
+        extensions: Option<serde_json::Value>,
+    ) {
         let existing: Vec<Target> = self
             .targets
             .lock()
@@ -233,7 +243,7 @@ impl<T: ConnectionTransport + Send + Sync + 'static> TargetManager<T> {
                 .session
                 .lock()
                 .await
-                .send_to(command.clone(), Some(sid.to_string()))
+                .send_extended(command.clone(), extensions.clone(), Some(sid.to_string()))
                 .await
             {
                 tracing::debug!(
@@ -244,7 +254,7 @@ impl<T: ConnectionTransport + Send + Sync + 'static> TargetManager<T> {
             }
         }
 
-        self.target_commands.lock().unwrap().push(command);
+        self.target_commands.lock().unwrap().push((command, extensions));
     }
 
     /// Install a script into every target — those already attached, and every one
@@ -411,8 +421,8 @@ impl<T: ConnectionTransport + Send + Sync + 'static> TargetManager<T> {
                     // the only window in which what we install is invisible to the
                     // target's own code.
                     let commands = target_commands.lock().unwrap().clone();
-                    for command in commands {
-                        fire(&session, &child, command).await;
+                    for (command, extensions) in commands {
+                        fire(&session, &child, command, extensions).await;
                     }
 
                     let scripts = init_scripts.lock().unwrap().clone();
@@ -428,11 +438,11 @@ impl<T: ConnectionTransport + Send + Sync + 'static> TargetManager<T> {
                                 fire(&session, &child, AddScriptToEvaluateOnNewDocument {
                                     method: AddScriptToEvaluateOnNewDocumentMethod::AddScriptToEvaluateOnNewDocument,
                                     params: AddScriptToEvaluateOnNewDocumentParams::new(source),
-                                }).await
+                                }, None).await
                             }
                             TargetKind::Worker => {
                                 fire(&session, &child, EvaluateBuilder::default()
-                                    .expression(source).build().unwrap()).await
+                                    .expression(source).build().unwrap(), None).await
                             }
                             TargetKind::Other => {}
                         }
@@ -447,13 +457,13 @@ impl<T: ConnectionTransport + Send + Sync + 'static> TargetManager<T> {
                         .flatten(true)
                         .build()
                         .unwrap();
-                    fire(&session, &child, rearm).await;
+                    fire(&session, &child, rearm, None).await;
 
                     // Unconditional. A target left waiting for the debugger never
                     // runs at all, so a failure anywhere above must not be allowed
                     // to strand it — the symptom is a page that never finishes
                     // loading.
-                    fire(&session, &child, RunIfWaitingForDebugger::builder().build()).await;
+                    fire(&session, &child, RunIfWaitingForDebugger::builder().build(), None).await;
                 }
             },
         );

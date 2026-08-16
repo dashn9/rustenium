@@ -327,6 +327,35 @@ pub trait CdpBrowser: Send + Sync {
         async move { adapter.emulate_device_metrics(command).await }
     }
 
+    /// `send_command`, with extra fields merged into the command's `params`.
+    ///
+    /// For protocol fields the generated bindings cannot express — added in a newer
+    /// browser than the vendored definition, or marked deprecated and dropped even
+    /// though the browser still honours them with no replacement.
+    ///
+    /// Replicated overrides are honoured here too, so an extended override still
+    /// reaches every target.
+    fn send_command_extended(
+        &mut self,
+        command: Command,
+        extensions: serde_json::Value,
+    ) -> impl Future<Output = Result<CommandResponse, CdpSessionSendError>> + Send {
+        let replicate = REPLICATED_OVERRIDES.contains(&command.identifier());
+        let pending = if replicate {
+            Some((self.target_manager().clone(), command.clone(), extensions.clone()))
+        } else {
+            None
+        };
+        let adapter = self.adapter_mut();
+        async move {
+            let response = adapter.send_command_extended(command, extensions).await?;
+            if let Some((manager, command, extensions)) = pending {
+                manager.add_target_command_extended(command, Some(extensions)).await;
+            }
+            Ok(response)
+        }
+    }
+
     fn send_command(
         &mut self,
         command: Command,
