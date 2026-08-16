@@ -210,6 +210,23 @@ impl<T: ConnectionTransport> CdpSession<T> {
         &mut self,
         command: impl Into<CdpCommand>,
     ) -> oneshot::Receiver<CdpCommandResponseState> {
+        let session_id = self.session_id.clone();
+        self.send_and_get_receiver_for(command, session_id).await
+    }
+
+    /// Send addressed at an explicit session rather than this one's.
+    ///
+    /// A connection to the browser endpoint multiplexes every attached target,
+    /// so one `CdpSession` can drive all of them: `None` targets the browser
+    /// session (where `Target.*` lives), and a child session id — handed to us by
+    /// `Target.attachedToTarget` — targets that page or worker. Responses are
+    /// matched by command id, which is unique per connection, so no extra
+    /// bookkeeping is needed to demultiplex them.
+    pub async fn send_and_get_receiver_for(
+        &mut self,
+        command: impl Into<CdpCommand>,
+        session_id: Option<String>,
+    ) -> oneshot::Receiver<CdpCommandResponseState> {
         let command_id = loop {
             let id = rand::rng().random::<u16>();
             if !self
@@ -226,6 +243,7 @@ impl<T: ConnectionTransport> CdpSession<T> {
         let command: CdpCommand = command.into();
         let msg = cdp_base::CommandMessage {
             id: command_id,
+            session_id,
             command_data: command,
         };
 
@@ -247,7 +265,17 @@ impl<T: ConnectionTransport> CdpSession<T> {
         &mut self,
         command: impl Into<CdpCommand>,
     ) -> Result<cdp_base::CommandResponse, CdpSessionSendError> {
-        let rx = self.send_and_get_receiver(command).await;
+        let session_id = self.session_id.clone();
+        self.send_to(command, session_id).await
+    }
+
+    /// `send`, addressed at an explicit session. See `send_and_get_receiver_for`.
+    pub async fn send_to(
+        &mut self,
+        command: impl Into<CdpCommand>,
+        session_id: Option<String>,
+    ) -> Result<cdp_base::CommandResponse, CdpSessionSendError> {
+        let rx = self.send_and_get_receiver_for(command, session_id).await;
         match timeout(Duration::from_secs(20), rx).await {
             Ok(Ok(state)) => match state {
                 CdpCommandResponseState::Success(response) => {

@@ -2,10 +2,16 @@ use serde::{Deserialize, Serialize};
 
 use crate::Command;
 
+/// `sessionId` is CDP's flat session addressing. A connection to the browser
+/// endpoint multiplexes every target — pages, workers, OOPIFs — over one socket,
+/// and each message names the session it belongs to. `None` addresses the
+/// browser session itself, which is where the `Target.*` domain lives.
 #[derive(Debug, Clone, Serialize)]
 pub struct CommandMessage {
     #[serde(rename = "id")]
     pub id: u16,
+    #[serde(rename = "sessionId", skip_serializing_if = "Option::is_none")]
+    pub session_id: Option<String>,
     #[serde(flatten)]
     pub command_data: Command,
 }
@@ -53,6 +59,10 @@ impl std::fmt::Display for ErrorResponse {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct EventResponse {
     pub method: String,
+    /// Which attached session emitted this. `None` means the browser session.
+    /// Needed to tell, say, one worker's `Runtime.consoleAPICalled` from another's.
+    #[serde(rename = "sessionId", skip_serializing_if = "Option::is_none", default)]
+    pub session_id: Option<String>,
     pub params: serde_json::Value,
 }
 

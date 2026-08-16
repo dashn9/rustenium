@@ -33,11 +33,14 @@ use rustenium_cdp_definitions::browser_protocol::page::results::{
 };
 use rustenium_cdp_definitions::browser_protocol::page::types::{FrameId, ScriptIdentifier};
 use rustenium_cdp_definitions::browser_protocol::target::command_builders::SetDiscoverTargetsBuilder;
-use rustenium_cdp_definitions::browser_protocol::target::commands::CreateTarget;
-use rustenium_cdp_definitions::browser_protocol::target::events::{TargetCreated, TargetDestroyed};
+use rustenium_cdp_definitions::browser_protocol::target::commands::{CreateTarget, SetAutoAttach};
+use rustenium_cdp_definitions::browser_protocol::target::events::{
+    AttachedToTarget, AttachedToTargetParams, TargetCreated, TargetDestroyed,
+};
 use rustenium_cdp_definitions::browser_protocol::target::results::CreateTargetResult;
 use rustenium_cdp_definitions::browser_protocol::target::types::{TargetId, TargetInfo};
 use rustenium_cdp_definitions::js_protocol::runtime::command_builders::EvaluateBuilder as RuntimeEvaluateBuilder;
+use rustenium_cdp_definitions::js_protocol::runtime::commands::RunIfWaitingForDebugger;
 use rustenium_cdp_definitions::js_protocol::runtime::results::EvaluateResult;
 use rustenium_core::CdpEventManagement;
 use rustenium_core::WebsocketConnectionTransport;
@@ -154,6 +157,90 @@ impl<T: ConnectionTransport + Send + Sync> CdpAdapter<T> {
         Ok(())
     }
 
+    /// Attach to every sub-target as it appears, frozen before it runs any script.
+    ///
+    /// Discovery (`listen_to_target_creation`) only tells you a target exists — by
+    /// then it is already running and you have no way to address it. Auto-attach
+    /// instead hands back a live `sessionId` for each target *and*, with
+    /// `waitForDebuggerOnStart`, holds it before its first statement. That pause is
+    /// the only window in which anything installed is invisible to the target's own
+    /// code, which is what makes it usable for injection.
+    ///
+    /// `on_attached` runs inside that window and receives the session handle plus
+    /// the attach params, so it can address the child via `CdpSession::send_to`.
+    ///
+    /// Two orderings here are load-bearing:
+    ///   * auto-attach is re-armed on the child *before* it is released. The rule is
+    ///     scoped to the session it was sent on and is not inherited, so without this
+    ///     a worker spawned in the target's first tick is never seen.
+    ///   * the release is unconditional, including when `on_attached` fails. A target
+    ///     left waiting for the debugger never runs at all — the symptom is not a
+    ///     weak fingerprint but a page that never finishes loading.
+    pub async fn auto_attach_targets<F, R>(
+        &mut self,
+        on_attached: F,
+    ) -> Result<(), CdpSessionSendError>
+    where
+        T: 'static,
+        F: Fn(Arc<TokioMutex<CdpSession<T>>>, AttachedToTargetParams) -> R
+            + Send
+            + Sync
+            + 'static,
+        R: Future<Output = ()> + Send + 'static,
+    {
+        let session = self.session.clone();
+        let on_attached = Arc::new(on_attached);
+
+        self.session.lock().await.add_event_handler(
+            [AttachedToTarget::IDENTIFIER],
+            move |event| {
+                let session = session.clone();
+                let on_attached = on_attached.clone();
+                async move {
+                    let attached = match event.try_into_event::<AttachedToTarget>() {
+                        Ok(attached) => attached,
+                        Err(_) => return,
+                    };
+                    let params = attached.params;
+                    let child = Some(params.session_id.as_ref().to_string());
+                    tracing::debug!(
+                        "[CdpAdapter] Attached to target: type={}, url={}, waiting={}",
+                        params.target_info.r#type,
+                        params.target_info.url,
+                        params.waiting_for_debugger
+                    );
+
+                    on_attached(session.clone(), params).await;
+
+                    let rearm = SetAutoAttach::builder()
+                        .auto_attach(true)
+                        .wait_for_debugger_on_start(true)
+                        .flatten(true)
+                        .build()
+                        .unwrap();
+                    if let Err(e) = session.lock().await.send_to(rearm, child.clone()).await {
+                        tracing::debug!("[CdpAdapter] re-arm auto-attach failed: {}", e);
+                    }
+
+                    let resume = RunIfWaitingForDebugger::builder().build();
+                    if let Err(e) = session.lock().await.send_to(resume, child).await {
+                        tracing::debug!("[CdpAdapter] resume target failed: {}", e);
+                    }
+                }
+            },
+        );
+
+        let command = SetAutoAttach::builder()
+            .auto_attach(true)
+            .wait_for_debugger_on_start(true)
+            .flatten(true)
+            .build()
+            .unwrap();
+        self.send_command(command).await?;
+
+        Ok(())
+    }
+
     /// Enables the Page domain on the attached target. Required for
     /// `Page.addScriptToEvaluateOnNewDocument` to actually inject scripts.
     pub async fn enable_page_domain(&mut self) -> Result<(), CdpSessionSendError> {
@@ -227,6 +314,16 @@ impl<T: ConnectionTransport + Send + Sync> CdpAdapter<T> {
         command: impl Into<Command>,
     ) -> Result<CommandResponse, CdpSessionSendError> {
         self.session.lock().await.send(command).await
+    }
+
+    /// Send a command addressed at a specific attached session rather than the
+    /// one this adapter is bound to. `None` targets the browser session.
+    pub async fn send_command_to(
+        &mut self,
+        command: impl Into<Command>,
+        session_id: Option<String>,
+    ) -> Result<CommandResponse, CdpSessionSendError> {
+        self.session.lock().await.send_to(command, session_id).await
     }
 
     pub async fn navigate(
