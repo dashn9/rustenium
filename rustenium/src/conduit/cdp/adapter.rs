@@ -659,10 +659,15 @@ pub async fn fetch_ws_debugger_url(host: &str, port: u16) -> Result<String, Stri
     let targets: serde_json::Value =
         serde_json::from_str(&body).map_err(|e| format!("parse JSON: {}", e))?;
 
-    targets[0]["webSocketDebuggerUrl"]
-        .as_str()
-        .map(|s| s.to_string())
-        .ok_or_else(|| "webSocketDebuggerUrl not found in /json response".to_string())
+    // A stock Chrome lists its component extensions before the tab.
+    targets
+        .as_array()
+        .into_iter()
+        .flatten()
+        .find(|target| target["type"] == "page")
+        .and_then(|target| target["webSocketDebuggerUrl"].as_str())
+        .map(|url| url.to_string())
+        .ok_or_else(|| "no page target in /json response".to_string())
 }
 
 pub async fn start_cdp_session(
