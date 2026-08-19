@@ -1,7 +1,10 @@
+use std::time::Duration;
 use super::capabilities::ChromeCapabilities;
 use crate::browsers::BidiBrowser;
 use crate::browsers::cdp_browser::CdpBrowser;
-use crate::cdp::adapter::fetch_browser_ws_url_with_retry;
+use crate::cdp::adapter::{
+    DEFAULT_CONNECTION_POLL_INTERVAL, DEFAULT_CONNECTION_TIMEOUT, fetch_browser_ws_url_with_retry,
+};
 use crate::conduit::cdp::target_manager::{InitScript, Target, TargetKind, TargetManager};
 use crate::conduit::bidi::drivers::{BidiDriver, DriverConfiguration, start_bidi_driver};
 use crate::conduit::cdp::adapter::{CdpAdapter, start_cdp_session};
@@ -99,6 +102,14 @@ pub struct ChromeConfig {
     /// Used in Managed and DriverManaged modes.
     pub browser_flags: Option<Vec<String>>,
 
+    /// How long a spawned Chrome is given to answer on its debug port.
+    /// Defaults to [`DEFAULT_CONNECTION_TIMEOUT`].
+    pub connection_timeout: Option<Duration>,
+
+    /// How often that port is tried while waiting.
+    /// Defaults to [`DEFAULT_CONNECTION_POLL_INTERVAL`].
+    pub connection_poll_interval: Option<Duration>,
+
     /// Enable BiDi (WebDriver BiDi) connection via chromedriver (default: true).
     pub enable_bidi: bool,
 
@@ -121,6 +132,8 @@ impl Default for ChromeConfig {
             chrome_executable_path: None,
             user_data_dir: None,
             browser_flags: None,
+            connection_timeout: None,
+            connection_poll_interval: None,
             enable_bidi: true,
             enable_cdp: false,
         }
@@ -221,13 +234,28 @@ impl ChromeBrowser {
         {
             (true, true) => {
                 let (cdp, bidi) = tokio::join!(
-                    Self::init_cdp(&host, chrome_port),
+                    Self::init_cdp(
+                        &host,
+                        chrome_port,
+                        config.connection_timeout.unwrap_or(DEFAULT_CONNECTION_TIMEOUT),
+                        config
+                            .connection_poll_interval
+                            .unwrap_or(DEFAULT_CONNECTION_POLL_INTERVAL),
+                    ),
                     Self::init_bidi(&mut config, &ct_config),
                 );
                 ((Some(cdp.0), Some(cdp.1)), Some(bidi))
             }
             (true, false) => {
-                let cdp = Self::init_cdp(&host, chrome_port).await;
+                let cdp = Self::init_cdp(
+                    &host,
+                    chrome_port,
+                    config.connection_timeout.unwrap_or(DEFAULT_CONNECTION_TIMEOUT),
+                    config
+                        .connection_poll_interval
+                        .unwrap_or(DEFAULT_CONNECTION_POLL_INTERVAL),
+                )
+                .await;
                 ((Some(cdp.0), Some(cdp.1)), None)
             }
             (false, true) => {
@@ -383,6 +411,8 @@ impl ChromeBrowser {
     async fn init_cdp(
         host: &str,
         chrome_port: u16,
+        connection_timeout: Duration,
+        connection_poll_interval: Duration,
     ) -> (
         CdpAdapter<WebsocketConnectionTransport>,
         TargetManager<WebsocketConnectionTransport>,
@@ -391,9 +421,14 @@ impl ChromeBrowser {
         // only ever address that one page: popups, workers and cross-origin iframes
         // are separate targets, `Target.*` is browser-scoped, and service workers
         // are children of the browser rather than of any page.
-        let ws_debugger_url = fetch_browser_ws_url_with_retry(host, chrome_port)
-            .await
-            .unwrap();
+        let ws_debugger_url = fetch_browser_ws_url_with_retry(
+            host,
+            chrome_port,
+            connection_timeout,
+            connection_poll_interval,
+        )
+        .await
+        .unwrap();
         let cdp_cc = ConnectionTransportConfig::from_ws_url(&ws_debugger_url).unwrap();
         let cdp_session = start_cdp_session(&cdp_cc).await;
 
@@ -450,7 +485,17 @@ impl ChromeBrowser {
             .config
             .remote_debugging_port
             .expect("Remote debugging port not set");
-        let (adapter, manager) = Self::init_cdp(&host, chrome_port).await;
+        let (adapter, manager) = Self::init_cdp(
+            &host,
+            chrome_port,
+            self.config
+                .connection_timeout
+                .unwrap_or(DEFAULT_CONNECTION_TIMEOUT),
+            self.config
+                .connection_poll_interval
+                .unwrap_or(DEFAULT_CONNECTION_POLL_INTERVAL),
+        )
+        .await;
         self.cdp_adapter = Some(adapter);
         self.target_manager = Some(manager);
     }

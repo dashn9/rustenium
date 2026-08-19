@@ -1,5 +1,5 @@
 use std::sync::{Arc, Mutex as StdMutex};
-use std::time::Duration;
+use std::time::{Duration, Instant};
 
 use crate::error::cdp::{ScreenshotError, WaitForNavigationError};
 use crate::input::{CdpKeyboard, CdpMouse, CdpTouchscreen, HumanMouse};
@@ -535,25 +535,30 @@ impl<T: ConnectionTransport + Send + Sync> CdpAdapter<T> {
     }
 }
 
+pub const DEFAULT_CONNECTION_TIMEOUT: Duration = Duration::from_secs(30);
+pub const DEFAULT_CONNECTION_POLL_INTERVAL: Duration = Duration::from_millis(250);
+
 pub async fn fetch_browser_ws_url_with_retry(
     host: &str,
     chrome_port: u16,
+    connection_timeout: Duration,
+    connection_poll_interval: Duration,
 ) -> Result<String, String> {
-    let mut last_err = None;
+    let deadline = Instant::now() + connection_timeout;
 
-    for attempt in 0..3 {
+    loop {
         match fetch_browser_ws_url(host, chrome_port).await {
             Ok(url) => return Ok(url),
-            Err(e) => {
-                last_err = Some(e);
-                if attempt < 2 {
-                    sleep(Duration::from_millis(500)).await;
-                }
+            Err(err) if Instant::now() >= deadline => {
+                return Err(format!(
+                    "chrome did not answer on {host}:{chrome_port} within {}s: {err}",
+                    connection_timeout.as_secs(),
+                ));
             }
+            Err(_) => {}
         }
+        sleep(connection_poll_interval).await;
     }
-
-    Err(last_err.expect("retry loop should always set an error"))
 }
 
 pub async fn fetch_browser_ws_url(host: &str, port: u16) -> Result<String, String> {
