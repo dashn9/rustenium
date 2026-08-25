@@ -238,7 +238,9 @@ impl<T: ConnectionTransport + Send + Sync + 'static> TargetManager<T> {
             .collect();
 
         for target in existing {
-            let Some(sid) = target.session_id.as_deref() else { continue };
+            let Some(sid) = target.session_id.as_deref() else {
+                continue;
+            };
             if let Err(e) = self
                 .session
                 .lock()
@@ -254,7 +256,10 @@ impl<T: ConnectionTransport + Send + Sync + 'static> TargetManager<T> {
             }
         }
 
-        self.target_commands.lock().unwrap().push((command, extensions));
+        self.target_commands
+            .lock()
+            .unwrap()
+            .push((command, extensions));
     }
 
     /// Install a script into every target — those already attached, and every one

@@ -250,6 +250,21 @@ impl<T: ConnectionTransport> CdpSession<T> {
             .await
     }
 
+    async fn next_command_id(&self) -> u16 {
+        loop {
+            let id = rand::rng().random::<u16>();
+            if !self
+                .connection
+                .commands_response_subscriptions
+                .lock()
+                .await
+                .contains_key(&id)
+            {
+                return id;
+            }
+        }
+    }
+
     /// As above, with extra fields merged into the command's `params`.
     ///
     /// The generated bindings can only express what the vendored protocol
@@ -267,18 +282,7 @@ impl<T: ConnectionTransport> CdpSession<T> {
         extensions: Option<serde_json::Value>,
         session_id: Option<String>,
     ) -> oneshot::Receiver<CdpCommandResponseState> {
-        let command_id = loop {
-            let id = rand::rng().random::<u16>();
-            if !self
-                .connection
-                .commands_response_subscriptions
-                .lock()
-                .await
-                .contains_key(&id)
-            {
-                break id;
-            }
-        };
+        let command_id = self.next_command_id().await;
 
         let command: CdpCommand = command.into();
         let msg = cdp_base::CommandMessage {
@@ -341,6 +345,18 @@ impl<T: ConnectionTransport> CdpSession<T> {
         let rx = self
             .send_and_get_receiver_extended(command, extensions, session_id)
             .await;
+        Self::await_response(rx).await
+    }
+
+    /// Awaits a queued command's reply.
+    ///
+    /// Split out from sending so a caller can drop the session lock first: a
+    /// command whose reply depends on another command being sent — a paused
+    /// request answered mid-navigation, say — deadlocks if the lock is held
+    /// across the wait.
+    pub async fn await_response(
+        rx: oneshot::Receiver<CdpCommandResponseState>,
+    ) -> Result<cdp_base::CommandResponse, CdpSessionSendError> {
         match timeout(Duration::from_secs(20), rx).await {
             Ok(Ok(state)) => match state {
                 CdpCommandResponseState::Success(response) => {

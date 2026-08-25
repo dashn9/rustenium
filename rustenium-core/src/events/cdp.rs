@@ -119,9 +119,7 @@ pub trait CdpEventManagement {
             let matched = predicate(&event);
             let tx = tx.clone();
             async move {
-                if matched
-                    && let Some(tx) = tx.lock().unwrap().take()
-                {
+                if matched && let Some(tx) = tx.lock().unwrap().take() {
                     let _ = tx.send(event);
                 }
             }

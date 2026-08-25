@@ -230,3 +230,11 @@ async fn cdp_preload_script_add_runs_and_remove() {
 async fn cdp_wait_for_navigation() {
     cdp_browser::test_wait_for_navigation(launch_cdp().await).await;
 }
+#[tokio::test]
+async fn cdp_request_interception() {
+    cdp_browser::test_request_interception(launch_cdp().await).await;
+}
+#[tokio::test]
+async fn cdp_events_handler_and_wait() {
+    cdp_browser::test_events_handler_and_wait(launch_cdp().await).await;
+}

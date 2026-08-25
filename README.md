@@ -20,8 +20,8 @@ Like Puppeteer / Playwright, but for RUST.
   - **Touchscreen**: Multi-touch gesture support for mobile testing
 - **CSS & XPath Selectors**: Convenient macros (`css!()`, `xpath!()`) for element location
 - **Screenshot Capture**: Take screenshots of elements or entire pages
-- **Network Interception**: Monitor and intercept network requests with BiDi
-- **Event System**: Subscribe to browser events in real-time
+- **Network Interception**: Monitor and intercept network requests over BiDi or CDP, behind one protocol-neutral request API
+- **Event System**: Subscribe to BiDi events and CDP events in real-time
 - **Script Evaluation**: Execute JavaScript with preload script support
 - **Timezone Emulation**: Emulate different timezones for testing
 - **Device Emulation**: Emulate device metrics via CDP for responsive testing
@@ -326,7 +326,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 ```
 
-### Network Interception
+### Network Interception (BiDi)
 
 ```rust
 use rustenium::browsers::chrome;
@@ -354,6 +354,100 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     browser.close().await?;
     Ok(())
 }
+```
+
+### Network Interception (CDP)
+
+CDP interception runs over the `Fetch` domain. Every handler registered sees the
+same request and is awaited in registration order, so the first one to resolve it
+decides the outcome and later ones can check `is_handled()`. A request no handler
+resolves is let through rather than left paused.
+
+```rust
+use rustenium::browsers::{
+    ChromeBrowser, ChromeConfig, chrome,
+    cdp_browser::{CdpBrowser, RequestInterceptOptions},
+};
+use rustenium_core::{ContinueRequestOverrides, HttpRequest, ResponseForRequest};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let config = ChromeConfig { enable_cdp: true, ..Default::default() };
+    let mut browser = chrome(Some(config)).await;
+
+    <ChromeBrowser as CdpBrowser>::on_request(&mut browser, |request| async move {
+        println!("{} {} {:?}", request.method(), request.url(), request.resource_type());
+
+        if request.url().ends_with(".png") {
+            let _ = request.abort().await;
+        } else if request.url().contains("/api/me") {
+            let _ = request.respond(
+                ResponseForRequest::new(200)
+                    .content_type("application/json")
+                    .body(r#"{"name":"mocked"}"#),
+            ).await;
+        } else {
+            let _ = request.continue_with(
+                ContinueRequestOverrides::default().header("x-trace", "1"),
+            ).await;
+        }
+    }).await?;
+
+    // Answer HTTP auth challenges. Credentials are offered once per request; a
+    // repeat challenge means they were rejected, so it is cancelled rather than
+    // retried forever.
+    <ChromeBrowser as CdpBrowser>::authenticate(&mut browser, "user", "pass").await?;
+
+    <ChromeBrowser as CdpBrowser>::navigate(&mut browser, "https://example.com").await?;
+    Ok(())
+}
+```
+
+Narrow what pauses with `RequestInterceptOptions`, and opt into out-of-process
+iframes and workers, which the page session never sees:
+
+```rust
+<ChromeBrowser as CdpBrowser>::on_request_with_options(
+    &mut browser,
+    handler,
+    RequestInterceptOptions::default()
+        .url_patterns(["*/api/*"])
+        .intercept_response(true) // pause again once response headers arrive
+        .all_targets(true),
+).await?;
+```
+
+`data:` URLs and memory-cache hits never pause, whatever the patterns say. Only a
+request paused at the response stage can have its body read via `response_body()`.
+
+Stop interception and drop every handler with
+`disable_request_interception()`.
+
+### CDP Events
+
+CDP has no subscribe command — a domain emits nothing until you enable it:
+
+```rust
+use rustenium::browsers::{ChromeBrowser, cdp_browser::CdpBrowser};
+use rustenium_cdp_definitions::js_protocol::runtime::commands::Enable;
+
+<ChromeBrowser as CdpBrowser>::send_command(&mut browser, Enable::builder().build()).await?;
+
+let handler_id = <ChromeBrowser as CdpBrowser>::add_event_handler(
+    &mut browser,
+    ["Runtime.consoleAPICalled"],
+    |event| async move { println!("{:?}", event.params); },
+).await;
+
+// Or arm a one-shot wait for the next matching event.
+let event = <ChromeBrowser as CdpBrowser>::wait_for_event(
+    &mut browser,
+    ["Page.loadEventFired"],
+    |_| true,
+    std::time::Duration::from_secs(5),
+).await?;
+
+<ChromeBrowser as CdpBrowser>::remove_event_handler(&mut browser, &handler_id).await;
 ```
 
 ### Script Evaluation & Preload Scripts

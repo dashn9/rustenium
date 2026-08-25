@@ -156,21 +156,28 @@ impl<T: ConnectionTransport + Send + Sync> CdpAdapter<T> {
             },
         );
 
-        waiter
-            .wait(timeout)
-            .await
-            .map(|_| ())
-            .map_err(|e| match e {
-                EventWaitError::Timeout => WaitForNavigationError::Timeout(timeout),
-                EventWaitError::Cancelled => WaitForNavigationError::Cancelled,
-            })
+        waiter.wait(timeout).await.map(|_| ()).map_err(|e| match e {
+            EventWaitError::Timeout => WaitForNavigationError::Timeout(timeout),
+            EventWaitError::Cancelled => WaitForNavigationError::Cancelled,
+        })
     }
 
+    /// The lock is held only long enough to queue the command, never across the
+    /// wait for its reply. Holding it across the round trip serialises the whole
+    /// connection behind the slowest command, and deadlocks outright when the
+    /// reply depends on another command going out — `Page.navigate` does not
+    /// answer until the document loads, which an intercepted request cannot let
+    /// happen without the lock.
     pub async fn send_command(
         &mut self,
         command: impl Into<Command>,
     ) -> Result<CommandResponse, CdpSessionSendError> {
-        self.session.lock().await.send(command).await
+        let rx = {
+            let mut session = self.session.lock().await;
+            let session_id = session.session_id.clone();
+            session.send_and_get_receiver_for(command, session_id).await
+        };
+        CdpSession::<T>::await_response(rx).await
     }
 
     /// `send_command`, with extra fields merged into the command's `params`.
@@ -180,12 +187,14 @@ impl<T: ConnectionTransport + Send + Sync> CdpAdapter<T> {
         command: impl Into<Command>,
         extensions: serde_json::Value,
     ) -> Result<CommandResponse, CdpSessionSendError> {
-        let session_id = self.session.lock().await.session_id.clone();
-        self.session
-            .lock()
-            .await
-            .send_extended(command, Some(extensions), session_id)
-            .await
+        let rx = {
+            let mut session = self.session.lock().await;
+            let session_id = session.session_id.clone();
+            session
+                .send_and_get_receiver_extended(command, Some(extensions), session_id)
+                .await
+        };
+        CdpSession::<T>::await_response(rx).await
     }
 
     pub async fn navigate(

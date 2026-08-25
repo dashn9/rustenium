@@ -1,14 +1,17 @@
 use crate::browsers::chrome::tab::ChromeTab;
-use crate::conduit::cdp::target_manager::TargetManager;
 use crate::conduit::cdp::adapter::CdpAdapter;
+use crate::conduit::cdp::network_manager::NetworkManager;
+use crate::conduit::cdp::target_manager::TargetManager;
 use crate::error::cdp::{
-    CreateTabError, EmulateDeviceMetricsError, EvaluateScriptError, LocateError, NavigateError,
-    NodesFetchError, PreloadScriptError, ScreenshotError, WaitForNavigationError,
+    CreateTabError, EmulateDeviceMetricsError, EvaluateScriptError, InterceptNetworkError,
+    LocateError, NavigateError, NodesFetchError, PreloadScriptError, ScreenshotError,
+    WaitForNavigationError,
 };
 use crate::input::{CdpKeyboard, CdpMouse, CdpTouchscreen, HumanMouse};
 use crate::nodes::AXNode;
 use rustenium_cdp_definitions::Command;
 use rustenium_cdp_definitions::base::CommandResponse;
+use rustenium_cdp_definitions::base::EventResponse;
 use rustenium_cdp_definitions::browser_protocol::accessibility::commands::GetFullAxTree;
 use rustenium_cdp_definitions::browser_protocol::accessibility::results::GetFullAxTreeResult;
 use rustenium_cdp_definitions::browser_protocol::dom::commands::DescribeNode;
@@ -32,11 +35,14 @@ use rustenium_cdp_definitions::browser_protocol::page::types::{
 use rustenium_cdp_definitions::browser_protocol::target::commands::CreateTarget;
 use rustenium_cdp_definitions::js_protocol::runtime::results::EvaluateResult;
 use rustenium_cdp_definitions::js_protocol::runtime::types::RemoteObjectId;
-use rustenium_core::error::{CdpCommandResultError, CdpSessionSendError};
+use rustenium_core::error::{CdpCommandResultError, CdpSessionSendError, EventWaitError};
 use rustenium_core::transport::WebsocketConnectionTransport;
+use rustenium_core::{CdpEventManagement, CdpHttpRequest};
+use std::sync::Arc;
 use std::time::Duration;
 
 pub use crate::conduit::cdp::adapter::WaitUntil;
+pub use crate::conduit::cdp::network_manager::RequestInterceptOptions;
 
 #[derive(Debug, Clone, Default)]
 pub struct NavigateOptions {
@@ -158,6 +164,10 @@ pub trait CdpBrowser: Send + Sync {
     /// `add_init_script` / `targets` / `workers` on the browser, or `ChromeTab`.
     #[doc(hidden)]
     fn target_manager(&self) -> &TargetManager<WebsocketConnectionTransport>;
+
+    /// Internal. Interception is reached through `on_request` / `authenticate`.
+    #[doc(hidden)]
+    fn network_manager(&self) -> &NetworkManager<WebsocketConnectionTransport>;
 
     fn build_node(&self, node: DomNode) -> Self::BrowserNode;
 
@@ -337,12 +347,17 @@ pub trait CdpBrowser: Send + Sync {
     /// reaches every target.
     fn send_command_extended(
         &mut self,
-        command: Command,
+        command: impl Into<Command>,
         extensions: serde_json::Value,
     ) -> impl Future<Output = Result<CommandResponse, CdpSessionSendError>> + Send {
+        let command = command.into();
         let replicate = REPLICATED_OVERRIDES.contains(&command.identifier());
         let pending = if replicate {
-            Some((self.target_manager().clone(), command.clone(), extensions.clone()))
+            Some((
+                self.target_manager().clone(),
+                command.clone(),
+                extensions.clone(),
+            ))
         } else {
             None
         };
@@ -350,7 +365,9 @@ pub trait CdpBrowser: Send + Sync {
         async move {
             let response = adapter.send_command_extended(command, extensions).await?;
             if let Some((manager, command, extensions)) = pending {
-                manager.add_target_command_extended(command, Some(extensions)).await;
+                manager
+                    .add_target_command_extended(command, Some(extensions))
+                    .await;
             }
             Ok(response)
         }
@@ -358,8 +375,9 @@ pub trait CdpBrowser: Send + Sync {
 
     fn send_command(
         &mut self,
-        command: Command,
+        command: impl Into<Command>,
     ) -> impl Future<Output = Result<CommandResponse, CdpSessionSendError>> + Send {
+        let command = command.into();
         // Overrides are replicated to every target automatically.
         //
         // These configure a session rather than the browser, and each target
@@ -603,6 +621,141 @@ pub trait CdpBrowser: Send + Sync {
             .unwrap();
         let adapter = self.adapter_mut();
         async move { adapter.remove_preload_script(command).await }
+    }
+
+    // ── Network interception ─────────────────────────────────────────────────
+
+    /// Registers a handler called for each network request.
+    ///
+    /// Every handler registered here sees the same request object and is awaited
+    /// in registration order, so the first to continue, abort or respond decides
+    /// the outcome and the rest can check `is_handled`. A request
+    /// no handler resolves is let through rather than left paused.
+    ///
+    /// Interception covers the page session. Out-of-process iframes and workers
+    /// are separate targets whose requests it does not see — pass
+    /// [`RequestInterceptOptions::all_targets`] for those.
+    ///
+    /// Two kinds of request never pause, whatever the patterns say: `data:`
+    /// URLs, which the network service does not route through interception, and
+    /// responses served from the memory cache.
+    fn on_request<F, Fut>(
+        &mut self,
+        handler: F,
+    ) -> impl Future<Output = Result<(), InterceptNetworkError>> + Send
+    where
+        F: Fn(Arc<CdpHttpRequest<WebsocketConnectionTransport>>) -> Fut + Send + Sync + 'static,
+        Fut: Future<Output = ()> + Send + 'static,
+    {
+        self.on_request_with_options(handler, RequestInterceptOptions::default())
+    }
+
+    /// Registers a handler with URL, resource-type, stage and scope filters.
+    fn on_request_with_options<F, Fut>(
+        &mut self,
+        handler: F,
+        options: RequestInterceptOptions,
+    ) -> impl Future<Output = Result<(), InterceptNetworkError>> + Send
+    where
+        F: Fn(Arc<CdpHttpRequest<WebsocketConnectionTransport>>) -> Fut + Send + Sync + 'static,
+        Fut: Future<Output = ()> + Send + 'static,
+    {
+        let network_manager = self.network_manager().clone();
+        async move { network_manager.on_request(handler, options).await }
+    }
+
+    /// Answers HTTP authentication challenges with these credentials.
+    ///
+    /// Credentials are offered once per request; a repeat challenge means they
+    /// were rejected, and the request is cancelled rather than retried forever.
+    fn authenticate(
+        &mut self,
+        username: impl Into<String>,
+        password: impl Into<String>,
+    ) -> impl Future<Output = Result<(), InterceptNetworkError>> + Send {
+        self.authenticate_with_options(username, password, RequestInterceptOptions::default())
+    }
+
+    fn authenticate_with_options(
+        &mut self,
+        username: impl Into<String>,
+        password: impl Into<String>,
+        options: RequestInterceptOptions,
+    ) -> impl Future<Output = Result<(), InterceptNetworkError>> + Send {
+        let network_manager = self.network_manager().clone();
+        let username = username.into();
+        let password = password.into();
+        async move {
+            network_manager
+                .authenticate(username, password, options)
+                .await
+        }
+    }
+
+    /// Stops interception and drops every handler registered with it.
+    fn disable_request_interception(
+        &mut self,
+    ) -> impl Future<Output = Result<(), InterceptNetworkError>> + Send {
+        let network_manager = self.network_manager().clone();
+        async move { network_manager.disable().await }
+    }
+
+    // ── Events ───────────────────────────────────────────────────────────────
+
+    /// Registers a handler for the given CDP methods. Returns the handler ID.
+    ///
+    /// CDP has no subscribe command: a domain emits nothing until it is enabled,
+    /// so enable it first or the handler simply never fires.
+    ///
+    /// ```no_run
+    /// # use rustenium::browsers::{ChromeBrowser, cdp_browser::CdpBrowser};
+    /// # use rustenium_cdp_definitions::js_protocol::runtime::commands::Enable;
+    /// # async fn example(browser: &mut ChromeBrowser) {
+    /// browser.send_command(Enable::builder().build()).await.unwrap();
+    /// browser.add_event_handler(["Runtime.consoleAPICalled"], |event| async move {
+    ///     println!("{:?}", event.params);
+    /// }).await;
+    /// # }
+    /// ```
+    fn add_event_handler<F, R>(
+        &mut self,
+        methods: impl IntoIterator<Item = impl Into<String>>,
+        handler: F,
+    ) -> impl Future<Output = String> + Send
+    where
+        F: FnMut(EventResponse) -> R + Send + Sync + 'static,
+        R: Future<Output = ()> + Send + 'static,
+    {
+        let methods: Vec<String> = methods.into_iter().map(Into::into).collect();
+        let session = self.adapter().session.clone();
+        async move { session.lock().await.add_event_handler(methods, handler) }
+    }
+
+    fn remove_event_handler(&mut self, id: &str) -> impl Future<Output = ()> + Send {
+        let session = self.adapter().session.clone();
+        let id = id.to_string();
+        async move { session.lock().await.remove_cdp_event_handler(&id) }
+    }
+
+    /// Waits for the first event matching `predicate`.
+    ///
+    /// The handler is registered before this returns, so arm it before doing
+    /// whatever produces the event.
+    fn wait_for_event<P>(
+        &mut self,
+        methods: impl IntoIterator<Item = impl Into<String>>,
+        predicate: P,
+        timeout: Duration,
+    ) -> impl Future<Output = Result<EventResponse, EventWaitError>> + Send
+    where
+        P: Fn(&EventResponse) -> bool + Send + Sync + 'static,
+    {
+        let methods: Vec<String> = methods.into_iter().map(Into::into).collect();
+        let session = self.adapter().session.clone();
+        async move {
+            let waiter = session.lock().await.subscribe_once(methods, predicate);
+            waiter.wait(timeout).await
+        }
     }
 }
 

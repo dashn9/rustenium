@@ -4,6 +4,10 @@ use rustenium::browsers::{
 };
 use rustenium::nodes::{AXNode, Node};
 use rustenium_cdp_definitions::browser_protocol::dom::types::BackendNodeId;
+use rustenium_cdp_definitions::js_protocol::runtime::commands::Enable as RuntimeEnable;
+use rustenium_core::{HttpRequest, ResponseForRequest};
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::{Arc, Mutex};
 use std::time::Duration;
 
 async fn first_backend_node_id(browser: &mut ChromeBrowser, url: &str) -> BackendNodeId {
@@ -276,6 +280,179 @@ pub async fn test_preload_script_add_runs_and_remove(mut browser: ChromeBrowser)
         after.result.value,
         Some(serde_json::json!("undefined")),
         "removed preload should not run on subsequent navigation"
+    );
+
+    browser.close().await.unwrap();
+}
+
+pub async fn test_request_interception(mut browser: ChromeBrowser) {
+    let seen: Arc<Mutex<Vec<(String, String)>>> = Arc::new(Mutex::new(Vec::new()));
+    let cooperated = Arc::new(AtomicBool::new(false));
+
+    let sink = seen.clone();
+    <ChromeBrowser as CdpBrowser>::on_request(&mut browser, move |request| {
+        let sink = sink.clone();
+        async move {
+            sink.lock().unwrap().push((
+                request.url().to_string(),
+                HttpRequest::method(request.as_ref()).to_string(),
+            ));
+
+            if request.url().ends_with("/blocked") {
+                let _ = request.abort().await;
+            } else if request.url().ends_with("/mocked") {
+                let _ = request
+                    .respond(
+                        ResponseForRequest::new(200)
+                            .content_type("text/plain")
+                            .body("intercepted"),
+                    )
+                    .await;
+            } else {
+                let _ = request
+                    .respond(
+                        ResponseForRequest::new(200)
+                            .content_type("text/html")
+                            .body("<html><body>hermetic</body></html>"),
+                    )
+                    .await;
+            }
+        }
+    })
+    .await
+    .expect("on_request should enable Fetch");
+
+    // A second handler sees the same request object, after the first resolved it.
+    let flag = cooperated.clone();
+    <ChromeBrowser as CdpBrowser>::on_request(&mut browser, move |request| {
+        let flag = flag.clone();
+        async move {
+            if request.is_handled() {
+                flag.store(true, Ordering::SeqCst);
+            }
+        }
+    })
+    .await
+    .expect("a second on_request should merge into the existing interception");
+
+    // Fulfilled from the handler above, so the test never touches the network.
+    <ChromeBrowser as CdpBrowser>::navigate(&mut browser, "https://rustenium.test/")
+        .await
+        .unwrap();
+
+    let mocked = <ChromeBrowser as CdpBrowser>::evaluate_script(
+        &mut browser,
+        "fetch('/mocked').then(r => r.text())",
+        true,
+    )
+    .await
+    .unwrap();
+    assert_eq!(
+        mocked.result.value,
+        Some(serde_json::json!("intercepted")),
+        "respond should deliver the mocked body to the page"
+    );
+
+    let blocked = <ChromeBrowser as CdpBrowser>::evaluate_script(
+        &mut browser,
+        "fetch('/blocked').then(() => 'loaded', () => 'blocked')",
+        true,
+    )
+    .await
+    .unwrap();
+    assert_eq!(
+        blocked.result.value,
+        Some(serde_json::json!("blocked")),
+        "abort should make the request fail in the page"
+    );
+
+    let requests = seen.lock().unwrap().clone();
+    assert!(
+        requests
+            .iter()
+            .any(|(url, method)| url.ends_with("/mocked") && method == "GET"),
+        "handler should have seen the mocked GET, saw {:?}",
+        requests
+    );
+    assert!(
+        requests.iter().any(|(url, _)| url.ends_with("/blocked")),
+        "handler should have seen the blocked request, saw {:?}",
+        requests
+    );
+    assert!(
+        cooperated.load(Ordering::SeqCst),
+        "second handler should observe the first one having resolved the request"
+    );
+
+    <ChromeBrowser as CdpBrowser>::disable_request_interception(&mut browser)
+        .await
+        .expect("disable_request_interception should succeed");
+
+    browser.close().await.unwrap();
+}
+
+pub async fn test_events_handler_and_wait(mut browser: ChromeBrowser) {
+    let logged: Arc<Mutex<Vec<String>>> = Arc::new(Mutex::new(Vec::new()));
+
+    // A CDP domain emits nothing until it is enabled.
+    <ChromeBrowser as CdpBrowser>::send_command(&mut browser, RuntimeEnable::builder().build())
+        .await
+        .expect("Runtime.enable should succeed");
+
+    let sink = logged.clone();
+    let handler_id = <ChromeBrowser as CdpBrowser>::add_event_handler(
+        &mut browser,
+        ["Runtime.consoleAPICalled"],
+        move |event| {
+            let sink = sink.clone();
+            async move {
+                if let Some(text) = event.params["args"][0]["value"].as_str() {
+                    sink.lock().unwrap().push(text.to_string());
+                }
+            }
+        },
+    )
+    .await;
+    assert!(!handler_id.is_empty(), "handler id should not be empty");
+
+    <ChromeBrowser as CdpBrowser>::evaluate_script(&mut browser, "console.log('first')", false)
+        .await
+        .unwrap();
+    tokio::time::sleep(Duration::from_millis(500)).await;
+    assert!(
+        logged.lock().unwrap().iter().any(|text| text == "first"),
+        "handler should receive events from the enabled domain, saw {:?}",
+        logged.lock().unwrap()
+    );
+
+    // Fires after wait_for_event has registered, which is the order it needs.
+    <ChromeBrowser as CdpBrowser>::evaluate_script(
+        &mut browser,
+        "setTimeout(() => console.log('later'), 300)",
+        false,
+    )
+    .await
+    .unwrap();
+    let event = <ChromeBrowser as CdpBrowser>::wait_for_event(
+        &mut browser,
+        ["Runtime.consoleAPICalled"],
+        |event| event.params["args"][0]["value"] == serde_json::json!("later"),
+        Duration::from_secs(5),
+    )
+    .await
+    .expect("wait_for_event should resolve on the matching event");
+    assert_eq!(event.method, "Runtime.consoleAPICalled");
+
+    <ChromeBrowser as CdpBrowser>::remove_event_handler(&mut browser, &handler_id).await;
+    logged.lock().unwrap().clear();
+    <ChromeBrowser as CdpBrowser>::evaluate_script(&mut browser, "console.log('after')", false)
+        .await
+        .unwrap();
+    tokio::time::sleep(Duration::from_millis(500)).await;
+    assert!(
+        logged.lock().unwrap().is_empty(),
+        "removed handler should stop receiving events, saw {:?}",
+        logged.lock().unwrap()
     );
 
     browser.close().await.unwrap();

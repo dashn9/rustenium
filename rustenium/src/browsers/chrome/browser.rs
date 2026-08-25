@@ -1,13 +1,13 @@
-use std::time::Duration;
 use super::capabilities::ChromeCapabilities;
 use crate::browsers::BidiBrowser;
 use crate::browsers::cdp_browser::CdpBrowser;
 use crate::cdp::adapter::{
     DEFAULT_CONNECTION_POLL_INTERVAL, DEFAULT_CONNECTION_TIMEOUT, fetch_browser_ws_url_with_retry,
 };
-use crate::conduit::cdp::target_manager::{InitScript, Target, TargetKind, TargetManager};
 use crate::conduit::bidi::drivers::{BidiDriver, DriverConfiguration, start_bidi_driver};
 use crate::conduit::cdp::adapter::{CdpAdapter, start_cdp_session};
+use crate::conduit::cdp::network_manager::NetworkManager;
+use crate::conduit::cdp::target_manager::{InitScript, Target, TargetKind, TargetManager};
 use crate::error::bidi::BrowserCloseError;
 use crate::input::cdp::{CdpKeyboard, CdpMouse};
 use crate::nodes::ChromeNode;
@@ -17,6 +17,7 @@ use rustenium_bidi_definitions::session::types::ProxyConfiguration;
 use rustenium_cdp_definitions::browser_protocol::dom::types::Node as DomNode;
 use rustenium_core::find_free_port;
 use rustenium_core::process::Process;
+use std::time::Duration;
 
 use rustenium_core::transport::{ConnectionTransportConfig, WebsocketConnectionTransport};
 use std::sync::{Arc, Mutex};
@@ -169,6 +170,9 @@ pub struct ChromeBrowser {
     /// Owns target discovery/attachment at browser scope. Distinct from the
     /// adapter, which is bound to a single page session.
     target_manager: Option<TargetManager<WebsocketConnectionTransport>>,
+    /// Owns request interception: the merged `Fetch.enable` configuration, the
+    /// handler list, and authentication bookkeeping.
+    network_manager: Option<NetworkManager<WebsocketConnectionTransport>>,
 }
 
 impl std::fmt::Debug for ChromeBrowser {
@@ -230,40 +234,44 @@ impl ChromeBrowser {
             ..ConnectionTransportConfig::default()
         };
 
-        let ((cdp_adapter, target_manager), driver) = match (config.enable_cdp, config.enable_bidi)
-        {
-            (true, true) => {
-                let (cdp, bidi) = tokio::join!(
-                    Self::init_cdp(
+        let ((cdp_adapter, target_manager, network_manager), driver) =
+            match (config.enable_cdp, config.enable_bidi) {
+                (true, true) => {
+                    let (cdp, bidi) = tokio::join!(
+                        Self::init_cdp(
+                            &host,
+                            chrome_port,
+                            config
+                                .connection_timeout
+                                .unwrap_or(DEFAULT_CONNECTION_TIMEOUT),
+                            config
+                                .connection_poll_interval
+                                .unwrap_or(DEFAULT_CONNECTION_POLL_INTERVAL),
+                        ),
+                        Self::init_bidi(&mut config, &ct_config),
+                    );
+                    ((Some(cdp.0), Some(cdp.1), Some(cdp.2)), Some(bidi))
+                }
+                (true, false) => {
+                    let cdp = Self::init_cdp(
                         &host,
                         chrome_port,
-                        config.connection_timeout.unwrap_or(DEFAULT_CONNECTION_TIMEOUT),
+                        config
+                            .connection_timeout
+                            .unwrap_or(DEFAULT_CONNECTION_TIMEOUT),
                         config
                             .connection_poll_interval
                             .unwrap_or(DEFAULT_CONNECTION_POLL_INTERVAL),
-                    ),
-                    Self::init_bidi(&mut config, &ct_config),
-                );
-                ((Some(cdp.0), Some(cdp.1)), Some(bidi))
-            }
-            (true, false) => {
-                let cdp = Self::init_cdp(
-                    &host,
-                    chrome_port,
-                    config.connection_timeout.unwrap_or(DEFAULT_CONNECTION_TIMEOUT),
-                    config
-                        .connection_poll_interval
-                        .unwrap_or(DEFAULT_CONNECTION_POLL_INTERVAL),
-                )
-                .await;
-                ((Some(cdp.0), Some(cdp.1)), None)
-            }
-            (false, true) => {
-                let bidi = Self::init_bidi(&mut config, &ct_config).await;
-                ((None, None), Some(bidi))
-            }
-            (false, false) => ((None, None), None),
-        };
+                    )
+                    .await;
+                    ((Some(cdp.0), Some(cdp.1), Some(cdp.2)), None)
+                }
+                (false, true) => {
+                    let bidi = Self::init_bidi(&mut config, &ct_config).await;
+                    ((None, None, None), Some(bidi))
+                }
+                (false, false) => ((None, None, None), None),
+            };
 
         ChromeBrowser {
             config,
@@ -271,6 +279,7 @@ impl ChromeBrowser {
             chrome_process,
             cdp_adapter,
             target_manager,
+            network_manager,
         }
     }
 
@@ -416,6 +425,7 @@ impl ChromeBrowser {
     ) -> (
         CdpAdapter<WebsocketConnectionTransport>,
         TargetManager<WebsocketConnectionTransport>,
+        NetworkManager<WebsocketConnectionTransport>,
     ) {
         // Connect at the *browser* endpoint, not at a page. A page-bound socket can
         // only ever address that one page: popups, workers and cross-origin iframes
@@ -448,10 +458,13 @@ impl ChromeBrowser {
             Err(e) => tracing::warn!("[ChromeBrowser] failed to attach to page: {}", e),
         }
 
+        let network_manager =
+            NetworkManager::new(cdp_session.clone(), Some(target_manager.clone()));
+
         let mut cdp_adapter = CdpAdapter::new(cdp_session);
         cdp_adapter.enable_page_domain().await.unwrap();
         cdp_adapter.enable_lifecycle_events().await.unwrap();
-        (cdp_adapter, target_manager)
+        (cdp_adapter, target_manager, network_manager)
     }
 
     pub async fn connect_bidi(&mut self) {
@@ -485,7 +498,7 @@ impl ChromeBrowser {
             .config
             .remote_debugging_port
             .expect("Remote debugging port not set");
-        let (adapter, manager) = Self::init_cdp(
+        let (adapter, manager, network_manager) = Self::init_cdp(
             &host,
             chrome_port,
             self.config
@@ -498,6 +511,7 @@ impl ChromeBrowser {
         .await;
         self.cdp_adapter = Some(adapter);
         self.target_manager = Some(manager);
+        self.network_manager = Some(network_manager);
     }
 
     /// Returns a reference to the Chrome configuration.
@@ -575,6 +589,12 @@ impl CdpBrowser for ChromeBrowser {
 
     fn target_manager(&self) -> &TargetManager<WebsocketConnectionTransport> {
         self.targets_inner()
+    }
+
+    fn network_manager(&self) -> &NetworkManager<WebsocketConnectionTransport> {
+        self.network_manager
+            .as_ref()
+            .expect("CDP is not enabled. Set `enable_cdp: true` in ChromeConfig.")
     }
 
     fn adapter_mut(&mut self) -> &mut CdpAdapter<WebsocketConnectionTransport> {

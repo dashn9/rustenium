@@ -101,3 +101,9 @@ pub enum ScreenshotError {
     #[error("Failed to write file: {0}")]
     FileWriteError(String),
 }
+
+#[derive(Debug, Error)]
+pub enum InterceptNetworkError {
+    #[error("An error occured executing command")]
+    CommandResultError(CdpCommandResultError),
+}

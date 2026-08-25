@@ -11,22 +11,20 @@ use rustenium_bidi_definitions::network::type_builders::{
     ContinueWithAuthCredentialsBuilder, ContinueWithAuthNoCredentialsBuilder,
 };
 use rustenium_bidi_definitions::network::types::{
-    AuthCredentials, BaseParameters, ContinueWithAuthCredentialsAction,
+    AuthCredentials, Base64Value, Base64ValueType, BaseParameters, BytesValue,
+    ContinueWithAuthCredentialsAction,
     ContinueWithAuthCredentialsContinueWithAuthNoCredentialsUnion,
-    ContinueWithAuthNoCredentialsAction, Header, Request,
+    ContinueWithAuthNoCredentialsAction, Header, Request, StringValue, StringValueType,
 };
 use tokio::sync::oneshot;
 
-/// How a network request was handled
-#[derive(Debug, Clone)]
-pub enum NetworkRequestHandledState {
-    /// Request was continued (with or without modifications)
-    Continued,
-    /// Request was aborted/failed
-    Aborted,
-    /// Request was responded with a custom response
-    Responded,
-}
+use base64::{Engine as _, engine::general_purpose};
+
+use super::NetworkRequestHandledState;
+use super::request::{
+    ContinueRequestOverrides, ErrorCode, HttpRequest, Interception, InterceptionError,
+    ResourceType, ResponseForRequest, handle_protocol_error,
+};
 use serde_json;
 use std::collections::HashMap;
 use std::sync::Arc;
@@ -36,6 +34,7 @@ use tokio::sync::Mutex;
 pub struct NetworkRequest<T: ConnectionTransport> {
     pub base: BaseParameters,
     session: Arc<Mutex<BidiSession<T>>>,
+    interception: Interception,
 }
 
 impl<T: ConnectionTransport> std::fmt::Debug for NetworkRequest<T> {
@@ -52,6 +51,7 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
         NetworkRequest {
             base: params.base_parameters,
             session,
+            interception: Interception::default(),
         }
     }
 
@@ -62,6 +62,7 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
         NetworkRequest {
             base: params.base_parameters,
             session,
+            interception: Interception::default(),
         }
     }
 
@@ -262,5 +263,166 @@ impl<T: ConnectionTransport> NetworkRequest<T> {
                 )).request(self.request_id().clone()).build().unwrap();
 
         self.session.lock().await.send(command).await.map(|_| ())
+    }
+}
+
+/// Maps the Fetch destination WebDriver BiDi reports to the CDP-shaped resource
+/// type the neutral surface uses.
+///
+/// Puppeteer gives up here and throws `UnsupportedOperation` unless CDP is also
+/// connected. The destination is not the same taxonomy, but it answers the same
+/// question closely enough to be worth translating.
+fn resource_type(destination: &str) -> ResourceType {
+    match destination {
+        "document" | "frame" | "iframe" => ResourceType::Document,
+        "style" => ResourceType::Stylesheet,
+        "image" => ResourceType::Image,
+        "audio" | "video" => ResourceType::Media,
+        "font" => ResourceType::Font,
+        "script" | "serviceworker" | "sharedworker" | "worker" | "audioworklet"
+        | "paintworklet" | "xslt" => ResourceType::Script,
+        "track" => ResourceType::TextTrack,
+        "manifest" => ResourceType::Manifest,
+        "report" => ResourceType::CspViolationReport,
+        "" => ResourceType::Fetch,
+        _ => ResourceType::Other,
+    }
+}
+
+fn string_header(name: &str, value: &str) -> Header {
+    Header::new(name, StringValue::new(StringValueType::String, value))
+}
+
+impl<T: ConnectionTransport> NetworkRequest<T> {
+    async fn send_intercept(&self, command: impl Into<Command>) -> Result<(), InterceptionError> {
+        match self.session.lock().await.send(command).await {
+            Ok(_) => Ok(()),
+            Err(SessionSendError::ErrorResponse(response)) => {
+                handle_protocol_error(response.message)
+            }
+            Err(error) => Err(InterceptionError::Protocol(error.to_string())),
+        }
+    }
+}
+
+/// The protocol-neutral surface.
+///
+/// The inherent methods above shadow these on `NetworkRequest` itself, so
+/// existing call sites keep the BiDi-shaped return types; generic code written
+/// against [`HttpRequest`] sees the neutral ones.
+///
+/// One caveat: [`HttpRequest::is_handled`] reports whether *this* handle
+/// resolved the request, because BiDi builds a fresh `NetworkRequest` per
+/// handler. The cross-handler view stays on the inherent async
+/// [`NetworkRequest::is_handled`], which consults the session.
+impl<T: ConnectionTransport + Send + Sync> HttpRequest for NetworkRequest<T> {
+    fn url(&self) -> &str {
+        &self.base.request.url
+    }
+
+    fn method(&self) -> &str {
+        &self.base.request.method
+    }
+
+    fn headers(&self) -> HashMap<String, String> {
+        self.base
+            .request
+            .headers
+            .iter()
+            .map(|header| {
+                let value = match &header.value {
+                    BytesValue::StringValue(value) => value.value.clone(),
+                    BytesValue::Base64Value(value) => value.value.clone(),
+                };
+                (header.name.to_lowercase(), value)
+            })
+            .collect()
+    }
+
+    fn post_data(&self) -> Option<String> {
+        NetworkRequest::post_data(self).map(str::to_string)
+    }
+
+    fn has_post_data(&self) -> bool {
+        NetworkRequest::has_post_data(self)
+    }
+
+    fn header(&self, name: &str) -> Option<String> {
+        self.base
+            .request
+            .headers
+            .iter()
+            .find(|header| header.name.eq_ignore_ascii_case(name))
+            .map(|header| match &header.value {
+                BytesValue::StringValue(value) => value.value.clone(),
+                BytesValue::Base64Value(value) => value.value.clone(),
+            })
+    }
+
+    fn resource_type(&self) -> Option<ResourceType> {
+        Some(resource_type(&self.base.request.destination))
+    }
+
+    fn interception(&self) -> &Interception {
+        &self.interception
+    }
+
+    async fn continue_impl(
+        &self,
+        overrides: ContinueRequestOverrides,
+    ) -> Result<(), InterceptionError> {
+        let mut builder =
+            ContinueRequestBuilder::default().request(self.base.request.request.clone());
+        if let Some(url) = overrides.url {
+            builder = builder.url(url);
+        }
+        if let Some(method) = overrides.method {
+            builder = builder.method(method);
+        }
+        if let Some(post_data) = overrides.post_data {
+            builder = builder.body(Base64Value::new(
+                Base64ValueType::Base64,
+                general_purpose::STANDARD.encode(post_data),
+            ));
+        }
+        if let Some(headers) = overrides.headers {
+            builder = builder.headers(
+                headers
+                    .iter()
+                    .map(|(name, value)| string_header(name, value))
+                    .collect::<Vec<_>>(),
+            );
+        }
+        self.send_intercept(builder.build().unwrap()).await
+    }
+
+    async fn respond_impl(&self, response: ResponseForRequest) -> Result<(), InterceptionError> {
+        let command = ProvideResponseBuilder::default()
+            .request(self.base.request.request.clone())
+            .status_code(response.status as u64)
+            .headers(
+                response
+                    .normalized_headers()
+                    .iter()
+                    .map(|(name, value)| string_header(name, value))
+                    .collect::<Vec<_>>(),
+            )
+            .body(Base64Value::new(
+                Base64ValueType::Base64,
+                general_purpose::STANDARD.encode(&response.body),
+            ))
+            .build()
+            .unwrap();
+        self.send_intercept(command).await
+    }
+
+    /// WebDriver BiDi's `network.failRequest` carries no reason, so `error` is
+    /// only advisory here.
+    async fn abort_impl(&self, _error: ErrorCode) -> Result<(), InterceptionError> {
+        let command = FailRequestBuilder::default()
+            .request(self.base.request.request.clone())
+            .build()
+            .unwrap();
+        self.send_intercept(command).await
     }
 }

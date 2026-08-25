@@ -15,3 +15,4 @@ pub use chrome::capabilities::{ChromeCapabilities, ChromeOptions, PerfLoggingPre
 pub use chrome::tab::ChromeTab;
 pub use firefox::browser::{FirefoxBrowser, FirefoxConfig, FirefoxLaunchMode, firefox};
 pub use firefox::capabilities::{FirefoxCapabilities, FirefoxOptions};
+pub use rustenium_core::{CdpHttpRequest, ErrorCode, HttpRequest, NetworkRequest};

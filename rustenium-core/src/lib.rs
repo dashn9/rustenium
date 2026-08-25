@@ -10,8 +10,11 @@ mod listeners;
 
 pub use connection::find_free_port;
 pub use events::{BidiEventManagement, CdpEventManagement};
-pub use listeners::CommandResponseState;
-pub use network::NetworkRequest;
+pub use listeners::{CdpCommandResponseState, CommandResponseState};
+pub use network::{
+    CdpHttpRequest, ContinueRequestOverrides, ErrorCode, HttpRequest, Interception,
+    InterceptionError, NetworkRequest, ResourceType, ResponseForRequest,
+};
 pub use session::{BidiSession, CdpSession};
 pub use transport::WebsocketConnectionTransport;
 
