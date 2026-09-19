@@ -294,13 +294,13 @@ impl<T: ConnectionTransport + Send + Sync> CdpAdapter<T> {
         Ok(*doc.root.node_id)
     }
 
-    /// Describe a node by `NodeId`, returning the full `DomNode` subtree.
+    /// Describe a node by `NodeId`, including its direct children.
     async fn describe_by_id(
         &mut self,
         node_id: rustenium_cdp_definitions::browser_protocol::dom::types::NodeId,
     ) -> Result<DomNode, crate::error::cdp::LocateError> {
         let result_value = self
-            .send_command(DescribeNode::builder().node_id(node_id).depth(-1).build())
+            .send_command(DescribeNode::builder().node_id(node_id).depth(1).build())
             .await
             .map_err(|e| {
                 crate::error::cdp::LocateError::CommandResultError(
