@@ -138,6 +138,31 @@ pub enum CdpCommandResponseState {
     Error(cdp_base::ErrorResponse),
 }
 
+// Chrome's deprecated postData string can contain unpaired UTF-16 surrogates
+// for binary bodies. serde_json cannot decode those into a Rust String;
+// dropping Fetch.requestPaused would leave the browser request paused forever.
+fn without_legacy_post_data(message: &str) -> Option<String> {
+    // Keep nested JSON raw so the offending string is never decoded.
+    type Fields = HashMap<String, Box<serde_json::value::RawValue>>;
+    let mut event: Fields = serde_json::from_str(message).ok()?;
+    let mut params: Fields = serde_json::from_str(event.get("params")?.get()).ok()?;
+    let mut request: Fields = serde_json::from_str(params.get("request")?.get()).ok()?;
+
+    // Modify only our event copy, not Chrome's original request body. Preserve
+    // postDataEntries: its base64 chunks allow lossless binary replay by callers.
+    request.remove("postData")?;
+
+    params.insert(
+        "request".into(),
+        serde_json::value::RawValue::from_string(serde_json::to_string(&request).ok()?).ok()?,
+    );
+    event.insert(
+        "params".into(),
+        serde_json::value::RawValue::from_string(serde_json::to_string(&params).ok()?).ok()?,
+    );
+    serde_json::to_string(&event).ok()
+}
+
 pub struct CdpListener {
     rx: UnboundedReceiver<String>,
     pub command_response_tx: UnboundedSender<CdpCommandResponseState>,
@@ -162,7 +187,24 @@ impl CdpListener {
             while let Some(message) = self.rx.recv().await {
                 let parsed = match serde_json::from_str::<cdp_base::Message>(&message) {
                     Ok(r) => r,
-                    Err(_) => continue,
+                    Err(error) => {
+                        // Recover only after normal decoding fails, so valid text
+                        // postData remains available to existing callers.
+                        let recovered = without_legacy_post_data(&message)
+                            .and_then(|json| serde_json::from_str::<cdp_base::Message>(&json).ok());
+
+                        match recovered {
+                            Some(event) => {
+                                tracing::debug!(%error, "recovered CDP event without legacy postData");
+                                event
+                            }
+                            None => {
+                                // Report failures without logging request bodies or cookies.
+                                tracing::warn!(%error, "could not decode CDP message");
+                                continue;
+                            }
+                        }
+                    }
                 };
                 match parsed {
                     cdp_base::Message::CommandResponse(r) => {
